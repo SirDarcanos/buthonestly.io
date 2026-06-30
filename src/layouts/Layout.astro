@@ -1,10 +1,13 @@
 ---
-import favicon from "../assets/favicon.svg?url";
 import "../styles/global.css";
+
 import { Font } from "astro:assets";
-import SEO from "../components/SEO.astro";
 import type { Entry } from "../lib/wordpress";
 
+import Header from "../components/Header.astro";
+import SEO from "../components/SEO.astro";
+
+import favicon from "../assets/favicon.svg?url";
 interface Props {
   title: string;
   description?: string;
@@ -35,7 +38,6 @@ const { title, description, type, article, noindex } = Astro.props;
 
     <Font cssVariable="--font-newsreader" preload />
     <Font cssVariable="--font-archivo" preload />
-  
 
     <SEO
       title={title}
@@ -65,13 +67,15 @@ const { title, description, type, article, noindex } = Astro.props;
       Skip to main content
     </a>
 
+    {/* HEADER */}
+    <Header />
+
     <main
       id="main"
       tabindex="-1"
-      class="mx-auto w-full max-w-5xl flex-1 px-6 focus:outline-none"
+      class="mx-auto w-full max-w-6xl flex-1 px-10 focus:outline-none"
     >
       <slot />
     </main>
-
   </body>
 </html>

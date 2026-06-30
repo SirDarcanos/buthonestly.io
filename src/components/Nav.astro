@@ -1,0 +1,48 @@
+---
+import { twMerge } from "tailwind-merge";
+
+interface NavLink {
+  href: string;
+  label: string;
+  rel?: string;
+  nofollow?: boolean;
+  blank?: boolean;
+}
+
+interface Props {
+  links?: NavLink[];
+  class?: string;
+  linkClass?: string;
+}
+
+const {
+  links = [{ href: "/", label: "Home" }],
+  class: className,
+  linkClass,
+} = Astro.props;
+
+const path = Astro.url.pathname;
+---
+
+<nav class={twMerge("meta flex gap-6", className)}>
+  {
+    links.map((link) => (
+      <a
+        href={link.href}
+        aria-current={path === link.href ? "page" : undefined}
+        target={link.blank ? "_blank" : undefined}
+        rel={
+          link.blank && link.nofollow
+            ? "nofollow noopener noreferrer"
+            : undefined
+        }
+        class={twMerge(
+          "text-ink transition-colors hover:text-accent aria-[current=page]:font-semibold",
+          linkClass,
+        )}
+      >
+        {link.label}
+      </a>
+    ))
+  }
+</nav>
