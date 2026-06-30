@@ -1,0 +1,84 @@
+---
+import Nav from "./Nav.astro";
+
+import { Image } from "astro:assets";
+import { getTags } from "../lib/wordpress.ts";
+
+import logo from "../assets/buthonestly-logo.svg";
+
+const tags = await getTags();
+const tagLinks = tags.map((tag) => ({
+  href: `/topic/${tag.slug}`,
+  label: tag.name,
+}));
+
+const tagLinks1 = tagLinks.filter((_, i) => i % 2 === 0);
+const tagLinks2 = tagLinks.filter((_, i) => i % 2 === 1);
+---
+
+<footer
+  id="footer"
+  class="border-ink bg-surface text-faint text-muted mt-20 border-t pt-10"
+>
+  <div
+    class="mx-auto flex w-full max-w-6xl flex-wrap gap-10 px-10 focus:outline-none"
+  >
+    <div class="flex flex-1 items-center gap-5">
+      <Image src={logo} alt="BUT. Honestly" width={66} height={66} />
+      <p class="elegant max-w-xs">
+        Clarity without the comfort. Long-form essays on the messy overlap
+        between humans and tech.
+      </p>
+    </div>
+    <Nav links={tagLinks1} class="flex-col gap-2" />
+    <Nav links={tagLinks2} class="flex-col gap-2" />
+  </div>
+  <div
+    id="copyright"
+    class="meta align-center mx-auto my-15 flex w-full max-w-6xl items-center justify-between px-10 focus:outline-none"
+  >
+    <p>© 2026 But Honestly</p>
+    <Nav
+      class="gap-2"
+      linkClass="text-muted"
+      links={[
+        {
+          href: "https://github.com/SirDarcanos",
+          label: "GitHub",
+          blank: true,
+          nofollow: true,
+        },
+        {
+          href: "https://www.linkedin.com/in/nicolamustone/",
+          label: "LinkedIn",
+          blank: true,
+          nofollow: true,
+        },
+        {
+          href: "https://bsky.app/profile/nicolamustone.bsky.social",
+          label: "Bluesky",
+          blank: true,
+          nofollow: true,
+        },
+        {
+          href: "https://indieweb.social/@nicolamustone",
+          label: "Mastodon",
+          blank: true,
+          nofollow: true,
+        },
+        {
+          href: "https://x.com/nicolamustone",
+          label: "X",
+          blank: true,
+          nofollow: true,
+        },
+        {
+          href: "https://profiles.wordpress.org/nicolamustone/",
+          label: "WordPress",
+          blank: true,
+          nofollow: true,
+        },
+      ]}
+    />
+  </div>
+</footer>

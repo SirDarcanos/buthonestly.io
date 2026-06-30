@@ -5,6 +5,7 @@ import { Font } from "astro:assets";
 import { type Post } from "../types.ts";
 
 import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
 import SEO from "../components/SEO.astro";
 
 import favicon from "../assets/favicon.svg?url";
@@ -77,5 +78,8 @@ const { title, description, type, article, noindex } = Astro.props;
     >
       <slot />
     </main>
+
+    {/* FOOTER */}
+    <Footer />
   </body>
 </html>
