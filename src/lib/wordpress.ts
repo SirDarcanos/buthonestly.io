@@ -14,31 +14,7 @@
  */
 
 import { SITE_URL, API_BASE } from "../consts.ts";
-
-export type PostLink = Pick<Entry, "title" | "slug">;
-
-export type Entry = {
-  id: number;
-  slug: string;
-  type: "post";
-  title: string;
-  contentHtml: string;
-  excerpt: string;
-  date: string; // ISO
-  modified: string; // ISO
-  featuredImage?: string;
-  featuredImageAlt?: string;
-  tags: string[];
-  categories: string[];
-  stack: { name: string; items: string[] }[];
-  highlights: string[];
-  seo: {
-    title: string;
-    description: string;
-    ogImage?: string;
-    canonical: string;
-  };
-};
+import { type PostLink, type Post } from "../types.ts";
 
 type WpTerm = {
   id: number;
@@ -165,7 +141,7 @@ function groupStack(
     }));
 }
 
-function normalize(post: WpPost, stackTree: StackTree): Entry {
+function normalize(post: WpPost, stackTree: StackTree): Post {
   const media = post._embedded?.["wp:featuredmedia"]?.[0];
   const featuredImageAlt = media?.alt_text || undefined;
 
@@ -211,10 +187,10 @@ function normalize(post: WpPost, stackTree: StackTree): Entry {
  * At this site's scale (4 posts) one page suffices, but the pagination loop is
  * the exact mechanism buthonestly.io needs, so it is exercised here.
  */
-export async function getAllPosts(): Promise<Entry[]> {
+export async function getAllPosts(): Promise<Post[]> {
   const perPage = 100;
   let page = 1;
-  const all: Entry[] = [];
+  const all: Post[] = [];
   const stackTree = await getStackTree();
 
   while (true) {
@@ -237,7 +213,7 @@ export async function getAllPosts(): Promise<Entry[]> {
   return all;
 }
 
-export async function getPostBySlug(slug: string): Promise<Entry | undefined> {
+export async function getPostBySlug(slug: string): Promise<Post | undefined> {
   const posts = await getAllPosts();
   return posts.find((p) => p.slug === slug);
 }
