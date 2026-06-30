@@ -1,141 +1,110 @@
-/*
-  The CSS in this style tag is based off of Bear Blog's default CSS.
-  https://github.com/HermanMartinus/bearblog/blob/297026a877bc2ab2b3bdfbd6b9f7961c350917dd/templates/styles/blog/default.css
-  License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
- */
+@import "tailwindcss";
 
-:root {
-	--accent: #2337ff;
-	--accent-dark: #000d8a;
-	--black: 15, 18, 25;
-	--gray: 96, 115, 159;
-	--gray-light: 229, 233, 240;
-	--gray-dark: 34, 41, 57;
-	--gray-gradient: rgba(var(--gray-light), 50%), #fff;
-	--box-shadow:
-		0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
-		0 16px 32px rgba(var(--gray), 33%);
+@theme {
+  --font-serif: var(--font-newsreader), ui-serif, system-ui, serif;
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, monospace;
+
+  --color-background: #efeae0; /* page background */
+  --color-surface: #e7e1d5; /* cards & panels */
+  --color-ink: #211d18; /* primary text, body, rules */
+  --color-ink-soft: #4a443b; /* excerpts & summaries */
+  --color-muted: #6e665a; /* deks, meta, labels */
+  --color-faint: color-mix(
+    in oklab,
+    var(--color-ink) 14%,
+    transparent
+  ); /* mono metadata */
+  --color-line: var(--color-faint); /* borders & dividers */
+
+  --color-accent: #7e2a1e; /* kickers, links, marks */
+  --color-accent-dark: #4a43bd; /* hover / pressed */
+  --color-accent-soft: rgba(90, 82, 213, 0.13); /* tag & chip fills */
+
+  --color-on-dark: #f6f6fa;
+  --color-on-dark-muted: #adaac0;
 }
-body {
-	font-family: var(--font-atkinson);
-	margin: 0;
-	padding: 0;
-	text-align: left;
-	background: linear-gradient(var(--gray-gradient)) no-repeat;
-	background-size: 100% 600px;
-	word-wrap: break-word;
-	overflow-wrap: break-word;
-	color: rgb(var(--gray-dark));
-	font-size: 20px;
-	line-height: 1.7;
-}
-main {
-	width: 720px;
-	max-width: calc(100% - 2em);
-	margin: auto;
-	padding: 3em 1em;
-}
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-	margin: 0 0 0.5rem 0;
-	color: rgb(var(--black));
-	line-height: 1.2;
-}
-h1 {
-	font-size: 3.052em;
-}
-h2 {
-	font-size: 2.441em;
-}
-h3 {
-	font-size: 1.953em;
-}
-h4 {
-	font-size: 1.563em;
-}
-h5 {
-	font-size: 1.25em;
-}
-strong,
-b {
-	font-weight: 700;
-}
-a {
-	color: var(--accent);
-}
-a:hover {
-	color: var(--accent);
-}
-p {
-	margin-bottom: 1em;
-}
-.prose p {
-	margin-bottom: 2em;
-}
-textarea {
-	width: 100%;
-	font-size: 16px;
-}
-input {
-	font-size: 16px;
-}
-table {
-	width: 100%;
-}
-img {
-	max-width: 100%;
-	height: auto;
-	border-radius: 8px;
-}
-code {
-	padding: 2px 5px;
-	background-color: rgb(var(--gray-light));
-	border-radius: 2px;
-}
-pre {
-	padding: 1.5em;
-	border-radius: 8px;
-}
-pre > code {
-	all: unset;
-}
-blockquote {
-	border-left: 4px solid var(--accent);
-	padding: 0 0 0 20px;
-	margin: 0;
-	font-size: 1.333em;
-}
-hr {
-	border: none;
-	border-top: 1px solid rgb(var(--gray-light));
-}
-@media (max-width: 720px) {
-	body {
-		font-size: 18px;
-	}
-	main {
-		padding: 1em;
-	}
+@custom-variant dark (&:where(.dark, .dark *));
+
+.dark {
+  --color-background: #171310; /* deep cool near-black */
+  --color-surface: #1e1813; /* cards & panels */
+  --color-ink: #e9e0d2; /* primary text */
+  --color-muted: #9c9281; /* secondary text */
+  --color-faint: color-mix(
+    in oklab,
+    var(--color-ink) 16%,
+    transparent
+  ); /* mono metadata */
+  --color-accent: #c5563f; /* lightened for legibility on dark */
 }
 
-.sr-only {
-	border: 0;
-	padding: 0;
-	margin: 0;
-	position: absolute !important;
-	height: 1px;
-	width: 1px;
-	overflow: hidden;
-	/* IE6, IE7 - a 0 height clip, off to the bottom right of the visible 1px box */
-	clip: rect(1px 1px 1px 1px);
-	/* maybe deprecated but we need to support legacy browsers */
-	clip: rect(1px, 1px, 1px, 1px);
-	/* modern browsers, clip-path works inwards from each corner */
-	clip-path: inset(50%);
-	/* added line to stop words getting smushed together (as they go onto separate lines and some screen readers do not understand line feeds as a space */
-	white-space: nowrap;
+@layer base {
+  html {
+    @apply antialiased;
+  }
+
+  body {
+    @apply bg-background text-ink font-serif text-xl leading-[1.72] font-normal;
+  }
+
+  ::selection {
+    @apply bg-accent text-background;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  h1 {
+    @apply text-[clamp(2.375rem,1.15rem+5.2vw,3.5rem)] leading-none tracking-[-0.02em];
+  }
+
+  h2 {
+    @apply text-[clamp(1.5rem,1.1rem+1.7vw,2.125rem)] leading-[1.08];
+  }
+
+  h3,
+  .subhead {
+    @apply text-[27px] leading-[1.2] font-medium;
+  }
+
+  a {
+    @apply text-accent;
+  }
+}
+
+@layer components {
+  .lead {
+    @apply text-muted text-[clamp(1.25rem,1.15rem+0.4vw,1.5625rem)] leading-[1.45] font-light italic;
+  }
+
+  .excerpt {
+    @apply text-ink-soft text-base leading-[1.46];
+  }
+
+  .label {
+    @apply text-accent font-sans text-[11px] font-semibold tracking-[0.19em] uppercase;
+  }
+
+  .meta {
+    @apply text-muted font-sans text-[10.5px] tracking-[0.14em] uppercase;
+  }
+
+  .caption {
+    @apply text-faint font-mono text-[11px] uppercase;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
