@@ -13,18 +13,26 @@ interface Props {
   links?: NavLink[];
   class?: string;
   linkClass?: string;
+  heading?: string;
+  tag?: string;
+  hadingClass?: string;
 }
 
 const {
   links = [{ href: "/", label: "Home" }],
   class: className,
   linkClass,
+  heading,
+  tag = "h3",
+  headingClass,
 } = Astro.props;
 
 const path = Astro.url.pathname;
+const Tag = tag;
 ---
 
 <nav class={twMerge("meta flex gap-6", className)}>
+  {heading && <Tag class={headingClass}>{heading}</Tag>}
   {
     links.map((link) => (
       <a
@@ -37,7 +45,7 @@ const path = Astro.url.pathname;
             : undefined
         }
         class={twMerge(
-          "text-ink transition-colors hover:text-accent aria-[current=page]:font-semibold",
+          "text-ink hover:text-accent transition-colors aria-[current=page]:font-semibold",
           linkClass,
         )}
       >
