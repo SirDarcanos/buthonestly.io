@@ -1,16 +1,8 @@
 /**
- * WordPress.com headless data layer for nicolamustone.com.
+ * WordPress.com headless data layer.
  *
  * Fetches published content from the public WordPress.com REST API at build
  * time and normalizes it so templates never touch raw API noise.
- *
- * Phase 0 findings that shape this file:
- *  - 4 posts, 0 pages. The hub project cards are real posts, so there is no
- *    getAllPages() — everything lives in posts.
- *  - No SEO plugin: the API exposes no populated SEO meta, so `seo` is derived
- *    from title / excerpt / featured image here.
- *  - Canonical is hard-set to the root domain regardless of what WordPress
- *    returns (de-risks the admin-subdomain question, see plan 0.3).
  */
 
 import { SITE_URL, API_BASE } from "../consts.ts";
@@ -112,18 +104,22 @@ function normalize(post: WpPost): Post {
       title: decodeEntities(post.title.rendered),
       description: truncate(toPlainText(post.excerpt.rendered)),
       ogImage: post.jetpack_featured_media_url || undefined,
-      // Always the root domain, never the admin subdomain (plan 0.3).
       canonical: `${SITE_URL}/${post.slug}/`,
     },
   };
 }
 
+let postsCache: Promise<Post[]> | undefined;
+
 /**
- * Fetch every published post, paginating until exhausted.
- * At this site's scale (4 posts) one page suffices, but the pagination loop is
- * the exact mechanism buthonestly.io needs, so it is exercised here.
+ * Every published post, newest first. Memoized — the network fetch runs once
+ * per build and every caller (homepage, [slug], getPostBySlug) reuses it.
  */
-export async function getAllPosts(): Promise<Post[]> {
+export function getAllPosts(): Promise<Post[]> {
+  return (postsCache ??= fetchAllPosts());
+}
+
+async function fetchAllPosts(): Promise<Post[]> {
   const perPage = 100;
   let page = 1;
   const all: Post[] = [];
