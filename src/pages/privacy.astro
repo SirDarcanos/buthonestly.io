@@ -1,0 +1,71 @@
+---
+import Container from "../components/Container.astro";
+import Layout from "../layouts/Layout.astro";
+import Label from "../components/Label.astro";
+---
+
+<Layout
+  title="Privacy"
+  description="How this site handles your data: privacy-first, cookieless analytics with Fathom, no tracking, and no personal data."
+>
+  <Container section id="privacy" className="md:max-w-2xl">
+    <Label>Privacy</Label>
+    <h1 class="mt-3 text-4xl">Privacy</h1>
+
+    <p class="mt-5">
+      The short version: this site doesn't track you, sets no cookies, and
+      collects nothing that could identify you. There's no consent banner
+      because there's nothing to consent to.
+    </p>
+
+    <h2 class="mt-12 text-2xl">Analytics</h2>
+    <p class="mt-4">
+      I use <a href="https://usefathom.com" target="_blank" rel="noopener"
+        >Fathom Analytics</a
+      >, a privacy-first, cookieless analytics service, to see which pages get
+      read and where visitors arrive from — in aggregate only. It's designed so
+      I can spot useful trends without ever knowing who you are.
+    </p>
+
+    <p class="mt-4">What Fathom records, all aggregated and anonymous:</p>
+    <ul class="text-body mt-3 list-disc space-y-1 pl-5">
+      <li>Page views and the paths visitors take through the site</li>
+      <li>The referrer — the site or search you arrived from</li>
+      <li>Country, derived from your IP (which is never stored)</li>
+      <li>Browser and device type</li>
+    </ul>
+
+    <p class="mt-4">
+      IP addresses are processed only briefly — for security and to generate an
+      anonymous, hashed visitor signature — and are never stored with the
+      analytics data or included in any export. Visitors in the EU have their
+      data processed on EU-based servers. Fathom is GDPR, CCPA, ePrivacy/PECR,
+      and Schrems II compliant; you can read their full data policy at <a
+        href="https://usefathom.com/data"
+        target="_blank"
+        rel="noopener">usefathom.com/data</a
+      >.
+    </p>
+
+    <h2 class="mt-12 text-2xl">Cookies</h2>
+    <p class="mt-4">
+      None. This site sets no tracking or advertising cookies, which is exactly
+      why you won't see a cookie banner.
+    </p>
+
+    <h2 class="mt-12 text-2xl">Hosting</h2>
+    <p class="mt-4">
+      The site is static and served by Cloudflare Pages. Like any web host,
+      Cloudflare may transiently process request data (such as IP addresses) to
+      deliver pages and guard against abuse, under its own policies.
+    </p>
+
+    <h2 class="mt-12 text-2xl">Questions</h2>
+    <p class="mt-4">
+      Any questions about privacy here? Reach me through any of the links in the
+      footer.
+    </p>
+
+    <p class="text-faint mt-10 font-mono text-xs">Last updated: June 2026</p>
+  </Container>
+</Layout>

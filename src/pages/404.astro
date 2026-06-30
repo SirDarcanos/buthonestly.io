@@ -1,0 +1,37 @@
+---
+import Button from "../components/Button.astro";
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Page not found" noindex>
+  <div
+    class="flex min-h-[64vh] flex-col items-center justify-center text-center"
+  >
+    <p
+      class="font-display text-accent text-8xl font-bold tracking-tight md:text-9xl"
+    >
+      404
+    </p>
+
+    <p
+      id="broken-path"
+      class="border-line bg-surface text-faint mt-6 rounded-lg border px-4 py-2 font-mono text-sm"
+    >
+      GET nicolamustone.com — 404
+    </p>
+
+    <h1 class="mt-8 text-3xl">This page doesn't exist.</h1>
+    <p class="text-muted mt-3 mb-8 max-w-md text-lg">
+      It may have moved, been renamed, or never existed in the first place.
+      Everything that's still around is back home.
+    </p>
+
+    <Button href="/">Back to home</Button>
+  </div>
+</Layout>
+
+<script>
+  // Fill the path box with the URL that 404'd (static page can't know it server-side).
+  const el = document.getElementById("broken-path");
+  if (el) el.textContent = `GET nicolamustone.com${location.pathname} — 404`;
+</script>
