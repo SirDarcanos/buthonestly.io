@@ -13,8 +13,6 @@ export type Post = {
   featuredImageAlt?: string;
   tags: string[];
   categories: string[];
-  stack: { name: string; items: string[] }[];
-  highlights: string[];
   seo: {
     title: string;
     description: string;

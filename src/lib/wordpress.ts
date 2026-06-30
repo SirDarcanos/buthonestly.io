@@ -33,7 +33,6 @@ type WpPost = {
   excerpt: { rendered: string };
   content: { rendered: string };
   jetpack_featured_media_url?: string;
-  meta?: { highlights?: string[] };
   _embedded?: {
     "wp:featuredmedia"?: Array<{
       alt_text?: string;
@@ -84,64 +83,7 @@ function truncate(text: string, max = 160): string {
   return `${slice.slice(0, lastSpace > 0 ? lastSpace : max).trimEnd()}…`;
 }
 
-type StackTree = {
-  parentName: Map<number, string>;
-  childParent: Map<number, number>;
-  order: number[];
-};
-
-/**
- * Fetch the whole `stack` taxonomy once and build parent/child maps. The post
- * embed strips a term's `parent`, so grouping is resolved from here instead —
- * fully data-driven, so adding parent groups in WordPress needs no code change.
- */
-async function getStackTree(): Promise<StackTree> {
-  const res = await fetch(
-    `${API_BASE}/stack?per_page=100&_fields=id,name,parent`,
-  );
-  const parentName = new Map<number, string>();
-  const childParent = new Map<number, number>();
-  const order: number[] = [];
-  if (res.ok) {
-    const terms = (await res.json()) as Array<{
-      id: number;
-      name: string;
-      parent: number;
-    }>;
-    for (const t of terms) {
-      if (t.parent) {
-        childParent.set(t.id, t.parent);
-      } else {
-        parentName.set(t.id, t.name);
-        order.push(t.id);
-      }
-    }
-  }
-  return { parentName, childParent, order };
-}
-
-/** Group a post's assigned stack child terms under their parent group names. */
-function groupStack(
-  children: WpTerm[],
-  tree: StackTree,
-): { name: string; items: string[] }[] {
-  const buckets = new Map<number, string[]>();
-  for (const c of children) {
-    const parentId = tree.childParent.get(c.id);
-    if (parentId === undefined) continue; // a parent term itself, skip
-    const list = buckets.get(parentId) ?? [];
-    list.push(c.name);
-    buckets.set(parentId, list);
-  }
-  return tree.order
-    .filter((pid) => buckets.has(pid))
-    .map((pid) => ({
-      name: tree.parentName.get(pid)!,
-      items: buckets.get(pid)!,
-    }));
-}
-
-function normalize(post: WpPost, stackTree: StackTree): Post {
+function normalize(post: WpPost): Post {
   const media = post._embedded?.["wp:featuredmedia"]?.[0];
   const featuredImageAlt = media?.alt_text || undefined;
 
@@ -152,10 +94,6 @@ function normalize(post: WpPost, stackTree: StackTree): Post {
   const cats = terms
     .filter((t) => t.taxonomy === "category" && t.slug !== "uncategorized")
     .map((t) => t.name);
-  const stack = groupStack(
-    terms.filter((t) => t.taxonomy === "stack"),
-    stackTree,
-  );
 
   return {
     id: post.id,
@@ -170,8 +108,6 @@ function normalize(post: WpPost, stackTree: StackTree): Post {
     featuredImageAlt: featuredImageAlt,
     tags: tags,
     categories: cats,
-    stack: stack,
-    highlights: post.meta?.highlights ?? [],
     seo: {
       title: decodeEntities(post.title.rendered),
       description: truncate(toPlainText(post.excerpt.rendered)),
@@ -191,10 +127,9 @@ export async function getAllPosts(): Promise<Post[]> {
   const perPage = 100;
   let page = 1;
   const all: Post[] = [];
-  const stackTree = await getStackTree();
 
   while (true) {
-    const url = `${API_BASE}/posts?per_page=${perPage}&page=${page}&_fields=id,slug,date,modified,title,excerpt,content,featured_media,jetpack_featured_media_url,meta,_links,_embedded&_embed=wp:featuredmedia,wp:term`;
+    const url = `${API_BASE}/posts?per_page=${perPage}&page=${page}&_fields=id,slug,date,modified,title,excerpt,content,featured_media,jetpack_featured_media_url,_links,_embedded&_embed=wp:featuredmedia,wp:term`;
     const res = await fetch(url);
 
     if (res.status === 400) break; // WP returns 400 past the last page
@@ -205,7 +140,7 @@ export async function getAllPosts(): Promise<Post[]> {
     const batch = (await res.json()) as WpPost[];
     if (batch.length === 0) break;
 
-    all.push(...batch.map((post) => normalize(post, stackTree)));
+    all.push(...batch.map((post) => normalize(post)));
     if (batch.length < perPage) break;
     page += 1;
   }
