@@ -2,7 +2,7 @@
 import "../styles/global.css";
 
 import { Font } from "astro:assets";
-import type { Entry } from "../lib/wordpress";
+import { type Post } from "../types.ts";
 
 import Header from "../components/Header.astro";
 import SEO from "../components/SEO.astro";
@@ -12,7 +12,7 @@ interface Props {
   title: string;
   description?: string;
   type?: "website" | "article" | "profile";
-  article?: Entry;
+  article?: Post;
   noindex?: boolean;
 }
 
