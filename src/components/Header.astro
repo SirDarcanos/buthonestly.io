@@ -4,23 +4,11 @@ import { Image } from "astro:assets";
 import Nav from "./Nav.astro";
 
 import logo from "../assets/buthonestly-logo.svg";
-
-const currentMonth = new Date().toLocaleString("default", {
-  month: "long",
-  year: "numeric",
-});
 ---
 
 <header id="header" class="mx-auto w-full max-w-6xl px-10 focus:outline-none">
   <div class="border-ink flex items-center gap-8 border-b py-5">
-    <Image
-      src={logo}
-      alt=""
-      aria-label="BUT. Honestly"
-      width={66}
-      height={66}
-      priority
-    />
+    <Image src={logo} alt="BUT. Honestly" width={66} height={66} priority />
     <span class="lead hidden text-base md:inline-block"
       >Clarity without the comfort.</span
     >
@@ -40,14 +28,5 @@ const currentMonth = new Date().toLocaleString("default", {
         },
       ]}
     />
-  </div>
-  <div class="border-line flex items-end justify-between border-b pt-6 pb-2">
-    <p class="label max-w-lg text-left">
-      {currentMonth} &middot; New this month
-    </p>
-    <p class="lead max-w-sm text-right text-base">
-      New essays each season on leadership, programming, and the messy overlap
-      between humans and tech.
-    </p>
   </div>
 </header>

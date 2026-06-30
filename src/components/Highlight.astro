@@ -1,0 +1,41 @@
+---
+import Image from "./Image.astro";
+import { type Post } from "../types.ts";
+import ReadTime from "./ReadTime.astro";
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const postDate = new Date(post.date).toLocaleString("default", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+---
+
+<section
+  id="highlight"
+  class="border-line mt-10 flex items-center justify-between gap-10 border-b pb-15"
+>
+  <div class="flex-col">
+    <p class="label">
+      {post.categories.map((category) => category)}
+      <span class="text-muted font-medium"> &mdash; The lead essay</span>
+    </p>
+    <h1 class="mt-5">{post.title}</h1>
+    <p class="mt-7">{post.excerpt}</p>
+    <p class="meta mt-7 font-semibold">
+      {postDate} &middot; <ReadTime content={post.contentHtml} />
+    </p>
+  </div>
+  <Image
+    src={post.featuredImage!}
+    alt={post.featuredImageAlt ?? ""}
+    width={452}
+    height={565}
+    class="align-center"
+    priority
+  />
+</section>

@@ -82,7 +82,7 @@
   }
 
   .excerpt {
-    @apply text-ink-soft text-base leading-[1.46];
+    @apply text-ink-soft leading-[1.46];
   }
 
   .label {
