@@ -178,5 +178,7 @@ async function fetchTax(
     throw new Error(`WordPress API error ${res.status} fetching ${tax}`);
   }
   const items = (await res.json()) as Array<{ name: string; slug: string }>;
-  return items.map((t) => ({ name: decodeEntities(t.name), slug: t.slug }));
+  return items
+    .filter((t) => t.slug !== "uncategorized")
+    .map((t) => ({ name: decodeEntities(t.name), slug: t.slug }));
 }
