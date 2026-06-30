@@ -1,0 +1,17 @@
+---
+import { twMerge } from "tailwind-merge";
+import { readingMinutes } from "../lib/reading-time";
+
+interface Props {
+  content: string;
+  suffix?: string;
+  class?: string;
+}
+
+const { content, suffix = " min", class: className } = Astro.props;
+const minutes = readingMinutes(content);
+---
+
+<time datetime={`PT${minutes}M`} class={twMerge(className)}
+  >{minutes}{suffix ? " " + suffix : undefined}</time
+>
