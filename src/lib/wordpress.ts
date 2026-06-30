@@ -148,3 +148,35 @@ export async function getPostBySlug(slug: string): Promise<Post | undefined> {
   const posts = await getAllPosts();
   return posts.find((p) => p.slug === slug);
 }
+
+let tagsCache: Promise<{ name: string; slug: string }[]> | undefined;
+let categoriesCache: Promise<{ name: string; slug: string }[]> | undefined;
+
+/**
+ * Fetch every tag on the site with its slug.
+ */
+export function getTags(): Promise<{ name: string; slug: string }[]> {
+  return (tagsCache ??= fetchTax("tags"));
+}
+
+/**
+ * Fetch every category on the site with its slug.
+ */
+export function getCategories(): Promise<{ name: string; slug: string }[]> {
+  return (categoriesCache ??= fetchTax("categories"));
+}
+
+async function fetchTax(
+  tax: string,
+): Promise<{ name: string; slug: string }[]> {
+  if (tax !== "tags" && tax !== "categories") {
+    throw new Error(`Unknown taxonomy ${tax}`);
+  }
+
+  const res = await fetch(`${API_BASE}/${tax}?per_page=100&_fields=name,slug`);
+  if (!res.ok) {
+    throw new Error(`WordPress API error ${res.status} fetching ${tax}`);
+  }
+  const items = (await res.json()) as Array<{ name: string; slug: string }>;
+  return items.map((t) => ({ name: decodeEntities(t.name), slug: t.slug }));
+}
