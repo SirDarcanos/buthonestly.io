@@ -20,3 +20,10 @@ export type Post = {
     canonical: string;
   };
 };
+
+export type Tax = {
+  name: string;
+  slug: string;
+  description?: string;
+  count: number;
+};

@@ -6,7 +6,7 @@
  */
 
 import { SITE_URL, API_BASE } from "../consts.ts";
-import { type PostLink, type Post } from "../types.ts";
+import { type PostLink, type Post, type Tax } from "../types.ts";
 
 type WpTerm = {
   id: number;
@@ -149,36 +149,46 @@ export async function getPostBySlug(slug: string): Promise<Post | undefined> {
   return posts.find((p) => p.slug === slug);
 }
 
-let tagsCache: Promise<{ name: string; slug: string }[]> | undefined;
-let categoriesCache: Promise<{ name: string; slug: string }[]> | undefined;
+let tagsCache: Promise<Tax[]> | undefined;
+let categoriesCache: Promise<Tax[]> | undefined;
 
 /**
  * Fetch every tag on the site with its slug.
  */
-export function getTags(): Promise<{ name: string; slug: string }[]> {
+export function getTags(): Promise<Tax[]> {
   return (tagsCache ??= fetchTax("tags"));
 }
 
 /**
  * Fetch every category on the site with its slug.
  */
-export function getCategories(): Promise<{ name: string; slug: string }[]> {
+export function getCategories(): Promise<Tax[]> {
   return (categoriesCache ??= fetchTax("categories"));
 }
 
-async function fetchTax(
-  tax: string,
-): Promise<{ name: string; slug: string }[]> {
+async function fetchTax(tax: string): Promise<Tax[]> {
   if (tax !== "tags" && tax !== "categories") {
     throw new Error(`Unknown taxonomy ${tax}`);
   }
 
-  const res = await fetch(`${API_BASE}/${tax}?per_page=100&_fields=name,slug`);
+  const res = await fetch(
+    `${API_BASE}/${tax}?per_page=100&_fields=name,slug,description,count`,
+  );
   if (!res.ok) {
     throw new Error(`WordPress API error ${res.status} fetching ${tax}`);
   }
-  const items = (await res.json()) as Array<{ name: string; slug: string }>;
+  const items = (await res.json()) as Array<{
+    name: string;
+    slug: string;
+    description: string;
+    count: number;
+  }>;
   return items
     .filter((t) => t.slug !== "uncategorized")
-    .map((t) => ({ name: decodeEntities(t.name), slug: t.slug }));
+    .map((t) => ({
+      name: decodeEntities(t.name),
+      slug: t.slug,
+      description: t.description,
+      count: t.count,
+    }));
 }
