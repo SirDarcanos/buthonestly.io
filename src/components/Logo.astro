@@ -1,0 +1,17 @@
+---
+import { Image } from "astro:assets";
+import logo from "../assets/buthonestly-logo.svg";
+
+const { priority } = Astro.props;
+---
+
+<a href="/" class="block">
+  <Image
+    src={logo}
+    alt="BUT. Honestly"
+    width={66}
+    height={66}
+    class="logo"
+    priority={priority || undefined}
+  />
+</a>
