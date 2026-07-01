@@ -1,0 +1,38 @@
+---
+import Image from "./Image.astro";
+import ReadTime from "./ReadTime.astro";
+
+import { type Post } from "../types.ts";
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+---
+
+<div class="space-y-6">
+  {
+    post.featuredImage ? (
+      <Image
+        src={post.featuredImage}
+        alt={post.title}
+        width={516}
+        height={344}
+      />
+    ) : null
+  }
+
+  <h2>{post.title}</h2>
+  <p class="excerpt text-base">{post.excerpt}</p>
+  <p class="meta font-bold">
+    {
+      new Date(post.date).toLocaleDateString("default", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      })
+    }{" "}
+    &middot; <ReadTime content={post.contentHtml} />
+  </p>
+</div>
