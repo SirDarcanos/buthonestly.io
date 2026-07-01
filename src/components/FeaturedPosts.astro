@@ -6,14 +6,17 @@ import { type Post } from "../types.ts";
 
 interface Props {
   posts: Post[];
+  taxName: string;
 }
 
-const { posts } = Astro.props;
+const { posts, taxName } = Astro.props;
 ---
 
-<section id="featured-posts" class="my-10 space-y-6 pb-5">
+<section id="featured-posts" class="mb-10 space-y-6">
   <p class="meta font-bold">
-    <span class="bg-accent mr-3 inline-block size-2"></span>Featured
+    <span class="bg-accent mr-3 inline-block size-2"></span>Featured in {
+      taxName
+    }
   </p>
   <div class="grid grid-cols-1 gap-10 md:grid-cols-2">
     {posts.map((post) => <FeaturedPost post={post} />)}

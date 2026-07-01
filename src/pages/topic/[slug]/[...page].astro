@@ -1,0 +1,98 @@
+---
+import FeaturedPosts from "../../../components/FeaturedPosts.astro";
+import Layout from "../../../layouts/Layout.astro";
+import ReadTime from "../../../components/ReadTime.astro";
+
+import { getAllPosts, getTags } from "../../../lib/wordpress";
+
+import type { GetStaticPaths, Page } from "astro";
+import { type Post, type Tax } from "../../../types.ts";
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const [posts, tags] = await Promise.all([getAllPosts(), getTags()]);
+
+  return tags.flatMap((tag) => {
+    const tagPosts = posts.filter((post) => post.tags.includes(tag.name));
+    return paginate(tagPosts, {
+      params: { slug: tag.slug },
+      props: { tag },
+      pageSize: 6,
+    });
+  });
+}) satisfies GetStaticPaths;
+
+interface Props {
+  page: Page<Post>;
+  tag: Tax;
+}
+const { page, tag } = Astro.props;
+
+const featuredPosts = page.data.slice(0, 2);
+const regularPosts = page.data.slice(2);
+---
+
+<Layout title={`${tag.name} — BUT. Honestly`} type="website">
+  <div
+    class="border-line mb-10 flex items-end justify-between border-b pt-6 pb-2"
+  >
+    <h1 class="max-w-lg">
+      {tag.name}
+    </h1>
+    <p class="lead max-w-sm text-right text-base">{tag.description}</p>
+  </div>
+
+  <FeaturedPosts posts={featuredPosts} taxName={tag.name} />
+
+  {
+    /* Only show the "All essays" section if there are more than 2 posts */
+    page.data.length > 2 && (
+      <section>
+        <p class="meta mb-1 font-bold">All essays</p>
+        {regularPosts.map((post) => {
+          const postDate = new Date(post.date).toLocaleString("default", {
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+          });
+
+          return (
+            <div class="border-line flex items-center gap-10 border-t py-7">
+              <div class="flex-1">
+                <h2>{post.title}</h2>
+                <p class="excerpt mt-3 text-base">{post.excerpt}</p>
+              </div>
+              <div class="meta text-right font-medium">
+                <p>{postDate}</p>
+                <ReadTime
+                  class="text-accent text-right"
+                  content={post.contentHtml}
+                />
+              </div>
+            </div>
+          );
+        })}
+      </section>
+    )
+  }
+
+  {
+    /* Only show the pagination if there is more than 1 page */
+    page.lastPage > 1 && (
+      <nav class="meta border-line flex items-center justify-center gap-6 border-t py-7 font-medium">
+        {page.url.prev ? (
+          <a href={page.url.prev} class="text-ink hover:text-accent">
+            ← Newer
+          </a>
+        ) : undefined}
+        <span class="text-muted">
+          Page {page.currentPage} of {page.lastPage}
+        </span>
+        {page.url.next ? (
+          <a href={page.url.next} class="text-ink hover:text-accent">
+            Older →
+          </a>
+        ) : undefined}
+      </nav>
+    )
+  }
+</Layout>
