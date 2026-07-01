@@ -9,26 +9,32 @@ import logo from "../assets/buthonestly-logo.svg";
 <header id="header" class="mx-auto w-full max-w-6xl px-10 focus:outline-none">
   <div class="border-ink flex items-center gap-8 border-b py-5">
     <a href="/">
-      <Image src={logo} alt="BUT. Honestly" width={66} height={66} priority />
-      <span class="elegant hidden md:inline-block"
-        >Clarity without the comfort.</span
-      >
-      <span class="border-line hidden h-px flex-1 border-t md:inline-block"
-      ></span>
-      <Nav
-        class="font-medium"
-        linkClass="text-muted"
-        links={[
-          {
-            href: "/",
-            label: "Home",
-          },
-          {
-            href: "/essays/",
-            label: "Essays",
-          },
-        ]}
-      />
-    </a>
+      <Image
+        src={logo}
+        alt="BUT. Honestly"
+        width={66}
+        height={66}
+        priority
+      /></a
+    >
+    <span class="elegant hidden md:inline-block"
+      >Clarity without the comfort.</span
+    >
+    <span class="border-line hidden h-px flex-1 border-t md:inline-block"
+    ></span>
+    <Nav
+      class="font-medium"
+      linkClass="text-muted"
+      links={[
+        {
+          href: "/",
+          label: "Home",
+        },
+        {
+          href: "/essays/",
+          label: "Essays",
+        },
+      ]}
+    />
   </div>
 </header>
