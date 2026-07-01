@@ -4,9 +4,11 @@ import { twMerge } from "tailwind-merge";
 interface Props {
   src: string;
   alt: string;
+  width: number;
+  height: number;
+  widths?: number[];
+  sizes?: string;
   class?: string;
-  width?: number;
-  height?: number;
   priority?: boolean;
   ariaHidden?: boolean;
 }
@@ -14,21 +16,52 @@ interface Props {
 const {
   src,
   alt,
-  class: className,
   width,
   height,
+  widths,
+  sizes,
+  class: className,
   priority = false,
   ariaHidden = false,
 } = Astro.props;
+
+/**
+ * Rewrite a Jetpack / WordPress.com CDN URL to request a specific size.
+ * `resize=W,H` returns *exactly* W×H, cropping to cover (unlike `fit`, which
+ * letterboxes to the source aspect ratio and so misses the target width).
+ * Existing sizing params are stripped first so we never stack conflicting ones.
+ */
+function cdnUrl(rawSrc: string, w: number, h: number): string {
+  const url = new URL(rawSrc);
+  for (const param of ["w", "h", "fit", "resize", "crop"]) {
+    url.searchParams.delete(param);
+  }
+  url.searchParams.set("resize", `${w},${h}`);
+  return url.toString();
+}
+
+const aspect = height / width;
+const candidates = widths ?? [width];
+
+const srcset = candidates
+  .map((w) => `${cdnUrl(src, w, Math.round(w * aspect))} ${w}w`)
+  .join(", ");
+
+const fallback = cdnUrl(src, width, height);
 ---
 
-<img
-  src={src}
-  alt={alt}
-  width={width}
-  height={height}
-  loading={priority ? "eager" : "lazy"}
-  decoding={priority ? "auto" : "async"}
-  aria-hidden={ariaHidden ? "true" : undefined}
-  class={twMerge("block h-auto max-w-full", className)}
-/>
+<figure>
+  <img
+    src={fallback}
+    srcset={srcset}
+    sizes={sizes}
+    alt={alt}
+    width={width}
+    height={height}
+    loading={priority ? "eager" : "lazy"}
+    decoding={priority ? "auto" : "async"}
+    fetchpriority={priority ? "high" : undefined}
+    aria-hidden={ariaHidden ? "true" : undefined}
+    class={twMerge("block h-auto max-w-full", className)}
+  />
+</figure>

@@ -83,7 +83,7 @@
   }
 
   .elegant {
-    @apply text-[17px];
+    @apply text-xl;
   }
 
   .excerpt,
@@ -97,11 +97,20 @@
   }
 
   .meta {
-    @apply text-muted;
+    @apply text-muted font-medium;
   }
 
   img:not(.logo) {
-    @apply aspect-video object-cover;
+    @apply border-faint aspect-video border object-cover p-1;
+  }
+
+  figure {
+    background: var(--accent);
+  }
+
+  figure img {
+    filter: grayscale(1) contrast(1.05);
+    mix-blend-mode: multiply;
   }
 }
 

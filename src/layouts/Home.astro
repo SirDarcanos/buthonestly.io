@@ -1,0 +1,91 @@
+---
+import "../styles/global.css";
+
+import { Font } from "astro:assets";
+import { type Post } from "../types.ts";
+
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import SEO from "../components/SEO.astro";
+
+import favicon from "../assets/favicon.svg?url";
+interface Props {
+  title: string;
+  description?: string;
+  type?: "website" | "article" | "profile";
+  article?: Post;
+  noindex?: boolean;
+}
+
+const { title, description, type, article, noindex } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href={favicon} />
+    <meta name="generator" content={Astro.generator} />
+
+    {/* Set theme before paint to avoid a flash. Dark is the default */}
+    <script is:inline>
+      {
+        if (localStorage.getItem("theme") !== "light") {
+          document.documentElement.classList.add("light");
+        }
+      }
+    </script>
+
+    <Font cssVariable="--font-newsreader" preload />
+    <Font cssVariable="--font-archivo" preload />
+
+    <SEO
+      title={title}
+      description={description}
+      type={type}
+      article={article}
+      noindex={noindex}
+    />
+
+    {/* Fathom analytics — production only. */}
+    {
+      import.meta.env.PROD && import.meta.env.FATHOM_SITE_ID && (
+        <script
+          src="https://cdn.usefathom.com/script.js"
+          data-site={import.meta.env.FATHOM_SITE_ID}
+          defer
+          is:inline
+        />
+      )
+    }
+  </head>
+  <body class="flex min-h-dvh flex-col">
+    <a
+      href="#main"
+      class="border-line bg-surface text-ink sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-md focus:border focus:px-4 focus:py-2 focus:text-sm"
+    >
+      Skip to main content
+    </a>
+
+    {/* HEADER */}
+    <Header />
+
+    <div class="mx-auto w-full max-w-6xl px-10">
+      <slot name="intro" />
+    </div>
+
+    <slot name="highlight" />
+
+    <main
+      id="main"
+      tabindex="-1"
+      class="mx-auto w-full max-w-6xl flex-1 px-10 focus:outline-none"
+    >
+      <slot />
+    </main>
+
+    {/* FOOTER */}
+    <Footer />
+  </body>
+</html>

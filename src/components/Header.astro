@@ -1,27 +1,16 @@
 ---
-import { Image } from "astro:assets";
-
+import Divider from "./Divider.astro";
+import Logo from "./Logo.astro";
 import Nav from "./Nav.astro";
-
-import logo from "../assets/buthonestly-logo.svg";
 ---
 
-<header id="header" class="mx-auto w-full max-w-6xl px-10 focus:outline-none">
+<header id="header" class="mx-auto w-full max-w-6xl px-6 focus:outline-none">
   <div class="border-ink flex items-center gap-8 border-b py-5">
-    <a href="/">
-      <Image
-        src={logo}
-        alt="BUT. Honestly"
-        width={66}
-        height={66}
-        priority
-      /></a
-    >
+    <Logo priority />
     <span class="elegant hidden md:inline-block"
       >Clarity without the comfort.</span
     >
-    <span class="border-line hidden h-px flex-1 border-t md:inline-block"
-    ></span>
+    <Divider />
     <Nav
       class="font-medium"
       linkClass="text-muted"
