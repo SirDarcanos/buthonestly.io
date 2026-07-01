@@ -9,7 +9,7 @@ import logo from "../assets/buthonestly-logo.svg";
 
 const categories = await getCategories();
 const categoryLinks = categories.map((category) => ({
-  href: `/section/${category.slug}`,
+  href: `/${category.slug}`,
   label: category.name,
 }));
 
