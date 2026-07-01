@@ -14,8 +14,8 @@ interface Props {
   class?: string;
   linkClass?: string;
   heading?: string;
-  tag?: string;
-  hadingClass?: string;
+  tag?: keyof astroHTML.JSX.IntrinsicElements;
+  headingClass?: string;
 }
 
 const {
@@ -28,11 +28,15 @@ const {
 } = Astro.props;
 
 const path = Astro.url.pathname;
-const Tag = tag;
+const Tag = tag as any;
 ---
 
 <nav class={twMerge("meta flex gap-6", className)}>
-  {heading && <Tag class={headingClass}>{heading}</Tag>}
+  {
+    heading && (
+      <Tag class={headingClass ? headingClass : undefined}>{heading}</Tag>
+    )
+  }
   {
     links.map((link) => (
       <a
