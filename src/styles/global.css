@@ -45,7 +45,7 @@
   }
 
   body {
-    @apply bg-background text-ink font-serif text-xl leading-[1.72] font-normal;
+    @apply bg-background text-ink font-serif text-xl leading-relaxed font-normal;
   }
 
   ::selection {
@@ -59,16 +59,16 @@
   }
 
   h1 {
-    @apply text-[clamp(2.375rem,1.15rem+5.2vw,3.5rem)] leading-none tracking-[-0.02em];
+    @apply text-[clamp(var(--text-4xl),1.75rem+3vw,var(--text-6xl))] leading-none tracking-tight;
   }
 
   h2 {
-    @apply text-[clamp(1.5rem,1.1rem+1.7vw,2.125rem)] leading-[1.08];
+    @apply text-[clamp(var(--text-2xl),1.25rem+1.5vw,var(--text-4xl))] leading-tight tracking-tight;
   }
 
   h3,
   .subhead {
-    @apply text-[27px] leading-[1.2] font-medium;
+    @apply text-[clamp(var(--text-xl),1.25rem+1.5vw,var(--text-2xl))] leading-snug tracking-tight;
   }
 
   a {
@@ -79,27 +79,29 @@
 @layer components {
   .lead,
   .elegant {
-    @apply text-muted text-[clamp(1.25rem,1.15rem+0.4vw,1.5625rem)] leading-[1.45] font-light italic;
+    @apply text-muted text-[clamp(var(--text-xl),1.25rem+1.5vw,var(--text-2xl))] leading-snug font-light italic;
   }
 
   .elegant {
     @apply text-[17px];
   }
 
-  .excerpt {
-    @apply text-ink-soft leading-[1.46];
+  .excerpt,
+  figcaption {
+    @apply text-base leading-relaxed;
   }
 
-  .label {
-    @apply text-accent font-sans text-[11px] font-semibold tracking-[0.19em] uppercase;
+  .label,
+  .meta {
+    @apply text-accent font-sans text-xs leading-relaxed font-semibold tracking-wide uppercase;
   }
 
   .meta {
-    @apply text-muted font-sans text-[10.5px] tracking-[0.14em] uppercase;
+    @apply text-muted;
   }
 
-  .caption {
-    @apply text-faint font-mono text-[11px] uppercase;
+  img:not(.logo) {
+    @apply aspect-video object-cover;
   }
 }
 
