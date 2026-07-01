@@ -1,0 +1,8 @@
+---
+const { width = 0 } = Astro.props;
+---
+
+<span
+  class={`border-line h-px border-t md:inline-block ${width > 0 ? "" : "w-full flex-1"}`}
+  style={width > 0 ? `width: ${width}px` : undefined}
+></span>
