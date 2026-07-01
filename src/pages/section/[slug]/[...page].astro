@@ -63,7 +63,11 @@ const regularPosts = page.data.slice(2);
           return (
             <div class="border-line flex items-center gap-10 border-t py-7">
               <div class="flex-1">
-                <h2>{post.title}</h2>
+                <h2>
+                  <a href={post.slug} class="text-ink hover:text-accent">
+                    {post.title}
+                  </a>
+                </h2>
                 <p class="excerpt mt-3 text-base">{post.excerpt}</p>
               </div>
               <div class="meta text-right font-medium">
