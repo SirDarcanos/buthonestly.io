@@ -37,16 +37,23 @@ const regularPosts = page.data.slice(2);
 ---
 
 <Layout title={`${category.name} — BUT. Honestly`} type="website">
-  <div
-    class="border-line mb-10 flex items-end justify-between border-b pt-6 pb-2"
-  >
-    <h1 class="max-w-lg">
-      {category.name}
-    </h1>
-    <p class="lead max-w-sm text-right text-base">{category.description}</p>
+  <div slot="intro" class="flex items-end justify-between pt-8">
+    <div class="space-y-4">
+      <p class="label max-w-lg text-left">Section</p>
+      <h1 class="max-w-lg">
+        {category.name}
+      </h1>
+    </div>
+    <p class="lead max-w-lg text-right text-lg">
+      {category.description}
+    </p>
   </div>
 
-  <FeaturedPosts posts={featuredPosts} taxName={category.name} />
+  <FeaturedPosts
+    slot="featured-posts"
+    posts={featuredPosts}
+    taxName={category.name}
+  />
 
   {
     /* Only show the "All essays" section if there are more than 2 posts */
@@ -61,7 +68,7 @@ const regularPosts = page.data.slice(2);
           });
 
           return (
-            <div class="border-line flex items-center gap-10 border-t py-7">
+            <article class="border-line flex items-center gap-10 border-t py-7">
               <div class="flex-1">
                 <h2>
                   <a href={post.slug} class="text-ink hover:text-accent">
@@ -77,31 +84,32 @@ const regularPosts = page.data.slice(2);
                   content={post.contentHtml}
                 />
               </div>
-            </div>
+            </article>
           );
         })}
       </section>
     )
   }
 
-  {
-    /* Only show the pagination if there is more than 1 page */
-    page.lastPage > 1 && (
-      <nav class="meta border-line flex items-center justify-center gap-6 border-t py-7 font-medium">
-        {page.url.prev ? (
-          <a href={page.url.prev} class="text-ink hover:text-accent">
-            ← Newer
-          </a>
-        ) : undefined}
-        <span class="text-muted">
-          Page {page.currentPage} of {page.lastPage}
-        </span>
-        {page.url.next ? (
-          <a href={page.url.next} class="text-ink hover:text-accent">
-            Older →
-          </a>
-        ) : undefined}
-      </nav>
-    )
-  }
+  <nav
+    class="meta flex items-center justify-center gap-6 pt-8 pb-16 font-medium"
+  >
+    {
+      page.url.prev ? (
+        <a href={page.url.prev} class="text-ink hover:text-accent">
+          ← Newer
+        </a>
+      ) : undefined
+    }
+    <span class="text-muted">
+      Page {page.currentPage} of {page.lastPage}
+    </span>
+    {
+      page.url.next ? (
+        <a href={page.url.next} class="text-ink hover:text-accent">
+          Older →
+        </a>
+      ) : undefined
+    }
+  </nav>
 </Layout>
