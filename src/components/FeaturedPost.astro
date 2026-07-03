@@ -11,7 +11,7 @@ interface Props {
 const { post } = Astro.props;
 ---
 
-<div class="space-y-6">
+<div class="space-y-3">
   {
     post.featuredImage ? (
       <Image
@@ -22,21 +22,22 @@ const { post } = Astro.props;
       />
     ) : null
   }
-
-  <h2>
-    <a href={post.slug} class="text-ink hover:text-accent">
-      {post.title}
-    </a>
-  </h2>
-  <p class="excerpt text-base">{post.excerpt}</p>
-  <p class="meta font-bold">
-    {
-      new Date(post.date).toLocaleDateString("default", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      })
-    }{" "}
+  <p class="meta mt-6">
+    <span class="text-accent">
+      {
+        new Date(post.date).toLocaleDateString("default", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        })
+      }</span
+    >{" "}
     &middot; <ReadTime content={post.contentHtml} />
+    <h2>
+      <a href={post.slug} class="text-ink hover:text-accent">
+        {post.title}
+      </a>
+    </h2>
+    <p class="excerpt text-base">{post.excerpt}</p>
   </p>
 </div>
