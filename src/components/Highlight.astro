@@ -33,11 +33,11 @@ const postDate = new Date(post.date).toLocaleString("default", {
   />
   <div class="flex-col space-y-6">
     <div class="flex items-center gap-3">
-      <span class="label whitespace-nowrap">
+      <span class="label">
         {post.categories.join(", ")}
       </span>
       <Divider width={20} />
-      <span class="meta whitespace-nowrap">Lead essay</span>
+      <span class="meta">Lead essay</span>
     </div>
     <h2><a href={post.url}>{post.title}</a></h2>
     <p class="lead">{post.excerpt}</p>
