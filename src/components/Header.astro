@@ -2,6 +2,14 @@
 import Divider from "./Divider.astro";
 import Logo from "./Logo.astro";
 import Nav from "./Nav.astro";
+
+import { getCategories } from "../lib/wordpress.ts";
+
+const categories = await getCategories();
+const categoryLinks = categories.map((category) => ({
+  href: `/section/${category.slug}/`,
+  label: category.name,
+}));
 ---
 
 <header id="header" class="mx-auto w-full max-w-6xl px-6 focus:outline-none">
@@ -19,10 +27,10 @@ import Nav from "./Nav.astro";
           href: "/",
           label: "Home",
         },
-        {
-          href: "/essays/",
-          label: "Essays",
-        },
+        ...categoryLinks.map((link) => ({
+          href: link.href,
+          label: link.label,
+        })),
       ]}
     />
   </div>
