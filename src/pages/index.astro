@@ -16,9 +16,10 @@ const currentMonth = new Date().toLocaleString("default", {
 
 <Home title="BUT. Honestly" type="website">
   <div slot="intro" class="flex items-end justify-between pt-8">
-    <p class="label max-w-lg text-left">
-      {currentMonth}<span class="text-muted"> &middot; New this month</span>
-    </p>
+    <div class="space-y-4">
+      <p class="label max-w-lg text-left">{currentMonth}</p>
+      <h1 class="max-w-lg">New This Month</h1>
+    </div>
     <p class="lead max-w-sm text-right text-lg">
       New essays each month on leadership, programming, and the messy overlap
       between humans and tech.
