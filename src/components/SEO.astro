@@ -1,5 +1,5 @@
 ---
-import type { Entry } from "../lib/wordpress";
+import type { Post } from "../types.ts";
 
 const SITE_URL = "https://nicolamustone.com";
 const SITE_NAME = "Nicola Mustone";
@@ -13,7 +13,7 @@ interface Props {
   canonical?: string;
   ogImage?: string;
   type?: "website" | "article" | "profile";
-  article?: Entry;
+  article?: Post;
   noindex?: boolean;
 }
 

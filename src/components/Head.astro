@@ -1,0 +1,59 @@
+---
+import "../styles/global.css";
+
+import SEO from "../components/SEO.astro";
+
+import { Font } from "astro:assets";
+import { type Post } from "../types.ts";
+
+import favicon from "../assets/favicon.svg?url";
+
+interface Props {
+  title: string;
+  description?: string;
+  type?: "website" | "article" | "profile";
+  article?: Post;
+  noindex?: boolean;
+}
+
+const { title, description, type, article, noindex } = Astro.props;
+---
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/svg+xml" href={favicon} />
+  <meta name="generator" content={Astro.generator} />
+
+  {/* Set theme before paint to avoid a flash. Dark is the default */}
+  <script is:inline>
+    {
+      if (localStorage.getItem("theme") !== "light") {
+        document.documentElement.classList.add("light");
+      }
+    }
+  </script>
+
+  <Font cssVariable="--font-newsreader" preload />
+  <Font cssVariable="--font-archivo" preload />
+
+  <SEO
+    title={title}
+    description={description}
+    type={type}
+    article={article}
+    noindex={noindex}
+  />
+
+  {/* Fathom analytics — production only. */}
+  {
+    import.meta.env.PROD && import.meta.env.FATHOM_SITE_ID && (
+      <script
+        src="https://cdn.usefathom.com/script.js"
+        data-site={import.meta.env.FATHOM_SITE_ID}
+        defer
+        is:inline
+      />
+    )
+  }
+</head>
