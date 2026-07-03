@@ -6,7 +6,7 @@ import { getAllPosts } from "../lib/wordpress";
 
 const posts = await getAllPosts();
 const [lead, ...rest] = posts;
-const recent = rest.slice(1, 6);
+const recent = rest.slice(1, 7);
 
 const currentMonth = new Date().toLocaleString("default", {
   month: "long",
@@ -37,7 +37,7 @@ const currentMonth = new Date().toLocaleString("default", {
         });
 
         return (
-          <article class="border-line space-y-3 border-b py-6 last:border-b-0">
+          <article class="border-line space-y-3 border-b py-6 nth-last-[-n+2]:border-0">
             <div class="flex justify-between">
               <p class="label text-left">{post.categories.join(", ")}</p>
               <div class="meta flex gap-2">
