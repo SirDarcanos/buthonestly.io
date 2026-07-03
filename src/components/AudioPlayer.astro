@@ -1,0 +1,129 @@
+---
+/**
+ * Progressive enhancement for post audio.
+ *
+ * WordPress renders `<figure class="wp-block-audio"><audio controls …>` into the
+ * post body via `set:html`, so we can't wrap it in a component at build time.
+ * Instead this script upgrades each native <audio> into a custom-styled player
+ * (.audio-player, styled in global.css). If JS never runs, the native control
+ * bar stays as a graceful fallback.
+ *
+ * Drop this once on any page that renders post content.
+ */
+---
+
+<script>
+  const PLAY = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>`;
+  const PAUSE = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z" /></svg>`;
+
+  function fmt(seconds: number): string {
+    if (!isFinite(seconds)) return "0:00";
+    const s = Math.floor(seconds);
+    return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+  }
+
+  function upgrade(audio: HTMLAudioElement): void {
+    if (audio.dataset.enhanced) return;
+    audio.dataset.enhanced = "1";
+    audio.removeAttribute("controls");
+    if (!audio.preload || audio.preload === "none") audio.preload = "metadata";
+
+    const RATES = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
+    const speedOptions = RATES.map(
+      (r) => `<option value="${r}"${r === 1 ? " selected" : ""}>${r}×</option>`,
+    ).join("");
+
+    const wrap = document.createElement("div");
+    wrap.className = "audio-player";
+    wrap.setAttribute("role", "group");
+    wrap.setAttribute("aria-label", "Audio player");
+    wrap.innerHTML = `
+      <p class="label">Listen instead of reading</p>
+      <div class="audio-row">
+        <button type="button" class="audio-play" aria-label="Play">
+          <span class="icon-play">${PLAY}</span>
+          <span class="icon-pause">${PAUSE}</span>
+        </button>
+        <input class="audio-seek" type="range" min="0" max="100" step="0.1" value="0" aria-label="Seek" />
+        <span class="audio-time"><span class="audio-current">0:00</span> / <span class="audio-duration">0:00</span></span>
+        <select class="audio-speed" aria-label="Playback speed">${speedOptions}</select>
+      </div>
+    `;
+
+    const parent = audio.parentNode as Node;
+    parent.insertBefore(wrap, audio);
+    wrap.appendChild(audio);
+
+    const btn = wrap.querySelector(".audio-play") as HTMLButtonElement;
+    const seek = wrap.querySelector(".audio-seek") as HTMLInputElement;
+    const curEl = wrap.querySelector(".audio-current") as HTMLElement;
+    const durEl = wrap.querySelector(".audio-duration") as HTMLElement;
+    const speed = wrap.querySelector(".audio-speed") as HTMLSelectElement;
+    let seeking = false;
+
+    speed.addEventListener("change", () => {
+      audio.playbackRate = Number(speed.value);
+    });
+
+    const render = () => {
+      const pct = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
+      seek.value = String(pct);
+      seek.style.setProperty("--progress", `${pct}%`);
+      seek.setAttribute(
+        "aria-valuetext",
+        `${fmt(audio.currentTime)} of ${fmt(audio.duration)}`,
+      );
+      curEl.textContent = fmt(audio.currentTime);
+    };
+
+    btn.addEventListener("click", () => {
+      audio.paused ? audio.play() : audio.pause();
+    });
+    audio.addEventListener("play", () => {
+      wrap.dataset.playing = "";
+      btn.setAttribute("aria-label", "Pause");
+    });
+    audio.addEventListener("pause", () => {
+      delete wrap.dataset.playing;
+      btn.setAttribute("aria-label", "Play");
+    });
+    audio.addEventListener("ended", () => {
+      delete wrap.dataset.playing;
+      btn.setAttribute("aria-label", "Play");
+    });
+    audio.addEventListener("loadedmetadata", () => {
+      durEl.textContent = fmt(audio.duration);
+      render();
+    });
+    audio.addEventListener("timeupdate", () => {
+      if (!seeking) render();
+    });
+
+    seek.addEventListener("input", () => {
+      seeking = true;
+      const t = (Number(seek.value) / 100) * (audio.duration || 0);
+      curEl.textContent = fmt(t);
+      seek.style.setProperty("--progress", `${seek.value}%`);
+    });
+    seek.addEventListener("change", () => {
+      audio.currentTime = (Number(seek.value) / 100) * (audio.duration || 0);
+      seeking = false;
+    });
+
+    // Metadata may already be available (cached / fast load).
+    if (audio.readyState >= 1) {
+      durEl.textContent = fmt(audio.duration);
+      render();
+    }
+  }
+
+  function init(): void {
+    document
+      .querySelectorAll<HTMLAudioElement>("article.post audio")
+      .forEach(upgrade);
+  }
+
+  init();
+  // Re-run if the site ever adopts Astro view transitions.
+  document.addEventListener("astro:page-load", init);
+</script>
