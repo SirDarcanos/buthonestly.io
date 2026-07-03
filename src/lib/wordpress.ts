@@ -28,6 +28,7 @@ type WpPost = {
   _embedded?: {
     "wp:featuredmedia"?: Array<{
       alt_text?: string;
+      caption?: { rendered?: string };
       media_details?: { width?: number; height?: number };
     }>;
     "wp:term"?: WpTerm[][];
@@ -78,6 +79,9 @@ function truncate(text: string, max = 160): string {
 function normalize(post: WpPost): Post {
   const media = post._embedded?.["wp:featuredmedia"]?.[0];
   const featuredImageAlt = media?.alt_text || undefined;
+  const featuredImageCaption = media?.caption?.rendered
+    ? toPlainText(media.caption.rendered)
+    : undefined;
 
   const terms = (post._embedded?.["wp:term"] ?? []).flat();
   const tags = terms
@@ -99,6 +103,7 @@ function normalize(post: WpPost): Post {
     modified: post.modified,
     featuredImage: post.jetpack_featured_media_url || undefined,
     featuredImageAlt: featuredImageAlt,
+    featuredImageCaption: featuredImageCaption,
     tags: tags,
     categories: cats,
     seo: {

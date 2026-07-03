@@ -118,6 +118,10 @@
     filter: grayscale(1) contrast(1.05);
     mix-blend-mode: multiply;
   }
+
+  figcaption {
+    @apply text-muted mt-2 text-right font-mono text-xs;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -12,6 +12,7 @@ export type Post = {
   modified: string; // ISO
   featuredImage?: string;
   featuredImageAlt?: string;
+  featuredImageCaption?: string;
   tags: string[];
   categories: string[];
   seo: {
