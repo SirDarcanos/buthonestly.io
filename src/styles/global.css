@@ -74,6 +74,12 @@
   a {
     @apply text-accent;
   }
+
+  h1 a,
+  h2 a,
+  h3 a {
+    @apply text-ink hover:text-accent;
+  }
 }
 
 @layer components {
@@ -93,7 +99,7 @@
 
   .label,
   .meta {
-    @apply text-accent font-sans text-xs leading-relaxed font-semibold tracking-wide uppercase;
+    @apply text-accent font-sans text-xs leading-relaxed font-semibold tracking-[clamp(0.12em,0.1em+0.2vw,0.2em)] uppercase;
   }
 
   .meta {
