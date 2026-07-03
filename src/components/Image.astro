@@ -9,6 +9,7 @@ interface Props {
   widths?: number[];
   sizes?: string;
   class?: string;
+  caption?: string;
   priority?: boolean;
   ariaHidden?: boolean;
 }
@@ -21,6 +22,7 @@ const {
   widths,
   sizes,
   class: className,
+  caption = "",
   priority = false,
   ariaHidden = false,
 } = Astro.props;
@@ -64,4 +66,5 @@ const fallback = cdnUrl(src, width, height);
     aria-hidden={ariaHidden ? "true" : undefined}
     class={twMerge("block h-auto max-w-full", className)}
   />
+  {caption && <figcaption>{caption}</figcaption>}
 </figure>
