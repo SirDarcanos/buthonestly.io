@@ -36,9 +36,13 @@ const { title, description, type, article, noindex } = Astro.props;
     {/* HEADER */}
     <Header />
 
-    <div class="mx-auto w-full max-w-6xl px-10">
-      <slot name="intro" />
-    </div>
+    {
+      Astro.slots.has("intro") && (
+        <div class="mx-auto w-full max-w-6xl px-10">
+          <slot name="intro" />
+        </div>
+      )
+    }
 
     <slot name="highlight" />
 
