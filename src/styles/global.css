@@ -122,6 +122,120 @@
   figcaption {
     @apply text-muted mt-2 text-right font-mono text-xs;
   }
+
+  article.post .wp-block-paragraph,
+  article.post .wp-block-audio {
+    @apply mb-6;
+  }
+
+  article.post .wp-block-heading {
+    @apply mt-8 mb-3;
+  }
+
+  article.post ul,
+  article.post ul.wp-block-list {
+    @apply list-disc pl-4;
+  }
+
+  article.post ol,
+  article.post ol.wp-block-list {
+    @apply list-decimal pl-4;
+  }
+
+  /* No-JS fallback: keep the native player usable + on-theme. AudioPlayer.astro
+     upgrades these into .audio-player and hides the native element. */
+  article.post .wp-block-audio audio {
+    @apply bg-surface h-12 w-full;
+    color-scheme: light;
+  }
+  .dark article.post .wp-block-audio audio {
+    color-scheme: dark;
+  }
+
+  /* Custom player (JS-enhanced). */
+  .audio-player {
+    @apply border-line bg-surface font-sans flex w-full flex-col gap-4 border p-5;
+  }
+  .audio-player audio {
+    @apply hidden;
+  }
+  .audio-row {
+    @apply flex w-full items-center gap-3;
+  }
+
+  /* Custom focus indicator: darken the control instead of the default outline.
+     Ink-based so it darkens on light and lightens on dark — always visible. */
+  .audio-player :focus-visible {
+    outline: none;
+    box-shadow: inset 0 0 0 100px
+      color-mix(in oklab, var(--color-ink) 20%, transparent);
+  }
+
+  .audio-play {
+    @apply bg-accent text-background grid size-9 flex-none cursor-pointer place-items-center rounded-full border-0;
+  }
+  .audio-play svg {
+    @apply block size-4;
+  }
+  .audio-play .icon-pause {
+    @apply hidden;
+  }
+  .audio-player[data-playing] .audio-play .icon-play {
+    @apply hidden;
+  }
+  .audio-player[data-playing] .audio-play .icon-pause {
+    @apply block;
+  }
+
+  .audio-seek {
+    @apply h-1 flex-1 cursor-pointer appearance-none rounded-full;
+    background: linear-gradient(
+      to right,
+      var(--color-accent) var(--progress, 0%),
+      var(--color-faint) var(--progress, 0%)
+    );
+  }
+  .audio-seek::-webkit-slider-thumb {
+    @apply bg-accent size-3 cursor-pointer appearance-none rounded-full;
+  }
+  .audio-seek::-moz-range-thumb {
+    @apply bg-accent size-3 cursor-pointer rounded-full border-0;
+  }
+  .audio-seek::-moz-range-progress {
+    @apply bg-accent h-1 rounded-full;
+  }
+  .audio-seek::-moz-range-track {
+    @apply bg-faint h-1 rounded-full;
+  }
+
+  .audio-time {
+    @apply text-muted flex-none text-xs tabular-nums;
+  }
+
+  .audio-speed {
+    @apply text-muted hover:text-accent font-sans flex-none cursor-pointer border-0 bg-transparent p-0 text-right text-xs font-semibold tabular-nums;
+    color-scheme: light;
+  }
+  .dark .audio-speed {
+    color-scheme: dark;
+  }
+
+  /* Details block - Quick Summary & Table of Contents */
+  article.post .wp-block-details {
+    @apply border-line bg-surface mb-6 border p-4 text-base leading-relaxed;
+  }
+
+  article.post .wp-block-details summary {
+    @apply text-accent font-sans text-xs leading-relaxed font-semibold tracking-[clamp(0.12em,0.1em+0.2vw,0.2em)] uppercase;
+  }
+
+  article.post .wp-block-details ul {
+    @apply mb-4;
+  }
+
+  article.post .wp-block-details p {
+    @apply mb-0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -5,7 +5,7 @@
  * time and normalizes it so templates never touch raw API noise.
  */
 
-import { SITE_URL, API_BASE } from "../consts.ts";
+import { SITE_URL, API_BASE, WPCOM_API_BASE } from "../consts.ts";
 import { type PostLink, type Post, type Tax } from "../types.ts";
 
 type WpTerm = {
@@ -153,6 +153,55 @@ async function fetchAllPosts(): Promise<Post[]> {
 export async function getPostBySlug(slug: string): Promise<Post | undefined> {
   const posts = await getAllPosts();
   return posts.find((p) => p.slug === slug);
+}
+
+type RelatedResponse = {
+  hits?: Array<{ fields?: { post_id?: number } }>;
+};
+
+/**
+ * Related posts for a given post, newest-relevance first.
+ *
+ * Uses Jetpack's Elasticsearch-backed related endpoint (WP.com v1.1) purely to
+ * rank post IDs, then maps them back onto our already-normalized posts so the
+ * cards reuse the same title/url/image/excerpt as everywhere else. Falls back to
+ * same-category posts (newest first) when the endpoint returns too few, so the
+ * section never renders short.
+ */
+export async function getRelatedPosts(post: Post, size = 3): Promise<Post[]> {
+  const all = await getAllPosts();
+  const byId = new Map(all.map((p) => [p.id, p]));
+
+  const related: Post[] = [];
+  try {
+    const res = await fetch(`${WPCOM_API_BASE}/posts/${post.id}/related`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ size }),
+    });
+    if (res.ok) {
+      const data = (await res.json()) as RelatedResponse;
+      for (const hit of data.hits ?? []) {
+        const match = byId.get(Number(hit.fields?.post_id));
+        if (match && match.id !== post.id) related.push(match);
+      }
+    }
+  } catch {
+    // Network/endpoint failure → rely on the category fallback below.
+  }
+
+  if (related.length < size) {
+    const chosen = new Set(related.map((p) => p.id));
+    chosen.add(post.id);
+    const sameCategory = all.filter(
+      (p) =>
+        !chosen.has(p.id) &&
+        p.categories.some((c) => post.categories.includes(c)),
+    );
+    related.push(...sameCategory.slice(0, size - related.length));
+  }
+
+  return related.slice(0, size);
 }
 
 let tagsCache: Promise<Tax[]> | undefined;

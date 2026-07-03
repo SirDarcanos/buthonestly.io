@@ -1,79 +1,116 @@
 ---
-import Highlight from "../components/Highlight.astro";
-import Layout from "../layouts/Layout.astro";
-import { getAllPosts } from "../lib/wordpress";
+import AudioPlayer from "../components/AudioPlayer.astro";
+import Divider from "../components/Divider.astro";
+import Image from "../components/Image.astro";
+import ReadTime from "../components/ReadTime.astro";
+import SinglePost from "../layouts/SinglePost.astro";
+import { getAllPosts, getRelatedPosts } from "../lib/wordpress";
 
-import { type Post, type PostLink } from "../types.ts";
+import { type Post } from "../types.ts";
 
 export async function getStaticPaths() {
   const posts = await getAllPosts();
-  return posts.map((post, i) => ({
-    params: { slug: post.slug },
-    props: {
-      post,
-      prev: {
-        title: posts[(i - 1 + posts.length) % posts.length].title,
-        slug: posts[(i - 1 + posts.length) % posts.length].slug,
+  return Promise.all(
+    posts.map(async (post) => ({
+      params: { slug: post.slug },
+      props: {
+        post,
+        related: await getRelatedPosts(post, 3),
       },
-      next: {
-        title: posts[(i + 1) % posts.length].title,
-        slug: posts[(i + 1) % posts.length].slug,
-      },
-    },
-  }));
+    })),
+  );
 }
 
 interface Props {
   post: Post;
-  prev: PostLink;
-  next: PostLink;
+  related: Post[];
 }
 
-const { post, prev, next } = Astro.props;
+const { post, related } = Astro.props;
 const publishDate = new Date(post.date);
 ---
 
-<Layout
+<SinglePost
   title={post.seo.title}
   description={post.seo.description}
   type="article"
   article={post}
 >
-  {/* POST HEADER */}
-  <article id={"post-" + post.id} class="mt-20">
-    <header class="text-center md:max-w-xl md:text-left">
-      <p class="font-mono text-sm uppercase">
-        {
-          post.tags.map((tag) => (
-            <>
-              <span class="text-accent">{tag}</span>
-              <span class="text-faint"> / </span>
-            </>
-          ))
-        }
-        <time datetime={post.date} class="text-faint">
+  {/* POST META */}
+  <article id={"post-" + post.id} class="post border-line mt-20 border-b pb-10">
+    <header class="mb-10 space-y-6">
+      <div class="flex items-center gap-3">
+        <span class="label">
+          {post.categories.join(", ")}
+        </span>
+        <Divider width={20} />
+        <span class="meta"
+          ><ReadTime content={post.contentHtml} suffix="min read" /></span
+        >
+      </div>
+      <h1>{post.title}</h1>
+      <p class="lead">
+        {post.excerpt}
+      </p>
+      <div class="border-line flex border-y py-4">
+        <time datetime={publishDate.toISOString()} class="label">
           {
-            publishDate.toLocaleDateString("en-RO", {
+            publishDate.toLocaleString("default", {
+              day: "numeric",
+              month: "long",
               year: "numeric",
-              month: "short",
             })
           }
         </time>
-        {
-          post.categories.map((category) => (
-            <span class="bg-accent-soft text-accent ml-2 inline-block px-2 py-1 align-middle font-mono text-xs font-light uppercase">
-              {category}
-            </span>
-          ))
-        }
-      </p>
-      <h1 class="mt-3 mb-10 text-4xl">{post.title}</h1>
-      <p class="text-muted mt-4 text-xl">
-        {post.excerpt}
-      </p>
+        <p class="meta flex flex-1 justify-end">
+          In {post.tags.join(", ")}
+        </p>
+      </div>
     </header>
+
+    {/* FEATURED IMAGE */}
+    <Image
+      src={post.featuredImage!}
+      alt={post.featuredImageAlt ?? ""}
+      caption={post.featuredImageCaption ?? ""}
+      width={1600}
+      height={900}
+      widths={[580, 1160]}
+      sizes="(max-width: 820px) 100vw, 580px"
+      class="w-full"
+      priority
+    />
 
     {/* POST CONTENT */}
     <div class="post-content mt-7" set:html={post.contentHtml} />
+
+    <p class="meta font-bold">
+      <span class="bg-accent mr-3 inline-block size-2"></span>End
+    </p>
   </article>
-</Layout>
+
+  {/* RELATED POSTS */}
+  {
+    related.length > 0 && (
+      <section class="my-16">
+        <p class="meta mb-3">More essays like this</p>
+        <ul>
+          {related.map((rel) => (
+            <li class="border-line flex items-start border-t py-4">
+              <h3 class="flex-1">
+                <a href={rel.url} class="text-ink hover:text-accent">
+                  {rel.title}
+                </a>
+              </h3>
+              <p class="meta mt-2 text-right">
+                <ReadTime content={rel.contentHtml} />
+              </p>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  <AudioPlayer />
+</SinglePost>
