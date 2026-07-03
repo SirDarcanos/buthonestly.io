@@ -11,7 +11,7 @@ interface Props {
 const { post } = Astro.props;
 ---
 
-<div class="space-y-3">
+<article class="space-y-3">
   {
     post.featuredImage ? (
       <Image
@@ -40,4 +40,4 @@ const { post } = Astro.props;
     </h2>
     <p class="excerpt text-base">{post.excerpt}</p>
   </p>
-</div>
+</article>
