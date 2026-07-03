@@ -3,13 +3,16 @@ import Logo from "./Logo.astro";
 import Nav from "./Nav.astro";
 import Socials from "./Socials.astro";
 
-import { getCategories } from "../lib/wordpress.ts";
+import { getTags } from "../lib/wordpress.ts";
 
-const categories = await getCategories();
-const categoryLinks = categories.map((category) => ({
-  href: `/section/${category.slug}/`,
-  label: category.name,
+const tags = await getTags();
+const tagLinks = tags.map((tag) => ({
+  href: `/topic/${tag.slug}/`,
+  label: tag.name,
 }));
+
+const tagLinks1 = tagLinks.filter((_, i) => i % 2 === 0);
+const tagLinks2 = tagLinks.filter((_, i) => i % 2 === 1);
 ---
 
 <footer id="footer" class="border-ink bg-surface text-muted border-t">
@@ -54,7 +57,12 @@ const categoryLinks = categories.map((category) => ({
       />
     </div>
     <Nav
-      links={categoryLinks}
+      links={tagLinks1}
+      class="flex-col gap-2"
+      linkClass="text-muted font-medium"
+    />
+    <Nav
+      links={tagLinks2}
       class="flex-col gap-2"
       linkClass="text-muted font-medium"
     />
