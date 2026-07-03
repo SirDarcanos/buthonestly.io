@@ -34,7 +34,7 @@ const { post } = Astro.props;
     >{" "}
     &middot; <ReadTime content={post.contentHtml} />
     <h2>
-      <a href={post.slug} class="text-ink hover:text-accent">
+      <a href={post.url} class="text-ink hover:text-accent">
         {post.title}
       </a>
     </h2>

@@ -90,6 +90,7 @@ function normalize(post: WpPost): Post {
   return {
     id: post.id,
     slug: post.slug,
+    url: `/${post.slug}/`,
     type: "post",
     title: decodeEntities(post.title.rendered),
     contentHtml: post.content.rendered,

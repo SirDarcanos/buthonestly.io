@@ -39,7 +39,7 @@ const postDate = new Date(post.date).toLocaleString("default", {
       <Divider width={20} />
       <span class="meta whitespace-nowrap">Lead essay</span>
     </div>
-    <h2><a href={post.slug}>{post.title}</a></h2>
+    <h2><a href={post.url}>{post.title}</a></h2>
     <p class="lead">{post.excerpt}</p>
     <p class="meta">
       {postDate} &middot; <ReadTime content={post.contentHtml} />

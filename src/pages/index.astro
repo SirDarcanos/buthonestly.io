@@ -46,7 +46,9 @@ const currentMonth = new Date().toLocaleString("default", {
                 <ReadTime content={post.contentHtml} />
               </div>
             </div>
-            <h3>{post.title}</h3>
+            <h3>
+              <a href={post.url}>{post.title}</a>
+            </h3>
             <p class="excerpt text-base">{post.excerpt}</p>
           </article>
         );

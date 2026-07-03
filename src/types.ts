@@ -3,6 +3,7 @@ export type PostLink = Pick<Post, "title" | "slug">;
 export type Post = {
   id: number;
   slug: string;
+  url: string;
   type: "post";
   title: string;
   contentHtml: string;
