@@ -7,6 +7,7 @@ import { unified } from "@astrojs/markdown-remark";
 
 import remarkWikiLinks from "./src/lib/remark-wiki-links.mjs";
 import remarkCallouts from "./src/lib/remark-callouts.mjs";
+import rehypeExternalLinks from "./src/lib/rehype-external-links.mjs";
 
 export default defineConfig({
   site: "https://buthonestly.io/",
@@ -15,6 +16,7 @@ export default defineConfig({
   markdown: {
     processor: unified({
       remarkPlugins: [remarkWikiLinks, remarkCallouts],
+      rehypePlugins: [rehypeExternalLinks],
     }),
   },
   vite: {
