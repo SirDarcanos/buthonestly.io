@@ -3,10 +3,20 @@ import icon from "astro-icon";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 
+import { unified } from "@astrojs/markdown-remark";
+
+import remarkWikiLinks from "./src/lib/remark-wiki-links.mjs";
+import remarkCallouts from "./src/lib/remark-callouts.mjs";
+
 export default defineConfig({
   site: "https://buthonestly.io/",
   trailingSlash: "always",
   integrations: [sitemap(), icon()],
+  markdown: {
+    processor: unified({
+      remarkPlugins: [remarkWikiLinks, remarkCallouts],
+    }),
+  },
   vite: {
     plugins: [tailwindcss()],
   },
@@ -15,7 +25,7 @@ export default defineConfig({
       provider: fontProviders.google(),
       name: "Newsreader",
       cssVariable: "--font-newsreader",
-      weights: [300, 380, 400, 500],
+      weights: [300, 400, 500],
     },
     {
       provider: fontProviders.google(),
