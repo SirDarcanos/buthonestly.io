@@ -19,9 +19,9 @@ Attributes describe your products. Variations turn those details into real choic
 
 > [!summary]- Quick Summary
 >
-> -   Attributes describe your products in WooCommerce.
-> -   Variations turn those attribute details into real choices customers make before they add to cart.
-> -   Understanding WooCommerce attributes vs variations helps you model only the complexity that actually exists in your store.
+> - Attributes describe your products in WooCommerce.
+> - Variations turn those attribute details into real choices customers make before they add to cart.
+> - Understanding WooCommerce attributes vs variations helps you model only the complexity that actually exists in your store.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
@@ -37,23 +37,23 @@ Attributes are product details. They tell people what they are looking at.
 
 If you sell a dress, useful attributes might be:
 
--   Size
--   Color
--   Fabric
+- Size
+- Color
+- Fabric
 
 If you sell an online course, attributes might be:
 
--   Skill Level
--   Required Knowledge
--   Language
+- Skill Level
+- Required Knowledge
+- Language
 
 In both cases, attributes add structure and clarity. The dress has sizes and colors. The course needs PHP, CSS, or HTML knowledge. You help people decide if the product fits their needs.
 
 Attributes can exist on almost any WooCommerce product type. You can add them to:
 
--   Simple products as extra information
--   Variable products as the base for variations
--   Other product types, when you need consistent filters or specs
+- Simple products as extra information
+- Variable products as the base for variations
+- Other product types, when you need consistent filters or specs
 
 The key point is this: attributes do not always create choices. Sometimes they just explain.
 
@@ -67,25 +67,25 @@ Variations are what your customers pick before they click Add to cart.
 
 A variation is one specific combination of attribute terms. In WooCommerce language, terms are the concrete values of an attribute, such as:
 
--   For Size: Small, Medium, Large
--   For Color: White, Black
+- For Size: Small, Medium, Large
+- For Color: White, Black
 
 Once you define these terms inside attributes, you can create variations from them.
 
 Think again about the dress:
 
--   Attributes: Size and Color
--   Size terms: Small, Medium, Large
--   Color terms: White, Black
+- Attributes: Size and Color
+- Size terms: Small, Medium, Large
+- Color terms: White, Black
 
 Each variation is a single, specific pairing of one size and one color. For example:
 
--   Small, White
--   Medium, White
--   Large, White
--   Small, Black
--   Medium, Black
--   Large, Black
+- Small, White
+- Medium, White
+- Large, White
+- Small, Black
+- Medium, Black
+- Large, Black
 
 That gives you six possible variations.
 
@@ -103,8 +103,8 @@ For a Simple product, attributes are often enough. They help describe what the p
 
 The course example is a good case. You might have attributes such as:
 
--   Skills Required: PHP, CSS, HTML
--   Level: Intermediate
+- Skills Required: PHP, CSS, HTML
+- Level: Intermediate
 
 Customers are not choosing between PHP, CSS, or HTML. They simply need to know that the course expects all three. The attributes are there to inform, not to create options.
 
@@ -112,9 +112,9 @@ In this situation, setting up variations would only add friction. You would be f
 
 Use attributes alone when:
 
--   There is only one version of the product
--   The attributes are informational, not selectable
--   Price and stock stay the same for everyone
+- There is only one version of the product
+- The attributes are informational, not selectable
+- Price and stock stay the same for everyone
 
 ## When Variations Make Your Life Easier
 
@@ -126,15 +126,15 @@ Technically, you can create all six variations. There is nothing wrong with that
 
 If all sizes and colors share the same settings, you can simplify. WooCommerce lets you create more flexible variations such as:
 
--   Any Color, Any Size
--   White, Any Size
--   Black, Any Size
+- Any Color, Any Size
+- White, Any Size
+- Black, Any Size
 
 For many stores, a single variation that covers “Any Color, Any Size” is enough, as long as:
 
--   The price is the same
--   You do not track stock per size or color
--   You do not need separate images or SKUs per combination
+- The price is the same
+- You do not track stock per size or color
+- You do not need separate images or SKUs per combination
 
 The customer still picks a size and a color from the dropdowns. They experience all six combinations. You, as the store admin, manage only two variations.
 
@@ -144,12 +144,12 @@ This is where understanding the difference between attributes and variations sav
 
 Here is a simple way to line up the two concepts.
 
-| Attributes | Variations |
-| --- | --- |
-| Describe the product in structured, reusable ways | Exist only on Variable products |
-| Can appear on multiple products | Depend on attributes and their terms |
-| Can be used for filters and navigation | Represent concrete combinations like Small, Black |
-| May or may not create choices | Control price, stock, SKU, and image |
+| Attributes                                        | Variations                                        |
+| ------------------------------------------------- | ------------------------------------------------- |
+| Describe the product in structured, reusable ways | Exist only on Variable products                   |
+| Can appear on multiple products                   | Depend on attributes and their terms              |
+| Can be used for filters and navigation            | Represent concrete combinations like Small, Black |
+| May or may not create choices                     | Control price, stock, SKU, and image              |
 
 If a detail belongs in a filter, spec table, or comparison list, it is usually an attribute.
 
@@ -173,15 +173,15 @@ You sell a t-shirt in two colors and three sizes. You also have a material attri
 
 Your attributes might be:
 
--   **Size**: Small, Medium, Large
--   **Color**: White, Black
--   **Material**: 100% Cotton
+- **Size**: Small, Medium, Large
+- **Color**: White, Black
+- **Material**: 100% Cotton
 
 If you want customers to choose size and color, you:
 
--   Add **Size** and **Color** as attributes.
--   Mark both as **Used for variations**.
--   Create variations from all combinations.
+- Add **Size** and **Color** as attributes.
+- Mark both as **Used for variations**.
+- Create variations from all combinations.
 
 **Material** stays as an attribute only. It appears in the **Additional information** tab, but it does not become a choice. There is no dropdown for material. The shirt is always 100% cotton.
 

@@ -48,10 +48,10 @@ With new WooCommerce versions, this process is simpler. It’s like with simple 
 
 The link is made in the same way, but you use the variation ID instead of the product ID, like this:
 
--   Redirect to the Homepage: `` https://yourwebsite.com/?add-to-cart=[Variation ID]`&quantity=1` ``
--   Redirect to the Cart: `` https://yourwebsite.com/cart/?add-to-cart=[Variation ID]`&quantity=1` ``
--   Redirect to the Checkout: `` https://yourwebsite.com/checkout/?add-to-cart=[Variation ID]`&quantity=1` ``
--   Redirect to any page: `` https://yourwebsite.com/page-slug/?add-to-cart=[Variation ID]`&quantity=1` ``
+- Redirect to the Homepage: `` https://yourwebsite.com/?add-to-cart=[Variation ID]`&quantity=1` ``
+- Redirect to the Cart: `` https://yourwebsite.com/cart/?add-to-cart=[Variation ID]`&quantity=1` ``
+- Redirect to the Checkout: `` https://yourwebsite.com/checkout/?add-to-cart=[Variation ID]`&quantity=1` ``
+- Redirect to any page: `` https://yourwebsite.com/page-slug/?add-to-cart=[Variation ID]`&quantity=1` ``
 
 ## Custom Add to Cart Link for Grouped Products
 
@@ -61,11 +61,11 @@ The add to cart link is slightly different when dealing with grouped products wi
 
 After making your link, adding it to your site is easy. It can be a simple link, a button, or part of a pricing table. You can place it in your content using the text editor or as a button in a Button Block.
 
--   Create a simple add-to-cart link anywhere in your content by using the text editor:
+- Create a simple add-to-cart link anywhere in your content by using the text editor:
 
 ![The WordPress content editor showing how to add the add to cart URL to a text link in](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/add-link-to-text-1030x339-1.webp?resize=830%2C273&quality=80&ssl=1)
 
--   Or using a [Button block](https://wordpress.org/documentation/article/buttons-block/):
+- Or using a [Button block](https://wordpress.org/documentation/article/buttons-block/):
 
 ![The WordPress content editor showing how to add the add to cart URL to the Button block](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/add-button-with-link-1030x296-1.webp?resize=830%2C239&quality=80&ssl=1)
 

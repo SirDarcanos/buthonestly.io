@@ -19,13 +19,13 @@ originalCover: https://buthonestly.io/wp-content/uploads/2025/11/choose-software
 
 > [!summary]- Quick Summary
 >
-> -   Without an explicit license, your code is **“all rights reserved”** and others can’t legally use, modify, or share it.
-> -   A software license is how you **give people permission** to use your work under specific conditions. Before choosing a license, decide your goals: **maximum adoption**, **guaranteed openness (copyleft)**, or **keeping parts proprietary**.
-> -   **Permissive licenses** (e.g. MIT, BSD, Apache 2.0) allow broad reuse, including in closed-source/commercial software.
-> -   **Copyleft licenses** (e.g. GPL) require derivative works to **remain open source** under the same or compatible license.
-> -   Always include a clear **LICENSE file**, update copyright notices, and mention the license in your **README** and project metadata.
-> -   Mixing licensed code has rules: you must **check compatibility** between your chosen license and any dependencies.
-> -   You can change or relicense your project later, but this gets harder once **outside contributors** are involved.
+> - Without an explicit license, your code is **“all rights reserved”** and others can’t legally use, modify, or share it.
+> - A software license is how you **give people permission** to use your work under specific conditions. Before choosing a license, decide your goals: **maximum adoption**, **guaranteed openness (copyleft)**, or **keeping parts proprietary**.
+> - **Permissive licenses** (e.g. MIT, BSD, Apache 2.0) allow broad reuse, including in closed-source/commercial software.
+> - **Copyleft licenses** (e.g. GPL) require derivative works to **remain open source** under the same or compatible license.
+> - Always include a clear **LICENSE file**, update copyright notices, and mention the license in your **README** and project metadata.
+> - Mixing licensed code has rules: you must **check compatibility** between your chosen license and any dependencies.
+> - You can change or relicense your project later, but this gets harder once **outside contributors** are involved.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
@@ -33,16 +33,16 @@ Choosing a software license can feel like a legal maze, but it’s one of the mo
 
 Developers often treat licenses as an afterthought. You finish building something, push it to GitHub, and move on. But if your repository doesn’t include a license file, you’re not technically “open source.”
 
-By default, *no license* means **all rights reserved**. Others can’t legally reuse, modify, or distribute your code. Even if someone forks your project or fixes a bug, they’re in a legal gray zone.
+By default, _no license_ means **all rights reserved**. Others can’t legally reuse, modify, or distribute your code. Even if someone forks your project or fixes a bug, they’re in a legal gray zone.
 
 Licensing your software early prevents headaches later. It protects your intentions, defines what others can do with your code, and helps your project grow under clear rules.
 
 This guide explains how to choose a software license that fits your goals, whether you’re sharing open-source tools or protecting private projects.
 
-**Disclaimer**  
-  
-Everything shared in this essay reflects **my own opinions and experience**. I’m speaking solely on my behalf — **not on behalf of Automattic Inc.** or any of its brands.  
-  
+**Disclaimer**
+
+Everything shared in this essay reflects **my own opinions and experience**. I’m speaking solely on my behalf — **not on behalf of Automattic Inc.** or any of its brands.
+
 This essay provides **general educational information** about software licensing based on common practices in the open-source community. **It is not legal advice** and should not be relied upon as such. Software licensing involves complex legal considerations that vary by jurisdiction. Before making licensing decisions that could affect your legal rights or obligations, **consult a qualified attorney** specializing in intellectual property law.
 
 ## What a Software License Really Does
@@ -69,14 +69,14 @@ The choice defines your project’s DNA — whether it spreads freely or ensures
 
 The [MIT license](https://tlo.mit.edu/understand-ip/exploring-mit-open-source-license-comprehensive-guide) is short, simple, and extremely permissive. It lets anyone reuse, modify, and even sell your code, as long as they include your original copyright and license notice.
 
-It’s ideal if your main goal is *adoption*. You’re saying, “Use it however you want, just give me credit.”  
+It’s ideal if your main goal is _adoption_. You’re saying, “Use it however you want, just give me credit.”  
 That’s why MIT dominates GitHub, from React to small npm packages. As AI-powered tools like ChatGPT generate more code, understanding these licenses becomes even more critical for developers navigating both human-written and AI-generated contributions.
 
 **Best for:** small libraries, educational projects, or anything meant to spread widely with minimal friction.
 
 ### GNU General Public License (GPL)
 
-The [GPL](https://www.gnu.org/licenses/licenses.html) protects *user freedom* by requiring anyone who redistributes your code, modified or not, to do so under the same license.
+The [GPL](https://www.gnu.org/licenses/licenses.html) protects _user freedom_ by requiring anyone who redistributes your code, modified or not, to do so under the same license.
 
 This “copyleft” clause keeps your work and its derivatives open-source forever. But it also means you can’t include GPL code in a closed-source product.
 
@@ -84,7 +84,7 @@ WordPress, Linux, and thousands of other projects rely on GPL to guarantee that 
 
 **Best for:** projects where openness matters more than commercial flexibility.
 
-> *“The GPL isn’t just a license, it’s a promise that freedom stays built into your software.”*
+> _“The GPL isn’t just a license, it’s a promise that freedom stays built into your software.”_
 
 ### Apache License 2.0
 
@@ -106,24 +106,24 @@ Patent protection matters increasingly as developers embrace AI-assisted develop
 
 [Creative Commons licenses](https://creativecommons.org/share-your-work/cclicenses/) are not for code, they’re for **content**: documentation, tutorials, UI assets, icons, videos, etc.
 
--   **CC-BY:** reuse allowed with attribution.
--   **CC-BY-SA:** same as above, but derivatives must use the same license (like GPL).
--   **CC-BY-NC-SA:** same as above, but the content cannot be used for commercial purposes.
--   **CC0:** public domain dedication — no attribution required.
+- **CC-BY:** reuse allowed with attribution.
+- **CC-BY-SA:** same as above, but derivatives must use the same license (like GPL).
+- **CC-BY-NC-SA:** same as above, but the content cannot be used for commercial purposes.
+- **CC0:** public domain dedication — no attribution required.
 
 **Best for:** non-code assets that accompany software.
 
 ### License Comparison at a Glance
 
-| License | Modify | Redistribute | Commercial Use | Require Attribution | Must Share Derivatives | Patent Protection |
-| --- | --- | --- | --- | --- | --- | --- |
-| **MIT** | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
-| **GPL** | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ |
-| **Apache 2.0** | ✅ | ✅ | ✅ | ✅ | ❌ | ✅ |
-| **BSD (2/3-Clause)** | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
-| **CC-BY-SA** | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ |
-| **CC-BY-NC-SA** | ✅ | ✅ | ❌ | ✅ | ✅ | ❌ |
-| **CC0** | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ |
+| License              | Modify | Redistribute | Commercial Use | Require Attribution | Must Share Derivatives | Patent Protection |
+| -------------------- | ------ | ------------ | -------------- | ------------------- | ---------------------- | ----------------- |
+| **MIT**              | ✅     | ✅           | ✅             | ✅                  | ❌                     | ❌                |
+| **GPL**              | ✅     | ✅           | ✅             | ✅                  | ✅                     | ❌                |
+| **Apache 2.0**       | ✅     | ✅           | ✅             | ✅                  | ❌                     | ✅                |
+| **BSD (2/3-Clause)** | ✅     | ✅           | ✅             | ✅                  | ❌                     | ❌                |
+| **CC-BY-SA**         | ✅     | ✅           | ✅             | ✅                  | ✅                     | ❌                |
+| **CC-BY-NC-SA**      | ✅     | ✅           | ❌             | ✅                  | ✅                     | ❌                |
+| **CC0**              | ✅     | ✅           | ✅             | ❌                  | ❌                     | ❌                |
 
 This table provides general guidance. Always review specific license terms in full.
 
@@ -139,24 +139,24 @@ All rights reserved. This software may not be used, copied, modified, or distrib
 ```
 
 If you distribute software (like a paid plugin or SaaS), use a custom [EULA (End User License Agreement)](https://en.wikipedia.org/wiki/End-user_license_agreement).  
-It defines what users *can do* (install, use, modify internally) and *cannot do* (resell, redistribute, reverse-engineer, etc.).
+It defines what users _can do_ (install, use, modify internally) and _cannot do_ (resell, redistribute, reverse-engineer, etc.).
 
 ## How to Choose the Right Software License
 
 Choosing a license isn’t about memorizing legal jargon — it’s about aligning with your goals. The steps to choose a license outlined below are a guideline for you to follow, although you might want to dig deeper based on your specific case.
 
-> *“Licensing decisions shape your project’s future before the first user even downloads it.”*
+> _“Licensing decisions shape your project’s future before the first user even downloads it.”_
 
 ### Step 1. Clarify your goals.
 
--   Want your code to spread freely? → *MIT, Apache, BSD.*
--   Want to ensure derivatives stay open? → *GPL.*
--   Want to keep it private? → *All rights reserved or EULA.*
--   Sharing creative assets? → *Creative Commons.*
+- Want your code to spread freely? → _MIT, Apache, BSD._
+- Want to ensure derivatives stay open? → _GPL._
+- Want to keep it private? → _All rights reserved or EULA._
+- Sharing creative assets? → _Creative Commons._
 
 ### Step 2. Check dependencies and libraries.
 
-If your project uses third-party libraries, their licenses may *force* your choice.
+If your project uses third-party libraries, their licenses may _force_ your choice.
 
 **Example:**  
 If you bundle a GPL library, your project **typically must** also be GPL-compatible  
@@ -173,10 +173,10 @@ Even a placeholder helps. It signals clarity and avoids confusion later.
 
 ### Step 5. Take advantage of these resources and tools.
 
--   [choosealicense.com](https://choosealicense.com) — plain-English summaries.
--   [GitHub license picker](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/licensing-a-repository).
--   [SPDX License List](https://spdx.org/licenses/).
--   [TLDRLegal](https://tldrlegal.com) — readable license explanations.
+- [choosealicense.com](https://choosealicense.com) — plain-English summaries.
+- [GitHub license picker](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/licensing-a-repository).
+- [SPDX License List](https://spdx.org/licenses/).
+- [TLDRLegal](https://tldrlegal.com) — readable license explanations.
 
 ### Step 6. Consult a lawyer. (optional)
 
@@ -213,7 +213,7 @@ Deleting your repository doesn’t delete the license others already received.
 
 ## How to Properly Add a License to Your Project
 
-Picking a license is one thing, actually *applying* it is another. If you don’t include it correctly, the license technically doesn’t exist.
+Picking a license is one thing, actually _applying_ it is another. If you don’t include it correctly, the license technically doesn’t exist.
 
 Here’s how to make sure your license is clear, valid, and visible everywhere it needs to be.
 
@@ -324,7 +324,7 @@ Consistency builds trust. Your license file, headers, and metadata should all sa
 
 If you ever update your license (say from GPLv2 to GPLv3), change it everywhere in one go.
 
-> *“Your license isn’t just a file — it’s a declaration of intent. Make it impossible to miss.”*
+> _“Your license isn’t just a file — it’s a declaration of intent. Make it impossible to miss.”_
 
 ## What to Do If Someone Violates Your License
 
@@ -338,9 +338,9 @@ Here’s how to handle it, calmly, methodically, and without burning bridges.
 
 Start by checking the facts. Ask yourself:
 
--   Did they actually breach a license term (like removing attribution or not sharing modifications)?
--   Is your license clearly included in your project and easy to find?
--   Could it be a misunderstanding rather than intentional misuse?
+- Did they actually breach a license term (like removing attribution or not sharing modifications)?
+- Is your license clearly included in your project and easy to find?
+- Could it be a misunderstanding rather than intentional misuse?
 
 Many developers simply don’t realize what a license requires. If you’re unsure whether a situation counts as infringement, **consult a lawyer familiar with intellectual property and open-source licensing** before taking action. It’s the best way to protect yourself and avoid unnecessary conflict.
 
@@ -348,9 +348,9 @@ Many developers simply don’t realize what a license requires. If you’re unsu
 
 If you’re confident there’s an issue, contact them directly and politely. Include:
 
--   A link to your original project and license file.
--   A short explanation of what part of the license they’re violating.
--   What action you’d like them to take (for example, restore attribution, publish modified source, or remove unlicensed content).
+- A link to your original project and license file.
+- A short explanation of what part of the license they’re violating.
+- What action you’d like them to take (for example, restore attribution, publish modified source, or remove unlicensed content).
 
 Keep your message factual and professional. Most people will comply once they understand the situation.
 
@@ -358,9 +358,9 @@ Keep your message factual and professional. Most people will comply once they un
 
 If they don’t respond or refuse to resolve the issue:
 
--   **Consider filing** a DMCA takedown with the platform hosting the content (GitHub, npm, WordPress.org, etc.).
--   For GPL projects, organizations like the **Free Software Foundation** or **Software Freedom Conservancy** sometimes assist in enforcing compliance.
--   In serious or commercial cases, contact a lawyer to explore next steps.
+- **Consider filing** a DMCA takedown with the platform hosting the content (GitHub, npm, WordPress.org, etc.).
+- For GPL projects, organizations like the **Free Software Foundation** or **Software Freedom Conservancy** sometimes assist in enforcing compliance.
+- In serious or commercial cases, contact a lawyer to explore next steps.
 
 **Note:** Filing a DMCA takedown requires a good faith belief that infringement occurred, and false claims can have legal consequences.
 
@@ -380,7 +380,7 @@ Whether you want your code to empower others or stay private, decide intentional
 Next time you push a project live, take a moment for the license.  
 It’s the smallest file in your repo but often the most powerful one.
 
-> *“The smallest file in your repo might be the one that protects it most.”*
+> _“The smallest file in your repo might be the one that protects it most.”_
 
 ## What About This Essay?
 
@@ -390,4 +390,4 @@ The text and images in this article are licensed under **Creative Commons Attrib
 
 Any code (or piece of) on this website is licensed under **GNU GPL v2 (or later)**, so you can use and modify it in compatible projects, in the spirit of open source.
 
-Unless otherwise specified, this is the default license for all content published on *buthonestly.io/*.
+Unless otherwise specified, this is the default license for all content published on _buthonestly.io/_.

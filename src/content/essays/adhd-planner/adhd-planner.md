@@ -18,11 +18,11 @@ originalCover: https://buthonestly.io/wp-content/uploads/2025/11/mental-adhd-pla
 
 > [!summary]- Quick Summary
 >
-> -   I blogged in intense bursts followed by long silences and blamed myself for years.
-> -   An ADHD diagnosis explained the cycle: hyperfocus, crash, repeat.
-> -   Burnout wasn’t failure, it was the cost of fighting my natural rhythm.
-> -   I built a simple mental ADHD planner around bursts, downtime, and batching.
-> -   Blogging became sustainable once I worked with my brain, not against it.
+> - I blogged in intense bursts followed by long silences and blamed myself for years.
+> - An ADHD diagnosis explained the cycle: hyperfocus, crash, repeat.
+> - Burnout wasn’t failure, it was the cost of fighting my natural rhythm.
+> - I built a simple mental ADHD planner around bursts, downtime, and batching.
+> - Blogging became sustainable once I worked with my brain, not against it.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
@@ -82,13 +82,13 @@ I started to see those patterns everywhere: in my energy, in my motivation, and 
 
 That’s when I could finally look back at my blog and understand what really happened.
 
-> *“I stopped trying to fix my brain and started designing around it.”*
+> _“I stopped trying to fix my brain and started designing around it.”_
 
 The disavow mistake, the one that killed my traffic, wasn’t the full story. It was part of it, but not the whole story. It was the easy one to tell. The harder truth was that I hadn’t been updating my old WooCommerce snippets and that I stopped writing new regular articles. I couldn’t bring myself to. Every time I opened one, I felt that same internal block.
 
 It wasn’t pure neglect or poor time management. It was ADHD. I just didn’t know it yet.
 
-Understanding that didn’t fix everything, I still neglected my blog and readers. But it reframed it. It helped me stop blaming myself for losing consistency and start designing a way to work *with* my brain instead of against it.
+Understanding that didn’t fix everything, I still neglected my blog and readers. But it reframed it. It helped me stop blaming myself for losing consistency and start designing a way to work _with_ my brain instead of against it.
 
 In 2025, I came back to my blog, not to rebuild traffic, but to rebuild trust with myself and to share what I had to say with whoever wanted to read it, be that ten people or a thousand.
 
@@ -98,9 +98,9 @@ After the diagnosis, I stopped trying to copy other people’s productivity habi
 
 It’s not a fancy app or a system with stickers and timers. I tried all of them before, and none of them, digital or analog, work with me.
 
-It’s just how I work when I stop pretending I can work like everyone else. I realized that when the motivation hits, I can do in one week what might take others a month. So instead of trying to slow that down, I *use it*. I write multiple essays in a single burst, then schedule them months ahead. That way, my future self doesn’t need to start from scratch when the energy dips.
+It’s just how I work when I stop pretending I can work like everyone else. I realized that when the motivation hits, I can do in one week what might take others a month. So instead of trying to slow that down, I _use it_. I write multiple essays in a single burst, then schedule them months ahead. That way, my future self doesn’t need to start from scratch when the energy dips.
 
-> *“It turned out my brain wasn’t broken — I was just using the wrong map.”*
+> _“It turned out my brain wasn’t broken — I was just using the wrong map.”_
 
 I also plan for silence. After every writing sprint, I expect downtime. I let it happen. During those quieter weeks, I edit, format, or outline future pieces. Things that keep the blog alive without forcing creativity. Or I simply live my life, [[choosing-what-to-play|choosing what to play]] or reading or just thinking, and ignore the blog entirely for a while to recharge, but with pre-scheduled reminders to just open the Dashboard and check my drafts.
 
@@ -116,10 +116,10 @@ I still get those internal walls, the moments when I want to write but can’t. 
 
 Here’s what helps me keep moving:
 
--   **Batch the dopamine.** When I’m in the zone, I write everything: outlines, intros, and drafts, and save them or schedule them for later.
--   **Make progress visible.** I check the [Jetpack Stats Insights](https://jetpack.com/support/jetpack-stats/insights-dashboard/), not to pressure myself, but to remind myself how much I’ve already done.
--   **Outsource friction.** If something feels too heavy, I let AI take the first step. Even a rough draft is better than an empty page.
--   **Plan for the crash.** Every creative sprint has a cooldown. Accepting that is part of staying consistent. I use that time to recharge, read newspapers and blogs, watch videos, and [[gaming-made-me-better-leader|play games]]. This gives me new ideas that could lead to another writing rush.
+- **Batch the dopamine.** When I’m in the zone, I write everything: outlines, intros, and drafts, and save them or schedule them for later.
+- **Make progress visible.** I check the [Jetpack Stats Insights](https://jetpack.com/support/jetpack-stats/insights-dashboard/), not to pressure myself, but to remind myself how much I’ve already done.
+- **Outsource friction.** If something feels too heavy, I let AI take the first step. Even a rough draft is better than an empty page.
+- **Plan for the crash.** Every creative sprint has a cooldown. Accepting that is part of staying consistent. I use that time to recharge, read newspapers and blogs, watch videos, and [[gaming-made-me-better-leader|play games]]. This gives me new ideas that could lead to another writing rush.
 
 It’s not about discipline anymore. It’s about rhythm.
 
@@ -127,7 +127,7 @@ It’s not about discipline anymore. It’s about rhythm.
 
 When I learned about the ADHD iceberg, it hit home. People see the visible part — productivity, creativity, energy — but not what’s underneath: the overthinking, exhaustion, guilt, and constant recalibration.
 
-> *“Every creative cycle has a crash. The trick is to build enough momentum to glide through it.”*
+> _“Every creative cycle has a crash. The trick is to build enough momentum to glide through it.”_
 
 Blogging with ADHD means living on that edge: being full of ideas and yet sometimes unable to act on them. But it also means being able to see connections, notice details, and write with a kind of intensity that only happens when everything finally clicks.
 
@@ -145,4 +145,4 @@ ADHD didn’t make me inconsistent; it made me cyclical. And cycles, I’ve lear
 
 If you’ve ever felt that same pattern — the bursts of motivation, the sudden quiet, the guilt that follows — I’d love to hear your story. How do you balance creativity and burnout? Have you found your rhythm, or are you still figuring it out?
 
-Drop a comment below or share your experience if you’re comfortable doing so. The more we talk about how our brains actually work — especially in creative fields — the easier it gets to build systems that fit *us*, not the other way around.
+Drop a comment below or share your experience if you’re comfortable doing so. The more we talk about how our brains actually work — especially in creative fields — the easier it gets to build systems that fit _us_, not the other way around.

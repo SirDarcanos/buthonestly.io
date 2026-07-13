@@ -18,10 +18,10 @@ originalCover: https://buthonestly.io/wp-content/uploads/2025/12/what-is-a-web-d
 
 > [!summary]- Quick Summary
 >
-> -   I became a web developer before AI by rebuilding a stranger’s website from “view source”, breaking layouts, and learning from other people’s code.
-> -   If you want to get into web development now, focus on core skills first: TypeScript, PHP, Python, CSS, then add frameworks like React, Next.js, Laravel, or Django.
-> -   There’s no fixed answer to how long it takes to become a web developer; it depends on consistent practice and real projects.
-> -   AI and vibe coding can speed you up, but only if you question every answer and rebuild things yourself until you truly understand them.
+> - I became a web developer before AI by rebuilding a stranger’s website from “view source”, breaking layouts, and learning from other people’s code.
+> - If you want to get into web development now, focus on core skills first: TypeScript, PHP, Python, CSS, then add frameworks like React, Next.js, Laravel, or Django.
+> - There’s no fixed answer to how long it takes to become a web developer; it depends on consistent practice and real projects.
+> - AI and vibe coding can speed you up, but only if you question every answer and rebuild things yourself until you truly understand them.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
@@ -35,7 +35,7 @@ This is what becoming a web developer looked like before AI, YouTube, and gamifi
 
 ## Before I Knew What a Developer Was
 
-As a kid, I had no idea what a *developer* was.
+As a kid, I had no idea what a _developer_ was.
 
 I only knew computers as boxes you could open and fix. I “worked” in the shop of a family friend, putting together machines from parts, formatting hard drives, reinstalling Windows, and solving the usual “my PC is broken” problems.
 
@@ -77,7 +77,7 @@ I wanted that too.
 
 So I asked him where I could learn.
 
-He pointed me to HTML.it, an Italian site packed with free tutorials on XHTML, CSS, and the basics of *web development*. That became my first real classroom.
+He pointed me to HTML.it, an Italian site packed with free tutorials on XHTML, CSS, and the basics of _web development_. That became my first real classroom.
 
 ![Early 2000s web development and browser on an old computer screen](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/12/web-development-in-2000s.jpg?resize=830%2C453&quality=81&ssl=1)
 
@@ -93,11 +93,11 @@ It seemed to wrap other elements. So I took a small section of his code, went ba
 
 I rebuilt his layout piece by piece:
 
--   Add a `div`
--   Refresh the page
--   See where it lands
--   Adjust something
--   Refresh again
+- Add a `div`
+- Refresh the page
+- See where it lands
+- Adjust something
+- Refresh again
 
 Then I found the CSS.
 
@@ -107,7 +107,7 @@ Centering a `div` became a miniature boss fight.
 
 I struggled with `margin`, `padding`, `width`, and everything else. I kept searching, reading, and refreshing until that box finally sat in the middle of the page where I wanted it.
 
-That moment, seeing something appear exactly where *I* told it to, was the hook.
+That moment, seeing something appear exactly where _I_ told it to, was the hook.
 
 I hosted my version of the site on a free Italian provider with a tiny storage limit. I didn’t care. It was mine. Also, it’s not like I could afford to pay for a better one anyway. I had my 200 megabytes of space (database included), and I had to get the best out of it.
 
@@ -141,12 +141,12 @@ I learned object-oriented programming by trying to understand how Joomla worked.
 
 I traced function calls. I followed how a request went from a URL to a controller to a view. I looked at how templates were structured and how data reached them. I didn’t have the vocabulary for most of it yet, but I could see patterns repeat.
 
-This was my definition of “*what is web development*” back then:
+This was my definition of “_what is web development_” back then:
 
--   There is a request
--   There is some logic
--   There is a response
--   Everything in the middle is worth understanding
+- There is a request
+- There is some logic
+- There is a response
+- Everything in the middle is worth understanding
 
 None of this came from school.
 
@@ -166,10 +166,10 @@ Useful for the first week. Not for the whole year.
 
 My classmates were moving slowly, so the teacher couldn’t go faster. We never got close to building a full website or app. Meanwhile, at home, I was reading tutorials on:
 
--   CSS layouts
--   PHP and MySQL
--   Basic JavaScript
--   How to tweak Joomla and other systems
+- CSS layouts
+- PHP and MySQL
+- Basic JavaScript
+- How to tweak Joomla and other systems
 
 Most of my progress came from this loop:
 
@@ -187,10 +187,10 @@ They saw my work and offered me a position for a separate project they were work
 
 There I learned:
 
--   How to structure PHP beyond quick scripts
--   How WordPress actually works under the hood
--   How to build themes and support real users
--   How to think about performance, not just features
+- How to structure PHP beyond quick scripts
+- How WordPress actually works under the hood
+- How to build themes and support real users
+- How to think about performance, not just features
 
 I rewrote my personal site on WordPress, kept experimenting, and shipped code that powered real shops.
 
@@ -202,13 +202,13 @@ Under all the titles and stacks, a web developer is someone who understands how 
 
 If you strip it down, web development looks like this:
 
--   A browser sends a request
--   A server responds with something useful
--   You design and control what happens in between
+- A browser sends a request
+- A server responds with something useful
+- You design and control what happens in between
 
 Whether you call yourself front-end, back-end, or full stack, you’re still playing in that space.
 
-When people search *“What is a web developer*” or “W*hat is web development*”, the real answer is more practical than most definitions:
+When people search _“What is a web developer_” or “W*hat is web development*”, the real answer is more practical than most definitions:
 
 You understand the browser.  
 You understand the server.  
@@ -222,7 +222,7 @@ If you’re wondering how to become a web developer today, you already have more
 
 You don’t need to learn everything, but you do need a solid base.
 
-> *”Learn the basics deeply, then add frameworks with a purpose”.*
+> _”Learn the basics deeply, then add frameworks with a purpose”._
 
 ### TypeScript and Modern JavaScript
 
@@ -230,9 +230,9 @@ This is the language of modern web apps.
 
 TypeScript gives you structure and safety. You’ll see it in:
 
--   React
--   Next.js
--   Node-based backends
+- React
+- Next.js
+- Node-based backends
 
 If you want web developer jobs in front-end or full-stack work, TypeScript is difficult to avoid.
 
@@ -244,9 +244,9 @@ WordPress is built with PHP, and it powers a massive slice of the internet ([43.
 
 Knowing PHP lets you:
 
--   Work with WordPress and WooCommerce
--   Maintain classic server-rendered sites
--   Understand many existing codebases
+- Work with WordPress and WooCommerce
+- Maintain classic server-rendered sites
+- Understand many existing codebases
 
 If you’re looking at jobs for web developers that involve content sites, agencies, or e-commerce, PHP is still very relevant.
 
@@ -256,9 +256,9 @@ Not just Tailwind. CSS itself.
 
 If you know CSS, you can:
 
--   Control layout, spacing, and typography
--   Fix broken layouts without guessing
--   Make things look intentional, not accidental
+- Control layout, spacing, and typography
+- Fix broken layouts without guessing
+- Make things look intentional, not accidental
 
 Once you understand CSS, utility frameworks become accelerators instead of crutches.
 
@@ -266,9 +266,9 @@ Once you understand CSS, utility frameworks become accelerators instead of crutc
 
 After the basics, pick frameworks that match the kind of projects you want to build:
 
--   React or Next.js for front-end and full-stack JavaScript
--   Laravel for expressive PHP backends
--   Tailwind once your CSS fundamentals are solid
+- React or Next.js for front-end and full-stack JavaScript
+- Laravel for expressive PHP backends
+- Tailwind once your CSS fundamentals are solid
 
 This is one honest answer to how to become a web developer: learn the basics deeply, then add frameworks with a purpose.
 
@@ -280,10 +280,10 @@ In my case, it started with tiny sites for local companies, support work for Wor
 
 Your path might look like:
 
--   joining an agency that ships many small client sites,
--   working on an internal company tool,
--   freelancing on WordPress, Shopify, or custom web apps, or
--   contributing to a SaaS product with a long life.
+- joining an agency that ships many small client sites,
+- working on an internal company tool,
+- freelancing on WordPress, Shopify, or custom web apps, or
+- contributing to a SaaS product with a long life.
 
 All of these are web developer jobs. The common thread is that you understand the browser, the server, and how to connect them in a way that keeps a real business running.
 
@@ -293,9 +293,9 @@ People love asking this question.
 
 They want “six months” or “a year” or some other clean number. In practice, how long it takes to become a web developer depends on a few things:
 
--   How much time you can spend each week
--   Whether you’re building real projects or just consuming content
--   How comfortable you are being confused for long stretches
+- How much time you can spend each week
+- Whether you’re building real projects or just consuming content
+- How comfortable you are being confused for long stretches
 
 You can get your first small freelance work in under a year if you’re consistent. It might take longer to feel confident. That’s fine.
 
@@ -315,10 +315,10 @@ But if you want to grow as a developer, you can’t stop at “the AI says it wo
 
 Use AI like this instead:
 
--   Ask it to generate code, then read every line
--   Ask *why* it chose that approach
--   Compare it with official documentation
--   Try to rewrite the same feature on your own
+- Ask it to generate code, then read every line
+- Ask _why_ it chose that approach
+- Compare it with official documentation
+- Try to rewrite the same feature on your own
 
 One good habit is to build a project with AI, ship it, then rebuild it from scratch without AI, using only docs and search. The second version will be slower to write but faster to understand.
 
@@ -330,7 +330,7 @@ Once you know how things work, AI becomes a multiplier. It can help you ship fas
 
 ## Am I Still a Web Developer?
 
-I’d lie if I said yes. I moved on to [coaching and leadership](/leadership/ "Leadership"), I still code, but [[neural-network-predict-resin-usage-3d-printed-miniatures|mostly in Python for machine learning]], rarely in PHP or for the web.
+I’d lie if I said yes. I moved on to [coaching and leadership](/section/leadership/ "Leadership"), I still code, but [[neural-network-predict-resin-usage-3d-printed-miniatures|mostly in Python for machine learning]], rarely in PHP or for the web.
 
 The tools I used when I started—HTML.it, Joomla, early WordPress, random forums—look old now.
 

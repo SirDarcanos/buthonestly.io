@@ -20,12 +20,12 @@ downloads:
 
 > [!summary]- Quick Summary
 >
-> -   Time off for leaders is not a luxury; it exposes how much a team relies on one person.
-> -   Your absence is a stress test for trust, priorities, and psychological safety.
-> -   Plan short and long breaks with clear owners, decision limits, and a simple handover plan.
-> -   Use a shared “catch-up” doc so you don’t need to trawl through weeks of chat when you return.
-> -   When you come back, treat what happened as data about your systems, not a verdict on your worth.
-> -   Download the Time Off Handover Plan template you can copy, share, and reuse with your team.
+> - Time off for leaders is not a luxury; it exposes how much a team relies on one person.
+> - Your absence is a stress test for trust, priorities, and psychological safety.
+> - Plan short and long breaks with clear owners, decision limits, and a simple handover plan.
+> - Use a shared “catch-up” doc so you don’t need to trawl through weeks of chat when you return.
+> - When you come back, treat what happened as data about your systems, not a verdict on your worth.
+> - Download the Time Off Handover Plan template you can copy, share, and reuse with your team.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
@@ -39,14 +39,14 @@ For plenty of people, taking time off as a leader feels riskier than just stayin
 
 They say things like:
 
--   “This isn’t a great moment, there’s a lot going on.”
--   “The team still needs me for X.”
--   “I’ll take time off once things calm down.” (They never do.)
+- “This isn’t a great moment, there’s a lot going on.”
+- “The team still needs me for X.”
+- “I’ll take time off once things calm down.” (They never do.)
 
 Underneath, there’s a fear: If I’m not around, something will break.  
 Or worse: if I’m not around, people will relax too much.
 
-In Italy we have a saying: “*Quando il gatto non c’è, i topi ballano*” — when the cat’s away, the mice dance.
+In Italy we have a saying: “_Quando il gatto non c’è, i topi ballano_” — when the cat’s away, the mice dance.
 
 Many leaders carry that energy in their head. If they step away, they imagine the team drifting, losing focus, or doing whatever they want.
 
@@ -71,9 +71,9 @@ But it often hides more profound issues:
 
 ![a burnout lead looking at a laptop desperately](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/team-lead-burnout.jpg?resize=830%2C592&quality=81&ssl=1 "Photo by Francisco De Legarreta C. on Unsplash")
 
--   A team that’s been trained to wait for you
--   A culture where people are scared to make the “wrong” call
--   A system so under-resourced that you’re permanently compensating for it
+- A team that’s been trained to wait for you
+- A culture where people are scared to make the “wrong” call
+- A system so under-resourced that you’re permanently compensating for it
 
 Skipping time off isn’t noble.  
 It’s just unsustainable.
@@ -85,9 +85,9 @@ There is a quiet belief behind many leadership habits: “If everything goes thr
 On good days, that shows up as care and high standards.  
 On bad days, it looks like:
 
--   Every decision is waiting for your review.
--   People pinging you for tiny approvals.
--   A leader who is exhausted and still afraid to step away.
+- Every decision is waiting for your review.
+- People pinging you for tiny approvals.
+- A leader who is exhausted and still afraid to step away.
 
 Control feels efficient in the short term.  
 You catch mistakes early, keep context tight, and feel “on top of things.”
@@ -115,7 +115,7 @@ A burned-out leader spreads that burnout — leadership burnout isn’t just per
 
 ## If the Mice Dance, That’s Data
 
-Back to “*Quando il gatto non c’è, i topi ballano*.”
+Back to “_Quando il gatto non c’è, i topi ballano_.”
 
 If your team “dances” when you are away, that is useful information.  
 Maybe people relax a bit, move slower, or experiment more. Perhaps they finally get long, focused work done without constant pings. Possibly they freeze and do nothing because they are afraid to decide.
@@ -124,11 +124,11 @@ All of that is data.
 
 ![cute harvest mice on wheat stalk](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/mice-dancing.jpg?resize=830%2C554&quality=81&ssl=1 "Photo by Chen Mizrach on Unsplash")
 
-Your absence shows what’s *really* going on in your culture:
+Your absence shows what’s _really_ going on in your culture:
 
--   Do people feel trusted or supervised?
--   Do they understand priorities, or just wait for instructions?
--   Do they feel safe deciding, or do they expect to be blamed later?
+- Do people feel trusted or supervised?
+- Do they understand priorities, or just wait for instructions?
+- Do they feel safe deciding, or do they expect to be blamed later?
 
 Your team’s behavior while you’re away isn’t just logistics, it’s a snapshot of [[psychological-safety-in-teams-people-first-leadership|psychological safety in your team]], whether people feel trusted to own decisions when you’re not in the room.
 
@@ -143,10 +143,10 @@ One way to frame it: treat your time off like a small project.
 
 Before you leave, answer these questions in writing and share them with your team and fellow leads:
 
--   What are the top three priorities while you are away?
--   Who is the point of contact for emergencies?
--   What decisions can the team make without you?
--   What decisions must wait, and why?
+- What are the top three priorities while you are away?
+- Who is the point of contact for emergencies?
+- What decisions can the team make without you?
+- What decisions must wait, and why?
 
 Then set a simple rule for escalation.  
 For example: “If something is time-sensitive and affects customers or ICs today, talk to this person. If it can wait 48 hours, park it in the list for when I’m back.”
@@ -159,13 +159,13 @@ You just need enough structure so people are not guessing.
 Longer breaks (multiple weeks, parental leave, sabbaticals) require more than one handover message.
 
 Here, it helps to think in terms of responsibilities, not tasks.  
-Write down what you actually *own* as a leader. Things like:
+Write down what you actually _own_ as a leader. Things like:
 
--   Setting direction and priorities (support reviews, project management, etc.)
--   Coaching and feedback (1on1s, team hangouts, etc.)
--   Hiring, performance, and hard conversations (PIPs, PRs, etc.)
--   Stakeholder communication (project updates, lead updates, etc.)
--   Keeping the team unblocked
+- Setting direction and priorities (support reviews, project management, etc.)
+- Coaching and feedback (1on1s, team hangouts, etc.)
+- Hiring, performance, and hard conversations (PIPs, PRs, etc.)
+- Stakeholder communication (project updates, lead updates, etc.)
+- Keeping the team unblocked
 
 Then ask, “What can be delegated, and to whom?”
 
@@ -202,9 +202,9 @@ At Automattic, in the WordPress.com support leadership team, we use Slack’s Ca
 
 Ask people to pin there:
 
--   Key decisions made while you were away
--   Topics that need your input once you are back
--   Any “you should know this” context
+- Key decisions made while you were away
+- Topics that need your input once you are back
+- Any “you should know this” context
 
 This reduces the random pings you get on your first day back.  
 Instead of digging through weeks of chat, you have a curated list of what matters.
@@ -218,10 +218,10 @@ If your team knows you will still reply, they will still ask.
 
 It helps to be explicit here. Share with your team and peers:
 
--   When your time off starts and ends
--   That you are offline, not “lightly checking in”
--   Who to contact in an emergency
--   What counts as an emergency
+- When your time off starts and ends
+- That you are offline, not “lightly checking in”
+- Who to contact in an emergency
+- What counts as an emergency
 
 If you really must be reachable, shrink the window.
 
@@ -237,10 +237,10 @@ You are never fully away and never fully present.
 
 When you come back, treat what happened as data and use [[mastering-effective-feedback-facts-feelings-curiosity|fact-and-feeling feedback conversations]] to talk through it with your team, not as a hunt for mistakes.
 
--   Where did the team move smoothly?
--   Where did they stall?
--   Which decisions went well without you?
--   Where did they feel blocked or unsure?
+- Where did the team move smoothly?
+- Where did they stall?
+- Which decisions went well without you?
+- Where did they feel blocked or unsure?
 
 It is a way to see where systems, processes, or expectations are unclear.
 
@@ -262,7 +262,7 @@ People will copy what they see, not what is written in the handbook.
 If leaders plan their breaks, hand over responsibilities, and disappear without drama, the message changes.  
 **Time off becomes normal.** Rest becomes part of how serious work is done, not a guilty exception.
 
-And if “*Quando il gatto non c’è, i topi ballano*” still applies, at least you will know. Maybe the mice are dancing because they finally feel trusted. Perhaps they are dancing because they are unsupervised and bored.
+And if “_Quando il gatto non c’è, i topi ballano_” still applies, at least you will know. Maybe the mice are dancing because they finally feel trusted. Perhaps they are dancing because they are unsupervised and bored.
 
 Either way, you now have something real to work with.
 

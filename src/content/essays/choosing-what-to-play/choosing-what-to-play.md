@@ -18,11 +18,11 @@ originalCover: https://buthonestly.io/wp-content/uploads/2026/02/choosing-what-t
 
 > [!summary]- Quick Summary
 >
-> -   ADHD makes game choice heavy, not fun
-> -   Context matters more than genre or ratings
-> -   AI helps externalize memory and structure decisions
-> -   The goal is less friction, not more completion
-> -   Kindness beats optimization
+> - ADHD makes game choice heavy, not fun
+> - Context matters more than genre or ratings
+> - AI helps externalize memory and structure decisions
+> - The goal is less friction, not more completion
+> - Kindness beats optimization
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
@@ -34,9 +34,9 @@ Most evenings, I do not lack games. I lack clarity. I scroll through my library,
 
 This is where AI became useful for me.
 
-Not to tell me what is *good*.  
+Not to tell me what is _good_.  
 Not to optimize my backlog.  
-Just to help me notice what actually fits *right now*.
+Just to help me notice what actually fits _right now_.
 
 ## Why Choosing Games Is Hard With ADHD
 
@@ -58,13 +58,13 @@ For a long time, I thought my taste was inconsistent.
 
 One week I wanted slow, narrative games. The next week I bounced off anything with dialogue. Sometimes I wanted complex systems. Other times even a tutorial felt like work.
 
-Eventually, I noticed something simpler. My taste was stable. My *context* was not. I like mostly strategy and survival games, but occasionally I need to just shoot at something or build mindlessly.
+Eventually, I noticed something simpler. My taste was stable. My _context_ was not. I like mostly strategy and survival games, but occasionally I need to just shoot at something or build mindlessly.
 
 Mood, energy, time available, and cognitive load change daily. My game choices did not adapt to that. They were based on abstract preference instead of present reality.
 
 Once I saw that, the question shifted.
 
-Not “What should I play?” but “What fits me *right now*?”
+Not “What should I play?” but “What fits me _right now_?”
 
 ## Externalizing the Decision
 
@@ -76,18 +76,18 @@ So I externalized it.
 
 I built a simple spreadsheet with:
 
--   Games I played
--   If I liked it or not
--   Notes
+- Games I played
+- If I liked it or not
+- Notes
 
 Nothing fancy. Just short telegraphic notes. Here’s an example:
 
-| Game Title | Liked? | Notes |
-| --- | --- | --- |
-| Burnout Paradise | Loved it | Played all of it, loved the unlocking system, loved the chaos for a change. |
-| Darkest Dungeon | Meh | Seems very cool, but got bored pretty fast after a few runs. |
-| Doom 3 | Liked it | It was great at the time. I never finished it, but I enjoyed the game. The graphics were next-gen when it came out, and the gameplay was immersive, a bit horror. |
-| NieR: Automata | No | Became boring quickly; poor ambience and repetitive gameplay; too anime-style. |
+| Game Title       | Liked?   | Notes                                                                                                                                                             |
+| ---------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Burnout Paradise | Loved it | Played all of it, loved the unlocking system, loved the chaos for a change.                                                                                       |
+| Darkest Dungeon  | Meh      | Seems very cool, but got bored pretty fast after a few runs.                                                                                                      |
+| Doom 3           | Liked it | It was great at the time. I never finished it, but I enjoyed the game. The graphics were next-gen when it came out, and the gameplay was immersive, a bit horror. |
+| NieR: Automata   | No       | Became boring quickly; poor ambience and repetitive gameplay; too anime-style.                                                                                    |
 
 The spreadsheet is not the solution. It is the memory.
 
@@ -99,14 +99,14 @@ Adding so many details is just too much for me, but it might work for you.
 
 I use ChatGPT as an interface, not an authority.
 
-I share my spreadsheet in a conversation. Then I ask it to ask *me* questions.
+I share my spreadsheet in a conversation. Then I ask it to ask _me_ questions.
 
 Things like:
 
--   How tired are you?
--   Do you want to think or react?
--   Do you want progression or comfort?
--   Are you okay learning systems tonight?
+- How tired are you?
+- Do you want to think or react?
+- Do you want progression or comfort?
+- Are you okay learning systems tonight?
 
 Sometimes I add constraints. Short session. Controller only. No story. Sometimes I ask for a genre. Sometimes I say I just want something familiar. Sometimes I say nothing and I just ask to suggest the best next game.
 
@@ -120,12 +120,12 @@ When choosing games with ADHD, content matters less than load.
 
 These are the signals I pay attention to.
 
--   **Mood comes first**. Restless, numb, focused, or overstimulated all want different games.
--   **Cognitive load matters more than difficulty**. A hard game can feel light. A simple game can feel exhausting.
--   **Mechanics matter more than genre**. Continuous flow beats constant interruptions.
--   **Input friction matters**. Keyboard-heavy games are harder on low-energy days.
--   **Drop safety matters**. Can I stop anytime without losing context or momentum?
--   **Time commitment matters**, but not how people think. A two-hour game can feel shorter than a twenty-minute one if it flows.
+- **Mood comes first**. Restless, numb, focused, or overstimulated all want different games.
+- **Cognitive load matters more than difficulty**. A hard game can feel light. A simple game can feel exhausting.
+- **Mechanics matter more than genre**. Continuous flow beats constant interruptions.
+- **Input friction matters**. Keyboard-heavy games are harder on low-energy days.
+- **Drop safety matters**. Can I stop anytime without losing context or momentum?
+- **Time commitment matters**, but not how people think. A two-hour game can feel shorter than a twenty-minute one if it flows.
 
 These are not objective traits. They are relational. AI helps me see the match.
 

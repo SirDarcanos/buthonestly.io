@@ -19,12 +19,12 @@ Before the first line of code, you need an environment that won’t fight you.
 
 > [!summary]- Quick Summary
 >
-> -   Local TensorFlow installs often break on CUDA, drivers, or Python versions, wasting hours before you even start coding.
-> -   Using the official `tensorflow/tensorflow:latest-gpu-jupyter` Docker image gives you Python, TensorFlow, CUDA, and Jupyter in one reproducible setup.
-> -   Apple Silicon users need a different Docker image and a `docker run` command, but still get an isolated Jupyter Lab environment.
-> -   You open Jupyter from the container logs via the tokenized URL, which grants full access and must be kept private.
-> -   A quick test notebook verifies Python, TensorFlow version, and GPU visibility, proving the environment is ready for real deep learning work.
-> -   Once it runs, restarting your TensorFlow lab is just starting the same container, so experiments stay organized and repeatable.
+> - Local TensorFlow installs often break on CUDA, drivers, or Python versions, wasting hours before you even start coding.
+> - Using the official `tensorflow/tensorflow:latest-gpu-jupyter` Docker image gives you Python, TensorFlow, CUDA, and Jupyter in one reproducible setup.
+> - Apple Silicon users need a different Docker image and a `docker run` command, but still get an isolated Jupyter Lab environment.
+> - You open Jupyter from the container logs via the tokenized URL, which grants full access and must be kept private.
+> - A quick test notebook verifies Python, TensorFlow version, and GPU visibility, proving the environment is ready for real deep learning work.
+> - Once it runs, restarting your TensorFlow lab is just starting the same container, so experiments stay organized and repeatable.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
@@ -58,7 +58,7 @@ Docker’s reproducibility becomes even more valuable in modern development work
 
 If you don’t have Docker yet, download Docker Desktop for Windows from [docker.com](https://www.docker.com/products/docker-desktop/) and follow the installer’s steps. If you are on macOS or Linux, download the respective installer. At the moment of writing, I’m using version 4.49.0 on macOS.
 
-Once it’s running, open it. You’ll see on the left tabs for *Containers*, *Images*, *Volumes*, etc. We’ll use the Images tab first. In the middle, there’s the **Search images to run** button.
+Once it’s running, open it. You’ll see on the left tabs for _Containers_, _Images_, _Volumes_, etc. We’ll use the Images tab first. In the middle, there’s the **Search images to run** button.
 
 ![Docker search image](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/docker-search-image.jpeg?resize=1000%2C685&quality=81&ssl=1)
 

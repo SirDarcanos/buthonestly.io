@@ -21,18 +21,18 @@ What makes people feel safe enough to speak up, disagree, or simply be themselve
 
 > [!summary]- Quick Summary
 >
-> -   Psychological safety is built through people-first leadership, where human connection and clarity come before metrics or authority.
-> -   Rebranding the team as Horizon and co-creating a handbook turned restructuring anxiety into shared identity, ownership, and belonging.
-> -   Everyday leadership practices like giving everyone space to speak, listening before deciding, and explaining “why” made trust tangible.
-> -   Admitting mistakes, co-creating growth goals, and supporting people even through termination showed accountability and empathy go both ways.
-> -   Informal bonds, shared tools like CliftonStrengths, and openness about ADHD turned differences into strengths and made safety self-sustaining through change.
-> -   Psychological safety proves to be a habit: asking instead of telling, explaining decisions, treating failure with empathy, and modeling transparency.
+> - Psychological safety is built through people-first leadership, where human connection and clarity come before metrics or authority.
+> - Rebranding the team as Horizon and co-creating a handbook turned restructuring anxiety into shared identity, ownership, and belonging.
+> - Everyday leadership practices like giving everyone space to speak, listening before deciding, and explaining “why” made trust tangible.
+> - Admitting mistakes, co-creating growth goals, and supporting people even through termination showed accountability and empathy go both ways.
+> - Informal bonds, shared tools like CliftonStrengths, and openness about ADHD turned differences into strengths and made safety self-sustaining through change.
+> - Psychological safety proves to be a habit: asking instead of telling, explaining decisions, treating failure with empathy, and modeling transparency.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
 It is easy to say, “We want an open culture,” but psychological safety does not come from slogans or handbooks. It grows through consistent behavior, especially from those who lead.
 
-As a Happiness Lead (Customer Support Team Lead) at WordPress.com, I have learned that *people-first leadership* is not a management style. It is a daily practice that shapes how teams communicate, collaborate, and trust each other. To me, it means putting human connection before performance metrics. When people feel respected, supported, and heard, great results follow naturally. It is about leading with empathy and clarity, not authority.
+As a Happiness Lead (Customer Support Team Lead) at WordPress.com, I have learned that _people-first leadership_ is not a management style. It is a daily practice that shapes how teams communicate, collaborate, and trust each other. To me, it means putting human connection before performance metrics. When people feel respected, supported, and heard, great results follow naturally. It is about leading with empathy and clarity, not authority.
 
 When I took over my first team, I did not just inherit responsibilities. I inherited people with stories, uncertainty, and a need for belonging. What happened next became one of the most defining experiences of my leadership journey.
 
@@ -61,7 +61,7 @@ Between workshops and skill-building games, we spent time getting to know each o
 Then, we built something that would stay with us for years: the **Horizon Handbook**.
 
 > We commit to unity, respect, and integrity, for a collaborative and diverse environment where every team member grows and excels, together.
-> 
+>
 > – Team Horizon
 
 It was not a list of rules. It was a living document that described who we were, how we worked, and how we treated each other. It included our locations, communication preferences, team values, and principles for collaboration.
@@ -84,7 +84,7 @@ Over time, that gentle respect turns into trust. When people speak, it’s becau
 
 ### Listening Before Leading
 
-I listen to all opinions before making a decision, even when I already have one in mind. If I have to enforce something coming from higher up, I always explain *why*. It’s a small act of transparency that builds immense trust.
+I listen to all opinions before making a decision, even when I already have one in mind. If I have to enforce something coming from higher up, I always explain _why_. It’s a small act of transparency that builds immense trust.
 
 People can handle hard news or directives if they understand the reasoning. What they struggle with is confusion and silence.
 
@@ -132,10 +132,10 @@ If there’s one leadership principle I now consider non-negotiable, it’s tran
 
 As a leader, I don’t believe in surprises; not in expectations, performance evaluations, or strategic decisions. When I learn something that impacts me or my team, I tell them how I’ll use that information. When I make a choice, I explain the reasoning behind it.
 
-That doesn’t mean I share everything, but I share *enough* that nobody is left guessing.
+That doesn’t mean I share everything, but I share _enough_ that nobody is left guessing.
 
 > I commit to calm, open, and honest leadership that empowers through coaching and creativity.
-> 
+>
 > – My personal commitment
 
 Transparency also means being open about your own process. I have [combined-type ADHD](https://www.psychiatry.org/patients-families/adhd/what-is-adhd), which sometimes makes my focus unpredictable or my communication patterns a bit unorthodox. I don’t hide that. Instead, I tell my team what that means for them; that I might respond quickly one day and slowly another, that I might need reminders for certain follow-ups, or that I might be more direct than they expect (one of the features that made me stand out as a leader).
@@ -152,15 +152,15 @@ That process mirrored our growth. We didn’t need to declare psychological safe
 
 Looking back, I realize that building psychological safety isn’t a project. It’s a habit, practiced through small, consistent actions:
 
--   Asking instead of telling.
--   Listening without rushing to reply.
--   Explaining decisions openly.
--   Admitting mistakes quickly.
--   Treating people with empathy, especially when they fail.
+- Asking instead of telling.
+- Listening without rushing to reply.
+- Explaining decisions openly.
+- Admitting mistakes quickly.
+- Treating people with empathy, especially when they fail.
 
 Those are the moments that define whether people feel safe or cautious.
 
-In *Project Aristotle*, [Google’s research into high-performing team](https://rework.withgoogle.com/intl/en/guides/understanding-team-effectiveness)s, psychological safety ranked as the number one factor for success. Amy Edmondson, who pioneered [the concept](https://web.mit.edu/curhan/www/docs/Articles/15341_Readings/Group_Performance/Edmondson%20Psychological%20safety.pdf), describes it as *“a belief that the team is safe for interpersonal risk-taking.”*
+In _Project Aristotle_, [Google’s research into high-performing team](https://rework.withgoogle.com/intl/en/guides/understanding-team-effectiveness)s, psychological safety ranked as the number one factor for success. Amy Edmondson, who pioneered [the concept](https://web.mit.edu/curhan/www/docs/Articles/15341_Readings/Group_Performance/Edmondson%20Psychological%20safety.pdf), describes it as _“a belief that the team is safe for interpersonal risk-taking.”_
 
 I have observed that truth firsthand. When people trust that they can speak freely, question decisions, or admit confusion without fear, that is when true collaboration begins. It does not start with systems or processes. It starts with leaders choosing to listen, to explain, and to show up with honesty.
 
@@ -174,4 +174,4 @@ Building safety takes time, consistency, and courage. But once you have it, it b
 
 What’s your experience? How do you foster psychological safety in your team? I’d love to hear your thoughts below.
 
-1.  Timothy R. Clark. “*The 4 Stages of Psychological Safety: Defining the Path to Inclusion and Innovation*.” Berrett-Koehler Publishers. March 3, 2020 [↩︎](#5a4e8570-6991-4e1f-b422-95e4b53ae11f-link)
+1.  Timothy R. Clark. “_The 4 Stages of Psychological Safety: Defining the Path to Inclusion and Innovation_.” Berrett-Koehler Publishers. March 3, 2020 [↩︎](#5a4e8570-6991-4e1f-b422-95e4b53ae11f-link)

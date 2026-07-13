@@ -20,13 +20,13 @@ Whenever I set up a new WordPress site, whether it’s a small personal blog or 
 
 > [!summary]- Quick Summary
 >
-> -   WordPress thrives on plugins, but too many overlapping tools slow sites and create long-term maintenance headaches.
-> -   Akismet keeps comments and form submissions clean by filtering spam automatically using a global database of known junk.
-> -   Yoast SEO handles titles, meta, schema, and sitemaps so every post starts with solid on-page optimization and search visibility.
-> -   Site Kit by Google connects Analytics, Search Console, and more into WordPress, giving quick traffic and keyword insights in one place.
-> -   Jetpack and Jetpack Boost add backups, security, uptime monitoring, CDN, and performance tweaks without juggling multiple separate plugins.
-> -   Code Snippets centralizes small PHP tweaks in a safe interface, avoiding fragile edits to theme files or child themes.
-> -   Together, these five plugins form a lean, reliable base for any new WordPress site, ready to extend only as needed.
+> - WordPress thrives on plugins, but too many overlapping tools slow sites and create long-term maintenance headaches.
+> - Akismet keeps comments and form submissions clean by filtering spam automatically using a global database of known junk.
+> - Yoast SEO handles titles, meta, schema, and sitemaps so every post starts with solid on-page optimization and search visibility.
+> - Site Kit by Google connects Analytics, Search Console, and more into WordPress, giving quick traffic and keyword insights in one place.
+> - Jetpack and Jetpack Boost add backups, security, uptime monitoring, CDN, and performance tweaks without juggling multiple separate plugins.
+> - Code Snippets centralizes small PHP tweaks in a safe interface, avoiding fragile edits to theme files or child themes.
+> - Together, these five plugins form a lean, reliable base for any new WordPress site, ready to extend only as needed.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
@@ -62,11 +62,11 @@ No WordPress setup feels complete without an SEO plugin, and [Yoast SEO](https:/
 
 At its core, Yoast helps you manage all the key on-page elements that matter for visibility:
 
--   Page titles and meta descriptions
--   Open Graph and Twitter card data
--   XML sitemaps
--   Breadcrumbs
--   Canonical URLs to prevent duplicate-content issues
+- Page titles and meta descriptions
+- Open Graph and Twitter card data
+- XML sitemaps
+- Breadcrumbs
+- Canonical URLs to prevent duplicate-content issues
 
 It also includes a built-in readability checker and keyword analysis tool that make content optimization more approachable, especially for non-technical users. I often use these as a quick reminder to structure posts better — not as strict rules, but as gentle SEO nudges.
 
@@ -82,10 +82,10 @@ Once your site is live, understanding how people find and use it becomes essenti
 
 This plugin acts as a bridge between your site and Google’s key tools, giving you an integrated overview of performance right from your WordPress dashboard. With a few clicks, you can see:
 
--   How many people visit your site
--   Which pages get the most traffic
--   What keywords drive clicks from Google Search
--   How your content performs over time
+- How many people visit your site
+- Which pages get the most traffic
+- What keywords drive clicks from Google Search
+- How your content performs over time
 
 It also automatically verifies ownership for Search Console and adds tracking for Analytics, meaning no more copying and pasting snippets of code into your theme or header.
 
@@ -95,25 +95,25 @@ If you’re already using multiple Google services, Site Kit is an easy win. It 
 
 ## Jetpack: Security, Performance, and Peace of Mind
 
-[Jetpack](https://jetpack.com/) is one of those plugins that often divides opinions — some love it, others find it too heavy. Personally, I think it’s incredibly useful *if you know which features to activate*. Jetpack isn’t just one tool; it’s a full suite covering backups, security, uptime monitoring, image optimization, and stats.
+[Jetpack](https://jetpack.com/) is one of those plugins that often divides opinions — some love it, others find it too heavy. Personally, I think it’s incredibly useful _if you know which features to activate_. Jetpack isn’t just one tool; it’s a full suite covering backups, security, uptime monitoring, image optimization, and stats.
 
 ![a turbo gauge](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/10/pexels-photo-10638654.jpeg?resize=1880%2C1253&quality=81&ssl=1 "Photo by Igor Dedik on Pexels.com")
 
 When setting up a new site, I usually enable a few key modules:
 
--   **Jetpack Backup** – real-time backups stored offsite.
--   **Jetpack Stats** – a lightweight analytics view that’s simpler than Google’s.
--   **Jetpack Protect** – blocks malicious login attempts.
--   **Jetpack CDN** – serves images and static files from a global network for faster loading.
+- **Jetpack Backup** – real-time backups stored offsite.
+- **Jetpack Stats** – a lightweight analytics view that’s simpler than Google’s.
+- **Jetpack Protect** – blocks malicious login attempts.
+- **Jetpack CDN** – serves images and static files from a global network for faster loading.
 
 These features make it easy to cover the basics of security and performance without juggling multiple plugins.
 
 One part that deserves special mention is [Jetpack Boost](https://jetpack.com/boost/) — a separate but complementary plugin from the same team. It focuses purely on performance optimization, offering tools to:
 
--   Defer non-essential JavaScript
--   Optimize CSS loading
--   Lazy-load images
--   Improve Core Web Vitals scores
+- Defer non-essential JavaScript
+- Optimize CSS loading
+- Lazy-load images
+- Improve Core Web Vitals scores
 
 Jetpack Boost is especially handy if you would rather not deal with caching or minification plugins right away. It provides measurable improvements with minimal setup and integrates cleanly with Jetpack if you’re already using it.
 
@@ -143,11 +143,11 @@ Whenever I start a new WordPress project, installing Code Snippets is one of the
 
 These five plugins, **Akismet**, **Yoast SEO**, **Site Kit by Google**, **Jetpack (with Jetpack Boost)**, and **Code Snippets**, form the backbone of nearly every WordPress setup I build. Each covers a different layer of functionality:
 
--   **Akismet** keeps comments clean.
--   **Yoast SEO** ensures every post is optimized for search.
--   **Site Kit** delivers traffic insights and data directly from Google.
--   **Jetpack** (and **Boost**) protect and accelerate your site.
--   **Code Snippets** handles all the fine-tuning behind the scenes.
+- **Akismet** keeps comments clean.
+- **Yoast SEO** ensures every post is optimized for search.
+- **Site Kit** delivers traffic insights and data directly from Google.
+- **Jetpack** (and **Boost**) protect and accelerate your site.
+- **Code Snippets** handles all the fine-tuning behind the scenes.
 
 Together, they create a balanced, lightweight, and maintainable foundation. From there, I might add project-specific tools, like caching, eCommerce, or other necessary plugins, but these five always come first. They’re the essentials I trust to keep my sites fast, secure, and SEO-ready from day one.
 

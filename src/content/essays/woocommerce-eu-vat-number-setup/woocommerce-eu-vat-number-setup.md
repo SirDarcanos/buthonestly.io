@@ -20,10 +20,10 @@ downloads:
 
 > [!summary]- Quick Summary
 >
-> -   WooCommerce can calculate VAT correctly if your tax settings and rates are set up properly.
-> -   The painful part is collecting, validating, and storing EU VAT numbers consistently at checkout.
-> -   I use EU VAT Number for WooCommerce to handle that piece, and it has solved the practical EU VAT-number issues I’ve run into.
-> -   **This is not sponsored**. I just use the extension and recommend it based on personal experience.
+> - WooCommerce can calculate VAT correctly if your tax settings and rates are set up properly.
+> - The painful part is collecting, validating, and storing EU VAT numbers consistently at checkout.
+> - I use EU VAT Number for WooCommerce to handle that piece, and it has solved the practical EU VAT-number issues I’ve run into.
+> - **This is not sponsored**. I just use the extension and recommend it based on personal experience.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
@@ -41,8 +41,8 @@ This essay is not a promise of universal compliance. EU VAT depends on what you 
 
 What it is: a clean way to think about the split between:
 
--   WooCommerce tax configuration (you must get this right)
--   VAT number collection + validation + behavior (this is where most stores get stuck)
+- WooCommerce tax configuration (you must get this right)
+- VAT number collection + validation + behavior (this is where most stores get stuck)
 
 ## Set Up Taxes Properly
 
@@ -97,8 +97,8 @@ It becomes relevant when you sell B2B, and especially when you sell across EU bo
 
 And this is the fork in the road:
 
--   You can DIY it: add a VAT field, validate via VIES, store it on the order, and decide what happens to VAT.
--   Or you can use a purpose-built extension that already handles the edge cases you only discover after your first “Why did this order get taxed?” email.
+- You can DIY it: add a VAT field, validate via VIES, store it on the order, and decide what happens to VAT.
+- Or you can use a purpose-built extension that already handles the edge cases you only discover after your first “Why did this order get taxed?” email.
 
 I used to write snippets for this. I don’t anymore.
 
@@ -122,15 +122,15 @@ WooCommerce is already good at tax calculation when configured correctly. The we
 
 The extension isn’t “more complicated.” In practice it reduces complexity because:
 
--   You stop maintaining custom code.
--   You get consistent behavior that’s easier to explain to your accountant.
--   You reduce the risk of subtle checkout regressions after theme, WooCommerce, or block changes.
+- You stop maintaining custom code.
+- You get consistent behavior that’s easier to explain to your accountant.
+- You reduce the risk of subtle checkout regressions after theme, WooCommerce, or block changes.
 
 So the new rule of thumb I use is simple:
 
--   Do your core tax setup inside WooCommerce.
--   Use EU VAT Number for WooCommerce for VAT numbers.
--   Ask your accountant what a valid VAT number should do to VAT on the order.
+- Do your core tax setup inside WooCommerce.
+- Use EU VAT Number for WooCommerce for VAT numbers.
+- Ask your accountant what a valid VAT number should do to VAT on the order.
 
 ## A Few Common Questions That Keep Coming Up
 

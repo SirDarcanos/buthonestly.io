@@ -21,9 +21,9 @@ originalCover: https://buthonestly.io/wp-content/uploads/2025/11/pexels-photo-56
 
 > [!summary]- Quick Summary
 >
-> -   Upskilling doesn’t always need a workshop; sometimes it starts with team building activities that feel genuinely human.
-> -   These team building games (Exciting Sponge, What’s in the Box?, and Unlock!) practice value messaging, better questions, and calm collaboration.
-> -   The point isn’t “fun for fun’s sake”, it’s using structured play to build psychological safety and real work habits.
+> - Upskilling doesn’t always need a workshop; sometimes it starts with team building activities that feel genuinely human.
+> - These team building games (Exciting Sponge, What’s in the Box?, and Unlock!) practice value messaging, better questions, and calm collaboration.
+> - The point isn’t “fun for fun’s sake”, it’s using structured play to build psychological safety and real work habits.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
@@ -41,11 +41,11 @@ In 2023, our team was new. New structure, new culture, new name, and new members
 
 So when we met in person for the first time in Seoul, South Korea, I wanted to avoid the usual “forced fun.” We needed a way to connect genuinely and sharpen our skills at the same time. Something that would help us communicate better, think creatively, and work together while having a bit of fun doing it.
 
-Workshops could have helped us align on processes, but they wouldn’t have helped us *know each other*. I wanted an approach that would build both connection and competence at once.
+Workshops could have helped us align on processes, but they wouldn’t have helped us _know each other_. I wanted an approach that would build both connection and competence at once.
 
 What I found from [my research](https://www.researchgate.net/publication/254109353_Serious_Play_as_a_Practice_of_Paradox), from both workplace studies and coaching methods, was that structured play, if done intentionally, helps people relax, collaborate, and absorb new skills more effectively.
 
-That insight guided how I approached the event and how I designed a set team building games that would bring laughter, participation, and learning together: *Exciting Sponge*, *What’s in the Box?*, and *Unlock!*.
+That insight guided how I approached the event and how I designed a set team building games that would bring laughter, participation, and learning together: _Exciting Sponge_, _What’s in the Box?_, and _Unlock!_.
 
 Each of them served a specific purpose; not just fun for fun’s sake, but a way to practice real skills we use every day in support work at WordPress.com. They’re simple, low-prep team building activities for adults. No trust falls, no props, and no pretending you’re all best friends.
 
@@ -65,7 +65,7 @@ As simple as it was, this fun team building exercise proved that even lightheart
 
 ## What’s in the Box? Listening Between the Lines
 
-Our next game didn’t need props either. For *What’s in the Box?*, I asked everyone to pick an object visible in the room. Something on a table, a wall, or near someone’s desk. No one said what it was; they just kept it in mind.
+Our next game didn’t need props either. For _What’s in the Box?_, I asked everyone to pick an object visible in the room. Something on a table, a wall, or near someone’s desk. No one said what it was; they just kept it in mind.
 
 Each person then partnered with someone else and had to guess what their partner’s chosen object was by asking ten yes-or-no questions, optionally followed by three open-ended ones.
 
@@ -98,7 +98,7 @@ Here is the game trailer from the creators to maybe make you curious enough to t
 
 Each game was chosen for a reason. Together, they built creativity, curiosity, and collaboration, some of the same skills that define good support work. That’s what makes this kind of team building experience meaningful. They upskill through laughter instead of pressure.
 
-But more importantly, they created a safe space to explore those skills. When people play, they let go of pretense. There’s no “manager” or “new hire,” just teammates solving, laughing, and learning together. That’s what makes play powerful. It turns learning into something people *feel*, not something they’re told.
+But more importantly, they created a safe space to explore those skills. When people play, they let go of pretense. There’s no “manager” or “new hire,” just teammates solving, laughing, and learning together. That’s what makes play powerful. It turns learning into something people _feel_, not something they’re told.
 
 By the end of the meetup, the team was more open, confident, and comfortable [[mastering-effective-feedback-facts-feelings-curiosity|reaching out to one another]]. Those same habits started showing up in daily work: more initiative, better listening, and smoother collaboration.
 
@@ -108,7 +108,7 @@ As a leader, my job wasn’t to teach but to design the space where learning cou
 
 > The best kind of learning happens when people stop realizing they’re being taught.
 
-That same principle applies beyond games, too. It’s the mindset behind any creative process, the idea that when you design for clarity and simplicity, the best outcomes emerge on their own. [It’s something I try to bring into my writing as well](/2015/09/01/why-i-write-in-markdown/ "Why I Write in Markdown"). Remove the friction, and the real message comes through. Play does that for teams. It removes the friction of formality and makes collaboration flow.
+That same principle applies beyond games, too. It’s the mindset behind any creative process, the idea that when you design for clarity and simplicity, the best outcomes emerge on their own. [[write-in-markdown|It’s something I try to bring into my writing as well]]. Remove the friction, and the real message comes through. Play does that for teams. It removes the friction of formality and makes collaboration flow.
 
 ## Play That Strengthens Teams
 

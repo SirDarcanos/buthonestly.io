@@ -15,16 +15,16 @@ coverAlt: X Twitter Account Cleanup
 originalCover: https://buthonestly.io/wp-content/uploads/2025/11/x-twitter-account-cleanup.jpg
 ---
 
-In Italy, the 2nd of November is the *Day of the Dead*. A time to remember and, in a way, revive what’s gone.
+In Italy, the 2nd of November is the _Day of the Dead_. A time to remember and, in a way, revive what’s gone.
 
 > [!summary]- Quick Summary
 >
-> -   Revisiting my old X account felt like digital archaeology: broken links, auto-retweets, and half-thoughts from a different version of me.
-> -   I chose a middle path: delete the automated noise and dead links while preserving conversations and posts that still tell my story.
-> -   Manual cleanup quickly hit a wall because X only allows one-by-one deletions and the API has strict rate limits.
-> -   Third-party bulk delete tools help, but they require deep account access, so I preferred a local solution inside my own browser.
-> -   A customized JavaScript snippet, inspired by another developer, let me filter by date and keywords and safely delete posts in batches.
-> -   Backing up the archive, defining what to keep, avoiding total wipes, and running small tests turned cleanup into thoughtful curation, not erasure.
+> - Revisiting my old X account felt like digital archaeology: broken links, auto-retweets, and half-thoughts from a different version of me.
+> - I chose a middle path: delete the automated noise and dead links while preserving conversations and posts that still tell my story.
+> - Manual cleanup quickly hit a wall because X only allows one-by-one deletions and the API has strict rate limits.
+> - Third-party bulk delete tools help, but they require deep account access, so I preferred a local solution inside my own browser.
+> - A customized JavaScript snippet, inspired by another developer, let me filter by date and keywords and safely delete posts in batches.
+> - Backing up the archive, defining what to keep, avoiding total wipes, and running small tests turned cleanup into thoughtful curation, not erasure.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
@@ -62,9 +62,9 @@ The X API does technically support deletion through the `DELETE /2/tweets/:id` e
 
 The next option is to use third-party tools that connect to your account through the X API and handle deletion for you. These tools often go beyond what the official interface offers:
 
--   They can filter posts by date, keywords, or media type.
--   Some support automated schedules for regular cleanups.
--   They handle the API rate limits for you, running in the background until the job is done.
+- They can filter posts by date, keywords, or media type.
+- Some support automated schedules for regular cleanups.
+- They handle the API rate limits for you, running in the background until the job is done.
 
 Each works slightly differently, but the concept is the same: they log into your account via the API and delete content based on your filters.
 
@@ -82,8 +82,8 @@ That’s when I came across a [post by Maximiliano Fonseca](https://medium.com/@
 
 I took his base idea and customized it. My version added:
 
--   **Date filtering:** delete only between 2014 and 2017, the years when my automation plugin was active.
--   **Keyword filtering:** skip posts containing my blog’s current URL, to keep those links alive, replies or discussions with specific users by checking for their @handles, or any other keyword I wanted to look out for.
+- **Date filtering:** delete only between 2014 and 2017, the years when my automation plugin was active.
+- **Keyword filtering:** skip posts containing my blog’s current URL, to keep those links alive, replies or discussions with specific users by checking for their @handles, or any other keyword I wanted to look out for.
 
 Once it started, the process took about **15 minutes** from start to finish. The script mimics human actions in the browser, just much faster. No API usage means no API rate limits. I could see posts disappearing in real time; a strangely satisfying sight after hours of manual deletion.
 
@@ -95,10 +95,10 @@ Below is my customized version of Maximiliano’s script. To use it, make sure y
 
 Once that is done, open the X page that you want to clean-up:
 
--   Timeline: `https://x.com/your_username`
--   Replies: `https://x.com/your_username/with_replies`
--   Likes: `https://x.com/your_username/likes`
--   Retweets: `https://x.com/your_username/with_replies?mode=retweets`
+- Timeline: `https://x.com/your_username`
+- Replies: `https://x.com/your_username/with_replies`
+- Likes: `https://x.com/your_username/likes`
+- Retweets: `https://x.com/your_username/with_replies?mode=retweets`
 
 Next, open your browser’s console (usually `F12` or `Ctrl+Shift+I`) and paste the configured script in it, hit Enter, and let the script do its work.
 
@@ -108,28 +108,28 @@ Monitor your browser’s console for any errors, and repeat the process as neede
 
 ```javascript
 // === CONFIG ===
-var USER           = 'your_x_handle';        // your @ without the @
-var MODE           = 'timeline';             // 'timeline' | 'replies' | 'likes' | 'retweets'
-var BASE_DELAY     = 1000;                   // ms between each item
-var CONFIRM_DELAY  = 800;                    // ms for dialogs
-var SCROLL_DELAY   = 1500;                   // ms between scrolls
-var MAX_SCROLLS    = 800;                    // safety limit. Stop after these many scrolls
+var USER = "your_x_handle"; // your @ without the @
+var MODE = "timeline"; // 'timeline' | 'replies' | 'likes' | 'retweets'
+var BASE_DELAY = 1000; // ms between each item
+var CONFIRM_DELAY = 800; // ms for dialogs
+var SCROLL_DELAY = 1500; // ms between scrolls
+var MAX_SCROLLS = 800; // safety limit. Stop after these many scrolls
 
 // Delete window (inclusive):
-var START_DATE = new Date('2016-01-01');
-var END_DATE   = null; // e.g., new Date('2019-12-31')
+var START_DATE = new Date("2016-01-01");
+var END_DATE = null; // e.g., new Date('2019-12-31')
 
 // Skip tweets containing ANY of these words/phrases (case-insensitive)
-var SKIP_KEYWORDS = ['yoursite.com', '@example', '#portfolio', 'anything'];
+var SKIP_KEYWORDS = ["yoursite.com", "@example", "#portfolio", "anything"];
 
 // === UTILS ===
 function parseTweetDate(article) {
-  var t = article.querySelector('time');
+  var t = article.querySelector("time");
   if (!t) return null;
-  var iso = t.getAttribute('datetime') || t.dateTime || '';
+  var iso = t.getAttribute("datetime") || t.dateTime || "";
   var d = new Date(iso);
   if (!isNaN(d)) return d;
-  var txt = (t.textContent || '').trim();
+  var txt = (t.textContent || "").trim();
   var d2 = new Date(txt);
   return isNaN(d2) ? null : d2;
 }
@@ -142,20 +142,24 @@ function inRange(date) {
 
 function isMine(article) {
   return !!(
-    article.querySelector('[data-testid="UserAvatar-Container-' + USER + '"]') ||
+    article.querySelector(
+      '[data-testid="UserAvatar-Container-' + USER + '"]',
+    ) ||
     article.querySelector('a[role="link"][href*="/' + USER.toLowerCase() + '"]')
   );
 }
 
 function processWithDelay(items, fn) {
-  items.forEach(function(item, i) {
-    setTimeout(function() { fn(item); }, i * BASE_DELAY);
+  items.forEach(function (item, i) {
+    setTimeout(function () {
+      fn(item);
+    }, i * BASE_DELAY);
   });
 }
 
 function containsSkipKeyword(article) {
   var text = article.textContent.toLowerCase();
-  return SKIP_KEYWORDS.some(function(word) {
+  return SKIP_KEYWORDS.some(function (word) {
     return text.includes(word.toLowerCase());
   });
 }
@@ -165,20 +169,34 @@ function clickDeleteFlow(article) {
   var caret = article.querySelector('[data-testid="caret"]');
   if (!caret) return;
   caret.click();
-  setTimeout(function() {
-    var delOpt = Array.from(document.querySelectorAll('div[role="menuitem"]'))
-      .find(function(el) { return el.textContent.trim().toLowerCase() === 'delete'; });
-    if (!delOpt) { caret.click(); return; }
+  setTimeout(function () {
+    var delOpt = Array.from(
+      document.querySelectorAll('div[role="menuitem"]'),
+    ).find(function (el) {
+      return el.textContent.trim().toLowerCase() === "delete";
+    });
+    if (!delOpt) {
+      caret.click();
+      return;
+    }
     delOpt.click();
-    setTimeout(function() {
-      var confirmBtn = document.querySelector('[data-testid="confirmationSheetDialog"] button');
+    setTimeout(function () {
+      var confirmBtn = document.querySelector(
+        '[data-testid="confirmationSheetDialog"] button',
+      );
       if (confirmBtn) confirmBtn.click();
     }, CONFIRM_DELAY);
   }, CONFIRM_DELAY);
 }
 
 function clickUnlike(article) {
-  var btn = document.evaluate('.//div[3]/button', article, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+  var btn = document.evaluate(
+    ".//div[3]/button",
+    article,
+    null,
+    XPathResult.FIRST_ORDERED_NODE_TYPE,
+    null,
+  ).singleNodeValue;
   if (btn) btn.click();
 }
 
@@ -186,9 +204,16 @@ function clickUnretweet(article) {
   var unrtBtn = article.querySelector('[data-testid="unretweet"]');
   if (!unrtBtn) return;
   unrtBtn.click();
-  setTimeout(function() {
-    var xpath = '//*[@id="layers"]/div[2]/div/div/div/div[2]/div/div[3]/div/div/div/div';
-    var confirm = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+  setTimeout(function () {
+    var xpath =
+      '//*[@id="layers"]/div[2]/div/div/div/div[2]/div/div[3]/div/div/div/div';
+    var confirm = document.evaluate(
+      xpath,
+      document,
+      null,
+      XPathResult.FIRST_ORDERED_NODE_TYPE,
+      null,
+    ).singleNodeValue;
     if (confirm) confirm.click();
   }, CONFIRM_DELAY);
 }
@@ -198,11 +223,11 @@ var seenIds = new Set();
 var scrolls = 0;
 
 function collectArticles() {
-  return Array.from(document.getElementsByTagName('article'));
+  return Array.from(document.getElementsByTagName("article"));
 }
 
 function articleKey(a) {
-  var time = a.querySelector('time');
+  var time = a.querySelector("time");
   var href = time ? time.closest('a[role="link"]') : null;
   return (href && href.href) || a.outerHTML.slice(0, 200);
 }
@@ -210,7 +235,7 @@ function articleKey(a) {
 function handleBatch() {
   var articles = collectArticles();
 
-  var candidates = articles.filter(function(a) {
+  var candidates = articles.filter(function (a) {
     var key = articleKey(a);
     if (seenIds.has(key)) return false;
     seenIds.add(key);
@@ -220,58 +245,72 @@ function handleBatch() {
     var d = parseTweetDate(a);
     if (!inRange(d)) return false;
 
-    if (MODE === 'timeline' || MODE === 'replies') return isMine(a);
+    if (MODE === "timeline" || MODE === "replies") return isMine(a);
     return true;
   });
 
-  if (MODE === 'timeline' || MODE === 'replies') {
+  if (MODE === "timeline" || MODE === "replies") {
     processWithDelay(candidates, clickDeleteFlow);
-  } else if (MODE === 'likes') {
+  } else if (MODE === "likes") {
     processWithDelay(candidates, clickUnlike);
-  } else if (MODE === 'retweets') {
+  } else if (MODE === "retweets") {
     processWithDelay(candidates, clickUnretweet);
   }
 
   // Scroll logic
-  var dates = articles.map(parseTweetDate).filter(Boolean).sort(function(a,b){return a-b;});
+  var dates = articles
+    .map(parseTweetDate)
+    .filter(Boolean)
+    .sort(function (a, b) {
+      return a - b;
+    });
   var oldest = dates[0];
 
-  setTimeout(function() {
-    if (scrolls >= MAX_SCROLLS) {
-      console.warn('Stop: hit MAX_SCROLLS =', MAX_SCROLLS);
-      return;
-    }
-    var needMore = !oldest || (END_DATE ? oldest > START_DATE : oldest > START_DATE);
-    if (needMore) {
-      scrolls++;
-      window.scrollTo(0, document.body.scrollHeight);
-      setTimeout(handleBatch, SCROLL_DELAY);
-    } else {
-      var more = collectArticles().some(function(a){
-        var d = parseTweetDate(a);
-        return d && inRange(d) && !containsSkipKeyword(a);
-      });
-      if (more && scrolls < MAX_SCROLLS) {
+  setTimeout(
+    function () {
+      if (scrolls >= MAX_SCROLLS) {
+        console.warn("Stop: hit MAX_SCROLLS =", MAX_SCROLLS);
+        return;
+      }
+      var needMore =
+        !oldest || (END_DATE ? oldest > START_DATE : oldest > START_DATE);
+      if (needMore) {
         scrolls++;
         window.scrollTo(0, document.body.scrollHeight);
         setTimeout(handleBatch, SCROLL_DELAY);
       } else {
-        console.log('Done. Scans:', scrolls, 'Processed items this run:', candidates.length);
+        var more = collectArticles().some(function (a) {
+          var d = parseTweetDate(a);
+          return d && inRange(d) && !containsSkipKeyword(a);
+        });
+        if (more && scrolls < MAX_SCROLLS) {
+          scrolls++;
+          window.scrollTo(0, document.body.scrollHeight);
+          setTimeout(handleBatch, SCROLL_DELAY);
+        } else {
+          console.log(
+            "Done. Scans:",
+            scrolls,
+            "Processed items this run:",
+            candidates.length,
+          );
+        }
       }
-    }
-  }, candidates.length * BASE_DELAY + 500);
+    },
+    candidates.length * BASE_DELAY + 500,
+  );
 }
 
 // === RUN ===
 switch (MODE) {
-  case 'timeline':
-  case 'replies':
-  case 'likes':
-  case 'retweets':
+  case "timeline":
+  case "replies":
+  case "likes":
+  case "retweets":
     handleBatch();
     break;
   default:
-    console.warn('Unknown MODE:', MODE);
+    console.warn("Unknown MODE:", MODE);
 }
 ```
 
@@ -279,15 +318,15 @@ switch (MODE) {
 
 Cleaning up an old social account sounds simple, but it quickly becomes a mix of archaeology and automation. A few things I learned along the way:
 
--   **Backup first.** Before deleting anything, download your X archive. It’s a single ZIP file, and it gives you peace of mind in case you delete something you later regret.
--   **Filter with intention.** Define what you want to keep before you start deleting. For me, that meant preserving blog links and meaningful replies.
--   **Avoid full wipes.** Total resets feel tempting, but they also erase context. A selective cleanup gives you a fresh start without pretending the past never happened.
--   **Trust carefully.** If you use third-party tools, review their permissions and revoke access once you’re done. The script method keeps everything local, no external logins are required.
--   **Automate in small batches.** Even with browser scripts, things can go wrong. Run short sessions, watch what happens, and stop if anything looks off.
--   **It’s okay to evolve.** Your old posts don’t have to align perfectly with who you are now. Keeping a few imperfect ones is part of the story.
+- **Backup first.** Before deleting anything, download your X archive. It’s a single ZIP file, and it gives you peace of mind in case you delete something you later regret.
+- **Filter with intention.** Define what you want to keep before you start deleting. For me, that meant preserving blog links and meaningful replies.
+- **Avoid full wipes.** Total resets feel tempting, but they also erase context. A selective cleanup gives you a fresh start without pretending the past never happened.
+- **Trust carefully.** If you use third-party tools, review their permissions and revoke access once you’re done. The script method keeps everything local, no external logins are required.
+- **Automate in small batches.** Even with browser scripts, things can go wrong. Run short sessions, watch what happens, and stop if anything looks off.
+- **It’s okay to evolve.** Your old posts don’t have to align perfectly with who you are now. Keeping a few imperfect ones is part of the story.
 
 After the cleanup, my account finally felt usable again; clean, current, but still mine. It’s amazing how a bit of pruning can make old platforms feel new again.
 
 ## Follow Me on X
 
-If you want to see what I’m sharing next about [leadership](/leadership/ "Leadership"), the [web](/web/ "Web Tech"), or [programming](/programming/ "Programming"), you can find me on X at [**@nicolamustone**](https://x.com/nicolamustone). And please, do share this or any other essays from my website. Any little visibility boost will help!
+If you want to see what I’m sharing next about [leadership](/section/leadership/ "Leadership"), the [web](/section/web/ "Web Tech"), or [programming](/section/programming/ "Programming"), you can find me on X at [**@nicolamustone**](https://x.com/nicolamustone). And please, do share this or any other essays from my website. Any little visibility boost will help!

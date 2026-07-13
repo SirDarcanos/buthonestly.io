@@ -23,13 +23,13 @@ What does a CNN actually look like when you build it from scratch?
 
 > [!summary]- Quick Summary
 >
-> -   You set up a clean TensorFlow + Jupyter environment so the CNN is reproducible instead of fragile.
-> -   MNIST is loaded, normalized, reshaped, one hot–encoded, and split into train, validation, and test sets for honest evaluation.
-> -   A SimpleCNN class builds the network from composable blocks: Conv → BatchNorm → Activation → Pooling, then Dense → BatchNorm → Activation → Dropout → Softmax.
-> -   A small baseline model is trained first, with training/validation curves used to check convergence, overfitting, and generalization.
-> -   Bayesian optimization with Keras Tuner searches hyperparameters (filters, L2, learning rate, optimizer, dropout, activation) to find a stronger configuration.
-> -   The best model is retrained, evaluated on the test set, and inspected with predictions, a confusion matrix, and a per class classification report.
-> -   The core takeaway is understanding how each CNN piece works so you can move beyond MNIST to tougher, real world datasets.
+> - You set up a clean TensorFlow + Jupyter environment so the CNN is reproducible instead of fragile.
+> - MNIST is loaded, normalized, reshaped, one hot–encoded, and split into train, validation, and test sets for honest evaluation.
+> - A SimpleCNN class builds the network from composable blocks: Conv → BatchNorm → Activation → Pooling, then Dense → BatchNorm → Activation → Dropout → Softmax.
+> - A small baseline model is trained first, with training/validation curves used to check convergence, overfitting, and generalization.
+> - Bayesian optimization with Keras Tuner searches hyperparameters (filters, L2, learning rate, optimizer, dropout, activation) to find a stronger configuration.
+> - The best model is retrained, evaluated on the test set, and inspected with predictions, a confusion matrix, and a per class classification report.
+> - The core takeaway is understanding how each CNN piece works so you can move beyond MNIST to tougher, real world datasets.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
@@ -173,9 +173,9 @@ print("Test:", X_test.shape)
 
 By keeping validation separate, we can check the model’s accuracy during training and detect overfitting early. After running this code you should have 3 sets of data:
 
--   Train: `(42000, 28, 28, 1)`
--   Validation: `(18000, 28, 28, 1)`
--   Test: `(10000, 28, 28, 1)`
+- Train: `(42000, 28, 28, 1)`
+- Validation: `(18000, 28, 28, 1)`
+- Test: `(10000, 28, 28, 1)`
 
 ### Exploring the Dataset
 
@@ -210,9 +210,9 @@ A CNN processes an image through a series of small filters that detect edges, cu
 
 The class is intentionally small. It has two helpers for building blocks and a `build()` method that assembles those blocks into a complete convolutional neural network:
 
--   `_add_conv_block(...)` adds one visual feature–extractor block.
--   `_add_dense_block(...)` adds one decision-making block.
--   `build(...)` stacks those blocks, then compiles the model with your chosen activation, optimizer, learning rate, and regularization.
+- `_add_conv_block(...)` adds one visual feature–extractor block.
+- `_add_dense_block(...)` adds one decision-making block.
+- `build(...)` stacks those blocks, then compiles the model with your chosen activation, optimizer, learning rate, and regularization.
 
 ### The Constructor: Shapes And Devices
 
@@ -279,7 +279,7 @@ Despite their differences, all share the same principle: detect local features, 
 
 ### Dense Block: From Features To Decisions
 
-By the time we reach the dense block, the image has been turned into a stack of feature maps and then flattened into a long vector. The `Dense` layer looks at *all* of those features at once and starts to combine them into a decision. Batch normalization plays the same stabilizing role here as before, smoothing the values so training remains predictable. The activation adds the non-linear step that lets the layer model more complex relationships.
+By the time we reach the dense block, the image has been turned into a stack of feature maps and then flattened into a long vector. The `Dense` layer looks at _all_ of those features at once and starts to combine them into a decision. Batch normalization plays the same stabilizing role here as before, smoothing the values so training remains predictable. The activation adds the non-linear step that lets the layer model more complex relationships.
 
 `Dropout` is a safety mechanism. During training, it randomly turns off a fraction of the neurons in this block. For example, a 0.3 dropout means 30% of neurons are temporarily disabled during training. That forces the model to rely on multiple clues rather than a single “pet” feature and usually leads to better generalization when you test the model on new images.
 
@@ -310,9 +310,9 @@ The `build` method assembles the network in a straight line you can read: one co
 
 The last layer uses `softmax`, which turns raw scores into a clean probability distribution across the classes. For a digit image, the output might read like “0.001 for 0, 0.003 for 1, …, 0.972 for 7.” Because those are probabilities across multiple classes, we train with `categorical_crossentropy`. That loss function compares the predicted probability distribution with the true distribution (the one-hot label) and encourages the model to put most of its confidence on the correct class while pulling confidence away from the others. You’ll sometimes see `sparse_categorical_crossentropy` used with integer labels; we’re using one-hot labels in this tutorial, so `categorical_crossentropy` is the natural fit.
 
-The optimizer and learning rate control *how* the model learns. Think of the loss landscape as a hilly terrain where the optimizer is the way you walk downhill and the learning rate is the length of each step. Adam takes adaptive, well-sized steps; SGD takes simpler steps that you can augment with momentum; RMSprop is another adaptive choice that works well for many vision tasks.
+The optimizer and learning rate control _how_ the model learns. Think of the loss landscape as a hilly terrain where the optimizer is the way you walk downhill and the learning rate is the length of each step. Adam takes adaptive, well-sized steps; SGD takes simpler steps that you can augment with momentum; RMSprop is another adaptive choice that works well for many vision tasks.
 
-We’ll let Bayesian optimization try different options later so you can *see* the impact rather than memorize rules.
+We’ll let Bayesian optimization try different options later so you can _see_ the impact rather than memorize rules.
 
 ![Llustration of the path followed by the gradient descent method to reach the minimum of a](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/llustration-of-the-path-followed-by-the-gradient-descent-method-to-reach-the-minimum-of-a.jpg?resize=692%2C387&quality=81&ssl=1 "Illustration of the path followed by the optimizer to improve accuracy. Image from ResearchGate.net.4")
 
@@ -369,9 +369,9 @@ To visualize how this process scales up in larger models, take a look at the fig
 This is **VGG-16**, one of the most classic convolutional neural network architectures used in computer vision.  
 It works exactly like our `SimpleCNN`, just with more layers and filters.
 
--   The **blue blocks** represent *convolution + ReLU* (activation) layers that extract features at increasing levels of abstraction.
--   The **red blocks** are *max pooling* layers that shrink the spatial dimensions while preserving key information.
--   The **green layers** on the right are *fully connected (dense) layers* that combine everything the network has learned to make a final prediction.
+- The **blue blocks** represent _convolution + ReLU_ (activation) layers that extract features at increasing levels of abstraction.
+- The **red blocks** are _max pooling_ layers that shrink the spatial dimensions while preserving key information.
+- The **green layers** on the right are _fully connected (dense) layers_ that combine everything the network has learned to make a final prediction.
 
 At the far left, an image enters the network as raw pixels. As it passes through each layer, it’s gradually transformed from shapes and edges into meaningful patterns the model can recognize — for example, the outline of a number or, later, in more complex tasks, the shape of a face or a car.  
 That’s the core idea behind every CNN: **turning pixels into patterns and patterns into understanding.**
@@ -496,11 +496,11 @@ In a real world scenario, you can expect the baseline accuracy to be poor.
 
 We’ll use the `SimpleCNN` class exactly as we built it, with all default settings:
 
--   32 filters in the first convolution layer.
--   no L2 regularization or dropout.
--   learning rate of 0.001.
--   Adam optimizer.
--   and ReLU activations.
+- 32 filters in the first convolution layer.
+- no L2 regularization or dropout.
+- learning rate of 0.001.
+- Adam optimizer.
+- and ReLU activations.
 
 In your notebook, add a new cell and run:
 
@@ -518,25 +518,25 @@ Here we instantiate the model and call `.build()` without passing any parameters
 At this point, it’s useful to print a summary. We do that with `.summary()`.  
 This table is automatically generated by Keras and lists every layer, its output shape, and how many parameters it contains. It’s a quick way to confirm that the architecture matches your expectations, especially after stacking multiple convolution and dense blocks.
 
-| **Layer (type)** | **Output Shape** | **Param #** |
-| --- | --- | --- |
-| conv2d (Conv2D) | (None, 28, 28, 32) | 320 |
-| batch\_normalization (BatchNormalization) | (None, 28, 28, 32) | 128 |
-| activation (Activation) | (None, 28, 28, 32) | 0 |
-| max\_pooling2d (MaxPooling2D) | (None, 14, 14, 32) | 0 |
-| conv2d\_1 (Conv2D) | (None, 14, 14, 16) | 4,624 |
-| batch\_normalization\_1 (BatchNormalization) | (None, 14, 14, 16) | 64 |
-| activation\_1 (Activation) | (None, 14, 14, 16) | 0 |
-| max\_pooling2d\_1 (MaxPooling2D) | (None, 7, 7, 16) | 0 |
-| flatten (Flatten) | (None, 784) | 0 |
-| dense (Dense) | (None, 64) | 50,240 |
-| batch\_normalization\_2 (BatchNormalization) | (None, 64) | 256 |
-| activation\_2 (Activation) | (None, 64) | 0 |
-| dropout (Dropout) | (None, 64) | 0 |
-| dense\_1 (Dense) | (None, 10) | 650 |
-| **Total parameters** | **56,282** |
-| **Trainable parameters** | **56,058** |
-| **Non-trainable parameters** | **224** |
+| **Layer (type)**                             | **Output Shape**   | **Param #** |
+| -------------------------------------------- | ------------------ | ----------- |
+| conv2d (Conv2D)                              | (None, 28, 28, 32) | 320         |
+| batch\_normalization (BatchNormalization)    | (None, 28, 28, 32) | 128         |
+| activation (Activation)                      | (None, 28, 28, 32) | 0           |
+| max\_pooling2d (MaxPooling2D)                | (None, 14, 14, 32) | 0           |
+| conv2d\_1 (Conv2D)                           | (None, 14, 14, 16) | 4,624       |
+| batch\_normalization\_1 (BatchNormalization) | (None, 14, 14, 16) | 64          |
+| activation\_1 (Activation)                   | (None, 14, 14, 16) | 0           |
+| max\_pooling2d\_1 (MaxPooling2D)             | (None, 7, 7, 16)   | 0           |
+| flatten (Flatten)                            | (None, 784)        | 0           |
+| dense (Dense)                                | (None, 64)         | 50,240      |
+| batch\_normalization\_2 (BatchNormalization) | (None, 64)         | 256         |
+| activation\_2 (Activation)                   | (None, 64)         | 0           |
+| dropout (Dropout)                            | (None, 64)         | 0           |
+| dense\_1 (Dense)                             | (None, 10)         | 650         |
+| **Total parameters**                         | **56,282**         |
+| **Trainable parameters**                     | **56,058**         |
+| **Non-trainable parameters**                 | **224**            |
 
 In total, the network has **56,058 trainable parameters**, small enough to train in seconds, but still large enough to demonstrate how convolution, pooling, and dense layers interact.
 
@@ -644,8 +644,8 @@ def model_builder(hp):
 
 **What’s happening:**
 
--   The tuner will try different values for filters, L2, learning rate, optimizer, dropout, and activation — all levers that shape our convolutional neural network architecture and training behavior.
--   We still use the same CNN in TensorFlow class; no duplicate model code.
+- The tuner will try different values for filters, L2, learning rate, optimizer, dropout, and activation — all levers that shape our convolutional neural network architecture and training behavior.
+- We still use the same CNN in TensorFlow class; no duplicate model code.
 
 ### Create The Tuner
 
@@ -667,11 +667,11 @@ Bayesian optimization is smart about where it looks. This is why we chose it ove
 
 For small search spaces, the difference might be small. As soon as you start tuning multiple parameters (like filters, dropout, and learning rate), Bayesian search saves a lot of time and compute.
 
-| **Method** | **How It Works** | **Pros** | **Cons** |
-| --- | --- | --- | --- |
-| **Grid Search** | Tries every combination on a fixed grid | Simple, exhaustive | Exponential time cost, redundant trials |
-| **Random Search** | Picks random combinations | Fast to set up, covers wide space | May miss optimal regions |
-| **Bayesian Search** | Learns from past results to choose next promising trials | More efficient, fewer total runs | Slightly more complex to configure |
+| **Method**          | **How It Works**                                         | **Pros**                          | **Cons**                                |
+| ------------------- | -------------------------------------------------------- | --------------------------------- | --------------------------------------- |
+| **Grid Search**     | Tries every combination on a fixed grid                  | Simple, exhaustive                | Exponential time cost, redundant trials |
+| **Random Search**   | Picks random combinations                                | Fast to set up, covers wide space | May miss optimal regions                |
+| **Bayesian Search** | Learns from past results to choose next promising trials | More efficient, fewer total runs  | Slightly more complex to configure      |
 
 That efficiency is why we’re using Bayesian optimization here. It finds good hyperparameters faster and with fewer trials. Perfect for our image classification problem where we want practical results without burning time or GPU hours.
 
@@ -757,7 +757,7 @@ The small gap between validation and test accuracy means the model generalized w
 
 ## Looking at Model Predictions
 
-Accuracy alone doesn’t show *how* the model makes decisions, so let’s visualize a few predictions.
+Accuracy alone doesn’t show _how_ the model makes decisions, so let’s visualize a few predictions.
 
 ```python
 preds = cnn_final.model.predict(X_test)
@@ -846,8 +846,8 @@ Now that you’ve built and optimized a convolutional neural network from scratc
 
 If you want to see how your CNN handles more realistic images, try these next:
 
--   🐶 **[CIFAR-10](https://www.tensorflow.org/datasets/catalog/cifar10)**: 60,000 color images across 10 classes (airplanes, cats, cars, etc.). Ideal next step: it’s still small enough to train on a laptop but requires deeper networks to perform well.
--   🌍 **[Fashion-MNIST](https://github.com/zalandoresearch/fashion-mnist)**: 70,000 grayscale images of clothes and accessories. Similar shape as MNIST (28×28×1), so you can reuse your entire pipeline with almost no change.
+- 🐶 **[CIFAR-10](https://www.tensorflow.org/datasets/catalog/cifar10)**: 60,000 color images across 10 classes (airplanes, cats, cars, etc.). Ideal next step: it’s still small enough to train on a laptop but requires deeper networks to perform well.
+- 🌍 **[Fashion-MNIST](https://github.com/zalandoresearch/fashion-mnist)**: 70,000 grayscale images of clothes and accessories. Similar shape as MNIST (28×28×1), so you can reuse your entire pipeline with almost no change.
 
 Try replacing the dataset loading section in your notebook with one of these and retraining your model. You will need to adapt the data loading with the new structure of the data.
 
@@ -859,9 +859,9 @@ That’s where the real learning begins.
 
 You can download the full Jupyter notebook used in this tutorial below. It includes all code, comments, and Markdown explanations, ready to run inside your Jupyter setup.
 
-1.  Zewen Li, Wenjie Yang, Shouheng Peng, Fan Liu. “*[A Survey of Convolutional Neural Networks: Analysis, Applications, and Prospects](https://arxiv.org/abs/2004.02806)*”. arXiv:2004.02806 \[cs.CV\]. April 1, 2020. [↩︎](#0ad620dc-63a8-43bf-98e8-064de3b97827-link)
-2.  Khan, A., Sohail, A., Zahoora, U. et al. “*[A survey of the recent architectures of deep convolutional neural networks.](https://arxiv.org/abs/1901.06032)*”. arXiv:1901.06032 \[cs.CV\]. January 17, 2019. [↩︎](#5c5c94d1-4086-4833-b7ff-71c93d586cad-link)
-3.  Claudio Filipi Gonçalves Dos Santos and João Paulo Papa. “*[Avoiding Overfitting: A Survey on Regularization Methods for Convolutional Neural Networks](https://arxiv.org/abs/2201.03299)*”. arXiv:2201.03299 \[cs.CV\]. January 10, 2022. [↩︎](#258290cc-efbf-41ae-a716-3c9a14e6de16-link)
-4.  Amini, Alexander & Amini, Ava & Karaman, Sertac & Rus, Daniela. ”*[Spatial Uncertainty Sampling for End-to-End Control.](https://arxiv.org/abs/1805.04829)*” arXiv:1805.04829 \[cs.AI\]. May 13, 2018. [↩︎](#5bdac8c7-19d7-472d-8b12-1b4caba014b3-link)
-5.  Sebastian Ruder. *“[An Overview of Gradient Descent Optimization Algorithms](https://arxiv.org/abs/1609.04747)”*. arXiv:1609.04747 \[cs.LG\]. September 15, 2016. [↩︎](#458b280b-87a9-438c-aa9f-f4aa0ac6a497-link)
-6.  Ferguson, Max & ak, Ronay & Lee, Yung-Tsun & Law, Kincho. “*[Automatic localization of casting defects with convolutional neural networks.](https://www.researchgate.net/publication/322512435_Automatic_localization_of_casting_defects_with_convolutional_neural_networks)*” 1726-1735. 10.1109/BigData.2017.8258115. 2017. [↩︎](#540a3a03-0ca5-4568-9982-4f624d2acccd-link)
+1.  Zewen Li, Wenjie Yang, Shouheng Peng, Fan Liu. “_[A Survey of Convolutional Neural Networks: Analysis, Applications, and Prospects](https://arxiv.org/abs/2004.02806)_”. arXiv:2004.02806 \[cs.CV\]. April 1, 2020. [↩︎](#0ad620dc-63a8-43bf-98e8-064de3b97827-link)
+2.  Khan, A., Sohail, A., Zahoora, U. et al. “_[A survey of the recent architectures of deep convolutional neural networks.](https://arxiv.org/abs/1901.06032)_”. arXiv:1901.06032 \[cs.CV\]. January 17, 2019. [↩︎](#5c5c94d1-4086-4833-b7ff-71c93d586cad-link)
+3.  Claudio Filipi Gonçalves Dos Santos and João Paulo Papa. “_[Avoiding Overfitting: A Survey on Regularization Methods for Convolutional Neural Networks](https://arxiv.org/abs/2201.03299)_”. arXiv:2201.03299 \[cs.CV\]. January 10, 2022. [↩︎](#258290cc-efbf-41ae-a716-3c9a14e6de16-link)
+4.  Amini, Alexander & Amini, Ava & Karaman, Sertac & Rus, Daniela. ”_[Spatial Uncertainty Sampling for End-to-End Control.](https://arxiv.org/abs/1805.04829)_” arXiv:1805.04829 \[cs.AI\]. May 13, 2018. [↩︎](#5bdac8c7-19d7-472d-8b12-1b4caba014b3-link)
+5.  Sebastian Ruder. _“[An Overview of Gradient Descent Optimization Algorithms](https://arxiv.org/abs/1609.04747)”_. arXiv:1609.04747 \[cs.LG\]. September 15, 2016. [↩︎](#458b280b-87a9-438c-aa9f-f4aa0ac6a497-link)
+6.  Ferguson, Max & ak, Ronay & Lee, Yung-Tsun & Law, Kincho. “_[Automatic localization of casting defects with convolutional neural networks.](https://www.researchgate.net/publication/322512435_Automatic_localization_of_casting_defects_with_convolutional_neural_networks)_” 1726-1735. 10.1109/BigData.2017.8258115. 2017. [↩︎](#540a3a03-0ca5-4568-9982-4f624d2acccd-link)

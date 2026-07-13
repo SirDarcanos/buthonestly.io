@@ -19,11 +19,11 @@ In today’s eCommerce world, creating a more relevant shopping experience for e
 
 > [!summary]- Quick Summary
 >
-> -   Default WooCommerce related products rely on categories and tags, which often surface irrelevant or generic recommendations for larger catalogs.
-> -   Switching to attribute-based related products makes suggestions match what shoppers actually care about, like style, color, or size.
-> -   The provided PHP snippet filters related products by shared attributes, then backfills with WooCommerce defaults so you still show four items.
-> -   Correct attribute slugs, visible and linkable attributes, and regular cleanup of attribute data are crucial for good recommendations.
-> -   Combine attribute-based related products with filters, upsells, cross-sells, ratings, and advanced recommendation plugins to boost discovery, trust, and order value.
+> - Default WooCommerce related products rely on categories and tags, which often surface irrelevant or generic recommendations for larger catalogs.
+> - Switching to attribute-based related products makes suggestions match what shoppers actually care about, like style, color, or size.
+> - The provided PHP snippet filters related products by shared attributes, then backfills with WooCommerce defaults so you still show four items.
+> - Correct attribute slugs, visible and linkable attributes, and regular cleanup of attribute data are crucial for good recommendations.
+> - Combine attribute-based related products with filters, upsells, cross-sells, ratings, and advanced recommendation plugins to boost discovery, trust, and order value.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
@@ -92,18 +92,18 @@ This script filters related products based on their shared attributes. It offers
 add_filter( 'woocommerce_related_products', 'nm_related_products_by_attributes', 10, 3 );
 function nm_related_products_by_attributes( $related_posts, $product_id, $args ) {
     $product = wc_get_product( $product_id );
-	
+
 	$attributes           = array( 'pa_attribute_1', 'pa_attribute_2', 'pa_attribute_3' );
 	$new_related_products = array();
-	
+
 	foreach( $attributes as $attribute ) {
 		$terms = $product->get_attribute( $attribute );
-		
+
 		if ( ! empty( $terms ) ) {
 			$new_related_products = array_merge( $new_related_products, nm_get_related_products( $product_id, $attribute, $terms ) );
 		}
 	}
-	
+
 	if ( count( $new_related_products ) < 4 ) {
 		$related_posts = array_slice( array_merge( $new_related_products, $related_posts ), 0, 4 );
 	} else {
@@ -156,11 +156,11 @@ With the slugs in hand, integrate them into the script. On line 12, replace `pa_
 
 ## Advanced Tips for WooCommerce Attributes
 
--   **Analyze Customer Data**: Regularly review which attributes your customers are most interested in. This data can help refine your selections for even better recommendations.
--   **Update Attributes Regularly**: Keep your product attributes up-to-date to reflect trends and preferences.
--   **Experiment with Different Combinations**: Try different combinations of attributes. Sometimes, unusual pairings can lead to unique and appealing product findings.
--   **Make your Attributes Visible:** Moving the attributes from the Additional Information tab to a more visible position can help customers see and use them more easily. A popular choice is after the Add to Cart button.
--   **Make your Attributes Links**: Linking your attributes to catalog pages can increase the chances of a customer seeing other products. [[make-product-attributes-linkable-woocommerce|I wrote an article about this]].
+- **Analyze Customer Data**: Regularly review which attributes your customers are most interested in. This data can help refine your selections for even better recommendations.
+- **Update Attributes Regularly**: Keep your product attributes up-to-date to reflect trends and preferences.
+- **Experiment with Different Combinations**: Try different combinations of attributes. Sometimes, unusual pairings can lead to unique and appealing product findings.
+- **Make your Attributes Visible:** Moving the attributes from the Additional Information tab to a more visible position can help customers see and use them more easily. A popular choice is after the Add to Cart button.
+- **Make your Attributes Links**: Linking your attributes to catalog pages can increase the chances of a customer seeing other products. [[make-product-attributes-linkable-woocommerce|I wrote an article about this]].
 
 ## Enhancing Product Discovery
 

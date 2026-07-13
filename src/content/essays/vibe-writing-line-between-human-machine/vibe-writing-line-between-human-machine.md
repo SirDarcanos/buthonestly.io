@@ -18,24 +18,24 @@ coverCaption: Photo by Suzy Hazelwood on Pexels.com
 originalCover: https://buthonestly.io/wp-content/uploads/2025/10/pexels-photo-3695297.jpeg
 ---
 
-Why is *vibe writing* still controversial when *vibe coding* is already becoming normal?
+Why is _vibe writing_ still controversial when _vibe coding_ is already becoming normal?
 
 > [!summary]- Quick Summary
 >
-> -   Vibe coding is becoming normal, but vibe writing with AI still feels suspicious, fake, or unethical to many people.
-> -   Code is judged by whether it runs, while writing is judged by whether it moves someone, so AI help feels riskier.
-> -   We care about authorship because originality still matters: the rare moments where empathy and insight combine into a new expression.
-> -   AI can mimic patterns and rhythm but lacks intention or meaning, so it cannot originate purpose, only language.
-> -   The ethical line is not in using AI, but in whether the writer keeps direction, intention, and responsibility for the words.
-> -   What matters most is the space we share with the machine and what we still choose to stand behind as ours.
+> - Vibe coding is becoming normal, but vibe writing with AI still feels suspicious, fake, or unethical to many people.
+> - Code is judged by whether it runs, while writing is judged by whether it moves someone, so AI help feels riskier.
+> - We care about authorship because originality still matters: the rare moments where empathy and insight combine into a new expression.
+> - AI can mimic patterns and rhythm but lacks intention or meaning, so it cannot originate purpose, only language.
+> - The ethical line is not in using AI, but in whether the writer keeps direction, intention, and responsibility for the words.
+> - What matters most is the space we share with the machine and what we still choose to stand behind as ours.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
-Earlier this month, I wrote about [[what-is-vibe-coding-how-to-do-it|vibe coding]], the idea of building software by describing how it should *feel* rather than how it should work. The concept is spreading fast: developers are experimenting with it, companies are hiring people around it, and tools are being built for it.
+Earlier this month, I wrote about [[what-is-vibe-coding-how-to-do-it|vibe coding]], the idea of building software by describing how it should _feel_ rather than how it should work. The concept is spreading fast: developers are experimenting with it, companies are hiring people around it, and tools are being built for it.
 
 Yet when writers do the same thing, when they co-write with AI based on tone, rhythm, and intuition, it’s often dismissed as fake, lazy, or unethical.
 
-We’ve accepted vibe coding as creative collaboration, but *vibe writing* still feels like a moral shortcut. Why?
+We’ve accepted vibe coding as creative collaboration, but _vibe writing_ still feels like a moral shortcut. Why?
 
 ## What’s a Vibe, Anyway?
 
@@ -103,19 +103,19 @@ What matters is intention. If writing is about expression, then the question isn
 
 Maybe that’s where the line is. Not in the tools we use, but in the meaning we stand behind.
 
-* * *
+---
 
-*I should probably mention how this essay came together.*
+_I should probably mention how this essay came together._
 
-*I wrote it in conversation with ChatGPT. Not as a co-author, but as a partner I could question and refine. The process looked more like editing in real time than automation.*
+_I wrote it in conversation with ChatGPT. Not as a co-author, but as a partner I could question and refine. The process looked more like editing in real time than automation._
 
-*It started with an outline. I asked ChatGPT to help shape the structure, suggest sections, and test how the argument could flow from “vibe coding” to “vibe writing.” I challenged its first drafts, trimmed repetition, and rewrote phrasing that didn’t sound like me or that I did not believe. When I wasn’t sure about a term, I asked it to research usage and examples. We checked whether “VibeOps” was a real thing. I asked GPT to find sources about the facts that we were stating.*
+_It started with an outline. I asked ChatGPT to help shape the structure, suggest sections, and test how the argument could flow from “vibe coding” to “vibe writing.” I challenged its first drafts, trimmed repetition, and rewrote phrasing that didn’t sound like me or that I did not believe. When I wasn’t sure about a term, I asked it to research usage and examples. We checked whether “VibeOps” was a real thing. I asked GPT to find sources about the facts that we were stating._
 
-*But most of the work wasn’t about structure, it was about ideas. We argued over what originality means, whether empathy defines human creativity, and why certain forms of writing still feel off-limits. Sometimes I disagreed with its reasoning; other times, it challenged mine. Those exchanges shaped this essay more than any outline.*
+_But most of the work wasn’t about structure, it was about ideas. We argued over what originality means, whether empathy defines human creativity, and why certain forms of writing still feel off-limits. Sometimes I disagreed with its reasoning; other times, it challenged mine. Those exchanges shaped this essay more than any outline._
 
-*That’s what vibe writing meant here, using the tool as a space to think, not as a shortcut. The AI helped me build momentum, but it never decided what to say. Every sentence, every turn of thought, was filtered through my questions and beliefs. Every choice, rhythm, and pause was mine.*
+_That’s what vibe writing meant here, using the tool as a space to think, not as a shortcut. The AI helped me build momentum, but it never decided what to say. Every sentence, every turn of thought, was filtered through my questions and beliefs. Every choice, rhythm, and pause was mine._
 
-* * *
+---
 
 ## The Space We Share
 

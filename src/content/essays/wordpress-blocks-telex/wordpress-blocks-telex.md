@@ -18,15 +18,14 @@ originalCover: https://buthonestly.io/wp-content/uploads/2025/11/vibe-coding-cre
 
 > [!summary]- Quick Summary
 >
-> -   Telex is Automattic’s experimental AI tool that turns natural-language prompts into working WordPress blocks, delivered as focused single-block plugins you can install on any site.
-> -   It behaves like a focused vibe-coding assistant: you describe the block, Telex builds it, and you refine it with follow-up prompts or code edits.
-> -   It excels at small and medium blocks, quick prototypes, and boilerplate work, like the Christmas Quote generator block built from a single prompt.
-> -   The code might still need review and maintenance, especially for complex logic or sensitive features, but Telex meaningfully lowers the barrier to building custom WordPress blocks.
+> - Telex is Automattic’s experimental AI tool that turns natural-language prompts into working WordPress blocks, delivered as focused single-block plugins you can install on any site.
+> - It behaves like a focused vibe-coding assistant: you describe the block, Telex builds it, and you refine it with follow-up prompts or code edits.
+> - It excels at small and medium blocks, quick prototypes, and boilerplate work, like the Christmas Quote generator block built from a single prompt.
+> - The code might still need review and maintenance, especially for complex logic or sensitive features, but Telex meaningfully lowers the barrier to building custom WordPress blocks.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
-If you spend time creating WordPress blocks in Gutenberg, Telex can  
-feel like a bit of a superpower, almost like having a lightweight WordPress block template built into your browser.
+If you spend time creating WordPress blocks in Gutenberg, Telex can feel like a bit of a superpower, almost like having a lightweight WordPress block template built into your browser.
 
 This [experimental browser-based tool](https://telex.automattic.ai/) uses vibe coding to turn plain-English prompts into single-block WordPress plugins you can download and install on any site.
 
@@ -57,8 +56,8 @@ From the outside, it looks like any other AI code assistant. Under the hood, it 
 
 That means you can throw fairly high-level prompts at it:
 
--   *“Create a WordPress block template for a pricing table with three columns and a toggle between monthly and yearly prices.”*
--   *“Create a WordPress block that shows a button to create a Chicago-style citation of the post being read by the user, copying it to the clipboard.”*
+- _“Create a WordPress block template for a pricing table with three columns and a toggle between monthly and yearly prices.”_
+- _“Create a WordPress block that shows a button to create a Chicago-style citation of the post being read by the user, copying it to the clipboard.”_
 
 Telex will not always nail the result on the first try, but the starting point is usually much closer than what you would get from a generic AI code editor with no WordPress context.
 
@@ -77,16 +76,16 @@ If tools like Cursor and Lovable are broad-spectrum vibe coding, Telex is the �
 To see what this feels like in practice, I used Telex to build a Christmas Quote Generator block. The entire thing started and ended with one prompt:
 
 ```text
-Create a WordPress block that displays random Christmas quotes from a preset PHP array of 100 quotes.  
-  
-On the frontend, show one quote at a time with a refresh button that loads a new random quote without page reload using AJAX or REST API.  
-   
+Create a WordPress block that displays random Christmas quotes from a preset PHP array of 100 quotes.
+
+On the frontend, show one quote at a time with a refresh button that loads a new random quote without page reload using AJAX or REST API.
+
 In the block editor, provide color controls for text color and background color of the quote container. Inherit all typography settings from the core paragraph block including font family, font size, line height, and text decoration.
-   
-The quote should display in a styled container box that visually responds to the selected background color.  
-Ensure the refresh button has clear visual affordance and provides instant feedback when clicked.  
-   
-Store all quotes server-side in PHP for performance.  
+
+The quote should display in a styled container box that visually responds to the selected background color.
+Ensure the refresh button has clear visual affordance and provides instant feedback when clicked.
+
+Store all quotes server-side in PHP for performance.
 The block should support full-width and wide alignment options.
 ```
 
@@ -95,7 +94,10 @@ That is not a short prompt, but it is still just English. No code. No file struc
 But honestly, that’s not the original prompt I used. Before you submit your prompt to Telex you can enhance your prompt within the interface itself. My initial prompt was this:
 
 ```text
-Create a WordPress block that displays random Christmas quotes from a preset PHP array of 100 quotes. The administrator must be able to change the color of the text and background container. Mimic the typography options of the paragraph block. On frontend, the user is able to refresh quotes with a button.
+Create a WordPress block that displays random Christmas quotes from a preset PHP array of 100 quotes.
+The administrator must be able to change the color of the text and background container.
+Mimic the typography options of the paragraph block.
+On frontend, the user is able to refresh quotes with a button.
 ```
 
 The Enhance Prompt feature turned it into the more WordPress-appropriate prompt that you see above.
@@ -104,19 +106,13 @@ The Enhance Prompt feature turned it into the more WordPress-appropriate prompt 
 
 I confirmed it was still what I wanted, submitted it, and Telex took it from there:
 
--   It created a new plugin that registers a Christmas Quotes block.
--   It created and stored the quote list in PHP so everything lives server-side.
--   It wired a JavaScript function so the “Refresh” button can load a new quote without reloading the page.
--   It built an editor interface that inherits typography from the core Paragraph block and exposes color controls.
--   It added full and wide alignment support and a styled container that responds to background color changes.
+- It created a new plugin that registers a Christmas Quotes block.
+- It created and stored the quote list in PHP so everything lives server-side.
+- It wired a JavaScript function so the “Refresh” button can load a new quote without reloading the page.
+- It built an editor interface that inherits typography from the core Paragraph block and exposes color controls.
+- It added full and wide alignment support and a styled container that responds to background color changes.
 
 ![Telex creating WordPress blocks automatically](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/telex-creating-blocks-wordpress.jpeg?resize=830%2C440&quality=81&ssl=1 "Telex acknowledging the prompt and creating my custom WordPress block.")
-
-And here is the working Gutenberg block. Try refreshing a few quotes!
-
-> The joy of brightening other lives becomes for us the magic of the holidays.
-
-🎄 Get Another Quote
 
 If you were to do this by hand, you would go through all the usual steps: set up a plugin, configure build tooling, register the block, add attributes and controls, connect an AJAX or REST handler, and only then start polishing the UX. Telex effectively compresses that entire “WordPress create a block” journey into one prompt and a few iterations.
 
@@ -126,10 +122,10 @@ The result is not sacred. You can modify the code directly before finalizing the
 
 Telex really shines when you use it for small and medium-sized WordPress blocks that would otherwise feel like too much effort for their value. Think about:
 
--   Utility blocks that wrap shortcodes, REST responses, or simple business logic.
--   Display blocks that format existing content in more interesting ways.
--   Internal tools and one-off blocks for a specific site or campaign.
--   Quick prototypes for clients: “Here’s a first pass, let’s react to this instead of a sketch.”
+- Utility blocks that wrap shortcodes, REST responses, or simple business logic.
+- Display blocks that format existing content in more interesting ways.
+- Internal tools and one-off blocks for a specific site or campaign.
+- Quick prototypes for clients: “Here’s a first pass, let’s react to this instead of a sketch.”
 
 For non-developers, this is where Telex is most magical. You can create WordPress Gutenberg blocks for your site’s particular needs without learning React or PHP. As long as you can describe the behavior clearly, Telex has an excellent chance of producing something useful.
 
@@ -143,11 +139,11 @@ The tool is still experimental, and that shows. Even the official documentation 
 
 You will hit limits in a few places:
 
--   Complex multi-step flows or heavy business logic.
--   Deep integrations that depend on specific third-party APIs.
--   Blocks that require inner blocks or advanced editor interactions.
--   Anything that requires serious performance tuning or security hardening.
--   Fine-tuning block settings and options.
+- Complex multi-step flows or heavy business logic.
+- Deep integrations that depend on specific third-party APIs.
+- Blocks that require inner blocks or advanced editor interactions.
+- Anything that requires serious performance tuning or security hardening.
+- Fine-tuning block settings and options.
 
 ![Telex WordPress block editor](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/telex-wordpress-block-editor-view.jpeg?resize=830%2C472&quality=81&ssl=1 "Telex didn’t create color options like you’d normally see in core WordPress blocks.")
 
@@ -163,9 +159,9 @@ In practice, Telex ends up sitting next to your existing tools rather than repla
 
 You might use it to:
 
--   Prototype a new family of WordPress blocks before building a polished version in your main repo.
--   Generate a minimal “WordPress indent block” experiment to try a layout idea, without polluting your production codebase.
--   Whip up a quick “creating blocks” demo for a workshop or a client call, guided by live prompts.
+- Prototype a new family of WordPress blocks before building a polished version in your main repo.
+- Generate a minimal “WordPress indent block” experiment to try a layout idea, without polluting your production codebase.
+- Whip up a quick “creating blocks” demo for a workshop or a client call, guided by live prompts.
 
 The workflow usually looks like this:
 

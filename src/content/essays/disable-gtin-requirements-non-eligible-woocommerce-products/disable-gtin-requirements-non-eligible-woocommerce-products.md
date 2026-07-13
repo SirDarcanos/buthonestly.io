@@ -19,11 +19,11 @@ In the intricate world of e-commerce, product identification is a crucial aspect
 
 > [!summary]- Quick Summary
 >
-> -   GTINs power product discoverability and are often required by Google Merchant, but handmade, vintage, or custom products legitimately lack them.
-> -   Google still looks for identifiers, so “missing” GTINs can trigger warnings unless you explicitly say the product has no identifier.
-> -   A small PHP filter sets `identifier_exists` to `no` in WooCommerce structured data, signaling to Google that GTIN is not applicable.
-> -   For mixed catalogs, you can limit this behavior to a specific “no GTIN” product category so eligible products remain unaffected.
-> -   Apply this only to genuinely GTIN-free products; otherwise, add real GTINs to keep listings healthy.
+> - GTINs power product discoverability and are often required by Google Merchant, but handmade, vintage, or custom products legitimately lack them.
+> - Google still looks for identifiers, so “missing” GTINs can trigger warnings unless you explicitly say the product has no identifier.
+> - A small PHP filter sets `identifier_exists` to `no` in WooCommerce structured data, signaling to Google that GTIN is not applicable.
+> - For mixed catalogs, you can limit this behavior to a specific “no GTIN” product category so eligible products remain unaffected.
+> - Apply this only to genuinely GTIN-free products; otherwise, add real GTINs to keep listings healthy.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
@@ -80,11 +80,11 @@ add_filter( 'woocommerce_structured_data_product', 'nm_conditional_identifier_ex
 function nm_conditional_identifier_exists_false( $markup, $product ) {
     // Replace 'your-category-slug' with the actual slug of the category you want to target.
     $target_category_slug = 'your-category-slug';
-    
+
     if ( has_term( $target_category_slug, 'product_cat', $product->get_id() ) ) {
         $markup['identifier_exists'] = 'no';
     }
-    
+
     return $markup;
 }
 ```
@@ -99,4 +99,4 @@ If your products do have GTINs, you should follow a different path. Properly add
 
 Whether your product assortment includes unique items without GTINs or a mix containing standard products with identifiers, it’s crucial to manage your product data with precision and care. Utilizing the snippet provided, you can effectively navigate the GTIN requirements for your specific needs, ensuring that your WooCommerce store remains compliant and your products discoverable.
 
-For WooCommerce store owners looking to tailor their product data even further, [the archive of technical articles](/programming/ "Programming") offers a wealth of knowledge to help you refine your e-commerce operations.
+For WooCommerce store owners looking to tailor their product data even further, [the archive of technical articles](/section/programming/ "Programming") offers a wealth of knowledge to help you refine your e-commerce operations.

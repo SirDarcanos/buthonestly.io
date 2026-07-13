@@ -22,11 +22,11 @@ downloads:
 
 > [!summary]- Quick Summary
 >
-> -   I built a 3D print cost calculator by combining PrusaSlicer, UVtools, and mesh features into a tabular dataset.
-> -   The original model was a small dense network per artist; the new version is an ensemble of a dense model plus XGBoost.
-> -   A RandomForest trained on past hyperparameter searches helped shrink the search space and produce a more stable dense model.
-> -   The ensemble now achieves roughly 98% of predictions within 3 grams and 99% within 5 grams of true resin usage.
-> -   The MiniRes library, `stl-scanner.py`, and a small pricing script let you go from STL files to cost-per-miniature in a few commands.
+> - I built a 3D print cost calculator by combining PrusaSlicer, UVtools, and mesh features into a tabular dataset.
+> - The original model was a small dense network per artist; the new version is an ensemble of a dense model plus XGBoost.
+> - A RandomForest trained on past hyperparameter searches helped shrink the search space and produce a more stable dense model.
+> - The ensemble now achieves roughly 98% of predictions within 3 grams and 99% within 5 grams of true resin usage.
+> - The MiniRes library, `stl-scanner.py`, and a small pricing script let you go from STL files to cost-per-miniature in a few commands.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
@@ -37,18 +37,18 @@ Three artists dropped new packs of 3D printing models. Each pack meant dozens of
 
 And every single file came with the same important question: **How much resin does this actually use?**
 
-If you run a printing business, you live and die by unsexy 3D printing facts like that. Resin is not cheap. Failed prints add up. Your margin lives in the gap between what you *think* a model costs you and what it *really* costs once you factor in resin consumption, failure rates, and print times.
+If you run a printing business, you live and die by unsexy 3D printing facts like that. Resin is not cheap. Failed prints add up. Your margin lives in the gap between what you _think_ a model costs you and what it _really_ costs once you factor in resin consumption, failure rates, and print times.
 
 If you’ve never worked with it, what is resin material in this context? It’s a liquid photopolymer you pour into a vat. UV light hardens it layer by layer. The detail is incredible, which is why it’s perfect for miniatures—but every gram is more expensive than filament. “Close enough” adds up fast.
 
 So my life looked like this:
 
--   Open slicer.
--   Load STL.
--   Slice.
--   Read the numbers.
--   Copy them into a spreadsheet.
--   Next file.
+- Open slicer.
+- Load STL.
+- Slice.
+- Read the numbers.
+- Copy them into a spreadsheet.
+- Next file.
 
 That was my “automation.” That was my 3D printing efficiency strategy.
 
@@ -70,14 +70,14 @@ Reality shrugged.
 
 Two 3D printing models with almost identical volume could end up using extremely diverse amounts of resin once sliced. The slicer cared about all the messy details volume didn’t know about:
 
--   wall thickness
--   hollow interiors
--   supports inside and outside the model
--   orientation on the build plate
+- wall thickness
+- hollow interiors
+- supports inside and outside the model
+- orientation on the build plate
 
 Geometry knew the shape. It did not know the print.
 
-Slicing software like Chitubox and Lychee *did* understand the print. They knew how layers stack, how supports interact, and how much resin would actually end up on the plate. But they lived behind clicky interfaces.
+Slicing software like Chitubox and Lychee _did_ understand the print. They knew how layers stack, how supports interact, and how much resin would actually end up on the plate. But they lived behind clicky interfaces.
 
 They were great for turning 3D printing models into physical objects and terrible at being part of a pipeline. No clean way to tell them, “Here’s a folder of a hundred files; tell me how much resin to use for each of them.”
 
@@ -117,20 +117,20 @@ Once the pipeline worked, I could finally stop guessing.
 
 For each sliced file, I kept:
 
--   geometry from the original STL (volume, surface area, implied mass), and
--   the stats UVtools extracted from the PrusaSlicer output, especially resin usage in grams.
+- geometry from the original STL (volume, surface area, implied mass), and
+- the stats UVtools extracted from the PrusaSlicer output, especially resin usage in grams.
 
 On top of the raw numbers, I built a few simple engineered features that seemed useful for 3D printing facts: ratios between surface and volume and a combined volume–mass interaction term that roughly captured “how much stuff is really there.”
 
 A tiny slice of the dataset looked like this:
 
-|  | kb | volume | surface\_area | bbox\_area | euler\_number | scale | weight | surface\_volume\_ratio |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 0 | 57773 | 26671.5 | 62721.7 | 208020.7 | 4579 | 103.7 | 26.9 | 2.4 |
-| 1 | 3795 | 279.4 | 1028.6 | 1739.4 | 149 | 21.0 | 0.2 | 3.7 |
-| 2 | 20591 | 12494.2 | 27990.7 | 67514.9 | 3264 | 80.3 | 11.7 | 2.2 |
-| 3 | 30708 | 6960.5 | 22507.6 | 64423.3 | 3855 | 70.6 | 6.2 | 3.2 |
-| 4 | 26519 | 3515.4 | 8609.0 | 20061.8 | 1412 | 47.1 | 3.6 | 2.4 |
+|     | kb    | volume  | surface\_area | bbox\_area | euler\_number | scale | weight | surface\_volume\_ratio |
+| --- | ----- | ------- | ------------- | ---------- | ------------- | ----- | ------ | ---------------------- |
+| 0   | 57773 | 26671.5 | 62721.7       | 208020.7   | 4579          | 103.7 | 26.9   | 2.4                    |
+| 1   | 3795  | 279.4   | 1028.6        | 1739.4     | 149           | 21.0  | 0.2    | 3.7                    |
+| 2   | 20591 | 12494.2 | 27990.7       | 67514.9    | 3264          | 80.3  | 11.7   | 2.2                    |
+| 3   | 30708 | 6960.5  | 22507.6       | 64423.3    | 3855          | 70.6  | 6.2    | 3.2                    |
+| 4   | 26519 | 3515.4  | 8609.0        | 20061.8    | 1412          | 47.1  | 3.6    | 2.4                    |
 
 Here `weight` is the important part: UVtools’ estimate of how much resin to use for a given slice.
 
@@ -150,25 +150,25 @@ All three models ended up small, well under 250k parameters, and fast to train. 
 
 ### Bayesian Optimization Parameters Grid
 
-| Component | Search Range | Purpose |
-| --- | --- | --- |
-| Initial Layer Width | 32 → 1024 (step 32) | Controls initial projection capacity from normalized inputs. |
-| Hidden Layers (Count) | 1 → 8 | Defines network depth; trades off expressiveness and overfitting. |
-| Hidden Layer Width | 32 → 1024 (step 32) | Adjusts model capacity per layer to fit data complexity. |
-| Activations | `relu`, `leaky_relu`, `elu`, `tanh`, `selu`, `linear`, `swish`, `mish` | Allows different nonlinearities for pattern learning and stability. |
-| Batch Normalization | Enabled / Disabled; Before / After Activation | Stabilizes gradients and smooths learning dynamics. |
-| Dropout | 0.0 → 0.75 (step 0.05) | Reduces overfitting and improves generalization. |
-| Regularization | None, L1, L2, or Both (1e−6 → 1e−2) | Encourages sparsity or weight decay for better generalization. |
-| Optimizer | `adam`, `adamw`, `nadam`, `adamax`, `rmsprop`, `sgd` | Tunes gradient updates for different convergence behaviors. |
-| Learning Rate | 1e−6 → 1e−2 (log scale) | Controls stability and convergence speed. |
+| Component             | Search Range                                                           | Purpose                                                             |
+| --------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| Initial Layer Width   | 32 → 1024 (step 32)                                                    | Controls initial projection capacity from normalized inputs.        |
+| Hidden Layers (Count) | 1 → 8                                                                  | Defines network depth; trades off expressiveness and overfitting.   |
+| Hidden Layer Width    | 32 → 1024 (step 32)                                                    | Adjusts model capacity per layer to fit data complexity.            |
+| Activations           | `relu`, `leaky_relu`, `elu`, `tanh`, `selu`, `linear`, `swish`, `mish` | Allows different nonlinearities for pattern learning and stability. |
+| Batch Normalization   | Enabled / Disabled; Before / After Activation                          | Stabilizes gradients and smooths learning dynamics.                 |
+| Dropout               | 0.0 → 0.75 (step 0.05)                                                 | Reduces overfitting and improves generalization.                    |
+| Regularization        | None, L1, L2, or Both (1e−6 → 1e−2)                                    | Encourages sparsity or weight decay for better generalization.      |
+| Optimizer             | `adam`, `adamw`, `nadam`, `adamax`, `rmsprop`, `sgd`                   | Tunes gradient updates for different convergence behaviors.         |
+| Learning Rate         | 1e−6 → 1e−2 (log scale)                                                | Controls stability and convergence speed.                           |
 
 This setup produced good results. Errors were usually within a couple of grams, and for day-to-day pricing that was already enough to be useful.
 
 But when I came back to the project in 2025 while writing this essay, a few things bothered me:
 
--   I had one model per artist instead of one model I could ship and reuse.
--   The hyperparameter space was wide and fuzzy; tuning was expensive and hard to reason about.
--   Dense networks are great, but for tabular regression you can often squeeze more signal out of tree-based models.
+- I had one model per artist instead of one model I could ship and reuse.
+- The hyperparameter space was wide and fuzzy; tuning was expensive and hard to reason about.
+- Dense networks are great, but for tabular regression you can often squeeze more signal out of tree-based models.
 
 So I decided to treat the original work as version 1, keep the dataset, and see how far I could push it with a cleaner pipeline and a more opinionated approach to the model.
 
@@ -184,16 +184,16 @@ I wanted three things:
 
 The new version, I called it MiniRes, does that by combining two models:
 
--   an improved dense neural network
--   an XGBoost regressor trained on the same features
+- an improved dense neural network
+- an XGBoost regressor trained on the same features
 
 Their predictions are combined into an ensemble, which tends to be more stable and slightly more accurate than either model on its own. The code and training notebooks live in the [`minires-models` repository on GitHub](https://github.com/SirDarcanos/minires-models/), and the weights are published as a [Hugging Face model at `nicolamustone/minires`](https://huggingface.co/nicolamustone/minires).
 
 Under the hood, MiniRes works like this:
 
--   takes the tabular features exported from your STL analysis and slicing pipeline
--   normalizes the inputs and feeds them to both models
--   averages their predictions (with tuned weights) to produce a final resin usage estimate in grams
+- takes the tabular features exported from your STL analysis and slicing pipeline
+- normalizes the inputs and feeds them to both models
+- averages their predictions (with tuned weights) to produce a final resin usage estimate in grams
 
 The ensemble is small enough to run comfortably on a laptop (I trained and worked on the model exclusively on my MacBook Pro) but strong enough to track the slicer’s estimates very closely.
 
@@ -205,25 +205,25 @@ Every Bayesian optimization run had left behind a dataset of its own: one row pe
 
 Instead of staring at those tables by hand, I treated them as a new regression problem:
 
--   inputs: hyperparameters
--   target: validation RMSE
+- inputs: hyperparameters
+- target: validation RMSE
 
 I trained a RandomForest regressor on this “meta-dataset” and used its feature importances to see which knobs really moved the needle and which ones mostly added noise.
 
 A few patterns emerged:
 
--   Optimizer learning rate was the most important hyperparameter to narrow down.
--   Beyond a certain depth, adding more layers didn’t buy much accuracy; it only increased variance.
--   The width of the first layer mattered more than most subtle regularization tweaks.
--   Dropout had a sweet spot; anything beyond that made the model wobblier than it needed to be.
--   Activations and optimizer choice were important, but only within relatively narrow bands.
+- Optimizer learning rate was the most important hyperparameter to narrow down.
+- Beyond a certain depth, adding more layers didn’t buy much accuracy; it only increased variance.
+- The width of the first layer mattered more than most subtle regularization tweaks.
+- Dropout had a sweet spot; anything beyond that made the model wobblier than it needed to be.
+- Activations and optimizer choice were important, but only within relatively narrow bands.
 
 Armed with that, I shrank the hyperparameter space:
 
--   set the number of layers to either 2 or 3
--   restricted layer widths to the ranges that actually helped
--   pinned regularization and dropout to a couple of sensible defaults
--   cut the optimizer and activation list down to the few that consistently performed well
+- set the number of layers to either 2 or 3
+- restricted layer widths to the ranges that actually helped
+- pinned regularization and dropout to a couple of sensible defaults
+- cut the optimizer and activation list down to the few that consistently performed well
 
 Then I re-ran a smaller, more focused search with this constrained space. The result was a denser cluster of “good” models, easier to reproduce and less sensitive to small noise in the data.
 
@@ -233,30 +233,30 @@ That cleaner dense model became half of the ensemble. The other half, XGBoost, b
 
 The revised model is trained on all artists at once and evaluated against UVtools’ resin usage in grams. On the held-out test set, the ensemble reaches:
 
--   Percentage of predictions within 1 gram of the true value: 91.66%
--   Percentage within 2 grams: 97.02%
--   Percentage within 3 grams: 98.31%
--   Percentage within 5 grams: 99.33%
+- Percentage of predictions within 1 gram of the true value: 91.66%
+- Percentage within 2 grams: 97.02%
+- Percentage within 3 grams: 98.31%
+- Percentage within 5 grams: 99.33%
 
 With overall regression metrics:
 
--   RMSE: 1.5779 grams
--   MAE: 0.3835 grams
--   R²: 0.99585
--   Adjusted R²: 0.99583
+- RMSE: 1.5779 grams
+- MAE: 0.3835 grams
+- R²: 0.99585
+- Adjusted R²: 0.99583
 
 In plain language:
 
--   If you care about being within 1 gram for each miniature, you will be right roughly nine times out of ten.
--   If you allow an error margin of 2–3 grams, you are almost always in range.
--   At 5 grams, mistakes are rare enough that they barely register. This will most likely happen with very big miniatures because the dataset did not have many of them to train my model on.
+- If you care about being within 1 gram for each miniature, you will be right roughly nine times out of ten.
+- If you allow an error margin of 2–3 grams, you are almost always in range.
+- At 5 grams, mistakes are rare enough that they barely register. This will most likely happen with very big miniatures because the dataset did not have many of them to train my model on.
 
 For pricing, I recommend thinking in terms of an error margin you are comfortable with rather than chasing “perfect” predictions.
 
 My preference is a 2-gram margin:
 
--   precise enough that per-miniature costs are trustworthy
--   conservative enough that small underestimates do not meaningfully eat into your profit
+- precise enough that per-miniature costs are trustworthy
+- conservative enough that small underestimates do not meaningfully eat into your profit
 
 You can always be stricter if your margins are razor thin or looser if you care more about rough planning than exact cents.
 
@@ -326,12 +326,12 @@ pip install trimesh
 
 The script accepts:
 
--   `--stl_path`
-    -   either a single `.stl` file or a folder of `.stl` files (non-recursive)
-    -   defaults to the current directory if omitted
--   `--output_path`
-    -   folder where the resulting CSV is written
-    -   defaults to the current directory
+- `--stl_path`
+  - either a single `.stl` file or a folder of `.stl` files (non-recursive)
+  - defaults to the current directory if omitted
+- `--output_path`
+  - folder where the resulting CSV is written
+  - defaults to the current directory
 
 Typical usage:
 
@@ -354,8 +354,8 @@ Once you can predict resin usage in grams, turning that into cost is mostly book
 
 Pricing a miniature usually includes at least:
 
--   resin cost (grams × cost per gram)
--   per-miniature overhead (your time, electricity, failures, packaging, accounting, etc.)
+- resin cost (grams × cost per gram)
+- per-miniature overhead (your time, electricity, failures, packaging, accounting, etc.)
 
 You can handle that with a simple script that sits next to `stl-scanner.py`. Create a new Python file (or download the one at the end of this essay), adjust the constants at the top, run it after scanning, and it writes a CSV you can open in your spreadsheet tool.
 
@@ -412,29 +412,29 @@ At that point you have per-model resin usage, resin cost, and total cost (resin 
 
 Before the model, every new release followed the same script:
 
--   Download the files.
--   Open a slicer.
--   Slice each model.
--   Read how much resin it needs.
--   Copy that into a spreadsheet.
--   Only then start thinking about pricing, stock, and print schedules.
+- Download the files.
+- Open a slicer.
+- Slice each model.
+- Read how much resin it needs.
+- Copy that into a spreadsheet.
+- Only then start thinking about pricing, stock, and print schedules.
 
 It was the opposite of **3D printing efficiency**.
 
 After the model, the workflow looked more like this:
 
--   Download the files.
--   Run MiniRes.
--   Get a table with estimated resin usage for every model.
--   Use those numbers directly for pricing, resin ordering, and planning.
+- Download the files.
+- Run MiniRes.
+- Get a table with estimated resin usage for every model.
+- Use those numbers directly for pricing, resin ordering, and planning.
 
-I still used a resin slicer for test prints, edge cases, and maybe once a quarter to update my dataset and retrain the model with more miniatures (all still automated via terminal). The point wasn’t to eliminate slicing completely. The point was to stop doing it *hundreds of times* just to get ballpark cost estimates.
+I still used a resin slicer for test prints, edge cases, and maybe once a quarter to update my dataset and retrain the model with more miniatures (all still automated via terminal). The point wasn’t to eliminate slicing completely. The point was to stop doing it _hundreds of times_ just to get ballpark cost estimates.
 
 MiniRes turned into a quiet piece of business automation with AI:
 
--   It never appeared on the storefront.
--   It didn’t talk to customers.
--   It just answered “how much resin to use?” for each model, well enough that I could make decisions without losing a weekend to clicking through a UI.
+- It never appeared on the storefront.
+- It didn’t talk to customers.
+- It just answered “how much resin to use?” for each model, well enough that I could make decisions without losing a weekend to clicking through a UI.
 
 That was enough to feel like a superpower.
 
@@ -446,9 +446,9 @@ It didn’t require cutting-edge research. There were no giant models, no GPU cl
 
 The important pieces weren’t magical. They were practical:
 
--   Features that actually reflected the physics of what is resin material doing in a print.
--   A dataset built from real slices, not theory.
--   A model small enough that retraining it when new packs arrived didn’t feel like an event.
+- Features that actually reflected the physics of what is resin material doing in a print.
+- A dataset built from real slices, not theory.
+- A model small enough that retraining it when new packs arrived didn’t feel like an event.
 
 And the payoff wasn’t dramatic. It was quieter than that: more reliable margins, faster pricing, better 3D printing efficiency, and fewer evenings lost to repetitive slicing.
 

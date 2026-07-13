@@ -17,10 +17,10 @@ originalCover: https://buthonestly.io/wp-content/uploads/2025/11/10-types-of-sit
 
 > [!summary]- Quick Summary
 >
-> -   WordPress is my default for most types of websites: blogs, brochure sites, memberships, and courses.
-> -   For some projects, specialized tools beat WordPress: Listable for directories, wiki.gg for wikis, and Substack for newsletter-first writing.
-> -   I treat tiny shops, one-page experiments, and simple bookings as “don’t overbuild” cases — Stripe or Calendly plus a simple page.
-> -   When projects grow (serious shops, complex bookings, site-first memberships), I’m happy to lean on WooCommerce and other WordPress plugins instead of chasing new platforms.
+> - WordPress is my default for most types of websites: blogs, brochure sites, memberships, and courses.
+> - For some projects, specialized tools beat WordPress: Listable for directories, wiki.gg for wikis, and Substack for newsletter-first writing.
+> - I treat tiny shops, one-page experiments, and simple bookings as “don’t overbuild” cases — Stripe or Calendly plus a simple page.
+> - When projects grow (serious shops, complex bookings, site-first memberships), I’m happy to lean on WooCommerce and other WordPress plugins instead of chasing new platforms.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
@@ -28,7 +28,7 @@ If you gave me a random website to build tomorrow, I’d probably reach for Word
 
 But that raises a better question:
 
-If I *could* do everything with WordPress… are there cases where a more specialized tool would actually be nicer?
+If I _could_ do everything with WordPress… are there cases where a more specialized tool would actually be nicer?
 
 That’s what this essay is about: ten **types of websites** and the specific tools I’d reach for. WordPress is still my default, but there are some exceptions.
 
@@ -64,8 +64,8 @@ Is WooCommerce perfect? No. Does it solve 90% of small-shop problems without cod
 
 So my rule of thumb is simple:
 
--   One or two things to sell? [Stripe page](https://stripe.com/en-ro/payments/payment-links) or [WordPress.com Payments](https://wordpress.com/support/wordpress-editor/blocks/payments/accept-payments/).
--   Actual shop? WordPress + [WooCommerce](https://woocommerce.com/).
+- One or two things to sell? [Stripe page](https://stripe.com/en-ro/payments/payment-links) or [WordPress.com Payments](https://wordpress.com/support/wordpress-editor/blocks/payments/accept-payments/).
+- Actual shop? WordPress + [WooCommerce](https://woocommerce.com/).
 
 ## Directories: Lists of Things with Filters
 
@@ -73,13 +73,13 @@ So my rule of thumb is simple:
 
 Directories are the first place where I start to feel the limits of “I’ll just do it in WordPress.”
 
-You *can* build a directory in WordPress. I’ve seen it. Custom post types, custom fields, search plugins, filtering plugins, and some glue in between. It works… until it doesn’t. At some point you end up debugging why the filter doesn’t like that one field you added six months ago.
+You _can_ build a directory in WordPress. I’ve seen it. Custom post types, custom fields, search plugins, filtering plugins, and some glue in between. It works… until it doesn’t. At some point you end up debugging why the filter doesn’t like that one field you added six months ago.
 
 If I wanted to build a directory today — a list of tools, local businesses, communities, jobs — I’d rather use [Listable](https://get-listable.com/).
 
 The whole point of Listable is: “this is a directory.” You define what a listing is, what fields it has, and how it’s categorized. It handles the layout, the cards, the search, the filtering. You stay in a browser UI instead of a plugin graveyard.
 
-If the directory is part of a bigger project, I’d happily run the marketing site on WordPress and the actual directory on Listable. If the directory *is* the project, I might not even bother with WordPress at all.
+If the directory is part of a bigger project, I’d happily run the marketing site on WordPress and the actual directory on Listable. If the directory _is_ the project, I might not even bother with WordPress at all.
 
 ## Wikis Without Handing Your Work to an Ad Farm
 
@@ -91,7 +91,7 @@ A good wiki is a shared brain: pages linking into each other, a clear history of
 
 If I wanted to build a wiki today, especially for a game or a niche topic, I’d go with [wiki.gg](https://www.wiki.gg/).
 
-There are big platforms out there that will happily host your free wiki. You’ve probably landed on them from search results: you scroll, you dodge three pop-ups, the page jumps as another ad loads, and when you tap something on mobile you’re not entirely sure if you clicked a link or an ad. They also tend to treat the content as *theirs* once it’s on there, and taking anything down is… optimistic.
+There are big platforms out there that will happily host your free wiki. You’ve probably landed on them from search results: you scroll, you dodge three pop-ups, the page jumps as another ad loads, and when you tap something on mobile you’re not entirely sure if you clicked a link or an ad. They also tend to treat the content as _theirs_ once it’s on there, and taking anything down is… optimistic.
 
 I don’t love that model. I don’t like pouring effort into something that’s then wrapped in someone else’s aggressive ad strategy and controlled like their asset, not yours.
 
@@ -107,9 +107,9 @@ When I’m not sure if an idea is worth the effort, I try very hard not to build
 
 What I actually need is one honest page:
 
--   This is what I’m offering.
--   This is who it’s for.
--   Here’s what to do if you’re interested.
+- This is what I’m offering.
+- This is who it’s for.
+- Here’s what to do if you’re interested.
 
 For that, I stay in my comfort zone: I open WordPress, create a single page, design it with the block editor, and treat everything else as optional. No huge navigation, no “About” page. Just the one page and maybe a simple thank-you page after a form or payment.
 
@@ -123,10 +123,10 @@ You don’t need a headless CMS and three front-end frameworks to show a few pro
 
 For that, I again use WordPress, but I strip it down aggressively:
 
--   A home page that explains who I am and what I do.
--   A “Work” or “Projects” page with a simple grid.
--   Individual project pages with some screenshots and a short story.
--   A contact page or just a clear email on every page.
+- A home page that explains who I am and what I do.
+- A “Work” or “Projects” page with a simple grid.
+- Individual project pages with some screenshots and a short story.
+- A contact page or just a clear email on every page.
 
 Specialized portfolio tools exist, but they mostly give you what WordPress already can: pages, images, links. I’d rather stay with the thing I know and spend energy on the work, not the platform.
 
@@ -140,17 +140,17 @@ Membership is where WordPress starts to stretch its legs.
 
 If I want a classic membership site — some public content, some protected content, logged-in members, maybe a small community area — I’m very comfortable staying in the WordPress world:
 
--   WordPress for the content and structure.
--   WooCommerce or Payment blocks (on WordPress.com) for payments.
--   A membership plugin or Paid Content (on WordPress.com) to decide who gets access to what.
+- WordPress for the content and structure.
+- WooCommerce or Payment blocks (on WordPress.com) for payments.
+- A membership plugin or Paid Content (on WordPress.com) to decide who gets access to what.
 
 Everything lives on my domain, under my control. I like that. It feels long-term.
 
 But if the project is **email-first**, I start to look elsewhere. If the main experience is:
 
--   You subscribe with email.
--   You read everything in your inbox.
--   The website is just an archive.
+- You subscribe with email.
+- You read everything in your inbox.
+- The website is just an archive.
 
 …then I’d seriously consider [Substack](https://substack.com/).
 
@@ -158,8 +158,8 @@ If I wanted to write regularly, build an audience through email, and maybe add p
 
 So my split here is:
 
--   Site-first memberships → **WordPress + memberships**.
--   Newsletter-first projects → **Substack**.
+- Site-first memberships → **WordPress + memberships**.
+- Newsletter-first projects → **Substack**.
 
 ## Courses
 
@@ -169,8 +169,8 @@ Courses are just structured content that people pay for, with a few extra expect
 
 If I were to run a course on my own site today, I’d start from WordPress again and layer on top:
 
--   [Sensei](https://senseilms.com/) is the one I’d look at first, especially if I’m already in the WooCommerce / Automattic world. It plugs nicely into that ecosystem and gives you lessons, modules, and basic course logic.
--   [LearnDash](https://www.learndash.com/) is another big name in WordPress courses. I haven’t personally used it, but it’s popular enough that if someone told me, “We run our whole course business on LearnDash,” I wouldn’t be surprised.
+- [Sensei](https://senseilms.com/) is the one I’d look at first, especially if I’m already in the WooCommerce / Automattic world. It plugs nicely into that ecosystem and gives you lessons, modules, and basic course logic.
+- [LearnDash](https://www.learndash.com/) is another big name in WordPress courses. I haven’t personally used it, but it’s popular enough that if someone told me, “We run our whole course business on LearnDash,” I wouldn’t be surprised.
 
 Either way, the pattern is the same: WordPress holds the content and pages, and the course plugin adds structure.
 
@@ -194,17 +194,17 @@ If all you need is a simple “book a call with me” flow, I wouldn’t build a
 
 My default here would be:
 
--   A simple site on WordPress.com with a “Book a call” page.
--   A Calendly block (available on the Premium plan).
--   That’s it.
+- A simple site on WordPress.com with a “Book a call” page.
+- A Calendly block (available on the Premium plan).
+- That’s it.
 
 Calendly handles time zones, availability, reminders, and cancellations. WordPress gives you a pleasant place to explain what the call is about and who it’s for.
 
 When bookings get more complex — multiple services, paid sessions, specific time rules, resources, maybe a team — then I’d upgrade the stack:
 
--   WordPress.
--   WooCommerce.
--   [WooCommerce Bookings](https://woocommerce.com/products/woocommerce-bookings/) to turn time slots into bookable products that people pay for.
+- WordPress.
+- WooCommerce.
+- [WooCommerce Bookings](https://woocommerce.com/products/woocommerce-bookings/) to turn time slots into bookable products that people pay for.
 
 ## Where Specialized Tools Make More Sense
 

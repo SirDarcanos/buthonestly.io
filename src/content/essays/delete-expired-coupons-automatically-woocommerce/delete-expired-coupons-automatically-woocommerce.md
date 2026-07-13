@@ -21,11 +21,11 @@ Do you still have hundreds of expired coupons sitting in your database?
 
 > [!summary]- Quick Summary
 >
-> -   Expired WooCommerce coupons pile up over time, cluttering the admin area and adding pointless weight to your database and backups.
-> -   A small PHP snippet runs daily via WP-Cron, finds expired coupons, and moves them to the Trash automatically.
-> -   You can switch to permanent deletion if you’re sure you’ll never need those coupons again.
-> -   The same cleanup logic is available on demand through a Delete Expired Coupons button in Marketing → Coupons.
-> -   Keeping expired coupons under control is a simple automation win that makes store maintenance faster and cleaner.
+> - Expired WooCommerce coupons pile up over time, cluttering the admin area and adding pointless weight to your database and backups.
+> - A small PHP snippet runs daily via WP-Cron, finds expired coupons, and moves them to the Trash automatically.
+> - You can switch to permanent deletion if you’re sure you’ll never need those coupons again.
+> - The same cleanup logic is available on demand through a Delete Expired Coupons button in Marketing → Coupons.
+> - Keeping expired coupons under control is a simple automation win that makes store maintenance faster and cleaner.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
@@ -37,9 +37,9 @@ Let’s fix that.
 
 Expired coupons serve no purpose once they’ve passed their expiry date. Keeping them:
 
--   Slows down your database queries slightly over time.
--   Makes your **Marketing → Coupons** page cluttered.
--   Adds unnecessary data to your backups.
+- Slows down your database queries slightly over time.
+- Makes your **Marketing → Coupons** page cluttered.
+- Adds unnecessary data to your backups.
 
 In short, it’s a small performance and housekeeping issue that’s easy to solve with a bit of automation.
 

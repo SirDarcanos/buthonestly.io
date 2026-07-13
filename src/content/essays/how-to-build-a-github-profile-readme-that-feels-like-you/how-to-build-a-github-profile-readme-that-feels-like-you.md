@@ -17,11 +17,11 @@ originalCover: https://buthonestly.io/wp-content/uploads/2025/11/sirdarcanos-git
 
 > [!summary]- Quick Summary
 >
-> -   **Your GitHub profile README should feel personal, not performative.**
-> -   It works best when it shows who you are, what you care about, and how you approach your work. **Start simple, then add structure.**
-> -   A good README can include a short intro, current projects, tools you use, ways to connect, and a few useful links. **Dynamic sections can help, but only if they serve the page.**
-> -   Badges, GitHub stats, recent posts, and GitHub Actions are useful when they add context, not clutter. **The goal is clarity, not decoration.**
-> -   A strong profile README should be easy to read, easy to maintain, and honest enough to feel like you.
+> - **Your GitHub profile README should feel personal, not performative.**
+> - It works best when it shows who you are, what you care about, and how you approach your work. **Start simple, then add structure.**
+> - A good README can include a short intro, current projects, tools you use, ways to connect, and a few useful links. **Dynamic sections can help, but only if they serve the page.**
+> - Badges, GitHub stats, recent posts, and GitHub Actions are useful when they add context, not clutter. **The goal is clarity, not decoration.**
+> - A strong profile README should be easy to read, easy to maintain, and honest enough to feel like you.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
@@ -48,9 +48,9 @@ That’s it, the file will instantly appear on your profile. You can edit it dir
 
 A few tips:
 
--   Markdown supports **HTML**, so you can use alignment, badges, and custom layouts.
--   You can preview the file live by clicking **“Preview”** while editing.
--   You can use comments (`<!-- like this -->`) to create placeholder sections for future automation. Comments won’t show in the rendered file.
+- Markdown supports **HTML**, so you can use alignment, badges, and custom layouts.
+- You can preview the file live by clicking **“Preview”** while editing.
+- You can use comments (`<!-- like this -->`) to create placeholder sections for future automation. Comments won’t show in the rendered file.
 
 ## Start with a Header That Grabs Attention
 
@@ -71,11 +71,11 @@ This uses [readme-typing-svg](https://readme-typing-svg.demolab.com/demo/) to an
 
 You could also:
 
--   Add a static banner image made with Figma or Canva.
--   Keep it plain text if you prefer minimalism.
--   Use emoji for warmth (👍, 💻, ✨).
+- Add a static banner image made with Figma or Canva.
+- Keep it plain text if you prefer minimalism.
+- Use emoji for warmth (👍, 💻, ✨).
 
-Your header doesn’t need to shout, it just needs to represent *you*.
+Your header doesn’t need to shout, it just needs to represent _you_.
 
 ## Add Badges for Links and Tools
 
@@ -97,10 +97,10 @@ These badges make your key links visible without forcing visitors to scroll or r
 
 You can create badges for:
 
--   Your website or blog
--   Social media (LinkedIn, Mastodon, X, etc.)
--   Tools you use (Python, Docker, Figma)
--   Status or metrics (“Open to work”, “Currently learning Go”, “Building something new”)
+- Your website or blog
+- Social media (LinkedIn, Mastodon, X, etc.)
+- Tools you use (Python, Docker, Figma)
+- Status or metrics (“Open to work”, “Currently learning Go”, “Building something new”)
 
 Keep them consistent in shape and color scheme.  
 For professional profiles, a single row of badges is enough. Anything more can distract from your content.
@@ -119,8 +119,8 @@ Here’s how I structured mine:
 
 You don’t need all of these, but you could have at least:
 
--   One **section about you** (the human part).
--   One **section about what you build or write** (the work part).
+- One **section about you** (the human part).
+- One **section about what you build or write** (the work part).
 
 That balance makes the page feel personal yet purposeful.
 
@@ -146,8 +146,8 @@ You can use badges, plain lists, or even icons. Some designers prefer a visual g
 If you want to highlight versatility, group tools by category:
 
 ```bash
-**Languages:** Python, PHP, JavaScript  
-**Frameworks:** WordPress, FastAPI  
+**Languages:** Python, PHP, JavaScript
+**Frameworks:** WordPress, FastAPI
 **Tools:** Docker, Jupyter, GitHub Actions
 ```
 
@@ -155,7 +155,7 @@ This small change adds context and readability.
 
 ## Add Dynamic Content with GitHub Actions
 
-This is where your README can evolve into something *alive*. Using GitHub Actions for blog posts and other content updates, your README becomes a living document that showcases your latest work automatically.
+This is where your README can evolve into something _alive_. Using GitHub Actions for blog posts and other content updates, your README becomes a living document that showcases your latest work automatically.
 
 In my profile, I use these for sections like “Programming,” “Leadership,” and “Web Tech”:
 
@@ -176,7 +176,7 @@ name: Latest blog post workflow
 
 on:
   schedule:
-    - cron: '0 3 * * *'   # Every day 03:00 UTC
+    - cron: "0 3 * * *" # Every day 03:00 UTC
   workflow_dispatch:
 
 permissions:
@@ -224,7 +224,7 @@ How this automation works:
 
 1.  GitHub Actions runs on a schedule (daily at 3 AM UTC)
 2.  The action fetches my blog’s RSS feed
-3.  It finds the HTML comments in my README (*<!– PROGRAMMING:START –>*)
+3.  It finds the HTML comments in my README (_<!– PROGRAMMING:START –>_)
 4.  It updates the content between those comment tags
 5.  It commits the changes automatically
 
@@ -237,7 +237,7 @@ Example (mine):
 
 ```bash
 ### Outside of work
-When I’m not working, I’m probably:  
+When I’m not working, I’m probably:
 - Running long-form *Dungeons & Dragons* campaigns
 - Writing new essays on [buthonestly.io/](/)
 - Coding on some project that will likely become public
@@ -256,9 +256,9 @@ And if you decide to add automation later, the structure will make that process 
 
 A few maintenance tips:
 
--   Update your links every few months.
--   Avoid hardcoding years (“2023,” etc.).
--   Keep badges lightweight, too many images can look heavy.
+- Update your links every few months.
+- Avoid hardcoding years (“2023,” etc.).
+- Keep badges lightweight, too many images can look heavy.
 
 ## Make It Yours
 
@@ -300,7 +300,7 @@ Examples: [https://github.com/Xx-Ashutosh-xX/](https://github.com/Xx-Ashutosh-xX
 
 A GitHub profile README doesn’t need to impress everyone, it just needs to represent you clearly. The best ones evolve naturally over time: a short “About me” today, perhaps badges or automation later, and eventually something that grows alongside your work.
 
-You don’t have to build it all at once. Start with a greeting, add what matters most, and refine it as you go. That’s the real advantage of [using Markdown](/2015/09/01/why-i-write-in-markdown/ "Why I Write in Markdown"): it’s flexible and forgiving.
+You don’t have to build it all at once. Start with a greeting, add what matters most, and refine it as you go. That’s the real advantage of [[write-in-markdown|using Markdown]]: it’s flexible and forgiving.
 
 What matters most isn’t how flashy or minimalist it looks, but that it tells a small, honest story about what you do and how you think.
 

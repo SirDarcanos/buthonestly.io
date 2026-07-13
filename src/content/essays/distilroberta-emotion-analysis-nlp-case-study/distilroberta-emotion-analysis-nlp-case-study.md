@@ -22,9 +22,9 @@ downloads:
 
 > [!summary]- Quick Summary
 >
-> -   An NLP sentiment and emotion analysis case study using DistilRoBERTa on 277k Dead by Daylight Steam reviews.
-> -   Download a reusable **Steam reviews sentiment analysis** notebook and dataset.
-> -   Walk through the case study with a Jupyter notebook you can reuse for your own projects.
+> - An NLP sentiment and emotion analysis case study using DistilRoBERTa on 277k Dead by Daylight Steam reviews.
+> - Download a reusable **Steam reviews sentiment analysis** notebook and dataset.
+> - Walk through the case study with a Jupyter notebook you can reuse for your own projects.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
@@ -46,26 +46,26 @@ We’ll start small and descriptive, then slowly move into models. Buckle up, it
 
 Each row is a single Steam review. The columns you’ll see when you open the file:
 
--   `review` – full, unedited review text
--   `sentiment` – `1` if the review is marked as positive on Steam, `0` if negative
--   `purchased` – `1` if the reviewer bought the game on Steam
--   `received_for_free` – `1` if they got it for free (bundle, promotion, etc.)
--   `votes_up` – number of “helpful” votes
--   `votes_funny` – number of “funny” votes
--   `date_created` – when the review was written (UTC, time omitted)
--   `date_updated` – when it was last edited (UTC, time omitted)
--   `author_num_games_owned` – how many games are in the Steam library of the author
--   `author_num_reviews` – how many reviews the author has written
--   `author_playtime_forever` – total author’s playtime in minutes
--   `author_playtime_at_review` – author’s playtime in minutes at the time of the review
+- `review` – full, unedited review text
+- `sentiment` – `1` if the review is marked as positive on Steam, `0` if negative
+- `purchased` – `1` if the reviewer bought the game on Steam
+- `received_for_free` – `1` if they got it for free (bundle, promotion, etc.)
+- `votes_up` – number of “helpful” votes
+- `votes_funny` – number of “funny” votes
+- `date_created` – when the review was written (UTC, time omitted)
+- `date_updated` – when it was last edited (UTC, time omitted)
+- `author_num_games_owned` – how many games are in the Steam library of the author
+- `author_num_reviews` – how many reviews the author has written
+- `author_playtime_forever` – total author’s playtime in minutes
+- `author_playtime_at_review` – author’s playtime in minutes at the time of the review
 
 Everything is English-only. In total: **277,439 reviews**.
 
 We’ll use this dataset to answer questions like:
 
--   How does the general tone of reviews change over time and around big patches?
--   How do “new,” “regular,” “veteran,” and “master” players talk differently?
--   What’s the relationship between the simple positive/negative label and a more detailed emotional “mood” from a pretrained model?
+- How does the general tone of reviews change over time and around big patches?
+- How do “new,” “regular,” “veteran,” and “master” players talk differently?
+- What’s the relationship between the simple positive/negative label and a more detailed emotional “mood” from a pretrained model?
 
 But first, we need to load the file and make sure it looks sane.
 
@@ -123,10 +123,10 @@ You get a feeling for the raw text, the shape of the timestamps, how big the pla
 
 Before doing anything clever, I want to answer a few boring questions:
 
--   Did the CSV load correctly?
--   Are the types roughly what I expect?
--   How are the positive/negative labels distributed?
--   How long are these reviews, roughly?
+- Did the CSV load correctly?
+- Are the types roughly what I expect?
+- How are the positive/negative labels distributed?
+- How long are these reviews, roughly?
 
 The notebook does that with a small block of code:
 
@@ -141,29 +141,29 @@ By running this code we see the following:
 <class 'pandas.core.frame.DataFrame'>
 RangeIndex: 277479 entries, 0 to 277478
 Data columns (total 12 columns):
- #   Column                         Non-Null Count   Dtype 
----  ------                         --------------   ----- 
+ #   Column                         Non-Null Count   Dtype
+---  ------                         --------------   -----
  0   review                         276470 non-null  object
- 1   sentiment                      277479 non-null  int64 
- 2   purchased                      277479 non-null  int64 
- 3   received_for_free              277479 non-null  int64 
- 4   votes_up                       277479 non-null  int64 
- 5   votes_funny                    277479 non-null  int64 
+ 1   sentiment                      277479 non-null  int64
+ 2   purchased                      277479 non-null  int64
+ 3   received_for_free              277479 non-null  int64
+ 4   votes_up                       277479 non-null  int64
+ 5   votes_funny                    277479 non-null  int64
  6   date_created                   277479 non-null  object
  7   date_updated                   277479 non-null  object
- 8   author_num_games_owned         277479 non-null  int64 
- 9   author_num_reviews             277479 non-null  int64 
- 10  author_playtime_forever_min    277479 non-null  int64 
- 11  author_playtime_at_review_min  277479 non-null  int64 
+ 8   author_num_games_owned         277479 non-null  int64
+ 9   author_num_reviews             277479 non-null  int64
+ 10  author_playtime_forever_min    277479 non-null  int64
+ 11  author_playtime_at_review_min  277479 non-null  int64
 dtypes: int64(9), object(3)
 memory usage: 25.4+ MB
 ```
 
 The notebook reports:
 
--   **277,479 rows** and **12 columns**
--   Most columns are integer counts: votes, playtime, number of games, number of reviews
--   Three columns are still plain `object`: `review`, `date_created`, `date_updated`
+- **277,479 rows** and **12 columns**
+- Most columns are integer counts: votes, playtime, number of games, number of reviews
+- Three columns are still plain `object`: `review`, `date_created`, `date_updated`
 
 The good news: almost everything is there. The only missing values are in the `review` text itself: **1,009 rows** have a null `review`, which is about **0.36%** of the dataset. That’s small enough that we can safely drop those rows later without feeling guilty.
 
@@ -193,11 +193,11 @@ max        8000.000000
 Name: text_len, dtype: float64
 ```
 
--   **count**: 277,479 reviews
--   **mean length**: about **158 characters**
--   **median**: **36 characters**
--   **75th percentile**: **113 characters**
--   **maximum**: **8,000 characters**
+- **count**: 277,479 reviews
+- **mean length**: about **158 characters**
+- **median**: **36 characters**
+- **75th percentile**: **113 characters**
+- **maximum**: **8,000 characters**
 
 So most people write something short and to the point, but there’s a long tail of full-on essays that go into several thousand characters. The median being 36 characters means that a typical review is closer to “fun with friends” than to a balance manifesto, but those manifestos are absolutely there, and they drag the average up.
 
@@ -207,12 +207,12 @@ In other words, the distribution looks exactly like you’d expect from Steam. L
 
 Once the basic structure looked sane, I wanted to know something simple:
 
-*How many of these reviews are actually marked as positive vs negative?*
+_How many of these reviews are actually marked as positive vs negative?_
 
 The `sentiment` column is a numeric label:
 
--   `1` → thumbs up
--   `0` → thumbs down
+- `1` → thumbs up
+- `0` → thumbs down
 
 ```python
 sentiment_counts = df["sentiment"].value_counts().sort_index()
@@ -223,8 +223,8 @@ sentiment_counts, sentiment_share
 
 When I ask the notebook for counts and proportions, it comes back with:
 
--   **19.7% negative** reviews
--   **80.3% positive** reviews
+- **19.7% negative** reviews
+- **80.3% positive** reviews
 
 ```bash
 (sentiment
@@ -239,15 +239,15 @@ When I ask the notebook for counts and proportions, it comes back with:
 
 So about four out of five reviews in this dataset are technically “positive.”
 
-That doesn’t mean four out of five reviews are *happy*.
+That doesn’t mean four out of five reviews are _happy_.
 
 If you’ve read Steam reviews before, you know how this works: people will mark a review as positive while writing a long, exhausted critique that ends with “I still recommend it though.” Or they’ll thumbs up a game because they have 2,000 hours in it and a complicated relationship with it.
 
 Still, this 80/20 split matters:
 
--   It tells us the dataset is very skewed towards positives, so any model trained directly on this label will inherit that bias.
--   It gives us a baseline to compare against later when we bring in a separate “mood” label from a pretrained emotion model.
--   It also says something about the game itself: people complain loudly, but a big majority still clicks “recommend.” This reflects my personal experience in the game and its subreddit.
+- It tells us the dataset is very skewed towards positives, so any model trained directly on this label will inherit that bias.
+- It gives us a baseline to compare against later when we bring in a separate “mood” label from a pretrained emotion model.
+- It also says something about the game itself: people complain loudly, but a big majority still clicks “recommend.” This reflects my personal experience in the game and its subreddit.
 
 For now, we’ll treat `sentiment` as “what the player decided to tell Steam about their overall recommendation” and keep in the back of our heads that the actual emotional tone might be very different.
 
@@ -268,10 +268,10 @@ date_range
 
 The answer is:
 
--   **earliest review**: 2019-07-04
--   **latest review**: 2025-11-09
+- **earliest review**: 2019-07-04
+- **latest review**: 2025-11-09
 
-So the dataset covers a bit more than **six years** of *Dead by Daylight*’s life.
+So the dataset covers a bit more than **six years** of _Dead by Daylight_’s life.
 
 ```bash
 min   2019-07-04
@@ -281,9 +281,9 @@ Name: date_created, dtype: datetime64[ns]
 
 That’s roughly:
 
--   Dozens of chapters and mid-chapters releases
--   A long list of killers and survivors introduced into the roster
--   Multiple balance passes, reworks, events, and seasonal spikes
+- Dozens of chapters and mid-chapters releases
+- A long list of killers and survivors introduced into the roster
+- Multiple balance passes, reworks, events, and seasonal spikes
 
 In other words, this is not a snapshot around a single patch. It’s a rolling diary of how people have been talking about the game, in public, for more than half a decade.
 
@@ -296,7 +296,7 @@ We already knew the collection window was “2019 to November 2025” from the d
 
 ### Monthly Volume and Mood
 
-Once we know the overall time window, it’s worth zooming in a bit, “*How many reviews do we get each month, and how positive are they?*”
+Once we know the overall time window, it’s worth zooming in a bit, “_How many reviews do we get each month, and how positive are they?_”
 
 ```python
 df["year_month"] = df["date_created"].dt.to_period("M").dt.to_timestamp()
@@ -332,36 +332,36 @@ When I bucket by month, two things stand out immediately.
 
 On the **early side** of the dataset:
 
--   July 2019: **2,186** reviews, about **82.8%** positive
--   August 2019: **803** reviews, ~**70.0%** positive
--   October 2019: **2,084** reviews, ~**82.1%** positive
--   November 2019: **6,585** reviews, ~**86.8%** positive
+- July 2019: **2,186** reviews, about **82.8%** positive
+- August 2019: **803** reviews, ~**70.0%** positive
+- October 2019: **2,084** reviews, ~**82.1%** positive
+- November 2019: **6,585** reviews, ~**86.8%** positive
 
 So even at the very start, the volume already moves a lot from month to month, and the positivity rate swings between roughly 70% and almost 87%. November 2019 in particular looks like a spike: many more reviews and a very high share of “recommend” clicks.
 
 Fast forward to the **most recent months** we have:
 
--   July 2025: **6,294** reviews, ~**80.6%** positive
--   August 2025: **5,321** reviews, ~**71.0%** positive
--   September 2025: **3,764** reviews, ~**64.2%** positive
--   October 2025: **3,691** reviews, ~**72.0%** positive
--   November 2025: **963** reviews, ~**70.3%** positive (partial month)
+- July 2025: **6,294** reviews, ~**80.6%** positive
+- August 2025: **5,321** reviews, ~**71.0%** positive
+- September 2025: **3,764** reviews, ~**64.2%** positive
+- October 2025: **3,691** reviews, ~**72.0%** positive
+- November 2025: **963** reviews, ~**70.3%** positive (partial month)
 
 The pattern feels familiar if you’ve played the game for a while:
 
--   Large spikes in volume around certain moments (new content, events, drama).
--   Noticeable dips in positivity that slowly recover, but not always back to previous levels.
+- Large spikes in volume around certain moments (new content, events, drama).
+- Noticeable dips in positivity that slowly recover, but not always back to previous levels.
 
 July 2025 looks pretty healthy, then positivity drops by more than 16 percentage points over the next two months before recovering a bit in October. Without context, that’s just a curve. Once we line it up with patch notes and new killer/survivor releases, it becomes a story.
 
 I’ll come back to that later using the patch log. For now, the important part is this:
 
--   The dataset isn’t just “a big bag of reviews.”
--   It’s a **time series** with clear swings in volume and mood that we can relate to what the game was doing at the time.
+- The dataset isn’t just “a big bag of reviews.”
+- It’s a **time series** with clear swings in volume and mood that we can relate to what the game was doing at the time.
 
 ### Who’s Talking: Playtime at Review
 
-Steam reviews are more interesting when you know *who* is writing them.
+Steam reviews are more interesting when you know _who_ is writing them.
 
 Someone with five hours in the game and someone with two thousand hours are technically leaving the same kind of review, but they live in completely different realities.
 
@@ -386,17 +386,17 @@ The key quantiles look like this:
 Name: author_playtime_at_review_min, dtype: float64
 ```
 
--   25th percentile: **1,021 minutes** (~**17 hours**)
--   50th percentile (median): **4,462 minutes** (~**74 hours**)
--   75th percentile: **18,112.5 minutes** (~**302 hours**)
--   90th percentile: **50,459.2 minutes** (~**841 hours**)
--   99th percentile: **170,344.4 minutes** (~**2,839 hours**)
+- 25th percentile: **1,021 minutes** (~**17 hours**)
+- 50th percentile (median): **4,462 minutes** (~**74 hours**)
+- 75th percentile: **18,112.5 minutes** (~**302 hours**)
+- 90th percentile: **50,459.2 minutes** (~**841 hours**)
+- 99th percentile: **170,344.4 minutes** (~**2,839 hours**)
 
 So:
 
--   A **typical reviewer** has already put around **70–80 hours** into the game.
--   A quarter of reviewers are under ~17 hours: fresh-ish impressions, still figuring out how anything works.
--   At the high end, there’s a long, heavy tail of people with **hundreds or thousands of hours**. That’s the “I main this killer and I have opinions” crowd.
+- A **typical reviewer** has already put around **70–80 hours** into the game.
+- A quarter of reviewers are under ~17 hours: fresh-ish impressions, still figuring out how anything works.
+- At the high end, there’s a long, heavy tail of people with **hundreds or thousands of hours**. That’s the “I main this killer and I have opinions” crowd.
 
 This supports the intuition that we shouldn’t treat all reviews as coming from the same kind of player. A new survivor complaining about the learning curve and a master killer complaining about MMR are both valid, but not interchangeable.
 
@@ -404,10 +404,10 @@ This supports the intuition that we shouldn’t treat all reviews as coming from
 
 To make this more concrete, I’ll group players into four experience bands based on playtime at the time of review:
 
--   **new** – under **100 hours** (< 6,000 minutes)
--   **regular** – **100–500 hours** (6,000–30,000 minutes)
--   **veteran** – **500–2,000 hours** (30,000–120,000 minutes)
--   **master** – over **2,000 hours** (> 120,000 minutes)
+- **new** – under **100 hours** (< 6,000 minutes)
+- **regular** – **100–500 hours** (6,000–30,000 minutes)
+- **veteran** – **500–2,000 hours** (30,000–120,000 minutes)
+- **master** – over **2,000 hours** (> 120,000 minutes)
 
 These thresholds aren’t magical; they’re just a simple way to turn a huge numeric range into four buckets that roughly match how the game feels at different stages. We’ll use them later to see how language and sentiment shift as people stick around.
 
@@ -440,17 +440,17 @@ veteran     40770
 Name: count, dtype: int64
 ```
 
--   **new** → about **55%** of all reviews
--   **regular** → about **28%**
--   **veteran** → about **15%**
--   **master** → about **2%**
+- **new** → about **55%** of all reviews
+- **regular** → about **28%**
+- **veteran** → about **15%**
+- **master** → about **2%**
 
 So the picture really is a pyramid:
 
--   More than half of the reviews come from people with **less than 100 hours** in the game.
--   Roughly a third come from the middle: people who’ve played somewhere between **100 and 500 hours**.
--   A solid chunk, almost **41k reviews**, are from veterans with **500–2,000 hours** behind them.
--   And then there’s the tiny top of the triangle: a bit over **6,000 reviews** from people with more than **2,000 hours**.
+- More than half of the reviews come from people with **less than 100 hours** in the game.
+- Roughly a third come from the middle: people who’ve played somewhere between **100 and 500 hours**.
+- A solid chunk, almost **41k reviews**, are from veterans with **500–2,000 hours** behind them.
+- And then there’s the tiny top of the triangle: a bit over **6,000 reviews** from people with more than **2,000 hours**.
 
 For Dead by Daylight, this feels right.
 
@@ -460,15 +460,15 @@ The nice part is: the dataset contains all four voices, and we can now treat the
 
 Later on, we’ll use these bands to ask questions like:
 
--   How positive vs. negative are reviews in each group?
--   What do new players complain about that masters don’t even mention anymore?
--   Where does the language become more technical, more specific, or more resigned?
+- How positive vs. negative are reviews in each group?
+- What do new players complain about that masters don’t even mention anymore?
+- Where does the language become more technical, more specific, or more resigned?
 
 For now, it’s enough to know that the CSV doesn’t just have a lot of reviews — it has a lot of reviews from people at very different stages of their relationship with the game.
 
 ### How Positivity Changes with Experience
 
-Now that the reviews are split into new / regular / veteran / master, the next question is obvious: “*Does the chance of recommending the game change as people spend more time in it?*”
+Now that the reviews are split into new / regular / veteran / master, the next question is obvious: “_Does the chance of recommending the game change as people spend more time in it?_”
 
 ```python
 sentiment_by_experience = (
@@ -491,25 +491,25 @@ veteran    0.667574
 Name: sentiment, dtype: float64
 ```
 
--   New players are **~86% positive**.
--   Regulars are **~77% positive**.
--   Veterans are **~67% positive**.
--   Masters are **~54% positive**.
+- New players are **~86% positive**.
+- Regulars are **~77% positive**.
+- Veterans are **~67% positive**.
+- Masters are **~54% positive**.
 
 That’s almost a straight slope down.
 
 You can read this a few ways:
 
--   There’s a clear **honeymoon phase**: under 100 hours, most people still hit “recommend” even if they have complaints.
--   Between 100 and 500 hours, positivity drops by about **nine points**. Maybe this is where the novelty wears off and the grind, meta and matchmaking start to bite.
--   Veterans (500–2,000 hours) are still mostly positive, but the split is closer to **two-thirds / one-third**. At that point, you’ve seen a few metas and probably lived through at least one patch you hated.
--   Masters (2,000+ hours) are basically **coin flip territory**. Slightly more than half still recommend the game, but a massive chunk doesn’t.
+- There’s a clear **honeymoon phase**: under 100 hours, most people still hit “recommend” even if they have complaints.
+- Between 100 and 500 hours, positivity drops by about **nine points**. Maybe this is where the novelty wears off and the grind, meta and matchmaking start to bite.
+- Veterans (500–2,000 hours) are still mostly positive, but the split is closer to **two-thirds / one-third**. At that point, you’ve seen a few metas and probably lived through at least one patch you hated.
+- Masters (2,000+ hours) are basically **coin flip territory**. Slightly more than half still recommend the game, but a massive chunk doesn’t.
 
 This is precisely why I wanted playtime in the dataset. A global “80% positive” hides the fact that the shape is:
 
 > very happy → still happy → conflicted → deeply ambivalent
 
-Later, when we look at the language itself, we’ll see *how* this shift shows up: whether masters use more technical jargon, more specific complaints, more sarcasm, or simply sound tired.
+Later, when we look at the language itself, we’ll see _how_ this shift shows up: whether masters use more technical jargon, more specific complaints, more sarcasm, or simply sound tired.
 
 For now, the important bit is: **sentiment is not uniform across experience**. Any model or analysis that ignores that is flattening something interesting.
 
@@ -517,7 +517,7 @@ For now, the important bit is: **sentiment is not uniform across experience**. A
 
 With a bit of light cleaning (lowercasing, stripping punctuation, removing stopwords), I asked a simple question:
 
-“*What are the most common words in positive reviews and in negative ones?*”
+“_What are the most common words in positive reviews and in negative ones?_”
 
 ```python
 PUNCTUATION = set(string.punctuation)
@@ -555,65 +555,65 @@ top_pos_uni, top_neg_uni
 
 On the **positive** side, the top unigrams look like this:
 
--   `game`, `fun`, `good`, `play`, `great`
--   `friends`, `love`, `time`, `really`
--   `killer`, `killers`, `survivor`, `survivors`
--   `recommend`
+- `game`, `fun`, `good`, `play`, `great`
+- `friends`, `love`, `time`, `really`
+- `killer`, `killers`, `survivor`, `survivors`
+- `recommend`
 
 ```bash
-[('game', 36588),  ('fun', 14520),  ('good', 9308),  
-('play', 8910),  ('killer', 6107),  ('friends', 5397),  
-('like', 5301),  ("it's", 4412),  ('great', 4210),  
-('just', 4163),  ('playing', 4144),  ('love', 4005),  
-('time', 3404),  ('killers', 3301),  ('really', 3271),  
-('survivor', 3125),  ('survivors', 2863),  ('games', 2453),  
+[('game', 36588),  ('fun', 14520),  ('good', 9308),
+('play', 8910),  ('killer', 6107),  ('friends', 5397),
+('like', 5301),  ("it's", 4412),  ('great', 4210),
+('just', 4163),  ('playing', 4144),  ('love', 4005),
+('time', 3404),  ('killers', 3301),  ('really', 3271),
+('survivor', 3125),  ('survivors', 2863),  ('games', 2453),
 ('people', 2375),  ('recommend', 2268)]
 ```
 
 So the picture is:
 
--   Lots of “fun”, “good”, “great”, “love”.
--   Social play shows up directly: “friends”.
--   Role words are present but not dominant — killers and survivors are part of the experience, not the whole story.
--   The word “recommend” is explicitly there, which fits the thumbs-up label.
+- Lots of “fun”, “good”, “great”, “love”.
+- Social play shows up directly: “friends”.
+- Role words are present but not dominant — killers and survivors are part of the experience, not the whole story.
+- The word “recommend” is explicitly there, which fits the thumbs-up label.
 
-On the **negative** side, the list is different but not *completely* different:
+On the **negative** side, the list is different but not _completely_ different:
 
--   `game`, `killer`, `play`, `fun`, `killers`
--   `like`, `time`, `survivor`, `survivors`
--   `new`, `perks`, `players`, `devs`, `people`, `community`
--   `"don't"`
+- `game`, `killer`, `play`, `fun`, `killers`
+- `like`, `time`, `survivor`, `survivors`
+- `new`, `perks`, `players`, `devs`, `people`, `community`
+- `"don't"`
 
 ```bash
-[('game', 84917),  ('killer', 20369),  ('play', 20246),  
-('just', 16706),  ('fun', 13593),  ('killers', 12978),  
-('like', 12181),  ('time', 10737),  ('survivor', 10283),  
-('survivors', 10214),  ("don't", 9850),  ('playing', 9805),  
-("it's", 9493),  ('new', 8038),  ('perks', 8002),  
-('good', 7583),  ('players', 7539),  ('devs', 7504),  
+[('game', 84917),  ('killer', 20369),  ('play', 20246),
+('just', 16706),  ('fun', 13593),  ('killers', 12978),
+('like', 12181),  ('time', 10737),  ('survivor', 10283),
+('survivors', 10214),  ("don't", 9850),  ('playing', 9805),
+("it's", 9493),  ('new', 8038),  ('perks', 8002),
+('good', 7583),  ('players', 7539),  ('devs', 7504),
 ('people', 7181),  ('community', 6440)]
 ```
 
 The overlap is almost the point:
 
--   `game`, `killer`, `play`, `fun` appear in both lists.
--   People talk about *the same objects* whether they like the game or not: killers, survivors, perks, and the community.
+- `game`, `killer`, `play`, `fun` appear in both lists.
+- People talk about _the same objects_ whether they like the game or not: killers, survivors, perks, and the community.
 
 What changes is the **frame**:
 
--   Positive reviews lean on **affect** and **social context**: fun, good, great, friends, love, recommend.
--   Negative reviews bring in **friction** and **targets**: new players, perks, devs, community, “don’t”.
+- Positive reviews lean on **affect** and **social context**: fun, good, great, friends, love, recommend.
+- Negative reviews bring in **friction** and **targets**: new players, perks, devs, community, “don’t”.
 
 You can already see a few classic Dead by Daylight tensions bubbling up:
 
--   “Fun” appears high on both sides — which often means “this *could* be fun, but…”
--   `devs` and `community` show up only in the negative top-20, not the positive one. When people are happy, they talk about matches. When they’re upset, they talk about *other people*.
--   `perks` only appears in negative reviews: people mostly bring them up when they feel something is unfair or broken.
+- “Fun” appears high on both sides — which often means “this _could_ be fun, but…”
+- `devs` and `community` show up only in the negative top-20, not the positive one. When people are happy, they talk about matches. When they’re upset, they talk about _other people_.
+- `perks` only appears in negative reviews: people mostly bring them up when they feel something is unfair or broken.
 
 This is still very crude: just word counts, no context, no sense of who is speaking (new vs. master). But it already confirms that:
 
-1.  Positive vs. negative reviews are *about* the same game.
-2.  The difference lives in how people *relate* to those same elements.
+1.  Positive vs. negative reviews are _about_ the same game.
+2.  The difference lives in how people _relate_ to those same elements.
 
 Later, we’ll repeat this kind of analysis inside each experience band and also per “mood” label from the emotion model to see how anger vs. disappointment vs. joy shapes the vocabulary.
 
@@ -621,7 +621,7 @@ For now, it’s enough to know that we’re looking at the right kind of mess: p
 
 ### Short Phrases, Long Stories
 
-Unigrams tell us *what* people talk about. Bigrams start to show *how* they talk about it.
+Unigrams tell us _what_ people talk about. Bigrams start to show _how_ they talk about it.
 
 ```python
 top_pos_bi = top_ngrams(pos_sample, n=2, top_k=20)
@@ -632,47 +632,47 @@ top_pos_bi, top_neg_bi
 
 When I look at the top two-word phrases in positive reviews, I get things like:
 
--   `good game`, `great game`, `fun game`, `best game`
--   `play friends`, `fun friends`
--   `game fun`, `fun play`, `really fun`, `fun haha`, `haha fun`
--   `love game`, `pretty good`
--   `dead daylight`, `nea nea`
+- `good game`, `great game`, `fun game`, `best game`
+- `play friends`, `fun friends`
+- `game fun`, `fun play`, `really fun`, `fun haha`, `haha fun`
+- `love game`, `pretty good`
+- `dead daylight`, `nea nea`
 
 It’s very on the nose:
 
--   Straight-up endorsements (`good game`, `great game`, `best game`).
--   Social context again: having fun **with friends** is a recurring pattern.
--   Several variations on “fun”
--   And wonderfully specific artifacts like `nea nea`, which is exactly the kind of thing you only get in a real community dataset. Knowing the game, this is probably something like “nea be nea”.
+- Straight-up endorsements (`good game`, `great game`, `best game`).
+- Social context again: having fun **with friends** is a recurring pattern.
+- Several variations on “fun”
+- And wonderfully specific artifacts like `nea nea`, which is exactly the kind of thing you only get in a real community dataset. Knowing the game, this is probably something like “nea be nea”.
 
 One interesting outlier: `hate game` appears in the positive list. That’s the classic “I hate this game but I love it” energy — something we’ll probably see more clearly when we add emotion labels.
 
 On the negative side, the top bigrams look different:
 
--   `play game`, `playing game`, `buy game`, `hours game`, `bad game`
--   `play killer`, `playing killer`, `play survivor`
--   `new players`
--   `recommend game`
--   `tunnel tunnel`
--   `game just`, `game game`, `game fun`, `good game`, `fun game`
+- `play game`, `playing game`, `buy game`, `hours game`, `bad game`
+- `play killer`, `playing killer`, `play survivor`
+- `new players`
+- `recommend game`
+- `tunnel tunnel`
+- `game just`, `game game`, `game fun`, `good game`, `fun game`
 
 A few things stand out:
 
--   `buy game` and `hours game` point straight at value: “I paid for this” and “I have X hours in this game” are how many negative reviews start.
--   `new players` shows up here but not in the positive bigrams. People mention new players when they’re upset (about matchmaking, smurfs, or teammates), not when they’re happy.
--   `tunnel tunnel` appearing in the top-20 negative phrases is the most Dead by Daylight thing possible. You can basically hear the salt.
--   `recommend game`, `good game`, and `fun game` also show up in negative reviews, which suggests a lot of “I recommend this game but…” or “good game ruined by…” type reviews.
+- `buy game` and `hours game` point straight at value: “I paid for this” and “I have X hours in this game” are how many negative reviews start.
+- `new players` shows up here but not in the positive bigrams. People mention new players when they’re upset (about matchmaking, smurfs, or teammates), not when they’re happy.
+- `tunnel tunnel` appearing in the top-20 negative phrases is the most Dead by Daylight thing possible. You can basically hear the salt.
+- `recommend game`, `good game`, and `fun game` also show up in negative reviews, which suggests a lot of “I recommend this game but…” or “good game ruined by…” type reviews.
 
 The overlap is again important:
 
--   Both sides use `play game`, `fun game`, `good game`, `game fun`.
--   The big difference is in the *surrounding frame*: value, time invested, specific frustrations (`tunnel tunnel`, `new players`) and a lot of “I want to play but…”
+- Both sides use `play game`, `fun game`, `good game`, `game fun`.
+- The big difference is in the _surrounding frame_: value, time invested, specific frustrations (`tunnel tunnel`, `new players`) and a lot of “I want to play but…”
 
 This is why I like starting with simple counts. Without any model, we’re already seeing:
 
--   Social vs. value vs. design complaints.
--   Community jargon showing up naturally.
--   The classic DBD contradiction: “good game, fun game, I hate it.”
+- Social vs. value vs. design complaints.
+- Community jargon showing up naturally.
+- The classic DBD contradiction: “good game, fun game, I hate it.”
 
 Later, we can formalize this with topic models or more structured features, but the basic texture is already on the page.
 
@@ -682,9 +682,9 @@ So far we’ve looked at the reviews as if they existed in a vacuum.
 
 We’ve seen:
 
--   How often people recommend the game.
--   How that recommendation rate changes with playtime.
--   What happy and unhappy players talk about, down to little phrases and in-jokes.
+- How often people recommend the game.
+- How that recommendation rate changes with playtime.
+- What happy and unhappy players talk about, down to little phrases and in-jokes.
 
 But Dead by Daylight doesn’t live in a vacuum. The game is constantly changing: new killers, new survivors, perk reworks, map updates, mid-chapter tweaks, and hotfixes for whatever broke last week.
 
@@ -692,47 +692,47 @@ If you’ve played for any amount of time, you know the rhythm: patch notes drop
 
 To bring that into the analysis, I took the official patch history from the wiki and turned it into a small CSV that ships with the dataset (available in the download). It’s intentionally simple:
 
--   `version` – things like `8.0.0`, `9.1.0`, `7.3.2`
--   `date` – the release date
+- `version` – things like `8.0.0`, `9.1.0`, `7.3.2`
+- `date` – the release date
 
 That’s it. No full changelog, no walls of text. Just enough to put a few vertical lines on the same timeline as the reviews.
 
 From there, I divide patches into three rough categories:
 
--   **Major** – versions like `8.0.0`, `9.0.0`
-    -   Big chapter drops. New killers, survivors, and maps. The things that change how the game *feels*.
--   **Minor** – versions like `9.1.0`, `9.2.0`
-    -   Seasonal characters, new perks, and noticeable balance changes. Still important, but smaller in scope.
--   **Patch** – everything else (`7.3.2`, `7.3.3`, etc.)
-    -   Hotfixes, small tuning passes, bug fixes.
+- **Major** – versions like `8.0.0`, `9.0.0`
+  - Big chapter drops. New killers, survivors, and maps. The things that change how the game _feels_.
+- **Minor** – versions like `9.1.0`, `9.2.0`
+  - Seasonal characters, new perks, and noticeable balance changes. Still important, but smaller in scope.
+- **Patch** – everything else (`7.3.2`, `7.3.3`, etc.)
+  - Hotfixes, small tuning passes, bug fixes.
 
 The rule is simple:
 
--   If a version ends in **`.0.0`**, I treat it as **major**.
--   If it ends in **`.0`** but not `.0.0`, it’s **minor**.
--   Otherwise, it’s a regular **patch**.
+- If a version ends in **`.0.0`**, I treat it as **major**.
+- If it ends in **`.0`** but not `.0.0`, it’s **minor**.
+- Otherwise, it’s a regular **patch**.
 
 It’s not perfect, but it matches how the game tends to move:
 
--   Major versions shake the meta and bring people back.
--   Minor versions nudge things and sometimes quietly fix long-running pain points.
--   Patches keep the whole thing from falling apart.
+- Major versions shake the meta and bring people back.
+- Minor versions nudge things and sometimes quietly fix long-running pain points.
+- Patches keep the whole thing from falling apart.
 
 Once everything has a `patch_type` and a `date`, I can bucket patches by month and put them next to the `share_positive` curve we saw earlier. The result is a sort of emotional ECG:
 
--   Calm stretches of “just patches.”
--   Sharp spikes of attention (and opinion) around big chapters.
--   Occasional dips where a major or minor update lands badly and the reviews immediately get saltier.
+- Calm stretches of “just patches.”
+- Sharp spikes of attention (and opinion) around big chapters.
+- Occasional dips where a major or minor update lands badly and the reviews immediately get saltier.
 
 In the notebook, I’m not trying to prove that any specific patch “caused” a change in sentiment. I’m doing something smaller and more honest: lining up **when** the game changed with **how** people talked about it and using that as context for the rest of the analysis.
 
 From here, we have three dimensions to play with:
 
--   **Time** – when reviews were written and what the game looked like then.
--   **Experience** – how many hours the reviewer had at that moment.
--   **Language and mood** – what they said and how it sounded.
+- **Time** – when reviews were written and what the game looked like then.
+- **Experience** – how many hours the reviewer had at that moment.
+- **Language and mood** – what they said and how it sounded.
 
-The last piece we haven’t touched yet is mood. The Steam label tells us whether someone clicked “recommend”. It doesn’t tell us *how* they felt when they wrote the review.
+The last piece we haven’t touched yet is mood. The Steam label tells us whether someone clicked “recommend”. It doesn’t tell us _how_ they felt when they wrote the review.
 
 That’s what we’ll tackle next: using a pretrained model to tag each review with an emotional label (angry, joyful, etc.) and then comparing that to the thumbs up / thumbs down we’ve been using so far.
 
@@ -782,35 +782,35 @@ Once every version in the patch CSV is tagged, the breakdown looks like this:
  4  1.0.2c 2016-06-30      patch 2016-06-01)
 ```
 
--   **231** entries tagged as `patch`
--   **59** as `minor`
--   **8** as `major`
+- **231** entries tagged as `patch`
+- **59** as `minor`
+- **8** as `major`
 
-So most of the time, *Dead by Daylight* is in **maintenance mode**:
+So most of the time, _Dead by Daylight_ is in **maintenance mode**:
 
--   Lots of small patches: hotfixes, bugfixes, small balance tweaks.
--   A smaller, but still regular, cadence of minor updates.
--   Only a handful of truly big “chapter-level” changes over the whole history in the CSV.
+- Lots of small patches: hotfixes, bugfixes, small balance tweaks.
+- A smaller, but still regular, cadence of minor updates.
+- Only a handful of truly big “chapter-level” changes over the whole history in the CSV.
 
 The head of the table looks like:
 
--   `1.0.1a` – 2016-06-22 – `patch`
--   `1.0.2` – 2016-06-29 – `patch`
--   `1.0.2a/b/c` – all `patch` entries in late June 2016
+- `1.0.1a` – 2016-06-22 – `patch`
+- `1.0.2` – 2016-06-29 – `patch`
+- `1.0.2a/b/c` – all `patch` entries in late June 2016
 
 So the patch file is really the **full historical record**, going back to 2016, while our reviews start in mid-2019. When we line these up with the review data, we’ll only keep the part of the patch history that overlaps with the review window.
 
 That gives us a nice view of the game’s “heartbeat” during the years covered by the dataset:
 
--   Long stretches where only small patches land.
--   Occasional minor updates that add characters or perks.
--   Rare major drops that bring a full chapter and usually a big wave of opinions.
+- Long stretches where only small patches land.
+- Occasional minor updates that add characters or perks.
+- Rare major drops that bring a full chapter and usually a big wave of opinions.
 
 On the sentiment chart, majors and minors become **landmarks**:
 
--   If a big chapter lands and the share of positive reviews drops the following month, that’s a strong hint that people didn’t like something about it.
--   If a minor update lands and sentiment gently climbs, it might be fixing pain points or quietly smoothing the meta.
--   If nothing big happens but positivity still moves, it suggests more systemic factors (or outside events) at play.
+- If a big chapter lands and the share of positive reviews drops the following month, that’s a strong hint that people didn’t like something about it.
+- If a minor update lands and sentiment gently climbs, it might be fixing pain points or quietly smoothing the meta.
+- If nothing big happens but positivity still moves, it suggests more systemic factors (or outside events) at play.
 
 Again, this isn’t about proving causality. It’s about reading reviews with context: knowing what the game looked like when people were writing those angry or happy paragraphs.
 
@@ -818,16 +818,16 @@ Again, this isn’t about proving causality. It’s about reading reviews with c
 
 We already looked at monthly reviews on their own:
 
--   July 2019: **2,186** reviews, **82.8%** positive
--   August 2019: **803** reviews, **70.0%** positive
--   September 2019: **1,225** reviews, **72.8%** positive
--   October 2019: **2,084** reviews, **82.1%** positive
--   November 2019: **6,585** reviews, **86.8%** positive
+- July 2019: **2,186** reviews, **82.8%** positive
+- August 2019: **803** reviews, **70.0%** positive
+- September 2019: **1,225** reviews, **72.8%** positive
+- October 2019: **2,084** reviews, **82.1%** positive
+- November 2019: **6,585** reviews, **86.8%** positive
 
 Even without context, you can see the game breathing:
 
--   Some months are relatively quiet, with under a thousand reviews.
--   Others spike hard (November 2019 is a big one) and are also very positive.
+- Some months are relatively quiet, with under a thousand reviews.
+- Others spike hard (November 2019 is a big one) and are also very positive.
 
 Once we pull the patch CSV in and count how many **major**, **minor**, and **patch** releases landed in each month, the picture gets more interesting.
 
@@ -860,33 +860,33 @@ for col in ["major", "minor", "patch"]:
 monthly_with_patches.head()
 ```
 
-|  | **year\_month** | **review\_count** | **share\_positive** | major | minor | patch |
-| --- | --- | --- | --- | --- | --- | --- |
-| 0 | 2019-07-01 | 2186 | 0.828454 | 0.0 | 1.0 | 2.0 |
-| 1 | 2019-08-01 | 803 | 0.699875 | 0.0 | 0.0 | 1.0 |
-| 2 | 2019-09-01 | 1225 | 0.728163 | 0.0 | 1.0 | 1.0 |
-| 3 | 2019-10-01 | 2084 | 0.820537 | 0.0 | 0.0 | 2.0 |
-| 4 | 2019-11-01 | 6585 | 0.867882 | 0.0 | 0.0 | 1.0 |
+|     | **year\_month** | **review\_count** | **share\_positive** | major | minor | patch |
+| --- | --------------- | ----------------- | ------------------- | ----- | ----- | ----- |
+| 0   | 2019-07-01      | 2186              | 0.828454            | 0.0   | 1.0   | 2.0   |
+| 1   | 2019-08-01      | 803               | 0.699875            | 0.0   | 0.0   | 1.0   |
+| 2   | 2019-09-01      | 1225              | 0.728163            | 0.0   | 1.0   | 1.0   |
+| 3   | 2019-10-01      | 2084              | 0.820537            | 0.0   | 0.0   | 2.0   |
+| 4   | 2019-11-01      | 6585              | 0.867882            | 0.0   | 0.0   | 1.0   |
 
 A few things pop out immediately:
 
--   There’s a **steady drip of patches** in the background: one or two most months, occasionally more.
--   Minors are less frequent but visible: July and September each have a **minor + patches** combo.
--   Spikes in review volume (like November 2019) don’t always line up with lots of patch entries; sometimes one well-timed update or event is enough to get people talking.
+- There’s a **steady drip of patches** in the background: one or two most months, occasionally more.
+- Minors are less frequent but visible: July and September each have a **minor + patches** combo.
+- Spikes in review volume (like November 2019) don’t always line up with lots of patch entries; sometimes one well-timed update or event is enough to get people talking.
 
 This is exactly why I wanted the patch CSV: it lets us talk about review mood with a bit more context than “the game changed somehow.”
 
 If you zoom this out across the whole 2019–2025 window, you end up with a monthly timeline where each point knows:
 
--   How many reviews happened.
--   What fraction of them were positive.
--   How many major, minor, and patch releases landed that month.
+- How many reviews happened.
+- What fraction of them were positive.
+- How many major, minor, and patch releases landed that month.
 
 From here, you can start asking questions like:
 
--   Do major updates tend to be followed by a drop in recommendation rate, or a bump?
--   Are there months with **no** major/minor updates where sentiment still swings hard?
--   Do we see any “recovery” months where a patch after a rough release calms people down?
+- Do major updates tend to be followed by a drop in recommendation rate, or a bump?
+- Are there months with **no** major/minor updates where sentiment still swings hard?
+- Do we see any “recovery” months where a patch after a rough release calms people down?
 
 In the essay, I don’t try to do serious causal analysis with this — that would need more care than a blog post deserves. But I do want readers to see that the dataset isn’t just random text: it’s reviews anchored to a clear patch history, and you can use that to frame your own questions.
 
@@ -958,28 +958,28 @@ A few patterns jump out.
 
 The **major patches** (the blue dots) all land in June:
 
--   2020-06 → 0.86 positive, ~5.6k reviews
--   2021-06 → 0.83 positive, ~6.0k reviews
--   2022-06 → 0.83 positive, ~4.3k reviews
--   2023-06 → 0.79 positive, ~2.8k reviews
--   2024-06 → 0.78 positive, ~3.0k reviews
--   2025-06 → 0.81 positive, ~6.2k reviews
+- 2020-06 → 0.86 positive, ~5.6k reviews
+- 2021-06 → 0.83 positive, ~6.0k reviews
+- 2022-06 → 0.83 positive, ~4.3k reviews
+- 2023-06 → 0.79 positive, ~2.8k reviews
+- 2024-06 → 0.78 positive, ~3.0k reviews
+- 2025-06 → 0.81 positive, ~6.2k reviews
 
 These are big chapter drops, and you can see that in the **volume**: every June is a relatively busy month.
 
-|  | **year\_month** | **review\_count** | **share\_positive** | major | minor | patch |
-| --- | --- | --- | --- | --- | --- | --- |
-| 0 | 2020-06-01 | 5597 | 0.859389 | 1.0 | 0.0 | 0.0 |
-| 1 | 2021-06-01 | 5967 | 0.825708 | 1.0 | 0.0 | 2.0 |
-| 2 | 2022-06-01 | 4306 | 0.829540 | 1.0 | 0.0 | 2.0 |
-| 3 | 2023-06-01 | 2787 | 0.793685 | 1.0 | 0.0 | 2.0 |
-| 4 | 2024-06-01 | 2963 | 0.783665 | 1.0 | 0.0 | 2.0 |
-| 5 | 2025-06-01 | 6195 | 0.805165 | 1.0 | 0.0 | 1.0 |
+|     | **year\_month** | **review\_count** | **share\_positive** | major | minor | patch |
+| --- | --------------- | ----------------- | ------------------- | ----- | ----- | ----- |
+| 0   | 2020-06-01      | 5597              | 0.859389            | 1.0   | 0.0   | 0.0   |
+| 1   | 2021-06-01      | 5967              | 0.825708            | 1.0   | 0.0   | 2.0   |
+| 2   | 2022-06-01      | 4306              | 0.829540            | 1.0   | 0.0   | 2.0   |
+| 3   | 2023-06-01      | 2787              | 0.793685            | 1.0   | 0.0   | 2.0   |
+| 4   | 2024-06-01      | 2963              | 0.783665            | 1.0   | 0.0   | 2.0   |
+| 5   | 2025-06-01      | 6195              | 0.805165            | 1.0   | 0.0   | 1.0   |
 
 But they’re not followed by catastrophic drops in recommendation rate. If anything, they sit slightly **above** or around the local baseline:
 
--   Early years: majors in the mid-80% range.
--   Later years: majors still in the high-70s to low-80s.
+- Early years: majors in the mid-80% range.
+- Later years: majors still in the high-70s to low-80s.
 
 So the “huge chapter ruined the game” narrative doesn’t show up as a massive post-June crater in this metric. People have complaints, but they mostly still click **recommend** around those updates.
 
@@ -987,24 +987,24 @@ So the “huge chapter ruined the game” narrative doesn’t show up as a massi
 
 The low points on the line are mostly **minor patch months** (orange crosses), not majors.
 
-|  | **year\_month** | **review\_count** | **share\_positive** | **major** | **minor** | **patch** |
-| --- | --- | --- | --- | --- | --- | --- |
-| 0 | 2019-07-01 | 2186 | 0.828454 | 0.0 | 1.0 | 2.0 |
-| 1 | 2019-09-01 | 1225 | 0.728163 | 0.0 | 1.0 | 1.0 |
-| 2 | 2019-12-01 | 4384 | 0.866104 | 0.0 | 1.0 | 2.0 |
-| 3 | 2020-01-01 | 4026 | 0.846746 | 0.0 | 1.0 | 1.0 |
-| … | … | … | … | … | … | … |
-| 40 | 2025-05-01 | 3095 | 0.799031 | 0.0 | 1.0 | 2.0 |
-| 41 | 2025-07-01 | 6294 | 0.806006 | 0.0 | 1.0 | 1.0 |
-| 42 | 2025-09-01 | 3764 | 0.642402 | 0.0 | 1.0 | 1.0 |
+|     | **year\_month** | **review\_count** | **share\_positive** | **major** | **minor** | **patch** |
+| --- | --------------- | ----------------- | ------------------- | --------- | --------- | --------- |
+| 0   | 2019-07-01      | 2186              | 0.828454            | 0.0       | 1.0       | 2.0       |
+| 1   | 2019-09-01      | 1225              | 0.728163            | 0.0       | 1.0       | 1.0       |
+| 2   | 2019-12-01      | 4384              | 0.866104            | 0.0       | 1.0       | 2.0       |
+| 3   | 2020-01-01      | 4026              | 0.846746            | 0.0       | 1.0       | 1.0       |
+| …   | …               | …                 | …                   | …         | …         | …         |
+| 40  | 2025-05-01      | 3095              | 0.799031            | 0.0       | 1.0       | 2.0       |
+| 41  | 2025-07-01      | 6294              | 0.806006            | 0.0       | 1.0       | 1.0       |
+| 42  | 2025-09-01      | 3764              | 0.642402            | 0.0       | 1.0       | 1.0       |
 
 A few that stand out:
 
--   **2021-02** – minor + patches, **65.3%** positive
--   **2023-03** – minor + patches, **70.5%** positive
--   **2023-04** – minor only, **65.0%** positive
--   **2025-01** – minor only, **63.0%** positive
--   **2025-09** – minor + patch, **64.2%** positive
+- **2021-02** – minor + patches, **65.3%** positive
+- **2023-03** – minor + patches, **70.5%** positive
+- **2023-04** – minor only, **65.0%** positive
+- **2025-01** – minor only, **63.0%** positive
+- **2025-09** – minor + patch, **64.2%** positive
 
 These are some of the worst months in the whole timeline, and they’re not the big June chapters — they’re smaller updates earlier or later in the year.
 
@@ -1012,9 +1012,9 @@ It fits the vibe of live-service games: big content drops bring people in and ge
 
 At the same time, not every minor is bad news:
 
--   **2019-12** – minor + patches, **86.6%** positive
--   **2020-07** – minor + patch, **87.2%** positive
--   **2023-11** – minor + patch, **87.7%** positive
+- **2019-12** – minor + patches, **86.6%** positive
+- **2020-07** – minor + patch, **87.2%** positive
+- **2023-11** – minor + patch, **87.7%** positive
 
 So minors are more like **inflection points** than automatically cursed months. Some of them kick off a bad era; others feel like “finally, they fixed X.”
 
@@ -1022,9 +1022,9 @@ So minors are more like **inflection points** than automatically cursed months. 
 
 If you look at the whole line from 2019 to 2025, there’s a slow, noisy drift from:
 
--   high-80s / low-80s  
-    to
--   mid-70s, sometimes dipping into the mid-60s.
+- high-80s / low-80s  
+  to
+- mid-70s, sometimes dipping into the mid-60s.
 
 The big June majors track that drift: still relatively high, but clearly lower in later years than in 2019–2020.
 
@@ -1040,16 +1040,16 @@ The nice part is that, thanks to the patch CSV, that slide isn’t just a vague 
 
 Up to now, we’ve treated Steam’s `sentiment` column as our ground truth:
 
--   `1` → thumbs up
--   `0` → thumbs down
+- `1` → thumbs up
+- `0` → thumbs down
 
-That tells us whether someone *recommends* the game, but not how they *feel* while writing the review.
+That tells us whether someone _recommends_ the game, but not how they _feel_ while writing the review.
 
 You can already see the gap in the text:
 
--   Positive reviews that contain “I hate this game” in the middle of a rant.
--   Negative reviews that sound more tired than angry.
--   A lot of sarcastic “good game btw” energy.
+- Positive reviews that contain “I hate this game” in the middle of a rant.
+- Negative reviews that sound more tired than angry.
+- A lot of sarcastic “good game btw” energy.
 
 To get a more nuanced picture, I added a second label: an approximate **mood** for each review.
 
@@ -1064,13 +1064,13 @@ emotion_labels
 
 Instead of building that from scratch, the notebook uses a pretrained emotion classifier — a DistilRoBERTa model fine-tuned on English emotions. It maps each review to one of seven classes:
 
--   `anger`
--   `disgust`
--   `fear`
--   `joy`
--   `neutral`
--   `sadness`
--   `surprise`
+- `anger`
+- `disgust`
+- `fear`
+- `joy`
+- `neutral`
+- `sadness`
+- `surprise`
 
 Under the hood, this is just a small Transformer model from the `transformers` library, running with a PyTorch backend. [[set-up-tensorflow-docker-jupyter-notebook|Depending on your environment]], you may need to install a couple of extra packages first: `pip install transformers`
 
@@ -1083,14 +1083,14 @@ Once that’s in place, the code does something very simple:
 
 This gives us a little 2D view of the data:
 
--   One axis is **“Do you recommend the game?”**
--   The other is **“What mood is this text in?”**
+- One axis is **“Do you recommend the game?”**
+- The other is **“What mood is this text in?”**
 
 From there, we can ask questions like:
 
--   How many reviews are technically positive but written in clear `anger` or `sadness`?
--   What does `joy` look like in language compared to `neutral` or `surprise`?
--   Are `anger` reviews mostly coming from veterans and masters, or is everyone mad?
+- How many reviews are technically positive but written in clear `anger` or `sadness`?
+- What does `joy` look like in language compared to `neutral` or `surprise`?
+- Are `anger` reviews mostly coming from veterans and masters, or is everyone mad?
 
 We’ll treat this mood label as approximate — the model isn’t perfect, and sarcasm is hard — but it’s still a lot more expressive than a binary thumb.
 
@@ -1148,30 +1148,30 @@ emotion_dist
 
 On 80,000 randomly sampled reviews, the distribution looks like this:
 
--   **joy** – ~**32.7%**
--   **neutral** – ~**31.4%**
--   **sadness** – ~**9.1%**
--   **disgust** – ~**8.9%**
--   **anger** – ~**8.8%**
--   **fear** – ~**6.1%**
--   **surprise** – ~**3.0%**
+- **joy** – ~**32.7%**
+- **neutral** – ~**31.4%**
+- **sadness** – ~**9.1%**
+- **disgust** – ~**8.9%**
+- **anger** – ~**8.8%**
+- **fear** – ~**6.1%**
+- **surprise** – ~**3.0%**
 
 So roughly:
 
--   About **a third** of the reviews read as joyful.
--   Another **third** are emotionally flat, or at least ambiguous enough to land in `neutral`.
--   The remaining **third** is split between various shades of “not happy” — sadness, disgust, anger, fear — with a small extra slice of surprise.
+- About **a third** of the reviews read as joyful.
+- Another **third** are emotionally flat, or at least ambiguous enough to land in `neutral`.
+- The remaining **third** is split between various shades of “not happy” — sadness, disgust, anger, fear — with a small extra slice of surprise.
 
 This is already more nuanced than the Steam label:
 
--   Steam tells us that ~80% of reviews are *recommendations*.
--   The emotion model tells us that only about a third of those texts are clearly joyful.
--   A big chunk of the corpus is written in **negative or mixed moods**, even though the author might still click “thumbs up.”
+- Steam tells us that ~80% of reviews are _recommendations_.
+- The emotion model tells us that only about a third of those texts are clearly joyful.
+- A big chunk of the corpus is written in **negative or mixed moods**, even though the author might still click “thumbs up.”
 
 We haven’t crossed emotions with `sentiment` yet, so we don’t know:
 
--   How many `joy` reviews are actually thumbs down.
--   How many `anger` reviews still recommend the game.
+- How many `joy` reviews are actually thumbs down.
+- How many `anger` reviews still recommend the game.
 
 But you can already see the shape of the thing. This is a community that spends a lot of time being both invested and slightly upset.
 
@@ -1181,8 +1181,8 @@ The interesting part is in the disagreement between the two labels. That’s wha
 
 Now that every review in our sample has both:
 
--   a **Steam label** (`positive` / `negative`), and
--   a **mood** (`joy`, `anger`, `sadness`, etc.)
+- a **Steam label** (`positive` / `negative`), and
+- a **mood** (`joy`, `anger`, `sadness`, etc.)
 
 we can look at how those two interact.
 
@@ -1197,38 +1197,38 @@ mood_sent_crosstab = pd.crosstab(
 mood_sent_crosstab
 ```
 
-| emotion | negative | positive |
-| --- | --- | --- |
-| anger | 0.374751 | 0.625249 |
-| disgust | 0.558712 | 0.441288 |
-| fear | 0.153548 | 0.846452 |
-| joy | 0.033856 | 0.966144 |
-| neutral | 0.178906 | 0.821094 |
-| sadness | 0.364735 | 0.635265 |
+| emotion  | negative | positive |
+| -------- | -------- | -------- |
+| anger    | 0.374751 | 0.625249 |
+| disgust  | 0.558712 | 0.441288 |
+| fear     | 0.153548 | 0.846452 |
+| joy      | 0.033856 | 0.966144 |
+| neutral  | 0.178906 | 0.821094 |
+| sadness  | 0.364735 | 0.635265 |
 | surprise | 0.174938 | 0.825062 |
 
 The crosstab looks like this (proportions within each emotion):
 
--   **joy** → 3.4% negative, **96.6% positive**
--   **neutral** → 17.9% negative, **82.1% positive**
--   **surprise** → 17.5% negative, **82.5% positive**
--   **fear** → 15.4% negative, **84.6% positive**
--   **anger** → 37.5% negative, **62.5% positive**
--   **sadness** → 36.5% negative, **63.5% positive**
--   **disgust** → **55.9% negative**, 44.1% positive
+- **joy** → 3.4% negative, **96.6% positive**
+- **neutral** → 17.9% negative, **82.1% positive**
+- **surprise** → 17.5% negative, **82.5% positive**
+- **fear** → 15.4% negative, **84.6% positive**
+- **anger** → 37.5% negative, **62.5% positive**
+- **sadness** → 36.5% negative, **63.5% positive**
+- **disgust** → **55.9% negative**, 44.1% positive
 
 A few things are very on-brand for Dead by Daylight:
 
--   `joy` is almost entirely positive. When the model thinks someone is joyful, they nearly always recommend the game.
--   `neutral`, `surprise`, and even `fear` are mostly positive. For a horror game, “fear but still thumbs up” makes a lot of sense.
--   `anger` and `sadness` are **not** mostly negative. Roughly two-thirds of angry or sad reviews still recommend the game.
--   `disgust` is the only mood where **negative** wins: more than half of disgusted reviews are thumbs down.
+- `joy` is almost entirely positive. When the model thinks someone is joyful, they nearly always recommend the game.
+- `neutral`, `surprise`, and even `fear` are mostly positive. For a horror game, “fear but still thumbs up” makes a lot of sense.
+- `anger` and `sadness` are **not** mostly negative. Roughly two-thirds of angry or sad reviews still recommend the game.
+- `disgust` is the only mood where **negative** wins: more than half of disgusted reviews are thumbs down.
 
 So the emotional space looks more like this:
 
--   A big warm cluster: joyful / neutral / surprised / scared but generally recommending the game.
--   A conflicted cluster: angry / sad but still mostly positive.
--   A smaller, sharper corner: disgusted and mostly negative.
+- A big warm cluster: joyful / neutral / surprised / scared but generally recommending the game.
+- A conflicted cluster: angry / sad but still mostly positive.
+- A smaller, sharper corner: disgusted and mostly negative.
 
 That “angry but positive” zone is exactly the energy you see all the time in DBD:
 
@@ -1237,13 +1237,13 @@ That “angry but positive” zone is exactly the energy you see all the time in
 If we only looked at Steam’s `sentiment`, we’d call that a positive review and move on.  
 The mood label forces us to admit that a lot of “positive” reviews are actually written in frustration, disappointment, or exhaustion.
 
-And the opposite also happens: there *are* joyful negative reviews, but they’re rare. When someone is genuinely happy about the game, they almost always click thumbs up. It’s the negative moods that split: some people bail (negative), some stay (positive but mad).
+And the opposite also happens: there _are_ joyful negative reviews, but they’re rare. When someone is genuinely happy about the game, they almost always click thumbs up. It’s the negative moods that split: some people bail (negative), some stay (positive but mad).
 
 For actual analysis or teaching, this is useful because you can frame more interesting tasks:
 
--   “Find positive-but-angry reviews and explain what they’re angry about.”
--   “Detect when sentiment and mood disagree and monitor that over time.”
--   “Compare language in joyful positives vs. angry positives vs. disgusted negatives.”
+- “Find positive-but-angry reviews and explain what they’re angry about.”
+- “Detect when sentiment and mood disagree and monitor that over time.”
+- “Compare language in joyful positives vs. angry positives vs. disgusted negatives.”
 
 It’s no longer just “Is this text positive or negative?” but “How complicated is this person’s relationship with the game in this paragraph?”
 
@@ -1251,9 +1251,9 @@ It’s no longer just “Is this text positive or negative?” but “How compli
 
 The raw emotion proportions told us that:
 
--   About a third of reviews read as **joy**,
--   About a third as **neutral**,
--   And the remaining third is split across **sadness**, **anger**, **disgust**, **fear**, and **surprise**.
+- About a third of reviews read as **joy**,
+- About a third as **neutral**,
+- And the remaining third is split across **sadness**, **anger**, **disgust**, **fear**, and **surprise**.
 
 We also saw that even obviously negative moods like `anger` and `sadness` still recommend the game most of the time, while `disgust` is the only mood that’s majority thumbs-down.
 
@@ -1309,48 +1309,48 @@ emotion_stats
 
 Here are the full results but let’s look at some in details.
 
-| emotion | mean\_len | median\_len | mean\_playtime\_min | median\_playtime\_min | share\_positive | count |
-| --- | --- | --- | --- | --- | --- | --- |
-| anger | 210.928755 | 64.0 | 23646.589627 | 8331.0 | 0.625249 | 7018 |
-| disgust | 314.312474 | 74.0 | 27524.477289 | 10191.0 | 0.441288 | 7111 |
-| fear | 284.043638 | 88.0 | 15582.952080 | 3415.5 | 0.846452 | 4904 |
-| joy | 96.235002 | 38.0 | 12691.102828 | 3009.0 | 0.966144 | 26170 |
-| neutral | 137.392676 | 14.0 | 17632.386500 | 4278.0 | 0.821094 | 25097 |
-| sadness | 164.173441 | 49.0 | 22363.406482 | 7116.0 | 0.635265 | 7282 |
-| surprise | 142.574442 | 37.0 | 15626.959057 | 3584.5 | 0.825062 | 2418 |
+| emotion  | mean\_len  | median\_len | mean\_playtime\_min | median\_playtime\_min | share\_positive | count |
+| -------- | ---------- | ----------- | ------------------- | --------------------- | --------------- | ----- |
+| anger    | 210.928755 | 64.0        | 23646.589627        | 8331.0                | 0.625249        | 7018  |
+| disgust  | 314.312474 | 74.0        | 27524.477289        | 10191.0               | 0.441288        | 7111  |
+| fear     | 284.043638 | 88.0        | 15582.952080        | 3415.5                | 0.846452        | 4904  |
+| joy      | 96.235002  | 38.0        | 12691.102828        | 3009.0                | 0.966144        | 26170 |
+| neutral  | 137.392676 | 14.0        | 17632.386500        | 4278.0                | 0.821094        | 25097 |
+| sadness  | 164.173441 | 49.0        | 22363.406482        | 7116.0                | 0.635265        | 7282  |
+| surprise | 142.574442 | 37.0        | 15626.959057        | 3584.5                | 0.825062        | 2418  |
 
 ### Joy: Short, Simple, and Early
 
-For reviews tagged as **joy**, the most common phrases in *positive* recommendations look exactly like you’d expect:
+For reviews tagged as **joy**, the most common phrases in _positive_ recommendations look exactly like you’d expect:
 
--   `good game`
--   `fun game`
--   `great game`
--   `play friends`
--   `game play`
+- `good game`
+- `fun game`
+- `great game`
+- `play friends`
+- `game play`
 
 Short, straightforward, and often social. It’s “this is fun with my friends”, not a design doc.
 
 The rare **joyful but negative** reviews are almost funny:
 
--   `potato server`
--   `server potato`
--   (and still) `fun game`, `game fun`, `play game`
+- `potato server`
+- `server potato`
+- (and still) `fun game`, `game fun`, `play game`
 
 So even when the model hears joy in the text and the reviewer clicks thumbs down, they’re often complaining about servers in a half-joking way, not writing a bitter breakup letter.
 
 Structurally, joyful reviews look light:
 
--   **mean length** ~96 characters, median ~38
--   **mean playtime** ~12,691 minutes (~212 hours)
--   **median playtime** ~3,009 minutes (~50 hours)
--   **share positive**: 96.6%
+- **mean length** ~96 characters, median ~38
+- **mean playtime** ~12,691 minutes (~212 hours)
+- **median playtime** ~3,009 minutes (~50 hours)
+- **share positive**: 96.6%
 
 So joy is:
 
--   **Short**
--   **Early-ish** (median ~50 hours)
--   **Almost always recommending the game**
+- **Short**
+- **Early-ish** (median ~50 hours)
+- **Almost always recommending the game**
 
 It’s the honeymoon phase, written in one or two lines.
 
@@ -1360,11 +1360,11 @@ Angry reviews are where things get more interesting.
 
 For **anger + positive** reviews, the top phrases include:
 
--   `hate game`
--   `play game`
--   `love hate`
--   `hate hate`
--   `help meplease`
+- `hate game`
+- `play game`
+- `love hate`
+- `hate hate`
+- `help meplease`
 
 This is the classic DBD energy:
 
@@ -1374,25 +1374,25 @@ The model hears anger, Steam sees a thumbs up, and the text is just oscillating 
 
 For **anger + negative**, the language narrows in on specific things:
 
--   `blight nurse`
--   `nurse spirit`
--   `spirit blight`
--   plus `play game`, `hate game`
+- `blight nurse`
+- `nurse spirit`
+- `spirit blight`
+- plus `play game`, `hate game`
 
-So when anger flips over into a thumbs down, it often points at **specific killers** (Blight, Nurse, Spirit) and the design decisions around them. It’s not “this sucks” in the abstract; it’s “*this* is broken and I am done.”
+So when anger flips over into a thumbs down, it often points at **specific killers** (Blight, Nurse, Spirit) and the design decisions around them. It’s not “this sucks” in the abstract; it’s “_this_ is broken and I am done.”
 
 Structurally, anger is heavier than joy:
 
--   **mean length** ~211 characters, median ~64
--   **mean playtime** ~23,647 minutes (~394 hours)
--   **median playtime** ~8,331 minutes (~139 hours)
--   **share positive**: 62.5%
+- **mean length** ~211 characters, median ~64
+- **mean playtime** ~23,647 minutes (~394 hours)
+- **median playtime** ~8,331 minutes (~139 hours)
+- **share positive**: 62.5%
 
 So angry reviews are:
 
--   **Longer**
--   **Written by higher-hour players**
--   Still **mostly** recommending the game, but much closer to a coin flip.
+- **Longer**
+- **Written by higher-hour players**
+- Still **mostly** recommending the game, but much closer to a coin flip.
 
 If joy is a quick “good game”, anger is the late-night paragraph from someone who’s seen several metas come and go.
 
@@ -1402,36 +1402,36 @@ Disgust is where things start to break.
 
 For **disgust + positive** reviews, the model’s top phrases are:
 
--   `worst game`
--   `game sucks`
--   `dead daylight`
--   `good game`
--   `play game`
+- `worst game`
+- `game sucks`
+- `dead daylight`
+- `good game`
+- `play game`
 
 Which is… very on brand. You get lines like “worst game, game sucks, good game”, all inside a recommendation. The mood is disgusted, the relationship is still ongoing.
 
 For **disgust + negative**, the tone shifts a bit:
 
--   `play game`
--   `dead daylight`
--   `game just`
--   `buy game`
--   `playing game`
+- `play game`
+- `dead daylight`
+- `game just`
+- `buy game`
+- `playing game`
 
 Here it leans more into **value and regret**: having bought the game, having played it, and now being tired of how it feels.
 
 Structurally, disgust is the heaviest of all moods:
 
--   **mean length** ~314 characters, median ~74
--   **mean playtime** ~27,524 minutes (~459 hours)
--   **median playtime** ~10,191 minutes (~170 hours)
--   **share positive**: 44.1% (the only mood that’s majority negative)
+- **mean length** ~314 characters, median ~74
+- **mean playtime** ~27,524 minutes (~459 hours)
+- **median playtime** ~10,191 minutes (~170 hours)
+- **share positive**: 44.1% (the only mood that’s majority negative)
 
 So disgusted reviews are:
 
--   The **longest** on average.
--   Written by some of the **most experienced** players in the dataset.
--   The only mood where negative recommendations outnumber positive ones.
+- The **longest** on average.
+- Written by some of the **most experienced** players in the dataset.
+- The only mood where negative recommendations outnumber positive ones.
 
 If joy is “I just started and this is fun”, disgust is “I’ve played this for hundreds of hours and I’m tired of the same problems”.
 
@@ -1439,43 +1439,43 @@ If joy is “I just started and this is fun”, disgust is “I’ve played this
 
 The other moods fill out the middle:
 
--   **Neutral**
-    -   Medium length (mean ~137), but a tiny median (~14), so lots of very short “ok” reviews plus some long ones.
-    -   Mean playtime ~17,632 minutes (~294 hours).
-    -   Still **82.1% positive**.
--   **Sadness**
-    -   Mean length ~164, median ~49.
-    -   Mean playtime ~22,363 minutes (~373 hours), median ~7,116 (~119 hours).
-    -   **63.5% positive**.
--   **Fear**
-    -   Mean length ~284, median ~88 — surprisingly long.
-    -   Mean playtime ~15,583 minutes (~260 hours).
-    -   **84.6% positive**, which makes sense for a horror game: being scared is kind of the point.
--   **Surprise**
-    -   Medium length (~143 mean, 37 median).
-    -   Playtime similar to fear.
-    -   **82.5% positive**.
+- **Neutral**
+  - Medium length (mean ~137), but a tiny median (~14), so lots of very short “ok” reviews plus some long ones.
+  - Mean playtime ~17,632 minutes (~294 hours).
+  - Still **82.1% positive**.
+- **Sadness**
+  - Mean length ~164, median ~49.
+  - Mean playtime ~22,363 minutes (~373 hours), median ~7,116 (~119 hours).
+  - **63.5% positive**.
+- **Fear**
+  - Mean length ~284, median ~88 — surprisingly long.
+  - Mean playtime ~15,583 minutes (~260 hours).
+  - **84.6% positive**, which makes sense for a horror game: being scared is kind of the point.
+- **Surprise**
+  - Medium length (~143 mean, 37 median).
+  - Playtime similar to fear.
+  - **82.5% positive**.
 
 Taken together:
 
--   Joy and neutral are shorter and more upbeat; they skew earlier in the relationship.
--   Anger, sadness, and disgust get **longer** and come from **more invested players**.
--   Disgust sits at the extreme: longest, most hours, most likely to give up the recommendation.
--   Fear is long but still very positive — this is people describing tense matches that they enjoyed.
+- Joy and neutral are shorter and more upbeat; they skew earlier in the relationship.
+- Anger, sadness, and disgust get **longer** and come from **more invested players**.
+- Disgust sits at the extreme: longest, most hours, most likely to give up the recommendation.
+- Fear is long but still very positive — this is people describing tense matches that they enjoyed.
 
 ### Why This Matters for the Dataset
 
 All of this is still just counting and grouping, but it changes how the dataset feels:
 
--   You don’t just have “positive vs. negative” reviews.
--   You have **joyful short blurbs from new players**, **long disgusted paragraphs from veterans**, **angry recommenders**, and **fearful-but-happy horror fans**.
--   You can slice by mood, by experience, by patch, or by any combination.
+- You don’t just have “positive vs. negative” reviews.
+- You have **joyful short blurbs from new players**, **long disgusted paragraphs from veterans**, **angry recommenders**, and **fearful-but-happy horror fans**.
+- You can slice by mood, by experience, by patch, or by any combination.
 
 For someone learning NLP, that opens up more interesting questions than “build a sentiment classifier”:
 
--   “Find angry-positive vs. angry-negative reviews and compare what they complain about.”
--   “Look at disgust over time around specific patches.”
--   “See how text length and playtime correlate with mood and recommendation.”
+- “Find angry-positive vs. angry-negative reviews and compare what they complain about.”
+- “Look at disgust over time around specific patches.”
+- “See how text length and playtime correlate with mood and recommendation.”
 
 And for people who just care about Dead by Daylight, it’s a way to put numbers on something they already feel: the longer you stay, the more complicated your relationship with the game gets — and the more likely you are to write a small essay about it.
 
@@ -1483,9 +1483,9 @@ And for people who just care about Dead by Daylight, it’s a way to put numbers
 
 To show how you can zoom in on specific parts of the dataset, I picked three very “discussion-heavy” killers:
 
--   **Blight** – mentioned **111** times in the patch notes
--   **Nurse** – **392** patch mentions
--   **Spirit** – **199** patch mentions
+- **Blight** – mentioned **111** times in the patch notes
+- **Nurse** – **392** patch mentions
+- **Spirit** – **199** patch mentions
 
 Those counts aren’t when they were introduced, just how often they show up in balance notes and bug fixes.
 
@@ -1529,9 +1529,9 @@ for k in ["blight", "nurse", "spirit"]:
 
 In the review sample we ran through the emotion model, they show up like this:
 
--   **Blight**: 186 reviews (~0.23% of the sample)
--   **Nurse**: 390 reviews (~0.49%)
--   **Spirit**: 232 reviews (~0.29%)
+- **Blight**: 186 reviews (~0.23% of the sample)
+- **Nurse**: 390 reviews (~0.49%)
+- **Spirit**: 232 reviews (~0.29%)
 
 So they’re not everywhere, but when they appear, they come with a very specific mood.
 
@@ -1541,14 +1541,14 @@ Globally, about **80%** of reviews in the dataset are positive (Steam “recomme
 
 For these three:
 
--   **Blight** – **52.2%** positive
--   **Nurse** – **54.1%** positive
--   **Spirit** – **69.4%** positive
+- **Blight** – **52.2%** positive
+- **Nurse** – **54.1%** positive
+- **Spirit** – **69.4%** positive
 
 So:
 
--   Reviews that mention **Blight** or **Nurse** are almost a coin flip: barely above half are recommendations.
--   Spirit is a bit less radioactive but still far below the global 80% baseline.
+- Reviews that mention **Blight** or **Nurse** are almost a coin flip: barely above half are recommendations.
+- Spirit is a bit less radioactive but still far below the global 80% baseline.
 
 Already, that answers one simple question:
 
@@ -1559,55 +1559,55 @@ Already, that answers one simple question:
 
 For the whole emotion sample, the mood distribution was roughly:
 
--   **joy** – 32.7%
--   **neutral** – 31.4%
--   **sadness** – 9.1%
--   **disgust** – 8.9%
--   **anger** – 8.8%
--   **fear** – 6.1%
--   **surprise** – 3.0%
+- **joy** – 32.7%
+- **neutral** – 31.4%
+- **sadness** – 9.1%
+- **disgust** – 8.9%
+- **anger** – 8.8%
+- **fear** – 6.1%
+- **surprise** – 3.0%
 
 Now just look at reviews that mention each killer.
 
 For **Blight**:
 
--   **neutral** – 31.7%
--   **disgust** – 20.4%
--   **sadness** – 12.4%
--   **joy** – 12.4%
--   **anger** – 10.8%
--   **fear** – 8.6%
--   **surprise** – 3.8%
+- **neutral** – 31.7%
+- **disgust** – 20.4%
+- **sadness** – 12.4%
+- **joy** – 12.4%
+- **anger** – 10.8%
+- **fear** – 8.6%
+- **surprise** – 3.8%
 
 For **Nurse**:
 
--   **neutral** – 26.9%
--   **disgust** – 18.7%
--   **anger** – 15.6%
--   **sadness** – 13.3%
--   **joy** – 11.8%
--   **fear** – 8.7%
--   **surprise** – 4.9%
+- **neutral** – 26.9%
+- **disgust** – 18.7%
+- **anger** – 15.6%
+- **sadness** – 13.3%
+- **joy** – 11.8%
+- **fear** – 8.7%
+- **surprise** – 4.9%
 
 For **Spirit**:
 
--   **neutral** – 33.2%
--   **joy** – 19.0%
--   **disgust** – 17.2%
--   **anger** – 10.3%
--   **sadness** – 9.9%
--   **fear** – 6.5%
--   **surprise** – 3.9%
+- **neutral** – 33.2%
+- **joy** – 19.0%
+- **disgust** – 17.2%
+- **anger** – 10.3%
+- **sadness** – 9.9%
+- **fear** – 6.5%
+- **surprise** – 3.9%
 
 A few things jump out:
 
--   **Joy collapses.**
-    -   Globally, joy is ~33% of reviews.
-    -   For Blight and Nurse, joy is only **11–12%**.
-    -   Even Spirit tops out at ~19%.
--   **Disgust and anger almost double.**
-    -   Disgust goes from ~9% globally to **18–20%** for all three.
-    -   Anger goes from ~9% globally to **15.6%** for Nurse and ~10–11% for Blight and Spirit.
+- **Joy collapses.**
+  - Globally, joy is ~33% of reviews.
+  - For Blight and Nurse, joy is only **11–12%**.
+  - Even Spirit tops out at ~19%.
+- **Disgust and anger almost double.**
+  - Disgust goes from ~9% globally to **18–20%** for all three.
+  - Anger goes from ~9% globally to **15.6%** for Nurse and ~10–11% for Blight and Spirit.
 
 So a concrete question like:
 
@@ -1625,14 +1625,14 @@ Because `emotion_sample` still carries `author_playtime_at_review_min` and `expe
 
 In the notebook, you can do:
 
--   median playtime for reviews mentioning each killer,
--   proportion of mentions coming from `new`, `regular`, `veteran`, `master`.
+- median playtime for reviews mentioning each killer,
+- proportion of mentions coming from `new`, `regular`, `veteran`, `master`.
 
 That answers questions like:
 
--   “Is Nurse mostly a problem for high-hours players?”
--   “Does Blight show up more in veteran/master reviews than in new ones?”
--   “Is Spirit more evenly hated across all experience bands?”
+- “Is Nurse mostly a problem for high-hours players?”
+- “Does Blight show up more in veteran/master reviews than in new ones?”
+- “Is Spirit more evenly hated across all experience bands?”
 
 ## Drama Arcs: Tracking a Killer’s Mood Over Time
 
@@ -1640,8 +1640,8 @@ Once you can flag reviews that mention a specific killer, it’s easy to give th
 
 For Nurse, I filtered the dataset down to “reviews that contain the word `nurse`” and then grouped them by month, counting:
 
--   how many such reviews there were, and
--   what share of them were positive.
+- how many such reviews there were, and
+- what share of them were positive.
 
 ```python
 def killer_monthly(killer: str):
@@ -1673,19 +1673,19 @@ km[["year_month", "review_count", "share_positive"]].head(), km[
 
 That gives a monthly table like this for the Nurse:
 
-| month | reviews | percentage |
-| --- | --- | --- |
-| July 2019 | 19 | 63% |
-| August 2019 | 11 | 45% |
-| September 2019 | 8 | 63% |
-| October 2019 | 15 | 47% |
-| November 2019 | 23 | 61% |
-| … | … | … |
-| July 2025 | 38 | 55% |
-| August 2025 | 33 | 45% |
-| September 2025 | 22 | 36% |
-| October 2025 | 25 | 52% |
-| November 2025 | 3 | 33% |
+| month          | reviews | percentage |
+| -------------- | ------- | ---------- |
+| July 2019      | 19      | 63%        |
+| August 2019    | 11      | 45%        |
+| September 2019 | 8       | 63%        |
+| October 2019   | 15      | 47%        |
+| November 2019  | 23      | 61%        |
+| …              | …       | …          |
+| July 2025      | 38      | 55%        |
+| August 2025    | 33      | 45%        |
+| September 2025 | 22      | 36%        |
+| October 2025   | 25      | 52%        |
+| November 2025  | 3       | 33%        |
 
 Plotting those monthly values gives a line that **wiggles all over the place**: some months shoot above 80–90% positive, others crash into the 30–40% range.
 
@@ -1693,20 +1693,20 @@ Plotting those monthly values gives a line that **wiggles all over the place**: 
 
 Two things stand out:
 
--   The **global average** for Nurse mentions is around **54% positive** — way below the ~80% baseline for all reviews.
--   Around that average, the Nurse line is **volatile**. She has eras where people are relatively happy, followed by sharp dips where the majority of reviews that mention her turn negative.
+- The **global average** for Nurse mentions is around **54% positive** — way below the ~80% baseline for all reviews.
+- Around that average, the Nurse line is **volatile**. She has eras where people are relatively happy, followed by sharp dips where the majority of reviews that mention her turn negative.
 
 Blight and Spirit can be analyzed the same way:
 
--   Filter to `mentions_blight`/`mentions_spirit`.
--   Group by month.
--   Plot the share of positive reviews that mention them.
+- Filter to `mentions_blight`/`mentions_spirit`.
+- Group by month.
+- Plot the share of positive reviews that mention them.
 
 You end up with three small, spiky graphs:
 
--   Blight, Nurse, and Spirit each have their own **“drama arc”** over 2019–2025.
--   Peaks and troughs roughly line up with balance eras players still talk about.
--   You can even put **patch markers** on top if you want to see how their curves react to specific updates.
+- Blight, Nurse, and Spirit each have their own **“drama arc”** over 2019–2025.
+- Peaks and troughs roughly line up with balance eras players still talk about.
+- You can even put **patch markers** on top if you want to see how their curves react to specific updates.
 
 This isn’t formal balance analysis, but it’s a good example of what the dataset enables: pick any killer, perk, map, or mechanic you care about; track how often players mention it, how positive they are when they do, and how that changes over time.
 

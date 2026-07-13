@@ -20,10 +20,10 @@ originalCover: https://buthonestly.io/wp-content/uploads/2025/11/learning-care-w
 
 > [!summary]- Quick Summary
 >
-> -   **Curiosity can be practiced intentionally**, even when it doesn’t come naturally.
-> -   Empathy is often a learned behavior, not just a feeling, and can start by “faking” it well.
-> -   Systems and small structures help keep you caring and curious when your emotions are quiet.
-> -   Detachment can be a strength when it protects your energy while still letting you show up for others.
+> - **Curiosity can be practiced intentionally**, even when it doesn’t come naturally.
+> - Empathy is often a learned behavior, not just a feeling, and can start by “faking” it well.
+> - Systems and small structures help keep you caring and curious when your emotions are quiet.
+> - Detachment can be a strength when it protects your energy while still letting you show up for others.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
@@ -55,7 +55,7 @@ In leadership, I’ve learned to value both reliability and change — a kind of
 
 When you lead, curiosity isn’t optional. It’s how you keep understanding the people you work with instead of assuming you already do. I don’t always feel curious, but I know what happens when I stop asking questions: I lose context, I lose perspective, and eventually I lose the connection that makes people [[psychological-safety-in-teams-people-first-leadership|feel safe to speak up]].
 
-So I keep the structure that keeps me curious: [small systems that remind me to check in, take notes, follow up](/2026/05/05/leading-with-adhd-systems-that-work/). Not because I require the reminders to care, but because I need help *accessing* that care consistently.  
+So I keep the structure that keeps me curious: [[tools-for-adhd-leadership|small systems that remind me to check in, take notes, follow up]]. Not because I require the reminders to care, but because I need help _accessing_ that care consistently.  
 Sometimes a nudge is all that stands between detachment and engagement.
 
 > “Systems preserve what feelings forget.”
@@ -64,18 +64,18 @@ Sometimes a nudge is all that stands between detachment and engagement.
 
 Curiosity wasn’t the first thing I had to learn. Before that, it was empathy.
 
-Between 2016 and 2020, when I was closer to web development, my team lead was [Job Thomas](https://job.blog). I was still a developer at heart. I’d been switched to support at a previous job not because I wanted to, but because I was good at it. My mindset back then was simple: *if your site is broken, it’s probably your fault.* And often, I was right.
+Between 2016 and 2020, when I was closer to web development, my team lead was [Job Thomas](https://job.blog). I was still a developer at heart. I’d been switched to support at a previous job not because I wanted to, but because I was good at it. My mindset back then was simple: _if your site is broken, it’s probably your fault._ And often, I was right.
 
 The problem was, being right didn’t help anyone feel heard. I struggled to connect with customers because I didn’t feel their frustration, I only saw the logic of their mistake.  
-Job noticed. After trying nicely and indirectly multiple times, he finally said it straight: *“I don’t care if you don’t care. Fake it.”* (I’m paraphrasing).
+Job noticed. After trying nicely and indirectly multiple times, he finally said it straight: _“I don’t care if you don’t care. Fake it.”_ (I’m paraphrasing).
 
-That moment changed me. It was my first real lesson in *learning empathy as a skill*, not as a personality trait.
+That moment changed me. It was my first real lesson in _learning empathy as a skill_, not as a personality trait.
 
 He didn’t mean “pretend to be nice.” He meant that empathy isn’t always a feeling; it’s a behavior.  
 People didn’t always need me to fix their issue first, they needed to know I understood it mattered to them. They needed validation before resolution.
 
 So I started faking empathy. I mirrored tone. I acknowledged frustration. I treated their issue as if it were my own, even when it wasn’t. Over time, I got better at it.  
-Repetition trained recognition. I learned to read emotion, even if I couldn’t *feel* it.
+Repetition trained recognition. I learned to read emotion, even if I couldn’t _feel_ it.
 
 > “Understanding without feeling is still understanding.”
 
@@ -97,9 +97,9 @@ And it all started with faking it.
 
 ## Practicing Curiosity in Support
 
-That same lesson carried into how I approach customer support. It also changed how I see expertise. That *professional empathy* often means asking questions you already know the answer to, just to help others discover it for themselves.
+That same lesson carried into how I approach customer support. It also changed how I see expertise. That _professional empathy_ often means asking questions you already know the answer to, just to help others discover it for themselves.
 
-When a user says, *“I want to make more sales,”* or *“My site isn’t working,”* they’re not telling you the full story. Staying curious means looking past the surface to find what they actually need.
+When a user says, _“I want to make more sales,”_ or _“My site isn’t working,”_ they’re not telling you the full story. Staying curious means looking past the surface to find what they actually need.
 
 For them, it’s a first. For me, it’s the thousandth time. That gap is what I have to bridge every day, and it’s also what makes me an expert. After fourteen years in customer support, I’ve seen what works and what doesn’t. I recognize patterns, ideas, and needs before customers even name them. They see their problem; I see the landscape.
 
@@ -109,9 +109,9 @@ Sometimes I don’t feel naturally interested in the issue, but I know the perso
 
 That’s reason enough to ask another question.
 
--   *Why is this important to them right now?*
--   *What are they not saying yet?*
--   *What would make this easier for them next time?*
+- _Why is this important to them right now?_
+- _What are they not saying yet?_
+- _What would make this easier for them next time?_
 
 That small act of investigation is how curiosity builds momentum. You don’t wait for interest; you build it through context.  
 Every conversation is a chance to uncover something someone doesn’t yet know they can do. That’s how curiosity turns into service. That’s how good support turns into an outstanding customer experience.
@@ -135,10 +135,10 @@ Curiosity isn’t constant. It shifts depending on energy, context, and connecti
 
 Here’s what helps me:
 
--   **[[mastering-effective-feedback-facts-feelings-curiosity|Ask before assuming]].** Curiosity lives in the space between what you think you know and what you actually don’t.
--   **Write things down as questions, not checkboxes.** It keeps me thinking instead of just executing.
--   **If you’re bored, find the missing context.** Ask who benefits, what it enables, or why it matters.
--   **Reframe dull work through someone else’s eyes.** If I can’t care for my own sake, I can usually care for someone else’s outcome.
+- **[[mastering-effective-feedback-facts-feelings-curiosity|Ask before assuming]].** Curiosity lives in the space between what you think you know and what you actually don’t.
+- **Write things down as questions, not checkboxes.** It keeps me thinking instead of just executing.
+- **If you’re bored, find the missing context.** Ask who benefits, what it enables, or why it matters.
+- **Reframe dull work through someone else’s eyes.** If I can’t care for my own sake, I can usually care for someone else’s outcome.
 
 Curiosity doesn’t depend on mood. It depends on design; on building small ways for it to find you again.
 

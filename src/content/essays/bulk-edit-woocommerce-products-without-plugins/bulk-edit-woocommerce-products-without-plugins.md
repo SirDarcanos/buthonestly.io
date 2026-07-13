@@ -21,10 +21,10 @@ originalCover: https://buthonestly.io/wp-content/uploads/2015/04/pexels-photo-53
 
 > [!summary]- Quick Summary
 >
-> -   The WooCommerce bulk editor, found under **Products → All Products,** can bulk edit WooCommerce products for most routine changes without extra plugins.
-> -   It saves time when many products need the same update, such as price changes, stock adjustments, or visibility tweaks.
-> -   Attributes and variations still require per-product edits or heavier workflows like CSV import or [[woocommerce-cli-product-management|WP CLI]].
-> -   Plugins still make sense for complex, frequent, or highly custom rules, but [[do-you-trust-your-instincts-making-smart-wordpress-choices|they should come after you have used the core tools]] well.
+> - The WooCommerce bulk editor, found under **Products → All Products,** can bulk edit WooCommerce products for most routine changes without extra plugins.
+> - It saves time when many products need the same update, such as price changes, stock adjustments, or visibility tweaks.
+> - Attributes and variations still require per-product edits or heavier workflows like CSV import or [[woocommerce-cli-product-management|WP CLI]].
+> - Plugins still make sense for complex, frequent, or highly custom rules, but [[do-you-trust-your-instincts-making-smart-wordpress-choices|they should come after you have used the core tools]] well.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
@@ -42,12 +42,12 @@ Bulk editing is not a magic feature. It is just a way to avoid opening the same 
 
 It becomes useful when many products need the same change, such as:
 
--   Applying a percentage discount for a short sale
--   Updating stock after new inventory arrives
--   Moving products into or out of a seasonal category
--   Turning backorders on or off
--   Changing visibility, for example from “hidden” to “catalog only”
--   Cleaning up tags across older products
+- Applying a percentage discount for a short sale
+- Updating stock after new inventory arrives
+- Moving products into or out of a seasonal category
+- Turning backorders on or off
+- Changing visibility, for example from “hidden” to “catalog only”
+- Cleaning up tags across older products
 
 None of these tasks are worth opening each product by hand. The built-in WooCommerce bulk editor exists for exactly this kind of work.
 
@@ -98,14 +98,14 @@ When the sale ends, you can repeat the process in reverse or set new prices usin
 
 The WooCommerce bulk editor covers most of the changes a normal store makes often. From that panel, you can:
 
--   Change product categories and tags
--   Set, increase, or decrease regular and sale prices
--   Adjust stock quantity and stock status
--   Enable or disable **Manage stock**
--   Allow or disallow backorders
--   Change catalog visibility and search visibility
--   Assign shipping classes
--   Enable or disable reviews
+- Change product categories and tags
+- Set, increase, or decrease regular and sale prices
+- Adjust stock quantity and stock status
+- Enable or disable **Manage stock**
+- Allow or disallow backorders
+- Change catalog visibility and search visibility
+- Assign shipping classes
+- Enable or disable reviews
 
 These actions map to all the small tasks that usually pile up and feel boring.
 
@@ -113,8 +113,8 @@ There is one important limit. You cannot bulk edit [[woocommerce-attributes-vs-v
 
 If you need to update attributes or variations at scale, you have two main options:
 
--   Use an import and export workflow with CSV files.
--   Use [[woocommerce-cli-product-management|WP CLI with the WooCommerce commands]] to update products from the command line.
+- Use an import and export workflow with CSV files.
+- Use [[woocommerce-cli-product-management|WP CLI with the WooCommerce commands]] to update products from the command line.
 
 For many stores, this limit is fine. For some, it is undoubtedly where things start to hurt.
 
@@ -146,10 +146,10 @@ There are real cases where the built-in bulk editor is not enough. Some stores d
 
 Extra tools can be useful when you often need to:
 
--   Edit custom product meta fields in bulk
--   Manage prices per customer group or tier
--   Control variation level data in detail
--   Apply dynamic pricing rules based on date, cart total, or user role
+- Edit custom product meta fields in bulk
+- Manage prices per customer group or tier
+- Control variation level data in detail
+- Apply dynamic pricing rules based on date, cart total, or user role
 
 In those situations, a dedicated bulk editing plugin or a custom solution can be worth the extra maintenance cost.
 

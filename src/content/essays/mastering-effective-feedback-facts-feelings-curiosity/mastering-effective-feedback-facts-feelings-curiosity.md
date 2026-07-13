@@ -17,12 +17,12 @@ originalCover: https://buthonestly.io/wp-content/uploads/2025/10/effective-feedb
 
 > [!summary]- Quick Summary
 >
-> -   Effective feedback is uncomfortable but vital, turning vague assumptions into clarity that helps people, teams, and organizations grow.
-> -   The most useful feedback combines facts and feelings: describing what happened and how it impacted you, without guessing intentions.
-> -   Using structures like “When you did X, I felt Y” keeps feedback specific, honest, and less likely to trigger defensiveness.
-> -   Starting from curiosity with questions like “What led to that choice?” reveals context and turns feedback into shared problem solving.
-> -   A simple flow helps: observe the situation, invite context, share your perspective and feelings, clarify impact, then agree on next steps.
-> -   Practiced consistently, this approach turns feedback into part of the team’s culture, building psychological safety, trust, and shared ownership.
+> - Effective feedback is uncomfortable but vital, turning vague assumptions into clarity that helps people, teams, and organizations grow.
+> - The most useful feedback combines facts and feelings: describing what happened and how it impacted you, without guessing intentions.
+> - Using structures like “When you did X, I felt Y” keeps feedback specific, honest, and less likely to trigger defensiveness.
+> - Starting from curiosity with questions like “What led to that choice?” reveals context and turns feedback into shared problem solving.
+> - A simple flow helps: observe the situation, invite context, share your perspective and feelings, clarify impact, then agree on next steps.
+> - Practiced consistently, this approach turns feedback into part of the team’s culture, building psychological safety, trust, and shared ownership.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
@@ -50,13 +50,13 @@ One of the most valuable things I have learned about effective feedback is that 
 
 Facts keep feedback objective. They describe what happened without judgment. Feelings make feedback human. They explain how that situation impacted you or the team. When you combine the two, the conversation becomes both clear and honest.
 
-I was first introduced to this way of thinking during a [Reboot](https://www.reboot.io/) workshop at Automattic. It stuck with me because it was simple but powerful. The idea was that feedback should be based on what you *saw* and how you *felt* about it. Nothing more, nothing less.
+I was first introduced to this way of thinking during a [Reboot](https://www.reboot.io/) workshop at Automattic. It stuck with me because it was simple but powerful. The idea was that feedback should be based on what you _saw_ and how you _felt_ about it. Nothing more, nothing less.
 
 The structure is simple:
 
 > “When you did **this**, I felt **like this**.”
 
-It sounds small, but it changes everything. Instead of saying, *“You were disrespectful in that meeting,”* you might say, *“When you interrupted me during that meeting, I felt dismissed.”* The first statement sounds like an accusation. The second describes a fact and a feeling. It invites a response rather than a reaction.
+It sounds small, but it changes everything. Instead of saying, _“You were disrespectful in that meeting,”_ you might say, _“When you interrupted me during that meeting, I felt dismissed.”_ The first statement sounds like an accusation. The second describes a fact and a feeling. It invites a response rather than a reaction.
 
 ![](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/10/effective-feedback-model.jpg?resize=1000%2C668&quality=81&ssl=1 "Photo by Jon Tyson on Unsplash.")
 
@@ -76,13 +76,13 @@ It is easy to assume that something went wrong or that someone made a poor decis
 
 ![Woman in white button up shirt sitting on gray couch, talking to another woman in a black blouse](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/10/pexels-photo-5989928.jpeg?resize=1880%2C1253&quality=81&ssl=1 "Photo by cottonbro studio on Pexels.com")
 
-Curiosity gives space for understanding. It shifts the conversation from “*You did something wrong*” to “*Help me understand what happened.*” That small change in tone makes a big difference. It turns feedback into a shared exploration instead of a correction.
+Curiosity gives space for understanding. It shifts the conversation from “_You did something wrong_” to “_Help me understand what happened._” That small change in tone makes a big difference. It turns feedback into a shared exploration instead of a correction.
 
 When I start from curiosity, I typically ask questions first.
 
--   What led to that choice?
--   How did you approach this?
--   What were you trying to achieve?
+- What led to that choice?
+- How did you approach this?
+- What were you trying to achieve?
 
 By simply asking, I discover something I did not know. Every so often I realize the outcome made sense given the context. Other times, we both learn something useful. Either way, it builds trust, because the person sees that I am trying to understand before judging.
 
@@ -96,26 +96,25 @@ Feedback theory is helpful, but what matters most is how we use it day to day. O
 
 Here is the process I usually follow:
 
--   **Observe the situation**
-    
-    Start with what you actually saw or experienced. Keep it factual and specific. “In yesterday’s meeting, the report wasn’t ready,” is very different from “You’re never prepared.”
-    
--   **Invite context.**
-    
-    Before giving feedback, ask a question. “I noticed the report wasn’t ready, what was going on for you?” Sometimes there is a good reason, and knowing it changes how you approach the rest of the conversation.
-    
--   **Share your perspective**
-    
-    Once you understand their context, explain what you observed and how it made you feel. “When that happened, I felt frustrated because we missed a chance to align as a team.”
-    
--   **Clarify the impact**
-    
-    Explain why it matters. “When the report is late, we lose time preparing for the client call.” This keeps the focus on the work, not the person.
-    
--   **Agree on next steps**
-    
-    Ask what support they need to avoid the same issue next time. Maybe they need clearer priorities, more time, or a better process. Feedback should end with an understanding, not a lecture.
-    
+- **Observe the situation**
+
+  Start with what you actually saw or experienced. Keep it factual and specific. “In yesterday’s meeting, the report wasn’t ready,” is very different from “You’re never prepared.”
+
+- **Invite context.**
+
+  Before giving feedback, ask a question. “I noticed the report wasn’t ready, what was going on for you?” Sometimes there is a good reason, and knowing it changes how you approach the rest of the conversation.
+
+- **Share your perspective**
+
+  Once you understand their context, explain what you observed and how it made you feel. “When that happened, I felt frustrated because we missed a chance to align as a team.”
+
+- **Clarify the impact**
+
+  Explain why it matters. “When the report is late, we lose time preparing for the client call.” This keeps the focus on the work, not the person.
+
+- **Agree on next steps**
+
+  Ask what support they need to avoid the same issue next time. Maybe they need clearer priorities, more time, or a better process. Feedback should end with an understanding, not a lecture.
 
 This same approach works beyond one-on-one conversations. It shapes how teams talk about performance, how peers collaborate, and even how leaders learn from their teams.
 

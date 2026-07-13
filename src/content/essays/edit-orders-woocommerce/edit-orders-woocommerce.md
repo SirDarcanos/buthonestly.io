@@ -18,11 +18,11 @@ Raise your hand if you like to get the New Order email notification in your inbo
 
 > [!summary]- Quick Summary
 >
-> -   New orders need active handling: check details, adjust them for customer needs, and keep order status aligned with reality.
-> -   Most fields can be edited directly on the order screen, including billing, shipping, items, shipping methods, coupons, and totals.
-> -   What you can change depends on status: once an order is Processing or beyond, rely on refunds instead of silently changing totals.
-> -   Use order actions and notes to resend emails, add context, and communicate clearly with customers without leaking private comments.
-> -   After any change that affects money, recalculate totals and update the order so reports, stock, and customer expectations stay correct.
+> - New orders need active handling: check details, adjust them for customer needs, and keep order status aligned with reality.
+> - Most fields can be edited directly on the order screen, including billing, shipping, items, shipping methods, coupons, and totals.
+> - What you can change depends on status: once an order is Processing or beyond, rely on refunds instead of silently changing totals.
+> - Use order actions and notes to resend emails, add context, and communicate clearly with customers without leaking private comments.
+> - After any change that affects money, recalculate totals and update the order so reports, stock, and customer expectations stay correct.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
@@ -34,15 +34,15 @@ Learn here all the details about how to edit orders in WooCommerce.
 
 ![](https://i0.wp.com/buthonestly.io/wp-content/uploads/2018/05/image-3.png?resize=2402%2C678&quality=80&ssl=1)
 
--   The order number
--   The payment method and the transaction ID
--   The date when the order has been created
--   The order status
--   The customer username and email and links to their profile and other orders
--   The customer billing data
--   The customer shipping data
--   The date when the order has been paid for
--   The customer IP
+- The order number
+- The payment method and the transaction ID
+- The date when the order has been created
+- The order status
+- The customer username and email and links to their profile and other orders
+- The customer billing data
+- The customer shipping data
+- The date when the order has been paid for
+- The customer IP
 
 Not all of these data can be changed by the administrator. For example, the order number (1), the payment date (8), the customer IP (9), and the transaction ID (2) cannot be easily changed and should not be changed.
 
@@ -74,11 +74,11 @@ Next is probably the part of an order that you are going to use most. The order 
 
 ![](https://i0.wp.com/buthonestly.io/wp-content/uploads/2018/05/image-6.png?resize=714%2C379&quality=80&ssl=1)
 
--   The purchased items list
--   The shipping method
--   The coupons applied to the order (if any)
--   The order totals
--   The refund button
+- The purchased items list
+- The shipping method
+- The coupons applied to the order (if any)
+- The order totals
+- The refund button
 
 This part is not editable all the time. By default, only if the order status is less than Processing will it be possible to edit these data.
 
@@ -92,9 +92,9 @@ If the order status is less than Processing, for example, **On Hold**, you can 
 
 ![](https://i0.wp.com/buthonestly.io/wp-content/uploads/2018/05/image-8.png?resize=714%2C376&quality=80&ssl=1)
 
--   Order items. Hovering over this part will show a pencil icon to edit the product data, or a `x` to remove the item from the order.
--   The buttons to add new items, shipping methods, and coupons
--   The recalculate totals button
+- Order items. Hovering over this part will show a pencil icon to edit the product data, or a `x` to remove the item from the order.
+- The buttons to add new items, shipping methods, and coupons
+- The recalculate totals button
 
 By clicking on **Add** **item(s)**, more buttons will show, allowing you to choose what item to add:
 

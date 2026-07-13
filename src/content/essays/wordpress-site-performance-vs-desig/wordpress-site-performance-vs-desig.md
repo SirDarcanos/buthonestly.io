@@ -20,17 +20,17 @@ originalCover: https://buthonestly.io/wp-content/uploads/2026/03/wordpress-perfo
 
 > [!summary]- Quick Summary
 >
-> -   This site uses a minimalist stack, the Bitácora theme, a few essential plugins, and no or heavy visuals to hit ~81 mobile and 100 desktop on PageSpeed Insights.
-> -   Performance comes first: fast loads build trust, boost engagement, and directly support SEO through better Core Web Vitals.
-> -   Once speed is solid, design matters for readability and identity; typography, spacing, and simple visuals can stand in for flashy effects.
-> -   Treat design as polish with a purpose; remove sliders, videos, or animations that don’t clearly have a purpose.
-> -   Use tools like lazy loading, WebP images, and local fonts, set a PageSpeed baseline, and retest after every design change to keep the balance right.
+> - This site uses a minimalist stack, the Bitácora theme, a few essential plugins, and no or heavy visuals to hit ~81 mobile and 100 desktop on PageSpeed Insights.
+> - Performance comes first: fast loads build trust, boost engagement, and directly support SEO through better Core Web Vitals.
+> - Once speed is solid, design matters for readability and identity; typography, spacing, and simple visuals can stand in for flashy effects.
+> - Treat design as polish with a purpose; remove sliders, videos, or animations that don’t clearly have a purpose.
+> - Use tools like lazy loading, WebP images, and local fonts, set a PageSpeed baseline, and retest after every design change to keep the balance right.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
 This blog has no fancy animations, no custom fonts, and barely any images. That’s entirely by design. I use the WordPress [Bitácora theme](https://wordpress.com/theme/bitacora), just a [[top-5-essential-wordpress-plugins-i-always-install-and-why|few essential plugins]], and that’s it. The result? An 81 on mobile and 100 on desktop in Google PageSpeed Insights.
 
-When every site tries to outshine the rest with gradients, parallax scrolling, and animated backgrounds, I’ve gone the opposite way, and I couldn’t be happier. A fast, clean, minimal website doesn’t just feel good to manage; it feels good to *use*.
+When every site tries to outshine the rest with gradients, parallax scrolling, and animated backgrounds, I’ve gone the opposite way, and I couldn’t be happier. A fast, clean, minimal website doesn’t just feel good to manage; it feels good to _use_.
 
 But I’ll admit, design still matters. Readers remember good experiences, not just good scores. The challenge is knowing when to prioritize speed and when to let visuals shine, even if they cost a few milliseconds.
 
@@ -42,31 +42,31 @@ A beautiful website is pointless if it’s slow to load. Visitors leave before t
 
 When a page loads instantly, it gives the impression of quality and reliability. Users trust it more, stay longer, engage better, and purchase more. A slow site, on the other hand, feels outdated or broken, no matter how nice it looks.
 
-That’s why I built my blog around *speed first*. I rely on the WordPress Bitácora theme and minimal plugins, no visual builders, and no unnecessary scripts. I don’t use featured images, custom fonts, or heavy effects. Almost everything is native or custom-built for this site, lightweight, and easy to maintain.
+That’s why I built my blog around _speed first_. I rely on the WordPress Bitácora theme and minimal plugins, no visual builders, and no unnecessary scripts. I don’t use featured images, custom fonts, or heavy effects. Almost everything is native or custom-built for this site, lightweight, and easy to maintain.
 
 ![Google Lighthouse report showing a perfect 100 WordPress performance score alongside metrics for speed, best practices, and SEO.](https://i0.wp.com/buthonestly.io/wp-content/uploads/2026/03/wordpress-performance-score.jpg?resize=830%2C647&quality=81&ssl=1 "Google PageSpeed Insight score results for BUT. Honestly on Desktop.")
 
 The payoff is immediate:
 
--   Google PageSpeed Insights shows **81 / 100** on mobile and **100 / 100** on desktop at the moment of writing.
--   Pages load almost instantly, even on slow connections.
--   Updates are simple; fewer moving parts mean fewer issues. In the case of this blog, I have all plugins and theme updated automatically through [Jetpack](https://jetpack.com).
+- Google PageSpeed Insights shows **81 / 100** on mobile and **100 / 100** on desktop at the moment of writing.
+- Pages load almost instantly, even on slow connections.
+- Updates are simple; fewer moving parts mean fewer issues. In the case of this blog, I have all plugins and theme updated automatically through [Jetpack](https://jetpack.com).
 
 Optimizing for performance also improves SEO. Core Web Vitals like **Largest Contentful Paint (LCP)** and **First Input Delay (FID)** directly influence search rankings. A lean site naturally performs well here.
 
-Focusing on performance first gives you a solid foundation. Once your site is fast, stable, and functional, *then* you can safely add layers of design without hurting the experience.
+Focusing on performance first gives you a solid foundation. Once your site is fast, stable, and functional, _then_ you can safely add layers of design without hurting the experience.
 
 ## When Design Starts to Matter
 
 Speed wins attention, but design keeps it.
 
-Once your site loads fast and feels smooth, visuals become the next piece of the puzzle. A clean but *well-designed* layout builds trust, improves readability, and gives your content identity. It’s what makes visitors remember *your* site among the thousands they scroll through.
+Once your site loads fast and feels smooth, visuals become the next piece of the puzzle. A clean but _well-designed_ layout builds trust, improves readability, and gives your content identity. It’s what makes visitors remember _your_ site among the thousands they scroll through.
 
 ![Notebook page with hand-drawn website wireframes and layout boxes, showing early web design planning for a multi-section homepage.](https://i0.wp.com/buthonestly.io/wp-content/uploads/2026/03/wordpress-design-structure.jpg?resize=830%2C467&quality=81&ssl=1 "Photo by Sigmund on Unsplash")
 
 Design isn’t just about aesthetics. It’s about **communication**. Typography guides the eye, spacing gives clarity, and subtle color choices create hierarchy. Even something as simple as using an image can break up long posts and give them character.
 
-If your site is new, or you’re still growing your audience, focus on **clarity and speed** before anything else. Good structure, readable typography, and consistent spacing already count as *design*; they don’t need to be fancy to work.
+If your site is new, or you’re still growing your audience, focus on **clarity and speed** before anything else. Good structure, readable typography, and consistent spacing already count as _design_; they don’t need to be fancy to work.
 
 Where many sites go wrong is in trying to do too much too early. Full-screen sliders, background videos, animated transitions, and large hero images might look impressive, but they come at a cost: longer loading times and higher bounce rates.
 
@@ -82,11 +82,11 @@ A practical rule I follow is this: **never let design elements exist without pur
 
 ![Flat illustration of website structure flow with a central browser window showing code, surrounded by CSS, HTML, JS panels, gears, charts and cloud upload icons.](https://i0.wp.com/buthonestly.io/wp-content/uploads/2026/03/website-structure-flow.jpg?resize=830%2C520&quality=81&ssl=1)
 
-You can absolutely have a beautiful, modern site *and* great performance. Tools like **lazy loading**, **[WebP images](https://jetpack.com/features/design/content-delivery-network/)**, and **locally hosted fonts** make it easier to add design without hurting your scores. The trick is to measure every change. After each adjustment, recheck your Core Web Vitals and Google PageSpeed results. [[do-you-trust-your-instincts-making-smart-wordpress-choices|Make smart choices]] when it comes to adding plugins.
+You can absolutely have a beautiful, modern site _and_ great performance. Tools like **lazy loading**, **[WebP images](https://jetpack.com/features/design/content-delivery-network/)**, and **locally hosted fonts** make it easier to add design without hurting your scores. The trick is to measure every change. After each adjustment, recheck your Core Web Vitals and Google PageSpeed results. [[do-you-trust-your-instincts-making-smart-wordpress-choices|Make smart choices]] when it comes to adding plugins.
 
 Another good habit is to set a **performance baseline**. For example, keep mobile speed at least 80 on PageSpeed Insights. Whenever you make a design update, test again. If your score dips significantly, you know the change wasn’t worth it.
 
-In the end, both design and speed serve the same goal: a better user experience and more engagement and conversions. Performance earns trust instantly; design builds connection over time. The right balance is the one that makes your site *feel effortless* to read and enjoy.
+In the end, both design and speed serve the same goal: a better user experience and more engagement and conversions. Performance earns trust instantly; design builds connection over time. The right balance is the one that makes your site _feel effortless_ to read and enjoy.
 
 ## What It Comes Down To
 

@@ -20,10 +20,10 @@ Product attributes are wasted potential if they cannot take your customers anywh
 
 > [!summary]- Quick Summary
 >
-> -   Product attributes are wasted potential if they cannot take customers anywhere.
-> -   This snippet shows how to make product attributes linkable in WooCommerce without changing your workflow.
-> -   Global attributes get optional URLs and new tab toggles on their term screens.
-> -   Local attributes can use simple Markdown-style links that render as clickable values in the Additional Information tab.
+> - Product attributes are wasted potential if they cannot take customers anywhere.
+> - This snippet shows how to make product attributes linkable in WooCommerce without changing your workflow.
+> - Global attributes get optional URLs and new tab toggles on their term screens.
+> - Local attributes can use simple Markdown-style links that render as clickable values in the Additional Information tab.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
@@ -39,8 +39,8 @@ If you are not clear on how WooCommerce product attributes work, everything else
 
 WooCommerce uses two main kinds of attributes:
 
--   Global attributes
--   Local (per-product) attributes
+- Global attributes
+- Local (per-product) attributes
 
 You can read about them in the [WooCommerce documentation](https://woocommerce.com/document/managing-product-taxonomies/#section-3), but here is the short version.
 
@@ -58,10 +58,10 @@ Out of the box, WooCommerce shows attributes as plain text. That works, but it l
 
 Turning attributes into links helps in a few ways:
 
--   Customers can jump to useful context, like a size chart or a care guide.
--   You can point attributes to documentation or support pages instead of repeating the same text.
--   You keep product pages cleaner while still offering depth where it matters.
--   Search engines get another way to discover and connect important pages on your site.
+- Customers can jump to useful context, like a size chart or a care guide.
+- You can point attributes to documentation or support pages instead of repeating the same text.
+- You keep product pages cleaner while still offering depth where it matters.
+- Search engines get another way to discover and connect important pages on your site.
 
 None of this is magic. It is just a small way to make the product page feel more intentional.
 
@@ -72,11 +72,11 @@ Because global and local attributes work differently, the code has to treat them
 At a high level, my custom solution does two things:
 
 1.  For global attributes, it adds two new term meta fields:
-    -   A URL to link the attribute term to
-    -   A checkbox to open the link in a new tab
+    - A URL to link the attribute term to
+    - A checkbox to open the link in a new tab
 2.  For local attributes, it lets you write attribute values using a small piece of Markdown:
-    -   `[Text](https://example.com)`
-    -   Or `[Text](https://example.com){blank}` if you want a new tab
+    - `[Text](https://example.com)`
+    - Or `[Text](https://example.com){blank}` if you want a new tab
 
 On the front end, the snippet filters how WooCommerce prints attributes in the **Additional Information** tab on the single product page.  
 If a URL is set or Markdown is present, it outputs a proper `<a>` tag.  
@@ -271,9 +271,9 @@ You will see the usual form to add or edit terms, plus a new field at the bottom
 
 Type the link you want that attribute term to point to. For example:
 
--   A brand term pointing to a brand story page
--   A material term pointing to a care instructions page
--   A size term pointing to a size guide
+- A brand term pointing to a brand story page
+- A material term pointing to a care instructions page
+- A size term pointing to a size guide
 
 If you want the link to open in a new tab, tick the checkbox.  
 If you leave the URL field empty, the attribute behaves as before and shows as plain text.
@@ -325,10 +325,10 @@ This approach is most useful when clickable product attributes hint at extra con
 
 Some examples:
 
--   “Organic cotton” linking to a page about sourcing and certifications.
--   “Lifetime warranty” linking to a clear, human warranty page.
--   “Digital download” linking to a how-to guide for accessing purchases.
--   “Pre-order” linking to an explanation of timelines and expectations.
+- “Organic cotton” linking to a page about sourcing and certifications.
+- “Lifetime warranty” linking to a clear, human warranty page.
+- “Digital download” linking to a how-to guide for accessing purchases.
+- “Pre-order” linking to an explanation of timelines and expectations.
 
 You keep the product page lean while still letting the customer dig deeper if they care.
 
@@ -342,11 +342,11 @@ Like most customizations, this one is not perfect everywhere.
 
 Some things to keep in mind:
 
--   The snippet focuses on the Additional Information tab in the single product page. If your theme overrides how attributes are displayed, you might need to adjust the filter or the markup.
--   This is not meant for attributes used for variations.  
-    Those need to stay clean, simple, and stable for WooCommerce to work correctly.
--   Every link is an invitation to leave the product page.  
-    In some cases this is useful, but it still adds a small decision for the customer. It is worth being intentional about which attributes get links.
+- The snippet focuses on the Additional Information tab in the single product page. If your theme overrides how attributes are displayed, you might need to adjust the filter or the markup.
+- This is not meant for attributes used for variations.  
+  Those need to stay clean, simple, and stable for WooCommerce to work correctly.
+- Every link is an invitation to leave the product page.  
+  In some cases this is useful, but it still adds a small decision for the customer. It is worth being intentional about which attributes get links.
 
 The goal is not to link every attribute. It is to link the few attributes that benefit from extra context.
 

@@ -14,10 +14,10 @@ originalCover: https://buthonestly.io/wp-content/uploads/2026/09/raccoon-city.jp
 
 > [!summary]- Quick Summary
 >
-> -   Returning to the ruined Raccoon City Police Department feels like revisiting a real place, not just replaying an old game level.
-> -   Games build “place-memory” by making you learn layouts with your own movement in a way films can’t.
-> -   Characters like Leon, Jill, and new additions like Grace carry those places through time, aging and changing alongside players.
-> -   These fictional spaces only exist in players’ heads, but the grief and attachment they trigger are as real as memories of physical locations.
+> - Returning to the ruined Raccoon City Police Department feels like revisiting a real place, not just replaying an old game level.
+> - Games build “place-memory” by making you learn layouts with your own movement in a way films can’t.
+> - Characters like Leon, Jill, and new additions like Grace carry those places through time, aging and changing alongside players.
+> - These fictional spaces only exist in players’ heads, but the grief and attachment they trigger are as real as memories of physical locations.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 

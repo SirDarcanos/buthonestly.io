@@ -27,10 +27,10 @@ downloads:
 
 > [!summary]- Quick Summary
 >
-> -   I’m a support lead with combined-type ADHD who struggled most with small, boring tasks, not big projects.
-> -   Instead of chasing discipline, I built a scaffold of tools for ADHD: calendar, reminders, AI notes, and simple rules my team can rely on.
-> -   My team knows the system, nudges me without drama, and we use shared structures (docs, deadlines, owners) to stay aligned.
-> -   ADHD didn’t make me a worse leader; it pushed me to design clearer systems so people can be human without losing momentum.
+> - I’m a support lead with combined-type ADHD who struggled most with small, boring tasks, not big projects.
+> - Instead of chasing discipline, I built a scaffold of tools for ADHD: calendar, reminders, AI notes, and simple rules my team can rely on.
+> - My team knows the system, nudges me without drama, and we use shared structures (docs, deadlines, owners) to stay aligned.
+> - ADHD didn’t make me a worse leader; it pushed me to design clearer systems so people can be human without losing momentum.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
@@ -72,7 +72,7 @@ Once I understood that, I stopped chasing discipline and started designing syste
 
 I’ve tried every productivity tool at least once. Notion, Todoist, task boards, paper lists, and many more, but only a handful turned into real ADHD productivity tools I could rely on. Most of them failed for the same reason: they expected me to maintain the system more than they helped me use it.
 
-What stuck are the tools that fit naturally into how I already think. I didn’t build elaborate workflows; I simplified until things worked almost *out of the box.*
+What stuck are the tools that fit naturally into how I already think. I didn’t build elaborate workflows; I simplified until things worked almost _out of the box._
 
 ### The ADHD Tools that Stuck
 

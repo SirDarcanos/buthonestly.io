@@ -20,10 +20,10 @@ Writing feels better when the tool disappears.
 
 > [!summary]- Quick Summary
 >
-> -   I write in Markdown because it is just plain text with light structure, which keeps writing readable and portable.
-> -   Using the same syntax across tools protects focus and makes it easier to move work around.
-> -   WordPress and many modern apps understand Markdown patterns, so the habit scales well.
-> -   Rich editors offer more features, but Markdown is the one that reliably gets out of the way.
+> - I write in Markdown because it is just plain text with light structure, which keeps writing readable and portable.
+> - Using the same syntax across tools protects focus and makes it easier to move work around.
+> - WordPress and many modern apps understand Markdown patterns, so the habit scales well.
+> - Rich editors offer more features, but Markdown is the one that reliably gets out of the way.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
@@ -41,9 +41,9 @@ You type normal sentences. When you want a heading, you start the line with `#`.
 
 You are not dragging sliders or choosing fonts. You are describing intent—[[what-is-vibe-coding-how-to-do-it|what makes Markdown work]].
 
--   This line is a heading.
--   This word should stand out.
--   This group of lines is a list.
+- This line is a heading.
+- This word should stand out.
+- This group of lines is a list.
 
 The text stays readable in its raw form. If you never convert it, you can still understand it. When you do render it, it becomes clean HTML, or a nicely formatted page, or a help article in your docs.
 
@@ -61,9 +61,9 @@ Markdown reduces that drag—a [[tools-for-adhd-leadership|plain tool that holds
 
 Everything happens from the keyboard.
 
--   Need a heading? Type `##` and keep going.
--   Need a list? Start a line with `-` and write the first item.
--   Need a link? Write `(url)` and move on.
+- Need a heading? Type `##` and keep going.
+- Need a list? Start a line with `-` and write the first item.
+- Need a link? Write `(url)` and move on.
 
 No modal windows. No “format painter”. No mode switches. The tool is not trying to be clever. It is just following along.
 
@@ -77,13 +77,13 @@ The real strength of Markdown is not any single editor. It is the fact that the 
 
 In daily work I see it in:
 
--   WordPress posts and pages
--   P2 threads
--   GitHub READMEs
--   Documentation portals
--   Slack messages
--   AI prompt templates
--   Google Docs ([as of 2022](https://techcrunch.com/2022/03/30/google-adds-limited-markdown-support-to-google-docs/))
+- WordPress posts and pages
+- P2 threads
+- GitHub READMEs
+- Documentation portals
+- Slack messages
+- AI prompt templates
+- Google Docs ([as of 2022](https://techcrunch.com/2022/03/30/google-adds-limited-markdown-support-to-google-docs/))
 
 I can move between these tools without changing how I write. A heading is a heading. A list is a list. The same characters mean the same thing in each place.
 
@@ -113,9 +113,9 @@ I have tried many editors over the years. It is easy to get lost in this part, b
 
 Today, my writing is more spread out:
 
--   WordPress for public posts.
--   P2 for internal discussions.
--   Plain text files in a synced folder for notes and drafts.
+- WordPress for public posts.
+- P2 for internal discussions.
+- Plain text files in a synced folder for notes and drafts.
 
 Markdown is the thread that connects all of them. It is the same pattern in each place. Headings, lists, emphasis, and links. The exact app becomes less important, which is a comfortable place to be.
 
@@ -133,9 +133,9 @@ I test these sometimes. They are impressive. They also tend to pull my attention
 
 Markdown remains the only system that consistently stays out of the way.
 
--   It does not assume anything about the final form.
--   It adds structure when I ask and stays quiet otherwise.
--   It works the same across almost every tool I use.
+- It does not assume anything about the final form.
+- It adds structure when I ask and stays quiet otherwise.
+- It works the same across almost every tool I use.
 
 There is also a simple, practical reason: longevity.
 
@@ -151,11 +151,11 @@ Here is a simple way to do that.
 
 1.  **Pick one place where you already write**. Maybe it is WordPress, P2, a docs tool, or a folder of notes. Do not change the tool. Just decide that for the next seven days, anything you write there will use Markdown.
 2.  **Learn five patterns and ignore the rest.** You can do a lot of real work with only these:
-    -   `#` for a main heading
-    -   `##` for a subheading
-    -   `-` for a list item
-    -   `*emphasis*` for italics
-    -   `[link text](https://example.com)` for links
+    - `#` for a main heading
+    - `##` for a subheading
+    - `-` for a list item
+    - `*emphasis*` for italics
+    - `[link text](https://example.com)` for links
 3.  **Draft in plain text**. Open a basic editor on your computer and write there first. No formatting bar. No distractions. When you are done, paste it into your tool and let it handle the rendering.
 4.  **Use one real piece of work as a test**. Do not practice on a fake example. Write a real support reply, a real internal post, or a real blog draft in Markdown. Notice when your hands reach for the mouse and ask if there is a Markdown shortcut instead.
 5.  **Decide after one week, not one hour.** The first day feels strange because your habits are different. By the third or fourth day, it usually feels normal. At the end of the week, you can decide if the tradeoffs are worth it for you.
@@ -174,9 +174,9 @@ When headings are just `#`, you stop worrying about typography. When emphasis is
 
 You are left with questions that matter more.
 
--   What am I trying to say.
--   Who is this for.
--   Is this the clearest version of the idea I can write today.
+- What am I trying to say.
+- Who is this for.
+- Is this the clearest version of the idea I can write today.
 
 Markdown is not magic. It will not fix a bad argument or fill an empty page. What it does is reduce the number of things you have to manage while you are doing the harder part.
 

@@ -18,11 +18,11 @@ originalCover: https://buthonestly.io/wp-content/uploads/2026/05/when-ai-stops-b
 
 > [!summary]- Quick Summary
 >
-> -   I came back from sabbatical and started building with AI so intensely that the tool began setting the rhythm of my days.
-> -   The problem was not that AI was useless. It was useful in exactly the way my brain likes: fast feedback, low friction, and constant novelty.
-> -   The dopamine was not really in the code. It was in the loop: ask, see, fix, ship, repeat.
-> -   AI started spreading beyond coding into goals, feedback, research, and everyday phrasing, often before I had done the first pass myself.
-> -   The line I am trying to hold now is simple: use AI as a companion, not a lead.
+> - I came back from sabbatical and started building with AI so intensely that the tool began setting the rhythm of my days.
+> - The problem was not that AI was useless. It was useful in exactly the way my brain likes: fast feedback, low friction, and constant novelty.
+> - The dopamine was not really in the code. It was in the loop: ask, see, fix, ship, repeat.
+> - AI started spreading beyond coding into goals, feedback, research, and everyday phrasing, often before I had done the first pass myself.
+> - The line I am trying to hold now is simple: use AI as a companion, not a lead.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 

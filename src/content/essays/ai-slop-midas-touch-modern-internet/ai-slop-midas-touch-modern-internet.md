@@ -19,11 +19,11 @@ originalCover: https://buthonestly.io/wp-content/uploads/2025/11/ai-slop.jpg
 
 > [!summary]- Quick Summary
 >
-> -   I ran a real NLP/emotion-analysis study on Dead by Daylight Steam reviews and shared a summarized version on the DbD subreddit.
-> -   The thread largely ignored the methodology and results and instead focused on attacking the fact I used AI for an infographic and AI-assisted writing.
-> -   This reaction came from AI-slop fatigue and purity tests around “real” work, not from any evidence that the study itself was fake or lazy.
-> -   The experience reinforced my own line: AI can help with expression and packaging, but not with thinking, data, or responsibility.
-> -   From a leadership and “gamer brain” perspective, it became a lesson in choosing the right arenas, reading the meta, and knowing when to walk away from bad-faith fights.
+> - I ran a real NLP/emotion-analysis study on Dead by Daylight Steam reviews and shared a summarized version on the DbD subreddit.
+> - The thread largely ignored the methodology and results and instead focused on attacking the fact I used AI for an infographic and AI-assisted writing.
+> - This reaction came from AI-slop fatigue and purity tests around “real” work, not from any evidence that the study itself was fake or lazy.
+> - The experience reinforced my own line: AI can help with expression and packaging, but not with thinking, data, or responsibility.
+> - From a leadership and “gamer brain” perspective, it became a lesson in choosing the right arenas, reading the meta, and knowing when to walk away from bad-faith fights.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
@@ -33,9 +33,9 @@ I love it not in the “I play it sometimes” way. In the “I think about this
 
 So when I decided to share my study on the Dead by Daylight subreddit, it felt like a nice overlap of everything I care about:
 
--   the game I genuinely enjoy
--   natural language processing and model behavior
--   and a good way to give back to the community and maybe even reach the developers with genuine data
+- the game I genuinely enjoy
+- natural language processing and model behavior
+- and a good way to give back to the community and maybe even reach the developers with genuine data
 
 I hit “post” feeling a little nervous but mostly excited.
 
@@ -53,10 +53,10 @@ When people say “AI slop”, they usually mean low-effort, AI generated conten
 
 The Reddit post is gone now, and I explain why I deleted it below, but here’s the short version of what I shared:
 
--   I ran a case study using DistilRoBERTa to analyze emotions in Dead by Daylight Steam reviews.
--   I summarized the core findings directly in the Reddit post so people **didn’t** have to click my blog if they didn’t want to.
--   I included an infographic from the article to quickly convey the main results (the same one at the end of the essay).
--   I linked to the full study on my blog for anyone who wanted to dig into the details.
+- I ran a case study using DistilRoBERTa to analyze emotions in Dead by Daylight Steam reviews.
+- I summarized the core findings directly in the Reddit post so people **didn’t** have to click my blog if they didn’t want to.
+- I included an infographic from the article to quickly convey the main results (the same one at the end of the essay).
+- I linked to the full study on my blog for anyone who wanted to dig into the details.
 
 That infographic? Made with AI, NotebookLM to be specific.
 
@@ -64,9 +64,9 @@ The article? Written by me, but like everything on BUT. Honestly, it was **assis
 
 So when people in the post started pointing out what I didn’t even try to hide, I responded honestly:
 
--   The infographic was made with AI.
--   The analysis used AI (NLP) for emotion detection.
--   The post was written by a human and reviewed and adjusted with AI.
+- The infographic was made with AI.
+- The analysis used AI (NLP) for emotion detection.
+- The post was written by a human and reviewed and adjusted with AI.
 
 I thought that level of transparency would build trust. It did the opposite.
 
@@ -74,9 +74,9 @@ I thought that level of transparency would build trust. It did the opposite.
 
 A chunk of the comments never got past one simple filter:
 
--   AI image → lazy, slop, untrustworthy
--   AI-assisted writing → fake, not worth reading
--   AI used anywhere → the entire study is suspect
+- AI image → lazy, slop, untrustworthy
+- AI-assisted writing → fake, not worth reading
+- AI used anywhere → the entire study is suspect
 
 They didn’t question the dataset.  
 They didn’t poke holes in the experimental setup.  
@@ -84,9 +84,9 @@ They didn’t argue with the conclusions.
 
 They went straight for:
 
--   “You could have made this yourself, there were tools 20 years ago that did this.”
--   “If you can’t be bothered to put in the effort to actually make it, no one is going to bother reading it.”
--   “Just more AI slop.”
+- “You could have made this yourself, there were tools 20 years ago that did this.”
+- “If you can’t be bothered to put in the effort to actually make it, no one is going to bother reading it.”
+- “Just more AI slop.”
 
 The irony is almost comical:  
 I did a case study on **AI-driven emotion analysis**, then got discredited because I used… AI… in the workflow.
@@ -101,9 +101,9 @@ I follow a specific format when [[mastering-effective-feedback-facts-feelings-cu
 
 What I got on Reddit was:
 
--   some facts (“You used an AI-generated infographic”)
--   a lot of feelings (“I hate this, I’m sick of AI everywhere”)
--   almost zero curiosity (“Can you show more of the raw data?” “Can you walk us through the model?”)
+- some facts (“You used an AI-generated infographic”)
+- a lot of feelings (“I hate this, I’m sick of AI everywhere”)
+- almost zero curiosity (“Can you show more of the raw data?” “Can you walk us through the model?”)
 
 There was a version of this conversation that could have been good:
 
@@ -129,27 +129,27 @@ It’s also exactly backwards: the people willing to **disclose** their AI use a
 
 Let’s get specific. For the [[distilroberta-emotion-analysis-nlp-case-study|Dead by Daylight emotion analysis]], here’s what **I** did:
 
--   Chose the topic and research question
--   Collected and cleaned Steam review and game patches data
--   Decided on the approach
--   Selected DistilRoBERTa and set up the pipeline
--   Ran the experiments, inspected outputs, and adjusted where needed
--   Interpreted results in the context of the game (perks, metas, design decisions, community sentiment)
--   Decided which findings were meaningful or surprising
+- Chose the topic and research question
+- Collected and cleaned Steam review and game patches data
+- Decided on the approach
+- Selected DistilRoBERTa and set up the pipeline
+- Ran the experiments, inspected outputs, and adjusted where needed
+- Interpreted results in the context of the game (perks, metas, design decisions, community sentiment)
+- Decided which findings were meaningful or surprising
 
 Here’s what **AI** did:
 
--   Helped me draft and refine the article text
-    -   I wrote the overall draft, AI helped me untangle clunky sentences and tighten structure or rewrite some parts that just didn’t feel right.
--   Generated a quick infographic from the numbers I provided
-    -   Because I would rather not spend a weekend learning a design tool to make one chart.
--   Pointed out a few places where the explanation could be clearer or more digestible for non-ML readers.
+- Helped me draft and refine the article text
+  - I wrote the overall draft, AI helped me untangle clunky sentences and tighten structure or rewrite some parts that just didn’t feel right.
+- Generated a quick infographic from the numbers I provided
+  - Because I would rather not spend a weekend learning a design tool to make one chart.
+- Pointed out a few places where the explanation could be clearer or more digestible for non-ML readers.
 
 If AI disappeared tomorrow, I would still:
 
--   care about the same questions
--   run the same analyses
--   stand behind the same conclusions
+- care about the same questions
+- run the same analyses
+- stand behind the same conclusions
 
 That’s also how I frame it on my [AI tools page](/artificial-intelligence-tools/): AI is allowed to help with **expression and packaging**, not with thinking or integrity.
 
@@ -159,10 +159,10 @@ If your standard is: “Anything less than doing everything by hand is morally c
 
 But let’s be consistent, then:
 
--   No more calculators.
--   No more IDEs with autocomplete.
--   No more no-code dashboards, blogging platforms, or layout tools.
--   Back to Notepad and FTP for everyone.
+- No more calculators.
+- No more IDEs with autocomplete.
+- No more no-code dashboards, blogging platforms, or layout tools.
+- Back to Notepad and FTP for everyone.
 
 We don’t actually live like that.
 
@@ -171,20 +171,20 @@ Until the tool is called “AI,” and then we pretend it erases the human.
 
 ## The Weird Double Standard Around Writing
 
-I’ve written before about [[vibe-writing-line-between-human-machine|vibe writing in 2025]]: our tolerance for AI changes dramatically depending on *where* it shows up.
+I’ve written before about [[vibe-writing-line-between-human-machine|vibe writing in 2025]]: our tolerance for AI changes dramatically depending on _where_ it shows up.
 
--   AI helping you refactor code? Efficient. Smart.
--   AI helping you phrase something better? Suspicious. Inauthentic.
--   AI summarizing a long document? Useful.
--   AI helping you write a blog post? “So you didn’t really write it, then.”
+- AI helping you refactor code? Efficient. Smart.
+- AI helping you phrase something better? Suspicious. Inauthentic.
+- AI summarizing a long document? Useful.
+- AI helping you write a blog post? “So you didn’t really write it, then.”
 
 Writing is tied to identity. People see it as their voice, their self.
 
 So when they see text that feels “AI-ish” or an AI-branded infographic, their brain goes:
 
-> “You tricked me. This isn’t *you*.”
+> “You tricked me. This isn’t _you_.”
 
-Even when it actually *is* you, your thinking, your structure, and your decisions, with a tool smoothing the edges. And that’s precisely why this Reddit experience got to me on a personal level.
+Even when it actually _is_ you, your thinking, your structure, and your decisions, with a tool smoothing the edges. And that’s precisely why this Reddit experience got to me on a personal level.
 
 I’m not interested in pretending I don’t use that tool. If an AI model helps me say what I mean more clearly, I’m going to use it.
 
@@ -230,8 +230,8 @@ In some spaces, leading with an obvious AI-generated visual or AI-smoothed tone 
 As a leader, that doesn’t mean I abandon my tools.  
 It means I:
 
--   adjust how I present my work depending on the audience
--   or decide that some audiences just aren’t worth the energy
+- adjust how I present my work depending on the audience
+- or decide that some audiences just aren’t worth the energy
 
 ### 3\. Know When to Stop Playing
 
@@ -253,25 +253,25 @@ If anything, this experience strengthened my previous position.
 
 AI is allowed to:
 
--   help me express myself more clearly
--   speed up boring or fiddly tasks (infographics, rewrites, structure)
--   translate my thoughts into cleaner prose
--   act as a rubber duck for thinking through ideas
+- help me express myself more clearly
+- speed up boring or fiddly tasks (infographics, rewrites, structure)
+- translate my thoughts into cleaner prose
+- act as a rubber duck for thinking through ideas
 
 AI is **not** allowed to:
 
--   decide what I think
--   fabricate data or results
--   publish anything I wouldn’t sign with my own name
--   replace my responsibility for what appears under “BUT. Honestly”
+- decide what I think
+- fabricate data or results
+- publish anything I wouldn’t sign with my own name
+- replace my responsibility for what appears under “BUT. Honestly”
 
 If that still makes some people see my work as invalid, that’s their standard, not mine. I’m not going to pretend I hand-crafted every pixel and syllable to prove I “deserve” to be heard.
 
 I’d rather spend my limited time doing what actually matters:
 
--   building things I care about
--   studying the things I love
--   writing honestly about the strange, frustrating, exciting ways humans and machines collide
+- building things I care about
+- studying the things I love
+- writing honestly about the strange, frustrating, exciting ways humans and machines collide
 
 If part of that involves letting an AI model help me shape an essay or generate a halfway decent chart in five seconds, I can live with that.
 

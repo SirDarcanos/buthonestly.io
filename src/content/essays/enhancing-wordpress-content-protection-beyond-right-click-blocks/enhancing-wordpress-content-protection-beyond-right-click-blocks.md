@@ -20,11 +20,11 @@ Trying to protect your content by blocking right-clicks? You’re actually locki
 
 > [!summary]- Quick Summary
 >
-> -   Blocking right-clicks barely slows content thieves but heavily disrupts normal browsing habits like opening tabs or using lookup tools.
-> -   It actively harms accessibility, breaking workflows for screen readers, assistive extensions, and people who rely on browser-level reading aids.
-> -   Overzealous “protection” also slows support and development, making debugging and collaboration harder for the people maintaining your site.
-> -   Smarter options include clear copyright notices, watermarked images, Google Alerts, DMCA action, and restricting premium content to logged-in users.
-> -   True protection balances usability, accessibility, and trust instead of fighting the browser and punishing legitimate visitors.
+> - Blocking right-clicks barely slows content thieves but heavily disrupts normal browsing habits like opening tabs or using lookup tools.
+> - It actively harms accessibility, breaking workflows for screen readers, assistive extensions, and people who rely on browser-level reading aids.
+> - Overzealous “protection” also slows support and development, making debugging and collaboration harder for the people maintaining your site.
+> - Smarter options include clear copyright notices, watermarked images, Google Alerts, DMCA action, and restricting premium content to logged-in users.
+> - True protection balances usability, accessibility, and trust instead of fighting the browser and punishing legitimate visitors.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
@@ -58,9 +58,9 @@ And your visitors? They’re mostly there to read, not steal. Putting barriers b
 Blocking right-clicks doesn’t just hurt usability; it can break accessibility.  
 For example:
 
--   Screen reader users often depend on context menus to navigate.
--   Assistive tools such as translation or reading extensions may fail.
--   Users with cognitive or learning disabilities sometimes rely on right-click tools to adjust reading settings.
+- Screen reader users often depend on context menus to navigate.
+- Assistive tools such as translation or reading extensions may fail.
+- Users with cognitive or learning disabilities sometimes rely on right-click tools to adjust reading settings.
 
 Good design doesn’t sacrifice accessibility for control.
 
