@@ -1,32 +1,37 @@
 ---
 import AudioPlayer from "../components/AudioPlayer.astro";
 import Divider from "../components/Divider.astro";
+import Downloads from "../components/Downloads.astro";
 import Image from "../components/Image.astro";
 import ReadTime from "../components/ReadTime.astro";
+import TableOfContents from "../components/TableOfContents.astro";
 import SinglePost from "../layouts/SinglePost.astro";
-import { getAllPosts, getRelatedPosts } from "../lib/wordpress";
+import { getPublishedEssays, getRelatedPosts, toPost } from "../lib/essays";
 
+import { render, type CollectionEntry } from "astro:content";
 import { type Post } from "../types.ts";
 
 export async function getStaticPaths() {
-  const posts = await getAllPosts();
+  const entries = await getPublishedEssays();
   return Promise.all(
-    posts.map(async (post) => ({
-      params: { slug: post.slug },
+    entries.map(async (entry) => ({
+      params: { slug: entry.id },
       props: {
-        post,
-        related: await getRelatedPosts(post, 3),
+        entry,
+        related: await getRelatedPosts(toPost(entry), 3),
       },
     })),
   );
 }
 
 interface Props {
-  post: Post;
+  entry: CollectionEntry<"essays">;
   related: Post[];
 }
 
-const { post, related } = Astro.props;
+const { entry, related } = Astro.props;
+const post = toPost(entry);
+const { Content, headings } = await render(entry);
 const publishDate = new Date(post.date);
 ---
 
@@ -45,7 +50,7 @@ const publishDate = new Date(post.date);
         </span>
         <Divider width={20} />
         <span class="meta"
-          ><ReadTime content={post.contentHtml} suffix="min read" /></span
+          ><ReadTime content={post.body} suffix="min read" /></span
         >
       </div>
       <h1>{post.title}</h1>
@@ -69,25 +74,34 @@ const publishDate = new Date(post.date);
     </header>
 
     {/* FEATURED IMAGE */}
-    <Image
-      src={post.featuredImage!}
-      alt={post.featuredImageAlt ?? ""}
-      caption={post.featuredImageCaption ?? ""}
-      width={1600}
-      height={900}
-      widths={[580, 1160]}
-      sizes="(max-width: 820px) 100vw, 580px"
-      class="w-full"
-      priority
-    />
+    {
+      post.featuredImage && (
+        <Image
+          src={post.featuredImage}
+          alt={post.featuredImageAlt ?? ""}
+          caption={post.featuredImageCaption ?? ""}
+          width={1600}
+          height={900}
+          widths={[580, 1160]}
+          sizes="(max-width: 820px) 100vw, 580px"
+          class="w-full"
+          priority
+        />
+      )
+    }
+
+    {/* TABLE OF CONTENTS */}
+    <TableOfContents headings={headings} />
 
     {/* POST CONTENT */}
-    <div class="post-content mt-7" set:html={post.contentHtml} />
+    <div class="post-content mt-7"><Content /></div>
 
     <p class="meta font-bold">
       <span class="bg-accent mr-3 inline-block size-2"></span>End
     </p>
   </article>
+
+  <Downloads downloads={entry.data.downloads} />
 
   {/* RELATED POSTS */}
   {
@@ -103,7 +117,7 @@ const publishDate = new Date(post.date);
                 </a>
               </h3>
               <p class="meta mt-2 text-right">
-                <ReadTime content={rel.contentHtml} />
+                <ReadTime content={rel.body} />
               </p>
             </li>
           ))}

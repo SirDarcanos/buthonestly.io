@@ -3,7 +3,7 @@ import Divider from "./Divider.astro";
 import Logo from "./Logo.astro";
 import Nav from "./Nav.astro";
 
-import { getCategories } from "../lib/wordpress.ts";
+import { getCategories } from "../lib/essays.ts";
 
 const categories = await getCategories();
 const categoryLinks = categories.map((category) => ({

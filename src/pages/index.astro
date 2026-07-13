@@ -2,7 +2,7 @@
 import Highlight from "../components/Highlight.astro";
 import Home from "../layouts/Home.astro";
 import ReadTime from "../components/ReadTime.astro";
-import { getAllPosts } from "../lib/wordpress";
+import { getAllPosts } from "../lib/essays";
 
 const posts = await getAllPosts();
 const [lead, ...rest] = posts;
@@ -43,7 +43,7 @@ const currentMonth = new Date().toLocaleString("default", {
               <p class="label text-left">{post.categories.join(", ")}</p>
               <div class="meta flex gap-2">
                 <p>{postDate}</p> &middot;
-                <ReadTime content={post.contentHtml} />
+                <ReadTime content={post.body} />
               </div>
             </div>
             <h3>

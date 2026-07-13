@@ -3,7 +3,7 @@ import FeaturedPosts from "../../../components/FeaturedPosts.astro";
 import Layout from "../../../layouts/Layout.astro";
 import ReadTime from "../../../components/ReadTime.astro";
 
-import { getAllPosts, getCategories } from "../../../lib/wordpress";
+import { getAllPosts, getCategories } from "../../../lib/essays";
 
 import type { GetStaticPaths, Page } from "astro";
 import { type Post, type Tax } from "../../../types.ts";
@@ -84,7 +84,7 @@ const regularPosts = isFirstPage ? page.data.slice(2) : page.data;
               </div>
               <div class="meta text-right">
                 <p class="text-accent">{postDate}</p>
-                <ReadTime content={post.contentHtml} />
+                <ReadTime content={post.body} />
               </div>
             </article>
           );

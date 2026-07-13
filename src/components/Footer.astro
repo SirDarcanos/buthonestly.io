@@ -3,7 +3,7 @@ import Logo from "./Logo.astro";
 import Nav from "./Nav.astro";
 import Socials from "./Socials.astro";
 
-import { getTags } from "../lib/wordpress.ts";
+import { getTags } from "../lib/essays.ts";
 
 const tags = await getTags();
 const tagLinks = tags.map((tag) => ({

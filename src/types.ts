@@ -1,12 +1,12 @@
 export type PostLink = Pick<Post, "title" | "slug">;
 
 export type Post = {
-  id: number;
+  id: string; // slug
   slug: string;
   url: string;
   type: "post";
   title: string;
-  contentHtml: string;
+  body: string; // raw Markdown (used for reading-time; the page renders <Content />)
   excerpt: string;
   date: string; // ISO
   modified: string; // ISO

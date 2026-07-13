@@ -5,11 +5,15 @@
 const WORDS_PER_MINUTE = 225;
 const segmenter = new Intl.Segmenter("en", { granularity: "word" });
 
-/** Number of words in `input`, after stripping HTML tags + entities. */
+/** Number of words in `input`, after stripping Markdown/HTML markup. */
 function countWords(input: string): number {
   const text = input
-    .replace(/<[^>]+>/g, " ")
-    .replace(/&[a-z0-9#]+;/gi, " ")
+    .replace(/```[\s\S]*?```/g, " ") // fenced code blocks
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, " ") // images (drop alt + URL)
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1") // links → their text
+    .replace(/<[^>]+>/g, " ") // HTML tags
+    .replace(/[#>*_`~|-]/g, " ") // Markdown syntax
+    .replace(/&[a-z0-9#]+;/gi, " ") // HTML entities
     .replace(/\s+/g, " ")
     .trim();
 
