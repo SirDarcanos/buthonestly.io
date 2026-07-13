@@ -1,0 +1,9 @@
+---
+/** Uppercase, tracked eyebrow/kicker (Archivo). */
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<p class:list={["label", className]}><slot /></p>

@@ -1,0 +1,14 @@
+---
+// Centered content block; `section` renders a <section> with py-16 rhythm.
+interface Props {
+  section?: boolean;
+  id?: string;
+  className?: string;
+}
+const { section = false, id, className } = Astro.props;
+const Tag = section ? "section" : "div";
+---
+
+<Tag id={id} class:list={["mx-auto w-full", section && "py-16", className]}>
+  <slot />
+</Tag>

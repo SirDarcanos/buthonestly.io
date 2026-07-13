@@ -1,10 +1,10 @@
 ---
 import type { Post } from "../types.ts";
+import { SITE_URL, SITE_TITLE, SITE_DESCRIPTION } from "../consts.ts";
 
-const SITE_URL = "https://nicolamustone.com";
-const SITE_NAME = "Nicola Mustone";
-const DEFAULT_DESCRIPTION = "Does things and ships them";
-const DEFAULT_OG_IMAGE = `${SITE_URL}/wp-content/uploads/2025/11/nicolamustone.png`;
+const SITE_NAME = SITE_TITLE;
+const AUTHOR_NAME = "Nicola Mustone";
+const AUTHOR_URL = "https://nicolamustone.com";
 const TWITTER_HANDLE = "@nicolamustone";
 
 interface Props {
@@ -19,9 +19,9 @@ interface Props {
 
 const {
   title,
-  description = DEFAULT_DESCRIPTION,
+  description = SITE_DESCRIPTION,
   canonical = new URL(Astro.url.pathname, SITE_URL).href,
-  ogImage = DEFAULT_OG_IMAGE,
+  ogImage,
   type = "website",
   article,
   noindex = false,
@@ -33,8 +33,8 @@ const resolvedOgImage = article?.seo.ogImage ?? ogImage;
 
 const PERSON = {
   "@type": "Person",
-  name: SITE_NAME,
-  url: SITE_URL,
+  name: AUTHOR_NAME,
+  url: AUTHOR_URL,
   sameAs: [
     "https://bsky.app/profile/nicolamustone.bsky.social",
     "https://github.com/SirDarcanos",
@@ -55,7 +55,7 @@ if (type === "website") {
     "@type": "WebSite",
     name: SITE_NAME,
     url: SITE_URL,
-    description: DEFAULT_DESCRIPTION,
+    description: SITE_DESCRIPTION,
   });
 }
 
@@ -97,7 +97,7 @@ if (article) {
 <meta property="og:description" content={description} />
 <meta property="og:url" content={resolvedCanonical} />
 <meta property="og:site_name" content={SITE_NAME} />
-<meta property="og:image" content={resolvedOgImage} />
+{resolvedOgImage && <meta property="og:image" content={resolvedOgImage} />}
 <meta property="og:locale" content="en_US" />
 {
   article && (
@@ -110,10 +110,13 @@ if (article) {
 }
 
 {/* Twitter Card */}
-<meta name="twitter:card" content="summary_large_image" />
+<meta
+  name="twitter:card"
+  content={resolvedOgImage ? "summary_large_image" : "summary"}
+/>
 <meta name="twitter:title" content={fullTitle} />
 <meta name="twitter:description" content={description} />
-<meta name="twitter:image" content={resolvedOgImage} />
+{resolvedOgImage && <meta name="twitter:image" content={resolvedOgImage} />}
 <meta name="twitter:site" content={TWITTER_HANDLE} />
 <meta name="twitter:creator" content={TWITTER_HANDLE} />
 
