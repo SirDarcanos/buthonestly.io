@@ -275,34 +275,42 @@ At a high level, MiniRes works like this:
 
 Install the dependencies of Minires:
 
-pip install tensorflow xgboost pandas numpy huggingface\_hub
+```bash
+pip install tensorflow xgboost pandas numpy huggingface_hub
+```
 
 Then import MiniRes in your project:
 
+```python
 from minires import minires
+```
 
 ### Basic Usage
 
 A minimal example:
 
+```python
 import pandas as pd
 from minires import minires
 
 # 1. Load STL features (see stl-scanner below)
-df = pd.read\_csv("stl\_features.csv")
+df = pd.read_csv("stl_features.csv")
 
 # 2. Create the ensemble model
 model = minires()  # downloads weights from Hugging Face on first run
 
 # 3. Predict resin usage in grams
-y\_pred = model.predict(df)
+y_pred = model.predict(df)
 
-print(y\_pred\[:10\])
+print(y_pred[:10])
+```
 
 MiniRes requires a very specific set of features to work. You can inspect them at runtime:
 
+```python
 model = minires()
 print(model.features)
+```
 
 Your dataframe must contain at least those columns. Extra columns are ignored; missing required ones will trigger a clear error.
 
@@ -312,7 +320,9 @@ To avoid writing your own geometry pipeline, the Hugging Face repo includes a he
 
 Make sure you install `trimesh` if you don’t have it already:
 
+```bash
 pip install trimesh
+```
 
 The script accepts:
 
@@ -325,14 +335,16 @@ The script accepts:
 
 Typical usage:
 
-\# Scan all STLs in the current folder
+```bash
+# Scan all STLs in the current folder
 python stl-scanner.py
 
 # Scan a single file
-python stl-scanner.py --stl\_path /path/to/model.stl --output\_path ./out
+python stl-scanner.py --stl_path /path/to/model.stl --output_path ./out
 
 # Scan all STLs in a folder (non-recursive)
-python stl-scanner.py --stl\_path /path/to/stls --output\_path ./features
+python stl-scanner.py --stl_path /path/to/stls --output_path ./features
+```
 
 After this, you will have a `stl_features.csv` file in the output folder with one row per STL. That CSV is ready to be passed to MiniRes.
 
@@ -347,25 +359,26 @@ Pricing a miniature usually includes at least:
 
 You can handle that with a simple script that sits next to `stl-scanner.py`. Create a new Python file (or download the one at the end of this essay), adjust the constants at the top, run it after scanning, and it writes a CSV you can open in your spreadsheet tool.
 
+```python
 from pathlib import Path
 
 import pandas as pd
 from minires import minires
 
 # ==== Edit these numbers for your context ====
-RESIN\_COST\_PER\_GRAM = 0.06   # in your currency, e.g. 0.06 = €0.06/gram
-OVERHEAD\_PER\_MINI = 1.50     # fixed overhead per miniature (packaging, time, etc.)
-INPUT\_CSV = Path("stl\_features.csv")
-OUTPUT\_CSV = Path("mini\_pricing.csv")
+RESIN_COST_PER_GRAM = 0.06   # in your currency, e.g. 0.06 = €0.06/gram
+OVERHEAD_PER_MINI = 1.50     # fixed overhead per miniature (packaging, time, etc.)
+INPUT_CSV = Path("stl_features.csv")
+OUTPUT_CSV = Path("mini_pricing.csv")
 # =============================================
 
 def main() -> None:
-    if not INPUT\_CSV.exists():
-        raise SystemExit(f"Input CSV not found: {INPUT\_CSV}. "
+    if not INPUT_CSV.exists():
+        raise SystemExit(f"Input CSV not found: {INPUT_CSV}. "
                          "Run stl-scanner.py first.")
 
     # Load STL features produced by stl-scanner.py
-    df = pd.read\_csv(INPUT\_CSV)
+    df = pd.read_csv(INPUT_CSV)
 
     # Create MiniRes ensemble model
     model = minires(verbose=0)
@@ -373,16 +386,17 @@ def main() -> None:
     # Predict resin usage in grams
     grams = model.predict(df)
 
-    df\["predicted\_grams"\] = grams
-    df\["resin\_cost"\] = df\["predicted\_grams"\] \* RESIN\_COST\_PER\_GRAM
-    df\["overhead"\] = OVERHEAD\_PER\_MINI
-    df\["total\_cost"\] = df\["resin\_cost"\] + df\["overhead"\]
+    df["predicted_grams"] = grams
+    df["resin_cost"] = df["predicted_grams"] * RESIN_COST_PER_GRAM
+    df["overhead"] = OVERHEAD_PER_MINI
+    df["total_cost"] = df["resin_cost"] + df["overhead"]
 
-    df.to\_csv(OUTPUT\_CSV, index=False)
-    print(f"Wrote pricing table to {OUTPUT\_CSV.resolve()}")
+    df.to_csv(OUTPUT_CSV, index=False)
+    print(f"Wrote pricing table to {OUTPUT_CSV.resolve()}")
 
-if \_\_name\_\_ == "\_\_main\_\_":
+if __name__ == "__main__":
     main()
+```
 
 A typical workflow looks like this:
 
@@ -446,4 +460,4 @@ The question that started it all is still the one I come back to whenever some p
 
 In this case, the answer happened to be a tiny model that knows how to calculate resin faster than I can at the end of a long day.
 
-If you want to download the models and use them yourself, you can find them here.
+If you want to download the models and use them yourself, you can find them in the **Downloads** section below.

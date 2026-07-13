@@ -81,57 +81,59 @@ You are about to edit PHP. Even a missing semicolon can break your site. Before 
 
 This script filters related products based on their shared attributes. It offers a more accurate selection than the standard category or tag-based approach built into WooCommerce.
 
-/\*\*
- \* @snippet       Get Related Products by Attributes
- \* @author        Nicola Mustone
- \* @author\_url    https://buthonestly.io/programming/improve-woocommerce-related-products-recommendations/
- \* @tested-up-to  WooCommerce 10.3.X
- \* @license       GPLv2
- \*/
-add\_filter( 'woocommerce\_related\_products', 'nm\_related\_products\_by\_attributes', 10, 3 );
-function nm\_related\_products\_by\_attributes( $related\_posts, $product\_id, $args ) {
-    $product = wc\_get\_product( $product\_id );
+```php
+/**
+ * @snippet       Get Related Products by Attributes
+ * @author        Nicola Mustone
+ * @author_url    https://buthonestly.io/programming/improve-woocommerce-related-products-recommendations/
+ * @tested-up-to  WooCommerce 10.3.X
+ * @license       GPLv2
+ */
+add_filter( 'woocommerce_related_products', 'nm_related_products_by_attributes', 10, 3 );
+function nm_related_products_by_attributes( $related_posts, $product_id, $args ) {
+    $product = wc_get_product( $product_id );
 	
-	$attributes           = array( 'pa\_attribute\_1', 'pa\_attribute\_2', 'pa\_attribute\_3' );
-	$new\_related\_products = array();
+	$attributes           = array( 'pa_attribute_1', 'pa_attribute_2', 'pa_attribute_3' );
+	$new_related_products = array();
 	
 	foreach( $attributes as $attribute ) {
-		$terms = $product->get\_attribute( $attribute );
+		$terms = $product->get_attribute( $attribute );
 		
 		if ( ! empty( $terms ) ) {
-			$new\_related\_products = array\_merge( $new\_related\_products, nm\_get\_related\_products( $product\_id, $attribute, $terms ) );
+			$new_related_products = array_merge( $new_related_products, nm_get_related_products( $product_id, $attribute, $terms ) );
 		}
 	}
 	
-	if ( count( $new\_related\_products ) < 4 ) {
-		$related\_posts = array\_slice( array\_merge( $new\_related\_products, $related\_posts ), 0, 4 );
+	if ( count( $new_related_products ) < 4 ) {
+		$related_posts = array_slice( array_merge( $new_related_products, $related_posts ), 0, 4 );
 	} else {
-		$related\_posts = array\_slice( $new\_related\_products, 0, 4 );
+		$related_posts = array_slice( $new_related_products, 0, 4 );
 	}
 
-    return $related\_posts;
+    return $related_posts;
 }
 
-function nm\_get\_related\_products( $product\_id, $attribute, $terms ) {
+function nm_get_related_products( $product_id, $attribute, $terms ) {
 	$args = array(
-		'post\_type'      => 'product',
-		'posts\_per\_page' => 4,
-		'post\_\_not\_in'   => array( $product\_id ),
+		'post_type'      => 'product',
+		'posts_per_page' => 4,
+		'post__not_in'   => array( $product_id ),
 		'orderby'        => 'rand',
-		'tax\_query'      => array(
+		'tax_query'      => array(
 			array(
 				'taxonomy' => $attribute,
 				'field'    => 'name',
-				'terms'    => array\_map( 'trim', explode( ',', $terms ) ),
+				'terms'    => array_map( 'trim', explode( ',', $terms ) ),
 			),
 		),
 	);
 
-	$query            = new WP\_Query( $args );
-	$related\_products = wp\_list\_pluck( $query->posts, 'ID' );
+	$query            = new WP_Query( $args );
+	$related_products = wp_list_pluck( $query->posts, 'ID' );
 
-    return $related\_products;
+    return $related_products;
 }
+```
 
 The snippet also covers cases with less than four related products by attributes. It can add additional product recommendations determined by WooCommerce on categories and tags. This ensures a consistent display of four items.
 

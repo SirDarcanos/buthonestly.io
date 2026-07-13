@@ -58,10 +58,12 @@ Your first line sets the tone. It can be as simple as a friendly greeting or as 
 
 For example, here’s how I start mine:
 
+```xml
 <h1 align="center">Hi, I'm Nico 👋</h1>
 <p align="center">
   <a href="https://buthonestly.io/"><img src="https://readme-typing-svg.demolab.com?font=&duration=3000&pause=1000&color=F0F6FC&center=true&vCenter=true&repeat=false&width=435&lines=Support+Lead+%40+Automattic;Writer+%40+nicolamustone.blog;Python%2FPHP+programmer;Leader.+Writer.+Builder." alt="Typing SVG" /></a>
 </p>
+```
 
 This uses [readme-typing-svg](https://readme-typing-svg.demolab.com/demo/) to animate a few short lines of text and badges for my links (more on this below). It adds personality without clutter. This is how it looks like:
 
@@ -82,12 +84,14 @@ They’re powered by [Shields.io](https://shields.io) and support logos, colors,
 
 Example (from my profile):
 
+```xml
 <p align="center">
-  <a href="https://buthonestly.io/" target="\_blank"><img alt="Website" src="https://img.shields.io/badge/Blog-8440dd.svg?&style=for-the-badge&logo=wordpress&logoColor=white" /></a>
-  <a href="https://www.linkedin.com/in/nicolamustone/" target="\_blank"><img alt="LinkedIn" src="https://img.shields.io/badge/LinkedIn-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white" /></a>
-  <a href="https://x.com/intent/follow?screen\_name=nicolamustone&tw\_p=followbutton" target="\_blank"><img alt="Follow on X" src="https://img.shields.io/badge/Follow\_on\_X-ffffff.svg?&style=for-the-badge&logo=x&logoColor=black" /></a>
-  <a href="https://profiles.wordpress.org/nicolamustone/" target="\_blank"><img alt="WordPress.org" src="https://img.shields.io/badge/WordPress.org-21759B.svg?&style=for-the-badge&logo=wordpress&logoColor=white" /></a>
+  <a href="https://buthonestly.io/" target="_blank"><img alt="Website" src="https://img.shields.io/badge/Blog-8440dd.svg?&style=for-the-badge&logo=wordpress&logoColor=white" /></a>
+  <a href="https://www.linkedin.com/in/nicolamustone/" target="_blank"><img alt="LinkedIn" src="https://img.shields.io/badge/LinkedIn-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white" /></a>
+  <a href="https://x.com/intent/follow?screen_name=nicolamustone&tw_p=followbutton" target="_blank"><img alt="Follow on X" src="https://img.shields.io/badge/Follow_on_X-ffffff.svg?&style=for-the-badge&logo=x&logoColor=black" /></a>
+  <a href="https://profiles.wordpress.org/nicolamustone/" target="_blank"><img alt="WordPress.org" src="https://img.shields.io/badge/WordPress.org-21759B.svg?&style=for-the-badge&logo=wordpress&logoColor=white" /></a>
 </p>
+```
 
 These badges make your key links visible without forcing visitors to scroll or read through long paragraphs.
 
@@ -126,6 +130,7 @@ A visual “tech stack” section is a great middle ground between design and su
 
 Example snippet:
 
+```xml
 <p>
   <img alt="Python" src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" />
   <img alt="TensorFlow" src="https://img.shields.io/badge/TensorFlow-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white" />
@@ -134,14 +139,17 @@ Example snippet:
   <img alt="Claude" src="https://img.shields.io/badge/Claude-D97757?style=for-the-badge&logo=claude&logoColor=white" />
   <img alt="PyCharm" src="https://img.shields.io/badge/PyCharm-000000?style=for-the-badge&logo=pycharm&logoColor=white" />
 </p>
+```
 
 You can use badges, plain lists, or even icons. Some designers prefer a visual grid of logos; developers often prefer badges with color codes that match their stack.
 
 If you want to highlight versatility, group tools by category:
 
-\*\*Languages:\*\* Python, PHP, JavaScript  
-\*\*Frameworks:\*\* WordPress, FastAPI  
-\*\*Tools:\*\* Docker, Jupyter, GitHub Actions
+```bash
+**Languages:** Python, PHP, JavaScript  
+**Frameworks:** WordPress, FastAPI  
+**Tools:** Docker, Jupyter, GitHub Actions
+```
 
 This small change adds context and readability.
 
@@ -151,22 +159,25 @@ This is where your README can evolve into something *alive*. Using GitHub Action
 
 In my profile, I use these for sections like “Programming,” “Leadership,” and “Web Tech”:
 
-\#### 🧠 Programming
+```bash
+#### 🧠 Programming
 <ul>
 <!-- PROGRAMMING:START -->
 <!-- PROGRAMMING:END -->
 </ul>
+```
 
 Those comments tell a future automation (a GitHub Action) where to insert new content — like recent blog posts, GitHub commits, or other data.
 
 For my profile, I created an action that pulls articles from my blog’s RSS feed and prints them. The file goes into the `.github/workflows/` folder in the repository. Name it `anything-you-like.yml`. The content will be the intructions to execute. For my profile it’s the following:
 
+```yaml
 name: Latest blog post workflow
 
 on:
   schedule:
-    - cron: '0 3 \* \* \*'   # Every day 03:00 UTC
-  workflow\_dispatch:
+    - cron: '0 3 * * *'   # Every day 03:00 UTC
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -182,31 +193,32 @@ jobs:
       - name: Update Programming posts
         uses: gautamkrishnar/blog-post-workflow@master
         with:
-          feed\_list: "https://buthonestly.io/category/programming/feed/"
-          max\_post\_count: 3
-          comment\_tag\_name: "PROGRAMMING"
+          feed_list: "https://buthonestly.io/category/programming/feed/"
+          max_post_count: 3
+          comment_tag_name: "PROGRAMMING"
           template: "<li><em>$date</em> <a href='$url'>$title</a></li>"
-          date\_format: "UTC: yyyy-mm-dd"
+          date_format: "UTC: yyyy-mm-dd"
 
       # Leadership
       - name: Update Leadership posts
         uses: gautamkrishnar/blog-post-workflow@master
         with:
-          feed\_list: "https://buthonestly.io/category/leadership/feed/"
-          max\_post\_count: 3
-          comment\_tag\_name: "LEADERSHIP"
+          feed_list: "https://buthonestly.io/category/leadership/feed/"
+          max_post_count: 3
+          comment_tag_name: "LEADERSHIP"
           template: "<li><em>$date</em> <a href='$url'>$title</a></li>"
-          date\_format: "UTC: yyyy-mm-dd"
+          date_format: "UTC: yyyy-mm-dd"
 
       # Web Tech
       - name: Update Web Tech posts
         uses: gautamkrishnar/blog-post-workflow@master
         with:
-          feed\_list: "https://buthonestly.io/category/web-tech/feed/"
-          max\_post\_count: 3
-          comment\_tag\_name: "WEB"
+          feed_list: "https://buthonestly.io/category/web-tech/feed/"
+          max_post_count: 3
+          comment_tag_name: "WEB"
           template: "<li><em>$date</em> <a href='$url'>$title</a></li>"
-          date\_format: "UTC: yyyy-mm-dd"
+          date_format: "UTC: yyyy-mm-dd"
+```
 
 How this automation works:
 
@@ -223,12 +235,14 @@ Even a single sentence can shift your profile from “technical” to “memorab
 
 Example (mine):
 
-\### Outside of work
+```bash
+### Outside of work
 When I’m not working, I’m probably:  
-- Running long-form \*Dungeons & Dragons\* campaigns
-- Writing new essays on \[buthonestly.io/\](/)
+- Running long-form *Dungeons & Dragons* campaigns
+- Writing new essays on [buthonestly.io/](/)
 - Coding on some project that will likely become public
-- Or playing games (currently: \*Dead by Daylight & Killing Floor 3\*)
+- Or playing games (currently: *Dead by Daylight & Killing Floor 3*)
+```
 
 It gives people something human to remember.
 

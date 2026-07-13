@@ -82,12 +82,14 @@ If you want to take that last one further, consider adding a logout link to your
 
 If you really intend to prevent malicious users from copying your content, you can use add this CSS code in **Appearance > Additional CSS** to disable the feature via CSS:
 
+```css
 body {
-  -webkit-user-select: none; /\* Safari \*/
-  -moz-user-select: none; /\* Firefox \*/
-  -ms-user-select: none; /\* IE10+/Edge \*/
-  user-select: none; /\* Standard \*/
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
 }
+```
 
 Remember though, not even this method will save your content if someone has the intention of stealing it. I would recommend against it.
 

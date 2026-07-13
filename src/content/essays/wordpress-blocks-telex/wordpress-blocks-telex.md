@@ -1,10 +1,9 @@
 ---
 title: Vibe Coding WordPress Blocks with Telex
 date: 2025-12-01T02:00:00
-updated: 2026-05-12T22:42:30
+updated: 2026-07-12T16:50:00
 draft: false
-excerpt: Telex turns natural-language prompts into working WordPress blocks,
-  bringing vibe coding directly into the Gutenberg editor world.
+excerpt: Telex turns natural-language prompts into working WordPress blocks, bringing vibe coding directly into the Gutenberg editor world.
 categories:
   - Web
 tags:
@@ -77,23 +76,27 @@ If tools like Cursor and Lovable are broad-spectrum vibe coding, Telex is the â€
 
 To see what this feels like in practice, I used Telex to build a Christmas Quote Generator block. The entire thing started and ended with one prompt:
 
-> Create a WordPress block that displays random Christmas quotes from a preset PHP array of 100 quotes.  
->   
-> On the frontend, show one quote at a time with a refresh button that loads a new random quote without page reload using AJAX or REST API.  
->   
-> In the block editor, provide color controls for text color and background color of the quote container. Inherit all typography settings from the core paragraph block including font family, font size, line height, and text decoration.  
->   
-> The quote should display in a styled container box that visually responds to the selected background color.  
-> Ensure the refresh button has clear visual affordance and provides instant feedback when clicked.  
->   
-> Store all quotes server-side in PHP for performance.  
-> The block should support full-width and wide alignment options.
+```text
+Create a WordPress block that displays random Christmas quotes from a preset PHP array of 100 quotes.  
+  
+On the frontend, show one quote at a time with a refresh button that loads a new random quote without page reload using AJAX or REST API.  
+   
+In the block editor, provide color controls for text color and background color of the quote container. Inherit all typography settings from the core paragraph block including font family, font size, line height, and text decoration.
+   
+The quote should display in a styled container box that visually responds to the selected background color.  
+Ensure the refresh button has clear visual affordance and provides instant feedback when clicked.  
+   
+Store all quotes server-side in PHP for performance.  
+The block should support full-width and wide alignment options.
+```
 
 That is not a short prompt, but it is still just English. No code. No file structure. No build commands.
 
 But honestly, thatâ€™s not the original prompt I used. Before you submit your prompt to Telex you can enhance your prompt within the interface itself. My initial prompt was this:
 
-> Create a WordPress block that displays random Christmas quotes from a preset PHP array of 100 quotes. The administrator must be able to change the color of the text and background container. Mimic the typography options of the paragraph block. On frontend, the user is able to refresh quotes with a button.
+```text
+Create a WordPress block that displays random Christmas quotes from a preset PHP array of 100 quotes. The administrator must be able to change the color of the text and background container. Mimic the typography options of the paragraph block. On frontend, the user is able to refresh quotes with a button.
+```
 
 The Enhance Prompt feature turned it into the more WordPress-appropriate prompt that you see above.
 

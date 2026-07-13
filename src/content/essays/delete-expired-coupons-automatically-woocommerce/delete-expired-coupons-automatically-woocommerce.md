@@ -49,66 +49,68 @@ You are about to edit PHP. Even a missing semicolon can break your site. Before 
 
 Open your **functions.php** file in **wp-content/themes/your-child-theme-name/** and add this code at the end of the file:
 
-/\*\*
- \* @snippet       Delete Expired Coupons Automatically
- \* @author        Nicola Mustone
- \* @author\_url    https://buthonestly.io/programming/delete-expired-coupons-automatically-woocommerce/
- \* @tested-up-to  WooCommerce 10.3.X
- \* @license       GPLv2
- \*/
+```php
+/**
+ * @snippet       Delete Expired Coupons Automatically
+ * @author        Nicola Mustone
+ * @author_url    https://buthonestly.io/programming/delete-expired-coupons-automatically-woocommerce/
+ * @tested-up-to  WooCommerce 10.3.X
+ * @license       GPLv2
+ */
 
-add\_action('delete\_expired\_coupons\_hook', function () {
-    $expired = new WP\_Query(\[
+add_action('delete_expired_coupons_hook', function () {
+    $expired = new WP_Query([
         'fields'         => 'ids',
-        'post\_type'      => 'shop\_coupon',
-        'post\_status'    => 'any',
-        'posts\_per\_page' => 500,
-        'no\_found\_rows'  => true,
+        'post_type'      => 'shop_coupon',
+        'post_status'    => 'any',
+        'posts_per_page' => 500,
+        'no_found_rows'  => true,
         'orderby'        => 'ID',
         'order'          => 'ASC',
-        'meta\_query'     => \[
+        'meta_query'     => [
             // has an expiry date
-            \[ 'key' => 'date\_expires', 'compare' => 'EXISTS' \],
+            [ 'key' => 'date_expires', 'compare' => 'EXISTS' ],
             // already expired
-            \[ 'key' => 'date\_expires', 'value' => time(), 'compare' => '<', 'type' => 'NUMERIC' \],
+            [ 'key' => 'date_expires', 'value' => time(), 'compare' => '<', 'type' => 'NUMERIC' ],
             // exclude AutomateWoo
-            \[ 'key' => '\_is\_aw\_coupon', 'value' => false \],
-        \],
-    \]);
+            [ 'key' => '_is_aw_coupon', 'value' => false ],
+        ],
+    ]);
 
-    foreach ( $expired->posts as $coupon\_id ) {
-        wp\_trash\_post( $coupon\_id );
+    foreach ( $expired->posts as $coupon_id ) {
+        wp_trash_post( $coupon_id );
     }
 });
 
-add\_action('init', function () {
-    if ( ! wp\_next\_scheduled('delete\_expired\_coupons\_hook') ) {
-        wp\_schedule\_event( time(), 'daily', 'delete\_expired\_coupons\_hook' );
+add_action('init', function () {
+    if ( ! wp_next_scheduled('delete_expired_coupons_hook') ) {
+        wp_schedule_event( time(), 'daily', 'delete_expired_coupons_hook' );
     }
 });
 
-add\_action('restrict\_manage\_posts', function () {
-    if ( 'shop\_coupon' !== ( $GLOBALS\['typenow'\] ?? '' ) ) return; ?>
+add_action('restrict_manage_posts', function () {
+    if ( 'shop_coupon' !== ( $GLOBALS['typenow'] ?? '' ) ) return; ?>
     <form method="post" style="display:inline;">
-        <input type="hidden" name="custom\_action" value="delete\_expired\_coupons">
-        <?php wp\_nonce\_field('custom\_delete\_expired\_coupons','custom\_delete\_nonce'); ?>
+        <input type="hidden" name="custom_action" value="delete_expired_coupons">
+        <?php wp_nonce_field('custom_delete_expired_coupons','custom_delete_nonce'); ?>
         <input type="submit" class="button" value="Delete Expired Coupons"
                onclick="return confirm('Delete all expired coupons now?');" />
     </form>
-    <?php if ( isset($\_GET\['custom\_deleted'\]) && 'true' === $\_GET\['custom\_deleted'\] ) {
+    <?php if ( isset($_GET['custom_deleted']) && 'true' === $_GET['custom_deleted'] ) {
         echo '<div class="updated"><p>Expired coupons deleted.</p></div>';
     }
 });
 
-add\_action('admin\_init', function () {
-    if ( isset($\_POST\['custom\_action'\], $\_POST\['custom\_delete\_nonce'\])
-         && 'delete\_expired\_coupons' === $\_POST\['custom\_action'\]
-         && wp\_verify\_nonce($\_POST\['custom\_delete\_nonce'\], 'custom\_delete\_expired\_coupons') ) {
-        do\_action('delete\_expired\_coupons\_hook');
-        wp\_redirect( add\_query\_arg(\['custom\_deleted'=>'true'\], admin\_url('edit.php?post\_type=shop\_coupon')) );
+add_action('admin_init', function () {
+    if ( isset($_POST['custom_action'], $_POST['custom_delete_nonce'])
+         && 'delete_expired_coupons' === $_POST['custom_action']
+         && wp_verify_nonce($_POST['custom_delete_nonce'], 'custom_delete_expired_coupons') ) {
+        do_action('delete_expired_coupons_hook');
+        wp_redirect( add_query_arg(['custom_deleted'=>'true'], admin_url('edit.php?post_type=shop_coupon')) );
         exit;
     }
 });
+```
 
 ## How It Works
 
@@ -117,11 +119,15 @@ From there, you can delete them permanently with one click, regardless of whethe
 
 If you prefer to delete them permanently right away, change this line:
 
-wp\_trash\_post( $coupon->ID );
+```php
+wp_trash_post( $coupon->ID );
+```
 
 to:
 
-wp\_delete\_post( $coupon->ID, true );
+```php
+wp_delete_post( $coupon->ID, true );
+```
 
 Be careful: once a coupon is permanently deleted, it can’t be recovered.
 

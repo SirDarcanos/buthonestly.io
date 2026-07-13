@@ -106,20 +106,21 @@ Monitor your browser’s console for any errors, and repeat the process as neede
 
 **Note**: I used this script only once on my X account. I never tested it extensively. Use it at your own risk.
 
+```javascript
 // === CONFIG ===
-var USER           = 'your\_x\_handle';        // your @ without the @
+var USER           = 'your_x_handle';        // your @ without the @
 var MODE           = 'timeline';             // 'timeline' | 'replies' | 'likes' | 'retweets'
-var BASE\_DELAY     = 1000;                   // ms between each item
-var CONFIRM\_DELAY  = 800;                    // ms for dialogs
-var SCROLL\_DELAY   = 1500;                   // ms between scrolls
-var MAX\_SCROLLS    = 800;                    // safety limit. Stop after these many scrolls
+var BASE_DELAY     = 1000;                   // ms between each item
+var CONFIRM_DELAY  = 800;                    // ms for dialogs
+var SCROLL_DELAY   = 1500;                   // ms between scrolls
+var MAX_SCROLLS    = 800;                    // safety limit. Stop after these many scrolls
 
 // Delete window (inclusive):
-var START\_DATE = new Date('2016-01-01');
-var END\_DATE   = null; // e.g., new Date('2019-12-31')
+var START_DATE = new Date('2016-01-01');
+var END_DATE   = null; // e.g., new Date('2019-12-31')
 
 // Skip tweets containing ANY of these words/phrases (case-insensitive)
-var SKIP\_KEYWORDS = \['yoursite.com', '@example', '#portfolio', 'anything'\];
+var SKIP_KEYWORDS = ['yoursite.com', '@example', '#portfolio', 'anything'];
 
 // === UTILS ===
 function parseTweetDate(article) {
@@ -135,61 +136,61 @@ function parseTweetDate(article) {
 
 function inRange(date) {
   if (!date) return false;
-  if (END\_DATE) return date >= START\_DATE && date <= END\_DATE;
-  return date >= START\_DATE;
+  if (END_DATE) return date >= START_DATE && date <= END_DATE;
+  return date >= START_DATE;
 }
 
 function isMine(article) {
   return !!(
-    article.querySelector('\[data-testid="UserAvatar-Container-' + USER + '"\]') ||
-    article.querySelector('a\[role="link"\]\[href\*="/' + USER.toLowerCase() + '"\]')
+    article.querySelector('[data-testid="UserAvatar-Container-' + USER + '"]') ||
+    article.querySelector('a[role="link"][href*="/' + USER.toLowerCase() + '"]')
   );
 }
 
 function processWithDelay(items, fn) {
   items.forEach(function(item, i) {
-    setTimeout(function() { fn(item); }, i \* BASE\_DELAY);
+    setTimeout(function() { fn(item); }, i * BASE_DELAY);
   });
 }
 
 function containsSkipKeyword(article) {
   var text = article.textContent.toLowerCase();
-  return SKIP\_KEYWORDS.some(function(word) {
+  return SKIP_KEYWORDS.some(function(word) {
     return text.includes(word.toLowerCase());
   });
 }
 
 // === ACTIONS ===
 function clickDeleteFlow(article) {
-  var caret = article.querySelector('\[data-testid="caret"\]');
+  var caret = article.querySelector('[data-testid="caret"]');
   if (!caret) return;
   caret.click();
   setTimeout(function() {
-    var delOpt = Array.from(document.querySelectorAll('div\[role="menuitem"\]'))
+    var delOpt = Array.from(document.querySelectorAll('div[role="menuitem"]'))
       .find(function(el) { return el.textContent.trim().toLowerCase() === 'delete'; });
     if (!delOpt) { caret.click(); return; }
     delOpt.click();
     setTimeout(function() {
-      var confirmBtn = document.querySelector('\[data-testid="confirmationSheetDialog"\] button');
+      var confirmBtn = document.querySelector('[data-testid="confirmationSheetDialog"] button');
       if (confirmBtn) confirmBtn.click();
-    }, CONFIRM\_DELAY);
-  }, CONFIRM\_DELAY);
+    }, CONFIRM_DELAY);
+  }, CONFIRM_DELAY);
 }
 
 function clickUnlike(article) {
-  var btn = document.evaluate('.//div\[3\]/button', article, null, XPathResult.FIRST\_ORDERED\_NODE\_TYPE, null).singleNodeValue;
+  var btn = document.evaluate('.//div[3]/button', article, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
   if (btn) btn.click();
 }
 
 function clickUnretweet(article) {
-  var unrtBtn = article.querySelector('\[data-testid="unretweet"\]');
+  var unrtBtn = article.querySelector('[data-testid="unretweet"]');
   if (!unrtBtn) return;
   unrtBtn.click();
   setTimeout(function() {
-    var xpath = '//\*\[@id="layers"\]/div\[2\]/div/div/div/div\[2\]/div/div\[3\]/div/div/div/div';
-    var confirm = document.evaluate(xpath, document, null, XPathResult.FIRST\_ORDERED\_NODE\_TYPE, null).singleNodeValue;
+    var xpath = '//*[@id="layers"]/div[2]/div/div/div/div[2]/div/div[3]/div/div/div/div';
+    var confirm = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
     if (confirm) confirm.click();
-  }, CONFIRM\_DELAY);
+  }, CONFIRM_DELAY);
 }
 
 // === MAIN LOOP ===
@@ -202,7 +203,7 @@ function collectArticles() {
 
 function articleKey(a) {
   var time = a.querySelector('time');
-  var href = time ? time.closest('a\[role="link"\]') : null;
+  var href = time ? time.closest('a[role="link"]') : null;
   return (href && href.href) || a.outerHTML.slice(0, 200);
 }
 
@@ -233,32 +234,32 @@ function handleBatch() {
 
   // Scroll logic
   var dates = articles.map(parseTweetDate).filter(Boolean).sort(function(a,b){return a-b;});
-  var oldest = dates\[0\];
+  var oldest = dates[0];
 
   setTimeout(function() {
-    if (scrolls >= MAX\_SCROLLS) {
-      console.warn('Stop: hit MAX\_SCROLLS =', MAX\_SCROLLS);
+    if (scrolls >= MAX_SCROLLS) {
+      console.warn('Stop: hit MAX_SCROLLS =', MAX_SCROLLS);
       return;
     }
-    var needMore = !oldest || (END\_DATE ? oldest > START\_DATE : oldest > START\_DATE);
+    var needMore = !oldest || (END_DATE ? oldest > START_DATE : oldest > START_DATE);
     if (needMore) {
       scrolls++;
       window.scrollTo(0, document.body.scrollHeight);
-      setTimeout(handleBatch, SCROLL\_DELAY);
+      setTimeout(handleBatch, SCROLL_DELAY);
     } else {
       var more = collectArticles().some(function(a){
         var d = parseTweetDate(a);
         return d && inRange(d) && !containsSkipKeyword(a);
       });
-      if (more && scrolls < MAX\_SCROLLS) {
+      if (more && scrolls < MAX_SCROLLS) {
         scrolls++;
         window.scrollTo(0, document.body.scrollHeight);
-        setTimeout(handleBatch, SCROLL\_DELAY);
+        setTimeout(handleBatch, SCROLL_DELAY);
       } else {
         console.log('Done. Scans:', scrolls, 'Processed items this run:', candidates.length);
       }
     }
-  }, candidates.length \* BASE\_DELAY + 500);
+  }, candidates.length * BASE_DELAY + 500);
 }
 
 // === RUN ===
@@ -272,6 +273,7 @@ switch (MODE) {
   default:
     console.warn('Unknown MODE:', MODE);
 }
+```
 
 ## Lessons Learned & Tips
 

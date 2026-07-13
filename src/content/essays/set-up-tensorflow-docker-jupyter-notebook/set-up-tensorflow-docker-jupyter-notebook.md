@@ -64,7 +64,9 @@ Once it’s running, open it. You’ll see on the left tabs for *Containers*, *I
 
 Click on it to open the search field and type in it:
 
+```bash
 tensorflow/tensorflow:latest-gpu-jupyter
+```
 
 A dropdown with several options will appear. The first one should be `tensorflow/tensorflow`. From the **Tag** dropdown on the right, choose `latest-gpu-jupyter` and click **Pull**.
 
@@ -86,7 +88,9 @@ Click **Run**. Docker starts the container and automatically launches Jupyter No
 
 **Note for macOS users on Apple Silicon processors**: The setup above won’t work due to incompatibilities with hardware. After installing and opening Docker Desktop, via Terminal, run this command:
 
-docker run --rm -it -p 8888:8888 --shm-size=1g -e JUPYTER\_TOKEN=dev -v /path/to/your/notebooks:/home/jovyan/work -w /home/jovyan/work quay.io/jupyter/tensorflow-notebook:53b1d144db49
+```bash
+docker run --rm -it -p 8888:8888 --shm-size=1g -e JUPYTER_TOKEN=dev -v /path/to/your/notebooks:/home/jovyan/work -w /home/jovyan/work quay.io/jupyter/tensorflow-notebook:53b1d144db49
+```
 
 Replace the `/path/to/your/notebooks` path with where you want your notebooks to be. This image contains Jupyter Lab instead of regular Jupyter. It’s basically the same but the UI is slightly different.
 
@@ -116,12 +120,14 @@ That’s your unique Jupyter link. Click on it in your browser. You’ll see Jup
 
 Before we move on, it’s worth confirming that everything works as expected. Create a new Python 3 notebook in Jupyter and paste the following snippet in the empty cell:
 
+```python
 import sys
 import tensorflow as tf
 
 print(sys.version())
-print("TensorFlow version:", tf.\_\_version\_\_)
-print("Available GPUs:", tf.config.list\_physical\_devices('GPU'))
+print("TensorFlow version:", tf.__version__)
+print("Available GPUs:", tf.config.list_physical_devices('GPU'))
+```
 
 With the focus on the cell, click **Shift + Enter** to run it. This will print on screen the version of Python and TensorFlow used, and the GPUs detected. If a GPU appears in the list, great — TensorFlow is using your NVIDIA hardware. If not, don’t worry; it’s running on the CPU instead.
 
@@ -129,7 +135,8 @@ With the focus on the cell, click **Shift + Enter** to run it. This will print o
 
 Let’s create your first tensor as an additional test. Go to the next cell in your notebook and paste this code:
 
-\# Create a simple tensor
+```python
+# Create a simple tensor
 hello = tf.constant('Hello, TensorFlow!')
 print(hello)
 
@@ -137,6 +144,7 @@ print(hello)
 a = tf.constant(2)
 b = tf.constant(3)
 print(f"2 + 3 = {a + b}")
+```
 
 If you see the output without errors, congratulations—your environment is fully functional!
 

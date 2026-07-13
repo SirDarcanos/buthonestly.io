@@ -156,9 +156,11 @@ In high school, from the 3rd to 5th year, we were learning HTML4 without CSS. Re
 
 We were also learning PHP. One example of what our professor was trying to teach us looked like this:
 
+```php
 $a = 4;
 $b = 5;
 echo $a + $b;
+```
 
 Useful for the first week. Not for the whole year.
 

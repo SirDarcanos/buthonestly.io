@@ -129,9 +129,11 @@ Every WordPress site ends up needing a few custom tweaks — maybe you want to d
 
 I use it to keep all small customizations centralized and version-controlled. For example, I might add snippets like:
 
+```php
 // Disable the WordPress emoji script
-remove\_action( 'wp\_head', 'print\_emoji\_detection\_script', 7 );
-remove\_action( 'wp\_print\_styles', 'print\_emoji\_styles' );
+remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+remove_action( 'wp_print_styles', 'print_emoji_styles' );
+```
 
 Instead of touching core files, everything stays modular and easy to revert if needed.
 

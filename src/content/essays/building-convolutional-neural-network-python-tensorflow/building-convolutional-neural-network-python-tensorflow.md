@@ -58,6 +58,7 @@ The goal in this section is to understand the basics of preparing data for a con
 
 We’ll import all the libraries we’ll need for this tutorial: NumPy for numeric operations, Matplotlib for visualization, TensorFlow and Keras for building and training the CNN neural network, Scikit-learn for splitting data and computing evaluation metrics, and Keras Tuner for the Bayesian optimization we’ll use later.
 
+```python
 import os
 import random
 import numpy as np
@@ -65,13 +66,14 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 
 from tensorflow.keras.datasets import mnist
-from tensorflow.keras.utils import to\_categorical
+from tensorflow.keras.utils import to_categorical
 from tensorflow.keras import layers, models, optimizers, regularizers
 
-from sklearn.model\_selection import train\_test\_split
-from sklearn.metrics import classification\_report, confusion\_matrix, ConfusionMatrixDisplay
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report, confusion_matrix, ConfusionMatrixDisplay
 
-from keras\_tuner.tuners import BayesianOptimization
+from keras_tuner.tuners import BayesianOptimization
+```
 
 Even though we won’t use all of these imports right away, having them together at the top keeps your notebook organized and ready for the next steps.
 
@@ -83,30 +85,32 @@ One thing worth highlighting is the random seed setup. Neural networks involve r
 
 This helps you debug, compare results, and confirm that improvements come from real changes, not random luck.
 
-\# ====== GLOBAL CONSTANTS ======
+```python
+# ====== GLOBAL CONSTANTS ======
 
 # Image dimensions and shape
-IMAGE\_HEIGHT = 28
-IMAGE\_WIDTH  = 28
-IMAGE\_CHANNELS = 1
-INPUT\_SHAPE = (IMAGE\_HEIGHT, IMAGE\_WIDTH, IMAGE\_CHANNELS)
+IMAGE_HEIGHT = 28
+IMAGE_WIDTH  = 28
+IMAGE_CHANNELS = 1
+INPUT_SHAPE = (IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS)
 
 # Dataset and model parameters
-NUM\_CLASSES   = 10
-VAL\_SPLIT     = 0.3        # portion of data reserved for validation
-BATCH\_SIZE    = 128
-MAX\_TRIALS    = 10         # how many configurations the tuner will test
-TUNER\_EPOCHS  = 5          # short runs during Bayesian optimization
-FINAL\_EPOCHS  = 10         # full training of the best model
+NUM_CLASSES   = 10
+VAL_SPLIT     = 0.3        # portion of data reserved for validation
+BATCH_SIZE    = 128
+MAX_TRIALS    = 10         # how many configurations the tuner will test
+TUNER_EPOCHS  = 5          # short runs during Bayesian optimization
+FINAL_EPOCHS  = 10         # full training of the best model
 
 # Reproducibility
 SEED = 42
 
 # Apply seed across all major libraries and environments
-os.environ\['PYTHONHASHSEED'\] = str(SEED)
+os.environ['PYTHONHASHSEED'] = str(SEED)
 random.seed(SEED)
 np.random.seed(SEED)
-tf.random.set\_seed(SEED)
+tf.random.set_seed(SEED)
+```
 
 With all of these set, two runs of this notebook, on the same hardware and TensorFlow version, will produce identical results (assuming that you did not modify the network, preprocessing, etc.). That’s especially useful once we start tuning hyperparameters, since it lets us compare model configurations fairly.
 
@@ -114,10 +118,12 @@ With all of these set, two runs of this notebook, on the same hardware and Tenso
 
 TensorFlow makes loading MNIST effortless through its built-in `keras.datasets` module. It automatically downloads the dataset if it’s not already cached locally and returns two tuples: training data and test data.
 
-(X\_train\_full, y\_train\_full), (X\_test, y\_test) = mnist.load\_data()
+```python
+(X_train_full, y_train_full), (X_test, y_test) = mnist.load_data()
 
-print("Train full:", X\_train\_full.shape)
-print("Test:", X\_test.shape)
+print("Train full:", X_train_full.shape)
+print("Test:", X_test.shape)
+```
 
 At this point, `X_train_full` and `X_test` are arrays of grayscale images, and the labels (`y_train_full`, `y_test`) are integers between 0 and 9. After you run this code, you will see that we have 60,000 train data, and 10,000 test data.
 
@@ -128,12 +134,14 @@ In a real world scenario, you will likely have a folder with images. The data lo
 Neural networks learn faster and more reliably when inputs are scaled to a consistent range. Here we normalize pixel values from `[0, 255]` down to `[0, 1]`.  
 We also add a channel dimension, since the convolutional neural network architecture expects data in the form `(height, width, channels)`.
 
-X\_train\_full = X\_train\_full.astype("float32") / 255.0
-X\_test       = X\_test.astype("float32") / 255.0
+```python
+X_train_full = X_train_full.astype("float32") / 255.0
+X_test       = X_test.astype("float32") / 255.0
 
 # Add channel dimension: (N, 28, 28) → (N, 28, 28, 1)
-X\_train\_full = np.expand\_dims(X\_train\_full, axis=-1)
-X\_test       = np.expand\_dims(X\_test, axis=-1)
+X_train_full = np.expand_dims(X_train_full, axis=-1)
+X_test       = np.expand_dims(X_test, axis=-1)
+```
 
 After this, each image is a small 3D array — 28×28 pixels with one channel — exactly what a CNN expects.
 
@@ -142,22 +150,26 @@ After this, each image is a small 3D array — 28×28 pixels with one channel �
 For classification tasks, labels are usually converted to one-hot encoded vectors. Instead of a single number like `5`, we represent each label as a binary vector of length 10, where only the correct class is `1`.  
 This format works seamlessly with TensorFlow’s categorical loss functions.
 
-y\_train\_full = to\_categorical(y\_train\_full, NUM\_CLASSES)
-y\_test\_onehot = to\_categorical(y\_test, NUM\_CLASSES)
+```python
+y_train_full = to_categorical(y_train_full, NUM_CLASSES)
+y_test_onehot = to_categorical(y_test, NUM_CLASSES)
+```
 
 ### Splitting Training and Validation Data
 
 Before training, it’s a good idea to set aside part of the training data for validation. This allows us to evaluate how well the model generalizes before touching the test set.
 
-X\_train, X\_val, y\_train, y\_val = train\_test\_split(
-    X\_train\_full, y\_train\_full,
-    test\_size=VAL\_SPLIT,
-    random\_state=SEED
+```python
+X_train, X_val, y_train, y_val = train_test_split(
+    X_train_full, y_train_full,
+    test_size=VAL_SPLIT,
+    random_state=SEED
 )
 
-print("Train:", X\_train.shape)
-print("Validation:", X\_val.shape)
-print("Test:", X\_test.shape)
+print("Train:", X_train.shape)
+print("Validation:", X_val.shape)
+print("Test:", X_test.shape)
+```
 
 By keeping validation separate, we can check the model’s accuracy during training and detect overfitting early. After running this code you should have 3 sets of data:
 
@@ -169,15 +181,17 @@ By keeping validation separate, we can check the model’s accuracy during train
 
 Before we start building the model, let’s visualize a few samples. This quick check ensures the data loaded correctly and gives an intuitive sense of what the network will learn to recognize.
 
+```python
 plt.figure(figsize=(8, 2))
 for i in range(8):
     plt.subplot(1, 8, i + 1)
-    plt.imshow(X\_train\[i\].squeeze(), cmap="gray")
+    plt.imshow(X_train[i].squeeze(), cmap="gray")
     plt.axis("off")
-    plt.title(np.argmax(y\_train\[i\]))
+    plt.title(np.argmax(y_train[i]))
 plt.suptitle("MNIST Examples")
-plt.tight\_layout()
+plt.tight_layout()
 plt.show()
+```
 
 You should see a row of handwritten digits like below, some thick, some thin, some slightly tilted. These small variations are what make MNIST useful: they force the network to learn patterns that generalize rather than memorize exact shapes.
 
@@ -208,17 +222,19 @@ The first thing the class does is remember what kind of images it will receive a
 
 Right after that, the constructor checks your hardware. If there’s more than one GPU, it prepares a mirrored strategy so the same model runs on all of them in parallel. If there isn’t, it quietly falls back to a single GPU or CPU. You don’t need to change any training code for either case.
 
+```python
 class SimpleCNN:
-    def \_\_init\_\_(self, input\_shape=INPUT\_SHAPE, num\_classes=NUM\_CLASSES):
-        self.input\_shape = input\_shape
-        self.num\_classes = num\_classes
+    def __init__(self, input_shape=INPUT_SHAPE, num_classes=NUM_CLASSES):
+        self.input_shape = input_shape
+        self.num_classes = num_classes
         # Multi-GPU: mirror the model across GPUs if more than one is present
-        if len(tf.config.list\_physical\_devices('GPU')) > 1:
+        if len(tf.config.list_physical_devices('GPU')) > 1:
             print("Multiple GPUs detected, using MirroredStrategy.")
             self.strategy = tf.distribute.MirroredStrategy()
         else:
             self.strategy = None
         self.model = None
+```
 
 ### Convolution Block: From Pixels To Patterns
 
@@ -234,21 +250,22 @@ This combination of convolution, activation, and pooling appears in almost every
 
 Despite their differences, all share the same principle: detect local features, compress what matters, and pass it forward.
 
-    def \_add\_conv\_block(self, model, filters, l2\_value, activation, input\_shape=None):
+```python
+    def _add_conv_block(self, model, filters, l2_value, activation, input_shape=None):
         """Add a Conv2D -> BatchNorm -> Activation -> MaxPool2D block.
-        Specify input\_shape only for the first block."""
-        conv\_args = {
+        Specify input_shape only for the first block."""
+        conv_args = {
             "filters": filters,
-            "kernel\_size": (3, 3),
+            "kernel_size": (3, 3),
             "padding": "same",
             "activation": None,
-            "kernel\_regularizer": regularizers.l2(l2\_value)
+            "kernel_regularizer": regularizers.l2(l2_value)
         }
-        if input\_shape is not None:
-            conv\_args\["input\_shape"\] = input\_shape
+        if input_shape is not None:
+            conv_args["input_shape"] = input_shape
 
         # 1) Convolution: learns small pattern detectors (e.g., edges)
-        model.add(layers.Conv2D(\*\*conv\_args))
+        model.add(layers.Conv2D(**conv_args))
 
         # 2) BatchNorm: stabilizes the numbers flowing through the network
         model.add(layers.BatchNormalization())
@@ -258,6 +275,7 @@ Despite their differences, all share the same principle: detect local features, 
 
         # 4) MaxPooling: keeps the strongest signals, reduces size/compute
         model.add(layers.MaxPooling2D((2, 2)))
+```
 
 ### Dense Block: From Features To Decisions
 
@@ -267,11 +285,12 @@ By the time we reach the dense block, the image has been turned into a stack of 
 
 Both techniques are forms of regularization, helping the model generalize beyond the training data by keeping activations stable and reducing dependency on any one feature.[3](/)
 
-    def \_add\_dense\_block(self, model, units, l2\_value, activation, dropout):
+```python
+    def _add_dense_block(self, model, units, l2_value, activation, dropout):
         """Add Dense -> BatchNorm -> Activation -> Dropout block."""
         # 1) Dense: mixes all features to make a decision
         model.add(layers.Dense(units, activation=None,
-                               kernel\_regularizer=regularizers.l2(l2\_value)))
+                               kernel_regularizer=regularizers.l2(l2_value)))
 
         # 2) BatchNorm: same reason as above, stabilizes training
         model.add(layers.BatchNormalization())
@@ -281,6 +300,7 @@ Both techniques are forms of regularization, helping the model generalize beyond
 
         # 4) Dropout: randomly turns off some neurons to reduce overfitting
         model.add(layers.Dropout(dropout))
+```
 
 ### Putting It Together: `build(...)`
 
@@ -302,43 +322,45 @@ The black path shows how the optimizer moves step by step downhill, adjusting th
 
 Different optimizers (like SGD, Adam, or RMSprop) follow slightly different paths, but they all aim for the same goal: finding the lowest valley where the model performs best.[5](/)
 
-    def build(self, n\_filters=32, l2=0.0, lr=1e-3, optimizer='adam', dropout=0.0, activation='relu'):
+```python
+    def build(self, n_filters=32, l2=0.0, lr=1e-3, optimizer='adam', dropout=0.0, activation='relu'):
         model = models.Sequential()
 
         # First Conv block: specify input shape here
-        self.\_add\_conv\_block(model, n\_filters,       l2, activation, input\_shape=self.input\_shape)
+        self._add_conv_block(model, n_filters,       l2, activation, input_shape=self.input_shape)
 
         # Second Conv block: typically fewer filters after pooling
-        self.\_add\_conv\_block(model, n\_filters // 2,  l2, activation)
+        self._add_conv_block(model, n_filters // 2,  l2, activation)
 
         # Flatten feature maps into a 1D vector
         model.add(layers.Flatten())
 
         # Dense block for decision making
-        self.\_add\_dense\_block(model, 64, l2, activation, dropout)
+        self._add_dense_block(model, 64, l2, activation, dropout)
 
         # Final classifier: one probability per class (softmax)
-        model.add(layers.Dense(self.num\_classes, activation='softmax'))
+        model.add(layers.Dense(self.num_classes, activation='softmax'))
 
         # Pick optimizer class by name (e.g., 'adam' -> optimizers.Adam)
-        opt\_cls = getattr(optimizers, optimizer.capitalize())
+        opt_cls = getattr(optimizers, optimizer.capitalize())
 
         # Compile inside strategy scope if we have multiple GPUs
         if self.strategy:
             with self.strategy.scope():
                 self.model = model
                 self.model.compile(
-                    optimizer=opt\_cls(learning\_rate=lr),
-                    loss='categorical\_crossentropy',  # using one-hot labels
-                    metrics=\['accuracy'\]
+                    optimizer=opt_cls(learning_rate=lr),
+                    loss='categorical_crossentropy',  # using one-hot labels
+                    metrics=['accuracy']
                 )
         else:
             self.model = model
             self.model.compile(
-                optimizer=opt\_cls(learning\_rate=lr),
-                loss='categorical\_crossentropy',
-                metrics=\['accuracy'\]
+                optimizer=opt_cls(learning_rate=lr),
+                loss='categorical_crossentropy',
+                metrics=['accuracy']
             )
+```
 
 To visualize how this process scales up in larger models, take a look at the figure below.
 
@@ -362,102 +384,106 @@ Once the model is built, `summary()` gives you an instant blueprint of the archi
 
 `evaluate(...)` runs a clean test on a dataset and reports the final loss and accuracy. Use it to measure where you actually ended up after training and to compare different hyperparameter choices fairly.
 
+```python
     def summary(self):
         self.model.summary()
 
-    def fit(self, X\_train, y\_train, X\_val, y\_val, epochs=FINAL\_EPOCHS, batch\_size=BATCH\_SIZE):
+    def fit(self, X_train, y_train, X_val, y_val, epochs=FINAL_EPOCHS, batch_size=BATCH_SIZE):
         return self.model.fit(
-            X\_train, y\_train,
+            X_train, y_train,
             epochs=epochs,
-            batch\_size=batch\_size,
-            validation\_data=(X\_val, y\_val),
+            batch_size=batch_size,
+            validation_data=(X_val, y_val),
             verbose=2
         )
 
     def evaluate(self, X, y):
         return self.model.evaluate(X, y, verbose=0)
+```
 
 ### The Full Class (Paste In One Cell)
 
 Here’s the complete class so you can copy it in one go:
 
+```python
 class SimpleCNN:
-    def \_\_init\_\_(self, input\_shape=INPUT\_SHAPE, num\_classes=NUM\_CLASSES):
-        self.input\_shape = input\_shape
-        self.num\_classes = num\_classes
+    def __init__(self, input_shape=INPUT_SHAPE, num_classes=NUM_CLASSES):
+        self.input_shape = input_shape
+        self.num_classes = num_classes
         # Check for multi-GPU
-        if len(tf.config.list\_physical\_devices('GPU')) > 1:
+        if len(tf.config.list_physical_devices('GPU')) > 1:
             print("Multiple GPUs detected, using MirroredStrategy.")
             self.strategy = tf.distribute.MirroredStrategy()
         else:
             self.strategy = None
         self.model = None
 
-    def \_add\_conv\_block(self, model, filters, l2\_value, activation, input\_shape=None):
+    def _add_conv_block(self, model, filters, l2_value, activation, input_shape=None):
         """Add a Conv2D -> BatchNorm -> Activation -> MaxPool2D block.
-        Specify input\_shape only for the first block."""
-        conv\_args = {
+        Specify input_shape only for the first block."""
+        conv_args = {
             "filters": filters,
-            "kernel\_size": (3, 3),
+            "kernel_size": (3, 3),
             "padding": "same",
             "activation": None,
-            "kernel\_regularizer": regularizers.l2(l2\_value)
+            "kernel_regularizer": regularizers.l2(l2_value)
         }
-        if input\_shape is not None:
-            conv\_args\["input\_shape"\] = input\_shape
+        if input_shape is not None:
+            conv_args["input_shape"] = input_shape
 
-        model.add(layers.Conv2D(\*\*conv\_args))
+        model.add(layers.Conv2D(**conv_args))
         model.add(layers.BatchNormalization())
         model.add(layers.Activation(activation))
         model.add(layers.MaxPooling2D((2, 2)))
 
-    def \_add\_dense\_block(self, model, units, l2\_value, activation, dropout):
+    def _add_dense_block(self, model, units, l2_value, activation, dropout):
         """Add Dense -> BatchNorm -> Activation -> Dropout block."""
-        model.add(layers.Dense(units, activation=None, kernel\_regularizer=regularizers.l2(l2\_value)))
+        model.add(layers.Dense(units, activation=None, kernel_regularizer=regularizers.l2(l2_value)))
         model.add(layers.BatchNormalization())
         model.add(layers.Activation(activation))
         model.add(layers.Dropout(dropout))
 
-    def build(self, n\_filters=32, l2=0.0, lr=1e-3, optimizer='adam', dropout=0.0, activation='relu'):
+    def build(self, n_filters=32, l2=0.0, lr=1e-3, optimizer='adam', dropout=0.0, activation='relu'):
         model = models.Sequential()
         # First Conv block
-        self.\_add\_conv\_block(model, n\_filters,       l2, activation, input\_shape=self.input\_shape)
+        self._add_conv_block(model, n_filters,       l2, activation, input_shape=self.input_shape)
         # Second Conv block
-        self.\_add\_conv\_block(model, n\_filters // 2,  l2, activation)
+        self._add_conv_block(model, n_filters // 2,  l2, activation)
         model.add(layers.Flatten())
         # Dense block
-        self.\_add\_dense\_block(model, 64, l2, activation, dropout)
-        model.add(layers.Dense(self.num\_classes, activation='softmax'))
+        self._add_dense_block(model, 64, l2, activation, dropout)
+        model.add(layers.Dense(self.num_classes, activation='softmax'))
 
-        opt\_cls = getattr(optimizers, optimizer.capitalize())
+        opt_cls = getattr(optimizers, optimizer.capitalize())
         if self.strategy:
             with self.strategy.scope():
                 self.model = model
                 self.model.compile(
-                    optimizer=opt\_cls(learning\_rate=lr),
-                    loss='categorical\_crossentropy',
-                    metrics=\['accuracy'\]
+                    optimizer=opt_cls(learning_rate=lr),
+                    loss='categorical_crossentropy',
+                    metrics=['accuracy']
                 )
         else:
             self.model = model
             self.model.compile(
-                optimizer=opt\_cls(learning\_rate=lr),
-                loss='categorical\_crossentropy',
-                metrics=\['accuracy'\]
+                optimizer=opt_cls(learning_rate=lr),
+                loss='categorical_crossentropy',
+                metrics=['accuracy']
             )
 
     def summary(self):
         self.model.summary()
 
-    def fit(self, X\_train, y\_train, X\_val, y\_val, epochs=FINAL\_EPOCHS, batch\_size=BATCH\_SIZE):
+    def fit(self, X_train, y_train, X_val, y_val, epochs=FINAL_EPOCHS, batch_size=BATCH_SIZE):
         return self.model.fit(
-            X\_train, y\_train,
-            epochs=epochs, batch\_size=batch\_size,
-            validation\_data=(X\_val, y\_val), verbose=2
+            X_train, y_train,
+            epochs=epochs, batch_size=batch_size,
+            validation_data=(X_val, y_val), verbose=2
         )
 
     def evaluate(self, X, y):
         return self.model.evaluate(X, y, verbose=0)
+```
 
 ## Training a Baseline CNN
 
@@ -478,12 +504,14 @@ We’ll use the `SimpleCNN` class exactly as we built it, with all default setti
 
 In your notebook, add a new cell and run:
 
-\# --- Baseline model (before optimization) ---
+```python
+# --- Baseline model (before optimization) ---
 print("n========= Baseline SimpleCNN Training =========n")
 
-baseline\_cnn = SimpleCNN()
-baseline\_cnn.build()  # use all defaults (n\_filters=32, l2=0.0, lr=1e-3, optimizer='adam', dropout=0.0, activation='relu')
-baseline\_cnn.summary()
+baseline_cnn = SimpleCNN()
+baseline_cnn.build()  # use all defaults (n_filters=32, l2=0.0, lr=1e-3, optimizer='adam', dropout=0.0, activation='relu')
+baseline_cnn.summary()
+```
 
 Here we instantiate the model and call `.build()` without passing any parameters, letting it use the defaults we defined earlier. The model is fully compiled and ready to train.
 
@@ -520,11 +548,13 @@ Notice in the table how the output shape shrinks as the data pass through the co
 
 Next, we’ll fit the model on the training data for a few epochs. Even though MNIST is small, training still takes a bit of time. Each epoch passes through all images once, adjusting weights to reduce the loss.
 
-history\_base = baseline\_cnn.fit(
-    X\_train, y\_train,
-    X\_val, y\_val,
-    epochs=FINAL\_EPOCHS
+```python
+history_base = baseline_cnn.fit(
+    X_train, y_train,
+    X_val, y_val,
+    epochs=FINAL_EPOCHS
 )
+```
 
 The `history_base` variable stores loss and accuracy values for each epoch, both for training and validation. We’ll use this next to plot the learning curves.
 
@@ -534,11 +564,12 @@ Looking at accuracy and loss numbers in the console does not tell the whole trut
 
 Create two small plots, one for loss, one for accuracy:
 
-def plot\_training\_history(history):
-    acc = history.history\['accuracy'\]
-    val\_acc = history.history\['val\_accuracy'\]
-    loss = history.history\['loss'\]
-    val\_loss = history.history\['val\_loss'\]
+```python
+def plot_training_history(history):
+    acc = history.history['accuracy']
+    val_acc = history.history['val_accuracy']
+    loss = history.history['loss']
+    val_loss = history.history['val_loss']
     epochs = range(1, len(acc) + 1)
 
     plt.figure(figsize=(12, 4))
@@ -546,7 +577,7 @@ def plot\_training\_history(history):
     # Accuracy plot
     plt.subplot(1, 2, 1)
     plt.plot(epochs, acc, 'bo-', label='Training accuracy')
-    plt.plot(epochs, val\_acc, 'ro-', label='Validation accuracy')
+    plt.plot(epochs, val_acc, 'ro-', label='Validation accuracy')
     plt.title('Training and Validation Accuracy')
     plt.xlabel('Epochs')
     plt.ylabel('Accuracy')
@@ -555,16 +586,17 @@ def plot\_training\_history(history):
     # Loss plot
     plt.subplot(1, 2, 2)
     plt.plot(epochs, loss, 'bo-', label='Training loss')
-    plt.plot(epochs, val\_loss, 'ro-', label='Validation loss')
+    plt.plot(epochs, val_loss, 'ro-', label='Validation loss')
     plt.title('Training and Validation Loss')
     plt.xlabel('Epochs')
     plt.ylabel('Loss')
     plt.legend()
 
-    plt.tight\_layout()
+    plt.tight_layout()
     plt.show()
 
-plot\_training\_history(history\_base)
+plot_training_history(history_base)
+```
 
 If both training and validation lines steadily go down for loss (or up for accuracy), your model is learning.  
 If the validation curve flattens or diverges from training, the model may be overfitting. It’s memorizing training data rather than learning general patterns.
@@ -587,26 +619,28 @@ We have a solid baseline. Now we’ll let the machine do the guessing. Bayesian 
 
 This function tells the tuner what it may change. We clear the Keras session to avoid leftover graphs between trials, create a `SimpleCNN` with the sampled values, and return the compiled Keras model (not the class).
 
-def model\_builder(hp):
-    tf.keras.backend.clear\_session()
+```python
+def model_builder(hp):
+    tf.keras.backend.clear_session()
 
-    n\_filters = hp.Int('n\_filters', 16, 64, step=8)
+    n_filters = hp.Int('n_filters', 16, 64, step=8)
     l2        = hp.Float('l2', 0.0, 0.01, step=0.002)
     lr        = hp.Float('lr', 1e-4, 1e-2, sampling='log')
-    optimizer\_choice = hp.Choice('optimizer', \['adam', 'sgd'\])
+    optimizer_choice = hp.Choice('optimizer', ['adam', 'sgd'])
     dropout   = hp.Float('dropout', 0.0, 0.4, step=0.1)
-    activation= hp.Choice('activation', \['relu', 'tanh'\])
+    activation= hp.Choice('activation', ['relu', 'tanh'])
 
     cnn = SimpleCNN()
     cnn.build(
-        n\_filters=n\_filters,
+        n_filters=n_filters,
         l2=l2,
         lr=lr,
-        optimizer=optimizer\_choice,
+        optimizer=optimizer_choice,
         dropout=dropout,
         activation=activation
     )
     return cnn.model
+```
 
 **What’s happening:**
 
@@ -617,15 +651,17 @@ def model\_builder(hp):
 
 We ask for the configuration that maximizes validation accuracy. `MAX_TRIALS` limits how many model versions we’ll test; the `SEED` keeps runs reproducible.
 
+```python
 tuner = BayesianOptimization(
-    model\_builder,
-    objective='val\_accuracy',
-    max\_trials=MAX\_TRIALS,
+    model_builder,
+    objective='val_accuracy',
+    max_trials=MAX_TRIALS,
     seed=SEED,
     overwrite=True,
-    directory='kt\_tuner\_dir',
-    project\_name='mnist\_cnn'
+    directory='kt_tuner_dir',
+    project_name='mnist_cnn'
 )
+```
 
 Bayesian optimization is smart about where it looks. This is why we chose it over other search models. Instead of testing every possible combination like grid search, or picking random ones and hoping to get lucky like random search, it actually learns from past trials. After each run, it builds a simple model of how the results behave and uses that to decide which hyperparameter sets are most promising to try next.
 
@@ -643,45 +679,53 @@ That efficiency is why we’re using Bayesian optimization here. It finds good h
 
 We run short, cheap trainings per trial so the tuner can compare ideas fast. Think of these epochs as “auditions,” not the final performance.
 
+```python
 print("n========= Starting Bayesian hyperparameter search using KerasTuner ... =========n")
 tuner.search(
-    X\_train, y\_train,
-    epochs=TUNER\_EPOCHS,
-    validation\_data=(X\_val, y\_val),
+    X_train, y_train,
+    epochs=TUNER_EPOCHS,
+    validation_data=(X_val, y_val),
     verbose=2
 )
+```
 
 When this finishes, we fetch the best hyperparameters and print them. It’s a nice way to show readers which choices mattered for this convolutional neural network example.
 
-best\_hps = tuner.get\_best\_hyperparameters(num\_trials=1)\[0\]
+```python
+best_hps = tuner.get_best_hyperparameters(num_trials=1)[0]
 print("Best hyperparameters found:")
-for hpname in best\_hps.values.keys():
-    print(f"{hpname}: {best\_hps.get(hpname)}")
+for hpname in best_hps.values.keys():
+    print(f"{hpname}: {best_hps.get(hpname)}")
+```
 
 It turns out that the best hyperparameters for this CNN are not the default values we initially set. They are the following:
 
-n\_filters: 48
+```text
+n_filters: 48
 l2: 0.0
 lr: 0.0006562536901904111
 optimizer: adam
 dropout: 0.4
 activation: relu
+```
 
 ### Retrain The Best Model
 
 Now we build a fresh model with those best settings and train it properly (more epochs). Same class, no code rewrites.
 
+```python
 print("n========= Retrain best model found by KerasTuner =========n")
-cnn\_final = SimpleCNN()
-cnn\_final.build(
-    n\_filters=best\_hps.get('n\_filters'),
-    l2=best\_hps.get('l2'),
-    lr=best\_hps.get('lr'),
-    optimizer=best\_hps.get('optimizer'),
-    dropout=best\_hps.get('dropout'),
-    activation=best\_hps.get('activation')
+cnn_final = SimpleCNN()
+cnn_final.build(
+    n_filters=best_hps.get('n_filters'),
+    l2=best_hps.get('l2'),
+    lr=best_hps.get('lr'),
+    optimizer=best_hps.get('optimizer'),
+    dropout=best_hps.get('dropout'),
+    activation=best_hps.get('activation')
 )
-history = cnn\_final.fit(X\_train, y\_train, X\_val, y\_val, epochs=FINAL\_EPOCHS)
+history = cnn_final.fit(X_train, y_train, X_val, y_val, epochs=FINAL_EPOCHS)
+```
 
 A quick reminder for readers following along on Windows with Docker: if a GPU is available, the CNN TensorFlow model will use it automatically; otherwise it runs on CPU with identical results, just slower.
 
@@ -691,7 +735,9 @@ As before, we can call our plotting helper to see the final accuracy and loss cu
 
 You will notice smoother and more stable training compared to the baseline, even though the difference on MNIST will be subtle. We’ll use the same plotting helper defined earlier to visualize this training run.
 
-plot\_training\_history(history)
+```python
+plot_training_history(history)
+```
 
 The figure below shows both training and validation curves. Compared to our earlier baseline, they converge even faster and remain tightly aligned; a sign that the optimized model learned efficiently without overfitting.
 
@@ -701,8 +747,10 @@ The figure below shows both training and validation curves. Compared to our earl
 
 Once the model has finished training, we evaluate it on the test set — the 10,000 images it has never seen. This gives an unbiased measure of generalization.
 
-test\_loss, test\_acc = cnn\_final.evaluate(X\_test, y\_test\_onehot)
-print(f"Optimized Test accuracy: {test\_acc:.4f}")
+```python
+test_loss, test_acc = cnn_final.evaluate(X_test, y_test_onehot)
+print(f"Optimized Test accuracy: {test_acc:.4f}")
+```
 
 You’ll likely see an accuracy of around **99%**, nearly perfect on MNIST.  
 The small gap between validation and test accuracy means the model generalized well; it’s learning real digit patterns, not just memorizing the training examples.
@@ -711,16 +759,18 @@ The small gap between validation and test accuracy means the model generalized w
 
 Accuracy alone doesn’t show *how* the model makes decisions, so let’s visualize a few predictions.
 
-preds = cnn\_final.model.predict(X\_test)
+```python
+preds = cnn_final.model.predict(X_test)
 
 plt.figure(figsize=(8, 2))
 for i in range(8):
     plt.subplot(1, 8, i + 1)
-    plt.imshow(X\_test\[i\].squeeze(), cmap='gray')
+    plt.imshow(X_test[i].squeeze(), cmap='gray')
     plt.axis('off')
-    plt.title(np.argmax(preds\[i\]))
+    plt.title(np.argmax(preds[i]))
 plt.suptitle("Model Predictions")
 plt.show()
+```
 
 Each image below shows the input digit and the model’s predicted label on top.
 
@@ -732,12 +782,14 @@ If your model is performing well, nearly all of these should be correct. Still, 
 
 A confusion matrix summarizes how the model performs across all classes — in this case, digits from 0 to 9. Each row represents the true label, and each column shows what the model predicted. Perfect classification would appear as a solid diagonal of blue squares.
 
-y\_pred = np.argmax(preds, axis=1)
-cm = confusion\_matrix(y\_test, y\_pred)
-disp = ConfusionMatrixDisplay(confusion\_matrix=cm, display\_labels=np.arange(NUM\_CLASSES))
+```python
+y_pred = np.argmax(preds, axis=1)
+cm = confusion_matrix(y_test, y_pred)
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=np.arange(NUM_CLASSES))
 disp.plot(cmap=plt.cm.Blues)
 plt.title("Confusion Matrix")
 plt.show()
+```
 
 The darker the diagonal, the more correctly predicted samples for that digit. Off-diagonal values represent misclassifications, the model’s “blind spots.” For instance, if you see numbers in the cell for “5 predicted as 3,” it means those digits share visual features the CNN occasionally confuses.
 
@@ -747,12 +799,15 @@ The darker the diagonal, the more correctly predicted samples for that digit. Of
 
 Finally, print a detailed classification report showing precision, recall, and F1-score per class.
 
+```python
 print("Classification Report:")
-print(classification\_report(y\_test, y\_pred, digits=4))
+print(classification_report(y_test, y_pred, digits=4))
+```
 
 This breakdown helps identify which classes perform slightly worse — something global accuracy can hide.  
 For MNIST, these scores are typically near 1,000 across all digits, confirming that our optimized CNN TensorFlow model learned to classify handwritten digits almost perfectly.
 
+```text
 Classification Report:
               precision    recall  f1-score   support
 
@@ -770,6 +825,7 @@ Classification Report:
     accuracy                         0.9890     10000
    macro avg     0.9890    0.9889    0.9889     10000
 weighted avg     0.9891    0.9890    0.9890     10000
+```
 
 ## Wrapping It Up
 

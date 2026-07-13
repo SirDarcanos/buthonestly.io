@@ -82,7 +82,7 @@ What stuck are the tools that fit naturally into how I already think. I didn’t
 
 The biggest breakthrough came with **Quill Meetings**. For years, I struggled to take notes during one-on-ones. I’d try to type and listen simultaneously, which broke the conversation and left me with half-formed notes. Or I’d stay fully present and forget the details minutes later. Now I run each session through Quill with quick templates I built myself for one-on-ones and coaching. The AI structures notes the way I need them, and I edit lightly afterward as necessary. I read them before the next 1:1 to plan the upcoming call. It removed one of my biggest sources of friction: remembering.
 
-You can download my custom templates here or on the [resources page](/resources/ "Resources & Assets"):
+You can download my custom templates from the **Downloads** section below, or on the [resources page](/resources/ "Resources & Assets").
 
 ![Close-up of a MacBook screen in a dark room showing the dock with apps like browser, design software, and note-taking tools, representing digital ADHD productivity tools that support focused, creative work.](https://i0.wp.com/buthonestly.io/wp-content/uploads/2026/04/adhd-productivity-tools.jpg?resize=830%2C467&quality=81&ssl=1 "Photo by Supriya Bhandari on Unsplash")
 

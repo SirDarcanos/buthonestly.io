@@ -36,7 +36,7 @@ I spend my days in and around machine learning. I spend my evenings getting hook
 
 So over the last few days I pulled every English review from the Steam API, from the very first one in 2019 up to November 2025, and turned them into a single CSV you can actually work with. Moreover, I wired up a notebook that runs a DistilRoBERTa sentiment analysis and emotion pipeline over the whole thing.
 
-I’m releasing the dataset together with the notebook I’m using for this essay. You can download both here:
+I’m releasing the dataset together with the notebook I’m using for this essay. You can download both from the **Downloads** section at the end of this essay.
 
 The rest of the essay walks through that notebook as I use it myself: what’s in the data, what we can learn from it, and how different “moods” show up in the language people use.
 
@@ -83,6 +83,7 @@ I like to put all the constants in one place at the top, so there’s a single s
 
 We’ll use Hugging Face transformers with PyTorch to run a **DistilRoBERTa emotion analysis** over a large sample of reviews. Not all the imports are relevant immediately but they will be used throughout the case study.
 
+```python
 from pathlib import Path
 from collections import Counter
 import re
@@ -92,26 +93,27 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import torch
-from sklearn.feature\_extraction.text import ENGLISH\_STOP\_WORDS
+from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
 SEED = 42
 
-DATA\_PATH = Path("steam\_reviews\_381210\_english.csv")  # adjust to your filename
+DATA_PATH = Path("steam_reviews_381210_english.csv")  # adjust to your filename
 
-NGRAM\_SAMPLE\_SIZE = 50\_000       # for later text analysis
-EMOTION\_SAMPLE\_SIZE = 80\_000     # for emotion model comparisons
+NGRAM_SAMPLE_SIZE = 50_000       # for later text analysis
+EMOTION_SAMPLE_SIZE = 80_000     # for emotion model comparisons
 
-EMOTION\_MODEL\_NAME = "j-hartmann/emotion-english-distilroberta-base"
+EMOTION_MODEL_NAME = "j-hartmann/emotion-english-distilroberta-base"
 
-plt.rcParams\["figure.figsize"\] = (8, 4)
-pd.set\_option("display.max\_colwidth", 200)
+plt.rcParams["figure.figsize"] = (8, 4)
+pd.set_option("display.max_colwidth", 200)
 
 np.random.seed(SEED)
-torch.manual\_seed(SEED)
+torch.manual_seed(SEED)
 
-df = pd.read\_csv(DATA\_PATH)
+df = pd.read_csv(DATA_PATH)
 df.head()
+```
 
 At this point I like to stop and just scroll.
 
@@ -128,11 +130,14 @@ Before doing anything clever, I want to answer a few boring questions:
 
 The notebook does that with a small block of code:
 
-\# Basic info about columns and types
+```python
+# Basic info about columns and types
 df.info()
+```
 
 By running this code we see the following:
 
+```bash
 <class 'pandas.core.frame.DataFrame'>
 RangeIndex: 277479 entries, 0 to 277478
 Data columns (total 12 columns):
@@ -141,17 +146,18 @@ Data columns (total 12 columns):
  0   review                         276470 non-null  object
  1   sentiment                      277479 non-null  int64 
  2   purchased                      277479 non-null  int64 
- 3   received\_for\_free              277479 non-null  int64 
- 4   votes\_up                       277479 non-null  int64 
- 5   votes\_funny                    277479 non-null  int64 
- 6   date\_created                   277479 non-null  object
- 7   date\_updated                   277479 non-null  object
- 8   author\_num\_games\_owned         277479 non-null  int64 
- 9   author\_num\_reviews             277479 non-null  int64 
- 10  author\_playtime\_forever\_min    277479 non-null  int64 
- 11  author\_playtime\_at\_review\_min  277479 non-null  int64 
+ 3   received_for_free              277479 non-null  int64 
+ 4   votes_up                       277479 non-null  int64 
+ 5   votes_funny                    277479 non-null  int64 
+ 6   date_created                   277479 non-null  object
+ 7   date_updated                   277479 non-null  object
+ 8   author_num_games_owned         277479 non-null  int64 
+ 9   author_num_reviews             277479 non-null  int64 
+ 10  author_playtime_forever_min    277479 non-null  int64 
+ 11  author_playtime_at_review_min  277479 non-null  int64 
 dtypes: int64(9), object(3)
 memory usage: 25.4+ MB
+```
 
 The notebook reports:
 
@@ -167,12 +173,15 @@ Memory-wise, the whole thing sits around **25 MB**, so you can open it on a lapt
 
 I also like to look at how long the reviews are, just to set expectations. The notebook adds a simple `text_len` column and runs:
 
-\# Text length distribution
-df\["text\_len"\] = df\["review"\].astype(str).str.len()
-df\["text\_len"\].describe()
+```python
+# Text length distribution
+df["text_len"] = df["review"].astype(str).str.len()
+df["text_len"].describe()
+```
 
 The `text_len` summary comes back with:
 
+```bash
 count    277479.000000
 mean        157.870722
 std         448.160816
@@ -181,7 +190,8 @@ min           1.000000
 50%          36.000000
 75%         113.000000
 max        8000.000000
-Name: text\_len, dtype: float64
+Name: text_len, dtype: float64
+```
 
 -   **count**: 277,479 reviews
 -   **mean length**: about **158 characters**
@@ -204,16 +214,19 @@ The `sentiment` column is a numeric label:
 -   `1` → thumbs up
 -   `0` → thumbs down
 
-sentiment\_counts = df\["sentiment"\].value\_counts().sort\_index()
-sentiment\_share = df\["sentiment"\].value\_counts(normalize=True).sort\_index()
+```python
+sentiment_counts = df["sentiment"].value_counts().sort_index()
+sentiment_share = df["sentiment"].value_counts(normalize=True).sort_index()
 
-sentiment\_counts, sentiment\_share
+sentiment_counts, sentiment_share
+```
 
 When I ask the notebook for counts and proportions, it comes back with:
 
 -   **19.7% negative** reviews
 -   **80.3% positive** reviews
 
+```bash
 (sentiment
  0     54777
  1    222702
@@ -222,6 +235,7 @@ When I ask the notebook for counts and proportions, it comes back with:
  0    0.19741
  1    0.80259
  Name: proportion, dtype: float64)
+```
 
 So about four out of five reviews in this dataset are technically “positive.”
 
@@ -245,10 +259,12 @@ The next question for the notebook is, “When are these reviews from?”
 
 We convert `date_created` to a proper datetime and ask for the minimum and maximum.
 
-\# Date range
-df\["date\_created"\] = pd.to\_datetime(df\["date\_created"\])
-date\_range = df\["date\_created"\].agg(\["min", "max"\])
-date\_range
+```python
+# Date range
+df["date_created"] = pd.to_datetime(df["date_created"])
+date_range = df["date_created"].agg(["min", "max"])
+date_range
+```
 
 The answer is:
 
@@ -257,9 +273,11 @@ The answer is:
 
 So the dataset covers a bit more than **six years** of *Dead by Daylight*’s life.
 
+```bash
 min   2019-07-04
 max   2025-11-09
-Name: date\_created, dtype: datetime64\[ns\]
+Name: date_created, dtype: datetime64[ns]
+```
 
 That’s roughly:
 
@@ -280,33 +298,37 @@ We already knew the collection window was “2019 to November 2025” from the d
 
 Once we know the overall time window, it’s worth zooming in a bit, “*How many reviews do we get each month, and how positive are they?*”
 
-df\["year\_month"\] = df\["date\_created"\].dt.to\_period("M").dt.to\_timestamp()
+```python
+df["year_month"] = df["date_created"].dt.to_period("M").dt.to_timestamp()
 
 monthly = (
-    df.groupby("year\_month")
+    df.groupby("year_month")
       .agg(
-          review\_count=("review", "size"),
-          share\_positive=("sentiment", "mean"),
+          review_count=("review", "size"),
+          share_positive=("sentiment", "mean"),
       )
-      .reset\_index()
+      .reset_index()
 )
 
 monthly.tail(), monthly.head()
+```
 
 When I bucket by month, two things stand out immediately.
 
-(   year\_month  review\_count  share\_positive
+```bash
+(   year_month  review_count  share_positive
  72 2025-07-01          6294        0.806006
  73 2025-08-01          5321        0.709641
  74 2025-09-01          3764        0.642402
  75 2025-10-01          3691        0.719859
  76 2025-11-01           963        0.703011,
-   year\_month  review\_count  share\_positive
+   year_month  review_count  share_positive
  0 2019-07-01          2186        0.828454
  1 2019-08-01           803        0.699875
  2 2019-09-01          1225        0.728163
  3 2019-10-01          2084        0.820537
  4 2019-11-01          6585        0.867882)
+```
 
 On the **early side** of the dataset:
 
@@ -345,20 +367,24 @@ Someone with five hours in the game and someone with two thousand hours are tech
 
 To get a rough sense of that, I looked at the distribution of `author_playtime_at_review_min` — the number of minutes played at the moment the review was written.
 
-playtime\_desc = df\["author\_playtime\_at\_review\_min"\].describe()
-playtime\_quantiles = df\["author\_playtime\_at\_review\_min"\].quantile(\[0.25, 0.5, 0.75, 0.9, 0.99\])
+```python
+playtime_desc = df["author_playtime_at_review_min"].describe()
+playtime_quantiles = df["author_playtime_at_review_min"].quantile([0.25, 0.5, 0.75, 0.9, 0.99])
 
-playtime\_desc
-playtime\_quantiles
+playtime_desc
+playtime_quantiles
+```
 
 The key quantiles look like this:
 
+```bash
 0.25      1021.00
 0.50      4462.00
 0.75     18112.50
 0.90     50459.20
 0.99    170344.44
-Name: author\_playtime\_at\_review\_min, dtype: float64
+Name: author_playtime_at_review_min, dtype: float64
+```
 
 -   25th percentile: **1,021 minutes** (~**17 hours**)
 -   50th percentile (median): **4,462 minutes** (~**74 hours**)
@@ -385,30 +411,34 @@ To make this more concrete, I’ll group players into four experience bands base
 
 These thresholds aren’t magical; they’re just a simple way to turn a huge numeric range into four buckets that roughly match how the game feels at different stages. We’ll use them later to see how language and sentiment shift as people stick around.
 
-def label\_experience(minutes: float) -> str:
+```python
+def label_experience(minutes: float) -> str:
     """Bucket players by minutes played at review time."""
-    if minutes < 100 \* 60:
+    if minutes < 100 * 60:
         return "new"
-    elif minutes < 500 \* 60:
+    elif minutes < 500 * 60:
         return "regular"
-    elif minutes < 2\_000 \* 60:
+    elif minutes < 2_000 * 60:
         return "veteran"
     else:
         return "master"
 
-df\["experience"\] = df\["author\_playtime\_at\_review\_min"\].fillna(0).apply(label\_experience)
+df["experience"] = df["author_playtime_at_review_min"].fillna(0).apply(label_experience)
 
-experience\_counts = df\["experience"\].value\_counts().sort\_index()
-experience\_counts
+experience_counts = df["experience"].value_counts().sort_index()
+experience_counts
+```
 
 When I apply that to `author_playtime_at_review_min`, the dataset breaks down like this:
 
+```bash
 experience
 master       6099
 new        153318
 regular     77292
 veteran     40770
 Name: count, dtype: int64
+```
 
 -   **new** → about **55%** of all reviews
 -   **regular** → about **28%**
@@ -440,22 +470,26 @@ For now, it’s enough to know that the CSV doesn’t just have a lot of reviews
 
 Now that the reviews are split into new / regular / veteran / master, the next question is obvious: “*Does the chance of recommending the game change as people spend more time in it?*”
 
-sentiment\_by\_experience = (
-    df.groupby("experience")\["sentiment"\]
+```python
+sentiment_by_experience = (
+    df.groupby("experience")["sentiment"]
       .mean()
-      .sort\_index()
+      .sort_index()
 )
 
-sentiment\_by\_experience
+sentiment_by_experience
+```
 
 When I ask the notebook for the average `sentiment` (0/1) inside each group, it comes back with:
 
+```bash
 experience
 master     0.544679
 new        0.863512
 regular    0.773314
 veteran    0.667574
 Name: sentiment, dtype: float64
+```
 
 -   New players are **~86% positive**.
 -   Regulars are **~77% positive**.
@@ -485,37 +519,39 @@ With a bit of light cleaning (lowercasing, stripping punctuation, removing stopw
 
 “*What are the most common words in positive reviews and in negative ones?*”
 
+```python
 PUNCTUATION = set(string.punctuation)
-STOPWORDS = ENGLISH\_STOP\_WORDS
+STOPWORDS = ENGLISH_STOP_WORDS
 
-def tokenize(text: str) -> list\[str\]:
+def tokenize(text: str) -> list[str]:
     text = str(text).lower()
     # keep only letters and apostrophes
-    tokens = re.findall(r"\[a-z'\]+", text)
-    return \[t for t in tokens if t not in STOPWORDS and len(t) > 2\]
+    tokens = re.findall(r"[a-z']+", text)
+    return [t for t in tokens if t not in STOPWORDS and len(t) > 2]
 
-def top\_ngrams(texts, n: int = 1, top\_k: int = 30):
+def top_ngrams(texts, n: int = 1, top_k: int = 30):
     counter = Counter()
     for text in texts:
         tokens = tokenize(text)
         for i in range(len(tokens) - n + 1):
-            ngram = " ".join(tokens\[i:i + n\])
-            counter\[ngram\] += 1
-    return counter.most\_common(top\_k)
+            ngram = " ".join(tokens[i:i + n])
+            counter[ngram] += 1
+    return counter.most_common(top_k)
 
-pos\_mask = df\["sentiment"\] == 1
-neg\_mask = df\["sentiment"\] == 0
+pos_mask = df["sentiment"] == 1
+neg_mask = df["sentiment"] == 0
 
-pos\_n = min(NGRAM\_SAMPLE\_SIZE, pos\_mask.sum())
-neg\_n = min(NGRAM\_SAMPLE\_SIZE, neg\_mask.sum())
+pos_n = min(NGRAM_SAMPLE_SIZE, pos_mask.sum())
+neg_n = min(NGRAM_SAMPLE_SIZE, neg_mask.sum())
 
-pos\_sample = df.loc\[pos\_mask, "review"\].sample(pos\_n, random\_state=SEED)
-neg\_sample = df.loc\[neg\_mask, "review"\].sample(neg\_n, random\_state=SEED)
+pos_sample = df.loc[pos_mask, "review"].sample(pos_n, random_state=SEED)
+neg_sample = df.loc[neg_mask, "review"].sample(neg_n, random_state=SEED)
 
-top\_pos\_uni = top\_ngrams(pos\_sample, n=1, top\_k=20)
-top\_neg\_uni = top\_ngrams(neg\_sample, n=1, top\_k=20)
+top_pos_uni = top_ngrams(pos_sample, n=1, top_k=20)
+top_neg_uni = top_ngrams(neg_sample, n=1, top_k=20)
 
-top\_pos\_uni, top\_neg\_uni
+top_pos_uni, top_neg_uni
+```
 
 On the **positive** side, the top unigrams look like this:
 
@@ -524,13 +560,15 @@ On the **positive** side, the top unigrams look like this:
 -   `killer`, `killers`, `survivor`, `survivors`
 -   `recommend`
 
-\[('game', 36588),  ('fun', 14520),  ('good', 9308),  
+```bash
+[('game', 36588),  ('fun', 14520),  ('good', 9308),  
 ('play', 8910),  ('killer', 6107),  ('friends', 5397),  
 ('like', 5301),  ("it's", 4412),  ('great', 4210),  
 ('just', 4163),  ('playing', 4144),  ('love', 4005),  
 ('time', 3404),  ('killers', 3301),  ('really', 3271),  
 ('survivor', 3125),  ('survivors', 2863),  ('games', 2453),  
-('people', 2375),  ('recommend', 2268)\]
+('people', 2375),  ('recommend', 2268)]
+```
 
 So the picture is:
 
@@ -546,13 +584,15 @@ On the **negative** side, the list is different but not *completely* different:
 -   `new`, `perks`, `players`, `devs`, `people`, `community`
 -   `"don't"`
 
-\[('game', 84917),  ('killer', 20369),  ('play', 20246),  
+```bash
+[('game', 84917),  ('killer', 20369),  ('play', 20246),  
 ('just', 16706),  ('fun', 13593),  ('killers', 12978),  
 ('like', 12181),  ('time', 10737),  ('survivor', 10283),  
 ('survivors', 10214),  ("don't", 9850),  ('playing', 9805),  
 ("it's", 9493),  ('new', 8038),  ('perks', 8002),  
 ('good', 7583),  ('players', 7539),  ('devs', 7504),  
-('people', 7181),  ('community', 6440)\]
+('people', 7181),  ('community', 6440)]
+```
 
 The overlap is almost the point:
 
@@ -583,10 +623,12 @@ For now, it’s enough to know that we’re looking at the right kind of mess: p
 
 Unigrams tell us *what* people talk about. Bigrams start to show *how* they talk about it.
 
-top\_pos\_bi = top\_ngrams(pos\_sample, n=2, top\_k=20)
-top\_neg\_bi = top\_ngrams(neg\_sample, n=2, top\_k=20)
+```python
+top_pos_bi = top_ngrams(pos_sample, n=2, top_k=20)
+top_neg_bi = top_ngrams(neg_sample, n=2, top_k=20)
 
-top\_pos\_bi, top\_neg\_bi
+top_pos_bi, top_neg_bi
+```
 
 When I look at the top two-word phrases in positive reviews, I get things like:
 
@@ -698,10 +740,11 @@ That’s what we’ll tackle next: using a pretrained model to tag each review w
 
 Let’s load the patches CSV and have a glance at it.
 
-\# Load patches
-patches = pd.read\_csv("dbd\_patches.csv", parse\_dates=\["date"\])
+```python
+# Load patches
+patches = pd.read_csv("dbd_patches.csv", parse_dates=["date"])
 
-def patch\_type\_from\_version(v: str) -> str:
+def patch_type_from_version(v: str) -> str:
     v = str(v)
     parts = v.split(".")
     if len(parts) != 3:
@@ -714,27 +757,30 @@ def patch\_type\_from\_version(v: str) -> str:
     else:
         return "patch"
 
-patches\["patch\_type"\] = patches\["version"\].apply(patch\_type\_from\_version)
+patches["patch_type"] = patches["version"].apply(patch_type_from_version)
 
 # Align to year-month for joining with reviews
-patches\["year\_month"\] = patches\["date"\].dt.to\_period("M").dt.to\_timestamp()
+patches["year_month"] = patches["date"].dt.to_period("M").dt.to_timestamp()
 
 # Quick sanity check: how many of each type?
-patches\["patch\_type"\].value\_counts(), patches.head()
+patches["patch_type"].value_counts(), patches.head()
+```
 
 Once every version in the patch CSV is tagged, the breakdown looks like this:
 
-(patch\_type
+```bash
+(patch_type
  patch    231
  minor     59
  major      8
  Name: count, dtype: int64,
-   version       date patch\_type year\_month
+   version       date patch_type year_month
  0  1.0.1a 2016-06-22      patch 2016-06-01
  1   1.0.2 2016-06-29      patch 2016-06-01
  2  1.0.2a 2016-06-30      patch 2016-06-01
  3  1.0.2b 2016-06-30      patch 2016-06-01
  4  1.0.2c 2016-06-30      patch 2016-06-01)
+```
 
 -   **231** entries tagged as `patch`
 -   **59** as `minor`
@@ -785,32 +831,34 @@ Even without context, you can see the game breathing:
 
 Once we pull the patch CSV in and count how many **major**, **minor**, and **patch** releases landed in each month, the picture gets more interesting.
 
-\# Keep only patches that overlap the review window
-start\_month = df\["year\_month"\].min()
-end\_month = df\["year\_month"\].max()
+```python
+# Keep only patches that overlap the review window
+start_month = df["year_month"].min()
+end_month = df["year_month"].max()
 
-patches\_window = patches\[
-    (patches\["year\_month"\] >= start\_month)
-    & (patches\["year\_month"\] <= end\_month)
-\].copy()
+patches_window = patches[
+    (patches["year_month"] >= start_month)
+    & (patches["year_month"] <= end_month)
+].copy()
 
 # Count patch types per month
-patch\_summary = (
-    patches\_window
-    .groupby(\["year\_month", "patch\_type"\])\["version"\]
+patch_summary = (
+    patches_window
+    .groupby(["year_month", "patch_type"])["version"]
     .count()
-    .unstack(fill\_value=0)
-    .reset\_index()
+    .unstack(fill_value=0)
+    .reset_index()
 )
 
 # Merge with monthly review stats
-monthly\_with\_patches = monthly.merge(patch\_summary, on="year\_month", how="left")
+monthly_with_patches = monthly.merge(patch_summary, on="year_month", how="left")
 
-for col in \["major", "minor", "patch"\]:
-    if col in monthly\_with\_patches.columns:
-        monthly\_with\_patches\[col\] = monthly\_with\_patches\[col\].fillna(0)
+for col in ["major", "minor", "patch"]:
+    if col in monthly_with_patches.columns:
+        monthly_with_patches[col] = monthly_with_patches[col].fillna(0)
 
-monthly\_with\_patches.head()
+monthly_with_patches.head()
+```
 
 |  | **year\_month** | **review\_count** | **share\_positive** | major | minor | patch |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -846,57 +894,59 @@ In the essay, I don’t try to do serious causal analysis with this — that wou
 
 Let’s plot the sentiment and take a closer look at monthly reviews and patches.
 
-\# Plot monthly positivity, volume, and patch markers
+```python
+# Plot monthly positivity, volume, and patch markers
 fig, ax1 = plt.subplots(figsize=(10, 4))
 
 # Positivity line
 ax1.plot(
-    monthly\_with\_patches\["year\_month"\],
-    monthly\_with\_patches\["share\_positive"\],
+    monthly_with_patches["year_month"],
+    monthly_with_patches["share_positive"],
     label="Share positive",
 )
-ax1.set\_xlabel("Month")
-ax1.set\_ylabel("Share positive")
+ax1.set_xlabel("Month")
+ax1.set_ylabel("Share positive")
 
 # Review volume as bars on second axis
 ax2 = ax1.twinx()
 ax2.bar(
-    monthly\_with\_patches\["year\_month"\],
-    monthly\_with\_patches\["review\_count"\],
+    monthly_with_patches["year_month"],
+    monthly_with_patches["review_count"],
     alpha=0.3,
     label="Review count",
 )
-ax2.set\_ylabel("Number of reviews")
+ax2.set_ylabel("Number of reviews")
 
 # Mark major and minor patches on the positivity line
-major\_mask = monthly\_with\_patches\["major"\] > 0
-minor\_mask = monthly\_with\_patches\["minor"\] > 0
+major_mask = monthly_with_patches["major"] > 0
+minor_mask = monthly_with_patches["minor"] > 0
 
 ax1.scatter(
-    monthly\_with\_patches.loc\[major\_mask, "year\_month"\],
-    monthly\_with\_patches.loc\[major\_mask, "share\_positive"\],
+    monthly_with_patches.loc[major_mask, "year_month"],
+    monthly_with_patches.loc[major_mask, "share_positive"],
     s=60,
     marker="o",
     label="Major patch month",
 )
 
 ax1.scatter(
-    monthly\_with\_patches.loc\[minor\_mask, "year\_month"\],
-    monthly\_with\_patches.loc\[minor\_mask, "share\_positive"\],
+    monthly_with_patches.loc[minor_mask, "year_month"],
+    monthly_with_patches.loc[minor_mask, "share_positive"],
     s=40,
     marker="x",
     label="Minor patch month",
 )
 
-ax1.tick\_params(axis="x", rotation=45)
-ax1.set\_title("Positivity, Volume, and Patches Over Time")
+ax1.tick_params(axis="x", rotation=45)
+ax1.set_title("Positivity, Volume, and Patches Over Time")
 
-handles1, labels1 = ax1.get\_legend\_handles\_labels()
-handles2, labels2 = ax2.get\_legend\_handles\_labels()
+handles1, labels1 = ax1.get_legend_handles_labels()
+handles2, labels2 = ax2.get_legend_handles_labels()
 ax1.legend(handles1 + handles2, labels1 + labels2, loc="best")
 
-fig.tight\_layout()
+fig.tight_layout()
 plt.show()
+```
 
 ![Steam reviews sentiment analysis over time vs. game patches](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/dbd-reviews-nlp-sentiment-plot.jpg?resize=829%2C324&quality=81&ssl=1)
 
@@ -1003,12 +1053,14 @@ You can already see the gap in the text:
 
 To get a more nuanced picture, I added a second label: an approximate **mood** for each review.
 
-tokenizer = AutoTokenizer.from\_pretrained(EMOTION\_MODEL\_NAME)
-emotion\_model = AutoModelForSequenceClassification.from\_pretrained(EMOTION\_MODEL\_NAME)
-emotion\_model.eval()
+```python
+tokenizer = AutoTokenizer.from_pretrained(EMOTION_MODEL_NAME)
+emotion_model = AutoModelForSequenceClassification.from_pretrained(EMOTION_MODEL_NAME)
+emotion_model.eval()
 
-emotion\_labels = emotion\_model.config.id2label
-emotion\_labels
+emotion_labels = emotion_model.config.id2label
+emotion_labels
+```
 
 Instead of building that from scratch, the notebook uses a pretrained emotion classifier — a DistilRoBERTa model fine-tuned on English emotions. It maps each review to one of seven classes:
 
@@ -1046,51 +1098,53 @@ We’ll treat this mood label as approximate — the model isn’t perfect, and 
 
 Once the emotion model runs over a big sample of reviews, it gives us a second label per text.
 
-text\_col = "review"  # using the raw review text
+```python
+text_col = "review"  # using the raw review text
 
 # Make sure we only sample from non-empty text
-df\_for\_emotion = df\[
-    df\[text\_col\].notna()
-    & (df\[text\_col\].astype(str).str.strip() != "")
-\].copy()
-df\_for\_emotion\["label"\] = df\_for\_emotion\["sentiment"\].map({1: "positive", 0: "negative"})
+df_for_emotion = df[
+    df[text_col].notna()
+    & (df[text_col].astype(str).str.strip() != "")
+].copy()
+df_for_emotion["label"] = df_for_emotion["sentiment"].map({1: "positive", 0: "negative"})
 
-def batched(iterable, batch\_size: int):
-    batch = \[\]
+def batched(iterable, batch_size: int):
+    batch = []
     for item in iterable:
         batch.append(item)
-        if len(batch) == batch\_size:
+        if len(batch) == batch_size:
             yield batch
-            batch = \[\]
+            batch = []
     if batch:
         yield batch
 
-def predict\_emotions(texts, batch\_size: int = 32, max\_len: int = 256):
-    all\_labels = \[\]
-    for batch in batched(texts, batch\_size):
-        batch\_str = \[str(t) for t in batch\]
+def predict_emotions(texts, batch_size: int = 32, max_len: int = 256):
+    all_labels = []
+    for batch in batched(texts, batch_size):
+        batch_str = [str(t) for t in batch]
         enc = tokenizer(
-            batch\_str,
+            batch_str,
             padding=True,
             truncation=True,
-            max\_length=max\_len,
-            return\_tensors="pt",
+            max_length=max_len,
+            return_tensors="pt",
         )
-        with torch.no\_grad():
-            outputs = emotion\_model(
-                input\_ids=enc\["input\_ids"\],
-                attention\_mask=enc\["attention\_mask"\],
+        with torch.no_grad():
+            outputs = emotion_model(
+                input_ids=enc["input_ids"],
+                attention_mask=enc["attention_mask"],
             )
             probs = torch.softmax(outputs.logits, dim=-1).cpu().numpy()
         preds = probs.argmax(axis=-1)
-        all\_labels.extend(preds)
-    return \[emotion\_labels\[int(i)\] for i in all\_labels\]
+        all_labels.extend(preds)
+    return [emotion_labels[int(i)] for i in all_labels]
 
-emotion\_sample = df\_for\_emotion.sample(EMOTION\_SAMPLE\_SIZE, random\_state=SEED).copy()
-emotion\_sample\["emotion"\] = predict\_emotions(emotion\_sample\[text\_col\])
+emotion_sample = df_for_emotion.sample(EMOTION_SAMPLE_SIZE, random_state=SEED).copy()
+emotion_sample["emotion"] = predict_emotions(emotion_sample[text_col])
 
-emotion\_dist = emotion\_sample\["emotion"\].value\_counts(normalize=True)
-emotion\_dist
+emotion_dist = emotion_sample["emotion"].value_counts(normalize=True)
+emotion_dist
+```
 
 On 80,000 randomly sampled reviews, the distribution looks like this:
 
@@ -1132,14 +1186,16 @@ Now that every review in our sample has both:
 
 we can look at how those two interact.
 
-\# Crosstab of emotion vs Steam label (positive/negative)
-mood\_sent\_crosstab = pd.crosstab(
-    emotion\_sample\["emotion"\],
-    emotion\_sample\["label"\],  # 'positive' / 'negative'
+```python
+# Crosstab of emotion vs Steam label (positive/negative)
+mood_sent_crosstab = pd.crosstab(
+    emotion_sample["emotion"],
+    emotion_sample["label"],  # 'positive' / 'negative'
     normalize="index",        # proportions per emotion
-).sort\_index()
+).sort_index()
 
-mood\_sent\_crosstab
+mood_sent_crosstab
+```
 
 | emotion | negative | positive |
 | --- | --- | --- |
@@ -1209,43 +1265,47 @@ That’s interesting, but still abstract. To get a better picture, I looked at t
 
 That’s where it starts to feel very Dead by Daylight.
 
-def top\_ngrams\_for(df\_slice, n: int = 2, k: int = 5, text\_col: str = "review"):
-    return top\_ngrams(df\_slice\[text\_col\], n=n, top\_k=k)
+```python
+def top_ngrams_for(df_slice, n: int = 2, k: int = 5, text_col: str = "review"):
+    return top_ngrams(df_slice[text_col], n=n, top_k=k)
 
 # Joyful reviews
-joy\_pos = emotion\_sample\[
-    (emotion\_sample\["emotion"\] == "joy")
-    & (emotion\_sample\["label"\] == "positive")
-\]
-joy\_neg = emotion\_sample\[
-    (emotion\_sample\["emotion"\] == "joy")
-    & (emotion\_sample\["label"\] == "negative")
-\]
+joy_pos = emotion_sample[
+    (emotion_sample["emotion"] == "joy")
+    & (emotion_sample["label"] == "positive")
+]
+joy_neg = emotion_sample[
+    (emotion_sample["emotion"] == "joy")
+    & (emotion_sample["label"] == "negative")
+]
 
-joy\_pos\_bi = top\_ngrams\_for(joy\_pos, n=2, k=5, text\_col=text\_col)
-joy\_neg\_bi = top\_ngrams\_for(joy\_neg, n=2, k=5, text\_col=text\_col)
+joy_pos_bi = top_ngrams_for(joy_pos, n=2, k=5, text_col=text_col)
+joy_neg_bi = top_ngrams_for(joy_neg, n=2, k=5, text_col=text_col)
 
-joy\_pos\_bi, joy\_neg\_bi
+joy_pos_bi, joy_neg_bi
+```
 
 I reused the code above for also `anger` and `disgust` and then analyzed that compared with playtime.
 
-emotion\_sample\["text\_len"\] = emotion\_sample\[text\_col\].astype(str).str.len()
+```python
+emotion_sample["text_len"] = emotion_sample[text_col].astype(str).str.len()
 
-emotion\_stats = (
-    emotion\_sample
+emotion_stats = (
+    emotion_sample
     .groupby("emotion")
     .agg(
-        mean\_len=("text\_len", "mean"),
-        median\_len=("text\_len", "median"),
-        mean\_playtime\_min=("author\_playtime\_at\_review\_min", "mean"),
-        median\_playtime\_min=("author\_playtime\_at\_review\_min", "median"),
-        share\_positive=("label", lambda s: (s == "positive").mean()),
+        mean_len=("text_len", "mean"),
+        median_len=("text_len", "median"),
+        mean_playtime_min=("author_playtime_at_review_min", "mean"),
+        median_playtime_min=("author_playtime_at_review_min", "median"),
+        share_positive=("label", lambda s: (s == "positive").mean()),
         count=("emotion", "size"),
     )
-    .sort\_index()
+    .sort_index()
 )
 
-emotion\_stats
+emotion_stats
+```
 
 Here are the full results but let’s look at some in details.
 
@@ -1429,41 +1489,43 @@ To show how you can zoom in on specific parts of the dataset, I picked three ver
 
 Those counts aren’t when they were introduced, just how often they show up in balance notes and bug fixes.
 
-killer\_cols = {
-    "blight": r"\\bblight\\b",
-    "nurse": r"\\bnurse\\b",
-    "spirit": r"\\bspirit\\b",
+```python
+killer_cols = {
+    "blight": r"\bblight\b",
+    "nurse": r"\bnurse\b",
+    "spirit": r"\bspirit\b",
 }
 
-for name, pattern in killer\_cols.items():
-    df\[f"mentions\_{name}"\] = df\["review"\].astype(str).str.contains(
+for name, pattern in killer_cols.items():
+    df[f"mentions_{name}"] = df["review"].astype(str).str.contains(
         pattern, case=False, na=False
     )
 
-for name, pattern in killer\_cols.items():
-    emotion\_sample\[f"mentions\_{name}"\] = (
-        emotion\_sample\[text\_col\]
+for name, pattern in killer_cols.items():
+    emotion_sample[f"mentions_{name}"] = (
+        emotion_sample[text_col]
         .astype(str)
         .str.contains(pattern, case=False, na=False)
     )
 
-emotion\_sample\[
-    \["emotion", "label", "mentions\_blight", "mentions\_nurse", "mentions\_spirit"\]
-\].head()
+emotion_sample[
+    ["emotion", "label", "mentions_blight", "mentions_nurse", "mentions_spirit"]
+].head()
 
-def killer\_summary(killer: str):
-    mask = emotion\_sample\[f"mentions\_{killer}"\]
-    subset = emotion\_sample\[mask\]
+def killer_summary(killer: str):
+    mask = emotion_sample[f"mentions_{killer}"]
+    subset = emotion_sample[mask]
     return {
         "killer": killer,
-        "n\_reviews": len(subset),
-        "share\_of\_sample": len(subset) / len(emotion\_sample),
-        "share\_positive": (subset\["label"\] == "positive").mean(),
-        "mood\_dist": subset\["emotion"\].value\_counts(normalize=True),
+        "n_reviews": len(subset),
+        "share_of_sample": len(subset) / len(emotion_sample),
+        "share_positive": (subset["label"] == "positive").mean(),
+        "mood_dist": subset["emotion"].value_counts(normalize=True),
     }
 
-for k in \["blight", "nurse", "spirit"\]:
-    print(killer\_summary(k))
+for k in ["blight", "nurse", "spirit"]:
+    print(killer_summary(k))
+```
 
 In the review sample we ran through the emotion model, they show up like this:
 
@@ -1581,31 +1643,33 @@ For Nurse, I filtered the dataset down to “reviews that contain the word `nurs
 -   how many such reviews there were, and
 -   what share of them were positive.
 
-def killer\_monthly(killer: str):
-    mask = df\[f"mentions\_{killer}"\]
-    subset = df\[mask\]
-    monthly\_k = (
-        subset.groupby("year\_month")
+```python
+def killer_monthly(killer: str):
+    mask = df[f"mentions_{killer}"]
+    subset = df[mask]
+    monthly_k = (
+        subset.groupby("year_month")
         .agg(
-            review\_count=("review", "size"),
-            share\_positive=("sentiment", "mean"),
+            review_count=("review", "size"),
+            share_positive=("sentiment", "mean"),
         )
-        .reset\_index()
+        .reset_index()
     )
-    monthly\_k\["killer"\] = killer
-    return monthly\_k
+    monthly_k["killer"] = killer
+    return monthly_k
 
-killer\_monthly\_df = pd.concat(
-    \[killer\_monthly(k) for k in \["blight", "nurse", "spirit"\]\],
-    ignore\_index=True,
+killer_monthly_df = pd.concat(
+    [killer_monthly(k) for k in ["blight", "nurse", "spirit"]],
+    ignore_index=True,
 )
 
 k = "nurse"
-km = killer\_monthly\_df\[killer\_monthly\_df\["killer"\] == k\].sort\_values("year\_month")
+km = killer_monthly_df[killer_monthly_df["killer"] == k].sort_values("year_month")
 
-km\[\["year\_month", "review\_count", "share\_positive"\]\].head(), km\[
-    \["year\_month", "review\_count", "share\_positive"\]
-\].tail()
+km[["year_month", "review_count", "share_positive"]].head(), km[
+    ["year_month", "review_count", "share_positive"]
+].tail()
+```
 
 That gives a monthly table like this for the Nurse:
 
@@ -1662,4 +1726,4 @@ From here, there’s a lot you can do next. You can reuse the same notebook for 
 
 You’re limited only by your imagination and curiosity.
 
-I hope you enjoyed reading this case study as much as I enjoyed writing it. Download the dataset here or [on Kaggle](https://www.kaggle.com/datasets/nicolamustone/steam-reviews-english-dead-by-daylight) and practice with NLP as you see fit!
+I hope you enjoyed reading this case study as much as I enjoyed writing it. Download the dataset below or [on Kaggle](https://www.kaggle.com/datasets/nicolamustone/steam-reviews-english-dead-by-daylight) and practice with NLP as you see fit!

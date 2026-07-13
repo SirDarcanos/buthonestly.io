@@ -86,162 +86,163 @@ The code below is a self-contained way to link WooCommerce attributes from the *
 
 You are about to edit PHP. Even a missing semicolon can break your site. Before you make any code changes, have a backup of your site. This will help you restore things if something goes wrong. I recommend using Jetpack Backup for real-time backups and one-click restores.
 
-/\*\*
- \* @snippet       Make Product Attributes Linkable + Optional New Tab
- \* @author        Nicola Mustone
- \* @author\_url    https://buthonestly.io/programming/make-product-attributes-linkable-woocommerce/
- \* @tested-up-to  WooCommerce 10.3.X
- \* @license       GPLv2
- \*/
+```php
+/**
+ * @snippet       Make Product Attributes Linkable + Optional New Tab
+ * @author        Nicola Mustone
+ * @author_url    https://buthonestly.io/programming/make-product-attributes-linkable-woocommerce/
+ * @tested-up-to  WooCommerce 10.3.X
+ * @license       GPLv2
+ */
 
-/\*\*
- \* Register term fields for WooCommerce attributes.
- \*/
-add\_action( 'woocommerce\_after\_register\_taxonomy', 'bh\_register\_attributes\_url\_meta' );
-function bh\_register\_attributes\_url\_meta() {
-	if ( ! is\_admin() ) {
+/**
+ * Register term fields for WooCommerce attributes.
+ */
+add_action( 'woocommerce_after_register_taxonomy', 'bh_register_attributes_url_meta' );
+function bh_register_attributes_url_meta() {
+	if ( ! is_admin() ) {
 		return;
 	}
 
-	$attributes = wc\_get\_attribute\_taxonomies();
+	$attributes = wc_get_attribute_taxonomies();
 	if ( empty( $attributes ) ) {
 		return;
 	}
 
 	foreach ( $attributes as $tax ) {
-		$name = wc\_attribute\_taxonomy\_name( $tax->attribute\_name );
+		$name = wc_attribute_taxonomy_name( $tax->attribute_name );
 
-		add\_action( "{$name}\_add\_form\_fields", 'bh\_add\_attribute\_url\_meta\_field' );
-		add\_action( "{$name}\_edit\_form\_fields", 'bh\_edit\_attribute\_url\_meta\_field', 10 );
-		add\_action( "edited\_{$name}", 'bh\_save\_attribute\_url' );
-		add\_action( "create\_{$name}", 'bh\_save\_attribute\_url' );
+		add_action( "{$name}_add_form_fields", 'bh_add_attribute_url_meta_field' );
+		add_action( "{$name}_edit_form_fields", 'bh_edit_attribute_url_meta_field', 10 );
+		add_action( "edited_{$name}", 'bh_save_attribute_url' );
+		add_action( "create_{$name}", 'bh_save_attribute_url' );
 	}
 }
 
-/\*\*
- \* Add URL + checkbox field to the new attribute term form.
- \*/
-function bh\_add\_attribute\_url\_meta\_field() {
-	wp\_nonce\_field( basename( \_\_FILE\_\_ ), 'attribute\_url\_meta\_nonce' );
+/**
+ * Add URL + checkbox field to the new attribute term form.
+ */
+function bh_add_attribute_url_meta_field() {
+	wp_nonce_field( basename( __FILE__ ), 'attribute_url_meta_nonce' );
 	?>
 	<div class="form-field">
-		<label for="attribute\_url"><?php esc\_html\_e( 'URL', 'woocommerce' ); ?></label>
-		<input type="url" name="attribute\_url" id="attribute\_url" value="" class="regular-text" />
-		<p class="description"><?php esc\_html\_e( 'Optional. If set, the attribute value will link to this URL.', 'woocommerce' ); ?></p>
+		<label for="attribute_url"><?php esc_html_e( 'URL', 'woocommerce' ); ?></label>
+		<input type="url" name="attribute_url" id="attribute_url" value="" class="regular-text" />
+		<p class="description"><?php esc_html_e( 'Optional. If set, the attribute value will link to this URL.', 'woocommerce' ); ?></p>
 	</div>
 
 	<div class="form-field">
-		<label for="attribute\_url\_blank">
-			<input type="checkbox" name="attribute\_url\_blank" id="attribute\_url\_blank" value="1" />
-			<?php esc\_html\_e( 'Open in a new tab', 'woocommerce' ); ?>
+		<label for="attribute_url_blank">
+			<input type="checkbox" name="attribute_url_blank" id="attribute_url_blank" value="1" />
+			<?php esc_html_e( 'Open in a new tab', 'woocommerce' ); ?>
 		</label>
 	</div>
 	<?php
 }
 
-/\*\*
- \* Add URL + checkbox field to the edit attribute term form.
- \*/
-function bh\_edit\_attribute\_url\_meta\_field( $term ) {
-	$url   = get\_term\_meta( $term->term\_id, 'attribute\_url', true );
-	$blank = get\_term\_meta( $term->term\_id, 'attribute\_url\_blank', true );
-	wp\_nonce\_field( basename( \_\_FILE\_\_ ), 'attribute\_url\_meta\_nonce' );
+/**
+ * Add URL + checkbox field to the edit attribute term form.
+ */
+function bh_edit_attribute_url_meta_field( $term ) {
+	$url   = get_term_meta( $term->term_id, 'attribute_url', true );
+	$blank = get_term_meta( $term->term_id, 'attribute_url_blank', true );
+	wp_nonce_field( basename( __FILE__ ), 'attribute_url_meta_nonce' );
 	?>
 	<tr class="form-field">
 		<th scope="row" valign="top">
-			<label for="attribute\_url"><?php esc\_html\_e( 'URL', 'woocommerce' ); ?></label>
+			<label for="attribute_url"><?php esc_html_e( 'URL', 'woocommerce' ); ?></label>
 		</th>
 		<td>
-			<input type="url" name="attribute\_url" id="attribute\_url" value="<?php echo esc\_url( $url ); ?>" class="regular-text" />
-			<p class="description"><?php esc\_html\_e( 'Optional. If set, the attribute value will link to this URL.', 'woocommerce' ); ?></p>
+			<input type="url" name="attribute_url" id="attribute_url" value="<?php echo esc_url( $url ); ?>" class="regular-text" />
+			<p class="description"><?php esc_html_e( 'Optional. If set, the attribute value will link to this URL.', 'woocommerce' ); ?></p>
 		</td>
 	</tr>
 	<tr class="form-field">
 		<th scope="row" valign="top">
-			<label for="attribute\_url\_blank"><?php esc\_html\_e( 'Open in a new tab', 'woocommerce' ); ?></label>
+			<label for="attribute_url_blank"><?php esc_html_e( 'Open in a new tab', 'woocommerce' ); ?></label>
 		</th>
 		<td>
-			<input type="checkbox" name="attribute\_url\_blank" id="attribute\_url\_blank" value="1" <?php checked( $blank, '1' ); ?> />
+			<input type="checkbox" name="attribute_url_blank" id="attribute_url_blank" value="1" <?php checked( $blank, '1' ); ?> />
 		</td>
 	</tr>
 	<?php
 }
 
-/\*\*
- \* Save URL + checkbox field for attribute terms.
- \*/
-function bh\_save\_attribute\_url( $term\_id ) {
-	if ( ! isset( $\_POST\['attribute\_url\_meta\_nonce'\] ) ||
-		 ! wp\_verify\_nonce( $\_POST\['attribute\_url\_meta\_nonce'\], basename( \_\_FILE\_\_ ) ) ) {
+/**
+ * Save URL + checkbox field for attribute terms.
+ */
+function bh_save_attribute_url( $term_id ) {
+	if ( ! isset( $_POST['attribute_url_meta_nonce'] ) ||
+		 ! wp_verify_nonce( $_POST['attribute_url_meta_nonce'], basename( __FILE__ ) ) ) {
 		return;
 	}
 
-	if ( ! current\_user\_can( 'manage\_product\_terms' ) ) {
+	if ( ! current_user_can( 'manage_product_terms' ) ) {
 		return;
 	}
 
-	$new\_url   = isset( $\_POST\['attribute\_url'\] ) ? esc\_url\_raw( wp\_unslash( $\_POST\['attribute\_url'\] ) ) : '';
-	$new\_blank = isset( $\_POST\['attribute\_url\_blank'\] ) ? '1' : '0';
+	$new_url   = isset( $_POST['attribute_url'] ) ? esc_url_raw( wp_unslash( $_POST['attribute_url'] ) ) : '';
+	$new_blank = isset( $_POST['attribute_url_blank'] ) ? '1' : '0';
 
-	if ( '' === $new\_url ) {
-		delete\_term\_meta( $term\_id, 'attribute\_url' );
-		delete\_term\_meta( $term\_id, 'attribute\_url\_blank' );
+	if ( '' === $new_url ) {
+		delete_term_meta( $term_id, 'attribute_url' );
+		delete_term_meta( $term_id, 'attribute_url_blank' );
 	} else {
-		update\_term\_meta( $term\_id, 'attribute\_url', $new\_url );
-		update\_term\_meta( $term\_id, 'attribute\_url\_blank', $new\_blank );
+		update_term_meta( $term_id, 'attribute_url', $new_url );
+		update_term_meta( $term_id, 'attribute_url_blank', $new_blank );
 	}
 }
 
-/\*\*
- \* Filter to make product attributes linkable.
- \*/
-add\_filter( 'woocommerce\_attribute', 'bh\_make\_product\_atts\_linkable', 10, 3 );
-function bh\_make\_product\_atts\_linkable( $text, $attribute, $values ) {
-	$new\_values = array();
+/**
+ * Filter to make product attributes linkable.
+ */
+add_filter( 'woocommerce_attribute', 'bh_make_product_atts_linkable', 10, 3 );
+function bh_make_product_atts_linkable( $text, $attribute, $values ) {
+	$new_values = array();
 
 	foreach ( (array) $values as $value ) {
-		if ( $attribute\['is\_taxonomy'\] ) {
+		if ( $attribute['is_taxonomy'] ) {
 			// Handle global (taxonomy) attributes.
-			$term = get\_term\_by( 'slug', sanitize\_title( $value ), $attribute\['name'\] );
-			if ( ! $term || is\_wp\_error( $term ) ) {
+			$term = get_term_by( 'slug', sanitize_title( $value ), $attribute['name'] );
+			if ( ! $term || is_wp_error( $term ) ) {
 				// Fallback to name if needed.
-				$term = get\_term\_by( 'name', $value, $attribute\['name'\] );
+				$term = get_term_by( 'name', $value, $attribute['name'] );
 			}
 
-			if ( $term && ! is\_wp\_error( $term ) ) {
-				$url = get\_term\_meta( $term->term\_id, 'attribute\_url', true );
+			if ( $term && ! is_wp_error( $term ) ) {
+				$url = get_term_meta( $term->term_id, 'attribute_url', true );
 				if ( ! empty( $url ) ) {
-					$blank = get\_term\_meta( $term->term\_id, 'attribute\_url\_blank', true );
-					$target\_attr = ( '1' === $blank ) ? ' target="\_blank"' : '';
+					$blank = get_term_meta( $term->term_id, 'attribute_url_blank', true );
+					$target_attr = ( '1' === $blank ) ? ' target="_blank"' : '';
 
-					$new\_values\[\] = sprintf(
+					$new_values[] = sprintf(
 						'<a href="%s" title="%s"%s>%s</a>',
-						esc\_url( $url ),
-						esc\_attr( $term->name ),
-						$target\_attr,
-						esc\_html( $term->name )
+						esc_url( $url ),
+						esc_attr( $term->name ),
+						$target_attr,
+						esc_html( $term->name )
 					);
 					continue;
 				}
 			}
 
-			$new\_values\[\] = esc\_html( $value );
+			$new_values[] = esc_html( $value );
 		} else {
-			// Handle local attributes (Markdown-style \[text\](url)).
-			if ( preg\_match( '/\[(.\*?)\]((.\*?))(?:{(blank)})?/', $value, $matches ) ) {
-				$link\_text = esc\_html( $matches\[1\] );
-				$link\_url  = strip\_tags( $matches\[2\] );
-				$target    = isset( $matches\[3\] ) && $matches\[3\] === 'blank' ? ' target="\_blank"' : '';
+			// Handle local attributes (Markdown-style [text](url)).
+			if ( preg_match( '/[(.*?)]((.*?))(?:{(blank)})?/', $value, $matches ) ) {
+				$link_text = esc_html( $matches[1] );
+				$link_url  = strip_tags( $matches[2] );
+				$target    = isset( $matches[3] ) && $matches[3] === 'blank' ? ' target="_blank"' : '';
 
-				if ( filter\_var( $link\_url, FILTER\_VALIDATE\_URL ) ) {
-					$new\_values\[\] = sprintf(
+				if ( filter_var( $link_url, FILTER_VALIDATE_URL ) ) {
+					$new_values[] = sprintf(
 						'<a href="%s"%s>%s</a>',
-						esc\_url( $link\_url ),
+						esc_url( $link_url ),
 						$target,
-						$link\_text
+						$link_text
 					);
 				} else {
-					$new\_values\[\] = $link\_text;
+					$new_values[] = $link_text;
 				}
 			}
 
@@ -249,8 +250,9 @@ function bh\_make\_product\_atts\_linkable( $text, $attribute, $values ) {
 	}
 
 	// Fallback to original text if nothing changed.
-	return $new\_values ? implode( ', ', $new\_values ) : $text;
+	return $new_values ? implode( ', ', $new_values ) : $text;
 }
+```
 
 From the start of the snippet to around the middle, the code registers and saves the extra fields for global attributes.  
 From the middle to the end, it changes how attributes are rendered so they can become links for both global and local attributes.
@@ -291,7 +293,9 @@ To work around this, the snippet lets you use a simple Markdown-style syntax in 
 4.  Give it a name.
 5.  In the **Values** field, write your links using this format:
 
-\[Text shown\](https://myurl.com)
+```text
+[Text shown](https://myurl.com)
+```
 
 The second attribute in the screenshot example (named “Test”) is a local attribute that uses this pattern.
 
@@ -303,7 +307,9 @@ After you click **Save Attributes** and update the product, the **Additional Inf
 
 To open the link in a new tab, add `{blank}` right after the link:
 
-\[Text shown\](https://myurl.com){blank}
+```text
+[Text shown](https://myurl.com){blank}
+```
 
 The snippet looks for that `{blank}` marker and sets the `target="_blank"` attribute on the link. If the URL is invalid, the code falls back to showing only the text.
 

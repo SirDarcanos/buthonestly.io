@@ -68,11 +68,13 @@ You can do it one product at a time, or drive everything from a CSV or text file
 
 Creating a simple product is a good baseline. This command creates a simple product with the title “Test Product,” SKU `WCCLITESTP`, and a regular price of 20:
 
+```bash
 wp wc product create 
   --title="Test Product" 
   --type=simple 
   --sku=WCCLITESTP 
-  --regular\_price=20
+  --regular_price=20
+```
 
 Run it and you will see the new product appear in your WooCommerce dashboard, just as if you had created it through the editor.
 
@@ -82,13 +84,15 @@ External products work the same way as simple products, but they point to a URL 
 
 On top of the simple product fields, you can set a product URL and the button text:
 
+```bash
 wp wc product create 
   --title="External Product Test" 
   --type=external 
   --sku=WCCLIEXTERNAL 
-  --regular\_price=20 
-  --product\_url="https://domain.com/product/test/" 
-  --button\_text="Buy me"
+  --regular_price=20 
+  --product_url="https://domain.com/product/test/" 
+  --button_text="Buy me"
+```
 
 The URL and button text are technically optional, but in practice you should set at least the `--product_url`. If you forget it here, you will have to edit the product by hand later, which defeats the purpose of using the CLI.
 
@@ -98,21 +102,25 @@ A grouped product is a container for other simple products. You create the group
 
 Create the grouped product:
 
+```bash
 wp wc product create 
   --title="Grouped Product" 
   --type=grouped 
   --sku=WCCLITESTGROUPED
+```
 
 The command will print the new product ID. You will need that ID when you attach simple products.
 
 When you create a simple product that belongs to this group, pass the grouped product ID as the parent:
 
+```bash
 wp wc product create 
   --title="Grouped Child Product" 
   --type=simple 
   --sku=WCCLIGROUPEDCHILD 
-  --regular\_price=15 
-  --parent\_id=123
+  --regular_price=15 
+  --parent_id=123
+```
 
 Replace `123` with the ID of your grouped product. Any simple product created with that `--parent_id` will appear inside the group in WooCommerce.
 
@@ -126,14 +134,19 @@ WooCommerce CLI treats attributes and variations as arrays. You refer to each on
 
 For example, to set the regular price for the first variation, you use:
 
-\--variations.0.regular\_price=20
+```bash
+--variations.0.regular_price=20
+```
 
 The same pattern applies to attributes:
 
-\--attributes.0.name="Color"
+```bash
+--attributes.0.name="Color"
+```
 
 Let us create a simple variable product with two attributes, Color and Size, and a set of variations that combine them.
 
+```bash
 wp wc product create 
   --title="Variable Product Test" 
   --type=variable 
@@ -150,31 +163,35 @@ wp wc product create
   
   --variations.0.attributes.color="Black" 
   --variations.0.attributes.size="Small" 
-  --variations.0.regular\_price=20 
+  --variations.0.regular_price=20 
   
   --variations.1.attributes.color="Black" 
   --variations.1.attributes.size="Medium" 
-  --variations.1.regular\_price=20 
+  --variations.1.regular_price=20 
   
   --variations.2.attributes.color="Blue" 
   --variations.2.attributes.size="Small" 
-  --variations.2.regular\_price=20 
+  --variations.2.regular_price=20 
   
   --variations.3.attributes.color="Blue" 
   --variations.3.attributes.size="Medium" 
-  --variations.3.regular\_price=20
+  --variations.3.regular_price=20
+```
 
 Let us unpack what this does.
 
 The first part creates the variable product itself:
 
+```bash
 wp wc product create 
   --title="Variable Product Test" 
   --type=variable
+```
 
 The next block defines the attributes:
 
-\--attributes.0.name="Color" 
+```bash
+--attributes.0.name="Color" 
 --attributes.0.visible=yes 
 --attributes.0.variation=yes 
 --attributes.0.options="Black|Blue" 
@@ -183,6 +200,7 @@ The next block defines the attributes:
 --attributes.1.visible=yes 
 --attributes.1.variation=yes 
 --attributes.1.options="Small|Medium"
+```
 
 Here:
 
@@ -193,21 +211,23 @@ Here:
 
 The final block creates the variations:
 
-\--variations.0.attributes.color="Black" 
+```bash
+--variations.0.attributes.color="Black" 
 --variations.0.attributes.size="Small" 
---variations.0.regular\_price=20 
+--variations.0.regular_price=20 
 
 --variations.1.attributes.color="Black" 
 --variations.1.attributes.size="Medium" 
---variations.1.regular\_price=20 
+--variations.1.regular_price=20 
 
 --variations.2.attributes.color="Blue" 
 --variations.2.attributes.size="Small" 
---variations.2.regular\_price=20 
+--variations.2.regular_price=20 
 
 --variations.3.attributes.color="Blue" 
 --variations.3.attributes.size="Medium" 
---variations.3.regular\_price=20
+--variations.3.regular_price=20
+```
 
 Each `variations.N` entry describes one specific combination of attributes and its price.
 
@@ -222,13 +242,17 @@ If you need more combinations, you keep adding more `variations.N` blocks.
 
 Deleting a single product by ID is straightforward:
 
+```bash
 wp wc product delete 123
+```
 
 Replace `123` with the product ID.
 
 If you want to delete all products in bulk, you can pipe the output of a list command into delete. This is destructive, so use it only when you are sure you want a clean slate.
 
+```bash
 wp wc product delete $(wp wc product list --format=ids)
+```
 
 `wp wc product list --format=ids` returns only product IDs, one after another. The outer command then deletes each of those IDs.
 
@@ -236,16 +260,20 @@ wp wc product delete $(wp wc product list --format=ids)
 
 Updating a product looks very similar to creating one. Instead of `product create`, you use `product update` and pass the product ID.
 
+```bash
 wp wc product update 123 
-  --regular\_price=25 
-  --sale\_price=20
+  --regular_price=25 
+  --sale_price=20
+```
 
 This updates product `123` with a new regular price and sale price. You can pass any other fields you would normally use for creation.
 
 Variations behave the same way. Each variation has its own ID and can be updated like a product:
 
+```bash
 wp wc product update 456 
-  --regular\_price=18
+  --regular_price=18
+```
 
 Here `456` is the variation ID. Treat variations as first class products when you update them.
 
@@ -267,10 +295,12 @@ Here is a minimal, end to end example of importing simple products from a CSV fi
 
 First, define a CSV file named `products.csv`. You can create one using Microsoft Excel or Google Sheets. Below is a basic example:
 
-title,sku,regular\_price,type
+```text
+title,sku,regular_price,type
 T Shirt Black Small,TSHIRT-BLACK-S,19.90,simple
 T Shirt Black Medium,TSHIRT-BLACK-M,19.90,simple
 Mug White,MUG-WHITE,9.90,simple
+```
 
 Each row describes one product:
 
@@ -281,31 +311,33 @@ Each row describes one product:
 
 Next, create a Python script named `import_products.py` in the same directory:
 
+```python
 import csv
 import subprocess
 from pathlib import Path
 
-csv\_path = Path("products.csv")
+csv_path = Path("products.csv")
 
-with csv\_path.open(newline="", encoding="utf-8") as f:
+with csv_path.open(newline="", encoding="utf-8") as f:
     reader = csv.DictReader(f)
 
     for row in reader:
-        title = row\["title"\]
-        sku = row\["sku"\]
-        regular\_price = row\["regular\_price"\]
+        title = row["title"]
+        sku = row["sku"]
+        regular_price = row["regular_price"]
         ptype = row.get("type", "simple")
 
-        cmd = \[
+        cmd = [
             "wp", "wc", "product", "create",
             f'--title={title}',
             f'--type={ptype}',
             f'--sku={sku}',
-            f'--regular\_price={regular\_price}',
-        \]
+            f'--regular_price={regular_price}',
+        ]
 
         print("Creating product:", title)
         subprocess.run(cmd, check=True)
+```
 
 What this script does:
 
@@ -315,7 +347,9 @@ What this script does:
 
 To run the import, go to your WordPress project directory (where `wp` is available) and run:
 
-python3 import\_products.py
+```bash
+python3 import_products.py
+```
 
 As long as the `wp wc` commands work when you type them by hand, they will work from Python too. The script just automates the typing.
 

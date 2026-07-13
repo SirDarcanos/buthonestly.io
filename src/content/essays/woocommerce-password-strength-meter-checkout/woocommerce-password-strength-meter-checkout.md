@@ -73,19 +73,21 @@ If you decide to relax the meter or customize its behavior, you do so at your ow
 
 Add this to your theme’s `functions.php` or to a small functionality plugin:
 
-/\*\*
- \* @snippet       WooCommerce Password Strength Meter: Keep It or Remove It
- \* @author        Nicola Mustone
- \* @author\_url    https://buthonestly.io/programming/woocommerce-password-strength-meter-checkout/
- \* @tested-up-to  WooCommerce 10.3.X
- \* @license       GPLv2
- \*/
-function bh\_remove\_woocommerce\_password\_strength\_meter() {
-	if ( wp\_script\_is( 'wc-password-strength-meter', 'enqueued' ) ) {
-		wp\_dequeue\_script( 'wc-password-strength-meter' );
+```php
+/**
+ * @snippet       WooCommerce Password Strength Meter: Keep It or Remove It
+ * @author        Nicola Mustone
+ * @author_url    https://buthonestly.io/programming/woocommerce-password-strength-meter-checkout/
+ * @tested-up-to  WooCommerce 10.3.X
+ * @license       GPLv2
+ */
+function bh_remove_woocommerce_password_strength_meter() {
+	if ( wp_script_is( 'wc-password-strength-meter', 'enqueued' ) ) {
+		wp_dequeue_script( 'wc-password-strength-meter' );
 	}
 }
-add\_action( 'wp\_enqueue\_scripts', 'bh\_remove\_woocommerce\_password\_strength\_meter', 100 );
+add_action( 'wp_enqueue_scripts', 'bh_remove_woocommerce_password_strength_meter', 100 );
+```
 
 This snippet has been used since the early WooCommerce 2.x days and still works with current WooCommerce because the script handle is the same.
 
@@ -103,28 +105,30 @@ If you do this, I recommend nudging your customers in another way, for example:
 
 This kind of hint is cheap to add and still better than nothing. To do that, put this in your theme’s `functions.php` or a small custom plugin:
 
-/\*\*
- \* @snippet       WooCommerce Password Strength Meter: Keep It or Remove It
- \* @author        Nicola Mustone
- \* @author\_url    https://buthonestly.io/programming/woocommerce-password-strength-meter-checkout/
- \* @tested-up-to  WooCommerce 10.3.X
- \* @license       GPLv2
- \*/
-function bh\_checkout\_password\_hint( $fields ) {
-	if ( isset( $fields\['account'\]\['account\_password'\] ) ) {
-		$fields\['account'\]\['account\_password'\]\['description'\] = \_\_( 'Use a unique password you do not use anywhere else.', 'your-textdomain' );
+```php
+/**
+ * @snippet       WooCommerce Password Strength Meter: Keep It or Remove It
+ * @author        Nicola Mustone
+ * @author_url    https://buthonestly.io/programming/woocommerce-password-strength-meter-checkout/
+ * @tested-up-to  WooCommerce 10.3.X
+ * @license       GPLv2
+ */
+function bh_checkout_password_hint( $fields ) {
+	if ( isset( $fields['account']['account_password'] ) ) {
+		$fields['account']['account_password']['description'] = __( 'Use a unique password you do not use anywhere else.', 'your-textdomain' );
 	}
 
 	return $fields;
 }
-add\_filter( 'woocommerce\_checkout\_fields', 'bh\_checkout\_password\_hint' );
+add_filter( 'woocommerce_checkout_fields', 'bh_checkout_password_hint' );
 
-function bh\_account\_password\_hint() {
+function bh_account_password_hint() {
 	echo '<p class="woocommerce-password-hint">';
-	echo esc\_html\_\_( 'Use a unique password you do not use anywhere else.', 'your-textdomain' );
+	echo esc_html__( 'Use a unique password you do not use anywhere else.', 'your-textdomain' );
 	echo '</p>';
 }
-add\_action( 'woocommerce\_edit\_account\_form', 'bh\_account\_password\_hint', 5 );
+add_action( 'woocommerce_edit_account_form', 'bh_account_password_hint', 5 );
+```
 
 What this does:
 
@@ -140,14 +144,15 @@ If you are in favor of the meter but hate how strict it is, you do not have to r
 
 Add this to `functions.php`:
 
-/\*\*
- \* @snippet       WooCommerce Password Strength Meter: Keep It or Remove It
- \* @author        Nicola Mustone
- \* @author\_url    https://buthonestly.io/programming/woocommerce-password-strength-meter-checkout/
- \* @tested-up-to  WooCommerce 10.3.X
- \* @license       GPLv2
- \*/
-function bh\_woocommerce\_min\_password\_strength( $strength ) {
+```php
+/**
+ * @snippet       WooCommerce Password Strength Meter: Keep It or Remove It
+ * @author        Nicola Mustone
+ * @author_url    https://buthonestly.io/programming/woocommerce-password-strength-meter-checkout/
+ * @tested-up-to  WooCommerce 10.3.X
+ * @license       GPLv2
+ */
+function bh_woocommerce_min_password_strength( $strength ) {
 	// 4 = Very strong (hardest)
 	// 3 = Strong (WooCommerce default)
 	// 2 = Medium
@@ -155,7 +160,8 @@ function bh\_woocommerce\_min\_password\_strength( $strength ) {
 	// 0 = Very weak / anything
 	return 2; // Accept Medium and above.
 }
-add\_filter( 'woocommerce\_min\_password\_strength', 'bh\_woocommerce\_min\_password\_strength' );
+add_filter( 'woocommerce_min_password_strength', 'bh_woocommerce_min_password_strength' );
+```
 
 A few ideas for values to return:
 

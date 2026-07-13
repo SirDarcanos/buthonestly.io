@@ -133,8 +133,10 @@ Not every project should be open-source. Internal tools, client work, or commerc
 
 If your goal is to keep full control, you don’t need an open-source license at all. Simply **reserve all rights** with language such as this:
 
-Copyright © \[Year\] \[Your Name or Company\]
+```text
+Copyright © [Year] [Your Name or Company]
 All rights reserved. This software may not be used, copied, modified, or distributed without explicit permission.
+```
 
 If you distribute software (like a paid plugin or SaaS), use a custom [EULA (End User License Agreement)](https://en.wikipedia.org/wiki/End-user_license_agreement).  
 It defines what users *can do* (install, use, modify internally) and *cannot do* (resell, redistribute, reverse-engineer, etc.).
@@ -193,8 +195,10 @@ If others have contributed, get their consent before relicensing. Large projects
 
 If you catch it early (and nobody cloned/forked your repo yet), fix it fast:
 
+```bash
 git commit --amend
 git push --force
+```
 
 If the repo was already public, deleting or rewriting history won’t remove the old license. Those copies remain valid.
 
@@ -223,6 +227,7 @@ You can copy it directly from [choosealicense.com](https://choosealicense.com), 
 **Example (for MIT):**  
 Copy the entire MIT license text, update your name and year, and place it at the root of your repo.
 
+```text
 MIT License
 
 Copyright (c) 2025 Nicola Mustone
@@ -244,6 +249,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+```
 
 This makes it immediately visible to anyone viewing or downloading your project.
 
@@ -253,12 +259,14 @@ While the main license file is the official reference, it’s good practice to i
 
 At the top of major files (like `index.js`, `main.py`, or `plugin.php`), add something like:
 
-/\*
- \* Project: My Cool Library
- \* License: MIT
- \* Copyright © 2025 Nicola Mustone
- \* See LICENSE file in the project root for full license text.
- \*/
+```javascript
+/*
+ * Project: My Cool Library
+ * License: MIT
+ * Copyright © 2025 Nicola Mustone
+ * See LICENSE file in the project root for full license text.
+ */
+```
 
 This ensures that even if the file gets copied out of context, the license still travels with it. You don’t have to include this in every single file, just the core ones that might be reused individually.
 
@@ -270,20 +278,26 @@ If your project is published as a package or library, always declare the license
 
 **For npm (JavaScript)**:
 
+```text
 {
   "name": "my-project",
   "license": "MIT"
 }
+```
 
 **For Python (setup.cfg or pyproject.toml)**:
 
+```text
 license = "MIT"
+```
 
 **For Composer (PHP)**:
 
+```text
 {
   "license": "GPL-2.0-or-later"
 }
+```
 
 These declarations make your license machine-readable and visible in package directories and dependency scanners.
 
@@ -292,11 +306,15 @@ These declarations make your license machine-readable and visible in package dir
 Your README is the first thing people see, and many won’t check the LICENSE file.  
 Add a short line at the bottom, like:
 
+```text
 License: MIT © 2025 Nicola Mustone
+```
 
 If you’re dual-licensing (e.g., open-source and commercial), note that too:
 
+```text
 License: GPL-2.0-or-later for open use, or commercial license available upon request.
+```
 
 This provides instant clarity without legal digging.
 

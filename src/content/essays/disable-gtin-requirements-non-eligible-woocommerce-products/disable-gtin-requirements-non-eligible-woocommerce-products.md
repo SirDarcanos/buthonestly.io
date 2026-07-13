@@ -45,18 +45,20 @@ You are about to edit PHP. Even a missing semicolon can break your site. Before 
 
 For those special cases where your products do not require a GTIN, inserting the following PHP snippet into your theme’s functions.php file or a custom plugin can indicate to Google’s systems that the identifier does not exist:
 
-/\*\*
- \* @snippet       Add identifier\_exists set to False in the Product schema
- \* @author        Nicola Mustone
- \* @author\_url    https://buthonestly.io/programming/disable-gtin-requirements-non-eligible-woocommerce-products/
- \* @tested-up-to  WooCommerce 10.3.X
- \* @license       GPLv2
- \*/
-add\_filter( 'woocommerce\_structured\_data\_product', 'nm\_add\_identifier\_exists\_false' );
-function nm\_add\_identifier\_exists\_false( $markup ) {
-    $markup\['identifier\_exists'\] = 'no';
+```php
+/**
+ * @snippet       Add identifier_exists set to False in the Product schema
+ * @author        Nicola Mustone
+ * @author_url    https://buthonestly.io/programming/disable-gtin-requirements-non-eligible-woocommerce-products/
+ * @tested-up-to  WooCommerce 10.3.X
+ * @license       GPLv2
+ */
+add_filter( 'woocommerce_structured_data_product', 'nm_add_identifier_exists_false' );
+function nm_add_identifier_exists_false( $markup ) {
+    $markup['identifier_exists'] = 'no';
     return $markup;
 }
+```
 
 By adding this filter, you instruct WooCommerce to output structured data that indicates to Google that an identifier for the product doesn’t exist and isn’t necessary. It’s a small but powerful addition to your WooCommerce setup that can save a lot of headaches for non-standard product sellers.
 
@@ -66,24 +68,26 @@ This adjustment should not be taken lightly. It’s not a blanket solution for a
 
 If your catalog has a mix of products that need GTIN and others that do not, you can add a category to those that DO NOT need a GTIN and use this snippet instead to add the exception for products in that category only:
 
-/\*\*
- \* @snippet       Add identifier\_exists set to False in the Product schema, conditionally
- \* @author        Nicola Mustone
- \* @author\_url    https://buthonestly.io/programming/disable-gtin-requirements-non-eligible-woocommerce-products/
- \* @tested-up-to  WooCommerce 10.3.X
- \* @license       GPLv2
- \*/
-add\_filter( 'woocommerce\_structured\_data\_product', 'nm\_conditional\_identifier\_exists\_false', 10, 2 );
-function nm\_conditional\_identifier\_exists\_false( $markup, $product ) {
+```php
+/**
+ * @snippet       Add identifier_exists set to False in the Product schema, conditionally
+ * @author        Nicola Mustone
+ * @author_url    https://buthonestly.io/programming/disable-gtin-requirements-non-eligible-woocommerce-products/
+ * @tested-up-to  WooCommerce 10.3.X
+ * @license       GPLv2
+ */
+add_filter( 'woocommerce_structured_data_product', 'nm_conditional_identifier_exists_false', 10, 2 );
+function nm_conditional_identifier_exists_false( $markup, $product ) {
     // Replace 'your-category-slug' with the actual slug of the category you want to target.
-    $target\_category\_slug = 'your-category-slug';
+    $target_category_slug = 'your-category-slug';
     
-    if ( has\_term( $target\_category\_slug, 'product\_cat', $product->get\_id() ) ) {
-        $markup\['identifier\_exists'\] = 'no';
+    if ( has_term( $target_category_slug, 'product_cat', $product->get_id() ) ) {
+        $markup['identifier_exists'] = 'no';
     }
     
     return $markup;
 }
+```
 
 Make sure to replace `your-category-slug` with the slug of the category you’re using to mark products that DO NOT need a GTIN.
 
