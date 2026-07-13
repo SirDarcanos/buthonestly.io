@@ -1,0 +1,86 @@
+---
+// Renders an essay's `downloads` front-matter as button links (files served
+// from R2 at /downloads/<file>).
+interface DownloadItem {
+  file: string;
+  label?: string;
+}
+interface Props {
+  downloads?: DownloadItem[];
+}
+const { downloads } = Astro.props;
+const ext = (file: string) => file.split(".").pop()?.toUpperCase() ?? "FILE";
+---
+
+{
+  downloads && downloads.length > 0 && (
+    <section class="downloads">
+      <p class="meta font-bold">
+        <span class="bg-accent mr-3 inline-block size-2" />Downloads
+      </p>
+      <ul>
+        {downloads.map((d) => (
+          <li>
+            <a class="download-btn" href={`/downloads/${d.file}`} download>
+              <svg
+                class="download-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14" />
+              </svg>
+              <span class="download-label">{d.label ?? d.file}</span>
+              <span class="download-ext">{ext(d.file)}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
+<style>
+  .downloads {
+    margin-block: 3rem;
+  }
+  .downloads ul {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .download-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border: 1px solid var(--color-line);
+    padding: 0.75rem 1rem;
+    background: var(--color-surface);
+    color: var(--color-ink);
+    text-decoration: none;
+    transition:
+      color 0.15s,
+      border-color 0.15s;
+  }
+  .download-btn:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+  .download-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex: none;
+  }
+  .download-label {
+    flex: 1;
+    font-size: 1rem;
+  }
+  .download-ext {
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+  }
+</style>
