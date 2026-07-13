@@ -158,8 +158,16 @@
     @apply font-medium;
   }
 
+  /* Pull quote — bleeds to the column edge, Title scale, light italic. */
   .post-content blockquote {
-    @apply border-accent text-muted my-8 border-l-2 pl-5 italic;
+    @apply text-ink border-accent my-10 border-l-2 font-light italic;
+    @apply leading-snug tracking-tight;
+    @apply text-[clamp(var(--text-2xl),1.25rem+1.5vw,var(--text-4xl))];
+    margin-inline: -2.5rem;
+    padding: 0 2.5rem;
+  }
+  .post-content blockquote p {
+    @apply mb-0;
   }
 
   .post-content hr {
@@ -177,6 +185,19 @@
   .post-content img,
   .post-content figure {
     @apply my-6;
+  }
+
+  /* Tables — scroll horizontally instead of overflowing the reading column. */
+  .post-content table {
+    @apply my-6 block max-w-full overflow-x-auto text-base;
+    border-collapse: collapse;
+  }
+  .post-content th,
+  .post-content td {
+    @apply border-line border-b px-3 py-2 text-left align-top;
+  }
+  .post-content th {
+    @apply font-sans font-semibold;
   }
 
   /* Audio player (JS-enhanced; markup + script in AudioPlayer.astro). */
