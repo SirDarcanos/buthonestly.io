@@ -94,7 +94,12 @@ function taxFrom(names: string[]): Tax[] {
   const counts = new Map<string, number>();
   for (const name of names) counts.set(name, (counts.get(name) ?? 0) + 1);
   return [...counts.entries()]
-    .map(([name, count]) => ({ name, slug: slugify(name), description: "", count }))
+    .map(([name, count]) => ({
+      name,
+      slug: slugify(name),
+      description: "",
+      count,
+    }))
     .sort((a, b) => a.name.localeCompare(b.name));
 }
 

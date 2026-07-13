@@ -58,7 +58,9 @@
     });
 
     const render = () => {
-      const pct = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
+      const pct = audio.duration
+        ? (audio.currentTime / audio.duration) * 100
+        : 0;
       seek.value = String(pct);
       seek.style.setProperty("--progress", `${pct}%`);
       seek.setAttribute(
@@ -119,4 +121,3 @@
   // Re-run if the site ever adopts Astro view transitions.
   document.addEventListener("astro:page-load", init);
 </script>
-

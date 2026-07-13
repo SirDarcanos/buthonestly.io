@@ -27,7 +27,8 @@ function apply(a) {
     return; // relative/internal link — leave it alone
   }
   if (!/^https?:$/.test(url.protocol)) return; // mailto:, tel:, etc.
-  if (url.hostname === SITE_HOST || url.hostname.endsWith(`.${SITE_HOST}`)) return;
+  if (url.hostname === SITE_HOST || url.hostname.endsWith(`.${SITE_HOST}`))
+    return;
 
   const rel = new Set(
     []

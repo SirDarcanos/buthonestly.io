@@ -16,7 +16,8 @@ const ext = (file: string) => file.split(".").pop()?.toUpperCase() ?? "FILE";
   downloads && downloads.length > 0 && (
     <section class="downloads">
       <p class="meta font-bold">
-        <span class="bg-accent mr-3 inline-block size-2" />Downloads
+        <span class="bg-accent mr-3 inline-block size-2" />
+        Downloads
       </p>
       <ul>
         {downloads.map((d) => (

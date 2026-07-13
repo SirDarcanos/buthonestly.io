@@ -151,7 +151,7 @@
   }
 
   .post-content a {
-    @apply underline decoration-faint underline-offset-2 hover:decoration-accent;
+    @apply decoration-faint hover:decoration-accent underline underline-offset-2;
   }
 
   .post-content strong {
@@ -202,7 +202,7 @@
 
   /* Audio player (JS-enhanced; markup + script in AudioPlayer.astro). */
   .audio-player {
-    @apply border-line bg-surface font-sans flex w-full flex-col gap-4 border p-5;
+    @apply border-line bg-surface flex w-full flex-col gap-4 border p-5 font-sans;
   }
   .audio-player audio {
     @apply hidden;
@@ -260,7 +260,7 @@
   }
 
   .audio-speed {
-    @apply text-muted hover:text-accent font-sans flex-none cursor-pointer border-0 bg-transparent p-0 text-right text-xs font-semibold tabular-nums;
+    @apply text-muted hover:text-accent flex-none cursor-pointer border-0 bg-transparent p-0 text-right font-sans text-xs font-semibold tabular-nums;
     color-scheme: light;
   }
   .dark .audio-speed {
