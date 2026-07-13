@@ -1,90 +1,53 @@
-/**
- * Generates public/_redirects for Cloudflare Pages.
- *
- * Two sources, combined:
- *  1. Dynamic — every published post's old date-based URL → its flat /<slug>,
- *     derived from the WordPress.com API `link` field at build time. This is the
- *     mechanism buthonestly.io reuses at much larger scale, so it is exercised
- *     here rather than hand-typed.
- *  2. Static — legacy 301s that already existed on the WordPress site (exported
- *     from the redirect plugin). These are historical and hand-maintained below.
- *
- * Runs as the `prebuild` npm step, writing into public/ so Astro copies it to
- * dist/_redirects.
- *
- * Cloudflare evaluates rules top-to-bottom, first match wins. All sources here
- * are unique static paths, so ordering is not significant between them.
- */
+// Generates public/_redirects (prebuild step). Static, no network — old post,
+// feed, download, and legacy URLs → their current paths.
 import { writeFile, mkdir } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
-// This runs as a plain Node process (not Astro), so load .env into process.env.
-// In CI (Cloudflare) there's no .env — the var is set in the environment.
-try {
-  process.loadEnvFile();
-} catch {
-  // No .env file present; rely on the ambient environment.
-}
-
-const API_BASE = `https://public-api.wordpress.com/wp/v2/sites/${process.env.WP_SITE_ID}`;
 const OUT = fileURLToPath(new URL("../public/_redirects", import.meta.url));
 
-/**
- * Legacy 301s exported from the WordPress plugin.
- * [from path, to URL] — `to` may be a same-site path or an external URL.
- */
-const LEGACY_REDIRECTS = [
-  // Old WooCommerce tutorials → archive on the personal blog
-  [
-    "/2014/09/30/create-localized-bookable-products-wpml-woocommerce-bookings/",
-    "https://nicolamustone.blog/old-articles-archive/",
-  ],
-  [
-    "/2015/09/16/add-enquiry-form-product-page/",
-    "https://nicolamustone.blog/old-articles-archive/",
-  ],
-  [
-    "/2015/04/03/print-the-unit-price-in-the-checkout-page/",
-    "https://nicolamustone.blog/old-articles-archive/",
-  ],
-  [
-    "/2015/05/04/add-the-quantity-field-to-the-add_to_cart-shortcode/",
-    "https://nicolamustone.blog/old-articles-archive/",
-  ],
-  [
-    "/2015/01/22/track-conversions-with-the-google-analytics-tracking-code-in-woocommerce/",
-    "https://nicolamustone.blog/old-articles-archive/",
-  ],
-  [
-    "/2015/07/20/change-the-return-to-shop-button-url-in-the-cart-page/",
-    "https://nicolamustone.blog/old-articles-archive/",
-  ],
-  [
-    "/2016/04/19/adding-custom-fields-vendor-registration-form/",
-    "https://nicolamustone.blog/old-articles-archive/",
-  ],
-  [
-    "/2015/09/03/translate-wordpress-themes-plugins-poedit/",
-    "https://nicolamustone.blog/old-articles-archive/",
-  ],
-
-  // Specific tutorials migrated to buthonestly.io
-  [
-    "/category/wordpress/woocommerce/",
-    "https://buthonestly.io/topic/wordpress/",
-  ],
-  [
-    "/2016/01/27/remove-the-password-strength-meter-on-the-checkout-page/",
-    "https://buthonestly.io/programming/woocommerce-password-strength-meter-checkout/",
-  ],
-  [
-    "/2015/04/21/bulk-edit-products/",
-    "https://buthonestly.io/web/bulk-edit-woocommerce-products-without-plugins/",
-  ],
-  [
-    "/2015/09/18/creating-custom-add-to-cart-url/",
-    "https://buthonestly.io/web/creating-a-custom-add-to-cart-link-woocommerce/",
-  ],
+/** Old section-prefixed post URLs → flat slug. Frozen from WordPress.com. */
+const POST_REDIRECTS = [
+  ["/leadership/gaming-made-me-better-leader/", "/gaming-made-me-better-leader/"],
+  ["/leadership/learning-care-without-feeling/", "/learning-care-without-feeling/"],
+  ["/leadership/mastering-effective-feedback-facts-feelings-curiosity/", "/mastering-effective-feedback-facts-feelings-curiosity/"],
+  ["/leadership/psychological-safety-in-teams-people-first-leadership/", "/psychological-safety-in-teams-people-first-leadership/"],
+  ["/leadership/team-building-activities-for-work/", "/team-building-activities-for-work/"],
+  ["/leadership/time-off-for-leaders/", "/time-off-for-leaders/"],
+  ["/leadership/tools-for-adhd-leadership/", "/tools-for-adhd-leadership/"],
+  ["/observations/adhd-planner/", "/adhd-planner/"],
+  ["/observations/ai-slop-midas-touch-modern-internet/", "/ai-slop-midas-touch-modern-internet/"],
+  ["/observations/buildings-never-were/", "/buildings-never-were/"],
+  ["/observations/choosing-what-to-play/", "/choosing-what-to-play/"],
+  ["/observations/vibe-writing-line-between-human-machine/", "/vibe-writing-line-between-human-machine/"],
+  ["/observations/what-is-a-web-developer/", "/what-is-a-web-developer/"],
+  ["/observations/when-ai-stops-being-a-tool/", "/when-ai-stops-being-a-tool/"],
+  ["/observations/write-in-markdown/", "/write-in-markdown/"],
+  ["/programming/automated-x-account-cleanup/", "/automated-x-account-cleanup/"],
+  ["/programming/building-convolutional-neural-network-python-tensorflow/", "/building-convolutional-neural-network-python-tensorflow/"],
+  ["/programming/delete-expired-coupons-automatically-woocommerce/", "/delete-expired-coupons-automatically-woocommerce/"],
+  ["/programming/disable-gtin-requirements-non-eligible-woocommerce-products/", "/disable-gtin-requirements-non-eligible-woocommerce-products/"],
+  ["/programming/distilroberta-emotion-analysis-nlp-case-study/", "/distilroberta-emotion-analysis-nlp-case-study/"],
+  ["/programming/how-to-choose-a-software-license-for-your-next-project/", "/how-to-choose-a-software-license-for-your-next-project/"],
+  ["/programming/improve-woocommerce-related-products-recommendations/", "/improve-woocommerce-related-products-recommendations/"],
+  ["/programming/limits-of-machine-learning/", "/limits-of-machine-learning/"],
+  ["/programming/make-product-attributes-linkable-woocommerce/", "/make-product-attributes-linkable-woocommerce/"],
+  ["/programming/neural-network-predict-resin-usage-3d-printed-miniatures/", "/neural-network-predict-resin-usage-3d-printed-miniatures/"],
+  ["/programming/what-is-vibe-coding-how-to-do-it/", "/what-is-vibe-coding-how-to-do-it/"],
+  ["/programming/woocommerce-eu-vat-number-setup/", "/woocommerce-eu-vat-number-setup/"],
+  ["/programming/woocommerce-password-strength-meter-checkout/", "/woocommerce-password-strength-meter-checkout/"],
+  ["/web/10-types-of-websites/", "/10-types-of-websites/"],
+  ["/web/bulk-edit-woocommerce-products-without-plugins/", "/bulk-edit-woocommerce-products-without-plugins/"],
+  ["/web/creating-a-custom-add-to-cart-link-woocommerce/", "/creating-a-custom-add-to-cart-link-woocommerce/"],
+  ["/web/do-you-trust-your-instincts-making-smart-wordpress-choices/", "/do-you-trust-your-instincts-making-smart-wordpress-choices/"],
+  ["/web/edit-orders-woocommerce/", "/edit-orders-woocommerce/"],
+  ["/web/enhancing-wordpress-content-protection-beyond-right-click-blocks/", "/enhancing-wordpress-content-protection-beyond-right-click-blocks/"],
+  ["/web/how-to-build-a-github-profile-readme-that-feels-like-you/", "/how-to-build-a-github-profile-readme-that-feels-like-you/"],
+  ["/web/set-up-tensorflow-docker-jupyter-notebook/", "/set-up-tensorflow-docker-jupyter-notebook/"],
+  ["/web/top-5-essential-wordpress-plugins-i-always-install-and-why/", "/top-5-essential-wordpress-plugins-i-always-install-and-why/"],
+  ["/web/woocommerce-attributes-vs-variations/", "/woocommerce-attributes-vs-variations/"],
+  ["/web/woocommerce-cli-product-management/", "/woocommerce-cli-product-management/"],
+  ["/web/wordpress-blocks-telex/", "/wordpress-blocks-telex/"],
+  ["/web/wordpress-site-performance-vs-desig/", "/wordpress-site-performance-vs-desig/"],
 ];
 
 const INTERNAL_REDIRECTS = [
@@ -93,27 +56,48 @@ const INTERNAL_REDIRECTS = [
   ["/category/nicos-websites/", "/"],
 ];
 
-async function getDateToSlugRedirects() {
-  const url = `${API_BASE}/posts?per_page=100&_fields=slug,link`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`WordPress API error ${res.status}`);
-  const posts = await res.json();
-  return posts.map((p) => {
-    const fromPath = new URL(p.link).pathname; // /YYYY/MM/DD/slug/
-    return [fromPath, `/${p.slug}/`];
-  });
-}
+/** Old WordPress Download-Monitor URLs → the static /downloads/ files
+ *  (served from R2 via functions/downloads/[[path]].js). */
+const DOWNLOAD_REDIRECTS = [
+  ["/download/eu-vat-rates/", "/downloads/eu-vat-rates.csv"],
+  ["/download/quill-meetings-templates/", "/downloads/quill-meetings-templates.zip"],
+  ["/download/cnn-mnist-use-case-tensorflow/", "/downloads/cnn-mnist-use-case-tensorflow.zip"],
+  ["/download/time-off-handover-plan/", "/downloads/time-off-handover-plan.zip"],
+  ["/download/dense-models-3d-print-cost-calculator/", "/downloads/dense-models-3d-print-cost-calculator.zip"],
+  ["/download/distilroberta-emotion-analysis-dead-by-daylight-case-study/", "/downloads/distilroberta-emotion-analysis-dead-by-daylight-case-study.zip"],
+];
+
+/**
+ * Legacy 301s exported from the old WordPress redirect plugin.
+ * [from path, to URL] — `to` may be a same-site path or an external URL.
+ */
+const LEGACY_REDIRECTS = [
+  // Old WooCommerce tutorials → archive on the personal blog
+  ["/2014/09/30/create-localized-bookable-products-wpml-woocommerce-bookings/", "https://nicolamustone.blog/old-articles-archive/"],
+  ["/2015/09/16/add-enquiry-form-product-page/", "https://nicolamustone.blog/old-articles-archive/"],
+  ["/2015/04/03/print-the-unit-price-in-the-checkout-page/", "https://nicolamustone.blog/old-articles-archive/"],
+  ["/2015/05/04/add-the-quantity-field-to-the-add_to_cart-shortcode/", "https://nicolamustone.blog/old-articles-archive/"],
+  ["/2015/01/22/track-conversions-with-the-google-analytics-tracking-code-in-woocommerce/", "https://nicolamustone.blog/old-articles-archive/"],
+  ["/2015/07/20/change-the-return-to-shop-button-url-in-the-cart-page/", "https://nicolamustone.blog/old-articles-archive/"],
+  ["/2016/04/19/adding-custom-fields-vendor-registration-form/", "https://nicolamustone.blog/old-articles-archive/"],
+  ["/2015/09/03/translate-wordpress-themes-plugins-poedit/", "https://nicolamustone.blog/old-articles-archive/"],
+
+  // Specific tutorials migrated to buthonestly.io
+  ["/category/wordpress/woocommerce/", "https://buthonestly.io/topic/wordpress/"],
+  ["/2016/01/27/remove-the-password-strength-meter-on-the-checkout-page/", "https://buthonestly.io/woocommerce-password-strength-meter-checkout/"],
+  ["/2015/04/21/bulk-edit-products/", "https://buthonestly.io/bulk-edit-woocommerce-products-without-plugins/"],
+  ["/2015/09/18/creating-custom-add-to-cart-url/", "https://buthonestly.io/creating-a-custom-add-to-cart-link-woocommerce/"],
+];
 
 function formatRule([from, to]) {
   return `${from}  ${to}  301`;
 }
 
-const dateToSlug = await getDateToSlugRedirects();
-
 const body = [
   "# Generated by scripts/generate-redirects.mjs — do not edit by hand.",
-  ...dateToSlug.map(formatRule),
+  ...POST_REDIRECTS.map(formatRule),
   ...INTERNAL_REDIRECTS.map(formatRule),
+  ...DOWNLOAD_REDIRECTS.map(formatRule),
   ...LEGACY_REDIRECTS.map(formatRule),
 ].join("\n");
 
@@ -123,5 +107,5 @@ await mkdir(fileURLToPath(new URL("../public", import.meta.url)), {
 await writeFile(OUT, body, "utf8");
 
 console.log(
-  `Wrote ${OUT} — ${dateToSlug.length} post + ${INTERNAL_REDIRECTS.length} internal + ${LEGACY_REDIRECTS.length} legacy rules`,
+  `Wrote ${OUT} — ${POST_REDIRECTS.length} post + ${INTERNAL_REDIRECTS.length} internal + ${DOWNLOAD_REDIRECTS.length} download + ${LEGACY_REDIRECTS.length} legacy rules`,
 );
