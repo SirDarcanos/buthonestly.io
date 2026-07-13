@@ -1,15 +1,7 @@
 ---
-/**
- * Progressive enhancement for post audio.
- *
- * WordPress renders `<figure class="wp-block-audio"><audio controls …>` into the
- * post body via `set:html`, so we can't wrap it in a component at build time.
- * Instead this script upgrades each native <audio> into a custom-styled player
- * (.audio-player, styled in global.css). If JS never runs, the native control
- * bar stays as a graceful fallback.
- *
- * Drop this once on any page that renders post content.
- */
+// Upgrades each native <audio> in the post body into a custom player; native
+// controls stay as a fallback if JS doesn't run. Player styles live in
+// global.css (the DOM is built client-side, so scoped styles can't reach it).
 ---
 
 <script>
@@ -127,3 +119,4 @@
   // Re-run if the site ever adopts Astro view transitions.
   document.addEventListener("astro:page-load", init);
 </script>
+

@@ -123,36 +123,63 @@
     @apply text-muted mt-2 text-right font-mono text-xs;
   }
 
-  article.post .wp-block-paragraph,
-  article.post .wp-block-audio {
+  /* Essay prose (Markdown). */
+  .post-content p {
     @apply mb-6;
   }
 
-  article.post .wp-block-heading {
+  .post-content h2 {
+    @apply mt-12 mb-3;
+  }
+
+  .post-content h3,
+  .post-content h4 {
     @apply mt-8 mb-3;
   }
 
-  article.post ul,
-  article.post ul.wp-block-list {
-    @apply list-disc pl-4;
+  .post-content ul {
+    @apply mb-6 list-disc space-y-2 pl-6;
   }
 
-  article.post ol,
-  article.post ol.wp-block-list {
-    @apply list-decimal pl-4;
+  .post-content ol {
+    @apply mb-6 list-decimal space-y-2 pl-6;
   }
 
-  /* No-JS fallback: keep the native player usable + on-theme. AudioPlayer.astro
-     upgrades these into .audio-player and hides the native element. */
-  article.post .wp-block-audio audio {
-    @apply bg-surface h-12 w-full;
-    color-scheme: light;
-  }
-  .dark article.post .wp-block-audio audio {
-    color-scheme: dark;
+  .post-content li ul,
+  .post-content li ol {
+    @apply mt-2 mb-0;
   }
 
-  /* Custom player (JS-enhanced). */
+  .post-content a {
+    @apply underline decoration-faint underline-offset-2 hover:decoration-accent;
+  }
+
+  .post-content strong {
+    @apply font-medium;
+  }
+
+  .post-content blockquote {
+    @apply border-accent text-muted my-8 border-l-2 pl-5 italic;
+  }
+
+  .post-content hr {
+    @apply border-line my-10;
+  }
+
+  .post-content :not(pre) > code {
+    @apply bg-surface rounded px-1.5 py-0.5 font-mono text-[0.85em];
+  }
+
+  .post-content pre {
+    @apply border-line my-6 overflow-x-auto border p-4 text-base leading-normal;
+  }
+
+  .post-content img,
+  .post-content figure {
+    @apply my-6;
+  }
+
+  /* Audio player (JS-enhanced; markup + script in AudioPlayer.astro). */
   .audio-player {
     @apply border-line bg-surface font-sans flex w-full flex-col gap-4 border p-5;
   }
@@ -163,8 +190,7 @@
     @apply flex w-full items-center gap-3;
   }
 
-  /* Custom focus indicator: darken the control instead of the default outline.
-     Ink-based so it darkens on light and lightens on dark — always visible. */
+  /* Ink-based focus ring — darkens on light, lightens on dark. */
   .audio-player :focus-visible {
     outline: none;
     box-shadow: inset 0 0 0 100px
@@ -220,21 +246,79 @@
     color-scheme: dark;
   }
 
-  /* Details block - Quick Summary & Table of Contents */
-  article.post .wp-block-details {
-    @apply border-line bg-surface mb-6 border p-4 text-base leading-relaxed;
-  }
-
-  article.post .wp-block-details summary {
+  /* Uppercase label for callout + TOC panels. */
+  .callout-title {
     @apply text-accent font-sans text-xs leading-relaxed font-semibold tracking-[clamp(0.12em,0.1em+0.2vw,0.2em)] uppercase;
+    @apply mb-3;
   }
 
-  article.post .wp-block-details ul {
-    @apply mb-4;
+  /* Collapsible <summary> bars: pointer + chevron, no native marker, and
+     the trailing gap only appears once opened. */
+  summary.callout-title {
+    @apply mb-0 flex cursor-pointer list-none items-center justify-between gap-3;
+  }
+  summary.callout-title::-webkit-details-marker {
+    display: none;
+  }
+  summary.callout-title::after {
+    content: "";
+    @apply size-2 flex-none border-r border-b border-current opacity-60;
+    transform: rotate(45deg);
+    transition: transform 0.15s ease;
+  }
+  [open] > summary.callout-title {
+    @apply mb-3;
+  }
+  [open] > summary.callout-title::after {
+    transform: rotate(-135deg);
   }
 
-  article.post .wp-block-details p {
+  /* Callouts (Obsidian [!type] blocks). */
+  .post-content .callout {
+    @apply border-line bg-surface my-6 border p-5 text-base leading-relaxed;
+  }
+  .post-content .callout p {
+    @apply mb-3;
+  }
+  .post-content .callout ul,
+  .post-content .callout ol {
+    @apply mb-3;
+  }
+  .post-content .callout > :last-child {
     @apply mb-0;
+  }
+
+  /* Table of contents. */
+  .toc {
+    @apply border-line bg-surface my-8 border p-5 text-base leading-relaxed;
+  }
+  .toc ol {
+    @apply list-none space-y-2 pl-0;
+  }
+  .toc a {
+    @apply text-ink hover:text-accent no-underline;
+  }
+  .toc .toc-depth-3 {
+    @apply pl-5 text-[0.95em];
+  }
+
+  /* Smooth expand/collapse for the collapsible panels. Progressive
+     enhancement — browsers without ::details-content just open instantly. */
+  details.callout,
+  .toc {
+    interpolate-size: allow-keywords;
+  }
+  details.callout::details-content,
+  .toc::details-content {
+    block-size: 0;
+    overflow: clip;
+    transition:
+      block-size 0.25s ease,
+      content-visibility 0.25s allow-discrete;
+  }
+  details.callout[open]::details-content,
+  .toc[open]::details-content {
+    block-size: auto;
   }
 }
 

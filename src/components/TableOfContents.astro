@@ -1,0 +1,30 @@
+---
+// Built from the essay's own headings (render() → headings).
+import type { MarkdownHeading } from "astro";
+
+interface Props {
+  headings: MarkdownHeading[];
+  minDepth?: number;
+  maxDepth?: number;
+}
+
+const { headings, minDepth = 2, maxDepth = 3 } = Astro.props;
+const items = headings.filter(
+  (h) => h.depth >= minDepth && h.depth <= maxDepth,
+);
+---
+
+{
+  items.length > 1 && (
+    <details class="toc" aria-label="Table of contents">
+      <summary class="callout-title">Contents</summary>
+      <ol>
+        {items.map((h) => (
+          <li class:list={[`toc-depth-${h.depth}`]}>
+            <a href={`#${h.slug}`}>{h.text}</a>
+          </li>
+        ))}
+      </ol>
+    </details>
+  )
+}
