@@ -67,7 +67,7 @@ const categoryLinks = categories.map((category) => ({
 >
   <div id="search-backdrop" class="bg-ink/40 absolute inset-0 backdrop-blur-sm">
   </div>
-  <div class="relative mx-auto mt-[10vh] w-full max-w-2xl px-4">
+  <div class="relative mx-auto mt-[10vh] w-full max-w-3xl px-4">
     <div class="border-line bg-background border shadow-2xl">
       <form
         id="search-form"
@@ -98,7 +98,7 @@ const categoryLinks = categories.map((category) => ({
           type="button"
           id="search-close"
           aria-label="Close search"
-          class="text-muted hover:text-ink border-line flex-none cursor-pointer rounded border px-1.5 py-0.5 font-sans text-[0.65rem] font-semibold tracking-widest transition-colors"
+          class="text-muted hover:text-ink flex-none cursor-pointer px-1 py-0.5 font-sans text-[0.65rem] font-semibold tracking-widest transition-colors"
         >
           ESC
         </button>
@@ -197,12 +197,38 @@ const categoryLinks = categories.map((category) => ({
       const search = await pf.debouncedSearch(query);
       if (search === null) return; // superseded by a newer keystroke
 
-      const items = await Promise.all(
+      const raw = await Promise.all(
         search.results.slice(0, 30).map((r) => r.data()),
       );
-      const n = search.results.length;
+
+      // Pagefind falls back to matching a short prefix of the query (so
+      // "awdjkawjdk" matches "aw" in "_is_aw_coupon"). Keep only results where a
+      // query term is a genuine prefix of, or stem of, an actually-matched word
+      // (the <mark>s in the excerpt) — dropping that character-by-character noise.
+      const terms = query
+        .toLowerCase()
+        .split(/[^a-z0-9]+/i)
+        .filter((t) => t.length >= MIN_QUERY);
+      const wholeWord = (d) => {
+        if (!terms.length) return true;
+        const tokens = [...String(d.excerpt).matchAll(/<mark>(.*?)<\/mark>/gis)]
+          .flatMap((m) => m[1].toLowerCase().split(/[^a-z0-9]+/i))
+          .filter(Boolean);
+        return terms.some((t) =>
+          tokens.some(
+            (tok) =>
+              tok.length >= MIN_QUERY &&
+              (tok.startsWith(t) || t.startsWith(tok)),
+          ),
+        );
+      };
+      const items = raw.filter(wholeWord);
+
+      // Show the true total only when nothing was filtered out; otherwise the
+      // filtered count (the real total past the first 30 is unknown).
+      const total = items.length === raw.length ? search.results.length : items.length;
       status.textContent = items.length
-        ? `${n} result${n === 1 ? "" : "s"}`
+        ? `${total} result${total === 1 ? "" : "s"}`
         : "No results.";
 
       results.innerHTML = items
