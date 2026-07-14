@@ -2,13 +2,9 @@
 title: "Tools for ADHD: Systems That Work When You’re Leading a Team"
 date: 2025-12-10T02:00:00
 updated: 2026-05-13T16:25:58
-sticky: false
+sticky: true
 cornerstone: false
-excerpt: I’ve been leading with ADHD for years without realizing it. I just
-  thought I was bad at the simple stuff. I’d procrastinate on easy tasks, forget
-  to post updates, or leave small follow-ups half-done. Nothing catastrophic,
-  just loose ends that multiplied when I got busy. Long before I had a name for
-  it, I was […]
+excerpt: I’ve been leading with ADHD for years without realizing it. I just thought I was bad at the simple stuff. I’d procrastinate on easy tasks, forget to post updates, or leave small follow-ups half-done. Nothing catastrophic, just loose ends that multiplied when I got busy. Long before I had a name for it, I was […]
 categories:
   - Leadership
 tags:
@@ -17,9 +13,7 @@ tags:
   - Automation
   - Productivity
   - Workflow
-coverAlt: Young adult with headphones sitting cross-legged on a desk, fidgeting
-  with a pen in a cozy home office, illustrating calming leadership tools for
-  ADHD such as music, minimal clutter, and focused solo work.
+coverAlt: Young adult with headphones sitting cross-legged on a desk, fidgeting with a pen in a cozy home office, illustrating calming leadership tools for ADHD such as music, minimal clutter, and focused solo work.
 originalCover: https://buthonestly.io/wp-content/uploads/2026/04/leadership-tools-for-adhd.jpg
 downloads:
   - file: quill-meetings-templates.zip

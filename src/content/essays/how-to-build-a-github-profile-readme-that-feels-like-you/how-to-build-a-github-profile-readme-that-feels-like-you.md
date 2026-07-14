@@ -2,10 +2,9 @@
 title: How to Build a GitHub Profile README That Feels Like You
 date: 2026-04-08T02:00:00
 updated: 2026-05-12T23:04:10
-sticky: false
+sticky: true
 cornerstone: false
-excerpt: A practical guide to building a GitHub profile README that feels
-  personal, useful, and easy to maintain.
+excerpt: A practical guide to building a GitHub profile README that feels personal, useful, and easy to maintain.
 categories:
   - Web
 tags:

@@ -2,20 +2,15 @@
 title: "Design vs. Performance: Balance for Your WordPress Site"
 date: 2026-03-02T02:00:00
 updated: 2026-05-12T22:42:14
-sticky: false
+sticky: true
 cornerstone: false
-excerpt: This blog has no fancy animations, no custom fonts, and barely any
-  images. That’s entirely by design. I use the WordPress Bitácora theme, just a
-  few essential plugins, and that’s it. The result? An 81 on mobile and 100 on
-  desktop in Google PageSpeed Insights. When every site tries to outshine the
-  rest with gradients, […]
+excerpt: This blog has no fancy animations, no custom fonts, and barely any images. That’s entirely by design. I use the WordPress Bitácora theme, just a few essential plugins, and that’s it. The result? An 81 on mobile and 100 on desktop in Google PageSpeed Insights. When every site tries to outshine the rest with gradients, […]
 categories:
   - Web
 tags:
   - Creativity
   - Performance
-coverAlt: High-speed train rushing forward, symbolizing WordPress performance vs
-  design trade-offs and the need for both speed and visual quality.
+coverAlt: High-speed train rushing forward, symbolizing WordPress performance vs design trade-offs and the need for both speed and visual quality.
 originalCover: https://buthonestly.io/wp-content/uploads/2026/03/wordpress-performance-design.jpg
 ---
 

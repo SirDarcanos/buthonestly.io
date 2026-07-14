@@ -2,10 +2,9 @@
 title: "DistilRoBERTa Emotion Analysis: NLP Case Study on Steam Reviews"
 date: 2025-11-20T15:01:45
 updated: 2026-05-13T15:19:13
-sticky: false
+sticky: true
 cornerstone: false
-excerpt: "DistilRoBERTa emotion analysis case study: Steam reviews dataset,
-  notebook, and plots for real-world NLP sentiment and emotion exploration."
+excerpt: "DistilRoBERTa emotion analysis case study: Steam reviews dataset, notebook, and plots for real-world NLP sentiment and emotion exploration."
 categories:
   - Programming
 tags:

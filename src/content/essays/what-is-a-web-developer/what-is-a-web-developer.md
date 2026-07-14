@@ -2,10 +2,9 @@
 title: What Is a Web Developer? How I Became One Before AI
 date: 2026-01-13T02:00:00
 updated: 2026-05-19T21:37:59
-sticky: false
+sticky: true
 cornerstone: false
-excerpt: How I became a web developer before AI and what today’s devs can still
-  learn from that slower, hands-on way.
+excerpt: How I became a web developer before AI and what today’s devs can still learn from that slower, hands-on way.
 categories:
   - Observations
 tags:
