@@ -42,7 +42,11 @@ const publishDate = new Date(post.date);
   article={post}
 >
   {/* POST META */}
-  <article id={"post-" + post.id} class="post border-line mt-20 border-b pb-10">
+  <article
+    id={"post-" + post.id}
+    class="post border-line mt-20 border-b pb-10"
+    data-pagefind-body
+  >
     <header class="mb-10 space-y-6">
       <div class="flex items-center gap-3">
         <span class="label">

@@ -9,6 +9,7 @@
     "dev": "astro dev",
     "prebuild": "node scripts/generate-redirects.mjs",
     "build": "astro build",
+    "postbuild": "pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro",
     "format": "prettier --write .",
@@ -28,6 +29,7 @@
   },
   "devDependencies": {
     "@iconify-json/simple-icons": "^1.2.88",
+    "pagefind": "^1.5.2",
     "prettier": "^3.8.4",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.8.0",

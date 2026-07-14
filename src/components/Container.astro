@@ -4,11 +4,16 @@ interface Props {
   section?: boolean;
   id?: string;
   className?: string;
+  [key: string]: unknown; // pass-through for data-* etc.
 }
-const { section = false, id, className } = Astro.props;
+const { section = false, id, className, ...rest } = Astro.props;
 const Tag = section ? "section" : "div";
 ---
 
-<Tag id={id} class:list={["mx-auto w-full", section && "pb-16", className]}>
+<Tag
+  id={id}
+  class:list={["mx-auto w-full", section && "pb-16", className]}
+  {...rest}
+>
   <slot />
 </Tag>
