@@ -14,6 +14,16 @@ export default defineConfig({
   trailingSlash: "always",
   integrations: [sitemap(), icon()],
   markdown: {
+    // Dual-theme Shiki: light tokens are inline by default; `--shiki-dark`
+    // holds the dark theme's colors, activated by the `.dark` class in
+    // global.css. Block backgrounds are overridden to `--color-surface` there
+    // so code reads as a warm-paper panel in both modes.
+    shikiConfig: {
+      themes: {
+        light: "github-light",
+        dark: "github-dark",
+      },
+    },
     processor: unified({
       remarkPlugins: [remarkWikiLinks, remarkCallouts],
       rehypePlugins: [rehypeExternalLinks],

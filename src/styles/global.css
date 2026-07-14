@@ -194,6 +194,19 @@
     @apply border-line my-6 overflow-x-auto border p-4 text-base leading-normal;
   }
 
+  /* Shiki dual-theme code blocks. Fill with the theme-aware surface so the
+     block sits on the paper like other panels instead of Shiki's own dark box;
+     Shiki still colors the tokens. In dark mode, swap token + block colors to
+     the dark theme's `--shiki-dark` values (the `.dark` class is toggled in JS,
+     so Shiki's default prefers-color-scheme switching doesn't apply). */
+  .post-content pre.astro-code {
+    background-color: var(--color-surface) !important;
+  }
+  :where(.dark) .post-content pre.astro-code,
+  :where(.dark) .post-content pre.astro-code span {
+    color: var(--shiki-dark) !important;
+  }
+
   .post-content img,
   .post-content figure {
     @apply my-6;
