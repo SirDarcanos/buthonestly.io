@@ -138,8 +138,7 @@ const POST_REDIRECTS = [
 ];
 
 const INTERNAL_REDIRECTS = [
-  ["/comments/feed/", "/"],
-  ["/feed/", "/"],
+  ["/feed/", "/feed.xml"],
   ["/category/nicos-websites/", "/"],
 ];
 

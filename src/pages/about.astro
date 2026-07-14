@@ -1,0 +1,74 @@
+---
+import Container from "../components/Container.astro";
+import Layout from "../layouts/Layout.astro";
+import Label from "../components/Label.astro";
+
+import { getCategories } from "../lib/essays";
+
+const categories = await getCategories();
+---
+
+<Layout
+  title="About"
+  type="profile"
+  description="Nico Mustone — support lead at WordPress.com, writing about leadership, code, and the messy overlap between humans and tech."
+>
+  <Container section id="about" className="md:max-w-2xl">
+    <Label>About</Label>
+    <h1 class="mt-3">Hi, I'm Nico.</h1>
+
+    <div class="post-content mt-7">
+      <p>
+        I'm Nicola Mustone — Nico to most people — and I've spent over a decade
+        at the intersection of technology, communication, and leadership,
+        learning how clear systems and good writing make both teams and products
+        stronger.
+      </p>
+      <p>
+        Today I'm a support lead at WordPress.com, guiding people, projects, and
+        complex systems across the platform — helping teams and customers get
+        the most out of WordPress.com and WooCommerce. A lot of my work is
+        turning difficult, tangled things into guidance someone can actually
+        act on.
+      </p>
+      <p>
+        Away from the support dashboard, I build small sites and tools, poke at
+        machine learning, run the occasional D&amp;D adventure, and cook things
+        I have strong opinions about. This site is where I write about all of
+        it — the overlap between humans and the tech they use.
+      </p>
+    </div>
+
+    <h2 class="mt-14 text-2xl">What I write about</h2>
+    <p class="text-muted mt-3">
+      New essays each month, roughly grouped into a few sections:
+    </p>
+    <div class="mt-6 grid gap-4 sm:grid-cols-2">
+      {
+        categories.map((category) => (
+          <a
+            href={`/section/${category.slug}/`}
+            class="border-line bg-surface hover:border-accent group block border p-6 transition-colors"
+          >
+            <h3 class="group-hover:text-accent text-lg transition-colors">
+              {category.name}
+            </h3>
+            {category.description && (
+              <p class="excerpt text-muted mt-2 text-base">
+                {category.description}
+              </p>
+            )}
+          </a>
+        ))
+      }
+    </div>
+
+    <div class="border-line mt-14 border-t pt-8">
+      <p class="text-muted">
+        The best way in is the writing itself. Start with the <a href="/essays/"
+          >full archive</a
+        >, or head <a href="/">home</a> for what's new this month.
+      </p>
+    </div>
+  </Container>
+</Layout>

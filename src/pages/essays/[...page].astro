@@ -1,0 +1,87 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ReadTime from "../../components/ReadTime.astro";
+
+import { getAllPosts } from "../../lib/essays";
+
+import type { GetStaticPaths, Page } from "astro";
+import { type Post } from "../../types.ts";
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const posts = await getAllPosts();
+  return paginate(posts, { pageSize: 12 });
+}) satisfies GetStaticPaths;
+
+interface Props {
+  page: Page<Post>;
+}
+const { page } = Astro.props;
+---
+
+<Layout title="Essays" type="website">
+  <div slot="intro" class="flex items-end justify-between pt-8">
+    <div class="space-y-4">
+      <p class="label max-w-lg text-left">The archive</p>
+      <h1 class="max-w-lg">Essays</h1>
+    </div>
+    <p class="lead max-w-lg text-right text-lg">
+      Everything I've written, newest first — leadership, programming, and the
+      messy overlap between humans and tech.
+    </p>
+  </div>
+
+  <section>
+    <p class="meta mb-1 font-bold">
+      {page.total} essay{page.total === 1 ? "" : "s"}
+    </p>
+    {
+      page.data.map((post) => {
+        const postDate = new Date(post.date).toLocaleString("default", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        });
+
+        return (
+          <article class="border-line flex items-center gap-10 border-t py-7">
+            <div class="flex-1">
+              <p class="label text-left">{post.categories.join(", ")}</p>
+              <h3 class="mt-2">
+                <a href={post.url} class="text-ink hover:text-accent">
+                  {post.title}
+                </a>
+              </h3>
+              <p class="excerpt mt-3 text-base">{post.excerpt}</p>
+            </div>
+            <div class="meta text-right">
+              <p class="text-accent">{postDate}</p>
+              <ReadTime content={post.body} />
+            </div>
+          </article>
+        );
+      })
+    }
+  </section>
+
+  <nav
+    class="meta flex items-center justify-center gap-6 pt-8 pb-16 font-medium"
+  >
+    {
+      page.url.prev ? (
+        <a href={page.url.prev} class="text-ink hover:text-accent">
+          ← Newer
+        </a>
+      ) : undefined
+    }
+    <span class="text-muted">
+      Page {page.currentPage} of {page.lastPage}
+    </span>
+    {
+      page.url.next ? (
+        <a href={page.url.next} class="text-ink hover:text-accent">
+          Older →
+        </a>
+      ) : undefined
+    }
+  </nav>
+</Layout>

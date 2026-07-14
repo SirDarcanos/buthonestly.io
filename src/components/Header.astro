@@ -27,10 +27,18 @@ const categoryLinks = categories.map((category) => ({
           href: "/",
           label: "Home",
         },
+        {
+          href: "/essays/",
+          label: "Essays",
+        },
         ...categoryLinks.map((link) => ({
           href: link.href,
           label: link.label,
         })),
+        {
+          href: "/about/",
+          label: "About",
+        },
       ]}
     />
     <button

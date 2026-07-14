@@ -23,6 +23,12 @@ const { title, description, type, article, noindex } = Astro.props;
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" type="image/svg+xml" href={favicon} />
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="BUT. Honestly"
+    href="/feed.xml"
+  />
   <meta name="generator" content={Astro.generator} />
 
   {/* Set theme before paint to avoid a flash. Dark is the default */}
