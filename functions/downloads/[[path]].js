@@ -1,9 +1,14 @@
-// Serves /downloads/<file> from the R2 bucket bound as DOWNLOADS. Setup: DOWNLOADS.md
-export async function onRequestGet({ params, env }) {
+// Serves /downloads/<file> from the R2 bucket bound as DOWNLOADS, forced as an
+// attachment (downloads rather than plays inline). Setup: DOWNLOADS.md
+async function handle({ params, env }, method) {
   const key = Array.isArray(params.path) ? params.path.join("/") : params.path;
   if (!key) return new Response("Not found", { status: 404 });
 
-  const object = await env.DOWNLOADS.get(key);
+  // HEAD only needs metadata, so skip streaming the body.
+  const object =
+    method === "HEAD"
+      ? await env.DOWNLOADS.head(key)
+      : await env.DOWNLOADS.get(key);
   if (!object) return new Response("Not found", { status: 404 });
 
   const headers = new Headers();
@@ -14,6 +19,10 @@ export async function onRequestGet({ params, env }) {
     "content-disposition",
     `attachment; filename="${key.split("/").pop()}"`,
   );
+  if (method === "HEAD") headers.set("content-length", String(object.size));
 
-  return new Response(object.body, { headers });
+  return new Response(method === "HEAD" ? null : object.body, { headers });
 }
+
+export const onRequestGet = (ctx) => handle(ctx, "GET");
+export const onRequestHead = (ctx) => handle(ctx, "HEAD");

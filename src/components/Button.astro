@@ -2,12 +2,13 @@
 import { twMerge } from "tailwind-merge";
 
 export interface Props {
-  href: string;
+  href?: string;
   icon?: "download" | "external" | "arrow";
   download?: boolean;
   external?: boolean;
   badges?: string[];
   class?: string;
+  [key: string]: unknown; // pass-through for data-* etc.
 }
 
 const {
@@ -17,7 +18,12 @@ const {
   external = false,
   badges,
   class: className,
+  ...rest
 } = Astro.props;
+
+// A download button gets the download icon automatically, unless an icon is
+// passed explicitly.
+const resolvedIcon = icon ?? (download ? "download" : undefined);
 
 const ICONS = {
   download: "M12 3v12m0 0 4-4m-4 4-4-4M5 21h14",
@@ -35,9 +41,10 @@ const ICONS = {
   download={download ? true : undefined}
   target={external ? "_blank" : undefined}
   rel={external ? "noopener noreferrer" : undefined}
+  {...rest}
 >
   {
-    icon && (
+    resolvedIcon && (
       <svg
         class="size-5 flex-none"
         viewBox="0 0 24 24"
@@ -46,7 +53,7 @@ const ICONS = {
         stroke-width="2"
         aria-hidden="true"
       >
-        <path d={ICONS[icon]} />
+        <path d={ICONS[resolvedIcon]} />
       </svg>
     )
   }
