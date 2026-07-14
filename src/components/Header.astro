@@ -218,7 +218,13 @@ const categoryLinks = categories.map((category) => ({
           tokens.some(
             (tok) =>
               tok.length >= MIN_QUERY &&
-              (tok.startsWith(t) || t.startsWith(tok)),
+              // The matched word must start with the query term (real prefix
+              // search, e.g. "coup" -> "coupon"), or be at most a two-char stem
+              // shorter (plurals, e.g. "coupons" -> "coupon"). Anything looser
+              // lets a short indexed word ("ada") match long gibberish
+              // ("adadawdwdad") via Pagefind's prefix-truncation fallback.
+              (tok.startsWith(t) ||
+                (t.startsWith(tok) && t.length - tok.length <= 2)),
           ),
         );
       };
