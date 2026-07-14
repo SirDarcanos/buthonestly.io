@@ -67,7 +67,7 @@ const categoryLinks = categories.map((category) => ({
 >
   <div id="search-backdrop" class="bg-ink/40 absolute inset-0 backdrop-blur-sm">
   </div>
-  <div class="relative mx-auto mt-[10vh] w-full max-w-xl px-4">
+  <div class="relative mx-auto mt-[10vh] w-full max-w-2xl px-4">
     <div class="border-line bg-background border shadow-2xl">
       <form
         id="search-form"
@@ -182,11 +182,13 @@ const categoryLinks = categories.map((category) => ({
           })[c],
       );
 
+    const MIN_QUERY = 3;
     async function run(query) {
       query = query.trim();
-      if (!query) {
+      if (query.length < MIN_QUERY) {
         results.innerHTML = "";
-        status.textContent = "";
+        selected = -1;
+        status.textContent = query ? `Type at least ${MIN_QUERY} characters.` : "";
         return;
       }
       const pf = await getPagefind();
@@ -213,7 +215,7 @@ const categoryLinks = categories.map((category) => ({
         )
         .join("");
       selected = items.length ? 0 : -1;
-      highlight();
+      highlight(false);
     }
 
     // Keyboard selection across the rendered results (command-palette style).
@@ -221,18 +223,18 @@ const categoryLinks = categories.map((category) => ({
     function rows() {
       return [...results.querySelectorAll("[data-result]")];
     }
-    function highlight() {
+    function highlight(scroll) {
       rows().forEach((el, i) => {
         const on = i === selected;
         el.setAttribute("aria-selected", on ? "true" : "false");
-        if (on) el.scrollIntoView({ block: "nearest" });
+        if (on && scroll) el.scrollIntoView({ block: "nearest" });
       });
     }
     function move(delta) {
       const n = rows().length;
       if (!n) return;
       selected = (selected + delta + n) % n;
-      highlight();
+      highlight(true);
     }
 
     form.addEventListener("submit", (e) => {
