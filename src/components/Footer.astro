@@ -53,6 +53,10 @@ const tagLinks2 = tagLinks.filter((_, i) => i % 2 === 1);
             href: "https://x.com/nicolamustone",
             icon: "x",
           },
+          {
+            href: "/feed.xml",
+            icon: "rss",
+          },
         ]}
       />
     </div>
@@ -68,10 +72,25 @@ const tagLinks2 = tagLinks.filter((_, i) => i % 2 === 1);
     />
     <Nav
       links={[
-        { href: "/resources/", label: "Resources" },
+        {
+          href: "/about/",
+          label: "About",
+        },
+        {
+          href: "/resources/",
+          label: "Resources",
+        },
         {
           href: "/resources/free-ai-voice-generator/",
           label: "AI Voice Generator",
+        },
+        {
+          href: "/terms-conditions/",
+          label: "Terms",
+        },
+        {
+          href: "/privacy/",
+          label: "Privacy",
         },
       ]}
       class="flex-col gap-2"
@@ -83,13 +102,6 @@ const tagLinks2 = tagLinks.filter((_, i) => i % 2 === 1);
     class="meta mx-auto w-full max-w-6xl items-center justify-between px-10 pb-16 text-center focus:outline-none"
   >
     <p>© 2026 But Honestly</p>
-    <nav class="mt-3 flex flex-wrap justify-center gap-x-2 gap-y-1">
-      <a href="/about/" class="hover:text-accent">About</a> &middot;
-      <a href="/essays/" class="hover:text-accent">Essays</a> &middot;
-      <a href="/privacy/" class="hover:text-accent">Privacy</a> &middot;
-      <a href="/terms-conditions/" class="hover:text-accent">Terms</a> &middot;
-      <a href="/feed.xml" class="hover:text-accent">RSS</a>
-    </nav>
     <p class="mt-3">
       Text content licensed under CC BY-NC-SA 4.0 &middot; Code content licensed
       under GPL v2 or later &middot; Site source under MIT

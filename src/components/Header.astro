@@ -27,18 +27,10 @@ const categoryLinks = categories.map((category) => ({
           href: "/",
           label: "Home",
         },
-        {
-          href: "/essays/",
-          label: "Essays",
-        },
         ...categoryLinks.map((link) => ({
           href: link.href,
           label: link.label,
         })),
-        {
-          href: "/about/",
-          label: "About",
-        },
       ]}
     />
     <button
@@ -127,7 +119,8 @@ const categoryLinks = categories.map((category) => ({
         class="text-muted border-line border-t px-5 py-3 font-sans text-xs leading-relaxed"
       >
         Multiple words must all match — wrap them in <code
-          class="bg-surface rounded px-1 py-0.5 font-mono text-[0.95em]">"quotes"</code
+          class="bg-surface rounded px-1 py-0.5 font-mono text-[0.95em]"
+          >"quotes"</code
         > for an exact phrase.
       </p>
     </div>
@@ -196,7 +189,9 @@ const categoryLinks = categories.map((category) => ({
       if (query.length < MIN_QUERY) {
         results.innerHTML = "";
         selected = -1;
-        status.textContent = query ? `Type at least ${MIN_QUERY} characters.` : "";
+        status.textContent = query
+          ? `Type at least ${MIN_QUERY} characters.`
+          : "";
         return;
       }
       const pf = await getPagefind();
@@ -240,7 +235,8 @@ const categoryLinks = categories.map((category) => ({
 
       // Show the true total only when nothing was filtered out; otherwise the
       // filtered count (the real total past the first 30 is unknown).
-      const total = items.length === raw.length ? search.results.length : items.length;
+      const total =
+        items.length === raw.length ? search.results.length : items.length;
       status.textContent = items.length
         ? `${total} result${total === 1 ? "" : "s"}`
         : "No results.";
