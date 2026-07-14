@@ -33,10 +33,12 @@ const categoryLinks = categories.map((category) => ({
         })),
       ]}
     />
-    <a
-      href="/search/"
+    <button
+      type="button"
+      id="search-open"
       aria-label="Search"
-      class="text-muted hover:text-accent flex-none transition-colors"
+      aria-haspopup="dialog"
+      class="text-muted hover:text-accent flex-none cursor-pointer transition-colors"
     >
       <svg
         class="size-5"
@@ -49,6 +51,192 @@ const categoryLinks = categories.map((category) => ({
         <circle cx="11" cy="11" r="7"></circle>
         <path d="m21 21-4.3-4.3"></path>
       </svg>
-    </a>
+    </button>
   </div>
 </header>
+
+<!-- Site-wide search overlay. Pagefind is built into /pagefind/ by the
+     postbuild step and is absent in `astro dev`, so results only work after a
+     real build (`npm run build && npm run preview`). -->
+<div
+  id="search-overlay"
+  class="fixed inset-0 z-50 hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Search"
+>
+  <div id="search-backdrop" class="bg-ink/40 absolute inset-0 backdrop-blur-sm">
+  </div>
+  <div class="relative mx-auto mt-[12vh] w-full max-w-2xl px-4">
+    <div class="border-line bg-background border shadow-2xl">
+      <form
+        id="search-form"
+        role="search"
+        class="border-line flex items-center gap-3 border-b px-4"
+      >
+        <svg
+          class="text-muted size-5 flex-none"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+        >
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="m21 21-4.3-4.3"></path>
+        </svg>
+        <label for="search-input" class="sr-only">Search</label>
+        <input
+          id="search-input"
+          type="search"
+          name="q"
+          autocomplete="off"
+          placeholder="Search essays and resources…"
+          class="text-ink w-full bg-transparent py-4 font-sans text-base focus:outline-none"
+        />
+        <button
+          type="button"
+          id="search-close"
+          aria-label="Close search"
+          class="meta hover:text-accent flex-none cursor-pointer border-0"
+        >
+          Esc
+        </button>
+      </form>
+
+      <p id="search-status" class="meta px-4 pt-3" aria-live="polite"></p>
+      <div
+        id="search-results"
+        class="[&_mark]:bg-accent/15 [&_mark]:text-ink max-h-[60vh] overflow-y-auto px-4 pb-2 [&_mark]:rounded-sm [&_mark]:px-0.5"
+      >
+      </div>
+      <p class="meta border-line border-t px-4 py-3">
+        Multiple words must all match; wrap them in <code>"quotes"</code> for an
+        exact phrase.
+      </p>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  (() => {
+    const overlay = document.getElementById("search-overlay");
+    const backdrop = document.getElementById("search-backdrop");
+    const openBtn = document.getElementById("search-open");
+    const closeBtn = document.getElementById("search-close");
+    const form = document.getElementById("search-form");
+    const input = document.getElementById("search-input");
+    const status = document.getElementById("search-status");
+    const results = document.getElementById("search-results");
+
+    let lastFocused = null;
+
+    function open() {
+      if (!overlay.classList.contains("hidden")) return;
+      lastFocused = document.activeElement;
+      overlay.classList.remove("hidden");
+      document.documentElement.classList.add("overflow-hidden");
+      input.focus();
+      input.select();
+    }
+
+    function close() {
+      if (overlay.classList.contains("hidden")) return;
+      overlay.classList.add("hidden");
+      document.documentElement.classList.remove("overflow-hidden");
+      if (lastFocused && lastFocused.focus) lastFocused.focus();
+    }
+
+    let pagefind = null;
+    async function getPagefind() {
+      if (pagefind) return pagefind;
+      try {
+        pagefind = await import("/pagefind/pagefind.js");
+        pagefind.init();
+        return pagefind;
+      } catch (e) {
+        status.textContent =
+          "Search index isn't available here (it's generated at build time).";
+        return null;
+      }
+    }
+
+    const escape = (s) =>
+      String(s).replace(
+        /[&<>"']/g,
+        (c) =>
+          ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;",
+          })[c],
+      );
+
+    async function run(query) {
+      query = query.trim();
+      if (!query) {
+        results.innerHTML = "";
+        status.textContent = "";
+        return;
+      }
+      const pf = await getPagefind();
+      if (!pf) return;
+      status.textContent = "Searching…";
+      const search = await pf.debouncedSearch(query);
+      if (search === null) return; // superseded by a newer keystroke
+
+      const items = await Promise.all(
+        search.results.slice(0, 30).map((r) => r.data()),
+      );
+      const n = search.results.length;
+      status.textContent = items.length
+        ? `${n} result${n === 1 ? "" : "s"}`
+        : "No results.";
+
+      results.innerHTML = items
+        .map(
+          (d) => `
+            <article class="border-line border-t py-6">
+              <h2 class="text-xl leading-snug tracking-tight">
+                <a href="${escape(d.url)}" class="text-ink hover:text-accent">${escape(d.meta.title || d.url)}</a>
+              </h2>
+              <p class="excerpt text-muted mt-2">${d.excerpt}</p>
+            </article>`,
+        )
+        .join("");
+    }
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      run(input.value);
+    });
+    input.addEventListener("input", () => run(input.value));
+
+    openBtn.addEventListener("click", open);
+    closeBtn.addEventListener("click", close);
+    backdrop.addEventListener("click", close);
+
+    document.addEventListener("keydown", (e) => {
+      // Cmd/Ctrl+K toggles the overlay from anywhere.
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        overlay.classList.contains("hidden") ? open() : close();
+        return;
+      }
+      if (e.key === "Escape" && !overlay.classList.contains("hidden")) {
+        close();
+        return;
+      }
+      // "/" opens search unless the user is typing in a field.
+      const tag = (e.target.tagName || "").toLowerCase();
+      const typing =
+        tag === "input" || tag === "textarea" || e.target.isContentEditable;
+      if (e.key === "/" && !typing && overlay.classList.contains("hidden")) {
+        e.preventDefault();
+        open();
+      }
+    });
+  })();
+</script>
