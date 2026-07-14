@@ -52,6 +52,14 @@
     @apply bg-accent text-background;
   }
 
+  /* Drop the browser's native (blue, off-palette) clear/decoration controls on
+     search inputs; the search overlay supplies its own affordances. */
+  input[type="search"]::-webkit-search-cancel-button,
+  input[type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
   :focus-visible {
     outline: 2px solid var(--color-accent);
     outline-offset: 2px;
