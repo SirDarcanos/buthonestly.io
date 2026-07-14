@@ -35,6 +35,7 @@ const routes = new Set([
   "/privacy/",
   "/artificial-intelligence-tools/",
   "/resources/",
+  "/resources/free-ai-voice-generator/",
 ]);
 const downloadFiles = new Set();
 const essays = [];

@@ -18,19 +18,25 @@
     if (audio.dataset.enhanced) return;
     audio.dataset.enhanced = "1";
     audio.removeAttribute("controls");
-    if (!audio.preload || audio.preload === "none") audio.preload = "metadata";
+    // Default to metadata (so duration shows), but respect an explicit
+    // preload="none" — e.g. the voice samples, so the page doesn't fetch all
+    // of them on load.
+    if (!audio.getAttribute("preload")) audio.preload = "metadata";
 
     const RATES = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
     const speedOptions = RATES.map(
       (r) => `<option value="${r}"${r === 1 ? " selected" : ""}>${r}×</option>`,
     ).join("");
 
+    const labelText = audio.dataset.audioLabel ?? "Listen instead of reading";
+    const labelHtml = labelText ? `<p class="label">${labelText}</p>` : "";
+
     const wrap = document.createElement("div");
     wrap.className = "audio-player";
     wrap.setAttribute("role", "group");
     wrap.setAttribute("aria-label", "Audio player");
     wrap.innerHTML = `
-      <p class="label">Listen instead of reading</p>
+      ${labelHtml}
       <div class="audio-row">
         <button type="button" class="audio-play" aria-label="Play">
           <span class="icon-play">${PLAY}</span>
@@ -113,7 +119,9 @@
 
   function init(): void {
     document
-      .querySelectorAll<HTMLAudioElement>("article.post audio")
+      .querySelectorAll<HTMLAudioElement>(
+        "article.post audio, audio.audio-enhance",
+      )
       .forEach(upgrade);
   }
 

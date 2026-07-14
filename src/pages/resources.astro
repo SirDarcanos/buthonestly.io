@@ -138,8 +138,8 @@ const sections: Section[] = [
         actions: [
           {
             label: "Generate Your AI Voice From Text",
-            href: "https://buthonestly.io/resources/free-ai-voice-generator/",
-            kind: "external",
+            href: "/resources/free-ai-voice-generator/",
+            kind: "internal",
           },
         ],
       },
@@ -178,7 +178,7 @@ const sections: Section[] = [
 >
   <Container section id="resources" className="md:max-w-2xl">
     <Label>Resources</Label>
-    <h1 class="mt-3 text-4xl">Resources & Assets</h1>
+    <h1 class="mt-6">Resources & Assets</h1>
 
     <div class="post-content mt-7">
       <p>
@@ -199,7 +199,7 @@ const sections: Section[] = [
     {
       sections.map((section) => (
         <section class="mt-14">
-          <Label>{section.title}</Label>
+          <h2>{section.title}</h2>
           <div class="mt-6 flex flex-col gap-4">
             {section.resources.map((resource) => (
               <Resource {...resource} />

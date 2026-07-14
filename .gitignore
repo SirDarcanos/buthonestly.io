@@ -9,6 +9,10 @@ public/_redirects
 .env
 .env.production
 
+# Wrangler config (keeps R2 bucket names out of the repo) + local state
+wrangler.toml
+.wrangler/
+
 .DS_Store
 
 npm-debug.log*

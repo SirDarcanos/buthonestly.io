@@ -231,7 +231,7 @@
   }
 
   .audio-play {
-    @apply bg-accent text-background grid size-9 flex-none cursor-pointer place-items-center rounded-full border-0;
+    @apply bg-accent text-background grid size-7 flex-none cursor-pointer place-items-center rounded-full border-0;
   }
   .audio-play svg {
     @apply block size-4;

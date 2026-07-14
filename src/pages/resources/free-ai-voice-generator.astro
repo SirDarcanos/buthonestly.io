@@ -1,0 +1,998 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Container from "../../components/Container.astro";
+import Label from "../../components/Label.astro";
+import AudioPlayer from "../../components/AudioPlayer.astro";
+
+const voiceGroups = [
+  {
+    label: "American English",
+    voices: [
+      ["am_adam", "Adam (Male)"],
+      ["af_alloy", "Alloy (Female)"],
+      ["af_aoede", "Aoede (Female)"],
+      ["af_bella", "Bella (Female)"],
+      ["am_echo", "Echo (Male)"],
+      ["am_eric", "Eric (Male)"],
+      ["am_fenrir", "Fenrir (Male)"],
+      ["af_heart", "Heart (Female)"],
+      ["af_jessica", "Jessica (Female)"],
+      ["af_kore", "Kore (Female)"],
+      ["am_liam", "Liam (Male)"],
+      ["am_michael", "Michael (Male)"],
+      ["af_nicole", "Nicole (Female)"],
+      ["af_nova", "Nova (Female)"],
+      ["am_onyx", "Onyx (Male)"],
+      ["am_puck", "Puck (Male)"],
+      ["af_river", "River (Female)"],
+      ["am_santa", "Santa (Male)"],
+      ["af_sarah", "Sarah (Female)"],
+      ["af_sky", "Sky (Female)"],
+    ],
+  },
+  {
+    label: "British English",
+    voices: [
+      ["bf_alice", "Alice (Female)"],
+      ["bm_daniel", "Daniel (Male)"],
+      ["bf_emma", "Emma (Female)"],
+      ["bm_fable", "Fable (Male)"],
+      ["bm_george", "George (Male)"],
+      ["bf_isabella", "Isabella (Female)"],
+      ["bm_lewis", "Lewis (Male)"],
+      ["bf_lily", "Lily (Female)"],
+    ],
+  },
+];
+
+const sampleSentence =
+  "Some mornings, the coffee tastes better than usual — and I never quite know why.";
+const sampleBase = "/static/kokoro-voice-samples";
+const blendSample = {
+  label: "Onyx + Heart (50/50 blend)",
+  file: "blend_am_onyx_af_heart_50-50-sample.mp3",
+};
+---
+
+<Layout
+  title="Free AI Voice Generator"
+  description="Turn any text into natural speech, right in your browser. Powered by Kokoro — nothing you type is ever sent to a server. Free, no sign-up."
+>
+  <Container section id="voice-generator" className="md:max-w-2xl">
+    <Label>Resources</Label>
+    <h1 class="mt-6">Free AI Voice Generator</h1>
+
+    <div class="post-content mt-7">
+      <p>
+        A small text-to-speech tool you can use for anything, entirely free of
+        charge. Paste your text, pick a voice, and click Generate — your browser
+        turns it into audio <strong>entirely on your device</strong>. It's the
+        same tool I use to record the audio versions of my essays.
+      </p>
+      <p>
+        It runs the open-source <a
+          href="https://huggingface.co/hexgrad/Kokoro-82M"
+          target="_blank"
+          rel="noopener">Kokoro</a
+        > model directly in your browser, using WebGPU when it's available. Despite
+        its lightweight architecture, it delivers quality comparable to larger (and
+        premium) models while being significantly faster — and free. Kokoro is distributed
+        under the Apache-2.0 license.
+      </p>
+    </div>
+
+    <div
+      class="bh-kokoro-tts-app border-line bg-surface mt-8 flex flex-col gap-6 border p-6"
+      data-bhktw-instance="main"
+    >
+      <div class="flex flex-col gap-1.5">
+        <label
+          for="bhktw-text"
+          class="text-muted font-sans text-[0.7rem] font-semibold tracking-[0.12em] uppercase"
+          >Text to read aloud</label
+        >
+        <textarea
+          id="bhktw-text"
+          data-bhktw="text"
+          rows="6"
+          class="border-line bg-background text-ink min-h-32 w-full resize-y border px-3 py-2.5 font-sans text-base leading-normal disabled:opacity-50"
+          placeholder="Paste any text here — an essay, a paragraph, anything you'd like to hear read aloud..."
+        ></textarea>
+      </div>
+
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <div class="flex flex-col gap-1.5">
+          <label
+            for="bhktw-voice"
+            class="text-muted font-sans text-[0.7rem] font-semibold tracking-[0.12em] uppercase"
+            >Voice</label
+          >
+          <select
+            id="bhktw-voice"
+            data-bhktw="voice"
+            class="border-line bg-background text-ink w-full border px-3 py-2.5 font-sans text-base disabled:opacity-50"
+          >
+            {
+              voiceGroups.map((group) => (
+                <optgroup label={group.label}>
+                  {group.voices.map(([value, name]) => (
+                    <option value={value}>{name}</option>
+                  ))}
+                </optgroup>
+              ))
+            }
+          </select>
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <label
+            for="bhktw-blend"
+            class="text-muted font-sans text-[0.7rem] font-semibold tracking-[0.12em] uppercase"
+            >Blend with</label
+          >
+          <select
+            id="bhktw-blend"
+            data-bhktw="blend"
+            class="border-line bg-background text-ink w-full border px-3 py-2.5 font-sans text-base disabled:opacity-50"
+          >
+            <option value="">None (single voice)</option>
+            {
+              voiceGroups.map((group) => (
+                <optgroup label={group.label}>
+                  {group.voices.map(([value, name]) => (
+                    <option value={value}>{name}</option>
+                  ))}
+                </optgroup>
+              ))
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-end gap-4">
+        <div class="flex w-24 flex-col gap-1.5">
+          <label
+            for="bhktw-blend-weight"
+            class="text-muted font-sans text-[0.7rem] font-semibold tracking-[0.12em] uppercase"
+            >Primary %</label
+          >
+          <input
+            type="number"
+            id="bhktw-blend-weight"
+            data-bhktw="blend-weight"
+            min="10"
+            max="90"
+            step="5"
+            value="100"
+            class="border-line bg-background text-ink w-full border px-3 py-2.5 font-sans text-base disabled:opacity-50"
+            disabled
+          />
+        </div>
+        <div class="flex w-24 flex-col gap-1.5">
+          <label
+            for="bhktw-speed"
+            class="text-muted font-sans text-[0.7rem] font-semibold tracking-[0.12em] uppercase"
+            >Speed ×</label
+          >
+          <input
+            type="number"
+            id="bhktw-speed"
+            data-bhktw="speed"
+            min="0.5"
+            max="1.5"
+            step="0.05"
+            value="1"
+            class="border-line bg-background text-ink w-full border px-3 py-2.5 font-sans text-base disabled:opacity-50"
+          />
+        </div>
+        <button
+          data-bhktw="generate"
+          type="button"
+          class="bg-accent text-background ml-auto cursor-pointer border-0 px-6 py-3 font-sans text-[0.9rem] font-semibold tracking-[0.02em] transition-opacity hover:opacity-90 disabled:cursor-default disabled:opacity-50"
+        >
+          Generate
+        </button>
+      </div>
+
+      <div class="text-muted flex items-center gap-2.5 font-mono text-[0.8rem]">
+        <span data-bhktw="dot" class="bg-muted size-2 flex-none rounded-full"
+        ></span>
+        <span data-bhktw="status-msg"
+          >Checking whether the voice model is ready…</span
+        >
+      </div>
+      <div
+        data-bhktw="progress"
+        class="bg-faint hidden h-[3px] overflow-hidden"
+      >
+        <div class="bg-accent h-full w-0 transition-[width] duration-200"></div>
+      </div>
+      <div
+        data-bhktw="err"
+        class="border-accent text-accent hidden border px-4 py-3 font-sans text-[0.9rem]"
+      >
+      </div>
+
+      <div
+        data-bhktw="output"
+        class="border-line flex hidden flex-col gap-3 border-t pt-6"
+      >
+        <h2 class="text-lg tracking-tight">Generated audio</h2>
+        <audio
+          data-bhktw="audio"
+          class="audio-enhance w-full"
+          data-audio-label=""
+          controls></audio>
+        <div class="flex flex-wrap gap-3">
+          <button
+            data-bhktw="download-mp3"
+            type="button"
+            class="border-line bg-background text-ink hover:border-accent hover:text-accent cursor-pointer border px-4 py-2.5 font-sans text-[0.9rem] transition-colors disabled:cursor-default disabled:opacity-50"
+          >
+            Download MP3
+          </button>
+          <button
+            data-bhktw="download-wav"
+            type="button"
+            class="border-line bg-background text-ink hover:border-accent hover:text-accent cursor-pointer border px-4 py-2.5 font-sans text-[0.9rem] transition-colors disabled:cursor-default disabled:opacity-50"
+          >
+            Download WAV
+          </button>
+        </div>
+      </div>
+    </div>
+
+    {/* HOW TO USE */}
+    <section class="mt-14">
+      <h2>How to use it</h2>
+      <div class="post-content mt-4">
+        <ul>
+          <li>
+            Paste your text, then pick a primary <strong>Voice</strong> from the dropdown
+            — there are twenty-eight. For a hybrid, pick a second one under <strong
+              >Blend with</strong
+            > and adjust the mix.
+          </li>
+          <li>
+            Add a pause anywhere by writing <code>[0.5s]</code> in the text — change
+            the number to whatever you prefer.
+          </li>
+          <li>
+            The first time, your browser downloads the Kokoro model
+            (~300&nbsp;MB), so the first run can take a minute or two. After
+            that it's cached and fast — a couple of minutes of audio takes about
+            as many seconds on a modern machine.
+          </li>
+          <li>
+            When it finishes, play it back, download the MP3, or grab the WAV.
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    {/* VOICE SAMPLES */}
+    <section class="mt-14">
+      <Label>Voice samples</Label>
+      <h2 class="mt-3">Hear each voice</h2>
+      <p class="text-muted mt-3 text-base">
+        Every clip reads the same line: <em>“{sampleSentence}”</em>
+      </p>
+
+      {
+        voiceGroups.map((group, gi) => (
+          <>
+            <h3 class="mt-8">{group.label}</h3>
+            <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {group.voices.map(([id, name]) => (
+                <audio
+                  class="audio-enhance w-full"
+                  preload="none"
+                  data-audio-label={name}
+                  src={`${sampleBase}/${id}-sample.mp3`}
+                  controls
+                />
+              ))}
+              {gi === 0 && (
+                <audio
+                  class="audio-enhance w-full"
+                  preload="none"
+                  data-audio-label={blendSample.label}
+                  src={`${sampleBase}/${blendSample.file}`}
+                  controls
+                />
+              )}
+            </div>
+          </>
+        ))
+      }
+    </section>
+
+    {/* GOOD TO KNOW */}
+    <section class="mt-14">
+      <h2>Good to know</h2>
+      <div class="post-content mt-4">
+        <p>
+          <strong>Browser.</strong> Chrome, Edge, and Brave support WebGPU, which
+          is what makes this quick. Safari and Firefox fall back to a slower WASM
+          mode — it still works, just be patient.
+        </p>
+        <p>
+          <strong>Privacy.</strong> Everything runs locally. No telemetry, no server
+          calls, no third parties, no cookies. Your text and the generated audio stay
+          in your browser and never reach a server.
+        </p>
+        <p>
+          <strong>Quality.</strong> Some voices are better than others, depending
+          on how long they were trained. Blending two voices within the same language
+          usually produces a more interesting result than a single one. I recommend
+          <strong>Heart</strong> (Female, American) — it's the most trained of all.
+        </p>
+        <p>
+          <strong>Audio files.</strong> WAV is uncompressed PCM (24&nbsp;kHz, 16-bit,
+          mono, ~2.9&nbsp;MB per minute). MP3 is encoded with lamejs (24&nbsp;kHz,
+          mono, 128&nbsp;kbps CBR, ~960&nbsp;KB per minute). The model itself only
+          produces 24&nbsp;kHz, so the WAV is speech-quality without lossy compression
+          on top — not studio-quality.
+        </p>
+      </div>
+    </section>
+
+    <AudioPlayer />
+  </Container>
+</Layout>
+
+{/* MP3 encoder — exposes window.lamejs, probed lazily by the module below. */}
+<script is:inline src="https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js"
+></script>
+
+<script is:inline type="module">
+  // BUT. Honestly — Kokoro TTS Web (browser-local TTS).
+  // Finds every .bh-kokoro-tts-app on the page and wires it up independently.
+
+  // Chunk budget in words. Kokoro silently truncates input past its ~512
+  // phoneme-token context (≈5 tokens/word ≈ 100 words) — a 100-word paragraph
+  // was observed to cut off after ~90. Keep chunks well under that so nothing
+  // is dropped. Short chunks may merge up to 1.2× this.
+  const MAX_CHUNK_WORDS = 60;
+  const SHORT_EDGE_WORDS = 20;
+
+  function getLamejs() {
+    const candidates = [
+      typeof window.lamejs !== "undefined" ? window.lamejs : null,
+      typeof window.Lame !== "undefined" ? window.Lame : null,
+    ];
+    for (const c of candidates) {
+      if (!c) continue;
+      if (typeof c.Mp3Encoder === "function") return c;
+      if (c.default && typeof c.default.Mp3Encoder === "function")
+        return c.default;
+    }
+    return null;
+  }
+
+  // Word count on whitespace-normalized text.
+  function countWords(text) {
+    const clean = String(text).replace(/\s+/gu, " ").trim();
+    return clean === "" ? 0 : clean.split(" ").length;
+  }
+
+  // Split clean text into TTS-sized chunks. Paragraph boundaries first; falls
+  // back to sentence, then clause, then comma boundaries when a paragraph or
+  // sentence itself exceeds the budget. Never splits mid-word. Ported from the
+  // Honest_TTS Chunker.
+  function chunkText(text, maxWords = MAX_CHUNK_WORDS) {
+    text = text.trim();
+    if (text === "") return [];
+    if (maxWords < 10) maxWords = 10;
+
+    // Pack paragraphs greedily up to maxWords; adjacent short paragraphs join
+    // with a blank line, so seams still land on paragraph breaks when possible.
+    // An oversized paragraph falls through to sentence splitting.
+    const chunks = [];
+    let current = "";
+    let currentWords = 0;
+
+    for (const rawPara of text.split(/\n\s*\n/u)) {
+      const para = rawPara.trim();
+      if (para === "") continue;
+      const words = countWords(para);
+
+      if (words > maxWords) {
+        if (current !== "") {
+          chunks.push(current);
+          current = "";
+          currentWords = 0;
+        }
+        for (const piece of splitParagraph(para, maxWords)) chunks.push(piece);
+        continue;
+      }
+
+      if (currentWords > 0 && currentWords + words > maxWords) {
+        chunks.push(current);
+        current = "";
+        currentWords = 0;
+      }
+
+      current = current === "" ? para : current + "\n\n" + para;
+      currentWords += words;
+    }
+
+    if (current !== "") chunks.push(current);
+
+    return absorbShortChunks(chunks, maxWords);
+  }
+
+  // Fold short chunks into a neighbor: a trailing/isolated short chunk can lose
+  // its last word to Kokoro's tail handling, so any chunk under
+  // SHORT_EDGE_WORDS merges into the PREVIOUS chunk (staying within 1.2× the
+  // cap). A still-short first chunk folds forward into the next instead.
+  function absorbShortChunks(chunks, maxWords) {
+    if (chunks.length < 2) return chunks;
+    const cap = Math.round(maxWords * 1.2);
+
+    const result = [chunks[0]];
+    for (let i = 1; i < chunks.length; i++) {
+      const cw = countWords(chunks[i]);
+      if (cw < SHORT_EDGE_WORDS) {
+        const last = result.length - 1;
+        if (countWords(result[last]) + cw <= cap) {
+          result[last] += "\n\n" + chunks[i];
+          continue;
+        }
+      }
+      result.push(chunks[i]);
+    }
+
+    if (result.length >= 2 && countWords(result[0]) < SHORT_EDGE_WORDS) {
+      result[1] = result[0] + "\n\n" + result[1];
+      result.shift();
+    }
+
+    return result;
+  }
+
+  // Sentence-split an oversized paragraph, packing sentences up to the cap.
+  function splitParagraph(para, maxWords) {
+    let sentences = para.split(/(?<=[.!?])\s+(?=[A-Z\p{Lu}"'(])/u);
+    if (sentences.length === 0) sentences = [para];
+
+    const chunks = [];
+    let current = "";
+    let currentWords = 0;
+
+    for (const rawSentence of sentences) {
+      const sentence = rawSentence.trim();
+      if (sentence === "") continue;
+      const words = countWords(sentence);
+
+      if (currentWords > 0 && currentWords + words > maxWords) {
+        chunks.push(current);
+        current = "";
+        currentWords = 0;
+      }
+
+      if (words <= maxWords) {
+        current = current === "" ? sentence : current + " " + sentence;
+        currentWords += words;
+        continue;
+      }
+
+      if (current !== "") {
+        chunks.push(current);
+        current = "";
+        currentWords = 0;
+      }
+      for (const piece of splitSentence(sentence, maxWords)) chunks.push(piece);
+    }
+
+    if (current !== "") chunks.push(current);
+    return chunks;
+  }
+
+  // Clause-split an oversized sentence on ; — – -- boundaries.
+  function splitSentence(sentence, maxWords) {
+    const parts = sentence.split(/(\s*(?:;|—|–|--)\s*)/u);
+    if (parts.length < 3) return splitOnCommas(sentence, maxWords);
+
+    const chunks = [];
+    let current = "";
+    let currentWords = 0;
+
+    for (let i = 0; i < parts.length; i += 2) {
+      const segment = (parts[i] ?? "").trim();
+      const delim = (parts[i + 1] ?? "").trim();
+      if (segment === "") continue;
+      const piece = delim === "" ? segment : segment + " " + delim;
+      const words = countWords(piece);
+
+      if (currentWords > 0 && currentWords + words > maxWords) {
+        chunks.push(current);
+        current = "";
+        currentWords = 0;
+      }
+
+      if (words <= maxWords) {
+        current = current === "" ? piece : current + " " + piece;
+        currentWords += words;
+        continue;
+      }
+
+      if (current !== "") {
+        chunks.push(current);
+        current = "";
+        currentWords = 0;
+      }
+      for (const sub of splitOnCommas(piece, maxWords)) chunks.push(sub);
+    }
+
+    if (current !== "") chunks.push(current);
+    return chunks;
+  }
+
+  // Last resort: split on commas, else pack words greedily into ≤max chunks.
+  function splitOnCommas(segment, maxWords) {
+    const parts = segment.split(/(\s*,\s*)/u);
+    const hasCommas = parts.length > 1;
+
+    const chunks = [];
+    let current = "";
+    let currentWords = 0;
+
+    const pack = (piece) => {
+      const words = countWords(piece);
+      if (currentWords > 0 && currentWords + words > maxWords) {
+        chunks.push(current);
+        current = "";
+        currentWords = 0;
+      }
+      if (words <= maxWords) {
+        current = current === "" ? piece : current + " " + piece;
+        currentWords += words;
+        return;
+      }
+      if (current !== "") {
+        chunks.push(current);
+        current = "";
+        currentWords = 0;
+      }
+      let buf = [];
+      for (const w of piece.split(/\s+/u).filter(Boolean)) {
+        buf.push(w);
+        if (buf.length >= maxWords) {
+          chunks.push(buf.join(" "));
+          buf = [];
+        }
+      }
+      if (buf.length) {
+        current = buf.join(" ");
+        currentWords = buf.length;
+      }
+    };
+
+    if (!hasCommas) {
+      pack(segment);
+    } else {
+      for (let i = 0; i < parts.length; i += 2) {
+        const seg = (parts[i] ?? "").trim();
+        const delim = (parts[i + 1] ?? "").trim();
+        if (seg === "") continue;
+        pack(delim === "" ? seg : seg + delim);
+      }
+    }
+
+    if (current !== "") chunks.push(current);
+    return chunks;
+  }
+
+  // Parse text into chunks separated by [Xs] silence markers.
+  function parseChunks(raw) {
+    const out = [];
+    const re = /\[(\d+(?:\.\d+)?)s\]/g;
+    let lastIdx = 0;
+    let m;
+    while ((m = re.exec(raw)) !== null) {
+      const before = raw.slice(lastIdx, m.index).trim();
+      if (before) {
+        for (const piece of chunkText(before)) {
+          out.push({ type: "text", text: piece });
+        }
+      }
+      out.push({ type: "silence", seconds: parseFloat(m[1]) });
+      lastIdx = m.index + m[0].length;
+    }
+    const tail = raw.slice(lastIdx).trim();
+    if (tail) {
+      for (const piece of chunkText(tail)) {
+        out.push({ type: "text", text: piece });
+      }
+    }
+    return out;
+  }
+
+  function concatFloat32(arrays) {
+    let total = 0;
+    for (const a of arrays) total += a.length;
+    const out = new Float32Array(total);
+    let off = 0;
+    for (const a of arrays) {
+      out.set(a, off);
+      off += a.length;
+    }
+    return out;
+  }
+
+  function encodeWav(samples, sampleRate) {
+    const dataSize = samples.length * 2;
+    const buffer = new ArrayBuffer(44 + dataSize);
+    const view = new DataView(buffer);
+    function writeString(off, str) {
+      for (let i = 0; i < str.length; i++)
+        view.setUint8(off + i, str.charCodeAt(i));
+    }
+    writeString(0, "RIFF");
+    view.setUint32(4, 36 + dataSize, true);
+    writeString(8, "WAVE");
+    writeString(12, "fmt ");
+    view.setUint32(16, 16, true);
+    view.setUint16(20, 1, true);
+    view.setUint16(22, 1, true);
+    view.setUint32(24, sampleRate, true);
+    view.setUint32(28, sampleRate * 2, true);
+    view.setUint16(32, 2, true);
+    view.setUint16(34, 16, true);
+    writeString(36, "data");
+    view.setUint32(40, dataSize, true);
+    let off = 44;
+    for (let i = 0; i < samples.length; i++) {
+      const s = Math.max(-1, Math.min(1, samples[i]));
+      view.setInt16(off, s < 0 ? s * 0x8000 : s * 0x7fff, true);
+      off += 2;
+    }
+    return new Blob([buffer], { type: "audio/wav" });
+  }
+
+  function encodeMp3(samples, sampleRate) {
+    const lib = getLamejs();
+    if (!lib)
+      throw new Error(
+        "MP3 encoder (lamejs) not available — script may have failed to load.",
+      );
+    const int16 = new Int16Array(samples.length);
+    for (let i = 0; i < samples.length; i++) {
+      const s = Math.max(-1, Math.min(1, samples[i]));
+      int16[i] = s < 0 ? s * 0x8000 : s * 0x7fff;
+    }
+    const encoder = new lib.Mp3Encoder(1, sampleRate, 128);
+    const blockSize = 1152;
+    const chunks = [];
+    for (let i = 0; i < int16.length; i += blockSize) {
+      const slice = int16.subarray(i, i + blockSize);
+      const buf = encoder.encodeBuffer(slice);
+      if (buf.length > 0) chunks.push(buf);
+    }
+    const flushBuf = encoder.flush();
+    if (flushBuf.length > 0) chunks.push(flushBuf);
+    return new Blob(chunks, { type: "audio/mpeg" });
+  }
+
+  function buildVoiceParam(primary, blendWith, primaryPct) {
+    if (!blendWith) return primary;
+    const w1 = Math.max(0.1, Math.min(0.9, primaryPct / 100));
+    return `${primary}(${w1.toFixed(2)}),${blendWith}(${(1 - w1).toFixed(2)})`;
+  }
+
+  function buildVoiceParamFallback(primary, blendWith) {
+    if (!blendWith) return primary;
+    return `${primary},${blendWith}`;
+  }
+
+  // Human-readable duration for the download ETA.
+  function fmtTime(seconds) {
+    const s = Math.max(0, Math.round(seconds));
+    if (s < 60) return `${s}s`;
+    return `${Math.floor(s / 60)}m ${String(s % 60).padStart(2, "0")}s`;
+  }
+
+  // Has the Kokoro model already been fetched into the browser's Cache
+  // Storage (by a previous visit)? transformers.js caches each file under
+  // some cache name; we scan them all for this model's .onnx weights, so the
+  // check survives library/cache-name changes. Best-effort — any failure just
+  // reports "not cached".
+  async function isModelCached() {
+    if (!("caches" in window)) return false;
+    try {
+      for (const name of await caches.keys()) {
+        const cache = await caches.open(name);
+        for (const req of await cache.keys()) {
+          if (/kokoro-82m/i.test(req.url) && /\.onnx(\?|#|$)/i.test(req.url)) {
+            return true;
+          }
+        }
+      }
+    } catch (e) {
+      /* Cache API blocked (private mode, etc.) — treat as not cached. */
+    }
+
+    return false;
+  }
+
+  // Lazily import kokoro-js the first time any instance generates audio.
+  // Reports model-download progress through setStatus/setProgress so the user
+  // sees how much is left and a rough time estimate.
+  let ttsPromise = null;
+  async function getTts(setStatus, setProgress) {
+    if (!ttsPromise) {
+      ttsPromise = (async () => {
+        const MODEL = "onnx-community/Kokoro-82M-v1.0-ONNX";
+        setStatus("Loading text-to-speech model (~300 MB)…", "busy");
+        setProgress(0);
+        const { KokoroTTS } =
+          await import("https://cdn.jsdelivr.net/npm/kokoro-js@1.2.1/dist/kokoro.web.js");
+
+        // Each load attempt gets its own byte accounting, so a WebGPU→WASM
+        // fallback (different files) starts the bar cleanly.
+        const load = (opts) => {
+          const files = new Map();
+          let startedAt = null;
+          const onProgress = (data) => {
+            if (!data || data.status !== "progress" || !data.total) return;
+            if (startedAt == null) startedAt = performance.now();
+            files.set(data.file, {
+              loaded: data.loaded || 0,
+              total: data.total,
+            });
+            let loaded = 0;
+            let total = 0;
+            for (const f of files.values()) {
+              loaded += f.loaded;
+              total += f.total;
+            }
+            const pct = Math.min(100, (loaded / total) * 100);
+            setProgress(pct);
+            if (loaded >= total) {
+              setStatus("Preparing model…", "busy");
+              return;
+            }
+            const mb = (loaded / 1048576).toFixed(0);
+            const totalMb = (total / 1048576).toFixed(0);
+            const elapsed = (performance.now() - startedAt) / 1000;
+            const speed = elapsed > 0 ? loaded / elapsed : 0;
+            const eta =
+              speed > 0 ? ` · ~${fmtTime((total - loaded) / speed)} left` : "";
+            setStatus(
+              `Downloading model — ${mb} / ${totalMb} MB (${pct.toFixed(0)}%)${eta}`,
+              "busy",
+            );
+          };
+          return KokoroTTS.from_pretrained(MODEL, {
+            ...opts,
+            progress_callback: onProgress,
+          });
+        };
+
+        try {
+          return await load({ dtype: "fp32", device: "webgpu" });
+        } catch (e) {
+          setStatus(
+            "WebGPU unavailable — downloading the CPU model instead…",
+            "busy",
+          );
+          setProgress(0);
+          return await load({ dtype: "q8", device: "wasm" });
+        }
+      })();
+    }
+    return ttsPromise;
+  }
+
+  function initInstance(root) {
+    const pick = (name) => root.querySelector(`[data-bhktw="${name}"]`);
+    const textInput = pick("text");
+    const voiceSelect = pick("voice");
+    const blendSelect = pick("blend");
+    const blendWeightInput = pick("blend-weight");
+    const speedInput = pick("speed");
+    const generateBtn = pick("generate");
+    const statusMsgEl = pick("status-msg");
+    const dotEl = pick("dot");
+    const progressEl = pick("progress");
+    const progressBarEl = progressEl.querySelector("div");
+    const errEl = pick("err");
+    const outputEl = pick("output");
+    const audioEl = pick("audio");
+    const downloadMp3Btn = pick("download-mp3");
+    const downloadWavBtn = pick("download-wav");
+
+    let lastSampleRate = 24000;
+    let lastMp3Blob = null;
+    let lastWavBlob = null;
+
+    const DOT_CLASS = {
+      idle: "bg-muted",
+      ready: "bg-green-600",
+      busy: "bg-muted animate-pulse",
+      ok: "bg-green-600",
+      err: "bg-red-600",
+    };
+    function setStatus(msg, mode = "idle") {
+      statusMsgEl.textContent = msg;
+      dotEl.className =
+        "size-2 flex-none rounded-full " + (DOT_CLASS[mode] ?? DOT_CLASS.idle);
+    }
+    function setProgress(pct) {
+      if (pct == null) {
+        progressEl.classList.add("hidden");
+        return;
+      }
+      progressEl.classList.remove("hidden");
+      progressBarEl.style.width = Math.max(0, Math.min(100, pct)) + "%";
+    }
+    function showError(msg) {
+      errEl.textContent = msg;
+      errEl.classList.remove("hidden");
+      dotEl.className = "size-2 flex-none rounded-full " + DOT_CLASS.err;
+    }
+    function clearError() {
+      errEl.classList.add("hidden");
+      errEl.textContent = "";
+    }
+    function timestamp() {
+      return new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
+    }
+    function downloadBlob(blob, filename) {
+      if (!blob) return;
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    blendSelect.addEventListener("change", () => {
+      blendWeightInput.disabled = !blendSelect.value;
+    });
+
+    async function generateChunk(tts, text, voice, speed) {
+      const result = await tts.generate(text, { voice, speed });
+      if (result && result.audio) {
+        lastSampleRate = result.sampling_rate || result.sampleRate || 24000;
+        return result.audio;
+      }
+      if (result instanceof Float32Array) return result;
+      throw new Error("Unexpected output from kokoro-js.");
+    }
+
+    async function doGenerate() {
+      clearError();
+      const text = textInput.value.trim();
+      if (!text) {
+        showError("Paste some text first.");
+        return;
+      }
+      if (text.length > 50000) {
+        showError(
+          "Text is very long — please split it into smaller pieces (under 50,000 characters).",
+        );
+        return;
+      }
+      const primary = voiceSelect.value;
+      const blendWith = blendSelect.value;
+      const primaryPct = parseInt(blendWeightInput.value, 10) || 60;
+      let voice = buildVoiceParam(primary, blendWith, primaryPct);
+      let blendFallback = false;
+      const speed = parseFloat(speedInput.value) || 1;
+
+      generateBtn.disabled = true;
+      outputEl.classList.add("hidden");
+      setProgress(0);
+      try {
+        const tts = await getTts(setStatus, setProgress);
+        const parsed = parseChunks(text);
+        const audioParts = [];
+        let chunkIdx = 0;
+        const totalChunks = parsed.filter((p) => p.type === "text").length;
+
+        for (const part of parsed) {
+          if (part.type === "silence") {
+            audioParts.push(
+              new Float32Array(Math.round(part.seconds * lastSampleRate)),
+            );
+            continue;
+          }
+          chunkIdx++;
+          setStatus(`Generating chunk ${chunkIdx} of ${totalChunks}…`, "busy");
+          setProgress(((chunkIdx - 1) / Math.max(1, totalChunks)) * 100);
+          let buf;
+          try {
+            buf = await generateChunk(tts, part.text, voice, speed);
+          } catch (e) {
+            if (chunkIdx === 1 && blendWith && !blendFallback) {
+              voice = buildVoiceParamFallback(primary, blendWith);
+              blendFallback = true;
+              try {
+                buf = await generateChunk(tts, part.text, voice, speed);
+              } catch (e2) {
+                voice = primary;
+                buf = await generateChunk(tts, part.text, voice, speed);
+              }
+            } else {
+              throw e;
+            }
+          }
+          audioParts.push(buf);
+        }
+
+        setStatus("Encoding…", "busy");
+        setProgress(95);
+        const merged = concatFloat32(audioParts);
+
+        lastWavBlob = encodeWav(merged, lastSampleRate);
+        audioEl.src = URL.createObjectURL(lastWavBlob);
+
+        try {
+          lastMp3Blob = encodeMp3(merged, lastSampleRate);
+          downloadMp3Btn.disabled = false;
+        } catch (e) {
+          lastMp3Blob = null;
+          downloadMp3Btn.disabled = true;
+        }
+
+        outputEl.classList.remove("hidden");
+        setProgress(100);
+        setStatus("Done.", "ok");
+        setTimeout(() => setProgress(null), 800);
+      } catch (e) {
+        console.error("[bh-kokoro-tts-web]", e);
+        setStatus("Something went wrong — see the note below.", "err");
+        showError(e && e.message ? e.message : String(e));
+        setProgress(null);
+      } finally {
+        generateBtn.disabled = false;
+      }
+    }
+
+    generateBtn.addEventListener("click", doGenerate);
+
+    downloadMp3Btn.addEventListener("click", () => {
+      if (lastMp3Blob) downloadBlob(lastMp3Blob, `audio-${timestamp()}.mp3`);
+    });
+
+    downloadWavBtn.addEventListener("click", () => {
+      if (lastWavBlob) downloadBlob(lastWavBlob, `audio-${timestamp()}.wav`);
+    });
+
+    // Tailor the idle message to whether the model still needs downloading
+    // (green dot if it's already cached, grey if not), and note CPU-only
+    // browsers — which isn't an error, so it keeps the idle/ready dot.
+    (async () => {
+      const cached = await isModelCached();
+      const gpuNote = navigator.gpu
+        ? ""
+        : " (No WebGPU. The model will run in a slower CPU mode. Chrome, Edge, or Brave are faster.)";
+      if (cached) {
+        setStatus(
+          "Voice model detected. Click Generate to begin." + gpuNote,
+          "ready",
+        );
+      } else {
+        setStatus(
+          "Click Generate to begin downloading the voice model and generating the audio." +
+            gpuNote,
+          "idle",
+        );
+      }
+    })();
+  }
+
+  function boot() {
+    document.querySelectorAll(".bh-kokoro-tts-app").forEach(initInstance);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot, { once: true });
+  } else {
+    boot();
+  }
+</script>
