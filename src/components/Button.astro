@@ -1,0 +1,55 @@
+---
+import { twMerge } from "tailwind-merge";
+
+export interface Props {
+  href: string;
+  icon?: "download" | "external" | "arrow";
+  download?: boolean;
+  external?: boolean;
+  badges?: string[];
+  class?: string;
+}
+
+const {
+  href,
+  icon,
+  download = false,
+  external = false,
+  badges,
+  class: className,
+} = Astro.props;
+
+const ICONS = {
+  download: "M12 3v12m0 0 4-4m-4 4-4-4M5 21h14",
+  external: "M7 17 17 7M9 7h8v8",
+  arrow: "M5 12h14m0 0-5-5m5 5-5 5",
+} as const;
+---
+
+<a
+  class={twMerge(
+    "border-line bg-surface text-ink hover:border-accent hover:text-accent flex items-center gap-3 border px-4 py-3 no-underline transition-colors",
+    className,
+  )}
+  href={href}
+  download={download ? true : undefined}
+  target={external ? "_blank" : undefined}
+  rel={external ? "noopener noreferrer" : undefined}
+>
+  {
+    icon && (
+      <svg
+        class="size-5 flex-none"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        aria-hidden="true"
+      >
+        <path d={ICONS[icon]} />
+      </svg>
+    )
+  }
+  <span class="flex-1 text-base leading-snug"><slot /></span>
+  {badges?.map((b) => <span class="text-muted font-mono text-xs">{b}</span>)}
+</a>

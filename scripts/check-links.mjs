@@ -30,7 +30,12 @@ const dirs = fs
 const essaySlugs = new Set(dirs);
 
 // Valid routes the site actually builds, plus known standalone pages.
-const routes = new Set(["/", "/privacy/", "/artificial-intelligence-tools/"]);
+const routes = new Set([
+  "/",
+  "/privacy/",
+  "/artificial-intelligence-tools/",
+  "/resources/",
+]);
 const downloadFiles = new Set();
 const essays = [];
 for (const slug of dirs) {

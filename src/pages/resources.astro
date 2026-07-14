@@ -1,0 +1,212 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Container from "../components/Container.astro";
+import Label from "../components/Label.astro";
+import Resource, {
+  type Props as ResourceData,
+} from "../components/Resource.astro";
+
+interface Section {
+  title: string;
+  resources: ResourceData[];
+}
+
+const sections: Section[] = [
+  {
+    title: "Leadership",
+    resources: [
+      {
+        title: "Quill Meetings Templates",
+        description:
+          "The custom instructions I use for my 1on1 and coaching templates in Quill Meetings. The download includes a “HOW TO USE” instructions file.",
+        actions: [
+          {
+            label: "Read the Essay",
+            href: "/tools-for-adhd-leadership/",
+            kind: "internal",
+          },
+          {
+            label: "Download",
+            href: "/downloads/quill-meetings-templates.zip",
+            kind: "download",
+            ext: ["zip"],
+          },
+        ],
+      },
+      {
+        title: "Time Off Handover Plan",
+        description: "A fillable template to help you plan for your time off.",
+        actions: [
+          {
+            label: "Read the Essay",
+            href: "/time-off-for-leaders/",
+            kind: "internal",
+          },
+          {
+            label: "Download",
+            href: "/downloads/time-off-handover-plan.zip",
+            kind: "download",
+            ext: ["zip"],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    title: "Engineering & Data",
+    resources: [
+      {
+        title:
+          "Building a Convolutional Neural Network in Python with TensorFlow",
+        description:
+          "A step-by-step guide to building a complete CNN in TensorFlow for the MNIST dataset. Use this Jupyter Notebook with reusable CNN Python class to create your own CNNs.",
+        actions: [
+          {
+            label: "Read the Essay",
+            href: "/building-convolutional-neural-network-python-tensorflow/",
+            kind: "internal",
+          },
+          {
+            label: "Download the Notebook",
+            href: "/downloads/cnn-mnist-use-case-tensorflow.zip",
+            kind: "download",
+            ext: ["ipynb"],
+          },
+        ],
+      },
+      {
+        title:
+          "DistilRoBERTa Emotion Analysis: NLP Case Study on Steam Reviews",
+        description:
+          "A full NLP case study using DistilRoBERTa on <strong>277k+ Dead by Daylight Steam reviews</strong>. Download ready-to-use CSVs of reviews and game patches, plus the notebook used in the essay. Use this if you want a real-world, slightly messy NLP playground instead of yet another tiny benchmark dataset.",
+        actions: [
+          {
+            label: "Read the Essay",
+            href: "/distilroberta-emotion-analysis-nlp-case-study/",
+            kind: "internal",
+          },
+          {
+            label: "Download the Notebook & Datasets",
+            href: "/downloads/distilroberta-emotion-analysis-dead-by-daylight-case-study.zip",
+            kind: "download",
+            ext: ["ipynb", "csv"],
+          },
+        ],
+      },
+      {
+        title: "Dense Models 3D Print Cost Calculator",
+        description:
+          "A tiny dense neural network trained to predict the resin consumption for estimating costs of 3D print.",
+        actions: [
+          {
+            label: "Read the Essay",
+            href: "/neural-network-predict-resin-usage-3d-printed-miniatures/",
+            kind: "internal",
+          },
+          {
+            label: "Download the Models and STL Scanner",
+            href: "https://huggingface.co/nicolamustone/minires",
+            kind: "external",
+          },
+          {
+            label: "Download the Notebooks and Datasets",
+            href: "https://github.com/SirDarcanos/minires-models",
+            kind: "external",
+          },
+        ],
+      },
+      {
+        title: "Steam Reviews Scraper",
+        description:
+          'A lightweight Python utility to collect and export Steam product reviews (via the official <code>appreviews</code> API) into a clean CSV file – ideal for NLP, sentiment analysis, or data exploration. Used to generate the <a href="https://www.kaggle.com/datasets/nicolamustone/steam-reviews-english-dead-by-daylight" target="_blank" rel="noopener">Dead by Daylight Steam reviews dataset on Kaggle</a>.',
+        actions: [
+          {
+            label: "Visit on GitHub",
+            href: "https://github.com/SirDarcanos/Steam-Reviews-Scraper",
+            kind: "external",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    title: "Others",
+    resources: [
+      {
+        title: "Free AI Voice Generator",
+        description: "A small text-to-speech generator based on Kokoro.",
+        actions: [
+          {
+            label: "Generate Your AI Voice From Text",
+            href: "https://buthonestly.io/resources/free-ai-voice-generator/",
+            kind: "external",
+          },
+        ],
+      },
+      {
+        title: "GitHub Fancy Profile Repository",
+        description:
+          "My profile repository on GitHub. Use it as an example to build your own fancy profile page with Markdown and GitHub Actions (in <code>.github/workflows/</code>).",
+        actions: [
+          {
+            label: "Explore on GitHub",
+            href: "https://github.com/SirDarcanos/SirDarcanos",
+            kind: "external",
+          },
+        ],
+      },
+      {
+        title: "MediEvil Speedrunning: Autosplitter & Docs",
+        description:
+          "A small collection of autosplitter components for LiveSplit and documentation for the original MediEvil on PSX, focused on emulator memory addresses and level IDs for tooling and modding.",
+        actions: [
+          {
+            label: "Explore & Download on GitHub",
+            href: "https://github.com/SirDarcanos/MediEvil",
+            kind: "external",
+          },
+        ],
+      },
+    ],
+  },
+];
+---
+
+<Layout
+  title="Resources & Assets"
+  description="Free templates, notebooks, datasets, and tools I make and use myself. No email gates, no funnels, no paywalls."
+>
+  <Container section id="resources" className="md:max-w-2xl">
+    <Label>Resources</Label>
+    <h1 class="mt-3 text-4xl">Resources & Assets</h1>
+
+    <div class="post-content mt-7">
+      <p>
+        This is where I keep the things you can actually use: templates,
+        notebooks, datasets, and whatever else I make that is helpful for
+        others.
+      </p>
+      <p>
+        No email gates, no funnels, no paywalls. Just tools I use myself and am
+        happy to share with you.
+      </p>
+      <p>
+        This page is regularly updated with new resources and assets as they are
+        created. Bookmark it for easy access.
+      </p>
+    </div>
+
+    {
+      sections.map((section) => (
+        <section class="mt-14">
+          <Label>{section.title}</Label>
+          <div class="mt-6 flex flex-col gap-4">
+            {section.resources.map((resource) => (
+              <Resource {...resource} />
+            ))}
+          </div>
+        </section>
+      ))
+    }
+  </Container>
+</Layout>

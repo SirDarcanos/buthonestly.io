@@ -1,0 +1,49 @@
+---
+import Button from "./Button.astro";
+
+export interface Action {
+  label: string;
+  href: string;
+  kind: "internal" | "download" | "external";
+  ext?: string[];
+}
+
+export interface Props {
+  title: string;
+  description: string;
+  actions: Action[];
+}
+
+const { title, description, actions } = Astro.props;
+
+const ICON_BY_KIND = {
+  internal: "arrow",
+  download: "download",
+  external: "external",
+} as const;
+---
+
+<article class="border-line bg-surface border p-6">
+  <h2 class="text-xl leading-snug tracking-tight">{title}</h2>
+  <p
+    class="rich-text text-muted mt-2.5 text-base leading-relaxed"
+    set:html={description}
+  />
+
+  <div class="mt-5 flex flex-col gap-3">
+    {
+      actions.map((action) => (
+        <Button
+          href={action.href}
+          icon={ICON_BY_KIND[action.kind]}
+          download={action.kind === "download"}
+          external={action.kind === "external"}
+          badges={action.ext?.map((e) => `.${e}`)}
+          class="bg-background"
+        >
+          {action.label}
+        </Button>
+      ))
+    }
+  </div>
+</article>

@@ -178,6 +178,18 @@
     @apply bg-surface rounded px-1.5 py-0.5 font-mono text-[0.85em];
   }
 
+  /* Inline rich text — hand-authored HTML blurbs (e.g. resource card
+     descriptions). Styles links and inline code like essay prose, minus the
+     block spacing of .post-content. Code sits on a surface, so it fills with
+     the page background for contrast. */
+  .rich-text a {
+    @apply decoration-faint hover:decoration-accent underline underline-offset-2;
+  }
+
+  .rich-text code {
+    @apply bg-background rounded px-1.5 py-0.5 font-mono text-[0.85em];
+  }
+
   .post-content pre {
     @apply border-line my-6 overflow-x-auto border p-4 text-base leading-normal;
   }
