@@ -2,7 +2,8 @@
 title: What is Vibe Coding and How to Do It
 date: 2025-11-04T02:00:51
 updated: 2025-11-28T08:42:13
-draft: false
+sticky: false
+cornerstone: false
 excerpt: Vibe coding turns natural language prompts into working code, shifting
   programming from memorizing syntax to communicating intent.
 categories:

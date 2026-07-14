@@ -2,7 +2,8 @@
 title: "WooCommerce Password Strength Meter: Keep It or Remove It"
 date: 2016-01-27T08:33:48
 updated: 2026-05-12T20:07:39
-draft: false
+sticky: false
+cornerstone: false
 excerpt: Tweak WooCommerce password strength without wrecking your checkout or
   your customers’ patience.
 categories:

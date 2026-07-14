@@ -2,7 +2,8 @@
 title: Creating a Custom Add to Cart Link with WooCommerce
 date: 2015-09-18T14:50:00
 updated: 2025-11-25T14:54:37
-draft: false
+sticky: false
+cornerstone: false
 excerpt: Learn how to create custom Add to Cart links with WooCommerce for
   various product types, enhancing the shopping experience.
 categories:

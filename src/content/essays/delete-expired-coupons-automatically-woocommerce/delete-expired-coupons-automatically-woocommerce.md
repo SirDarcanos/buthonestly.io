@@ -2,7 +2,8 @@
 title: Automatically Delete Expired Coupons in WooCommerce
 date: 2018-08-01T10:00:00
 updated: 2025-11-18T07:43:41
-draft: false
+sticky: false
+cornerstone: false
 excerpt: Automatically remove expired WooCommerce coupons daily so your database
   stays lean and your marketing screen uncluttered.
 categories:

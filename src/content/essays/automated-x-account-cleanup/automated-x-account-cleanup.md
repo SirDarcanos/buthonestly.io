@@ -2,7 +2,8 @@
 title: How I Automated My X Account Cleanup
 date: 2025-11-02T02:00:00
 updated: 2025-11-27T15:43:22
-draft: false
+sticky: false
+cornerstone: false
 excerpt: Automating my X cleanup let me delete years of noisy posts while
   keeping the human conversations that still matter.
 categories:

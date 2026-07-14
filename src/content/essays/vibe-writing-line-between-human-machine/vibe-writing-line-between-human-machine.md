@@ -2,7 +2,8 @@
 title: Vibe Writing and the Line Between Human and Machine
 date: 2025-11-14T02:00:57
 updated: 2026-05-13T15:36:49
-draft: false
+sticky: false
+cornerstone: false
 excerpt: Vibe writing treats AI as a thinking partner, raising fresh questions
   about originality, intention, and what makes writing human.
 categories:

@@ -1,7 +1,8 @@
 ---
 title: "Time Off for Leaders: Can You Really Step Away?"
 date: 2025-12-19T02:00:00
-draft: false
+sticky: false
+cornerstone: false
 excerpt: Leaders should carefully plan time off to build team trust and
   ownership. Download the Handover Plan template.
 categories:

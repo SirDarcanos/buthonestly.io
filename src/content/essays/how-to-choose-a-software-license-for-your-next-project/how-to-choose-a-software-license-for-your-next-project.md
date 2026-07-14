@@ -2,7 +2,8 @@
 title: How to Choose a Software License for Your Next Project
 date: 2026-05-05T02:00:00
 updated: 2026-05-23T12:21:45
-draft: false
+sticky: false
+cornerstone: false
 excerpt: Choosing a software license can feel like a legal maze, but it’s one of
   the most important decisions you’ll make for your software. Developers often
   treat licenses as an afterthought. You finish building something, push it to

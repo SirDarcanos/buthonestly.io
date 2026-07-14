@@ -2,7 +2,8 @@
 title: "AI Is Not an Oracle: The Limits of Machine Learning"
 date: 2026-01-20T02:00:00
 updated: 2026-01-21T07:12:55
-draft: false
+sticky: false
+cornerstone: false
 excerpt: Machine-learning curves look confident until speedrunners change the
   game underneath them. MediEvil shows why “AI as oracle” fails.
 categories:

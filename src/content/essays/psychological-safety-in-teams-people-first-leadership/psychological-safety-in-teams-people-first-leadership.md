@@ -2,6 +2,8 @@
 title: Building Psychological Safety in Teams Through People-First Leadership
 date: 2025-10-01T02:00:00
 updated: 2025-12-10T08:09:20
+sticky: false
+cornerstone: false
 draft: false
 excerpt: "Psychological safety grows from people-first leadership: daily
   transparency, shared ownership, and empathy that help teams belong and

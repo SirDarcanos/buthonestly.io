@@ -2,7 +2,8 @@
 title: Team Building Activities That Upskill Without Forced Fun
 date: 2026-01-02T02:00:14
 updated: 2026-05-20T18:43:15
-draft: false
+sticky: false
+cornerstone: false
 excerpt: Upskilling doesn’t always need a workshop; sometimes it starts with
   funny team building activities that are quietly useful. We’ve all been there.
   The trust fall, the awkward hug, the overly cheerful facilitator with a

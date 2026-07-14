@@ -2,7 +2,8 @@
 title: The Buildings That Never Were
 date: 2026-07-02T16:00:00
 updated: 2026-07-02T17:00:02
-draft: false
+sticky: false
+cornerstone: false
 excerpt: I walked into a police station that doesn’t exist and knew exactly where to go.
 categories:
   - Observations

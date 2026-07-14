@@ -2,7 +2,8 @@
 title: Why I Write in Markdown for Most of My Work
 date: 2015-09-01T09:45:38
 updated: 2026-05-12T22:45:17
-draft: false
+sticky: false
+cornerstone: false
 excerpt: Markdown keeps writing fast, portable, and distraction-free, working
   across tools so you focus on ideas, not formatting or interfaces instead.
 categories:

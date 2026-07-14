@@ -2,7 +2,8 @@
 title: "Enhancing WordPress Content Protection: Beyond Blocking Right-Clicks"
 date: 2023-11-28T19:19:32
 updated: 2025-11-18T07:43:41
-draft: false
+sticky: false
+cornerstone: false
 excerpt: Blocking right-clicks harms real users more than thieves; protect
   WordPress content with smarter, accessible strategies instead.
 categories:

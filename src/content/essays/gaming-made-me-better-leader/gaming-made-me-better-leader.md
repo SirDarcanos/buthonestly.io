@@ -2,6 +2,8 @@
 title: How Gaming Made Me a Better Leader
 date: 2025-10-23T11:58:00
 updated: 2026-05-20T18:43:15
+sticky: false
+cornerstone: false
 draft: false
 excerpt: Games taught me leadership as facilitation, turning failure, empathy, and shared stories into practical habits for real world teams.
 categories:

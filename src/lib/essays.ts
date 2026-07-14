@@ -45,6 +45,8 @@ export function toPost(entry: Essay): Post {
     featuredImageCaption: d.coverCaption,
     tags: d.tags,
     categories: d.categories,
+    sticky: d.sticky,
+    cornerstone: d.cornerstone,
     seo: {
       title: d.title,
       description: truncate(excerpt),
@@ -58,7 +60,7 @@ export async function getPublishedEssays(): Promise<Essay[]> {
   const now = new Date();
   const published = await getCollection(
     "essays",
-    ({ data }) => !data.draft && !!data.date && data.date <= now,
+    ({ data }) => !!data.date && data.date <= now,
   );
   return published.sort(
     (a, b) => (b.data.date?.valueOf() ?? 0) - (a.data.date?.valueOf() ?? 0),

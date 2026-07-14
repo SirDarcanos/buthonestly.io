@@ -2,7 +2,8 @@
 title: How To Bulk Edit WooCommerce Products Without Plugins
 date: 2015-04-21T09:17:28
 updated: 2026-05-12T16:43:44
-draft: false
+sticky: false
+cornerstone: false
 excerpt: The best WooCommerce bulk editor is often WooCommerce itself. The usual
   pattern is simple. Something about product management feels slow. You search
   for “WooCommerce Advanced Bulk Editor” in the plugins directory, install the

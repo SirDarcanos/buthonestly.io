@@ -2,7 +2,8 @@
 title: When AI Stops Being a Tool
 date: 2026-06-23T16:00:00
 updated: 2026-06-30T16:36:28
-draft: false
+sticky: false
+cornerstone: false
 excerpt: We let AI set the rhythm. Instead of leading it, we let ourselves be
   led by it, following it blindly.
 categories:

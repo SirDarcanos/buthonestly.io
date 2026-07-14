@@ -15,6 +15,8 @@ export type Post = {
   featuredImageCaption?: string;
   tags: string[];
   categories: string[];
+  sticky: boolean;
+  cornerstone: boolean;
   seo: {
     title: string;
     description: string;

@@ -2,7 +2,8 @@
 title: Building a Convolutional Neural Network in Python with TensorFlow
 date: 2025-10-30T02:00:00
 updated: 2026-05-12T23:03:51
-draft: false
+sticky: false
+cornerstone: false
 excerpt: Build, train, and tune a CNN in TensorFlow, understanding each layer
   from data prep to Bayesian hyperparameter search.
 categories:

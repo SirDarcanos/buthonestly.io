@@ -2,7 +2,8 @@
 title: How to Edit Orders in WooCommerce
 date: 2018-06-01T10:00:12
 updated: 2025-11-18T07:43:41
-draft: false
+sticky: false
+cornerstone: false
 excerpt: Editing WooCommerce orders means adjusting details without breaking
   payments, using notes, refunds, and statuses to keep everything aligned.
 categories:

@@ -2,7 +2,8 @@
 title: How I Built a 3D Print Cost Calculator with a Neural Network
 date: 2025-11-27T02:00:09
 updated: 2025-12-09T10:49:01
-draft: false
+sticky: false
+cornerstone: false
 excerpt: A tiny dense neural network learned resin consumption well enough to
   replace hours of manual slicing in my 3D printing business.
 categories:

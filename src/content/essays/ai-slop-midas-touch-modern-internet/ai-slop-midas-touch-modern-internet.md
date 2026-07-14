@@ -2,9 +2,9 @@
 title: "Touched by AI, Treated Like Slop: The Midas Touch of The Modern Internet"
 date: 2025-11-24T16:05:32
 updated: 2026-05-12T22:44:57
-draft: false
-excerpt: Is the term “AI Slop” used to widely and slapped on anything touched by
-  AI like a cursed Midas Touch?
+sticky: false
+cornerstone: false
+excerpt: Is the term “AI Slop” used too widely and slapped on anything touched by AI like a cursed Midas Touch?
 categories:
   - Observations
 tags:

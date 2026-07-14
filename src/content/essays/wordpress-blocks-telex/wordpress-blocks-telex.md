@@ -2,7 +2,8 @@
 title: Vibe Coding WordPress Blocks with Telex
 date: 2025-12-01T02:00:00
 updated: 2026-07-12T16:50:00
-draft: false
+sticky: false
+cornerstone: false
 excerpt: Telex turns natural-language prompts into working WordPress blocks, bringing vibe coding directly into the Gutenberg editor world.
 categories:
   - Web

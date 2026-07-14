@@ -2,7 +2,8 @@
 title: Learning to Care Without Feeling It
 date: 2026-06-07T02:00:00
 updated: 2026-06-12T16:36:04
-draft: false
+sticky: false
+cornerstone: false
 excerpt: What happens when caring isn’t natural, but still necessary? There are
   days when I know I should care — about a project, a person, a conversation —
   and yet nothing moves. The switch stays off. I can see what needs to be done,

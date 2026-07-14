@@ -1,7 +1,8 @@
 ---
 title: 10 Types of Websites and What I’d Use to Build Them
 date: 2025-12-07T02:00:00
-draft: false
+sticky: false
+cornerstone: false
 excerpt: When WordPress is enough, and when a specialized no-code tool actually
   makes more sense for your site.
 categories:

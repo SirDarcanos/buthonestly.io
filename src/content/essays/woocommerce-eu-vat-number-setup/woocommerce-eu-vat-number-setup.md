@@ -2,7 +2,8 @@
 title: "WooCommerce EU VAT Number: Set Up VAT for Your Store"
 date: 2023-12-04T10:00:00
 updated: 2025-12-16T11:59:54
-draft: false
+sticky: false
+cornerstone: false
 excerpt: Automatically validate EU VAT numbers at WooCommerce checkout with VIES
   so B2B orders stay compliant and error free.
 categories:

@@ -2,7 +2,8 @@
 title: "Tools for ADHD: Systems That Work When You’re Leading a Team"
 date: 2025-12-10T02:00:00
 updated: 2026-05-13T16:25:58
-draft: false
+sticky: false
+cornerstone: false
 excerpt: I’ve been leading with ADHD for years without realizing it. I just
   thought I was bad at the simple stuff. I’d procrastinate on easy tasks, forget
   to post updates, or leave small follow-ups half-done. Nothing catastrophic,

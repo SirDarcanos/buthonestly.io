@@ -14,7 +14,8 @@ const essays = defineCollection({
         title: z.string(),
         date: z.coerce.date().optional(),
         updated: z.coerce.date().optional(),
-        draft: z.boolean().default(true), // defaults true so nothing publishes by accident
+        sticky: z.boolean().default(false),
+        cornerstone: z.boolean().default(false),
         cover: image().optional(),
         coverAlt: z.string().optional(),
         coverCaption: z.string().optional(),
@@ -26,9 +27,7 @@ const essays = defineCollection({
           .array(z.object({ file: z.string(), label: z.string().optional() }))
           .optional(),
       })
-      // Drafts may be incomplete; once live (draft: false) the metadata is required.
       .superRefine((d, ctx) => {
-        if (d.draft) return;
         const need = (ok: unknown, path: string, message: string) => {
           if (!ok) ctx.addIssue({ code: "custom", path: [path], message });
         };

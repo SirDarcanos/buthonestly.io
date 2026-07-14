@@ -2,7 +2,8 @@
 title: "WooCommerce CLI Product Management: A Practical Guide"
 date: 2016-03-10T12:44:32
 updated: 2025-11-18T07:43:41
-draft: false
+sticky: false
+cornerstone: false
 excerpt: Manage WooCommerce products from the terminal, including variable
   products and bulk changes, with clear, scriptable CLI commands.
 categories:

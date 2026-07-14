@@ -2,7 +2,8 @@
 title: "Mastering Effective Feedback: Facts, Feelings, and Curiosity"
 date: 2025-11-17T02:00:06
 updated: 2026-01-06T06:09:19
-draft: false
+sticky: false
+cornerstone: false
 excerpt: Effective feedback blends facts, feelings, and curiosity to create
   honest, growth-focused conversations and a healthier team culture.
 categories:

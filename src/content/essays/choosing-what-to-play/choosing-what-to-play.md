@@ -2,7 +2,8 @@
 title: Using AI To Choose What To Play With ADHD
 date: 2026-02-18T02:00:00
 updated: 2026-05-13T15:41:03
-draft: false
+sticky: false
+cornerstone: false
 excerpt: AI helps me pick games that match my mental state,
 categories:
   - Observations

@@ -2,7 +2,8 @@
 title: Set Up TensorFlow with Docker and Jupyter Notebook
 date: 2025-10-25T02:00:03
 updated: 2025-12-04T06:30:07
-draft: false
+sticky: false
+cornerstone: false
 excerpt: Create a stable TensorFlow lab with Docker and Jupyter, avoiding
   dependency hell and keeping notebooks reproducible.
 categories:
@@ -36,21 +37,21 @@ Before we start coding, we need a place to work that’s clean, predictable, and
 
 To avoid that, we’ll run everything inside a contained environment, one that isolates our setup from the rest of the system and gives us a fresh start every time.
 
-### What We’ll Use and Why
+## What We’ll Use and Why
 
 By combining these tools, you’ll create a reproducible machine learning environment that works identically across all systems—eliminating the classic ‘it works on my machine’ problem that plagues traditional TensorFlow installations.
 
-#### Docker
+### Docker
 
 [Docker](https://www.docker.com/) is a container system that lets you run isolated environments. It guarantees that everyone following my [AI tutorials](/topic/ai/ "AI"), including you a year from now, will have the same working setup. No conflicting dependencies, no reinstalling Python packages, and no “works on my machine” moments.
 
 Docker’s reproducibility becomes even more valuable in modern development workflows where AI-assisted coding and [[what-is-vibe-coding-how-to-do-it|vibe coding practices]] are becoming standard—you need environments that work consistently regardless of who (or what) generated the code.
 
-#### Jupyter Notebook
+### Jupyter Notebook
 
 [Jupyter](https://jupyter.org/) is an interactive coding environment that runs in your browser. It lets you mix text, code, and visualizations in one place, making it ideal for tutorials and experiments.
 
-#### TensorFlow
+### TensorFlow
 
 [TensorFlow](https://www.tensorflow.org/) is the deep learning framework used to build our neural networks. It’s widely supported, integrates smoothly with Docker, and includes high-level APIs like Keras that make experimentation simple. There’s another excellent option called [PyTorch](https://pytorch.org/), which you’ll often see in research settings. PyTorch is known for flexibility and debugging convenience, while TensorFlow shines when it comes to deployment, performance, and ecosystem tooling. For a beginner-friendly introduction to machine learning, TensorFlow is the more stable and forgiving choice.
 

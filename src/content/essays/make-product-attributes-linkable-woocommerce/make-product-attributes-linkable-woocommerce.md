@@ -2,7 +2,8 @@
 title: Make Product Attributes Linkable in WooCommerce
 date: 2016-03-11T10:38:43
 updated: 2025-11-20T20:09:42
-draft: false
+sticky: false
+cornerstone: false
 excerpt: Use product attributes as real links, not dead labels, so WooCommerce
   can guide customers instead of listing facts.
 categories:

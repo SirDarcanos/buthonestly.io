@@ -15,12 +15,14 @@ export const getStaticPaths = (async ({ paginate }) => {
   ]);
 
   return categories.flatMap((category) => {
-    const categoryPosts = posts.filter((post) =>
+    const inCategory = posts.filter((post) =>
       post.categories.includes(category.name),
     );
-    return paginate(categoryPosts, {
+    const sticky = inCategory.filter((post) => post.sticky);
+    const regular = inCategory.filter((post) => !post.sticky);
+    return paginate(regular, {
       params: { slug: category.slug },
-      props: { category },
+      props: { category, sticky },
       pageSize: 8,
     });
   });
@@ -29,12 +31,13 @@ export const getStaticPaths = (async ({ paginate }) => {
 interface Props {
   page: Page<Post>;
   category: Tax;
+  sticky: Post[];
 }
-const { page, category } = Astro.props;
+const { page, category, sticky } = Astro.props;
 
 const isFirstPage = page.currentPage === 1;
-const featuredPosts = isFirstPage ? page.data.slice(0, 2) : [];
-const regularPosts = isFirstPage ? page.data.slice(2) : page.data;
+const featuredPosts = isFirstPage ? sticky : [];
+const regularPosts = page.data;
 ---
 
 <Layout title={`${category.name} — BUT. Honestly`} type="website">
@@ -51,7 +54,7 @@ const regularPosts = isFirstPage ? page.data.slice(2) : page.data;
   </div>
 
   {
-    isFirstPage && (
+    isFirstPage && featuredPosts.length > 0 && (
       <FeaturedPosts
         slot="featured-posts"
         posts={featuredPosts}

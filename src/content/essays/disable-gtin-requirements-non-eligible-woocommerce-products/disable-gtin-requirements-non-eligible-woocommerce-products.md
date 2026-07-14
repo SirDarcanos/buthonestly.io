@@ -2,7 +2,8 @@
 title: How to Disable GTIN for Non-Eligible WooCommerce Products
 date: 2023-11-20T09:00:00
 updated: 2025-11-18T07:43:41
-draft: false
+sticky: false
+cornerstone: false
 excerpt: Tell Google which WooCommerce products lack GTINs by outputting
   identifier_exists “no” only for truly exempt items.
 categories:
