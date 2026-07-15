@@ -19,7 +19,7 @@ export async function getStaticPaths() {
       params: { slug: entry.id },
       props: {
         entry,
-        related: await getRelatedPosts(toPost(entry), 3),
+        related: await getRelatedPosts(toPost(entry), 6),
       },
     })),
   );
@@ -112,18 +112,21 @@ const publishDate = new Date(post.date);
   {
     related.length > 0 && (
       <section class="my-16">
-        <p class="meta mb-3">More essays like this</p>
+        <p class="meta mb-3">More similar essays</p>
         <ul>
           {related.map((rel) => (
-            <li class="border-line flex items-start border-t py-4">
-              <h3 class="flex-1">
-                <a href={rel.url} class="text-ink hover:text-accent">
-                  {rel.title}
-                </a>
-              </h3>
-              <p class="meta mt-2 text-right">
-                <ReadTime content={rel.body} />
-              </p>
+            <li class="border-line border-t py-4">
+              <div class="flex items-start">
+                <h3 class="flex-1">
+                  <a href={rel.url} class="text-ink hover:text-accent">
+                    {rel.title}
+                  </a>
+                </h3>
+                <p class="meta mt-2 text-right">
+                  <ReadTime content={rel.body} />
+                </p>
+              </div>
+              <p class="excerpt">{rel.excerpt}</p>
             </li>
           ))}
         </ul>
