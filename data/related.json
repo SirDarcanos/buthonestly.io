@@ -1,0 +1,330 @@
+{
+  "10-types-of-websites": [
+    "top-5-essential-wordpress-plugins-i-always-install-and-why",
+    "do-you-trust-your-instincts-making-smart-wordpress-choices",
+    "bulk-edit-woocommerce-products-without-plugins",
+    "wordpress-blocks-telex",
+    "woocommerce-attributes-vs-variations",
+    "wordpress-site-performance-vs-desig"
+  ],
+  "adhd-planner": [
+    "when-ai-stops-being-a-tool",
+    "tools-for-adhd-leadership",
+    "choosing-what-to-play",
+    "write-in-markdown",
+    "vibe-writing-line-between-human-machine",
+    "ai-slop-midas-touch-modern-internet"
+  ],
+  "ai-slop-midas-touch-modern-internet": [
+    "choosing-what-to-play",
+    "when-ai-stops-being-a-tool",
+    "vibe-writing-line-between-human-machine",
+    "distilroberta-emotion-analysis-nlp-case-study",
+    "limits-of-machine-learning",
+    "what-is-vibe-coding-how-to-do-it"
+  ],
+  "automated-x-account-cleanup": [
+    "delete-expired-coupons-automatically-woocommerce",
+    "ai-slop-midas-touch-modern-internet",
+    "neural-network-predict-resin-usage-3d-printed-miniatures",
+    "distilroberta-emotion-analysis-nlp-case-study",
+    "adhd-planner",
+    "when-ai-stops-being-a-tool"
+  ],
+  "building-convolutional-neural-network-python-tensorflow": [
+    "neural-network-predict-resin-usage-3d-printed-miniatures",
+    "set-up-tensorflow-docker-jupyter-notebook",
+    "limits-of-machine-learning",
+    "what-is-vibe-coding-how-to-do-it",
+    "distilroberta-emotion-analysis-nlp-case-study",
+    "wordpress-blocks-telex"
+  ],
+  "buildings-never-were": [
+    "ai-slop-midas-touch-modern-internet",
+    "choosing-what-to-play",
+    "what-is-a-web-developer",
+    "when-ai-stops-being-a-tool",
+    "vibe-writing-line-between-human-machine",
+    "gaming-made-me-better-leader"
+  ],
+  "bulk-edit-woocommerce-products-without-plugins": [
+    "woocommerce-cli-product-management",
+    "edit-orders-woocommerce",
+    "creating-a-custom-add-to-cart-link-woocommerce",
+    "woocommerce-attributes-vs-variations",
+    "top-5-essential-wordpress-plugins-i-always-install-and-why",
+    "10-types-of-websites"
+  ],
+  "choosing-what-to-play": [
+    "when-ai-stops-being-a-tool",
+    "ai-slop-midas-touch-modern-internet",
+    "tools-for-adhd-leadership",
+    "adhd-planner",
+    "learning-care-without-feeling",
+    "limits-of-machine-learning"
+  ],
+  "creating-a-custom-add-to-cart-link-woocommerce": [
+    "woocommerce-cli-product-management",
+    "make-product-attributes-linkable-woocommerce",
+    "bulk-edit-woocommerce-products-without-plugins",
+    "edit-orders-woocommerce",
+    "woocommerce-attributes-vs-variations",
+    "improve-woocommerce-related-products-recommendations"
+  ],
+  "delete-expired-coupons-automatically-woocommerce": [
+    "woocommerce-eu-vat-number-setup",
+    "woocommerce-password-strength-meter-checkout",
+    "woocommerce-cli-product-management",
+    "automated-x-account-cleanup",
+    "disable-gtin-requirements-non-eligible-woocommerce-products",
+    "bulk-edit-woocommerce-products-without-plugins"
+  ],
+  "disable-gtin-requirements-non-eligible-woocommerce-products": [
+    "improve-woocommerce-related-products-recommendations",
+    "make-product-attributes-linkable-woocommerce",
+    "woocommerce-eu-vat-number-setup",
+    "woocommerce-password-strength-meter-checkout",
+    "woocommerce-cli-product-management",
+    "delete-expired-coupons-automatically-woocommerce"
+  ],
+  "distilroberta-emotion-analysis-nlp-case-study": [
+    "ai-slop-midas-touch-modern-internet",
+    "limits-of-machine-learning",
+    "gaming-made-me-better-leader",
+    "building-convolutional-neural-network-python-tensorflow",
+    "choosing-what-to-play",
+    "neural-network-predict-resin-usage-3d-printed-miniatures"
+  ],
+  "do-you-trust-your-instincts-making-smart-wordpress-choices": [
+    "10-types-of-websites",
+    "woocommerce-attributes-vs-variations",
+    "top-5-essential-wordpress-plugins-i-always-install-and-why",
+    "wordpress-site-performance-vs-desig",
+    "wordpress-blocks-telex",
+    "enhancing-wordpress-content-protection-beyond-right-click-blocks"
+  ],
+  "edit-orders-woocommerce": [
+    "bulk-edit-woocommerce-products-without-plugins",
+    "creating-a-custom-add-to-cart-link-woocommerce",
+    "woocommerce-cli-product-management",
+    "woocommerce-attributes-vs-variations",
+    "woocommerce-eu-vat-number-setup",
+    "delete-expired-coupons-automatically-woocommerce"
+  ],
+  "enhancing-wordpress-content-protection-beyond-right-click-blocks": [
+    "do-you-trust-your-instincts-making-smart-wordpress-choices",
+    "wordpress-site-performance-vs-desig",
+    "top-5-essential-wordpress-plugins-i-always-install-and-why",
+    "10-types-of-websites",
+    "wordpress-blocks-telex",
+    "bulk-edit-woocommerce-products-without-plugins"
+  ],
+  "gaming-made-me-better-leader": [
+    "psychological-safety-in-teams-people-first-leadership",
+    "team-building-activities-for-work",
+    "mastering-effective-feedback-facts-feelings-curiosity",
+    "time-off-for-leaders",
+    "tools-for-adhd-leadership",
+    "choosing-what-to-play"
+  ],
+  "how-to-build-a-github-profile-readme-that-feels-like-you": [
+    "wordpress-blocks-telex",
+    "10-types-of-websites",
+    "do-you-trust-your-instincts-making-smart-wordpress-choices",
+    "write-in-markdown",
+    "top-5-essential-wordpress-plugins-i-always-install-and-why",
+    "creating-a-custom-add-to-cart-link-woocommerce"
+  ],
+  "how-to-choose-a-software-license-for-your-next-project": [
+    "what-is-vibe-coding-how-to-do-it",
+    "vibe-writing-line-between-human-machine",
+    "when-ai-stops-being-a-tool",
+    "what-is-a-web-developer",
+    "choosing-what-to-play",
+    "neural-network-predict-resin-usage-3d-printed-miniatures"
+  ],
+  "improve-woocommerce-related-products-recommendations": [
+    "make-product-attributes-linkable-woocommerce",
+    "woocommerce-attributes-vs-variations",
+    "creating-a-custom-add-to-cart-link-woocommerce",
+    "disable-gtin-requirements-non-eligible-woocommerce-products",
+    "woocommerce-eu-vat-number-setup",
+    "woocommerce-password-strength-meter-checkout"
+  ],
+  "learning-care-without-feeling": [
+    "when-ai-stops-being-a-tool",
+    "mastering-effective-feedback-facts-feelings-curiosity",
+    "choosing-what-to-play",
+    "vibe-writing-line-between-human-machine",
+    "tools-for-adhd-leadership",
+    "team-building-activities-for-work"
+  ],
+  "limits-of-machine-learning": [
+    "ai-slop-midas-touch-modern-internet",
+    "neural-network-predict-resin-usage-3d-printed-miniatures",
+    "building-convolutional-neural-network-python-tensorflow",
+    "choosing-what-to-play",
+    "distilroberta-emotion-analysis-nlp-case-study",
+    "when-ai-stops-being-a-tool"
+  ],
+  "make-product-attributes-linkable-woocommerce": [
+    "improve-woocommerce-related-products-recommendations",
+    "creating-a-custom-add-to-cart-link-woocommerce",
+    "woocommerce-attributes-vs-variations",
+    "disable-gtin-requirements-non-eligible-woocommerce-products",
+    "woocommerce-eu-vat-number-setup",
+    "woocommerce-cli-product-management"
+  ],
+  "mastering-effective-feedback-facts-feelings-curiosity": [
+    "psychological-safety-in-teams-people-first-leadership",
+    "gaming-made-me-better-leader",
+    "team-building-activities-for-work",
+    "learning-care-without-feeling",
+    "time-off-for-leaders",
+    "vibe-writing-line-between-human-machine"
+  ],
+  "neural-network-predict-resin-usage-3d-printed-miniatures": [
+    "building-convolutional-neural-network-python-tensorflow",
+    "limits-of-machine-learning",
+    "what-is-vibe-coding-how-to-do-it",
+    "when-ai-stops-being-a-tool",
+    "ai-slop-midas-touch-modern-internet",
+    "automated-x-account-cleanup"
+  ],
+  "psychological-safety-in-teams-people-first-leadership": [
+    "team-building-activities-for-work",
+    "mastering-effective-feedback-facts-feelings-curiosity",
+    "gaming-made-me-better-leader",
+    "time-off-for-leaders",
+    "tools-for-adhd-leadership",
+    "learning-care-without-feeling"
+  ],
+  "set-up-tensorflow-docker-jupyter-notebook": [
+    "building-convolutional-neural-network-python-tensorflow",
+    "neural-network-predict-resin-usage-3d-printed-miniatures",
+    "wordpress-blocks-telex",
+    "top-5-essential-wordpress-plugins-i-always-install-and-why",
+    "limits-of-machine-learning",
+    "how-to-build-a-github-profile-readme-that-feels-like-you"
+  ],
+  "team-building-activities-for-work": [
+    "psychological-safety-in-teams-people-first-leadership",
+    "gaming-made-me-better-leader",
+    "mastering-effective-feedback-facts-feelings-curiosity",
+    "tools-for-adhd-leadership",
+    "time-off-for-leaders",
+    "ai-slop-midas-touch-modern-internet"
+  ],
+  "time-off-for-leaders": [
+    "psychological-safety-in-teams-people-first-leadership",
+    "tools-for-adhd-leadership",
+    "gaming-made-me-better-leader",
+    "mastering-effective-feedback-facts-feelings-curiosity",
+    "team-building-activities-for-work",
+    "learning-care-without-feeling"
+  ],
+  "tools-for-adhd-leadership": [
+    "when-ai-stops-being-a-tool",
+    "choosing-what-to-play",
+    "adhd-planner",
+    "time-off-for-leaders",
+    "psychological-safety-in-teams-people-first-leadership",
+    "gaming-made-me-better-leader"
+  ],
+  "top-5-essential-wordpress-plugins-i-always-install-and-why": [
+    "10-types-of-websites",
+    "do-you-trust-your-instincts-making-smart-wordpress-choices",
+    "bulk-edit-woocommerce-products-without-plugins",
+    "wordpress-blocks-telex",
+    "enhancing-wordpress-content-protection-beyond-right-click-blocks",
+    "wordpress-site-performance-vs-desig"
+  ],
+  "vibe-writing-line-between-human-machine": [
+    "what-is-vibe-coding-how-to-do-it",
+    "when-ai-stops-being-a-tool",
+    "ai-slop-midas-touch-modern-internet",
+    "write-in-markdown",
+    "learning-care-without-feeling",
+    "adhd-planner"
+  ],
+  "what-is-a-web-developer": [
+    "when-ai-stops-being-a-tool",
+    "vibe-writing-line-between-human-machine",
+    "ai-slop-midas-touch-modern-internet",
+    "10-types-of-websites",
+    "what-is-vibe-coding-how-to-do-it",
+    "choosing-what-to-play"
+  ],
+  "what-is-vibe-coding-how-to-do-it": [
+    "vibe-writing-line-between-human-machine",
+    "wordpress-blocks-telex",
+    "when-ai-stops-being-a-tool",
+    "ai-slop-midas-touch-modern-internet",
+    "neural-network-predict-resin-usage-3d-printed-miniatures",
+    "building-convolutional-neural-network-python-tensorflow"
+  ],
+  "when-ai-stops-being-a-tool": [
+    "choosing-what-to-play",
+    "tools-for-adhd-leadership",
+    "vibe-writing-line-between-human-machine",
+    "adhd-planner",
+    "ai-slop-midas-touch-modern-internet",
+    "learning-care-without-feeling"
+  ],
+  "woocommerce-attributes-vs-variations": [
+    "make-product-attributes-linkable-woocommerce",
+    "do-you-trust-your-instincts-making-smart-wordpress-choices",
+    "improve-woocommerce-related-products-recommendations",
+    "creating-a-custom-add-to-cart-link-woocommerce",
+    "edit-orders-woocommerce",
+    "bulk-edit-woocommerce-products-without-plugins"
+  ],
+  "woocommerce-cli-product-management": [
+    "bulk-edit-woocommerce-products-without-plugins",
+    "creating-a-custom-add-to-cart-link-woocommerce",
+    "edit-orders-woocommerce",
+    "woocommerce-attributes-vs-variations",
+    "make-product-attributes-linkable-woocommerce",
+    "delete-expired-coupons-automatically-woocommerce"
+  ],
+  "woocommerce-eu-vat-number-setup": [
+    "delete-expired-coupons-automatically-woocommerce",
+    "woocommerce-password-strength-meter-checkout",
+    "disable-gtin-requirements-non-eligible-woocommerce-products",
+    "make-product-attributes-linkable-woocommerce",
+    "improve-woocommerce-related-products-recommendations",
+    "creating-a-custom-add-to-cart-link-woocommerce"
+  ],
+  "woocommerce-password-strength-meter-checkout": [
+    "woocommerce-eu-vat-number-setup",
+    "delete-expired-coupons-automatically-woocommerce",
+    "make-product-attributes-linkable-woocommerce",
+    "improve-woocommerce-related-products-recommendations",
+    "disable-gtin-requirements-non-eligible-woocommerce-products",
+    "woocommerce-cli-product-management"
+  ],
+  "wordpress-blocks-telex": [
+    "what-is-vibe-coding-how-to-do-it",
+    "10-types-of-websites",
+    "do-you-trust-your-instincts-making-smart-wordpress-choices",
+    "top-5-essential-wordpress-plugins-i-always-install-and-why",
+    "bulk-edit-woocommerce-products-without-plugins",
+    "woocommerce-cli-product-management"
+  ],
+  "wordpress-site-performance-vs-desig": [
+    "do-you-trust-your-instincts-making-smart-wordpress-choices",
+    "enhancing-wordpress-content-protection-beyond-right-click-blocks",
+    "10-types-of-websites",
+    "top-5-essential-wordpress-plugins-i-always-install-and-why",
+    "bulk-edit-woocommerce-products-without-plugins",
+    "woocommerce-attributes-vs-variations"
+  ],
+  "write-in-markdown": [
+    "vibe-writing-line-between-human-machine",
+    "adhd-planner",
+    "ai-slop-midas-touch-modern-internet",
+    "when-ai-stops-being-a-tool",
+    "10-types-of-websites",
+    "tools-for-adhd-leadership"
+  ]
+}

@@ -1,8 +1,14 @@
 import { getCollection, type CollectionEntry } from "astro:content";
 import { SITE_URL } from "../consts.ts";
 import { type Post, type Tax } from "../types.ts";
+import relatedMap from "../../data/related.json";
 
 type Essay = CollectionEntry<"essays">;
+
+// Precomputed semantic neighbours (slug -> ranked slugs), built from sentence
+// embeddings by scripts/build-related.mjs. Missing/unknown slugs fall back to
+// taxonomy scoring below.
+const RELATED = relatedMap as Record<string, string[]>;
 
 /** Clamp to ~160 chars at a word boundary for a meta description. */
 function truncate(text: string, max = 160): string {
@@ -75,21 +81,44 @@ export async function getPostBySlug(slug: string): Promise<Post | undefined> {
   return (await getAllPosts()).find((p) => p.slug === slug);
 }
 
-/** Ranked by shared taxonomy (categories weighted above tags), then recency. */
+/**
+ * Precomputed semantic neighbours (RELATED) first, topped up with shared
+ * taxonomy (categories weighted above tags), then recency — so a brand-new
+ * essay not yet in the embedding map still gets sensible related posts.
+ */
 export async function getRelatedPosts(post: Post, size = 3): Promise<Post[]> {
-  const others = (await getAllPosts()).filter((p) => p.slug !== post.slug);
-  const scored = others.map((p) => ({
-    post: p,
-    score:
-      p.categories.filter((c) => post.categories.includes(c)).length * 2 +
-      p.tags.filter((t) => post.tags.includes(t)).length,
-  }));
-  scored.sort(
-    (a, b) =>
-      b.score - a.score ||
-      new Date(b.post.date).valueOf() - new Date(a.post.date).valueOf(),
-  );
-  return scored.slice(0, size).map((s) => s.post);
+  const all = await getAllPosts();
+  const bySlug = new Map(all.map((p) => [p.slug, p]));
+  const picked: Post[] = [];
+  const seen = new Set<string>([post.slug]);
+
+  for (const slug of RELATED[post.slug] ?? []) {
+    if (seen.has(slug)) continue;
+    const p = bySlug.get(slug);
+    if (!p) continue; // slug not published (yet)
+    picked.push(p);
+    seen.add(slug);
+    if (picked.length >= size) return picked;
+  }
+
+  const scored = all
+    .filter((p) => !seen.has(p.slug))
+    .map((p) => ({
+      post: p,
+      score:
+        p.categories.filter((c) => post.categories.includes(c)).length * 2 +
+        p.tags.filter((t) => post.tags.includes(t)).length,
+    }))
+    .sort(
+      (a, b) =>
+        b.score - a.score ||
+        new Date(b.post.date).valueOf() - new Date(a.post.date).valueOf(),
+    );
+  for (const { post: p } of scored) {
+    picked.push(p);
+    if (picked.length >= size) break;
+  }
+  return picked;
 }
 
 function taxFrom(names: string[]): Tax[] {
