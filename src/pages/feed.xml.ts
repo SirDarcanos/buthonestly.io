@@ -3,7 +3,7 @@ import type { APIContext } from "astro";
 
 import { getAllPosts } from "../lib/essays";
 
-// Served at /feed.xml. The old WordPress /feed/ and /comments/feed/ 301 here
+// Served at /feed.xml. The old WordPress /feed/ 301 here
 // (see scripts/generate-redirects.mjs) so existing subscribers follow through.
 export async function GET(context: APIContext) {
   const posts = await getAllPosts();

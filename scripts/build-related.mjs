@@ -26,7 +26,6 @@ const EMB_FILE = "data/embeddings.json";
 const OUT_FILE = "data/related.json";
 const MODEL = "Xenova/bge-small-en-v1.5";
 const TOP_N = 6;
-// Tags are more specific than the broad category, so they nudge harder.
 const CAT_BOOST = 0.02;
 const TAG_BOOST = 0.06;
 
@@ -57,14 +56,17 @@ async function loadEssays() {
     if (!existsSync(file)) continue;
     const { data, content } = matter(await readFile(file, "utf8"));
     if (!data.date) continue; // draft / not live
+    // Present-but-empty frontmatter arrives as null; clean it like the schema does.
+    const list = (v) =>
+      Array.isArray(v) ? v.filter((x) => x != null && x !== "") : [];
     const text = `${data.title ?? slug}. ${data.excerpt ?? ""}. ${stripMarkdown(
       content,
     )}`.slice(0, 4000);
     essays.push({
       slug,
       title: data.title ?? slug,
-      categories: data.categories ?? [],
-      tags: data.tags ?? [],
+      categories: list(data.categories),
+      tags: list(data.tags),
       text,
       hash: hashText(text),
     });
@@ -148,7 +150,10 @@ async function main() {
         const sharedTag = a.tags.filter((t) => b.tags.includes(t)).length;
         return {
           slug: b.slug,
-          score: dot(va, cache[b.slug].vector) + CAT_BOOST * sharedCat + TAG_BOOST * sharedTag,
+          score:
+            dot(va, cache[b.slug].vector) +
+            CAT_BOOST * sharedCat +
+            TAG_BOOST * sharedTag,
         };
       })
       .sort((x, y) => y.score - x.score)

@@ -1,6 +1,18 @@
 import { defineCollection, z } from "astro:content";
 import { glob } from "astro/loaders";
 
+// The template ships every property, so blanks arrive as YAML null. `.optional()`
+// allows `undefined` (missing) but NOT `null` (present-but-empty), so normalise
+// "" / null to absent before each optional validator, and clean list values.
+const optional = <T extends z.ZodTypeAny>(schema: T) =>
+  z.preprocess((v) => (v === "" || v === null ? undefined : v), schema);
+
+// null / "" / non-array → []; also drops blank items (e.g. an empty bullet).
+const stringList = z.preprocess(
+  (v) => (Array.isArray(v) ? v.filter((x) => x != null && x !== "") : []),
+  z.array(z.string()),
+);
+
 // One folder per essay: src/content/essays/<slug>/<slug>.md, images colocated.
 const essays = defineCollection({
   loader: glob({
@@ -12,20 +24,22 @@ const essays = defineCollection({
     z
       .object({
         title: z.string(),
-        date: z.coerce.date().optional(),
-        updated: z.coerce.date().optional(),
-        sticky: z.boolean().default(false),
-        cornerstone: z.boolean().default(false),
-        cover: image().optional(),
-        coverAlt: z.string().optional(),
-        coverCaption: z.string().optional(),
-        originalCover: z.string().url().optional(), // migrated WP image, until a local cover exists
-        excerpt: z.string().optional(),
-        tags: z.array(z.string()).default([]),
-        categories: z.array(z.string()).default([]),
-        downloads: z
-          .array(z.object({ file: z.string(), label: z.string().optional() }))
-          .optional(),
+        date: optional(z.coerce.date().optional()),
+        updated: optional(z.coerce.date().optional()),
+        sticky: optional(z.boolean().default(false)),
+        cornerstone: optional(z.boolean().default(false)),
+        cover: optional(image().optional()),
+        coverAlt: optional(z.string().optional()),
+        coverCaption: optional(z.string().optional()),
+        originalCover: optional(z.string().url().optional()), // migrated WP image, until a local cover exists
+        excerpt: optional(z.string().optional()),
+        tags: stringList,
+        categories: stringList,
+        downloads: optional(
+          z
+            .array(z.object({ file: z.string(), label: z.string().optional() }))
+            .optional(),
+        ),
       })
       .superRefine((d, ctx) => {
         const need = (ok: unknown, path: string, message: string) => {
