@@ -2,6 +2,7 @@
 import AudioPlayer from "../components/AudioPlayer.astro";
 import Divider from "../components/Divider.astro";
 import Downloads from "../components/Downloads.astro";
+import Newsletter from "../components/Newsletter.astro";
 import Image from "../components/Image.astro";
 import ReadTime from "../components/ReadTime.astro";
 import TableOfContents from "../components/TableOfContents.astro";
@@ -129,6 +130,8 @@ const publishDate = new Date(post.date);
       </section>
     )
   }
+
+  <Newsletter />
 
   <AudioPlayer />
 </SinglePost>

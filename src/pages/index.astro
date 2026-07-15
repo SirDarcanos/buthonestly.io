@@ -2,6 +2,7 @@
 import Highlight from "../components/Highlight.astro";
 import Home from "../layouts/Home.astro";
 import Label from "../components/Label.astro";
+import Newsletter from "../components/Newsletter.astro";
 import ReadTime from "../components/ReadTime.astro";
 import { getAllPosts } from "../lib/essays";
 
@@ -87,4 +88,6 @@ const currentMonth = new Date().toLocaleString("default", {
       </a>
     </div>
   </section>
+
+  <Newsletter />
 </Home>
