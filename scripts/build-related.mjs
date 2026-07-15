@@ -26,8 +26,9 @@ const EMB_FILE = "data/embeddings.json";
 const OUT_FILE = "data/related.json";
 const MODEL = "Xenova/bge-small-en-v1.5";
 const TOP_N = 6;
-const CAT_BOOST = 0.05;
-const TAG_BOOST = 0.02;
+// Tags are more specific than the broad category, so they nudge harder.
+const CAT_BOOST = 0.02;
+const TAG_BOOST = 0.06;
 
 function stripMarkdown(md) {
   return md
