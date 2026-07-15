@@ -11,7 +11,7 @@ tags:
   - Automation
   - Creativity
   - Workflow
-coverAlt: SirDarcanos' GitHub README
+coverAlt: The SirDarcanos GitHub profile page showing a custom profile README headed “Hi, I'm Nico.”
 originalCover: https://buthonestly.io/wp-content/uploads/2025/11/sirdarcanos-github-readme.jpeg
 ---
 

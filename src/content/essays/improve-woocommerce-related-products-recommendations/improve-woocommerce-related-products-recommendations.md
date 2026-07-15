@@ -12,7 +12,7 @@ tags:
   - Performance
   - PHP
   - WordPress
-coverAlt: WooCommerce Related Products Recommendations
+coverAlt: A row of tech gadgets lined up on a white surface — headphones, a battery, phone cases, and a camera — like related products side by side.
 originalCover: https://buthonestly.io/wp-content/uploads/2023/12/woocommerce-related-products-recommendations.jpeg
 ---
 

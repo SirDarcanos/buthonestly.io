@@ -33,7 +33,7 @@ Learn here all the details about how to edit orders in WooCommerce.
 
 ## Order details
 
-![](https://i0.wp.com/buthonestly.io/wp-content/uploads/2018/05/image-3.png?resize=2402%2C678&quality=80&ssl=1)
+![The WooCommerce order details panel, showing the customer's general, billing, and shipping information.](https://i0.wp.com/buthonestly.io/wp-content/uploads/2018/05/image-3.png?resize=2402%2C678&quality=80&ssl=1)
 
 - The order number
 - The payment method and the transaction ID
@@ -55,13 +55,13 @@ Editing the billing (6) and shipping (7) details is possible by clicking the pen
 
 On the right side the first section shown is the **Order** **actions**:
 
-![](https://i0.wp.com/buthonestly.io/wp-content/uploads/2018/05/image-4.png?resize=592%2C298&quality=80&ssl=1)
+![The WooCommerce Order actions box, used to resend order emails or regenerate download permissions.](https://i0.wp.com/buthonestly.io/wp-content/uploads/2018/05/image-4.png?resize=592%2C298&quality=80&ssl=1)
 
 This section allows you to resend the order notifications and regenerate the download permissions for downloadable products, if any.
 
 Right next to the order actions you have the **Order** **notes**:
 
-![](https://i0.wp.com/buthonestly.io/wp-content/uploads/2018/05/image-5.png?resize=596%2C924&quality=80&ssl=1)
+![The WooCommerce Order notes panel, listing status-change and customer notes.](https://i0.wp.com/buthonestly.io/wp-content/uploads/2018/05/image-5.png?resize=596%2C924&quality=80&ssl=1)
 
 There are two types of order notes, customer notes, and private notes. You can easily recognize them by their color. If their background is purple or grey, they are private notes. If the background is blue they are customer notes.
 
@@ -73,7 +73,7 @@ You can also add new notes by using the text area at the bottom, and choose the 
 
 Next is probably the part of an order that you are going to use most. The order items list.
 
-![](https://i0.wp.com/buthonestly.io/wp-content/uploads/2018/05/image-6.png?resize=714%2C379&quality=80&ssl=1)
+![The WooCommerce order items list, showing purchased products with quantities, costs, and totals.](https://i0.wp.com/buthonestly.io/wp-content/uploads/2018/05/image-6.png?resize=714%2C379&quality=80&ssl=1)
 
 - The purchased items list
 - The shipping method
@@ -87,11 +87,11 @@ This limit is because once the order status is Processing it means that the cust
 
 To do so, click on the Refund button (5) and fill in the fields as necessary:
 
-![](https://i0.wp.com/buthonestly.io/wp-content/uploads/2018/05/image-7.png?resize=2402%2C1232&quality=80&ssl=1)
+![The WooCommerce refund form, with per-item amount, tax, and total fields to fill in.](https://i0.wp.com/buthonestly.io/wp-content/uploads/2018/05/image-7.png?resize=2402%2C1232&quality=80&ssl=1)
 
 If the order status is less than Processing, for example, **On Hold**, you can make further adjustments before the customer pays, like adding/editing/removing items, taxes, shipping, etc. and the order items section will look a bit different:
 
-![](https://i0.wp.com/buthonestly.io/wp-content/uploads/2018/05/image-8.png?resize=714%2C376&quality=80&ssl=1)
+![The WooCommerce order items section for an unpaid (On Hold) order, with editable items plus Add and Recalculate buttons.](https://i0.wp.com/buthonestly.io/wp-content/uploads/2018/05/image-8.png?resize=714%2C376&quality=80&ssl=1)
 
 - Order items. Hovering over this part will show a pencil icon to edit the product data, or a `x` to remove the item from the order.
 - The buttons to add new items, shipping methods, and coupons
@@ -99,6 +99,6 @@ If the order status is less than Processing, for example, **On Hold**, you can 
 
 By clicking on **Add** **item(s)**, more buttons will show, allowing you to choose what item to add:
 
-![](https://i0.wp.com/buthonestly.io/wp-content/uploads/2018/05/image-9.png?resize=1042%2C134&quality=80&ssl=1)
+![The WooCommerce “Add item(s)” buttons for adding a product, fee, shipping, or tax to an order.](https://i0.wp.com/buthonestly.io/wp-content/uploads/2018/05/image-9.png?resize=1042%2C134&quality=80&ssl=1)
 
 Once you are done making changes if any of these changes should change the order total make sure to click on the **Recalculate** button, and then **Update** the order.

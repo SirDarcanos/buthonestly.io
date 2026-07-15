@@ -12,7 +12,7 @@ tags:
   - Automation
   - Creativity
   - Productivity
-coverAlt: X Twitter Account Cleanup
+coverAlt: A dense 3D pile of blue verified-checkmark badges, echoing X (Twitter) verification marks.
 originalCover: https://buthonestly.io/wp-content/uploads/2025/11/x-twitter-account-cleanup.jpg
 ---
 
