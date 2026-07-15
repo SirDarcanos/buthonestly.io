@@ -4,18 +4,38 @@ import Label from "./Label.astro";
 // Custom form posting to Kit (form 9685650). The markup is ours so it matches
 // the palette; submission is AJAX so the visitor stays on the page. Kit sends
 // the confirmation email (double opt-in) after a successful post.
+//
+// `inline` puts the copy and form side by side (used on the wide home page);
+// the default stacks them, which fits the narrow essay reading column.
+interface Props {
+  inline?: boolean;
+}
+const { inline = false } = Astro.props;
 ---
 
 <section class="border-line border-t py-16">
-  <div class="border-line bg-surface border p-8 md:p-12">
-    <Label>Newsletter</Label>
-    <h2 class="mt-3">Stay in the loop</h2>
-    <p class="text-muted mt-3 max-w-md text-base">
-      New essays and the occasional tool, 1–4 times a month. No spam, and you
-      can unsubscribe anytime.
-    </p>
+  <div
+    class:list={[
+      "border-line bg-surface border p-8 md:p-12",
+      inline && "md:flex md:items-center md:justify-between md:gap-10",
+    ]}
+  >
+    <div class:list={[inline && "md:max-w-sm"]}>
+      <Label>Newsletter</Label>
+      <h2 class="mt-3">Stay in the loop</h2>
+      <p class="text-muted mt-3 max-w-md text-base">
+        New essays and the occasional tool, 1–4 times a month. No spam, and you
+        can unsubscribe anytime.
+      </p>
+    </div>
 
-    <form data-newsletter class="mt-7 max-w-xl">
+    <form
+      data-newsletter
+      class:list={[
+        "max-w-xl",
+        inline ? "mt-6 md:mt-0 md:w-full md:max-w-md md:flex-none" : "mt-7",
+      ]}
+    >
       <div class="flex flex-col gap-3 sm:flex-row">
         <label class="sr-only" for="newsletter-email">Email address</label>
         <input
