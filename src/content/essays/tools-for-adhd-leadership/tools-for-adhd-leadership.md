@@ -4,7 +4,7 @@ date: 2025-12-10T02:00:00
 updated: 2026-05-13T16:25:58
 sticky: true
 cornerstone: false
-excerpt: I’ve been leading with ADHD for years without realizing it. I just thought I was bad at the simple stuff. I’d procrastinate on easy tasks, forget to post updates, or leave small follow-ups half-done. Nothing catastrophic, just loose ends that multiplied when I got busy. Long before I had a name for it, I was […]
+excerpt: I led a team with ADHD for years and just thought I was bad at the simple stuff. These are the systems I built to catch the loose ends before they pile up.
 categories:
   - Leadership
 tags:

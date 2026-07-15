@@ -4,7 +4,7 @@ date: 2026-05-05T02:00:00
 updated: 2026-05-23T12:21:45
 sticky: true
 cornerstone: false
-excerpt: Choosing a software license can feel like a legal maze, but it’s one of the most important decisions you’ll make for your software. Developers often treat licenses as an afterthought. You finish building something, push it to GitHub, and move on. But if your repository doesn’t include a license file, you’re not technically “open source.” […]
+excerpt: Push code to GitHub with no license file and it isn’t really open source — just visible. Choosing a license feels like a legal maze, but it’s one of the most important calls you’ll make.
 categories:
   - Programming
 tags:

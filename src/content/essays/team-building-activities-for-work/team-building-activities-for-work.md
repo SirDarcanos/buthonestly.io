@@ -4,7 +4,7 @@ date: 2026-01-02T02:00:14
 updated: 2026-05-20T18:43:15
 sticky: true
 cornerstone: false
-excerpt: Upskilling doesn’t always need a workshop; sometimes it starts with funny team building activities that are quietly useful. We’ve all been there. The trust fall, the awkward hug, the overly cheerful facilitator with a clipboard. These activities are supposed to build trust, but in reality, they mostly build discomfort. You can’t measure teamwork by whether […]
+excerpt: Trust falls and cheerful facilitators mostly build discomfort, not trust. Real team building looks less like forced fun and more like useful work done together.
 categories:
   - Leadership
 tags:
