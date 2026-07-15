@@ -1,0 +1,71 @@
+name: Notify subscribers on publish
+
+# Emails subscribers when a new essay goes live, via Kit's Broadcasts API
+# (scripts/notify-subscribers.mjs). Runs on push (immediate) and daily (so
+# future-dated essays go out when their date passes). A committed ledger
+# (data/newsletter-sent.json) makes each essay email at most once.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/content/essays/**"
+  schedule:
+    - cron: "0 13 * * *" # daily 13:00 UTC — catches scheduled essays going live
+  workflow_dispatch:
+    inputs:
+      send:
+        description: "Actually send (true) or create drafts to review (false)"
+        type: boolean
+        default: false
+      mode:
+        description: "run or seed"
+        type: string
+        default: "run"
+
+# Never let two runs email at the same time.
+concurrency:
+  group: newsletter
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # full history so the ledger commit can rebase + push
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Notify subscribers
+        run: node scripts/notify-subscribers.mjs
+        env:
+          KIT_API_KEY: ${{ secrets.KIT_API_KEY }}
+          # push & cron send for real; manual dispatch defaults to drafts.
+          KIT_SEND: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.send) || 'true' }}
+          MODE: ${{ github.event.inputs.mode || 'run' }}
+          # Set a NEWSLETTER_SITE_URL repo variable to the pages.dev URL until
+          # the domain cutover; defaults to the production domain.
+          SITE_URL: ${{ vars.NEWSLETTER_SITE_URL || 'https://buthonestly.io' }}
+
+      - name: Record sends
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/newsletter-sent.json
+          if git diff --staged --quiet; then
+            echo "Ledger unchanged."
+          else
+            git commit -m "chore: record newsletter sends [skip ci]"
+            git pull --rebase origin main
+            git push
+          fi
