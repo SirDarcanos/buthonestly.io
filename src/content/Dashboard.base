@@ -1,0 +1,71 @@
+formulas:
+  Title: link(file.path, note.title)
+  Date: if(note.date, note.date.format("MMM D, YYYY"), "—")
+properties:
+  formula.Title:
+    displayName: Title
+  formula.Date:
+    displayName: Date
+  note.categories:
+    displayName: Section
+  note.tags:
+    displayName: Topics
+  note.sticky:
+    displayName: Featured
+  note.cornerstone:
+    displayName: Cornerstone
+views:
+  - type: table
+    name: Published
+    filters:
+      and:
+        - file.inFolder("essays")
+        - file.ext == "md"
+        - date <= now()
+    order:
+      - formula.Title
+      - formula.Date
+      - categories
+      - tags
+      - sticky
+      - cornerstone
+    sort:
+      - property: date
+        direction: DESC
+    columnSize:
+      formula.Title: 419
+  - type: table
+    name: Scheduled
+    filters:
+      and:
+        - file.inFolder("essays")
+        - file.ext == "md"
+        - date > now()
+    order:
+      - formula.Title
+      - formula.Date
+      - categories
+      - tags
+      - sticky
+      - cornerstone
+    sort:
+      - property: date
+        direction: DESC
+    columnSize:
+      formula.Title: 419
+  - type: table
+    name: Drafts
+    filters:
+      and:
+        - file.inFolder("drafts")
+        - file.ext == "md"
+    order:
+      - formula.Title
+      - formula.Date
+      - categories
+      - tags
+    sort:
+      - property: date
+        direction: DESC
+    columnSize:
+      formula.Title: 419
