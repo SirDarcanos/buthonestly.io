@@ -2,8 +2,8 @@
   "10-types-of-websites": [
     "top-5-essential-wordpress-plugins-i-always-install-and-why",
     "do-you-trust-your-instincts-making-smart-wordpress-choices",
-    "bulk-edit-woocommerce-products-without-plugins",
     "wordpress-blocks-telex",
+    "bulk-edit-woocommerce-products-without-plugins",
     "woocommerce-cli-product-management",
     "woocommerce-attributes-vs-variations"
   ],
@@ -28,8 +28,8 @@
     "neural-network-predict-resin-usage-3d-printed-miniatures",
     "delete-expired-coupons-automatically-woocommerce",
     "what-is-vibe-coding-how-to-do-it",
-    "tools-for-adhd-leadership",
-    "how-to-build-a-github-profile-readme-that-feels-like-you"
+    "how-to-build-a-github-profile-readme-that-feels-like-you",
+    "tools-for-adhd-leadership"
   ],
   "building-convolutional-neural-network-python-tensorflow": [
     "neural-network-predict-resin-usage-3d-printed-miniatures",
@@ -53,7 +53,7 @@
     "edit-orders-woocommerce",
     "top-5-essential-wordpress-plugins-i-always-install-and-why",
     "10-types-of-websites",
-    "wordpress-blocks-telex"
+    "woocommerce-attributes-vs-variations"
   ],
   "choosing-what-to-play": [
     "when-ai-stops-being-a-tool",
@@ -100,8 +100,8 @@
     "woocommerce-attributes-vs-variations",
     "top-5-essential-wordpress-plugins-i-always-install-and-why",
     "wordpress-blocks-telex",
-    "bulk-edit-woocommerce-products-without-plugins",
-    "vibe-writing-line-between-human-machine"
+    "vibe-writing-line-between-human-machine",
+    "bulk-edit-woocommerce-products-without-plugins"
   ],
   "edit-orders-woocommerce": [
     "bulk-edit-woocommerce-products-without-plugins",
@@ -120,8 +120,8 @@
     "improve-woocommerce-related-products-recommendations"
   ],
   "gaming-made-me-better-leader": [
-    "psychological-safety-in-teams-people-first-leadership",
     "team-building-activities-for-work",
+    "psychological-safety-in-teams-people-first-leadership",
     "mastering-effective-feedback-facts-feelings-curiosity",
     "time-off-for-leaders",
     "choosing-what-to-play",
@@ -132,16 +132,16 @@
     "write-in-markdown",
     "what-is-vibe-coding-how-to-do-it",
     "automated-x-account-cleanup",
-    "vibe-writing-line-between-human-machine",
-    "building-convolutional-neural-network-python-tensorflow"
+    "how-to-choose-a-software-license-for-your-next-project",
+    "vibe-writing-line-between-human-machine"
   ],
   "how-to-choose-a-software-license-for-your-next-project": [
     "vibe-writing-line-between-human-machine",
     "when-ai-stops-being-a-tool",
     "what-is-vibe-coding-how-to-do-it",
+    "how-to-build-a-github-profile-readme-that-feels-like-you",
     "10-types-of-websites",
-    "what-is-a-web-developer",
-    "choosing-what-to-play"
+    "what-is-a-web-developer"
   ],
   "improve-woocommerce-related-products-recommendations": [
     "make-product-attributes-linkable-woocommerce",
@@ -155,8 +155,8 @@
     "when-ai-stops-being-a-tool",
     "choosing-what-to-play",
     "mastering-effective-feedback-facts-feelings-curiosity",
-    "tools-for-adhd-leadership",
     "vibe-writing-line-between-human-machine",
+    "tools-for-adhd-leadership",
     "adhd-planner"
   ],
   "limits-of-machine-learning": [
@@ -192,8 +192,8 @@
     "wordpress-blocks-telex"
   ],
   "psychological-safety-in-teams-people-first-leadership": [
-    "mastering-effective-feedback-facts-feelings-curiosity",
     "team-building-activities-for-work",
+    "mastering-effective-feedback-facts-feelings-curiosity",
     "time-off-for-leaders",
     "gaming-made-me-better-leader",
     "tools-for-adhd-leadership",
@@ -212,8 +212,8 @@
     "gaming-made-me-better-leader",
     "ai-slop-midas-touch-modern-internet",
     "mastering-effective-feedback-facts-feelings-curiosity",
-    "time-off-for-leaders",
-    "learning-care-without-feeling"
+    "learning-care-without-feeling",
+    "vibe-writing-line-between-human-machine"
   ],
   "time-off-for-leaders": [
     "psychological-safety-in-teams-people-first-leadership",
@@ -277,7 +277,7 @@
     "make-product-attributes-linkable-woocommerce",
     "edit-orders-woocommerce",
     "improve-woocommerce-related-products-recommendations",
-    "bulk-edit-woocommerce-products-without-plugins"
+    "woocommerce-cli-product-management"
   ],
   "woocommerce-cli-product-management": [
     "bulk-edit-woocommerce-products-without-plugins",
@@ -315,8 +315,8 @@
     "enhancing-wordpress-content-protection-beyond-right-click-blocks",
     "do-you-trust-your-instincts-making-smart-wordpress-choices",
     "10-types-of-websites",
-    "top-5-essential-wordpress-plugins-i-always-install-and-why",
     "write-in-markdown",
+    "top-5-essential-wordpress-plugins-i-always-install-and-why",
     "limits-of-machine-learning"
   ],
   "write-in-markdown": [
