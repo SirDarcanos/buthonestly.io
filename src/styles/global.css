@@ -9,7 +9,7 @@
   --color-surface: #e7e1d5; /* cards & panels */
   --color-ink: #211d18; /* primary text, body, rules */
   --color-ink-soft: #4a443b; /* excerpts & summaries */
-  --color-muted: #6e665a; /* deks, meta, labels */
+  --color-muted: #665e51; /* deks, meta, labels — AA on surface (4.9:1) */
   --color-faint: color-mix(
     in oklab,
     var(--color-ink) 14%,

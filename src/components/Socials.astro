@@ -5,6 +5,7 @@ import { twMerge } from "tailwind-merge";
 interface NavLink {
   href: string;
   icon: string;
+  label?: string;
 }
 
 interface Props {
@@ -24,12 +25,13 @@ const path = Astro.url.pathname;
       <a
         href={link.href}
         target="_blank"
+        aria-label={link.label ?? link.icon}
         class={twMerge(
           "text-ink hover:text-accent transition-colors aria-[current=page]:font-semibold",
           linkClass,
         )}
       >
-        <Icon name={`simple-icons:${link.icon}`} />
+        <Icon name={`simple-icons:${link.icon}`} aria-hidden="true" />
       </a>
     ))
   }
