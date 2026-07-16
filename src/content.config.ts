@@ -40,6 +40,18 @@ const essays = defineCollection({
             .array(z.object({ file: z.string(), label: z.string().optional() }))
             .optional(),
         ),
+        // Optional per-essay audio-narration overrides (npm run audio). Loose
+        // by design — the audio script validates voice/style/pace, so a typo
+        // never fails the site build.
+        audio: optional(
+          z
+            .object({
+              voice: optional(z.string().optional()),
+              style: optional(z.string().optional()),
+              pace: optional(z.string().optional()),
+            })
+            .optional(),
+        ),
       })
       .superRefine((d, ctx) => {
         const need = (ok: unknown, path: string, message: string) => {

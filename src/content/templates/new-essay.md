@@ -24,6 +24,10 @@ cover:
 coverAlt:
 coverCaption:
 downloads:
+audio:
+  voice:
+  style:
+  pace:
 ---
 
 > [!summary]- Quick Summary
