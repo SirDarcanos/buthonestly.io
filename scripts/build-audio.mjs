@@ -174,21 +174,33 @@ async function uploadToR2(bucket, key, filePath) {
 // --- essay wiring -----------------------------------------------------------
 
 async function insertAudioTag(file, slug) {
-  const raw = await readFile(file, "utf8");
-  // Obsidian audio embed (plays in the vault); remark-audio-embed renders it as
-  // the <audio> player on the site. Comment markers make re-runs idempotent.
+  let raw = await readFile(file, "utf8");
   const block = [AUDIO_START, "", `![[${slug}.mp3]]`, "", AUDIO_END].join("\n");
+  const esc = escapeRe(slug);
 
-  const existing = new RegExp(
-    `${escapeRe(AUDIO_START)}[\\s\\S]*?${escapeRe(AUDIO_END)}`,
-  );
-  if (existing.test(raw)) {
-    await writeFile(file, raw.replace(existing, block));
-    return;
-  }
+  // Strip any existing embed for this essay so a re-run replaces rather than
+  // duplicates: the marked block, a bare ![[..]] (an editor may drop the
+  // comment markers), or an old <audio> tag. Then insert exactly one, below.
+  raw = raw
+    .replace(
+      new RegExp(
+        `\\n*${escapeRe(AUDIO_START)}[\\s\\S]*?${escapeRe(AUDIO_END)}\\n*`,
+        "g",
+      ),
+      "\n\n",
+    )
+    .replace(new RegExp(`\\n*!\\[\\[${esc}\\.mp3\\]\\]\\n*`, "g"), "\n\n")
+    .replace(
+      new RegExp(
+        `\\n*<audio[^>]*${esc}\\.mp3[^>]*>(?:[\\s\\S]*?</audio>)?\\n*`,
+        "gi",
+      ),
+      "\n\n",
+    )
+    .replace(/\n{3,}/g, "\n\n");
 
-  // No existing player: insert after frontmatter, and after a leading Quick
-  // Summary callout if one is present, so the player sits above the body.
+  // Insert after the frontmatter, and after a leading Quick Summary callout if
+  // present, so the player sits above the body.
   const fm = raw.match(/^---\n[\s\S]*?\n---\n/);
   let insertAt = fm ? fm[0].length : 0;
   const afterFm = raw.slice(insertAt);
