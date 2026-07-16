@@ -12,6 +12,7 @@ tags:
   - Creativity
 cover: buildings-never-were.jpg
 coverAlt: A car driving by a road sign reading "Welcome to Raccoon City". The atmosphere is mysterious and scary.
+coverCaption: Image by Capcom.
 ---
 
 > [!summary]- Quick Summary
