@@ -349,16 +349,17 @@ const blendSample = {
 <script is:inline src="https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js"
 ></script>
 
-<script is:inline type="module">
+<script>
   // BUT. Honestly — Kokoro TTS Web (browser-local TTS).
   // Finds every .bh-kokoro-tts-app on the page and wires it up independently.
+  import { chunkText } from "../../lib/chunk-text.mjs";
 
   // Chunk budget in words. Kokoro silently truncates input past its ~512
   // phoneme-token context (≈5 tokens/word ≈ 100 words) — a 100-word paragraph
   // was observed to cut off after ~90. Keep chunks well under that so nothing
-  // is dropped. Short chunks may merge up to 1.2× this.
+  // is dropped. Short chunks may merge up to 1.2× this. The chunker itself
+  // lives in src/lib/chunk-text.mjs (shared with the Gemini narration script).
   const MAX_CHUNK_WORDS = 60;
-  const SHORT_EDGE_WORDS = 20;
 
   function getLamejs() {
     const candidates = [
@@ -374,220 +375,6 @@ const blendSample = {
     return null;
   }
 
-  // Word count on whitespace-normalized text.
-  function countWords(text) {
-    const clean = String(text).replace(/\s+/gu, " ").trim();
-    return clean === "" ? 0 : clean.split(" ").length;
-  }
-
-  // Split clean text into TTS-sized chunks. Paragraph boundaries first; falls
-  // back to sentence, then clause, then comma boundaries when a paragraph or
-  // sentence itself exceeds the budget. Never splits mid-word. Ported from the
-  // Honest_TTS Chunker.
-  function chunkText(text, maxWords = MAX_CHUNK_WORDS) {
-    text = text.trim();
-    if (text === "") return [];
-    if (maxWords < 10) maxWords = 10;
-
-    // Pack paragraphs greedily up to maxWords; adjacent short paragraphs join
-    // with a blank line, so seams still land on paragraph breaks when possible.
-    // An oversized paragraph falls through to sentence splitting.
-    const chunks = [];
-    let current = "";
-    let currentWords = 0;
-
-    for (const rawPara of text.split(/\n\s*\n/u)) {
-      const para = rawPara.trim();
-      if (para === "") continue;
-      const words = countWords(para);
-
-      if (words > maxWords) {
-        if (current !== "") {
-          chunks.push(current);
-          current = "";
-          currentWords = 0;
-        }
-        for (const piece of splitParagraph(para, maxWords)) chunks.push(piece);
-        continue;
-      }
-
-      if (currentWords > 0 && currentWords + words > maxWords) {
-        chunks.push(current);
-        current = "";
-        currentWords = 0;
-      }
-
-      current = current === "" ? para : current + "\n\n" + para;
-      currentWords += words;
-    }
-
-    if (current !== "") chunks.push(current);
-
-    return absorbShortChunks(chunks, maxWords);
-  }
-
-  // Fold short chunks into a neighbor: a trailing/isolated short chunk can lose
-  // its last word to Kokoro's tail handling, so any chunk under
-  // SHORT_EDGE_WORDS merges into the PREVIOUS chunk (staying within 1.2× the
-  // cap). A still-short first chunk folds forward into the next instead.
-  function absorbShortChunks(chunks, maxWords) {
-    if (chunks.length < 2) return chunks;
-    const cap = Math.round(maxWords * 1.2);
-
-    const result = [chunks[0]];
-    for (let i = 1; i < chunks.length; i++) {
-      const cw = countWords(chunks[i]);
-      if (cw < SHORT_EDGE_WORDS) {
-        const last = result.length - 1;
-        if (countWords(result[last]) + cw <= cap) {
-          result[last] += "\n\n" + chunks[i];
-          continue;
-        }
-      }
-      result.push(chunks[i]);
-    }
-
-    if (result.length >= 2 && countWords(result[0]) < SHORT_EDGE_WORDS) {
-      result[1] = result[0] + "\n\n" + result[1];
-      result.shift();
-    }
-
-    return result;
-  }
-
-  // Sentence-split an oversized paragraph, packing sentences up to the cap.
-  function splitParagraph(para, maxWords) {
-    let sentences = para.split(/(?<=[.!?])\s+(?=[A-Z\p{Lu}"'(])/u);
-    if (sentences.length === 0) sentences = [para];
-
-    const chunks = [];
-    let current = "";
-    let currentWords = 0;
-
-    for (const rawSentence of sentences) {
-      const sentence = rawSentence.trim();
-      if (sentence === "") continue;
-      const words = countWords(sentence);
-
-      if (currentWords > 0 && currentWords + words > maxWords) {
-        chunks.push(current);
-        current = "";
-        currentWords = 0;
-      }
-
-      if (words <= maxWords) {
-        current = current === "" ? sentence : current + " " + sentence;
-        currentWords += words;
-        continue;
-      }
-
-      if (current !== "") {
-        chunks.push(current);
-        current = "";
-        currentWords = 0;
-      }
-      for (const piece of splitSentence(sentence, maxWords)) chunks.push(piece);
-    }
-
-    if (current !== "") chunks.push(current);
-    return chunks;
-  }
-
-  // Clause-split an oversized sentence on ; — – -- boundaries.
-  function splitSentence(sentence, maxWords) {
-    const parts = sentence.split(/(\s*(?:;|—|–|--)\s*)/u);
-    if (parts.length < 3) return splitOnCommas(sentence, maxWords);
-
-    const chunks = [];
-    let current = "";
-    let currentWords = 0;
-
-    for (let i = 0; i < parts.length; i += 2) {
-      const segment = (parts[i] ?? "").trim();
-      const delim = (parts[i + 1] ?? "").trim();
-      if (segment === "") continue;
-      const piece = delim === "" ? segment : segment + " " + delim;
-      const words = countWords(piece);
-
-      if (currentWords > 0 && currentWords + words > maxWords) {
-        chunks.push(current);
-        current = "";
-        currentWords = 0;
-      }
-
-      if (words <= maxWords) {
-        current = current === "" ? piece : current + " " + piece;
-        currentWords += words;
-        continue;
-      }
-
-      if (current !== "") {
-        chunks.push(current);
-        current = "";
-        currentWords = 0;
-      }
-      for (const sub of splitOnCommas(piece, maxWords)) chunks.push(sub);
-    }
-
-    if (current !== "") chunks.push(current);
-    return chunks;
-  }
-
-  // Last resort: split on commas, else pack words greedily into ≤max chunks.
-  function splitOnCommas(segment, maxWords) {
-    const parts = segment.split(/(\s*,\s*)/u);
-    const hasCommas = parts.length > 1;
-
-    const chunks = [];
-    let current = "";
-    let currentWords = 0;
-
-    const pack = (piece) => {
-      const words = countWords(piece);
-      if (currentWords > 0 && currentWords + words > maxWords) {
-        chunks.push(current);
-        current = "";
-        currentWords = 0;
-      }
-      if (words <= maxWords) {
-        current = current === "" ? piece : current + " " + piece;
-        currentWords += words;
-        return;
-      }
-      if (current !== "") {
-        chunks.push(current);
-        current = "";
-        currentWords = 0;
-      }
-      let buf = [];
-      for (const w of piece.split(/\s+/u).filter(Boolean)) {
-        buf.push(w);
-        if (buf.length >= maxWords) {
-          chunks.push(buf.join(" "));
-          buf = [];
-        }
-      }
-      if (buf.length) {
-        current = buf.join(" ");
-        currentWords = buf.length;
-      }
-    };
-
-    if (!hasCommas) {
-      pack(segment);
-    } else {
-      for (let i = 0; i < parts.length; i += 2) {
-        const seg = (parts[i] ?? "").trim();
-        const delim = (parts[i + 1] ?? "").trim();
-        if (seg === "") continue;
-        pack(delim === "" ? seg : seg + delim);
-      }
-    }
-
-    if (current !== "") chunks.push(current);
-    return chunks;
-  }
-
   // Parse text into chunks separated by [Xs] silence markers.
   function parseChunks(raw) {
     const out = [];
@@ -597,7 +384,7 @@ const blendSample = {
     while ((m = re.exec(raw)) !== null) {
       const before = raw.slice(lastIdx, m.index).trim();
       if (before) {
-        for (const piece of chunkText(before)) {
+        for (const piece of chunkText(before, MAX_CHUNK_WORDS)) {
           out.push({ type: "text", text: piece });
         }
       }
@@ -606,7 +393,7 @@ const blendSample = {
     }
     const tail = raw.slice(lastIdx).trim();
     if (tail) {
-      for (const piece of chunkText(tail)) {
+      for (const piece of chunkText(tail, MAX_CHUNK_WORDS)) {
         out.push({ type: "text", text: piece });
       }
     }
