@@ -10,7 +10,7 @@ categories:
 tags:
   - Productivity
   - Workflow
-coverAlt: How to Choose a Software License
+coverAlt: "A public sculpture of red and grey blocks arranged to spell ‘MIT’ outside a concrete building."
 originalCover: https://buthonestly.io/wp-content/uploads/2025/11/choose-software-license.jpg
 ---
 

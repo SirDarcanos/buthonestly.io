@@ -12,8 +12,7 @@ tags:
   - AI
   - Gaming
   - Workflow
-coverAlt: A neon-lit gaming setup with a keyboard in the foreground and a “Game
-  Zone” sign glowing in pink and blue light.
+coverAlt: "A dark gaming desk lit in blue and purple neon, with a diamond ‘Game Zone’ sign, a monitor, and a hand on a backlit keyboard."
 originalCover: https://buthonestly.io/wp-content/uploads/2026/02/choosing-what-to-play.jpg
 ---
 

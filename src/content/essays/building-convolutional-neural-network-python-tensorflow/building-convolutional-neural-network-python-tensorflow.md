@@ -13,7 +13,7 @@ tags:
   - Automation
   - Creativity
   - Python
-coverAlt: Building a Convolutional Neural Network in Python with TensorFlow
+coverAlt: "A long-exposure light painting of swirling red, green, and blue light trails against black, like tangled neural pathways."
 originalCover: https://buthonestly.io/wp-content/uploads/2025/11/luis-lara-nucZB1NPpRY-unsplash.jpg
 downloads:
   - file: cnn-mnist-use-case-tensorflow.zip

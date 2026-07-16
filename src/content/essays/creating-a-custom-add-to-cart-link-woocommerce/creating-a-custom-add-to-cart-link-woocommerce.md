@@ -13,7 +13,7 @@ tags:
   - Productivity
   - WordPress
   - Workflow
-coverAlt: Creating a Custom Add to Cart Link in WooCommerce
+coverAlt: "Overhead view of hands holding a phone showing an online-store app and a credit card, over a wooden desk with a laptop and coffee."
 originalCover: https://buthonestly.io/wp-content/uploads/2025/11/custom-add-to-cart-link-woocommerce.jpg
 ---
 

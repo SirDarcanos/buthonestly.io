@@ -12,7 +12,7 @@ tags:
   - AI
   - Python
   - Workflow
-coverAlt: Docker and TensorFlow Environment
+coverAlt: "The Docker whale logo above the orange TensorFlow logo on a white background."
 originalCover: https://buthonestly.io/wp-content/uploads/2026/01/docker-tensorflow-environment.jpg
 ---
 

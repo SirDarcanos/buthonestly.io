@@ -12,7 +12,7 @@ tags:
   - Creativity
   - PHP
   - Workflow
-coverAlt: What is a Web Developer? - Tired woman looking at a laptop screen
+coverAlt: "A tired young person rests their head on one hand at a laptop, in a dimly lit bedroom at night."
 originalCover: https://buthonestly.io/wp-content/uploads/2025/12/what-is-a-web-developer.jpg
 ---
 

@@ -12,7 +12,7 @@ tags:
   - Performance
   - Team Building
   - Workflow
-coverAlt: A lead taking time off on a beach reading a book
+coverAlt: "A person reclines in a wooden beach chair reading a book, facing a calm turquoise sea under a blue sky."
 originalCover: https://buthonestly.io/wp-content/uploads/2025/11/time-off-lead.jpg
 downloads:
   - file: time-off-handover-plan.zip

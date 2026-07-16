@@ -11,7 +11,7 @@ categories:
 tags:
   - WordPress
   - Workflow
-coverAlt: A woman in a green shirt working on a cash regsiter
+coverAlt: "A shop worker in a green shirt and bandana leans over a counter to tap an order into a colourful point-of-sale tablet."
 originalCover: https://buthonestly.io/wp-content/uploads/2018/06/edit-order-woocommerce.jpg
 ---
 

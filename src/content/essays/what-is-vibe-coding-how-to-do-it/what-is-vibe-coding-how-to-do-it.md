@@ -13,7 +13,7 @@ tags:
   - Automation
   - Creativity
   - Productivity
-coverAlt: A grey cat asleep on a keyboard's wrist rest in front of a monitor full of code.
+coverAlt: "A grey cat in a blue harness asleep on a keyboard’s wrist rest, in front of two monitors showing code."
 originalCover: https://buthonestly.io/wp-content/uploads/2025/11/vibe-coding-programming-language.jpg
 ---
 

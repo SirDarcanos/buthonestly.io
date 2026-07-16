@@ -13,7 +13,7 @@ tags:
   - Blogging
   - Productivity
   - Workflow
-coverAlt: My Mental ADHD Planner
+coverAlt: "Close-up of chrysanthemum petals glowing in rainbow colours against a dark background."
 originalCover: https://buthonestly.io/wp-content/uploads/2025/11/mental-adhd-planner.jpg
 ---
 

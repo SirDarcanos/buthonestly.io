@@ -15,7 +15,7 @@ tags:
   - Feedback
   - Team Building
   - Workflow
-coverAlt: Psychological Safety in Teams through Leadership
+coverAlt: "Four smiling colleagues take a selfie together in front of a chalkboard covered in hand-drawn diagrams."
 originalCover: https://buthonestly.io/wp-content/uploads/2025/11/psychological-safety-in-teams-leadership.jpg
 ---
 

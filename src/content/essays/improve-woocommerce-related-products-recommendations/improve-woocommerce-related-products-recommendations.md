@@ -12,7 +12,7 @@ tags:
   - Performance
   - PHP
   - WordPress
-coverAlt: A row of tech gadgets lined up on a white surface — headphones, a battery, phone cases, and a camera — like related products side by side.
+coverAlt: "A row of gadgets laid out on a white surface: Sony headphones, a phone battery, phone cases, and a Fujifilm camera."
 originalCover: https://buthonestly.io/wp-content/uploads/2023/12/woocommerce-related-products-recommendations.jpeg
 ---
 

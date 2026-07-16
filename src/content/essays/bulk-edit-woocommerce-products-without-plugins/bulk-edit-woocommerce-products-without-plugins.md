@@ -11,7 +11,7 @@ tags:
   - Productivity
   - WordPress
   - Workflow
-coverAlt: Pexels photo
+coverAlt: "A towering, colourful wall of stacked beverage crates full of bottles."
 coverCaption: Photo by Pixabay on Pexels.com
 originalCover: https://buthonestly.io/wp-content/uploads/2015/04/pexels-photo-533353.jpeg
 ---

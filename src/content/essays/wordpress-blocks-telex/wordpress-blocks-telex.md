@@ -13,7 +13,7 @@ tags:
   - Productivity
   - WordPress
   - Workflow
-coverAlt: Create WordPress blocks with Telex and Vibe Coding
+coverAlt: "A screenshot of Automattic’s Telex tool on an orange background, with a prompt box reading ‘Describe your idea. Telex will build a WordPress block for you.’"
 originalCover: https://buthonestly.io/wp-content/uploads/2025/11/vibe-coding-creating-wordpress-blocks-with-telex.png
 ---
 

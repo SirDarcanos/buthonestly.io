@@ -12,7 +12,7 @@ tags:
   - Performance
   - PHP
   - WordPress
-coverAlt: Boy and girl pulling a rope and playing tug of war
+coverAlt: "Two young children play tug-of-war on a grassy field at sunset; the child in front wears a leather aviator cap."
 originalCover: https://buthonestly.io/wp-content/uploads/2016/01/passowrd-strength-meter.jpg
 ---
 

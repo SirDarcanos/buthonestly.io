@@ -13,7 +13,7 @@ tags:
   - Performance
   - Python
 cover:
-coverAlt: A graphics card installed inside a desktop PC, lit by red and blue internal RGB lighting.
+coverAlt: "The inside of a gaming PC lit in red and blue, with a Gigabyte graphics card mounted above the motherboard."
 coverCaption:
 originalCover: https://buthonestly.io/wp-content/uploads/2026/05/what-is-gpu-why-ai-needs-them.jpg
 downloads:

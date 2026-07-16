@@ -12,7 +12,7 @@ tags:
   - Feedback
   - Team Building
   - Workflow
-coverAlt: Effective Feedback for Leaders
+coverAlt: "A bunch of pink and orange smiley-face balloons — some smiling, some frowning — against a blue sky."
 originalCover: https://buthonestly.io/wp-content/uploads/2025/10/effective-feedback-leadership.jpg
 ---
 

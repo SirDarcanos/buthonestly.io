@@ -13,7 +13,7 @@ tags:
   - Productivity
   - WordPress
   - Workflow
-coverAlt: Pexels photo
+coverAlt: "Green Matrix-style streams of code characters falling down a black screen."
 coverCaption: Photo by Markus Spiske on Pexels.com
 originalCover: https://buthonestly.io/wp-content/uploads/2016/03/pexels-photo-1089438.jpeg
 ---

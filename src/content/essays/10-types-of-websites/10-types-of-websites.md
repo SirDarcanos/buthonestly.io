@@ -12,7 +12,7 @@ tags:
   - Productivity
   - WordPress
   - Workflow
-coverAlt: tools for 10 types of sites
+coverAlt: "An open laptop on a wooden desk showing a website-design mockup that reads ‘Build your dream website,’ beside a black coffee mug."
 originalCover: https://buthonestly.io/wp-content/uploads/2025/11/10-types-of-sites-10-tools.jpg
 ---
 

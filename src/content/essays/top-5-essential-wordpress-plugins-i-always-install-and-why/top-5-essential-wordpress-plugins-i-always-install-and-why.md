@@ -12,7 +12,7 @@ tags:
   - Productivity
   - WordPress
   - Workflow
-coverAlt: Pexels photo
+coverAlt: "An assortment of hand tools — pliers, cutters, an awl, and a spool of wire — laid out on white paper."
 coverCaption: Photo by Pixabay on Pexels.com
 originalCover: https://buthonestly.io/wp-content/uploads/2025/10/pexels-photo-301703.jpeg
 ---

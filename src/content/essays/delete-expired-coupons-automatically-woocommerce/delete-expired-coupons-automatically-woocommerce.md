@@ -13,7 +13,7 @@ tags:
   - PHP
   - Productivity
   - WordPress
-coverAlt: Pexels photo
+coverAlt: "Overhead view of a person in a white hoodie shopping a ‘70% off’ sale on a laptop while holding a payment card, with headphones and a phone nearby."
 coverCaption: Photo by Antoni Shkraba Studio on Pexels.com
 originalCover: https://buthonestly.io/wp-content/uploads/2018/08/pexels-photo-6207767.jpeg
 ---

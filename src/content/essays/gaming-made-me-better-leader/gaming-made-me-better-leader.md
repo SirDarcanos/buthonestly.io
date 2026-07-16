@@ -12,7 +12,7 @@ tags:
   - Gaming
   - Team Building
   - Workflow
-coverAlt: Pexels photo
+coverAlt: "Overhead view of two hands holding a black and a white PlayStation controller facing each other, beside a console and a VR headset."
 coverCaption: Photo by cottonbro studio on Pexels.com
 originalCover: https://buthonestly.io/wp-content/uploads/2025/10/pexels-photo-3945683.jpeg
 ---

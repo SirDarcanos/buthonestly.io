@@ -13,7 +13,7 @@ tags:
   - Creativity
   - Productivity
   - Workflow
-coverAlt: Pexels photo
+coverAlt: "A close-up of a vintage typewriter with a sheet of paper that reads ‘Something worth reading.’"
 coverCaption: Photo by Suzy Hazelwood on Pexels.com
 originalCover: https://buthonestly.io/wp-content/uploads/2025/10/pexels-photo-3695297.jpeg
 ---

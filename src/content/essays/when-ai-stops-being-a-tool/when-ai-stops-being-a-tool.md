@@ -13,7 +13,7 @@ tags:
   - AI
   - Productivity
   - Workflow
-coverAlt: Two men looking at a laptop together.
+coverAlt: "Two colleagues in suits study a laptop screen together in a glass-walled office."
 originalCover: https://buthonestly.io/wp-content/uploads/2026/05/when-ai-stops-being-a-tool.jpg
 ---
 

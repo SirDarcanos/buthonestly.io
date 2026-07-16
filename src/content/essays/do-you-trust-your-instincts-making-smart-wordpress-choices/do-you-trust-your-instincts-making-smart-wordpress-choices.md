@@ -12,7 +12,7 @@ tags:
   - Blogging
   - WordPress
   - Workflow
-coverAlt: Pexels photo
+coverAlt: "A bakery display case filled with rows of glazed doughnuts, éclairs, and cream-topped pastries."
 coverCaption: Photo by Igor Ovsyannykov on Pexels.com
 originalCover: https://buthonestly.io/wp-content/uploads/2023/11/pexels-photo-205961.jpeg
 ---

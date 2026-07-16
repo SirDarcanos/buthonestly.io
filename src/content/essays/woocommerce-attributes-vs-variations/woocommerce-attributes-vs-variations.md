@@ -11,7 +11,7 @@ categories:
 tags:
   - WordPress
   - Workflow
-coverAlt: Pexels photo
+coverAlt: "Several leather belts in black, brown, and tan fanned out in a row on a dark surface."
 coverCaption: Photo by Shivam Patil on Pexels.com
 originalCover: https://buthonestly.io/wp-content/uploads/2017/04/pexels-photo-31959214.jpeg
 ---

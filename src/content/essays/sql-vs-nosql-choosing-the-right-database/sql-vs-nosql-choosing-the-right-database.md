@@ -12,7 +12,7 @@ tags:
   - Productivity
   - Workflow
 cover:
-coverAlt: A technician kneels in a dimly lit server room, working on a laptop among tall racks of hardware, symbolizing the real-world infrastructure decisions behind SQL vs NoSQL databases.
+coverAlt: "A person crouches with a laptop in a dark data-centre aisle lit by blue light, between rows of server racks."
 coverCaption:
 originalCover: https://buthonestly.io/wp-content/uploads/2025/12/sql-vs-nosql-database.jpg
 downloads:

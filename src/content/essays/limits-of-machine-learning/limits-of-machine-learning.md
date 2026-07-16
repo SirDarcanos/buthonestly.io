@@ -14,8 +14,7 @@ tags:
   - Creativity
   - Gaming
   - Python
-coverAlt: Woman at a tarot table with candles, cards, and a glowing crystal
-  ball, symbolising fortune-telling and uncertain machine learning predictions.
+coverAlt: "A person seated at a candlelit table gives a tarot reading, with a crystal ball and cards spread out against a red backdrop."
 originalCover: https://buthonestly.io/wp-content/uploads/2025/12/machine-learning-prediction.jpg
 ---
 

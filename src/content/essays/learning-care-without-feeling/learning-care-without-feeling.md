@@ -11,7 +11,7 @@ tags:
   - ADHD
   - Team Building
   - Workflow
-coverAlt: Learning to Care Without Feeling it
+coverAlt: "A young child in a blue polka-dot shirt looks through a toy telescope indoors."
 coverCaption: Photo by Joseph Rosales on Unsplash
 originalCover: https://buthonestly.io/wp-content/uploads/2025/11/learning-care-without-feeling.jpg
 ---

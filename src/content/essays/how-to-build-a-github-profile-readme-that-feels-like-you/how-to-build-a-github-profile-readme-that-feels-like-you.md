@@ -11,7 +11,7 @@ tags:
   - Automation
   - Creativity
   - Workflow
-coverAlt: The SirDarcanos GitHub profile page showing a custom profile README headed “Hi, I'm Nico.”
+coverAlt: "A screenshot of Nicola Mustone’s GitHub profile with a custom README reading ‘Hi, I’m Nico — Leader. Writer. Builder.’ and a grid of technology badges."
 originalCover: https://buthonestly.io/wp-content/uploads/2025/11/sirdarcanos-github-readme.jpeg
 ---
 

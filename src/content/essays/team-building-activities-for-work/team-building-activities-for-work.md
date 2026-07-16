@@ -12,7 +12,7 @@ tags:
   - Gaming
   - Team Building
 cover: team-building-activities-for-work.jpeg
-coverAlt: Intense outdoor go-kart racing competition on a cloudy day. Athletes navigate the racetrack with precision.
+coverAlt: "Two people in racing suits and helmets driving go-karts around an outdoor track lined with tyre barriers."
 coverCaption: Photo by Tima Miroshnichenko on Pexels.com
 ---
 

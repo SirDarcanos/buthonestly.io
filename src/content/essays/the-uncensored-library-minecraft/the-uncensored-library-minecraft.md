@@ -13,7 +13,7 @@ tags:
   - Gaming
   - Workflow
 cover:
-coverAlt: The Uncensored Library built in Minecraft — a grand white neoclassical building with a central dome and columns, fronted by manicured gardens.
+coverAlt: "A vast neoclassical library building with domes and columns, built in Minecraft and surrounded by manicured gardens."
 coverCaption:
 originalCover: https://buthonestly.io/wp-content/uploads/2025/12/uncensored-library-minecraft.jpg
 downloads:

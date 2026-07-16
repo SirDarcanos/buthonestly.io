@@ -12,7 +12,7 @@ tags:
   - Automation
   - Creativity
   - Productivity
-coverAlt: A dense 3D pile of blue verified-checkmark badges, echoing X (Twitter) verification marks.
+coverAlt: "A dense 3D pile of blue verified-checkmark badges, one glowing brightly at the centre."
 originalCover: https://buthonestly.io/wp-content/uploads/2025/11/x-twitter-account-cleanup.jpg
 ---
 

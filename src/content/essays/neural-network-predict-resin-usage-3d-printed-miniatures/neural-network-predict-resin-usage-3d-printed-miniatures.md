@@ -14,7 +14,7 @@ tags:
   - Creativity
   - Productivity
   - Python
-coverAlt: 3D Printing Cost Calculator with Dense Network
+coverAlt: "A child in glasses and a yellow shirt leans over a tabletop game, moving small miniature figures while holding a card."
 originalCover: https://buthonestly.io/wp-content/uploads/2025/11/3d-printing-cost-calculator-dense-network.jpg
 downloads:
   - file: dense-models-3d-print-cost-calculator.zip

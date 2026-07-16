@@ -12,7 +12,7 @@ tags:
   - PHP
   - Productivity
   - WordPress
-coverAlt: A space view of Europe at night
+coverAlt: "A night-time satellite view of Europe from space, city lights glowing across the continent."
 originalCover: https://buthonestly.io/wp-content/uploads/2023/12/woocommerce-eu-vat-number-validation.jpg
 downloads:
   - file: eu-vat-rates.csv

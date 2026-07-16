@@ -11,7 +11,7 @@ tags:
   - Gaming
   - Creativity
 cover: buildings-never-were.jpg
-coverAlt: A car driving by a road sign reading "Welcome to Raccoon City". The atmosphere is mysterious and scary.
+coverAlt: "A car drives down a foggy forest road at dusk toward a weathered ‘Welcome to Raccoon City, Home of Umbrella’ sign."
 coverCaption: Image by Capcom.
 ---
 

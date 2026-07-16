@@ -10,7 +10,7 @@ categories:
 tags:
   - Creativity
   - Performance
-coverAlt: High-speed train rushing forward, symbolizing WordPress performance vs design trade-offs and the need for both speed and visual quality.
+coverAlt: "A white and blue high-speed train rushing forward with motion blur streaking past."
 originalCover: https://buthonestly.io/wp-content/uploads/2026/03/wordpress-performance-design.jpg
 ---
 

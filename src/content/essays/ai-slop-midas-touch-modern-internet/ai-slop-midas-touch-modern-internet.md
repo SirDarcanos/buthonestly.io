@@ -13,7 +13,7 @@ tags:
   - Creativity
   - Gaming
   - Productivity
-coverAlt: AI Slop erases real work
+coverAlt: "The letters ‘AI?’ handwritten in dark marker on a glossy white surface."
 originalCover: https://buthonestly.io/wp-content/uploads/2025/11/ai-slop.jpg
 ---
 

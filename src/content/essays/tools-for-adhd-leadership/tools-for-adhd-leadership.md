@@ -13,7 +13,7 @@ tags:
   - Automation
   - Productivity
   - Workflow
-coverAlt: Young adult with headphones sitting cross-legged on a desk, fidgeting with a pen in a cozy home office, illustrating calming leadership tools for ADHD such as music, minimal clutter, and focused solo work.
+coverAlt: "A person in a knit vest and headphones sits cross-legged on a desk, fidgeting with a small object in a home workspace."
 originalCover: https://buthonestly.io/wp-content/uploads/2026/04/leadership-tools-for-adhd.jpg
 downloads:
   - file: quill-meetings-templates.zip

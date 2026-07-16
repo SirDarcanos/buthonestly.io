@@ -13,7 +13,7 @@ tags:
   - Gaming
   - Python
   - Workflow
-coverAlt: "DistilRoBERTa Emotion Analysis: NLP Case Study on Steam Reviews"
+coverAlt: "Key art for the video game Dead by Daylight: four survivors flee looming masked killers in a dark forest."
 originalCover: https://buthonestly.io/wp-content/uploads/2025/11/dbd-steam-reviews-nlp-dataset.jpg
 downloads:
   - file: distilroberta-emotion-analysis-dead-by-daylight-case-study.zip

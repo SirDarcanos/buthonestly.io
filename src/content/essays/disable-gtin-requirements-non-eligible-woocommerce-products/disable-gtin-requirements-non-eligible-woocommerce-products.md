@@ -11,7 +11,7 @@ categories:
 tags:
   - PHP
   - WordPress
-coverAlt: Pexels photo
+coverAlt: "A person labelling a cardboard moving box ‘CLOTHES’ with a marker, beside a houseplant and stacked boxes."
 coverCaption: Photo by Karolina Grabowska on Pexels.com
 originalCover: https://buthonestly.io/wp-content/uploads/2023/11/pexels-photo-4506234.jpeg
 ---

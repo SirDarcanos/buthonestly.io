@@ -12,7 +12,7 @@ tags:
   - Creativity
   - Performance
   - WordPress
-coverAlt: Pexels photo
+coverAlt: "A close-up of a hand resting on a white computer mouse at a wooden desk, with a keyboard and monitor behind."
 coverCaption: Photo by Vojtech Okenka on Pexels.com
 originalCover: https://buthonestly.io/wp-content/uploads/2023/11/pexels-photo-392018.jpeg
 ---

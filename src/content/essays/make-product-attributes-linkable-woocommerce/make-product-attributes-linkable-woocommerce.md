@@ -12,7 +12,7 @@ tags:
   - Performance
   - PHP
   - WordPress
-coverAlt: Make Product Attributes Linkable
+coverAlt: "Three folded pairs of blue jeans in different washes arranged against a white background."
 coverCaption: Photo by Mica Asato on Pexels.com
 originalCover: https://buthonestly.io/wp-content/uploads/2016/03/pexels-photo-1082529.jpeg
 ---

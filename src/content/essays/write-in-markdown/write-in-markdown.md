@@ -12,7 +12,7 @@ tags:
   - Blogging
   - Creativity
   - Workflow
-coverAlt: Pexels photo
+coverAlt: "Overhead view of a person in a white sweater typing on a laptop at a white desk, with a notebook, a glass of water, and small succulents."
 coverCaption: Photo by cottonbro studio on Pexels.com
 originalCover: https://buthonestly.io/wp-content/uploads/2015/09/pexels-photo-5076531.jpeg
 ---
