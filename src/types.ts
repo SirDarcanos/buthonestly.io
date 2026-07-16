@@ -1,3 +1,5 @@
+import type { ImageMetadata } from "astro";
+
 export type PostLink = Pick<Post, "title" | "slug">;
 
 export type Post = {
@@ -10,7 +12,10 @@ export type Post = {
   excerpt: string;
   date: string; // ISO
   modified: string; // ISO
-  featuredImage?: string;
+  // The cover for the Picture component: a local imported image (optimized to
+  // AVIF/WebP) or a remote URL string (WP CDN, during migration).
+  cover?: ImageMetadata | string;
+  featuredImage?: string; // absolute URL string, for og:image / social only
   featuredImageAlt?: string;
   featuredImageCaption?: string;
   tags: string[];

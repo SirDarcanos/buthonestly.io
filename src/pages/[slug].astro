@@ -3,7 +3,7 @@ import AudioPlayer from "../components/AudioPlayer.astro";
 import Divider from "../components/Divider.astro";
 import Downloads from "../components/Downloads.astro";
 import Newsletter from "../components/Newsletter.astro";
-import Image from "../components/Image.astro";
+import Picture from "../components/Picture.astro";
 import ReadTime from "../components/ReadTime.astro";
 import TableOfContents from "../components/TableOfContents.astro";
 import SinglePost from "../layouts/SinglePost.astro";
@@ -80,9 +80,9 @@ const publishDate = new Date(post.date);
 
     {/* FEATURED IMAGE */}
     {
-      post.featuredImage && (
-        <Image
-          src={post.featuredImage}
+      post.cover && (
+        <Picture
+          src={post.cover}
           alt={post.featuredImageAlt ?? ""}
           caption={post.featuredImageCaption ?? ""}
           width={1600}

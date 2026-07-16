@@ -1,6 +1,6 @@
 ---
 import Divider from "./Divider.astro";
-import Image from "./Image.astro";
+import Picture from "./Picture.astro";
 import ReadTime from "./ReadTime.astro";
 
 import { type Post } from "../types.ts";
@@ -21,8 +21,8 @@ const postDate = new Date(post.date).toLocaleString("default", {
   id="highlight"
   class="border-line mx-auto my-10 grid max-w-6xl grid-cols-1 items-center gap-16 border-y px-10 pt-8 pb-16 min-[820px]:grid-cols-[1.35fr_1fr]"
 >
-  <Image
-    src={post.featuredImage!}
+  <Picture
+    src={post.cover!}
     alt={post.featuredImageAlt ?? ""}
     width={1600}
     height={900}

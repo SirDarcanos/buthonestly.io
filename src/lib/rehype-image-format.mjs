@@ -1,0 +1,35 @@
+// Tag local Markdown <img>s with `format: "avif"` so Astro's built-in image
+// optimization emits AVIF. Runs before @astrojs/markdown-remark's rehypeImages
+// (which serializes <img> props into its getImage() call). Remote images are
+// left untouched; responsive srcset/sizes come from image.layout in the config;
+// covers are handled by Picture.astro.
+
+export default function rehypeImageFormat() {
+  return (tree, file) => {
+    const local = file?.data?.astro?.localImagePaths;
+    if (!Array.isArray(local) || local.length === 0) return;
+    walk(tree, local);
+  };
+}
+
+function walk(node, local) {
+  if (
+    node.tagName === "img" &&
+    node.properties &&
+    typeof node.properties.src === "string"
+  ) {
+    const src = safeDecode(node.properties.src);
+    if (local.includes(src) && !node.properties.format) {
+      node.properties.format = "avif";
+    }
+  }
+  if (node.children) for (const child of node.children) walk(child, local);
+}
+
+function safeDecode(s) {
+  try {
+    return decodeURI(s);
+  } catch {
+    return s;
+  }
+}

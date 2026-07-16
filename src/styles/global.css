@@ -215,7 +215,8 @@
     color: var(--shiki-dark) !important;
   }
 
-  .post-content img,
+  .post-content > img,
+  .post-content p > img,
   .post-content figure {
     @apply my-6;
   }
@@ -243,6 +244,10 @@
   }
   .post-content th {
     @apply font-sans font-semibold;
+  }
+
+  .post-content .audio-player {
+    @apply my-8;
   }
 
   /* Audio player (JS-enhanced; markup + script in AudioPlayer.astro). */

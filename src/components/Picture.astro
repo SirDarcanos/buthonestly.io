@@ -1,0 +1,93 @@
+---
+import { Picture as AstroPicture } from "astro:assets";
+import { twMerge } from "tailwind-merge";
+import type { ImageMetadata } from "astro";
+
+// Responsive image. A LOCAL image (ImageMetadata) → Astro <Picture> with AVIF →
+// WebP → JPEG. A REMOTE image (URL string, WP CDN during migration) → Jetpack
+// `resize=W,H` srcset. Local is preferred at the call site.
+interface Props {
+  src: ImageMetadata | string;
+  alt: string;
+  width: number;
+  height: number;
+  widths?: number[];
+  sizes?: string;
+  class?: string;
+  caption?: string;
+  priority?: boolean;
+  ariaHidden?: boolean;
+}
+
+const {
+  src,
+  alt,
+  width,
+  height,
+  widths,
+  sizes,
+  class: className,
+  caption = "",
+  priority = false,
+  ariaHidden = false,
+} = Astro.props;
+
+const isLocal = typeof src !== "string";
+const imgClass = twMerge("block h-auto max-w-full", className);
+
+/**
+ * Remote (WP.com/Jetpack CDN): request an exact size via `resize=W,H`, cropping
+ * to cover. Existing sizing params are stripped first so we never stack them.
+ */
+function cdnUrl(rawSrc: string, w: number, h: number): string {
+  const url = new URL(rawSrc);
+  for (const param of ["w", "h", "fit", "resize", "crop"]) {
+    url.searchParams.delete(param);
+  }
+  url.searchParams.set("resize", `${w},${h}`);
+  return url.toString();
+}
+
+const aspect = height / width;
+const candidates = widths ?? [width];
+const srcset = isLocal
+  ? ""
+  : candidates
+      .map((w) => `${cdnUrl(src as string, w, Math.round(w * aspect))} ${w}w`)
+      .join(", ");
+const fallback = isLocal ? "" : cdnUrl(src as string, width, height);
+---
+
+<figure>
+  {
+    isLocal ? (
+      <AstroPicture
+        src={src as ImageMetadata}
+        alt={alt}
+        widths={widths}
+        sizes={sizes}
+        formats={["avif", "webp"]}
+        loading={priority ? "eager" : "lazy"}
+        decoding={priority ? "auto" : "async"}
+        fetchpriority={priority ? "high" : undefined}
+        aria-hidden={ariaHidden ? "true" : undefined}
+        class={imgClass}
+      />
+    ) : (
+      <img
+        src={fallback}
+        srcset={srcset}
+        sizes={sizes}
+        alt={alt}
+        width={width}
+        height={height}
+        loading={priority ? "eager" : "lazy"}
+        decoding={priority ? "auto" : "async"}
+        fetchpriority={priority ? "high" : undefined}
+        aria-hidden={ariaHidden ? "true" : undefined}
+        class={imgClass}
+      />
+    )
+  }
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>

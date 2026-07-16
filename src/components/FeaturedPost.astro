@@ -1,5 +1,5 @@
 ---
-import Image from "./Image.astro";
+import Picture from "./Picture.astro";
 import ReadTime from "./ReadTime.astro";
 
 import { type Post } from "../types.ts";
@@ -13,13 +13,8 @@ const { post } = Astro.props;
 
 <article class="space-y-3">
   {
-    post.featuredImage ? (
-      <Image
-        src={post.featuredImage}
-        alt={post.title}
-        width={516}
-        height={344}
-      />
+    post.cover ? (
+      <Picture src={post.cover} alt={post.title} width={516} height={344} />
     ) : null
   }
   <p class="meta mt-6">

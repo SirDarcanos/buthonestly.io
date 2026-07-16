@@ -32,8 +32,13 @@ export function toPost(entry: Essay): Post {
   const slug = entry.id;
   const date = d.date ? d.date.toISOString() : "";
   const modified = (d.updated ?? d.date)?.toISOString() ?? date;
-  // Local cover wins; fall back to the migrated WP URL until it's rebuilt.
-  const featuredImage = d.originalCover ?? d.cover?.src;
+  // Local cover wins; fall back to the migrated WP URL until it's rebuilt. The
+  // raw cover (ImageMetadata for local, URL string for remote) goes to the
+  // Picture component; `featuredImage` is an absolute URL string for og:image.
+  const cover = d.cover ?? d.originalCover;
+  const featuredImage = d.cover
+    ? new URL(d.cover.src, SITE_URL).toString()
+    : d.originalCover;
   const excerpt = d.excerpt ?? "";
 
   return {
@@ -46,6 +51,7 @@ export function toPost(entry: Essay): Post {
     excerpt,
     date,
     modified,
+    cover,
     featuredImage,
     featuredImageAlt: d.coverAlt,
     featuredImageCaption: d.coverCaption,
