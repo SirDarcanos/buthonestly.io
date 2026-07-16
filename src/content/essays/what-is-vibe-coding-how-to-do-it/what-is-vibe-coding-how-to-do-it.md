@@ -141,5 +141,3 @@ This does not mean that if you have a subscription to an AI tool and no programm
 Vibe coding isn’t about laziness. It’s about trusting AI as a creative partner and learning to communicate intent clearly. Used responsibly, it’s an incredible accelerator. Used blindly, it’s a recipe for trouble.
 
 Are you just getting started with vibe coding? What do you think about it? Do you trust an AI enough to write production code for you?
-
-Share your experience in the comments below!

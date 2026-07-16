@@ -131,5 +131,3 @@ ADHD didn’t make me a worse leader; it made me a more deliberate one. The syst
 I don’t measure my success by spotless notes or punctual updates. I measure it by how well I and my team grow, communicate, and follow through. The structure keeps me consistent enough to support that. If that means I need two reminders for one task, that’s fine. The system works because it’s built around how my brain actually functions.
 
 The tools keep me organized. The team keeps me honest. [[time-off-for-leaders|Time off keeps me energized]]. That’s balanced enough. None of these replaces proper ADHD diagnosis or treatment; these are simply the tools for ADHD that make my work and leadership less fragile.
-
-What about you? What systems or habits help you stay on track when focus isn’t guaranteed? Drop a note in the comments, I’m always collecting ideas.

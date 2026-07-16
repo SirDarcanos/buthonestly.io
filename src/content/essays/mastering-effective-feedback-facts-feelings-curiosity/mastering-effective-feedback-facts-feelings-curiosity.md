@@ -134,5 +134,3 @@ Feedback is a skill that takes time and intention to master. It requires honesty
 When feedback is grounded in facts and feelings and guided by curiosity, it becomes something more than a correction. It becomes a shared conversation about how to work better together. It builds understanding, not defensiveness.
 
 The more we practice giving and receiving feedback this way, the more it becomes part of how our teams grow. It is not always easy, but it is always worth it.
-
-What about you? How do you approach feedback in your team and in life? Share your thoughts or experiences in the comments below. I’d love to hear how you handle it!

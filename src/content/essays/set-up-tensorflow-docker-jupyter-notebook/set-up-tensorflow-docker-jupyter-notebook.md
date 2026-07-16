@@ -154,5 +154,3 @@ If you see the output without errors, congratulations—your environment is full
 You now have a self-contained TensorFlow lab running on your machine. Everything you build inside Jupyter — from notebooks to trained models — stays organized and reproducible. The next time you need to revisit or share your setup, just start the same container, and you’ll be back where you left off.
 
 This environment isn’t just for deep learning experiments. It’s perfect for anyone exploring AI tools and machine learning workflows, whether you’re training CNNs or experimenting with AI-powered features for your projects.
-
-What about you, have you run into Docker issues or TensorFlow setup quirks on your machine? Share your experience in the comments below.

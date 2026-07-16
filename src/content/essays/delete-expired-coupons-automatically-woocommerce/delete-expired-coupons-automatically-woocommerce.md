@@ -143,5 +143,3 @@ Clicking this will trigger the same cleanup process immediately. However, if you
 ## Keep Your WooCommerce Store Clean
 
 Expired coupons may seem harmless, but cleaning them up automatically keeps your database lean and your admin area tidy. It’s one of those small optimizations that makes managing a store a bit smoother every day.
-
-What’s your take on this? Have you implemented a similar cleanup process? Share your experience in the comments below.

@@ -98,5 +98,3 @@ Remember though, not even this method will save your content if someone has the 
 
 Balancing content protection with accessibility and usability is essential. Avoid restrictive tactics like right-click blocking — they create frustration without adding real security.  
 Instead, focus on **transparency, control, and trust**. Empower users to interact with your site responsibly while safeguarding your work intelligently. And remember, there’s nothing more secure than [[do-you-trust-your-instincts-making-smart-wordpress-choices|making smart WordPress choices]].
-
-What’s your WordPress pet peeve? Have you encountered practices that impacted your experience or accessibility? Share in the comments below!

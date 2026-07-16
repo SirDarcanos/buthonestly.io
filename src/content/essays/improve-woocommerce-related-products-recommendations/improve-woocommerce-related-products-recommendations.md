@@ -208,5 +208,3 @@ Display related products using attributes in your WooCommerce store and add the 
 Remember that the world of eCommerce is constantly changing. Adapt and focus on your customers to ensure that your WooCommerce store continues to thrive.
 
 I look forward to seeing how these changes transform your store and improve customers’ shopping experience.
-
-You are welcome to share your journey and insights or ask any questions in the comments below!

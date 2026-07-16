@@ -71,9 +71,3 @@ After making your link, adding it to your site is easy. It can be a simple link,
 ![The WordPress content editor showing how to add the add to cart URL to the Button block](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/add-button-with-link-1030x296-1.webp?resize=830%2C239&quality=80&ssl=1)
 
 There are many more ways; for example, you might want to use it as part of a pricing table block or shortcode or as a heading or another type of block. The options are virtually limitless. If you can add a link, that link can be a custom WooCommerce Add to Cart link.
-
-## Engage and Innovate: Share Your Thoughts
-
-We’ve just explored how to make custom Add to Cart links in WooCommerce. I’d love to hear your thoughts and experiences.
-
-Have you tried something creative, or do you have questions? Your ideas and questions help us all learn more. Share your thoughts in the comments!​

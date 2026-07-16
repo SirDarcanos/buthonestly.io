@@ -146,4 +146,4 @@ ADHD didn’t make me inconsistent; it made me cyclical. And cycles, I’ve lear
 
 If you’ve ever felt that same pattern — the bursts of motivation, the sudden quiet, the guilt that follows — I’d love to hear your story. How do you balance creativity and burnout? Have you found your rhythm, or are you still figuring it out?
 
-Drop a comment below or share your experience if you’re comfortable doing so. The more we talk about how our brains actually work — especially in creative fields — the easier it gets to build systems that fit _us_, not the other way around.
+The more we talk about how our brains actually work — especially in creative fields — the easier it gets to build systems that fit _us_, not the other way around.

@@ -171,5 +171,3 @@ These experiences might seem unrelated to leadership, but they’ve shaped how I
 In the end, gaming didn’t just make me a better player, it made me a better listener, communicator, and collaborator. Each game taught me something about guiding people, balancing structure with freedom, and building trust through shared challenges.
 
 Leadership isn’t about being the hero of the story. It’s about helping others become heroes in theirs.
-
-What about you? Have you ever learned something about teamwork or leadership from a game? I’d love to hear your story in the comments below.
