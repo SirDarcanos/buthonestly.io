@@ -1,7 +1,7 @@
 ---
 title: The Buildings That Never Were
 date: 2026-07-02T16:00:00
-updated: 2026-07-02T17:00:02
+updated: 2026-07-16T22:50:00
 sticky: true
 cornerstone: false
 excerpt: I walked into a police station that doesn’t exist and knew exactly where to go.
@@ -23,6 +23,12 @@ coverCaption: Image by Capcom.
 > - These fictional spaces only exist in players’ heads, but the grief and attachment they trigger are as real as memories of physical locations.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
+
+<!-- audio:start -->
+
+![[buildings-never-were.mp3]]
+
+<!-- audio:end -->
 
 I walked into a police station that doesn’t exist and knew exactly where to go.
 
