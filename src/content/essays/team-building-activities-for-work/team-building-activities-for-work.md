@@ -11,9 +11,9 @@ tags:
   - Creativity
   - Gaming
   - Team Building
-coverAlt: Pexels photo
+cover: team-building-activities-for-work.jpeg
+coverAlt: Intense outdoor go-kart racing competition on a cloudy day. Athletes navigate the racetrack with precision.
 coverCaption: Photo by Tima Miroshnichenko on Pexels.com
-originalCover: https://buthonestly.io/wp-content/uploads/2025/11/pexels-photo-5640518.jpeg
 ---
 
 > [!summary]- Quick Summary
@@ -23,6 +23,12 @@ originalCover: https://buthonestly.io/wp-content/uploads/2025/11/pexels-photo-56
 > - The point isn’t “fun for fun’s sake”, it’s using structured play to build psychological safety and real work habits.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
+
+<!-- audio:start -->
+
+![[team-building-activities-for-work.mp3]]
+
+<!-- audio:end -->
 
 Upskilling doesn’t always need a workshop; sometimes it starts with funny team building activities that are quietly useful.
 
@@ -42,7 +48,7 @@ Workshops could have helped us align on processes, but they wouldn’t have help
 
 What I found from [my research](https://www.researchgate.net/publication/254109353_Serious_Play_as_a_Practice_of_Paradox), from both workplace studies and coaching methods, was that structured play, if done intentionally, helps people relax, collaborate, and absorb new skills more effectively.
 
-That insight guided how I approached the event and how I designed a set team building games that would bring laughter, participation, and learning together: _Exciting Sponge_, _What’s in the Box?_, and _Unlock!_.
+That insight guided how I approached the event and how I designed a set of team building games that would bring laughter, participation, and learning together: _Exciting Sponge_, _What’s in the Box?_, and _Unlock!_.
 
 Each of them served a specific purpose; not just fun for fun’s sake, but a way to practice real skills we use every day in support work at WordPress.com. They’re simple, low-prep team building activities for adults. No trust falls, no props, and no pretending you’re all best friends.
 
@@ -72,7 +78,7 @@ It was fascinating to watch and play because this mirrored how we handle custome
 
 The people who guessed correctly weren’t the ones who asked the most, they were the ones who listened best and asked the right questions. It’s one of those team building activities that quietly sharpens how a group observes, asks, and listens. We trained curiosity and patience. All skills that translate directly to customer conversations.
 
-![two coworkers in a casual office setting laughing and talking](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/two-coworkers-in-a-casual-office-setting-laughing-and-talking-3.png?resize=1024%2C768&quality=80&ssl=1)
+![Three coworkers in an office setting casually laughing and talking](casual-coworkers.jpg "Photo by Ahmet Kurt on Unsplash.")
 
 ## Unlock! Solving Problems as a Team
 
@@ -88,9 +94,6 @@ From where I sat, Unlock! looked like work at its best: collaborative, curious, 
 And it aligns with research showing that [play-based teamwork strengthens creativity and communication](https://www.researchgate.net/publication/341698763_A_play-at-work_intervention_What_are_the_benefits).
 
 On a personal note, this game has always been special to me. I’ve played every Unlock! box with my wife, and I love how it rewards patience and clear thinking over speed. Seeing those same qualities emerge in our team made the whole experiment worth it. This wasn’t just a game, it was a full team building experience that showed how collaboration and trust can develop through play.
-
-Here is the game trailer from the creators to maybe make you curious enough to try it!
-
 ## Why It Worked
 
 Each game was chosen for a reason. Together, they built creativity, curiosity, and collaboration, some of the same skills that define good support work. That’s what makes this kind of team building experience meaningful. They upskill through laughter instead of pressure.
@@ -114,5 +117,3 @@ Play isn’t a substitute for serious work. It’s a way to make serious work mo
 When done with purpose, [[gaming-made-me-better-leader|it builds the same muscles we rely on every day]]: communication, curiosity, and calm under pressure.
 
 You don’t need trust falls or motivational speeches to bring people together. You just need shared laughter, meaningful challenge, and a bit of imagination.
-
-What’s your take? Have you ever used play to build skills in your team? I’d love to hear in the comments how it worked for you.
