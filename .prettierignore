@@ -3,3 +3,9 @@ dist
 node_modules
 package-lock.json
 public/_redirects
+
+# Generated data (embeddings, related map, ledgers, image manifest)
+data
+
+# Authored content + Obsidian/Templater files — not code, don't reflow
+src/content

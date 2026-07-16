@@ -152,9 +152,7 @@ async function main() {
     process.exit(1);
   }
 
-  console.log(
-    `${fresh.length} new essay(s); mode=${SEND ? "SEND" : "DRAFT"}.`,
-  );
+  console.log(`${fresh.length} new essay(s); mode=${SEND ? "SEND" : "DRAFT"}.`);
 
   for (const essay of fresh) {
     if (!(await waitUntilLive(essay.url))) {

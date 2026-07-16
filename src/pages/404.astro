@@ -51,8 +51,7 @@ const suggestions = (await getAllPosts()).slice(0, 3);
                 </a>
               </h3>
               <p class="meta flex-none text-right">
-                {post.categories[0]} &middot;{" "}
-                <ReadTime content={post.body} />
+                {post.categories[0]} &middot; <ReadTime content={post.body} />
               </p>
             </article>
           ))

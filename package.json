@@ -6,10 +6,13 @@
     "node": ">=22.12.0"
   },
   "scripts": {
+    "prepare": "git config core.hooksPath .githooks || true",
     "dev": "astro dev",
     "prebuild": "node scripts/generate-redirects.mjs",
     "build": "astro build",
     "related": "node scripts/build-related.mjs",
+    "audio": "node scripts/build-audio.mjs",
+    "images": "node scripts/optimize-images.mjs",
     "postbuild": "pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro",
@@ -35,6 +38,7 @@
     "prettier": "^3.8.4",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.8.0",
+    "sharp": "^0.34.5",
     "typescript": "^6.0.3"
   }
 }
