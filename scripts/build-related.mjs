@@ -55,7 +55,8 @@ async function loadEssays() {
     const file = path.join(ESSAYS_DIR, slug, `${slug}.md`);
     if (!existsSync(file)) continue;
     const { data, content } = matter(await readFile(file, "utf8"));
-    if (!data.date) continue; // draft / not live
+    if (!data.date) continue; // draft / no date
+    if (new Date(data.date) > new Date()) continue; // scheduled — not published yet
     // Present-but-empty frontmatter arrives as null; clean it like the schema does.
     const list = (v) =>
       Array.isArray(v) ? v.filter((x) => x != null && x !== "") : [];

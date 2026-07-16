@@ -11,6 +11,10 @@ on:
     branches: [main]
     paths:
       - "src/content/essays/**"
+  # Daily, so the map picks up essays that go live by their scheduled date
+  # (a date passing isn't a push). Only commits when the map actually changes.
+  schedule:
+    - cron: "0 12 * * *"
   workflow_dispatch:
 
 concurrency:
