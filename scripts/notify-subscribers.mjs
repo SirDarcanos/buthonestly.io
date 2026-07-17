@@ -45,12 +45,13 @@ const escapeHtml = (s) =>
       })[c],
   );
 
-// Pull the essay's first real paragraph out of the Obsidian markdown so the
-// email can show a taste of the piece, not just the one-line excerpt. Skips
-// frontmatter-adjacent noise: callouts/blockquotes (`>`), headings, images,
-// embeds, rules, code fences and raw HTML. Strips wikilinks/links/emphasis to
-// plain text and caps the length at a sentence boundary.
-function firstParagraph(markdown) {
+// Pull the essay's opening prose out of the Obsidian markdown for the email
+// teaser: the first real paragraph, plus the second when the first is short
+// (essays often open on a one-line hook). Skips furniture — callouts/blockquotes
+// (`>`), headings, images, embeds, rules, code fences, raw HTML — and strips
+// wikilinks/links/emphasis to plain text, capping each paragraph at a sentence
+// boundary. Returns an array of 1–2 plain-text paragraphs (or empty).
+function openingParagraphs(markdown) {
   const paras = [];
   let buf = [];
   const flush = () => {
@@ -79,16 +80,24 @@ function firstParagraph(markdown) {
       .replace(/\s+/g, " ")
       .trim();
 
-  const first = clean(paras.find((p) => clean(p).length >= 40) ?? "");
   const MAX = 360;
-  if (first.length <= MAX) return first;
-  const cut = first.slice(0, MAX);
-  const stop = Math.max(
-    cut.lastIndexOf(". "),
-    cut.lastIndexOf("! "),
-    cut.lastIndexOf("? "),
-  );
-  return stop > MAX * 0.5 ? cut.slice(0, stop + 1) : cut.trimEnd() + "…";
+  const cap = (s) => {
+    if (s.length <= MAX) return s;
+    const cut = s.slice(0, MAX);
+    const stop = Math.max(
+      cut.lastIndexOf(". "),
+      cut.lastIndexOf("! "),
+      cut.lastIndexOf("? "),
+    );
+    return stop > MAX * 0.5 ? cut.slice(0, stop + 1) : cut.trimEnd() + "…";
+  };
+
+  const cleaned = paras.map(clean).filter(Boolean);
+  if (!cleaned.length) return [];
+  const out = [cap(cleaned[0])];
+  const SHORT = 140; // a thin opening (often a one-line hook) — add the next para
+  if (cleaned[0].length < SHORT && cleaned[1]) out.push(cap(cleaned[1]));
+  return out;
 }
 
 async function loadPublishedEssays() {
@@ -106,9 +115,8 @@ async function loadPublishedEssays() {
     essays.push({
       slug,
       title: String(data.title ?? slug),
-      excerpt: String(data.excerpt ?? ""),
       coverAlt: data.coverAlt ? String(data.coverAlt) : "",
-      opening: firstParagraph(content), // the essay's first real prose line
+      opening: openingParagraphs(content), // the essay's opening paragraph(s)
       date,
       url: `${SITE}/${slug}/`,
     });
@@ -161,7 +169,7 @@ function extractOgImage(html) {
 }
 
 // The broadcast body Kit drops into {{ message_content }}: an intro line, the
-// featured image, linked title, the excerpt + a taste of the opening, then the
+// featured image, linked title, the essay's opening paragraph(s), then the
 // read link. The intro lives here (not the Kit template) so the template stays
 // essay-agnostic — a hand-written broadcast won't inherit an "new essay" lead.
 // Styles are inlined here so the body holds up in clients that ignore the
@@ -184,13 +192,12 @@ function renderEmail(essay) {
       `<a href="${essay.url}" style="color:#211d18; text-decoration:none;">${escapeHtml(essay.title)}</a></h2>`,
   );
 
-  if (essay.excerpt) {
-    parts.push(`<p style="margin:0 0 20px;">${escapeHtml(essay.excerpt)}</p>`);
-  }
-  if (essay.opening) {
-    parts.push(`<p style="margin:0 0 26px;">${escapeHtml(essay.opening)}</p>`);
-  }
-  if (!essay.excerpt && !essay.opening) {
+  const opening = essay.opening ?? [];
+  if (opening.length) {
+    for (const p of opening) {
+      parts.push(`<p style="margin:0 0 26px;">${escapeHtml(p)}</p>`);
+    }
+  } else {
     parts.push(
       `<p style="margin:0 0 26px;">A new essay is up on BUT. Honestly.</p>`,
     );
@@ -213,7 +220,7 @@ async function createBroadcast(essay, send = SEND) {
     public: false,
     published_at: iso,
     send_at: send ? iso : null, // null = draft; timestamp = send now
-    preview_text: (essay.excerpt || essay.title).slice(0, 150),
+    preview_text: (essay.opening[0] || essay.title).slice(0, 150),
     subscriber_filter: [{ all: [], any: null, none: null }], // everyone
   };
 
