@@ -60,4 +60,14 @@ const { title, description, type, article, noindex } = Astro.props;
       />
     )
   }
+
+  {/* Fire a Fathom event for any clicked element carrying data-track. */}
+  <script>
+    import { track } from "../lib/track";
+    document.addEventListener("click", (e) => {
+      const el = (e.target as HTMLElement).closest<HTMLElement>("[data-track]");
+      const name = el?.dataset.track;
+      if (name) track(name);
+    });
+  </script>
 </head>

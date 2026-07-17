@@ -65,6 +65,8 @@ const { inline = false } = Astro.props;
 </section>
 
 <script>
+  import { track } from "../lib/track";
+
   const FORM_ID = "9685650";
 
   document.querySelectorAll("form[data-newsletter]").forEach((el) => {
@@ -107,6 +109,7 @@ const { inline = false } = Astro.props;
         }
         form.reset();
         set("ok", "Almost there — check your inbox to confirm.");
+        track("Newsletter subscribed");
       } catch {
         set("error", "That didn't go through. Please try again.");
       } finally {

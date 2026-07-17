@@ -40,6 +40,11 @@ const ICON_BY_KIND = {
           external={action.kind === "external"}
           badges={action.ext?.map((e) => `.${e}`)}
           class="bg-background"
+          data-track={
+            action.kind === "download"
+              ? `Download: ${action.href.split("/").pop()}`
+              : undefined
+          }
         >
           {action.label}
         </Button>

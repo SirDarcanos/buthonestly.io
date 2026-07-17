@@ -30,6 +30,7 @@ const ext = (file: string) => file.split(".").pop()?.toUpperCase() ?? "FILE";
               download
               icon="download"
               badges={[ext(d.file)]}
+              data-track={`Download: ${d.file}`}
             >
               {d.label ?? d.file}
             </Button>

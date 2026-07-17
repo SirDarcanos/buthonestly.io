@@ -273,6 +273,8 @@ const categoryLinks = categories.map((category) => ({
     form.addEventListener("submit", (e) => {
       e.preventDefault();
       run(input.value);
+      // Inline script — call Fathom directly (can't import the track() helper).
+      if (input.value.trim()) window.fathom?.trackEvent?.("Search");
     });
     input.addEventListener("input", () => run(input.value));
     input.addEventListener("keydown", (e) => {

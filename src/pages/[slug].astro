@@ -118,7 +118,11 @@ const publishDate = new Date(post.date);
             <li class="border-line border-t py-4">
               <div class="flex items-start">
                 <h3 class="flex-1">
-                  <a href={rel.url} class="text-ink hover:text-accent">
+                  <a
+                    href={rel.url}
+                    class="text-ink hover:text-accent"
+                    data-track="Related post click"
+                  >
                     {rel.title}
                   </a>
                 </h3>

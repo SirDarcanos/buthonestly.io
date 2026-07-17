@@ -230,6 +230,7 @@ const blendSample = {
           <Button
             download
             data-bhktw="download-mp3"
+            data-track="Voice download: mp3"
             class="bg-background flex-none"
           >
             Download MP3
@@ -237,6 +238,7 @@ const blendSample = {
           <Button
             download
             data-bhktw="download-wav"
+            data-track="Voice download: wav"
             class="bg-background flex-none"
           >
             Download WAV
@@ -741,6 +743,8 @@ const blendSample = {
         outputEl.classList.remove("hidden");
         setProgress(100);
         setStatus("Done.", "ok");
+        // Inline script — can't import the track() helper, so call Fathom directly.
+        window.fathom?.trackEvent?.("Voice generated");
         setTimeout(() => setProgress(null), 800);
       } catch (e) {
         console.error("[bh-kokoro-tts-web]", e);
