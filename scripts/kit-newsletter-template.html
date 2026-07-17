@@ -1,0 +1,170 @@
+<!--
+  BUT. Honestly — Kit (ConvertKit) email template.
+
+  Paste this into Kit → Account → Email templates → New template (HTML).
+  Kit injects the broadcast/sequence body wherever {{ message_content }} sits;
+  everything around it (greeting, sign-off, footer, unsubscribe) is this shell —
+  deliberately essay-agnostic. The intro line, featured image, title, excerpt
+  and read link inside {{ message_content }} are generated per-essay by
+  scripts/notify-subscribers.mjs.
+
+  Palette + type mirror the site (src/styles/global.css):
+    paper   #efeae0   surface #e7e1d5   ink #211d18   muted #665e51
+    accent  #7e2a1e   Newsreader (serif) · Archivo (sans)  → Georgia / Arial fallbacks
+
+  Table-based, fully inline-styled, 600px, light theme only.
+-->
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="color-scheme" content="light only">
+  <meta name="supported-color-schemes" content="light only">
+  <title>BUT. Honestly</title>
+
+  <!--[if mso]>
+  <noscript>
+    <xml>
+      <o:OfficeDocumentSettings>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+    </xml>
+  </noscript>
+  <![endif]-->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+
+    /* Client resets */
+    body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+    table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+    img { -ms-interpolation-mode: bicubic; border: 0; outline: none; text-decoration: none; }
+    body { margin: 0 !important; padding: 0 !important; width: 100% !important; }
+
+    /* Style the injected {{ message_content }} so the broadcast body inherits
+       the site's voice. The per-essay HTML also carries inline styles, so this
+       is mainly for anything hand-added to a broadcast. */
+    .bh-content { color: #211d18; font-family: 'Newsreader', Georgia, 'Times New Roman', serif; font-size: 19px; line-height: 1.7; }
+    .bh-content p { margin: 0 0 22px; }
+    .bh-content a { color: #7e2a1e; text-decoration: underline; text-underline-offset: 2px; }
+    .bh-content h1, .bh-content h2, .bh-content h3 { font-family: 'Newsreader', Georgia, serif; color: #211d18; line-height: 1.25; margin: 34px 0 14px; font-weight: 600; letter-spacing: -0.01em; }
+    .bh-content h2 { font-size: 26px; }
+    .bh-content h3 { font-size: 22px; }
+    .bh-content img { max-width: 100%; height: auto; border: 1px solid rgba(33,29,24,0.14); }
+    .bh-content blockquote { margin: 0 0 22px; padding: 4px 0 4px 20px; border-left: 3px solid #7e2a1e; color: #4a443b; font-style: italic; }
+    .bh-content ul, .bh-content ol { margin: 0 0 22px; padding-left: 22px; }
+    .bh-content li { margin: 0 0 8px; }
+    .bh-content hr { border: 0; border-top: 1px solid rgba(33,29,24,0.14); margin: 32px 0; }
+
+    a { color: #7e2a1e; }
+
+    @media only screen and (max-width: 620px) {
+      .bh-container { width: 100% !important; }
+      .bh-pad { padding-left: 26px !important; padding-right: 26px !important; }
+      .bh-content { font-size: 18px !important; }
+    }
+  </style>
+</head>
+
+<body style="margin:0; padding:0; background-color:#e7e1d5;">
+
+  <!-- Preheader: pulled into the inbox preview, then hidden. -->
+  <div style="display:none; max-height:0; overflow:hidden; mso-hide:all; font-size:1px; line-height:1px; color:#e7e1d5; opacity:0;">
+    Clarity without the comfort. A new essay from BUT. Honestly.
+    &#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;
+  </div>
+
+  <table role="presentation" class="bh-outer" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#e7e1d5;">
+    <tr>
+      <td align="center" style="padding:32px 12px;">
+
+        <!--[if mso]><table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0"><tr><td><![endif]-->
+        <table role="presentation" class="bh-container bh-card" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px; max-width:600px; background-color:#efeae0; border:1px solid rgba(33,29,24,0.16);">
+
+          <!-- Masthead -->
+          <tr>
+            <td class="bh-pad" style="padding:34px 44px 0 44px;">
+              <a href="https://buthonestly.io/" style="text-decoration:none;">
+                <span class="bh-wordmark" style="font-family:'Newsreader', Georgia, serif; font-size:30px; font-weight:600; letter-spacing:-0.01em; color:#211d18;">BUT.&nbsp;Honestly</span>
+              </a>
+              <div class="bh-tagline" style="font-family:'Newsreader', Georgia, serif; font-style:italic; font-size:16px; color:#665e51; margin-top:6px;">Clarity without the comfort.</div>
+            </td>
+          </tr>
+
+          <!-- Hairline under the masthead -->
+          <tr>
+            <td class="bh-pad" style="padding:22px 44px 0 44px;">
+              <div class="bh-rule" style="border-top:1px solid rgba(33,29,24,0.16); font-size:0; line-height:0;">&nbsp;</div>
+            </td>
+          </tr>
+
+          <!-- Greeting -->
+          <tr>
+            <td class="bh-pad" style="padding:28px 44px 0 44px;">
+              <p class="bh-greeting" style="margin:0; font-family:'Newsreader', Georgia, serif; font-size:19px; line-height:1.6; color:#211d18;">Hi {{ subscriber.first_name | strip | default: "there" }},</p>
+            </td>
+          </tr>
+
+          <!-- Broadcast / sequence body: featured image, title, excerpt, read link -->
+          <tr>
+            <td class="bh-pad bh-content" style="padding:26px 44px 8px 44px; font-family:'Newsreader', Georgia, serif; font-size:19px; line-height:1.7; color:#211d18;">
+              {{ message_content }}
+            </td>
+          </tr>
+
+          <!-- Sign-off: invite to read, then sign as Nico -->
+          <tr>
+            <td class="bh-pad" style="padding:22px 44px 34px 44px;">
+              <p style="margin:0 0 18px; font-family:'Newsreader', Georgia, serif; font-size:19px; line-height:1.7; color:#211d18;">Settle in and give it a read when you have a quiet moment &mdash; I think you'll get something out of it.</p>
+              <p style="margin:0; font-family:'Newsreader', Georgia, serif; font-size:19px; line-height:1.6; color:#211d18;">&mdash; Nico</p>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td class="bh-pad" style="padding:0 44px;">
+              <div class="bh-rule" style="border-top:1px solid rgba(33,29,24,0.16); font-size:0; line-height:0;">&nbsp;</div>
+            </td>
+          </tr>
+          <tr>
+            <td class="bh-pad" style="padding:26px 44px 38px 44px;">
+              <p class="bh-footer-text" style="margin:0 0 10px; font-family:'Archivo', Arial, Helvetica, sans-serif; font-size:13px; line-height:1.6; color:#665e51;">
+                <strong style="color:#4a443b;">BUT.&nbsp;Honestly</strong> — long-form essays by Nicola Mustone on the messy overlap between humans and tech.
+              </p>
+              <p class="bh-footer-text" style="margin:0 0 14px; font-family:'Archivo', Arial, Helvetica, sans-serif; font-size:13px; line-height:1.6; color:#665e51;">
+                <a href="https://buthonestly.io/" class="bh-link" style="color:#7e2a1e; text-decoration:none;">buthonestly.io</a>
+                &nbsp;&middot;&nbsp;
+                <a href="https://www.linkedin.com/in/nicolamustone/" class="bh-link" style="color:#7e2a1e; text-decoration:none;">LinkedIn</a>
+                &nbsp;&middot;&nbsp;
+                <a href="https://bsky.app/profile/nicolamustone.bsky.social" class="bh-link" style="color:#7e2a1e; text-decoration:none;">Bluesky</a>
+                &nbsp;&middot;&nbsp;
+                <a href="https://buthonestly.io/feed.xml" class="bh-link" style="color:#7e2a1e; text-decoration:none;">RSS</a>
+              </p>
+              <p class="bh-muted" style="margin:0 0 6px; font-family:'Archivo', Arial, Helvetica, sans-serif; font-size:12px; line-height:1.6; color:#8a8172;">
+                You're receiving this because you subscribed at buthonestly.io.
+              </p>
+              <p class="bh-muted" style="margin:0 0 6px; font-family:'Archivo', Arial, Helvetica, sans-serif; font-size:12px; line-height:1.6; color:#8a8172;">
+                <a href="{{ unsubscribe_url }}" class="bh-link" style="color:#8a8172; text-decoration:underline;">Unsubscribe</a>
+                &nbsp;&middot;&nbsp;
+                <a href="{{ subscriber_preferences_url }}" class="bh-link" style="color:#8a8172; text-decoration:underline;">Update your preferences</a>
+              </p>
+              <p class="bh-muted" style="margin:0; font-family:'Archivo', Arial, Helvetica, sans-serif; font-size:12px; line-height:1.6; color:#8a8172;">
+                {{ address }}
+              </p>
+            </td>
+          </tr>
+
+        </table>
+        <!--[if mso]></td></tr></table><![endif]-->
+
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>

@@ -45,6 +45,52 @@ const escapeHtml = (s) =>
       })[c],
   );
 
+// Pull the essay's first real paragraph out of the Obsidian markdown so the
+// email can show a taste of the piece, not just the one-line excerpt. Skips
+// frontmatter-adjacent noise: callouts/blockquotes (`>`), headings, images,
+// embeds, rules, code fences and raw HTML. Strips wikilinks/links/emphasis to
+// plain text and caps the length at a sentence boundary.
+function firstParagraph(markdown) {
+  const paras = [];
+  let buf = [];
+  const flush = () => {
+    if (buf.length) paras.push(buf.join(" ").trim());
+    buf = [];
+  };
+  for (const raw of String(markdown).split(/\r?\n/)) {
+    const line = raw.trim();
+    if (!line) {
+      flush();
+      continue;
+    }
+    if (/^(>|#{1,6}\s|!?\[\[|!\[|-{3,}|\*{3,}|_{3,}|```|~~~|<)/.test(line)) {
+      flush();
+      continue;
+    }
+    buf.push(line);
+  }
+  flush();
+
+  const clean = (s) =>
+    s
+      .replace(/!?\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, (_, a, b) => b || a) // wikilinks
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1") // markdown links
+      .replace(/[*_`~]/g, "") // emphasis / code marks
+      .replace(/\s+/g, " ")
+      .trim();
+
+  const first = clean(paras.find((p) => clean(p).length >= 40) ?? "");
+  const MAX = 360;
+  if (first.length <= MAX) return first;
+  const cut = first.slice(0, MAX);
+  const stop = Math.max(
+    cut.lastIndexOf(". "),
+    cut.lastIndexOf("! "),
+    cut.lastIndexOf("? "),
+  );
+  return stop > MAX * 0.5 ? cut.slice(0, stop + 1) : cut.trimEnd() + "…";
+}
+
 async function loadPublishedEssays() {
   const entries = await readdir(ESSAYS_DIR, { withFileTypes: true });
   const essays = [];
@@ -53,7 +99,7 @@ async function loadPublishedEssays() {
     const slug = entry.name;
     const file = path.join(ESSAYS_DIR, slug, `${slug}.md`);
     if (!existsSync(file)) continue;
-    const { data } = matter(await readFile(file, "utf8"));
+    const { data, content } = matter(await readFile(file, "utf8"));
     if (!data.date) continue; // no date → not live yet
     const date = new Date(data.date);
     if (Number.isNaN(+date) || date > NOW) continue; // scheduled / future
@@ -61,6 +107,8 @@ async function loadPublishedEssays() {
       slug,
       title: String(data.title ?? slug),
       excerpt: String(data.excerpt ?? ""),
+      coverAlt: data.coverAlt ? String(data.coverAlt) : "",
+      opening: firstParagraph(content), // the essay's first real prose line
       date,
       url: `${SITE}/${slug}/`,
     });
@@ -83,27 +131,77 @@ async function saveLedger(set) {
 // Only email once the post is actually reachable on the site, so links never
 // 404. On a push this waits for the Cloudflare deploy; on the daily cron the
 // post is already live and this returns on the first try.
+// Returns the live page's HTML once reachable (so we can lift its og:image),
+// or null if it never came up.
 async function waitUntilLive(url, tries = 10, delayMs = 30000) {
   for (let i = 0; i < tries; i++) {
     try {
       const res = await fetch(url, { redirect: "follow" });
-      if (res.ok) return true;
+      if (res.ok) return await res.text();
     } catch {
       // network hiccup — retry
     }
     if (i < tries - 1) await new Promise((r) => setTimeout(r, delayMs));
   }
-  return false;
+  return null;
 }
 
+// The essay's cover is only resolved to a public, absolute URL inside Astro's
+// build, so we lift it from the rendered page's og:image rather than trying to
+// reconstruct the hashed `_astro/` path here. Handles both attribute orders.
+function extractOgImage(html) {
+  const m =
+    html.match(
+      /<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i,
+    ) ||
+    html.match(
+      /<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i,
+    );
+  return m ? m[1] : null;
+}
+
+// The broadcast body Kit drops into {{ message_content }}: an intro line, the
+// featured image, linked title, the excerpt + a taste of the opening, then the
+// read link. The intro lives here (not the Kit template) so the template stays
+// essay-agnostic — a hand-written broadcast won't inherit an "new essay" lead.
+// Styles are inlined here so the body holds up in clients that ignore the
+// template's <style> (Outlook), not only Gmail.
 function renderEmail(essay) {
-  const teaser = essay.excerpt
-    ? `<p>${escapeHtml(essay.excerpt)}</p>`
-    : `<p>A new essay is up on BUT. Honestly.</p>`;
-  return [
-    teaser,
-    `<p><a href="${essay.url}">Read the full essay →</a></p>`,
-  ].join("\n");
+  const parts = [
+    `<p style="margin:0 0 26px;">There's a new essay up on the site. Here's what it's about &mdash; and where to read the whole thing.</p>`,
+  ];
+
+  if (essay.image) {
+    parts.push(
+      `<p style="margin:0 0 26px;"><a href="${essay.url}" style="text-decoration:none;">` +
+        `<img src="${escapeHtml(essay.image)}" alt="${escapeHtml(essay.coverAlt || essay.title)}" width="512" ` +
+        `style="display:block; width:100%; max-width:512px; height:auto; border:1px solid rgba(33,29,24,0.14);"></a></p>`,
+    );
+  }
+
+  parts.push(
+    `<h2 style="margin:0 0 16px; font-family:'Newsreader',Georgia,serif; font-size:26px; line-height:1.25; font-weight:600; letter-spacing:-0.01em;">` +
+      `<a href="${essay.url}" style="color:#211d18; text-decoration:none;">${escapeHtml(essay.title)}</a></h2>`,
+  );
+
+  if (essay.excerpt) {
+    parts.push(`<p style="margin:0 0 20px;">${escapeHtml(essay.excerpt)}</p>`);
+  }
+  if (essay.opening) {
+    parts.push(`<p style="margin:0 0 26px;">${escapeHtml(essay.opening)}</p>`);
+  }
+  if (!essay.excerpt && !essay.opening) {
+    parts.push(
+      `<p style="margin:0 0 26px;">A new essay is up on BUT. Honestly.</p>`,
+    );
+  }
+
+  parts.push(
+    `<p style="margin:0;"><a href="${essay.url}" ` +
+      `style="color:#7e2a1e; font-weight:600; text-decoration:underline; text-underline-offset:2px;">Read the full essay &rarr;</a></p>`,
+  );
+
+  return parts.join("\n");
 }
 
 async function createBroadcast(essay, send = SEND) {
@@ -156,10 +254,12 @@ async function main() {
     console.log(
       `TEST: drafting "${essay.slug}" (ledger ignored & untouched, never sends).`,
     );
-    if (!(await waitUntilLive(essay.url))) {
+    const html = await waitUntilLive(essay.url);
+    if (!html) {
       console.error(`${essay.slug}: not reachable at ${essay.url}.`);
       process.exit(1);
     }
+    essay.image = extractOgImage(html);
     const ok = await createBroadcast(essay, false);
     console.log(
       ok
@@ -189,10 +289,12 @@ async function main() {
   console.log(`${fresh.length} new essay(s); mode=${SEND ? "SEND" : "DRAFT"}.`);
 
   for (const essay of fresh) {
-    if (!(await waitUntilLive(essay.url))) {
+    const html = await waitUntilLive(essay.url);
+    if (!html) {
       console.log(`· ${essay.slug}: not live yet — will retry next run.`);
       continue;
     }
+    essay.image = extractOgImage(html);
     if (await createBroadcast(essay)) {
       ledger.add(essay.slug);
       await saveLedger(ledger); // persist after each success (crash-safe)
