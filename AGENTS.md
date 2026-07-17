@@ -12,6 +12,12 @@ Node 24 (LTS) everywhere: `.nvmrc`, `engines`, and the GitHub workflows.
 Astro does not hot-reload `astro.config.mjs` — restart the dev server after
 changing it (including the markdown remark/rehype plugins).
 
+## Git
+
+Commit as work lands, but **do not push automatically**. Push only when the
+maintainer explicitly asks, or when wrapping up a session — local commits
+accumulate and go out as a batch. Do not push on every change.
+
 ## Tooling
 
 - `npm run images [-- <slug>]` — optimize essay source images in place:
