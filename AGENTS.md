@@ -8,6 +8,55 @@ astro dev --background
 
 Manage the background server with `astro dev stop`, `astro dev status`, and `astro dev logs`.
 
+Node 24 (LTS) everywhere: `.nvmrc`, `engines`, and the GitHub workflows.
+Astro does not hot-reload `astro.config.mjs` — restart the dev server after
+changing it (including the markdown remark/rehype plugins).
+
+## Tooling
+
+- `npm run images [-- <slug>]` — optimize essay source images in place:
+  resize to max 1376px, recompress, convert big opaque PNGs to JPEG (updating
+  Markdown references). Non-16:9 images are flagged and skipped. Idempotent
+  via `data/images-optimized.json`.
+- `npm run audio -- <slug>` — synthesize an essay narration (Gemini TTS on
+  Vertex AI) into a git-ignored MP3 beside the essay and insert an Obsidian
+  `![[<slug>.mp3]]` embed (plays in the vault; the site renders it as the
+  audio player). Listen first, then `npm run audio -- <slug> --commit`
+  uploads that MP3 to the STATIC R2 bucket — commit only uploads, it never
+  re-synthesizes. Env in `.env`: `GOOGLE_APPLICATION_CREDENTIALS` (Vertex
+  service-account JSON path), optional `VERTEX_REGION` / `VERTEX_MODEL`.
+  Per-essay overrides via `audio:` frontmatter (voice / style / pace).
+- `npm run related` — rebuild the semantic related-posts map (normally left
+  to the `related.yml` Action).
+- A pre-commit hook (`.githooks/`, wired by the `prepare` script) optimizes
+  staged essay images — blocking the commit on non-16:9 — and formats staged
+  code. Prettier deliberately ignores `data/` (generated) and `src/content`
+  (authored prose and Templater files); don't format those.
+
+## Images
+
+Essay images are local-first and committed to git — they are build inputs
+that Astro re-encodes to AVIF/WebP for the site. Audio MP3s are the
+opposite: git-ignored, uploaded to R2.
+
+- All essay images must be 16:9; ~1376px wide is the target (2× the reading
+  column). `npm run images` (and the pre-commit hook) enforce both.
+- Covers: `cover: ./file.jpg` in frontmatter. `originalCover` holds a
+  not-yet-migrated WordPress CDN URL; a local `cover` wins over it. Rendered
+  by `Picture.astro` as AVIF → WebP → JPEG.
+- Body images: plain Markdown `![alt](./file.jpg "caption")` — the quoted
+  title becomes a `<figcaption>`, rehype emits AVIF, and `image.layout`
+  makes it responsive. Never hand-write `<picture>` or `<img>` in content
+  for local images.
+- `coverAlt` must describe what is actually in the image, not repeat the
+  essay title or SEO copy.
+
+## Content
+
+- The site has no comments — never add "share in the comments" CTAs.
+- Publishing is date-driven (a future `date` schedules the essay); WIP lives
+  in `src/content/drafts/`, which is not a built collection.
+
 ## Styling
 
 Style with Tailwind utility classes directly in the markup. Do not add scoped
