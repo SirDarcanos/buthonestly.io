@@ -1,0 +1,7 @@
+# Cloudflare Pages custom headers. Astro fingerprints everything under /_astro/
+# (JS, CSS, images, fonts) with a content hash in the filename, so those files
+# are immutable — a change ships a new URL. Cache them for a year to avoid
+# needless revalidation. HTML is left on Pages' default (revalidate each load)
+# so new deploys show up immediately.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
