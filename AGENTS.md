@@ -40,7 +40,9 @@ that Astro re-encodes to AVIF/WebP for the site. Audio MP3s are the
 opposite: git-ignored, uploaded to R2.
 
 - All essay images must be 16:9; ~1376px wide is the target (2× the reading
-  column). `npm run images` (and the pre-commit hook) enforce both.
+  column). `npm run images` (and the pre-commit hook) enforce both — but only
+  for JPEG/PNG. GIFs and SVGs are exempt: the optimizer ignores them and they
+  need not be 16:9.
 - Covers: `cover: ./file.jpg` in frontmatter. `originalCover` holds a
   not-yet-migrated WordPress CDN URL; a local `cover` wins over it. Rendered
   by `Picture.astro` as AVIF → WebP → JPEG.
@@ -48,6 +50,10 @@ opposite: git-ignored, uploaded to R2.
   title becomes a `<figcaption>`, rehype emits AVIF, and `image.layout`
   makes it responsive. Never hand-write `<picture>` or `<img>` in content
   for local images.
+- Animated GIFs: reference them the same way (`![alt](./file.gif)`).
+  `rehype-image-format.mjs` skips the AVIF tag for GIFs (AVIF is single-frame),
+  so Astro emits a responsive **animated WebP** and animation is preserved.
+  SVGs are likewise served as-is.
 - `coverAlt` must describe what is actually in the image, not repeat the
   essay title or SEO copy.
 

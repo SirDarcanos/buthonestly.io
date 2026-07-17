@@ -21,6 +21,9 @@ const MANIFEST = "data/images-optimized.json";
 const MAX_WIDTH = 1376; // 2× the 688px body column; ≥ the cover's 1160 need
 const JPEG_QUALITY = 80;
 const PNG_TO_JPEG_MIN_BYTES = 100_000; // only big opaque PNGs become JPEG
+// Only JPEG/PNG are optimized here. GIFs (animated) and SVGs are deliberately
+// left alone — they're served as-is and exempt from the 16:9 rule (Astro emits
+// animated WebP for GIFs; see rehype-image-format.mjs).
 const IMAGE_RE = /\.(jpe?g|png)$/i;
 const RATIO_16_9 = 16 / 9;
 const RATIO_TOLERANCE = 0.02;
