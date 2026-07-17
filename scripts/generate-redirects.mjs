@@ -2,6 +2,7 @@
 // feed, download, and legacy URLs → their current paths.
 import { writeFile, mkdir } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
+import { STATIC_BASE, DOWNLOADS_BASE } from "../src/lib/cdn.mjs";
 
 const OUT = fileURLToPath(new URL("../public/_redirects", import.meta.url));
 
@@ -150,30 +151,37 @@ const SECTION_REDIRECTS = [
   ["/web/", "/section/web/"],
 ];
 
-/** Old WordPress Download-Monitor URLs → the static /downloads/ files
- *  (served from R2 via functions/downloads/[[path]].js). */
+/** Old WordPress Download-Monitor URLs → the files on the R2 downloads
+ *  subdomain (served directly by an R2 custom domain). */
 const DOWNLOAD_REDIRECTS = [
-  ["/download/eu-vat-rates/", "/downloads/eu-vat-rates.csv"],
+  ["/download/eu-vat-rates/", `${DOWNLOADS_BASE}/eu-vat-rates.csv`],
   [
     "/download/quill-meetings-templates/",
-    "/downloads/quill-meetings-templates.zip",
+    `${DOWNLOADS_BASE}/quill-meetings-templates.zip`,
   ],
   [
     "/download/cnn-mnist-use-case-tensorflow/",
-    "/downloads/cnn-mnist-use-case-tensorflow.zip",
+    `${DOWNLOADS_BASE}/cnn-mnist-use-case-tensorflow.zip`,
   ],
   [
     "/download/time-off-handover-plan/",
-    "/downloads/time-off-handover-plan.zip",
+    `${DOWNLOADS_BASE}/time-off-handover-plan.zip`,
   ],
   [
     "/download/dense-models-3d-print-cost-calculator/",
-    "/downloads/dense-models-3d-print-cost-calculator.zip",
+    `${DOWNLOADS_BASE}/dense-models-3d-print-cost-calculator.zip`,
   ],
   [
     "/download/distilroberta-emotion-analysis-dead-by-daylight-case-study/",
-    "/downloads/distilroberta-emotion-analysis-dead-by-daylight-case-study.zip",
+    `${DOWNLOADS_BASE}/distilroberta-emotion-analysis-dead-by-daylight-case-study.zip`,
   ],
+];
+
+/** The retired Pages Function paths → the R2 subdomains, so any published
+ *  /downloads/<file> or /static/<file> URL keeps working. */
+const R2_PASSTHROUGH_REDIRECTS = [
+  ["/downloads/*", `${DOWNLOADS_BASE}/:splat`],
+  ["/static/*", `${STATIC_BASE}/:splat`],
 ];
 
 /**
@@ -244,6 +252,7 @@ const body = [
   ...INTERNAL_REDIRECTS.map(formatRule),
   ...SECTION_REDIRECTS.map(formatRule),
   ...DOWNLOAD_REDIRECTS.map(formatRule),
+  ...R2_PASSTHROUGH_REDIRECTS.map(formatRule),
   ...LEGACY_REDIRECTS.map(formatRule),
 ].join("\n");
 
@@ -253,5 +262,5 @@ await mkdir(fileURLToPath(new URL("../public", import.meta.url)), {
 await writeFile(OUT, body, "utf8");
 
 console.log(
-  `Wrote ${OUT} — ${POST_REDIRECTS.length} post + ${INTERNAL_REDIRECTS.length} internal + ${SECTION_REDIRECTS.length} section + ${DOWNLOAD_REDIRECTS.length} download + ${LEGACY_REDIRECTS.length} legacy rules`,
+  `Wrote ${OUT} — ${POST_REDIRECTS.length} post + ${INTERNAL_REDIRECTS.length} internal + ${SECTION_REDIRECTS.length} section + ${DOWNLOAD_REDIRECTS.length} download + ${R2_PASSTHROUGH_REDIRECTS.length} R2 passthrough + ${LEGACY_REDIRECTS.length} legacy rules`,
 );

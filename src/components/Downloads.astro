@@ -1,8 +1,9 @@
 ---
 import Button from "./Button.astro";
+import { DOWNLOADS_BASE } from "../lib/cdn.mjs";
 
 // Renders an essay's `downloads` front-matter as button links (files served
-// from R2 at /downloads/<file>).
+// directly from R2 at <DOWNLOADS_BASE>/<file>).
 interface DownloadItem {
   file: string;
   label?: string;
@@ -25,7 +26,7 @@ const ext = (file: string) => file.split(".").pop()?.toUpperCase() ?? "FILE";
         {downloads.map((d) => (
           <li>
             <Button
-              href={`/downloads/${d.file}`}
+              href={`${DOWNLOADS_BASE}/${d.file}`}
               download
               icon="download"
               badges={[ext(d.file)]}

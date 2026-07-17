@@ -103,7 +103,7 @@ async function commitToR2(slug, mp3Path) {
   const bucket = await staticBucketName();
   await uploadToR2(bucket, `audio/${slug}.mp3`, mp3Path);
   console.log(
-    `Uploaded to R2: ${bucket}/audio/${slug}.mp3 — serves at /static/audio/${slug}.mp3`,
+    `Uploaded to R2: ${bucket}/audio/${slug}.mp3 — serves at https://static.buthonestly.io/audio/${slug}.mp3`,
   );
 }
 
@@ -161,6 +161,10 @@ async function uploadToR2(bucket, key, filePath) {
         "--remote",
         "--content-type",
         "audio/mpeg",
+        // Long-lived immutable cache — the R2 custom domain serves this
+        // directly, so there's no Worker to set headers.
+        "--cache-control",
+        "public, max-age=31536000, immutable",
       ],
       { stdio: "inherit" },
     );

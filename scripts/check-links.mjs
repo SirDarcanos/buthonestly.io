@@ -56,7 +56,8 @@ const norm = (p) => (p.endsWith("/") || /\.[a-z0-9]+$/i.test(p) ? p : `${p}/`);
 const issues = [];
 for (const { slug, body } of essays) {
   const clean = body.replace(/```[\s\S]*?```/g, ""); // ignore code blocks
-  for (const m of clean.matchAll(/\[\[([^\]|#]+)/g)) {
+  // `[[…]]` wikilinks, but not `![[…]]` embeds (audio players etc.).
+  for (const m of clean.matchAll(/(?<!!)\[\[([^\]|#]+)/g)) {
     const target = m[1].trim();
     if (!essaySlugs.has(target))
       issues.push([slug, "wikilink", `[[${target}]]`]);

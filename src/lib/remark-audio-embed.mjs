@@ -1,6 +1,8 @@
 // Rewrite Obsidian audio embeds `![[name.mp3]]` → an <audio> player served from
-// R2 at /static/audio/<name> (AudioPlayer enhances it). MUST run before
+// R2 at <STATIC_BASE>/audio/<name> (AudioPlayer enhances it). MUST run before
 // remark-wiki-links, which would otherwise eat the `[[...]]` and break it.
+import { STATIC_BASE } from "./cdn.mjs";
+
 const EMBED = /!\[\[([^\]|]+?\.(?:mp3|m4a|ogg|wav))(?:\|[^\]]*)?\]\]/gi;
 
 export default function remarkAudioEmbed() {
@@ -22,11 +24,11 @@ function visit(node) {
         if (m.index > last) {
           parts.push({ type: "text", value: child.value.slice(last, m.index) });
         }
-        // Basename only — the file is served flat under /static/audio/.
+        // Basename only — the file is served flat under <STATIC_BASE>/audio/.
         const file = m[1].trim().split("/").pop();
         parts.push({
           type: "html",
-          value: `<audio class="audio-enhance" src="/static/audio/${file}" data-audio-label="Listen instead of reading"></audio>`,
+          value: `<audio class="audio-enhance" src="${STATIC_BASE}/audio/${file}" data-audio-label="Listen instead of reading"></audio>`,
         });
         last = m.index + m[0].length;
       }
