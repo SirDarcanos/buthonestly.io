@@ -22,6 +22,10 @@ on:
         description: "run or seed"
         type: string
         default: "run"
+      test_slug:
+        description: "Draft ONE essay by slug (ignores + never writes the ledger, never sends). Blank for normal runs."
+        type: string
+        default: ""
 
 # Never let two runs email at the same time.
 concurrency:
@@ -56,6 +60,8 @@ jobs:
           # Set a NEWSLETTER_SITE_URL repo variable to the pages.dev URL until
           # the domain cutover; defaults to the production domain.
           SITE_URL: ${{ vars.NEWSLETTER_SITE_URL || 'https://buthonestly.io' }}
+          # Blank on push/cron; set only via the dispatch UI to draft one essay.
+          TEST_SLUG: ${{ github.event.inputs.test_slug }}
 
       - name: Record sends
         run: |

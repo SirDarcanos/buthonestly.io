@@ -11,6 +11,10 @@
 // KIT_SEND=true actually sends; anything else creates a DRAFT in Kit (safe for
 // testing — you review and send it by hand). A committed ledger
 // (data/newsletter-sent.json) guarantees each essay is emailed at most once.
+//
+// TEST_SLUG=<slug> — draft exactly that one essay as a test: ignores the ledger
+// and never writes it, and always drafts (never sends). Set it from the
+// newsletter.yml dispatch UI to exercise the pipeline without side effects.
 
 import { readFile, readdir, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
@@ -102,7 +106,7 @@ function renderEmail(essay) {
   ].join("\n");
 }
 
-async function createBroadcast(essay) {
+async function createBroadcast(essay, send = SEND) {
   const iso = new Date().toISOString();
   const body = {
     subject: essay.title,
@@ -110,7 +114,7 @@ async function createBroadcast(essay) {
     description: `New essay: ${essay.title}`,
     public: false,
     published_at: iso,
-    send_at: SEND ? iso : null, // null = draft; timestamp = send now
+    send_at: send ? iso : null, // null = draft; timestamp = send now
     preview_text: (essay.excerpt || essay.title).slice(0, 150),
     subscriber_filter: [{ all: [], any: null, none: null }], // everyone
   };
@@ -134,6 +138,36 @@ async function createBroadcast(essay) {
 
 async function main() {
   const essays = await loadPublishedEssays();
+
+  // Test path: draft exactly one essay by slug, ignoring the ledger and never
+  // writing it, and always as a DRAFT (never emails). For exercising the
+  // pipeline from the workflow_dispatch UI without touching the back catalogue.
+  const testSlug = process.env.TEST_SLUG?.trim();
+  if (testSlug) {
+    const essay = essays.find((e) => e.slug === testSlug);
+    if (!essay) {
+      console.error(`TEST_SLUG "${testSlug}" is not a published essay.`);
+      process.exit(1);
+    }
+    if (!API_KEY) {
+      console.error("KIT_API_KEY is not set — cannot create the test draft.");
+      process.exit(1);
+    }
+    console.log(
+      `TEST: drafting "${essay.slug}" (ledger ignored & untouched, never sends).`,
+    );
+    if (!(await waitUntilLive(essay.url))) {
+      console.error(`${essay.slug}: not reachable at ${essay.url}.`);
+      process.exit(1);
+    }
+    const ok = await createBroadcast(essay, false);
+    console.log(
+      ok
+        ? `· ${essay.slug}: draft created — review it in Kit.`
+        : `· ${essay.slug}: draft failed.`,
+    );
+    process.exit(ok ? 0 : 1);
+  }
 
   if (MODE === "seed") {
     await saveLedger(new Set(essays.map((e) => e.slug)));
