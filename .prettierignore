@@ -9,3 +9,6 @@ data
 
 # Authored content + Obsidian/Templater files — not code, don't reflow
 src/content
+
+# Hand-tuned Kit email template — inline styles must not be reflowed
+scripts/kit-newsletter-template.html
