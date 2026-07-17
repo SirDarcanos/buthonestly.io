@@ -1,0 +1,27 @@
+name: Scheduled rebuild
+
+# Future-dated essays are committed ahead of time and only appear once the site
+# is rebuilt on or after their date (getPublishedEssays keeps date <= now).
+# Nothing else forces a daily build, so this pings a Cloudflare Pages deploy
+# hook each morning — 30 min before the newsletter cron (13:00 UTC) so a newly
+# live essay is up before notify-subscribers.mjs checks its URL and emails.
+
+on:
+  schedule:
+    - cron: "30 12 * * *" # daily 12:30 UTC, ahead of the 13:00 newsletter run
+  workflow_dispatch: {}
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Cloudflare Pages deploy
+        env:
+          DEPLOY_HOOK_URL: ${{ secrets.CF_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$DEPLOY_HOOK_URL" ]; then
+            echo "::error::CF_DEPLOY_HOOK_URL secret is not set — create a Pages deploy hook and add it."
+            exit 1
+          fi
+          curl -fsS -X POST "$DEPLOY_HOOK_URL" -o /dev/null \
+            -w "Triggered Cloudflare Pages deploy: HTTP %{http_code}\n"
