@@ -13,9 +13,10 @@ import Label from "../components/Label.astro";
     <h1 class="mt-3 text-4xl">Privacy</h1>
 
     <p class="mt-5">
-      The short version: this site doesn't track you, sets no cookies, and
-      collects nothing that could identify you. There's no consent banner
-      because there's nothing to consent to.
+      The short version: this site doesn't track you, sets no cookies, and —
+      unless you choose to subscribe to the newsletter — collects nothing that
+      could identify you. There's no consent banner because there's nothing to
+      consent to.
     </p>
 
     <h2 class="mt-12 text-2xl">Analytics</h2>
@@ -36,6 +37,14 @@ import Label from "../components/Label.astro";
     </ul>
 
     <p class="mt-4">
+      I also record a few anonymous interaction events — such as a newsletter
+      signup, a download, an audio play, or a search — so I can see which
+      features actually get used. These are aggregate counts only, with nothing
+      that identifies you and no content (your search terms and email are never
+      part of an event).
+    </p>
+
+    <p class="mt-4">
       IP addresses are processed only briefly — for security and to generate an
       anonymous, hashed visitor signature — and are never stored with the
       analytics data or included in any export. Visitors in the EU have their
@@ -45,6 +54,20 @@ import Label from "../components/Label.astro";
         target="_blank"
         rel="noopener">usefathom.com/data</a
       >.
+    </p>
+
+    <h2 class="mt-12 text-2xl">Newsletter</h2>
+    <p class="mt-4">
+      The newsletter is entirely optional and opt-in. If you subscribe, your
+      email address is stored and processed by <a
+        href="https://kit.com/privacy"
+        target="_blank"
+        rel="noopener">Kit</a
+      > (formerly ConvertKit), the service that manages the list and sends the emails,
+      for the sole purpose of sending you new essays and the occasional tool. It's
+      double opt-in — you confirm before anything is sent — and every email has a
+      one-click unsubscribe. I never sell or share your address, and you can leave
+      anytime.
     </p>
 
     <h2 class="mt-12 text-2xl">Cookies</h2>
@@ -59,11 +82,20 @@ import Label from "../components/Label.astro";
       browser storage removes it.
     </p>
 
-    <h2 class="mt-12 text-2xl">Hosting</h2>
+    <h2 class="mt-12 text-2xl">In-browser tools</h2>
     <p class="mt-4">
-      The site is static and served by Cloudflare Pages. Like any web host,
-      Cloudflare may transiently process request data (such as IP addresses) to
-      deliver pages and guard against abuse, under its own policies.
+      The voice generator runs entirely on your device. The text you type and
+      the audio it produces never leave your browser — there's no server doing
+      the work. The one-time model download comes from a public CDN, which sees
+      only the request (as any file download would), not your text or audio.
+    </p>
+
+    <h2 class="mt-12 text-2xl">Hosting &amp; files</h2>
+    <p class="mt-4">
+      The site is static and served by Cloudflare Pages, and downloads and media
+      are served from Cloudflare too. Like any web host, Cloudflare may
+      transiently process request data (such as IP addresses) to deliver files
+      and guard against abuse, under its own policies.
     </p>
 
     <h2 class="mt-12 text-2xl">Questions</h2>
