@@ -2,6 +2,7 @@
 import Head from "../components/Head.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import BackToTop from "../components/BackToTop.astro";
 
 import { type Post } from "../types.ts";
 
@@ -56,5 +57,7 @@ const { title, description, type, article, noindex } = Astro.props;
 
     {/* FOOTER */}
     <Footer />
+
+    <BackToTop />
   </body>
 </html>
