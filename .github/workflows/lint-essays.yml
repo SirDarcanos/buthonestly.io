@@ -1,0 +1,37 @@
+name: Lint essays
+
+# Advisory style-guide lint (scripts/lint-essay.mjs) on changed essays/drafts.
+# Prints FAILs/WARNs to the run log; never blocks — style is the author's call.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/content/essays/**/*.md"
+      - "src/content/drafts/**/*.md"
+  workflow_dispatch: {}
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # need history to diff against the previous commit
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      - name: Lint changed essays (advisory)
+        run: |
+          BASE="${{ github.event.before }}"
+          if [ -z "$BASE" ] || ! git cat-file -e "$BASE^{commit}" 2>/dev/null; then
+            RANGE="HEAD~1 HEAD"
+          else
+            RANGE="$BASE ${{ github.sha }}"
+          fi
+          FILES=$(git diff --name-only $RANGE -- src/content/essays src/content/drafts | grep '\.md$' || true)
+          if [ -z "$FILES" ]; then echo "No essay changes to lint."; exit 0; fi
+          echo "Linting changed essays:"; echo "$FILES"
+          node scripts/lint-essay.mjs $FILES --quiet

@@ -19,6 +19,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "check:links": "node scripts/check-links.mjs",
+    "lint:essay": "node scripts/lint-essay.mjs",
     "lint": "prettier --check . && node scripts/check-links.mjs"
   },
   "dependencies": {
