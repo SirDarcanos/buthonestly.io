@@ -115,6 +115,10 @@ I confirmed it was still what I wanted, submitted it, and Telex took it from the
 
 ![Telex creating WordPress blocks automatically](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/telex-creating-blocks-wordpress.jpeg?resize=830%2C440&quality=81&ssl=1 "Telex acknowledging the prompt and creating my custom WordPress block.")
 
+And here is the working Gutenberg block:
+
+![](wordpress-block-example.gif)
+
 If you were to do this by hand, you would go through all the usual steps: set up a plugin, configure build tooling, register the block, add attributes and controls, connect an AJAX or REST handler, and only then start polishing the UX. Telex effectively compresses that entire “WordPress create a block” journey into one prompt and a few iterations.
 
 The result is not sacred. You can modify the code directly before finalizing the plugin, download the zip and inspect it, and modify it after testing it on your site. But you start from a working baseline instead of an empty folder, which is the whole point of vibe coding.
