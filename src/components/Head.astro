@@ -6,8 +6,6 @@ import SEO from "../components/SEO.astro";
 import { Font } from "astro:assets";
 import { type Post } from "../types.ts";
 
-import favicon from "../assets/favicon.svg?url";
-
 interface Props {
   title: string;
   description?: string;
@@ -22,7 +20,7 @@ const { title, description, type, article, noindex } = Astro.props;
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="icon" type="image/svg+xml" href={favicon} />
+  <link rel="icon" type="image/webp" href="/favicon.webp" />
   <link
     rel="alternate"
     type="application/rss+xml"
