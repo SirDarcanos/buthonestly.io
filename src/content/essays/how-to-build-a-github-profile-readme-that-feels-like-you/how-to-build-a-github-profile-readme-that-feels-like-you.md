@@ -11,8 +11,9 @@ tags:
   - Automation
   - Creativity
   - Workflow
-coverAlt: "A screenshot of Nicola Mustone’s GitHub profile with a custom README reading ‘Hi, I’m Nico — Leader. Writer. Builder.’ and a grid of technology badges."
-originalCover: https://buthonestly.io/wp-content/uploads/2025/11/sirdarcanos-github-readme.jpeg
+coverAlt: A screenshot of Nicola Mustone’s GitHub profile with a custom README reading ‘Hi, I’m Nico — Leader. Writer. Builder.’ and a grid of technology badges.
+originalCover:
+cover: custom-github-profile.jpg
 ---
 
 > [!summary]- Quick Summary
@@ -67,7 +68,7 @@ For example, here’s how I start mine:
 
 This uses [readme-typing-svg](https://readme-typing-svg.demolab.com/demo/) to animate a few short lines of text and badges for my links (more on this below). It adds personality without clutter. This is how it looks like:
 
-![SirDarcanos' GitHub header](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/sirdarcanos-github-header.jpg?resize=900%2C226&quality=81&ssl=1)
+![SirDarcanos' GitHub profile header](profile-header.jpg)
 
 You could also:
 
@@ -84,7 +85,7 @@ They’re powered by [Shields.io](https://shields.io) and support logos, colors,
 
 Example (from my profile):
 
-```xml
+```markdown
 <p align="center">
   <a href="https://buthonestly.io/" target="_blank"><img alt="Website" src="https://img.shields.io/badge/Blog-8440dd.svg?&style=for-the-badge&logo=wordpress&logoColor=white" /></a>
   <a href="https://www.linkedin.com/in/nicolamustone/" target="_blank"><img alt="LinkedIn" src="https://img.shields.io/badge/LinkedIn-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white" /></a>
@@ -130,7 +131,7 @@ A visual “tech stack” section is a great middle ground between design and su
 
 Example snippet:
 
-```xml
+```markdown
 <p>
   <img alt="Python" src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" />
   <img alt="TensorFlow" src="https://img.shields.io/badge/TensorFlow-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white" />
@@ -145,7 +146,7 @@ You can use badges, plain lists, or even icons. Some designers prefer a visual g
 
 If you want to highlight versatility, group tools by category:
 
-```bash
+```markdown
 **Languages:** Python, PHP, JavaScript
 **Frameworks:** WordPress, FastAPI
 **Tools:** Docker, Jupyter, GitHub Actions
@@ -159,7 +160,7 @@ This is where your README can evolve into something _alive_. Using GitHub Action
 
 In my profile, I use these for sections like “Programming,” “Leadership,” and “Web Tech”:
 
-```bash
+```markdown
 #### 🧠 Programming
 <ul>
 <!-- PROGRAMMING:START -->
@@ -235,7 +236,7 @@ Even a single sentence can shift your profile from “technical” to “memorab
 
 Example (mine):
 
-```bash
+```markdown
 ### Outside of work
 When I’m not working, I’m probably:
 - Running long-form *Dungeons & Dragons* campaigns

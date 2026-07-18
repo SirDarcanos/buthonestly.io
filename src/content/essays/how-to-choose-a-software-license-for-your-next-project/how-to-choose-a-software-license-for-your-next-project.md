@@ -10,8 +10,10 @@ categories:
 tags:
   - Productivity
   - Workflow
-coverAlt: "A public sculpture of red and grey blocks arranged to spell ‘MIT’ outside a concrete building."
-originalCover: https://buthonestly.io/wp-content/uploads/2025/11/choose-software-license.jpg
+coverAlt: A public sculpture of red and grey blocks arranged to spell ‘MIT’ outside a concrete building.
+originalCover:
+cover: mit-software-license.jpg
+coverCaption: Photo by Bernd Dittrich on Unsplash
 ---
 
 > [!summary]- Quick Summary
@@ -36,12 +38,10 @@ Licensing your software early prevents headaches later. It protects your intenti
 
 This guide explains how to choose a software license that fits your goals, whether you’re sharing open-source tools or protecting private projects.
 
-**Disclaimer**
-
-Everything shared in this essay reflects **my own opinions and experience**. I’m speaking solely on my behalf — **not on behalf of Automattic Inc.** or any of its brands.
-
-This essay provides **general educational information** about software licensing based on common practices in the open-source community. **It is not legal advice** and should not be relied upon as such. Software licensing involves complex legal considerations that vary by jurisdiction. Before making licensing decisions that could affect your legal rights or obligations, **consult a qualified attorney** specializing in intellectual property law.
-
+> [!disclaimer]
+> Everything shared in this essay reflects **my own opinions and experience**. I’m speaking solely on my behalf — **not on behalf of Automattic Inc.** or any of its brands.
+> 
+> This essay provides **general educational information** about software licensing based on common practices in the open-source community. **It is not legal advice** and should not be relied upon as such. Software licensing involves complex legal considerations that vary by jurisdiction. Before making licensing decisions that could affect your legal rights or obligations, **consult a qualified attorney** specializing in intellectual property law.
 ## What a Software License Really Does
 
 A software license is a legal framework that answers three questions:
@@ -53,8 +53,6 @@ A software license is a legal framework that answers three questions:
 If you share your code publicly, a license is how you control the answers.
 
 Not all open source is the same. Some licenses encourage maximum freedom, while others enforce openness. That’s where the two broad categories come in: **permissive** and **copyleft**.
-
-![An open book that reads Permissing and Copyleft on the pages](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/two-open-books-labeled-permissive-and-copyleft-minimalist-provides-visual-breathing.png?resize=1024%2C768&quality=80&ssl=1)
 
 **Permissive licenses** (like MIT or Apache 2.0) let others do almost anything as long as they give credit. **Copyleft licenses** (like GPL) generally allow reuse only if derivative works also stay open-source
 
@@ -275,7 +273,7 @@ If your project is published as a package or library, always declare the license
 
 **For npm (JavaScript)**:
 
-```text
+```json
 {
   "name": "my-project",
   "license": "MIT"
@@ -284,13 +282,13 @@ If your project is published as a package or library, always declare the license
 
 **For Python (setup.cfg or pyproject.toml)**:
 
-```text
+```python
 license = "MIT"
 ```
 
 **For Composer (PHP)**:
 
-```text
+```json
 {
   "license": "GPL-2.0-or-later"
 }
@@ -329,7 +327,7 @@ Even with the clearest license, infringements happen. Maybe someone copied your 
 
 Here’s how to handle it, calmly, methodically, and without burning bridges.
 
-![Software license violation](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/software-license-violation.jpg?resize=999%2C562&quality=81&ssl=1 "Photo by The New York Public Library on Unsplash")
+![Black and white lithograph of diverse individuals, including a nun and a man using a magnifying glass, reading intensely at a library table.](software-license-violations.jpg "Photo by The New York Public Library on Unsplash")
 
 ### Step 1. Confirm it’s really a violation.
 
