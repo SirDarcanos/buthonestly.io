@@ -166,8 +166,9 @@
     @apply text-ink border-accent my-10 border-l-2 font-light italic;
     @apply leading-snug tracking-tight;
     @apply text-[clamp(var(--text-2xl),1.25rem+1.5vw,var(--text-4xl))];
-    margin-inline: -2.5rem;
-    padding: 0 2.5rem;
+    /* Bleeds to the column edge, so the negative margin has to track the
+       container's padding — otherwise it overflows the viewport on mobile. */
+    @apply -mx-6 px-6 md:-mx-10 md:px-10;
   }
   .post-content blockquote p {
     @apply mb-0;

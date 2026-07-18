@@ -67,19 +67,22 @@ const regularPosts = isFirstPage ? page.data.slice(2) : page.data;
             year: "numeric",
           });
 
+          // Meta leads on mobile — date left, read time right — matching the
+          // home cards. From sm it moves back beside the title as a right-hand
+          // column, hence the order swap.
           return (
-            <article class="border-line flex items-center gap-10 border-t py-7">
-              <div class="flex-1">
+            <article class="border-line flex flex-col gap-3 border-t py-7 sm:flex-row sm:items-center sm:gap-10">
+              <div class="meta flex items-center justify-between gap-4 sm:order-2 sm:flex-none sm:flex-col sm:items-end sm:gap-0 sm:text-right">
+                <p class="text-accent">{postDate}</p>
+                <ReadTime content={post.body} />
+              </div>
+              <div class="sm:order-1 sm:flex-1">
                 <h3>
                   <a href={post.url} class="text-ink hover:text-accent">
                     {post.title}
                   </a>
                 </h3>
                 <p class="excerpt mt-3 text-base">{post.excerpt}</p>
-              </div>
-              <div class="meta text-right">
-                <p class="text-accent">{postDate}</p>
-                <ReadTime content={post.body} />
               </div>
             </article>
           );

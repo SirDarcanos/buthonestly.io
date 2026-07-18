@@ -14,7 +14,12 @@ const { post } = Astro.props;
 <article class="space-y-3">
   {
     post.cover ? (
-      <Picture src={post.cover} alt={post.title} width={516} height={344} />
+      <Picture
+        src={post.cover}
+        alt={post.featuredImageAlt ?? ""}
+        width={516}
+        height={344}
+      />
     ) : null
   }
   <p class="meta mt-6">
@@ -28,11 +33,11 @@ const { post } = Astro.props;
       }</span
     >{" "}
     &middot; <ReadTime content={post.body} />
-    <h2>
-      <a href={post.url} class="text-ink hover:text-accent">
-        {post.title}
-      </a>
-    </h2>
-    <p class="excerpt text-base">{post.excerpt}</p>
   </p>
+  <h2>
+    <a href={post.url} class="text-ink hover:text-accent">
+      {post.title}
+    </a>
+  </h2>
+  <p class="excerpt text-base">{post.excerpt}</p>
 </article>

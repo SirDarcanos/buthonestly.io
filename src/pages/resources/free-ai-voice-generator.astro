@@ -156,7 +156,7 @@ const blendSample = {
       </div>
 
       <div class="flex flex-wrap items-end gap-4">
-        <div class="flex w-24 flex-col gap-1.5">
+        <div class="flex w-[calc(50%-0.5rem)] flex-col gap-1.5 sm:w-24">
           <label
             for="bhktw-blend-weight"
             class="text-muted font-sans text-[0.7rem] font-semibold tracking-[0.12em] uppercase"
@@ -174,7 +174,7 @@ const blendSample = {
             disabled
           />
         </div>
-        <div class="flex w-24 flex-col gap-1.5">
+        <div class="flex w-[calc(50%-0.5rem)] flex-col gap-1.5 sm:w-24">
           <label
             for="bhktw-speed"
             class="text-muted font-sans text-[0.7rem] font-semibold tracking-[0.12em] uppercase"
@@ -191,10 +191,14 @@ const blendSample = {
             class="border-line bg-background text-ink w-full border px-3 py-2.5 font-sans text-base disabled:opacity-50"
           />
         </div>
+        {
+          /* Full width on its own row until sm, where it returns to the end of
+            the field row. */
+        }
         <button
           data-bhktw="generate"
           type="button"
-          class="bg-accent text-background ml-auto cursor-pointer border-0 px-6 py-3 font-sans text-[0.9rem] font-semibold tracking-[0.02em] transition-opacity hover:opacity-90 disabled:cursor-default disabled:opacity-50"
+          class="bg-accent text-background w-full cursor-pointer border-0 px-6 py-3 font-sans text-[0.9rem] font-semibold tracking-[0.02em] transition-opacity hover:opacity-90 disabled:cursor-default disabled:opacity-50 sm:ml-auto sm:w-auto"
         >
           Generate
         </button>

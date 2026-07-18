@@ -116,7 +116,9 @@ const publishDate = new Date(post.date);
         <ul>
           {related.map((rel) => (
             <li class="border-line border-t py-4">
-              <div class="flex items-start">
+              {/* Stacked rows on narrow screens — side by side the read time
+                  steals width and forces the title to wrap early. */}
+              <div class="flex flex-col gap-1 sm:flex-row sm:items-start sm:gap-4">
                 <h3 class="flex-1">
                   <a
                     href={rel.url}
@@ -126,7 +128,7 @@ const publishDate = new Date(post.date);
                     {rel.title}
                   </a>
                 </h3>
-                <p class="meta mt-2 text-right">
+                <p class="meta flex-none sm:mt-2 sm:text-right">
                   <ReadTime content={rel.body} />
                 </p>
               </div>

@@ -10,28 +10,22 @@ const categoryLinks = categories.map((category) => ({
   href: `/section/${category.slug}/`,
   label: category.name,
 }));
+// Shared by the inline desktop nav and the collapsed mobile menu.
+const navLinks = [{ href: "/", label: "Home" }, ...categoryLinks];
 ---
 
 <header id="header" class="mx-auto w-full max-w-6xl px-6 focus:outline-none">
   <div class="border-ink flex items-center gap-8 border-b py-5">
     <Logo priority />
-    <span class="elegant hidden md:inline-block"
+    <span class="elegant hidden lg:inline-block"
       >Clarity without the comfort.</span
     >
     <Divider />
+    {/* Full nav from lg up; below that it collapses into the menu button. */}
     <Nav
-      class="font-medium"
+      class="hidden font-medium lg:flex"
       linkClass="text-muted"
-      links={[
-        {
-          href: "/",
-          label: "Home",
-        },
-        ...categoryLinks.map((link) => ({
-          href: link.href,
-          label: link.label,
-        })),
-      ]}
+      links={navLinks}
     />
     <button
       type="button"
@@ -52,6 +46,39 @@ const categoryLinks = categories.map((category) => ({
         <path d="m21 21-4.3-4.3"></path>
       </svg>
     </button>
+    <button
+      type="button"
+      id="menu-open"
+      aria-label="Menu"
+      aria-expanded="false"
+      aria-controls="mobile-nav"
+      class="text-muted hover:text-accent flex-none cursor-pointer transition-colors lg:hidden"
+    >
+      <svg
+        class="size-5"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        aria-hidden="true"
+      >
+        <path id="menu-bars" d="M4 7h16M4 12h16M4 17h16"></path>
+        <path id="menu-x" class="hidden" d="M6 6l12 12M18 6 6 18"></path>
+      </svg>
+    </button>
+  </div>
+
+  {
+    /* Collapsed nav. `hidden` is toggled in JS; `lg:hidden` keeps it out of the
+      way once the inline nav takes over. */
+  }
+  <div id="mobile-nav" class="hidden lg:hidden">
+    <Nav
+      class="border-line flex-col gap-4 border-b py-5"
+      linkClass="text-muted"
+      links={navLinks}
+    />
   </div>
 </header>
 
@@ -315,6 +342,36 @@ const categoryLinks = categories.map((category) => ({
       if (e.key === "/" && !typing && overlay.classList.contains("hidden")) {
         e.preventDefault();
         open();
+      }
+    });
+  })();
+
+  /* Collapsed nav toggle (below md). */
+  (function () {
+    const btn = document.getElementById("menu-open");
+    const nav = document.getElementById("mobile-nav");
+    if (!btn || !nav) return;
+    const bars = document.getElementById("menu-bars");
+    const ex = document.getElementById("menu-x");
+
+    function setOpen(open) {
+      nav.classList.toggle("hidden", !open);
+      bars.classList.toggle("hidden", open);
+      ex.classList.toggle("hidden", !open);
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+    }
+
+    btn.addEventListener("click", () =>
+      setOpen(nav.classList.contains("hidden")),
+    );
+    // Following a link should leave the menu closed behind you.
+    nav.addEventListener("click", (e) => {
+      if (e.target.closest("a")) setOpen(false);
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !nav.classList.contains("hidden")) {
+        setOpen(false);
+        btn.focus();
       }
     });
   })();
