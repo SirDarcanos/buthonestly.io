@@ -21,7 +21,7 @@ accumulate and go out as a batch. Do not push on every change.
 ## Tooling
 
 - `npm run images [-- <slug>]` — optimize essay source images in place:
-  resize to max 1376px, recompress, convert big opaque PNGs to JPEG (updating
+  resize to max 1376px, recompress, convert opaque images to JPEG (updating
   Markdown references). Non-16:9 images are flagged and skipped. Idempotent
   via `data/images-optimized.json`.
 - `npm run audio -- <slug>` — synthesize an essay narration (Gemini TTS on
@@ -52,10 +52,11 @@ opposite: git-ignored, uploaded to R2.
 - **Body images can be any shape** — a wide dataset strip or a tall diagram is
   fine. Only width matters: anything over 1376px is resized down, and anything
   narrower than the 688px reading column gets a non-blocking note.
-- **WebP/AVIF/TIFF/BMP are converted to JPEG** (or PNG when they carry
-  transparency), and the Markdown/frontmatter references are rewritten to
-  match. Animated sources are skipped rather than flattened. GIFs and SVGs are
-  exempt entirely — the optimizer ignores them and they need not be 16:9.
+- **Opaque images are converted to JPEG** — PNG, WebP, AVIF, TIFF, BMP, at any
+  size — and the Markdown/frontmatter references are rewritten to match. Only
+  transparency keeps a file as PNG (JPEG has no alpha). Animated sources are
+  skipped rather than flattened. GIFs and SVGs are exempt entirely — the
+  optimizer ignores them and they need not be 16:9.
 - Covers: `cover: ./file.jpg` in frontmatter. `originalCover` holds a
   not-yet-migrated WordPress CDN URL; a local `cover` wins over it. Rendered
   by `Picture.astro` as AVIF → WebP → JPEG.

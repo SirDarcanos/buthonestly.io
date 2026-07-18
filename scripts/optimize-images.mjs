@@ -23,7 +23,6 @@ import { exists, die, resolveEssay, ESSAY_ROOTS } from "./lib/fs-util.mjs";
 const MANIFEST = "data/images-optimized.json";
 const MAX_WIDTH = 1376; // 2× the 688px body column; ≥ the cover's 1160 need
 const JPEG_QUALITY = 80;
-const PNG_TO_JPEG_MIN_BYTES = 100_000; // only big opaque PNGs become JPEG
 const COLUMN_WIDTH = 688; // the reading column — body images below this look soft
 // Formats handled here. WebP/AVIF/TIFF/BMP are normalized to JPEG (or PNG when
 // they carry transparency) so essays ship two predictable source formats.
@@ -126,7 +125,6 @@ async function coverBasename(dir) {
 async function processFile(abs, rel, manifest) {
   const buf = await readFile(abs);
   const inputHash = sha256(buf);
-  if (manifest[rel] === inputHash) return { skipped: true };
 
   const meta = await sharp(buf).metadata();
   const { width = 0, height = 0 } = meta;
@@ -150,17 +148,22 @@ async function processFile(abs, rel, manifest) {
   const curExt = path.extname(abs).toLowerCase();
   const curIsJpeg = curExt === ".jpg" || curExt === ".jpeg";
 
-  // Transparency survives as PNG; everything else normalizes to JPEG. A PNG
-  // only becomes JPEG once it's big enough to be worth it (existing rule).
-  let targetExt;
-  if (alpha) targetExt = ".png";
-  else if (meta.format === "png")
-    targetExt = buf.length >= PNG_TO_JPEG_MIN_BYTES ? ".jpg" : ".png";
-  else targetExt = ".jpg";
+  // Everything opaque normalizes to JPEG, whatever it started as and whatever
+  // it weighs. Only transparency keeps a file as PNG — JPEG has no alpha, so
+  // converting one would flatten it onto a black background.
+  const targetExt = alpha ? ".png" : ".jpg";
 
   const toJpeg = targetExt === ".jpg";
   const renaming = toJpeg ? !curIsJpeg : curExt !== targetExt;
   const resized = width > MAX_WIDTH;
+
+  // Idempotence check, deliberately AFTER the format decision: a file already
+  // recorded under older rules (say a small PNG, back when only big ones became
+  // JPEG) still needs converting. Skipping on the hash alone would silently
+  // leave it — and report "unchanged" — forever.
+  if (!renaming && manifest[rel] === inputHash) {
+    return { skipped: true, narrow: !isCover && width < COLUMN_WIDTH, width };
+  }
 
   let pipeline = sharp(buf, { failOn: "none" }).rotate();
   if (resized) pipeline = pipeline.resize({ width: MAX_WIDTH });
