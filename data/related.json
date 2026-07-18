@@ -170,8 +170,8 @@
   "make-product-attributes-linkable-woocommerce": [
     "improve-woocommerce-related-products-recommendations",
     "creating-a-custom-add-to-cart-link-woocommerce",
-    "woocommerce-attributes-vs-variations",
     "woocommerce-password-strength-meter-checkout",
+    "woocommerce-attributes-vs-variations",
     "woocommerce-cli-product-management",
     "disable-gtin-requirements-non-eligible-woocommerce-products"
   ],
@@ -274,8 +274,8 @@
   "woocommerce-attributes-vs-variations": [
     "do-you-trust-your-instincts-making-smart-wordpress-choices",
     "creating-a-custom-add-to-cart-link-woocommerce",
-    "make-product-attributes-linkable-woocommerce",
     "improve-woocommerce-related-products-recommendations",
+    "make-product-attributes-linkable-woocommerce",
     "edit-orders-woocommerce",
     "woocommerce-cli-product-management"
   ],
@@ -290,9 +290,9 @@
   "woocommerce-eu-vat-number-setup": [
     "delete-expired-coupons-automatically-woocommerce",
     "woocommerce-password-strength-meter-checkout",
-    "make-product-attributes-linkable-woocommerce",
     "creating-a-custom-add-to-cart-link-woocommerce",
     "disable-gtin-requirements-non-eligible-woocommerce-products",
+    "make-product-attributes-linkable-woocommerce",
     "improve-woocommerce-related-products-recommendations"
   ],
   "woocommerce-password-strength-meter-checkout": [
