@@ -11,9 +11,10 @@ tags:
   - ADHD
   - Team Building
   - Workflow
-coverAlt: "A young child in a blue polka-dot shirt looks through a toy telescope indoors."
+coverAlt: A young child in a blue polka-dot shirt looks through a toy telescope indoors.
 coverCaption: Photo by Joseph Rosales on Unsplash
-originalCover: https://buthonestly.io/wp-content/uploads/2025/11/learning-care-without-feeling.jpg
+originalCover:
+cover: learning-to-care.jpg
 ---
 
 > [!summary]- Quick Summary
@@ -33,7 +34,7 @@ Living with ADHD, emotional regulation can be unpredictable—it’s not distrac
 
 That’s how I learned to care without feeling it.
 
-![an empty chair and an empty desk in an empty room](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/a-minimalist-image-of-stillness-an-empty-chair-a.png?resize=1024%2C768&quality=80&ssl=1)
+![All-white minimalist workspace featuring a computer, desk lamp, and rolling chair against a plain wall.](minimalist-desk.jpg)
 
 ## Practicing Curiosity
 
@@ -44,9 +45,6 @@ When I don’t feel engaged, I start small. I ask one question. Then another. So
 Every once in a while, one of those questions sparks something real.
 
 Over time, I realized that curiosity in ADHD works like a feedback loop: the more I engage, the more interest returns. It’s a mechanical entry point that becomes genuine the moment it connects to something alive in another person.
-
-![a looping visual of ripples in water](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/a-looping-visual-of-ripples-in-water.png?resize=1024%2C768&quality=80&ssl=1)
-
 ## Leadership and Adaptation
 
 In leadership, I’ve learned to value both reliability and change — a kind of leadership empathy that balances consistency with flexibility. I like being someone people can count on, but I also need variety to stay awake. The balance lives somewhere between being predictable in principle and flexible in method.
@@ -91,7 +89,7 @@ Empathy, for me, isn’t emotional contagion. It’s precision. It’s understan
 
 And it all started with faking it.
 
-![person holding eyeglasses](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/learning-empathy.jpg?resize=1000%2C667&quality=81&ssl=1 "Photo by Josh Calabrese on Unsplash")
+![A person holds up a pair of round, gold-rimmed glasses in focus against a blurry urban alley background.](learning-empathy.jpg "Photo by Josh Calabrese on Unsplash")
 
 ## Practicing Curiosity in Support
 
@@ -125,7 +123,7 @@ It’s what allows me to hold empathy without drowning in it, to stay curious wi
 What matters is balance, knowing when to step closer and when to stay still.  
 Leadership often means knowing when to listen to the complaint and when to ask what they will do about it.
 
-![silhouette of a man standing on a rock at sunset](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/leadership-balance.jpg?resize=1000%2C646&quality=81&ssl=1 "Photo by Aziz Acharki on Unsplash")
+![Silhouette of a person balancing on a rock on one leg with arms outstretched against a bright orange sunset over the water.](leadership-balance.jpg "Photo by Aziz Acharki on Unsplash")
 
 ## When Curiosity Shifts
 

@@ -4,8 +4,7 @@ date: 2023-12-21T09:00:00
 updated: 2025-11-18T07:43:12
 sticky: false
 cornerstone: false
-excerpt: Use attributes, filters, and smarter recommendations to turn
-  WooCommerce related products into genuinely helpful upsell suggestions.
+excerpt: Use attributes, filters, and smarter recommendations to turn WooCommerce related products into genuinely helpful upsell suggestions.
 categories:
   - Programming
 tags:
@@ -13,10 +12,10 @@ tags:
   - PHP
   - WordPress
 coverAlt: "A row of gadgets laid out on a white surface: Sony headphones, a phone battery, phone cases, and a Fujifilm camera."
-originalCover: https://buthonestly.io/wp-content/uploads/2023/12/woocommerce-related-products-recommendations.jpeg
+originalCover:
+coverCaption: Photo by Ady TeenagerInRO on Unsplash.
+cover: woocommerce-related-products-recommendations.jpeg
 ---
-
-In today’s eCommerce world, creating a more relevant shopping experience for each customer is essential.
 
 > [!summary]- Quick Summary
 >
@@ -27,6 +26,8 @@ In today’s eCommerce world, creating a more relevant shopping experience for e
 > - Combine attribute-based related products with filters, upsells, cross-sells, ratings, and advanced recommendation plugins to boost discovery, trust, and order value.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
+
+In today’s eCommerce world, creating a more relevant shopping experience for each customer is essential.
 
 If you have a WooCommerce store, especially one with many products, achieving this can be challenging. The simple related products in WooCommerce often fall short. They can display items that aren’t quite similar to what the customer is visiting.
 
@@ -42,7 +43,7 @@ Think of when you’re looking at a pair of glasses on an e-commerce store. Some
 
 This is an example of how related products look like for one of my D&D miniatures:
 
-![A set of 4 related products for a D&D miniature item on elementalbeacon.com. The heading reads Other Unpainted Miniatures from This Pack and lists 4 miniatures.](https://i0.wp.com/buthonestly.io/wp-content/uploads/2023/12/related-products-by-attribute-example-1030x368.jpeg?resize=1030%2C368&quality=81&ssl=1)
+![A set of 4 related products for a D&D miniature item on elementalbeacon.com. The heading reads Other Unpainted Miniatures from This Pack and lists 4 miniatures.](related-products-by-attribute-example.jpeg)
 
 ## The Importance of Product Recommendations
 
@@ -69,9 +70,6 @@ Using the attribute Style and the term Elegant, you can significantly enhance th
 3.  **Higher Average Order Value**: Suggesting more relevant items can increase the overall order value.
 4.  **Improved Customer Satisfaction**: When customers find what they are looking for easily, it boosts their satisfaction.
 5.  **Competitive Edge**: Offering more relevant shopping experiences can set your store apart from competitors who might still rely on generic recommendation algorithms.
-
-![person holding white ipad on brown wooden table](https://i0.wp.com/buthonestly.io/wp-content/uploads/2023/12/pexels-photo-6476589.jpeg?resize=1880%2C1255&quality=81&ssl=1 "Photo by Mikael Blomkvist on Pexels.com")
-
 ## WooCommerce Related Products by Attribute
 
 As highlighted in several of my WooCommerce articles, implementing this feature is straightforward with the right code snippet.
@@ -149,7 +147,7 @@ To make this script work perfectly for your store, you need to tailor it to your
 3.  On the attributes table, the second column lists the slugs.
 4.  Remember, these slugs are not complete. WooCommerce hides the prefix `pa_`. The actual attribute slug looks like `pa_3d_artist`.
 
-![The Products > Attributes table showing where the slug is. The image shows 2 purple arrows pointing at the values in the second column of the table.](https://i0.wp.com/buthonestly.io/wp-content/uploads/2023/12/product-attributes-slug-list.jpeg?resize=1030%2C282&quality=81&ssl=1)
+![The Products > Attributes table showing where the slug is. The image shows 2 purple arrows pointing at the values in the second column of the table.](product-attributes-slug-list.jpeg)
 
 ### Using The Attribute Slug
 
@@ -181,7 +179,7 @@ Upsells are typically products that are more profitable, better quality, or more
 
 Upsells and cross-sells do not require any additional extension or snippet. You can create them directly in WooCommerce from the Edit Product screen in Product Data > Linked Products.
 
-![The Linked Products screen showing the Upsells and Cross-sells fields in WooCommerce](https://i0.wp.com/buthonestly.io/wp-content/uploads/2023/12/upsells-product-cross-sells-product.jpg?resize=1030%2C288&quality=81&ssl=1)
+![The Linked Products screen showing the Upsells and Cross-sells fields in WooCommerce](upsells-product-cross-sells-product.jpg)
 
 ### Show Customer Ratings
 
@@ -199,7 +197,7 @@ The script in this article, and no other quick snippet, can do this. For this ad
 
 Personalized recommendations based on customer behavior involve more advanced analysis and statistical techniques. A single snippet or a couple of functions will not be able to do it.
 
-![positive senior man in eyeglasses showing thumbs up and looking at camera](https://i0.wp.com/buthonestly.io/wp-content/uploads/2023/12/pexels-photo-3824771.jpeg?resize=1845%2C1300&quality=81&ssl=1 "Photo by Andrea Piacquadio on Pexels.com")
+![A smiling senior man in eyeglasses and a black suit showing thumbs up and looking at camera](old-man-thumbs-up.jpg "Photo by Andrea Piacquadio on Pexels.com")
 
 ## Embrace the Future of Online Retail
 
