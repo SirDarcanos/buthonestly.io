@@ -4,16 +4,17 @@ date: 2025-11-17T02:00:06
 updated: 2026-01-06T06:09:19
 sticky: false
 cornerstone: false
-excerpt: Effective feedback blends facts, feelings, and curiosity to create
-  honest, growth-focused conversations and a healthier team culture.
+excerpt: Effective feedback blends facts, feelings, and curiosity to create honest, growth-focused conversations and a healthier team culture.
 categories:
   - Leadership
 tags:
   - Feedback
   - Team Building
   - Workflow
-coverAlt: "A bunch of pink and orange smiley-face balloons — some smiling, some frowning — against a blue sky."
-originalCover: https://buthonestly.io/wp-content/uploads/2025/10/effective-feedback-leadership.jpg
+coverAlt: A bunch of pink and orange smiley-face balloons — some smiling, some frowning — against a blue sky.
+originalCover:
+cover: effective-feedback.jpg
+coverCaption: Photo by Madison Oren on Unsplash
 ---
 
 > [!summary]- Quick Summary
@@ -59,7 +60,7 @@ The structure is simple:
 
 It sounds small, but it changes everything. Instead of saying, _“You were disrespectful in that meeting,”_ you might say, _“When you interrupted me during that meeting, I felt dismissed.”_ The first statement sounds like an accusation. The second describes a fact and a feeling. It invites a response rather than a reaction.
 
-![A black-and-white photo of a banner reading “WE HEAR YOU.” in bold letters.](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/10/effective-feedback-model.jpg?resize=1000%2C668&quality=81&ssl=1 "Photo by Jon Tyson on Unsplash.")
+![A black-and-white photo of a banner reading “WE HEAR YOU.” in bold letters.](effective-feedback-model.jpg "Photo by Jon Tyson on Unsplash.")
 
 I like this approach because it invites understanding rather than debate. No one can tell you that you did not feel a certain way. It also removes assumptions. You are not trying to guess someone’s intention, only sharing your perspective of what happened and how it affected you, the team, the project, the situation, etc.
 
@@ -75,7 +76,7 @@ Before jumping into feedback, I try to be curious.
 
 It is easy to assume that something went wrong or that someone made a poor decision. But often there is more to the story than I can see. Maybe the person did not have all the information, perhaps priorities changed, or possibly I did not communicate clearly enough in the first place.
 
-![Woman in white button up shirt sitting on gray couch, talking to another woman in a black blouse](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/10/pexels-photo-5989928.jpeg?resize=1880%2C1253&quality=81&ssl=1 "Photo by cottonbro studio on Pexels.com")
+![Woman in white button up shirt sitting on gray couch, talking to another woman in a black blouse](sharing-critical-feedback.jpg "Photo by cottonbro studio on Pexels.com")
 
 Curiosity gives space for understanding. It shifts the conversation from “_You did something wrong_” to “_Help me understand what happened._” That small change in tone makes a big difference. It turns feedback into a shared exploration instead of a correction.
 

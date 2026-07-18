@@ -4,8 +4,7 @@ date: 2025-11-27T02:00:09
 updated: 2025-12-09T10:49:01
 sticky: false
 cornerstone: false
-excerpt: A tiny dense neural network learned resin consumption well enough to
-  replace hours of manual slicing in my 3D printing business.
+excerpt: A tiny dense neural network learned resin consumption well enough to replace hours of manual slicing in my 3D printing business.
 categories:
   - Programming
 tags:
@@ -14,11 +13,13 @@ tags:
   - Creativity
   - Productivity
   - Python
-coverAlt: "A child in glasses and a yellow shirt leans over a tabletop game, moving small miniature figures while holding a card."
-originalCover: https://buthonestly.io/wp-content/uploads/2025/11/3d-printing-cost-calculator-dense-network.jpg
+coverAlt: A child in glasses and a yellow shirt leans over a tabletop game, moving small miniature figures while holding a card.
+originalCover:
 downloads:
   - file: dense-models-3d-print-cost-calculator.zip
     label: 3D-print cost calculator models
+cover: 3d-printing-cost-calculator-dense-network.jpg
+coverCaption:
 ---
 
 > [!summary]- Quick Summary
@@ -86,7 +87,7 @@ So I had code that understood meshes, slicers that understood printing, and a gr
 
 If I wanted trustworthy estimates of resin consumption, I was still stuck slicing every file by hand.
 
-![pexels-photo-28655002.jpeg](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/10/pexels-photo-28655002.jpeg?resize=1880%2C1058&quality=81&ssl=1 "Photo by Jake Heinemann on Pexels.com")
+![A laptop displays a 3D animated male character being edited in Blender, placed next to a potted succulent.](3d-modeling.jpg "Photo by Jake Heinemann on Pexels.com")
 
 ## PrusaSlicer, UVtools, and a Real Data Pipeline
 

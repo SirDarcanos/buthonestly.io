@@ -4,20 +4,18 @@ date: 2016-03-11T10:38:43
 updated: 2025-11-20T20:09:42
 sticky: false
 cornerstone: false
-excerpt: Use product attributes as real links, not dead labels, so WooCommerce
-  can guide customers instead of listing facts.
+excerpt: Use product attributes as real links, not dead labels, so WooCommerce can guide customers instead of listing facts.
 categories:
   - Programming
 tags:
   - Performance
   - PHP
   - WordPress
-coverAlt: "Three folded pairs of blue jeans in different washes arranged against a white background."
+coverAlt: Three folded pairs of blue jeans in different washes arranged against a white background.
 coverCaption: Photo by Mica Asato on Pexels.com
-originalCover: https://buthonestly.io/wp-content/uploads/2016/03/pexels-photo-1082529.jpeg
+originalCover:
+cover: woocommerce-product-attributes.jpg
 ---
-
-Product attributes are wasted potential if they cannot take your customers anywhere.
 
 > [!summary]- Quick Summary
 >
@@ -27,6 +25,8 @@ Product attributes are wasted potential if they cannot take your customers anywh
 > - Local attributes can use simple Markdown-style links that render as clickable values in the Additional Information tab.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
+
+Product attributes are wasted potential if they cannot take your customers anywhere.
 
 Most WooCommerce stores treat attributes as static facts. Size: Medium. Color: Blue. Brand: Whatever. Useful, but passive.
 
@@ -268,7 +268,7 @@ For global attributes, everything happens where you already manage their terms.
 
 You will see the usual form to add or edit terms, plus a new field at the bottom named **URL** and a checkbox to **open the link in a new tab**.
 
-![The Edit attribute term form shows the Name, Slug and Description text fields, followed by a new URL field added by the snippet from this article.](https://i0.wp.com/buthonestly.io/wp-content/uploads/2016/03/edit-linkable-attribute.jpg?resize=552%2C430&quality=81&ssl=1)
+![The Edit attribute term form shows the Name, Slug and Description text fields, followed by a new URL field added by the snippet from this article.](edit-linkable-attribute.jpg)
 
 Type the link you want that attribute term to point to. For example:
 
@@ -294,21 +294,21 @@ To work around this, the snippet lets you use a simple Markdown-style syntax in 
 4.  Give it a name.
 5.  In the **Values** field, write your links using this format:
 
-```text
+```markdown
 [Text shown](https://myurl.com)
 ```
 
 The second attribute in the screenshot example (named “Test”) is a local attribute that uses this pattern.
 
-![The attributes form in WooCommerce showing the markdown value of an attribute](https://i0.wp.com/buthonestly.io/wp-content/uploads/2023/11/markdown-attributes.jpg?resize=1030%2C524&quality=81&ssl=1)
+![The attributes form in WooCommerce showing the markdown value of an attribute](markdown-attributes.jpg)
 
 After you click **Save Attributes** and update the product, the **Additional Information** tab on the product page will show the attribute name, and the value will be a clickable link with the text you wrote between the square brackets.
 
-![The Additional Information tab on WooCommerce showing the local and global attributes as links.](https://i0.wp.com/buthonestly.io/wp-content/uploads/2023/11/frontend-markdown-attribute.jpg?resize=880%2C404&quality=81&ssl=1)
+![The Additional Information tab on WooCommerce showing the local and global attributes as links.](frontend-markdown-attribute.jpg)
 
 To open the link in a new tab, add `{blank}` right after the link:
 
-```text
+```markdown
 [Text shown](https://myurl.com){blank}
 ```
 

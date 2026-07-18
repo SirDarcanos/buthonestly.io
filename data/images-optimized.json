@@ -80,5 +80,19 @@
   "src/content/essays/learning-care-without-feeling/learning-empathy.jpg": "dbe20cef3f2d52c41514112b57333f928b1e15924aa57c417291c7486d8b4567",
   "src/content/essays/learning-care-without-feeling/learning-to-care.jpg": "1d57db6577a2f2dd5f15cc2794d960fff2c6c68828bb92eae442f4a12cde4d17",
   "src/content/essays/learning-care-without-feeling/minimalist-desk.jpg": "3b269ad0ead938853b31e4d7b4e0b60fb9bca40c11f2ab25b5b66d76bdc13bfe",
-  "src/content/essays/improve-woocommerce-related-products-recommendations/woocommerce-related-products-recommendations.jpeg": "fb8c40dead1ac30ed43c2e651ab0fae71a808d2e8f2d9dad8ee34fd9c3b94737"
+  "src/content/essays/improve-woocommerce-related-products-recommendations/woocommerce-related-products-recommendations.jpeg": "fb8c40dead1ac30ed43c2e651ab0fae71a808d2e8f2d9dad8ee34fd9c3b94737",
+  "src/content/essays/limits-of-machine-learning/limits-machine-learning.jpg": "f5185b3ca0606350fe70f7a4dd74eaeaa73cb6daf52787ec7e0567263487833a",
+  "src/content/essays/limits-of-machine-learning/machine-learning-medievil-wr-analysis.jpg": "8621ca7278734414c91445be3c1c22deef3d263f0420c3cd1fb96fe18e1f8aab",
+  "src/content/essays/limits-of-machine-learning/machine-learning-medievil-wr-normal-progression.jpg": "b7ca178b14505ef416533fb5aa072b53ba74297d3361aa71569816ff2441d57e",
+  "src/content/essays/limits-of-machine-learning/noobkillerroof-medievil-worldrecord.jpg": "0a6d7d66dce43d25e823a69fce4817dd5416275bb8fc202c954b715bbd200b0d",
+  "src/content/essays/limits-of-machine-learning/sir-daniel-fortesque.jpg": "1b171116ba4481a7155367e20cf0e95f48f11aa74934c0ba222cb992df27eb0d",
+  "src/content/essays/make-product-attributes-linkable-woocommerce/edit-linkable-attribute.jpg": "929a57f47a18191451f50d1880c037792be787a3ac3896bdf7f65d9e9d19ce31",
+  "src/content/essays/make-product-attributes-linkable-woocommerce/frontend-markdown-attribute.jpg": "b70ef75fce6af9bfaaa256924ee1d09c7fe62017c03077a48efe4f18d6a59b1c",
+  "src/content/essays/make-product-attributes-linkable-woocommerce/markdown-attributes.jpg": "c67f8fc0d91d12e23c7343b91d7c10b31403f2fe7395da9f2c0eba5ed52ba8de",
+  "src/content/essays/make-product-attributes-linkable-woocommerce/woocommerce-product-attributes.jpg": "13c884d42fb6d861d33b6b5c5b8c388f16ddae230b6610ffbff50a380a52e0d3",
+  "src/content/essays/mastering-effective-feedback-facts-feelings-curiosity/effective-feedback-model.jpg": "8eee88bcc2894b81e55d08f837dcdef371f2de8e1dee2075912d96932470a305",
+  "src/content/essays/mastering-effective-feedback-facts-feelings-curiosity/effective-feedback.jpg": "f5895f40e0d5f3dbc6c6965da2edb398d38e0db2b2986f2295a6646a7bd5ac6e",
+  "src/content/essays/mastering-effective-feedback-facts-feelings-curiosity/sharing-critical-feedback.jpg": "5d2f2cc0256f2359b22004c575a97dd9d3c24ceaaa118c377647c66e7aac7a0e",
+  "src/content/essays/neural-network-predict-resin-usage-3d-printed-miniatures/3d-modeling.jpg": "79f815c73fc4e42f7b74df2ee67a9bcc3336eac306768f08b26c3c943568f78e",
+  "src/content/essays/neural-network-predict-resin-usage-3d-printed-miniatures/3d-printing-cost-calculator-dense-network.jpg": "8b8210f40d37dad28b3f981c020b254bc5d923e1ba4e0cdb0706bce19d9259b2"
 }

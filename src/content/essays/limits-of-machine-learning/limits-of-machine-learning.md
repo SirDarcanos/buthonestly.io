@@ -4,8 +4,7 @@ date: 2026-01-20T02:00:00
 updated: 2026-01-21T07:12:55
 sticky: false
 cornerstone: false
-excerpt: Machine-learning curves look confident until speedrunners change the
-  game underneath them. MediEvil shows why “AI as oracle” fails.
+excerpt: Machine-learning curves look confident until speedrunners change the game underneath them. MediEvil shows why “AI as oracle” fails.
 categories:
   - Programming
 tags:
@@ -14,8 +13,9 @@ tags:
   - Creativity
   - Gaming
   - Python
-coverAlt: "A person seated at a candlelit table gives a tarot reading, with a crystal ball and cards spread out against a red backdrop."
-originalCover: https://buthonestly.io/wp-content/uploads/2025/12/machine-learning-prediction.jpg
+coverAlt: A person seated at a candlelit table gives a tarot reading, with a crystal ball and cards spread out against a red backdrop.
+originalCover:
+cover: limits-machine-learning.jpg
 ---
 
 > [!summary]- Quick Summary
@@ -48,7 +48,7 @@ Because sometimes a runner finds a new _skip_ — a trick, a glitch, a route cha
 
 This essay is about those collapses, and in particular about MediEvil, the 1998 PlayStation action-adventure game where you run around as Sir Daniel Fortesque, a resurrected skeleton knight with a sword and a lot of unresolved business.
 
-![Skeletal knight Sir Daniel Fortesque from MediEvil standing in a stylised village, used to illustrate machine learning analysis of speedrunning data.](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/12/machine-learning-medievil-psx.jpg?resize=830%2C623&quality=81&ssl=1 "Sir Daniel Fortesque in the sleeping village – MediEvil (1998).")
+![Sir Daniel Fortesque poses with a sword and shield in a graveyard surrounded by zombies and an evil living tree.](sir-daniel-fortesque.jpg "Image by Sony Music Entertainement.")
 
 I’ve collected a full MediEvil speedrunning dataset: all the official runs from speedrun.com (including mine), plus some private data from runners—failed attempts, local PBs, unsubmitted grinds. That gives us something rare: not just the shiny world records, but a glimpse into the process behind them.
 
@@ -159,12 +159,12 @@ For NoobKillerRoof, I also have private data: every attempt, not just his verifi
 
 If you plot the world record over time, you get this:
 
-![Machine learning medievil wr analysis](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/12/machine-learning-medievil-wr-analysis.jpg?resize=830%2C410&quality=81&ssl=1)
+![A line graph tracking the MediEvil speedrun world record progression from 2020 to 2025, highlighting key skips and runners.](machine-learning-medievil-wr-analysis.jpg)
 
 On 14 October 2020, NoobKillerRoof submits a **32:57**.  
 That same day he drops it to 27:48, then 26:27, then **25:37**.
 
-The first improvement alone is **−5:09 (309 seconds)**. The whole evening is a seven-minute freefall. In speedrunning terms, that’s absurd.
+The first improvement alone is **−5:09 (309 seconds)**. The whole evening is a seven-minute free fall. In speedrunning terms, that’s absurd.
 
 After that first frenzy, the progression looks almost sensible:
 
@@ -241,7 +241,7 @@ This is why I wanted to start with the raw progression before touching models.
 
 It gives us a concrete object to work with—dates, times, deltas—and it already shows a mix of smooth grinds and sudden drops, even in this compressed, post-DGS era. But it also hides the most important facts behind the scenes: _how_ those drops came to be.
 
-In the next step, we’ll formalise that intuition:
+In the next step, we’ll formalize that intuition:
 
 - What does a “normal” improvement look like if we ignore the outliers?
 - How far could we reasonably extrapolate just from those?
@@ -269,7 +269,7 @@ On that trimmed set of WR updates, the numbers look like this:
 
 If you plot those sizes as a histogram, you don’t see anything exotic.
 
-![Machine learning medievil wr normal progression](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/12/machine-learning-medievil-wr-normal-progression.jpg?resize=829%2C397&quality=81&ssl=1)
+![A histogram showing the size and frequency of typical MediEvil Any% world record improvements, with most under 30 seconds.](machine-learning-medievil-wr-normal-progression.jpg)
 
 - A “typical” new world record is about **17 seconds faster** than the previous one.
 - Half of all records improve by **between ~12 and ~30 seconds**.
@@ -657,7 +657,7 @@ From that perspective, the story is pretty tidy:
 - **Nazzareno** looks capped; the curve says his next PB should be roughly where he already is.
 - **BlackMenthol** has a bit of room to grow, but not much.
 
-![Screenshot of speedrunner NoobKillerRoof finishing a MediEvil Any% emulator run in 19:29, showing detailed splits on the left, a controller overlay, and the in-game dragon boss exploding as Twitch chat reacts to the new world record.](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/12/noobkillerroof-medievil-worldrecord.jpg?resize=829%2C465&quality=81&ssl=1 "NoobKillerRoof setting the current MediEvil Any% world record.")
+![Screenshot of speedrunner NoobKillerRoof finishing a MediEvil Any% emulator run in 19:29, showing detailed splits on the left, a controller overlay, and the in-game dragon boss exploding as Twitch chat reacts to the new world record.](noobkillerroof-medievil-worldrecord.jpg "NoobKillerRoof setting the current MediEvil Any% world record.")
 
 This is the classic “learning curve” move: compress years of grind into a neat little exponential and pretend the future will politely follow it.
 
