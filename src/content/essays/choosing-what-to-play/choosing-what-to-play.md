@@ -12,8 +12,9 @@ tags:
   - AI
   - Gaming
   - Workflow
-coverAlt: "A dark gaming desk lit in blue and purple neon, with a diamond ‘Game Zone’ sign, a monitor, and a hand on a backlit keyboard."
-originalCover: https://buthonestly.io/wp-content/uploads/2026/02/choosing-what-to-play.jpg
+coverAlt: A dark gaming desk lit in blue and purple neon, with a diamond ‘Game Zone’ sign, a monitor, and a hand on a backlit keyboard.
+originalCover:
+cover: choosing-what-to-play.jpg
 ---
 
 > [!summary]- Quick Summary
@@ -50,7 +51,7 @@ The result is predictable. I either default to the same safe game or I don’t p
 
 Neither is satisfying.
 
-![Steam games library](https://i0.wp.com/buthonestly.io/wp-content/uploads/2026/02/steam-games-library.jpg?resize=830%2C467&quality=81&ssl=1 "Photo by Amanz on Unsplash")
+![A close-up shot focuses on a person's hands holding a black handheld gaming console under vibrant purple and blue ambient lighting.](steam-games-library.jpg "Photo by Amanz on Unsplash")
 
 ## The Real Problem Is Context, Not Taste
 
@@ -149,7 +150,7 @@ AI helped me reframe unfinished games as information instead of backlog debt.
 
 That shift made gaming lighter again.
 
-![A close-up of a backlit gaming keyboard glowing with multicolored keys, with a blurred game scene visible on a monitor in the background.](https://i0.wp.com/buthonestly.io/wp-content/uploads/2026/02/gaming-recommendations.jpg?resize=830%2C467&quality=81&ssl=1 "Photo by Ahmed Atef on Unsplash")
+![A close-up of a backlit gaming keyboard glowing with multicolored keys, with a blurred game scene visible on a monitor in the background.](gaming-recommendations.jpg "Photo by Ahmed Atef on Unsplash")
 
 ### What This Is Not
 

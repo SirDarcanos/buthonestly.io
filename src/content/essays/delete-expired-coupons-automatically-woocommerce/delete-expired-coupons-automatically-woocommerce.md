@@ -4,8 +4,7 @@ date: 2018-08-01T10:00:00
 updated: 2025-11-18T07:43:41
 sticky: false
 cornerstone: false
-excerpt: Automatically remove expired WooCommerce coupons daily so your database
-  stays lean and your marketing screen uncluttered.
+excerpt: Automatically remove expired WooCommerce coupons daily so your database stays lean and your marketing screen uncluttered.
 categories:
   - Programming
 tags:
@@ -13,12 +12,11 @@ tags:
   - PHP
   - Productivity
   - WordPress
-coverAlt: "Overhead view of a person in a white hoodie shopping a ‘70% off’ sale on a laptop while holding a payment card, with headphones and a phone nearby."
+coverAlt: Two hands hold a colorful amusement park ticket reading "ADMIT ONE" and "FUN PASS AMUSEMENT PARK" against a dark background.
 coverCaption: Photo by Antoni Shkraba Studio on Pexels.com
-originalCover: https://buthonestly.io/wp-content/uploads/2018/08/pexels-photo-6207767.jpeg
+originalCover:
+cover: delete-expired-coupons.jpg
 ---
-
-Do you still have hundreds of expired coupons sitting in your database?
 
 > [!summary]- Quick Summary
 >
@@ -29,6 +27,8 @@ Do you still have hundreds of expired coupons sitting in your database?
 > - Keeping expired coupons under control is a simple automation win that makes store maintenance faster and cleaner.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
+
+Do you still have hundreds of expired coupons sitting in your database?
 
 If you’re giving discounts to first-time buyers or loyal customers, chances are your store creates coupons automatically. That’s great, everyone loves a discount. But once those coupons expire, WooCommerce doesn’t delete them. They just sit there, taking up space for no reason.
 

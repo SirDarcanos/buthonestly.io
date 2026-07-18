@@ -12,9 +12,10 @@ tags:
   - Gaming
   - Team Building
   - Workflow
-coverAlt: "Overhead view of two hands holding a black and a white PlayStation controller facing each other, beside a console and a VR headset."
-coverCaption: Photo by cottonbro studio on Pexels.com
-originalCover: https://buthonestly.io/wp-content/uploads/2025/10/pexels-photo-3945683.jpeg
+coverAlt: A smiling woman celebrates at a computer while gaming with two teammates in an internet cafe with red and blue lights.
+coverCaption:
+originalCover:
+cover: gaming-and-leadership.jpg
 ---
 
 > [!summary]- Quick Summary
@@ -42,7 +43,7 @@ This post is about those lessons and how the virtual worlds I’ve explored have
 
 If I had to pick one game that changed how I think about leadership, it would be _[Dungeons & Dragons](https://en.wikipedia.org/wiki/Dungeons_%26_Dragons)_.
 
-![Dungeons & Dragons cover image](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/10/Dungeons_And_Dragons_Official_Poster.webp?resize=1000%2C625&quality=80&ssl=1 "Image by Wizards of the Coast LLC.")
+![Official Dungeons & Dragons artwork featuring Tiamat, the five-headed dragon queen, surrounded by fire.](dungeons-and-dragons.jpg "Image by Wizards of the Coast LLC.")
 
 I’ve spent years playing and running campaigns. Sitting behind the screen as a Dungeon Master, you quickly learn that your job isn’t to control the story. It’s to build a world, guide your players through it, and keep them engaged in a journey that ultimately is theirs. The story may start with you, but it only comes alive when everyone contributes.
 
@@ -50,7 +51,7 @@ This isn’t just my experience. [A 2023 qualitative study](https://www.academia
 
 A DM who dominates every session quickly loses the group’s enthusiasm. Players stop making bold choices. The energy fades. It’s the same in a team: when people feel that every decision is already made for them, they disengage. Real leadership is about building a framework where others can shine, not about deciding everything yourself.
 
-![seven white closed doors](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/10/pexels-photo-277593.jpeg?resize=1030%2C550&quality=81&ssl=1 "Photo by Pixabay on Pexels.com")
+![Seven closed doors in a black and white ornate hallway symbolizing opportunities and decisions.](seven-doors.jpg "Photo by Pixabay on Pexels.com")
 
 D&D also taught me that planning only gets you so far. You can spend hours preparing a session, designing encounters, and imagining outcomes, and the players will still do something completely unexpected. Sometimes that chaos is frustrating, but more often, it’s inspiring. It forces you to adapt, to listen, and to say “_yes, and_” instead of “_no, but_”.
 
@@ -74,7 +75,7 @@ It’s a reminder that leadership isn’t about directing others, it’s about c
 
 The modern RPGs from Larian Studios take the lessons of D&D and translate them into digital form. In _[Baldur’s Gate 3](https://baldursgate3.game/)_ and _[Divinity: Original Sin 2](https://store.steampowered.com/app/435150/Divinity_Original_Sin_2__Definitive_Edition/)_, every choice has weight. Your words change relationships, your actions shift outcomes, and sometimes even your silence speaks volumes.
 
-![Baldur's Gate 3 Underdark Team](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/10/bg3-underdark-team.jpg?resize=800%2C450&quality=81&ssl=1 "Image by Larian Studios.")
+![Baldur's Gate 3 Underdark Team in Act 2](bg3.jpg "Image by Larian Studios.")
 
 These games don’t tell you what the “right” choice is. They simply present the consequences and let you live with them. That mirrors leadership more than most people realize.
 
@@ -94,7 +95,7 @@ I play _[Dead by Daylight](https://deadbydaylight.com/)_ both solo and in SWF (_
 
 When I play solo, either as a survivor or killer, I have to read other players purely through in-game cues. Every action tells a story: someone running toward a hook, someone hiding too long, someone looping the killer to buy time. Without voice chat, teamwork depends on awareness and empathy. You learn to read intent and anticipate others’ moves. That has helped me in real projects, too, where you often have to sense what’s happening in your team even when no one says it out loud.
 
-![Dead by Daylight survivors healing](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/10/dead-by-daylight-teamwork.jpg?resize=1000%2C563&quality=81&ssl=1 "Image by Behaviour Interactive.")
+![Michael Mayers from Dead by Daylight carrying a survivor.](dead-by-daylight-killer.jpg "Image by Behaviour Interactive.")
 
 But when I play SWF with my colleague, everything changes. We jump on a Discord call, plan strategies, and coordinate in real time. What stands out isn’t how we talk, but how we listen. Good communication in _Dead by Daylight_ isn’t about giving constant instructions; it’s about sharing the right information at the right time, and trusting that the other person knows what to do with it.
 
@@ -110,7 +111,7 @@ It’s also a great reminder that trust builds over time. The more we’ve playe
 
 I discovered _[Chained Together](https://store.steampowered.com/app/2567870/Chained_Together/)_ recently. The premise is simple: two or more players are physically chained together and must climb through increasingly difficult levels. If one person falls, the other feels it immediately, and possibly falls with them.
 
-![Chained Together players looking forward](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/10/chained-together-team.jpg?resize=1000%2C323&quality=81&ssl=1 "Image by Anegar Games.")
+![Chained Together players looking forward](chained-together-team.jpg "Image by Anegar Games.")
 
 I’ve been playing it with the same colleague I play _Dead by Daylight_ with, and it’s been a surprisingly deep experience. Every jump, pull, and movement requires coordination. Sometimes I lead the climb, sometimes he does. When one of us moves too fast, we both fall.
 
@@ -122,7 +123,7 @@ Even workplace research supports this idea. [Atlassian’s own internal study](h
 
 Pushing too hard can burn people out, moving too slowly can frustrate them. The challenge is to stay connected, to sense when to pull forward and when to let someone else take the lead.
 
-![Screenshot from Chained Together, lead going up a ladder](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/10/chained-together-lead.jpg?resize=1000%2C563&quality=81&ssl=1 "Image by Anegar Games.")
+![Screenshot from Chained Together, lead going up a ladder](chained-together-lead.jpg "Image by Anegar Games.")
 
 Some of the most valuable lessons from _Chained Together_ came not from winning, but from falling repeatedly and trying again. Those shared failures built trust faster than easy success ever could. The laughter, frustration, and persistence became part of the bond.
 
@@ -157,8 +158,6 @@ No plan survives the dice, the killer, or the chaos of co-op play. Adaptability,
 What makes games such powerful teachers is that they’re safe spaces to explore how people interact. You can experiment, fail, adjust, and try again without real-world consequences. There are [[team-building-activities-for-work|games that teach real team skills]] through structured play — deliberately designed to build capabilities without relying on forced connection.
 
 Over time, you start recognizing the same patterns outside the screen.
-
-![black dice in tilt shift lens](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/10/pexels-photo-7025165.jpeg?resize=1030%2C1030&quality=81&ssl=1 "Photo by Nika Benedictova on Pexels.com")
 
 When I lead a meeting today, I sometimes think like a Dungeon Master, making sure everyone gets a chance to speak and guiding the flow without forcing it. If decisions are hard, I remember that _Baldur’s Gate 3_ lesson: be transparent, own the choice, and move forward. When pressure rises, I think back to those voice calls in _Dead by Daylight_, where quick, honest communication made all the difference.
 

@@ -3,8 +3,7 @@ title: 10 Types of Websites and What I’d Use to Build Them
 date: 2025-12-07T02:00:00
 sticky: false
 cornerstone: false
-excerpt: When WordPress is enough, and when a specialized no-code tool actually
-  makes more sense for your site.
+excerpt: When WordPress is enough, and when a specialized no-code tool actually makes more sense for your site.
 categories:
   - Web
 tags:
@@ -12,8 +11,10 @@ tags:
   - Productivity
   - WordPress
   - Workflow
-coverAlt: "An open laptop on a wooden desk showing a website-design mockup that reads ‘Build your dream website,’ beside a black coffee mug."
-originalCover: https://buthonestly.io/wp-content/uploads/2025/11/10-types-of-sites-10-tools.jpg
+coverAlt: An open laptop on a wooden desk showing a website-design mockup that reads ‘Build your dream website,’ beside a black coffee mug.
+originalCover:
+cover: 10-types-of-websites.jpg
+coverCaption: Photo by Carriza Maiquez on Unsplash.
 ---
 
 > [!summary]- Quick Summary
@@ -34,8 +35,7 @@ If I _could_ do everything with WordPress… are there cases where a more specia
 That’s what this essay is about: ten **types of websites** and the specific tools I’d reach for. WordPress is still my default, but there are some exceptions.
 
 ## “Normal” Websites and Blogs
-
-![WordPress .com vs .org](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/wordpress-com-vs-org.jpg?resize=830%2C415&quality=81&ssl=1 "Image by Automattic.")
+![The WordPress logo in a diamond shape with cicled .com and .org words.](wordpress-com-vs-org.jpg "Image by Automattic.")
 
 For anything that looks like a normal website — home page, a few subpages, maybe a blog — I still don’t overthink it. I use WordPress.
 
@@ -51,7 +51,7 @@ I know very well about the battle of .org vs. .com. I’d personally prefer [Wor
 
 ## Tiny Shops and Serious Shops
 
-![Stripe](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/stripe.jpg?resize=830%2C361&quality=81&ssl=1)
+![The Stripe logo on a blue background](stripe.jpg "Image by Stripe.")
 
 When it comes to taking money online, I think in two sizes: **tiny** and **serious**.
 
@@ -70,7 +70,7 @@ So my rule of thumb is simple:
 
 ## Directories: Lists of Things with Filters
 
-![Listable](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/listable.jpg?resize=830%2C467&quality=81&ssl=1)
+![The Listable logo on a salmon background.](listable.jpg "Image by Listable.")
 
 Directories are the first place where I start to feel the limits of “I’ll just do it in WordPress.”
 
@@ -84,7 +84,7 @@ If the directory is part of a bigger project, I’d happily run the marketing si
 
 ## Wikis Without Handing Your Work to an Ad Farm
 
-![Wiki.gg](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/wikigg.jpg?resize=830%2C198&quality=81&ssl=1)
+![The wiki.gg logo on a white background.](wikigg.jpg "Image by wiki.gg.")
 
 Wikis are another place where “just use WordPress” starts to feel wrong.
 
@@ -135,7 +135,7 @@ If you’re a developer, you might also just want to use a [fancy profile reposi
 
 ## Memberships and Newsletter-First Sites
 
-![Substack](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/substack.jpg?resize=830%2C307&quality=81&ssl=1)
+![The Substack logo on a white background.](substack.jpg "Image by Substack.")
 
 Membership is where WordPress starts to stretch its legs.
 
@@ -164,7 +164,7 @@ So my split here is:
 
 ## Courses
 
-![SenseiLMS](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/senseilms.jpg?resize=830%2C509&quality=81&ssl=1)
+![The SenseiLMS logo on a white background.](senseilms.jpg "Image by Automattic.")
 
 Courses are just structured content that people pay for, with a few extra expectations: progress, modules, and maybe quizzes.
 
@@ -187,7 +187,7 @@ Yes, there are WordPress forum plugins. If I really wanted a traditional forum, 
 
 ## Bookings and Appointments
 
-![WooCommerce](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/woo.jpg?resize=830%2C434&quality=81&ssl=1)
+![The WooCommerce logo on an abstract purple background.](woocommerce.jpg "Image by Automattic.")
 
 Finally, bookings.
 

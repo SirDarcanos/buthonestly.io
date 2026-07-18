@@ -122,11 +122,6 @@
     background: var(--accent);
   }
 
-  header + figure img {
-    filter: grayscale(1) contrast(1.05);
-    mix-blend-mode: multiply;
-  }
-
   figcaption {
     @apply text-muted mt-2 text-right font-mono text-xs;
   }
@@ -218,7 +213,7 @@
   .post-content > img,
   .post-content p > img,
   .post-content figure {
-    @apply my-6;
+    @apply mx-auto my-6;
   }
 
   /* Body images keep their own shape. The global `img` rule forces 16:9 with

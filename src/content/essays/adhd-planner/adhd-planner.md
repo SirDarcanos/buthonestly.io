@@ -4,8 +4,7 @@ date: 2026-02-07T02:00:00
 updated: 2026-05-23T15:50:23
 sticky: false
 cornerstone: false
-excerpt: How I stopped fighting ADHD, accepted creative cycles, and built a
-  simple mental planner to blog consistently without burning out.
+excerpt: How I stopped fighting ADHD, accepted creative cycles, and built a simple mental planner to blog consistently without burning out.
 categories:
   - Observations
 tags:
@@ -13,8 +12,10 @@ tags:
   - Blogging
   - Productivity
   - Workflow
-coverAlt: "Close-up of chrysanthemum petals glowing in rainbow colours against a dark background."
-originalCover: https://buthonestly.io/wp-content/uploads/2025/11/mental-adhd-planner.jpg
+coverAlt: Close-up of chrysanthemum petals glowing in rainbow colours against a dark background.
+originalCover:
+cover: adhd-planner.jpg
+coverCaption: Photo by Siora Photography on Unsplash.
 ---
 
 > [!summary]- Quick Summary
@@ -45,7 +46,7 @@ Then it stopped.
 
 Not gradually. Suddenly. I woke up one day, opened the editor, and couldn’t do it. The thought of writing felt heavy, like walking through deep sand. The same blog that had filled me with energy now looked like work I couldn’t face.
 
-![sad white and brown cat in a cage](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/mental-prison-adhd.jpg?resize=1000%2C667&quality=81&ssl=1 "Photo by Tong Nguyen van on Unsplash")
+![A sad white and brown cat in a cage.](cat-in-cage.jpg "Photo by Tong Nguyen van on Unsplash.")
 
 That became the pattern. A few months of creativity, then silence. I’d come back with excitement, only to lose it again. The longer I stayed away, the harder it was to return.
 
@@ -61,7 +62,7 @@ I checked everything: Search Console, sitemaps, robots.txt. Nothing helped. I ha
 
 That day broke something in me. I told myself I’d fix it, but I didn’t. My motivation disappeared.
 
-![A collapsed building](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/collapsed-building-to-the-ground.png?resize=1024%2C768&quality=80&ssl=1)
+![The lone survivor stands in the middle of the street in the destroyed city, 3D render.](city-ruins.jpg)
 
 Over the next three years, I only managed to publish ten articles and they gathered four comments. For comparison, in 2015 alone I had written forty-nine articles and received 187 comments.
 
@@ -142,7 +143,7 @@ When I disappear now, you probably don’t notice. Because I planned for it.
 
 ADHD didn’t make me inconsistent; it made me cyclical. And cycles, I’ve learned, are just another kind of rhythm. One that moves differently but still moves.
 
-![blue spiral neon light](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/pexels-photo-2495173.jpeg?resize=1625%2C1300&quality=81&ssl=1)
+![The inside of an orange tube with a spiralling line going towards a light in the center.](spiral.jpg "Photo by Lanju Fotografie on Unsplash.")
 
 If you’ve ever felt that same pattern — the bursts of motivation, the sudden quiet, the guilt that follows — I’d love to hear your story. How do you balance creativity and burnout? Have you found your rhythm, or are you still figuring it out?
 

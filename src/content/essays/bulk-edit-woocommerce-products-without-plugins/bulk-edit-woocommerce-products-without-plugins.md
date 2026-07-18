@@ -11,9 +11,10 @@ tags:
   - Productivity
   - WordPress
   - Workflow
-coverAlt: "A towering, colourful wall of stacked beverage crates full of bottles."
+coverAlt: A towering, colourful wall of stacked beverage crates full of bottles.
 coverCaption: Photo by Pixabay on Pexels.com
-originalCover: https://buthonestly.io/wp-content/uploads/2015/04/pexels-photo-533353.jpeg
+originalCover:
+cover: bulk-edit-woocommerce-products-without-plugins.jpg
 ---
 
 > [!summary]- Quick Summary
@@ -68,7 +69,7 @@ That is by design. The bulk editor exists to apply new values across all selecte
 
 The real skill is not in clicking the right fields. It is in selecting the right products before you touch the panel.
 
-![The “Bulk actions” dropdown on the Products screen.](https://i0.wp.com/buthonestly.io/wp-content/uploads/2015/04/Screenshot-on-4.21.2015-at-9.02.22-AM.png?resize=511%2C97&quality=80&ssl=1 "The “Bulk actions” dropdown on the Products screen.")
+![The “Bulk actions” dropdown on the Products screen.](bulk-actions.jpg)
 
 ## A Concrete Example: Discounting Prices
 
@@ -89,7 +90,7 @@ WooCommerce recalculates the regular price for every selected product. There is 
 
 When the sale ends, you can repeat the process in reverse or set new prices using the same panel. It is not clever. It is just direct.
 
-![The bulk edit panel’s fields.](https://i0.wp.com/buthonestly.io/wp-content/uploads/2015/04/Screenshot-on-4.21.2015-at-9.04.44-AM.png?resize=1030%2C649&quality=80&ssl=1 "The bulk edit panel’s fields.")
+![The bulk edit panel’s fields.](bulk-edit-panel.jpg)
 
 ## What You Can Bulk Edit In WooCommerce
 

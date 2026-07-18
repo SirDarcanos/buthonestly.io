@@ -13,8 +13,10 @@ tags:
   - Creativity
   - Gaming
   - Productivity
-coverAlt: "The letters ‘AI?’ handwritten in dark marker on a glossy white surface."
-originalCover: https://buthonestly.io/wp-content/uploads/2025/11/ai-slop.jpg
+coverAlt: The letters ‘AI?’ handwritten in dark marker on a whiteboard.
+originalCover:
+coverCaption: Photo by Nahrizul Kadri on Unsplash.
+cover: ai-slop-midas-touch-modern-internet.jpg
 ---
 
 > [!summary]- Quick Summary

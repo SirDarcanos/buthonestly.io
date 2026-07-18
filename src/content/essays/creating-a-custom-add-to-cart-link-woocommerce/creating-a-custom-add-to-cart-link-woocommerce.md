@@ -4,8 +4,7 @@ date: 2015-09-18T14:50:00
 updated: 2025-11-25T14:54:37
 sticky: false
 cornerstone: false
-excerpt: Learn how to create custom Add to Cart links with WooCommerce for
-  various product types, enhancing the shopping experience.
+excerpt: Learn how to create custom Add to Cart links with WooCommerce for various product types, enhancing the shopping experience.
 categories:
   - Web
 tags:
@@ -13,8 +12,10 @@ tags:
   - Productivity
   - WordPress
   - Workflow
-coverAlt: "Overhead view of hands holding a phone showing an online-store app and a credit card, over a wooden desk with a laptop and coffee."
-originalCover: https://buthonestly.io/wp-content/uploads/2025/11/custom-add-to-cart-link-woocommerce.jpg
+coverAlt: Overhead view of hands holding a phone showing an online-store app and a credit card, over a wooden desk with a laptop and coffee.
+originalCover:
+cover: creating-a-custom-add-to-cart-link-woocommerce.jpg
+coverCaption:
 ---
 
 > [!summary]- Quick Summary
@@ -29,7 +30,7 @@ WooCommerce lets you add products normally, but sometimes you need something spe
 
 **Step 1**: Find the product ID under Products > All Products in your dashboard.
 
-![Product ID](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/product-id-1030x332-1.webp?resize=830%2C268&quality=80&ssl=1 "The products list in Products > All Products, highlighting the product ID of a simple product")
+![The products list in Products > All Products, highlighting the product ID of a simple product.](product-id.jpg)
 
 **Step 2**: add `?add-to-cart=[Product ID]&quantity=1` to your website’s base URL. This creates a link like `https://www.yourwebsite.com/?add-to-cart=39367&quantity=1` that puts the product directly in the cart of those who click it.
 
@@ -45,7 +46,7 @@ You can easily adjust how many products are added by changing `&quantity=X` in t
 
 With new WooCommerce versions, this process is simpler. It’s like with simple products, but use the variation ID found under Variations on the Edit Product page.
 
-![Variation ID](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/variation-id-1030x431-1.webp?resize=830%2C347&quality=80&ssl=1 "The Variations tab of a variable product highlighting the variation ID.")
+![The Variations tab of a variable product highlighting the variation ID.](variation-id.jpg)
 
 The link is made in the same way, but you use the variation ID instead of the product ID, like this:
 
@@ -64,10 +65,10 @@ After making your link, adding it to your site is easy. It can be a simple link,
 
 - Create a simple add-to-cart link anywhere in your content by using the text editor:
 
-![The WordPress content editor showing how to add the add to cart URL to a text link in](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/add-link-to-text-1030x339-1.webp?resize=830%2C273&quality=80&ssl=1)
+![The WordPress content editor showing how to add the add to cart URL to a text link in](add-link-to-text.jpg)
 
 - Or using a [Button block](https://wordpress.org/documentation/article/buttons-block/):
 
-![The WordPress content editor showing how to add the add to cart URL to the Button block](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/add-button-with-link-1030x296-1.webp?resize=830%2C239&quality=80&ssl=1)
+![The WordPress content editor showing how to add the add to cart URL to the Button block.](add-button-with-link.jpg)
 
 There are many more ways; for example, you might want to use it as part of a pricing table block or shortcode or as a heading or another type of block. The options are virtually limitless. If you can add a link, that link can be a custom WooCommerce Add to Cart link.

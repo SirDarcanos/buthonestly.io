@@ -4,19 +4,17 @@ date: 2023-11-20T09:00:00
 updated: 2025-11-18T07:43:41
 sticky: false
 cornerstone: false
-excerpt: Tell Google which WooCommerce products lack GTINs by outputting
-  identifier_exists “no” only for truly exempt items.
+excerpt: Tell Google which WooCommerce products lack GTINs by outputting identifier_exists “no” only for truly exempt items.
 categories:
   - Programming
 tags:
   - PHP
   - WordPress
-coverAlt: "A person labelling a cardboard moving box ‘CLOTHES’ with a marker, beside a houseplant and stacked boxes."
+coverAlt: A close-up shot of a hand holding a black clothing price tag with the word "Brand" on it while a retail scanner scans the barcode.
 coverCaption: Photo by Karolina Grabowska on Pexels.com
-originalCover: https://buthonestly.io/wp-content/uploads/2023/11/pexels-photo-4506234.jpeg
+originalCover:
+cover: barcode-gtin-woocommerce.jpg
 ---
-
-In the intricate world of e-commerce, product identification is a crucial aspect of ensuring that your items are easily discoverable and comparable across the vast online marketplace.
 
 > [!summary]- Quick Summary
 >
@@ -27,6 +25,8 @@ In the intricate world of e-commerce, product identification is a crucial aspect
 > - Apply this only to genuinely GTIN-free products; otherwise, add real GTINs to keep listings healthy.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
+
+In the intricate world of e-commerce, product identification is a crucial aspect of ensuring that your items are easily discoverable and comparable across the vast online marketplace.
 
 For many WooCommerce store owners, providing a Global Trade Item Number (GTIN) is an essential part of this process, particularly when integrating with Google Merchant.
 

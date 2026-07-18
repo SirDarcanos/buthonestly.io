@@ -13,11 +13,13 @@ tags:
   - Gaming
   - Python
   - Workflow
-coverAlt: "Key art for the video game Dead by Daylight: four survivors flee looming masked killers in a dark forest."
-originalCover: https://buthonestly.io/wp-content/uploads/2025/11/dbd-steam-reviews-nlp-dataset.jpg
+coverAlt: Official artwork for the video game "Dead by Daylight" featuring survivors standing in front of menacing killers in a dark forest.
+originalCover:
 downloads:
   - file: distilroberta-emotion-analysis-dead-by-daylight-case-study.zip
     label: Steam reviews dataset + notebook
+cover: dead-by-daylight.jpg
+coverCaption: Image by Behaviour Interactive.
 ---
 
 > [!summary]- Quick Summary
@@ -948,7 +950,7 @@ fig.tight_layout()
 plt.show()
 ```
 
-![Steam reviews sentiment analysis over time vs. game patches](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/dbd-reviews-nlp-sentiment-plot.jpg?resize=829%2C324&quality=81&ssl=1)
+![Steam reviews sentiment analysis over time vs. game patches.](dbd-reviews-nlp-sentiment-plot.jpg)
 
 With everything on the same chart — positivity line, review volume bars, circles for major patches and crosses for minor ones — the review history of Dead by Daylight suddenly looks like weather.
 
@@ -1689,7 +1691,7 @@ That gives a monthly table like this for the Nurse:
 
 Plotting those monthly values gives a line that **wiggles all over the place**: some months shoot above 80–90% positive, others crash into the 30–40% range.
 
-![Pretrained emotion classifier on Dead by Daylight Steam reviews](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/dbd-steam-reviews-nlp-nurse-analysis.jpg?resize=830%2C326&quality=81&ssl=1)
+![Pretrained emotion classifier on Dead by Daylight Steam reviews.](dbd-steam-reviews-nlp-nurse-analysis.jpg)
 
 Two things stand out:
 
@@ -1717,9 +1719,6 @@ In the notebook, this is just a few extra boolean columns (`mentions_blight`, `m
 In short, this dataset shows a community that mostly recommends Dead by Daylight while being increasingly conflicted the longer they play. New players (under 100 hours) are overwhelmingly positive; by the time someone hits thousands of hours, reviews are barely above a coin flip. Monthly sentiment stays generally high, but dips cluster around certain balance periods rather than the big chapter drops. When we add a mood label on top of Steam’s thumbs-up/down, the picture gets sharper: a third of reviews are clearly joyful, another third are neutral, and the rest are split between sadness, anger, fear, and disgust. Joy is almost always positive. Anger and sadness are mostly positive too—people rant but still recommend. Only disgust flips: it’s the mood of long, high-playtime reviews where people finally stop giving the game the benefit of the doubt.
 
 Zooming in on Blight, Nurse, and Spirit shows how you can turn all this into focused mini-studies. Reviews that mention any of the three are far less positive than the global 80% baseline, and their mood mix tilts heavily toward anger and disgust. Those same killers are all over the patch notes, which suggests a long-running tug of war between balance changes and player frustration. Together, these pieces show what this dataset is good for: connecting sentiment, mood, playtime, and patch history to answer very human questions about a live-service game—who’s happy, who’s exhausted, and what they’re mad about.
-
-![Dead by Daylight reviews infographic](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/dbd-reviews-infographic.jpg?resize=1536%2C2752&quality=81&ssl=1 "Dead by Daylight reviews anatomy infographic")
-
 ## What’s Next?
 
 From here, there’s a lot you can do next. You can reuse the same notebook for Steam reviews sentiment analysis on other games or swap in a different model if you want to experiment. You could model sentiment or mood directly, build “angry but still positive” detectors, or study what makes a review “helpful” or “funny.” You could compare free vs. paid players or trace how language around a specific killer or perk changes before and after major patches. Or you could ignore models entirely and just use the notebook as an interactive microscope on the game’s history, killer by killer, patch by patch.

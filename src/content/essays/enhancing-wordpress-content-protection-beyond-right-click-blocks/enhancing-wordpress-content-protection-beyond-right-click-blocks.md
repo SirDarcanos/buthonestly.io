@@ -4,20 +4,18 @@ date: 2023-11-28T19:19:32
 updated: 2025-11-18T07:43:41
 sticky: false
 cornerstone: false
-excerpt: Blocking right-clicks harms real users more than thieves; protect
-  WordPress content with smarter, accessible strategies instead.
+excerpt: Blocking right-clicks harms real users more than thieves; protect WordPress content with smarter, accessible strategies instead.
 categories:
   - Web
 tags:
   - Creativity
   - Performance
   - WordPress
-coverAlt: "A close-up of a hand resting on a white computer mouse at a wooden desk, with a keyboard and monitor behind."
-coverCaption: Photo by Vojtech Okenka on Pexels.com
-originalCover: https://buthonestly.io/wp-content/uploads/2023/11/pexels-photo-392018.jpeg
+coverAlt: A close-up of woman using a computer keyboard and a mouse.
+coverCaption:
+originalCover:
+cover: wordpress-security.jpg
 ---
-
-Trying to protect your content by blocking right-clicks? You’re actually locking out your readers, not the thieves.
 
 > [!summary]- Quick Summary
 >
@@ -28,6 +26,8 @@ Trying to protect your content by blocking right-clicks? You’re actually locki
 > - True protection balances usability, accessibility, and trust instead of fighting the browser and punishing legitimate visitors.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
+
+Trying to protect your content by blocking right-clicks? You’re actually locking out your readers, not the thieves.
 
 As a WordPress professional, I’ve seen all kinds of “security” tricks across websites. One, however, always makes me cringe: **blocking right-clicks**.  
 It’s still surprisingly common, even though it harms accessibility and user experience far more than it helps prevent content theft.
@@ -50,7 +50,7 @@ When planning content protection, think about who your site is really serving. R
 
 Developers and support staff typically rely on right-click actions to inspect code, debug CSS, or fix layout issues. Removing that functionality just slows everyone down.
 
-![ethnic man lying near psychologist](https://i0.wp.com/buthonestly.io/wp-content/uploads/2023/11/pexels-photo-5699454.jpeg?resize=1030%2C686&quality=81&ssl=1 "Photo by Alex Green on Pexels.com")
+![A row of orange and white barriers sitting next to each other on a road.](barriers.jpg)
 
 And your visitors? They’re mostly there to read, not steal. Putting barriers between them and your content leads to frustration and higher bounce rates.
 
@@ -79,7 +79,7 @@ Instead of disabling browser features, use approaches that respect users while k
 
 If you want to take that last one further, consider adding a logout link to your main menu. It’s a simple way to improve both user experience and security, giving logged-in users control over their session without needing extra plugins or code.
 
-![security logo](https://i0.wp.com/buthonestly.io/wp-content/uploads/2023/11/security-protection-anti-virus-software-60504.jpeg?resize=1030%2C686&quality=81&ssl=1 "Photo by Pixabay on Pexels.com")
+![Security guard with a flashlight looking into a room over a blue handrail.](security.jpg)
 
 If you really intend to prevent malicious users from copying your content, you can use add this CSS code in **Appearance > Additional CSS** to disable the feature via CSS:
 

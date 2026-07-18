@@ -4,8 +4,7 @@ date: 2025-10-30T02:00:00
 updated: 2026-05-12T23:03:51
 sticky: false
 cornerstone: false
-excerpt: Build, train, and tune a CNN in TensorFlow, understanding each layer
-  from data prep to Bayesian hyperparameter search.
+excerpt: Build, train, and tune a CNN in TensorFlow, understanding each layer from data prep to Bayesian hyperparameter search.
 categories:
   - Programming
 tags:
@@ -13,11 +12,13 @@ tags:
   - Automation
   - Creativity
   - Python
-coverAlt: "A long-exposure light painting of swirling red, green, and blue light trails against black, like tangled neural pathways."
-originalCover: https://buthonestly.io/wp-content/uploads/2025/11/luis-lara-nucZB1NPpRY-unsplash.jpg
+coverAlt: A long-exposure light painting of swirling red, green, and blue light trails against black, like tangled neural pathways.
+originalCover:
 downloads:
   - file: cnn-mnist-use-case-tensorflow.zip
     label: CNN + MNIST notebook
+cover: building-convolutional-neural-network-python-tensorflow.jpg
+coverCaption: Photo by Luis Lara on Unsplash.
 ---
 
 What does a CNN actually look like when you build it from scratch?
@@ -196,7 +197,7 @@ plt.show()
 
 You should see a row of handwritten digits like below, some thick, some thin, some slightly tilted. These small variations are what make MNIST useful: they force the network to learn patterns that generalize rather than memorize exact shapes.
 
-![MNIST dataset sample](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/mnist-dataset-sample.jpeg?resize=1000%2C214&quality=81&ssl=1)
+![MNIST dataset sample](mnist-dataset-sample.jpg)
 
 At this point, our data is fully prepared: loaded, normalized, encoded, and split. Next, we’ll start building the convolutional neural network architecture itself, one block at a time, and see how each component contributes to the final model.
 
@@ -315,7 +316,7 @@ The optimizer and learning rate control _how_ the model learns. Think of the los
 
 We’ll let Bayesian optimization try different options later so you can _see_ the impact rather than memorize rules.
 
-![Llustration of the path followed by the gradient descent method to reach the minimum of a](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/llustration-of-the-path-followed-by-the-gradient-descent-method-to-reach-the-minimum-of-a.jpg?resize=692%2C387&quality=81&ssl=1 "Illustration of the path followed by the optimizer to improve accuracy. Image from ResearchGate.net.4")
+![Illustration of the path followed by the gradient descent method to reach the minimum of a](optimizer-path.jpg "Image by ResearchGate.net.4.")
 
 The figure above shows the classic “hill and valley” view of how an optimizer trains a neural network.  
 The colored surface represents the loss function — high points mean poor predictions, and low points mean better ones.  
@@ -365,7 +366,7 @@ Different optimizers (like SGD, Adam, or RMSprop) follow slightly different path
 
 To visualize how this process scales up in larger models, take a look at the figure below.
 
-![Vgg 16 network architecture](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/vgg-16-network-architecture.png?resize=677%2C430&quality=80&ssl=1 "The standard VGG-16 neural network architecture. Image by ResearchGate.net.6")
+![The standard VGG-16 neural network architecture.](vgg-16.jpg "Image by ResearchGate.net.6")
 
 This is **VGG-16**, one of the most classic convolutional neural network architectures used in computer vision.  
 It works exactly like our `SimpleCNN`, just with more layers and filters.
@@ -602,7 +603,7 @@ plot_training_history(history_base)
 If both training and validation lines steadily go down for loss (or up for accuracy), your model is learning.  
 If the validation curve flattens or diverges from training, the model may be overfitting. It’s memorizing training data rather than learning general patterns.
 
-![CNN baseline accuracy plot](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/cnn-accuracy-plot.jpeg?resize=1000%2C331&quality=81&ssl=1)
+![CNN baseline accuracy plot](cnn-accuracy-plot.jpg)
 
 In the accuracy plots above, both lines rise quickly and meet near the top. That’s a good sign. It means the model is learning meaningful features and not just memorizing the training data. When training and validation accuracy move together and stay close, it usually indicates that the network is generalizing well.
 
@@ -742,7 +743,7 @@ plot_training_history(history)
 
 The figure below shows both training and validation curves. Compared to our earlier baseline, they converge even faster and remain tightly aligned; a sign that the optimized model learned efficiently without overfitting.
 
-![Cnn optimized accuracy plot](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/cnn-optimized-accuracy-plot.jpeg?resize=1000%2C327&quality=81&ssl=1)
+![CNN optimized accuracy plot](cnn-optimized-accuracy-plot.jpeg)
 
 ## Evaluating on the Test Set
 
@@ -775,7 +776,7 @@ plt.show()
 
 Each image below shows the input digit and the model’s predicted label on top.
 
-![Cnn model predictions](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/cnn-model-predictions.jpeg?resize=800%2C184&quality=81&ssl=1)
+![CNN model predictions](cnn-model-predictions.jpg)
 
 If your model is performing well, nearly all of these should be correct. Still, visualizing predictions is good practice. It helps you spot systematic mistakes (for instance, confusing 3s and 8s, or 4s and 9s).
 
@@ -794,7 +795,7 @@ plt.show()
 
 The darker the diagonal, the more correctly predicted samples for that digit. Off-diagonal values represent misclassifications, the model’s “blind spots.” For instance, if you see numbers in the cell for “5 predicted as 3,” it means those digits share visual features the CNN occasionally confuses.
 
-![Cnn confusion matrix](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/cnn-confusion-matrix.jpeg?resize=522%2C430&quality=81&ssl=1)
+![CNN confusion matrix](cnn-confusion-matrix.jpg)
 
 ### Classification Report
 

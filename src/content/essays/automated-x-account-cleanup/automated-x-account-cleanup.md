@@ -4,16 +4,16 @@ date: 2025-11-02T02:00:00
 updated: 2025-11-27T15:43:22
 sticky: false
 cornerstone: false
-excerpt: Automating my X cleanup let me delete years of noisy posts while
-  keeping the human conversations that still matter.
+excerpt: Automating my X cleanup let me delete years of noisy posts while keeping the human conversations that still matter.
 categories:
   - Programming
 tags:
   - Automation
   - Creativity
   - Productivity
-coverAlt: "A dense 3D pile of blue verified-checkmark badges, one glowing brightly at the centre."
-originalCover: https://buthonestly.io/wp-content/uploads/2025/11/x-twitter-account-cleanup.jpg
+coverAlt: A dense 3D pile of blue verified-checkmark badges, one glowing brightly at the centre.
+originalCover:
+cover: automated-x-account-cleanup.jpg
 ---
 
 In Italy, the 2nd of November is the _Day of the Dead_. A time to remember and, in a way, revive what’s gone.
@@ -41,7 +41,7 @@ There’s a strange tension in that choice. On one hand, deleting feels liberati
 
 The truth is, there’s no universal rule. The right choice depends on what you want that account to be now. If you’re relaunching it with a new focus — to share your work, reconnect with a community, or simply be active again — then some curation helps. If the account has personal meaning, or if its old posts still say something true about your path, keeping them makes sense.
 
-![X feed balance](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/x-feed-balance.jpg?resize=1000%2C667&quality=81&ssl=1 "Photo by Nathan Dumlao on Unsplash.")
+![A close-up shot of a person's hands holding a dark smartphone while wearing a grey hoodie and dark trousers. A classic black dive watch with a rotating bezel and a black strap is visible on their wrist.](x-feed-balance.jpg "Photo by Nathan Dumlao on Unsplash.")
 
 In my case, I found two full years of automation. An unintended experiment in noise. I once had a plugin on this website that would automatically tweet one of my past articles each day to “keep things active.” It seemed clever at the time, but it turned my timeline into a random feed of links without context. By 2017, the automation doubled to two tweets a day, and I had thousands of repetitive posts that added no value and broken links that no longer worked.
 
