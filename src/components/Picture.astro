@@ -38,9 +38,19 @@ const imgClass = twMerge("block h-auto max-w-full", className);
 /**
  * Remote (WP.com/Jetpack CDN): request an exact size via `resize=W,H`, cropping
  * to cover. Existing sizing params are stripped first so we never stack them.
+ *
+ * Anything that isn't an absolute URL — a root-relative path, or a blank/
+ * half-typed cover mid-edit — is handed back untouched. `new URL()` would throw
+ * an "Invalid URL" TypeError that names no essay, taking the whole page down
+ * over one bad frontmatter value.
  */
 function cdnUrl(rawSrc: string, w: number, h: number): string {
-  const url = new URL(rawSrc);
+  let url: URL;
+  try {
+    url = new URL(rawSrc);
+  } catch {
+    return rawSrc;
+  }
   for (const param of ["w", "h", "fit", "resize", "crop"]) {
     url.searchParams.delete(param);
   }
