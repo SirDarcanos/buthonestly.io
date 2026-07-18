@@ -25,8 +25,8 @@
   ],
   "automated-x-account-cleanup": [
     "ai-slop-midas-touch-modern-internet",
-    "neural-network-predict-resin-usage-3d-printed-miniatures",
     "delete-expired-coupons-automatically-woocommerce",
+    "neural-network-predict-resin-usage-3d-printed-miniatures",
     "what-is-vibe-coding-how-to-do-it",
     "how-to-build-a-github-profile-readme-that-feels-like-you",
     "tools-for-adhd-leadership"
@@ -85,7 +85,7 @@
     "woocommerce-eu-vat-number-setup",
     "woocommerce-password-strength-meter-checkout",
     "delete-expired-coupons-automatically-woocommerce",
-    "woocommerce-cli-product-management"
+    "bulk-edit-woocommerce-products-without-plugins"
   ],
   "distilroberta-emotion-analysis-nlp-case-study": [
     "ai-slop-midas-touch-modern-internet",
@@ -233,8 +233,8 @@
   ],
   "top-5-essential-wordpress-plugins-i-always-install-and-why": [
     "10-types-of-websites",
-    "bulk-edit-woocommerce-products-without-plugins",
     "do-you-trust-your-instincts-making-smart-wordpress-choices",
+    "bulk-edit-woocommerce-products-without-plugins",
     "wordpress-blocks-telex",
     "woocommerce-cli-product-management",
     "enhancing-wordpress-content-protection-beyond-right-click-blocks"
@@ -290,9 +290,9 @@
   "woocommerce-eu-vat-number-setup": [
     "delete-expired-coupons-automatically-woocommerce",
     "woocommerce-password-strength-meter-checkout",
-    "disable-gtin-requirements-non-eligible-woocommerce-products",
     "make-product-attributes-linkable-woocommerce",
     "creating-a-custom-add-to-cart-link-woocommerce",
+    "disable-gtin-requirements-non-eligible-woocommerce-products",
     "improve-woocommerce-related-products-recommendations"
   ],
   "woocommerce-password-strength-meter-checkout": [
@@ -325,6 +325,6 @@
     "10-types-of-websites",
     "ai-slop-midas-touch-modern-internet",
     "when-ai-stops-being-a-tool",
-    "how-to-build-a-github-profile-readme-that-feels-like-you"
+    "do-you-trust-your-instincts-making-smart-wordpress-choices"
   ]
 }
