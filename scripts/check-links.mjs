@@ -4,6 +4,8 @@
 // quote (which swallows the closing paren, so the caption never renders and the
 // stray quote leaks into the filename), and a relative image that doesn't exist
 // beside the essay (which fails the Astro build with ImageNotFound).
+// Also flags a callout marker written `> ![tip]` instead of `> [!tip]`, which
+// is valid Markdown and so degrades silently to a plain blockquote.
 // External links and #anchors are not checked. Exits non-zero on any problem so
 // it can gate `npm run lint`.
 import fs from "node:fs";
@@ -101,6 +103,14 @@ for (const { slug, body } of essays) {
     if (!essaySlugs.has(target))
       issues.push([slug, "wikilink", `[[${target}]]`]);
   }
+  // A callout marker with the bang outside the bracket — `> ![tip]` instead of
+  // `> [!tip]` — is still valid Markdown, so it silently degrades to a plain
+  // blockquote instead of rendering as a callout. Real images (`![alt](src)`)
+  // are excluded by the lookahead.
+  for (const m of clean.matchAll(/^>[ \t]*!\[(\w+)\](?!\()/gm)) {
+    issues.push([slug, "callout", `![${m[1]}] — did you mean [!${m[1]}]?`]);
+  }
+
   // Markdown images. Remote and root-relative sources are left to the link
   // check below; these are the essay-local ones.
   for (const { target, broken, raw } of markdownImages(clean)) {
