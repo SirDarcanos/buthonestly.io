@@ -122,7 +122,7 @@
     background: var(--accent);
   }
 
-  figure img {
+  header + figure img {
     filter: grayscale(1) contrast(1.05);
     mix-blend-mode: multiply;
   }
@@ -221,6 +221,14 @@
     @apply my-6;
   }
 
+  /* Body images keep their own shape. The global `img` rule forces 16:9 with
+     object-cover, which suits covers and cards but crops body images that
+     aren't 16:9 (a wide dataset strip, a tall diagram). Same layer and
+     specificity as that rule, so declaration order lets this win. */
+  .post-content img {
+    @apply aspect-auto object-contain;
+  }
+
   /* Image galleries — a responsive grid of images. Markup:
      <div class="gallery cols-3"><img .../><img .../></div> */
   .post-content .gallery {
@@ -229,8 +237,9 @@
   .post-content .gallery.cols-3 {
     @apply md:grid-cols-3;
   }
+  /* Gallery tiles stay a uniform grid, so they keep the 16:9 crop. */
   .post-content .gallery img {
-    @apply my-0 h-full w-full;
+    @apply my-0 aspect-video h-full w-full object-cover;
   }
 
   /* Tables — scroll horizontally instead of overflowing the reading column. */
