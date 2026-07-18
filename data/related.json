@@ -67,9 +67,9 @@
     "woocommerce-cli-product-management",
     "bulk-edit-woocommerce-products-without-plugins",
     "make-product-attributes-linkable-woocommerce",
-    "improve-woocommerce-related-products-recommendations",
     "edit-orders-woocommerce",
-    "woocommerce-attributes-vs-variations"
+    "woocommerce-attributes-vs-variations",
+    "improve-woocommerce-related-products-recommendations"
   ],
   "delete-expired-coupons-automatically-woocommerce": [
     "woocommerce-eu-vat-number-setup",
@@ -147,8 +147,8 @@
     "make-product-attributes-linkable-woocommerce",
     "creating-a-custom-add-to-cart-link-woocommerce",
     "woocommerce-attributes-vs-variations",
-    "woocommerce-password-strength-meter-checkout",
     "disable-gtin-requirements-non-eligible-woocommerce-products",
+    "woocommerce-password-strength-meter-checkout",
     "woocommerce-cli-product-management"
   ],
   "learning-care-without-feeling": [
@@ -275,8 +275,8 @@
     "do-you-trust-your-instincts-making-smart-wordpress-choices",
     "creating-a-custom-add-to-cart-link-woocommerce",
     "make-product-attributes-linkable-woocommerce",
-    "edit-orders-woocommerce",
     "improve-woocommerce-related-products-recommendations",
+    "edit-orders-woocommerce",
     "woocommerce-cli-product-management"
   ],
   "woocommerce-cli-product-management": [
