@@ -1,7 +1,11 @@
 // Verify internal links in essays resolve: [[wikilinks]] point to real essays,
 // and root-relative links (/…, /section/…, /topic/…, /downloads/…) match a real
-// route or download. External links and #anchors are not checked. Exits non-zero
-// on any broken link so it can gate `npm run lint`.
+// route or download. Also checks Markdown images: a title with an unbalanced
+// quote (which swallows the closing paren, so the caption never renders and the
+// stray quote leaks into the filename), and a relative image that doesn't exist
+// beside the essay (which fails the Astro build with ImageNotFound).
+// External links and #anchors are not checked. Exits non-zero on any problem so
+// it can gate `npm run lint`.
 import fs from "node:fs";
 import path from "node:path";
 
@@ -52,6 +56,41 @@ for (const slug of dirs) {
     downloadFiles.add(d[1]);
 }
 
+// Walk `![alt](target "title")` image refs. Scanned rather than regex-matched
+// because a quoted title may itself contain parens ("… MediEvil (1998)."), and
+// because an unterminated quote — the failure we want to catch — can't be
+// expressed as a match. A quote that only "closes" on a later line is broken.
+function* markdownImages(text) {
+  const re = /!\[[^\]]*\]\(/g;
+  let m;
+  while ((m = re.exec(text)) !== null) {
+    let i = re.lastIndex;
+    while (i < text.length && /[ \t]/.test(text[i])) i++;
+    const tStart = i;
+    while (i < text.length && !/[\s)]/.test(text[i])) i++;
+    const target = text.slice(tStart, i).replace(/^<|>$/g, "");
+    while (i < text.length && /[ \t]/.test(text[i])) i++;
+
+    let broken = false;
+    if (text[i] === '"' || text[i] === "'") {
+      const close = text.indexOf(text[i], i + 1);
+      const nl = text.indexOf("\n", i + 1);
+      if (close === -1 || (nl !== -1 && close > nl)) broken = true;
+      else i = close + 1;
+    }
+    if (!broken) {
+      while (i < text.length && /[ \t]/.test(text[i])) i++;
+      if (text[i] !== ")") broken = true;
+    }
+    const eol = text.indexOf("\n", m.index);
+    yield {
+      target,
+      broken,
+      raw: text.slice(m.index, eol === -1 ? text.length : eol).slice(0, 90),
+    };
+  }
+}
+
 const norm = (p) => (p.endsWith("/") || /\.[a-z0-9]+$/i.test(p) ? p : `${p}/`);
 const issues = [];
 for (const { slug, body } of essays) {
@@ -61,6 +100,21 @@ for (const { slug, body } of essays) {
     const target = m[1].trim();
     if (!essaySlugs.has(target))
       issues.push([slug, "wikilink", `[[${target}]]`]);
+  }
+  // Markdown images. Remote and root-relative sources are left to the link
+  // check below; these are the essay-local ones.
+  for (const { target, broken, raw } of markdownImages(clean)) {
+    if (broken) {
+      // The target is unreliable once quoting is broken, so don't also file it
+      // as a missing image.
+      issues.push([slug, "image title", raw]);
+      continue;
+    }
+    const src = target.split(/[#?]/)[0];
+    if (!src || /^(https?:)?\/\//i.test(src) || /^data:/i.test(src)) continue;
+    if (src.startsWith("/")) continue; // public/ asset — not essay-local
+    if (!fs.existsSync(path.join(ESSAYS, slug, src.replace(/^\.\//, ""))))
+      issues.push([slug, "image", src]);
   }
   for (const m of clean.matchAll(
     /\]\((\/[^)\s#]*)(?:#[^)\s]*)?(?:[ \t]+"[^"]*")?\)/g,
@@ -77,11 +131,11 @@ for (const { slug, body } of essays) {
 
 if (issues.length === 0) {
   console.log(
-    `✓ Links OK — ${essays.length} essays, all wikilinks and internal links resolve.`,
+    `✓ Links OK — ${essays.length} essays; wikilinks, internal links and images all resolve.`,
   );
   process.exit(0);
 }
-console.error(`✗ ${issues.length} broken internal link(s):\n`);
+console.error(`✗ ${issues.length} problem(s):\n`);
 for (const [slug, kind, link] of issues)
   console.error(`  ${slug}  [${kind}]  ${link}`);
 process.exit(1);
