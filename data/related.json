@@ -115,8 +115,8 @@
     "wordpress-site-performance-vs-desig",
     "do-you-trust-your-instincts-making-smart-wordpress-choices",
     "top-5-essential-wordpress-plugins-i-always-install-and-why",
-    "woocommerce-password-strength-meter-checkout",
     "make-product-attributes-linkable-woocommerce",
+    "woocommerce-password-strength-meter-checkout",
     "improve-woocommerce-related-products-recommendations"
   ],
   "gaming-made-me-better-leader": [
@@ -148,8 +148,8 @@
     "creating-a-custom-add-to-cart-link-woocommerce",
     "woocommerce-attributes-vs-variations",
     "disable-gtin-requirements-non-eligible-woocommerce-products",
-    "woocommerce-password-strength-meter-checkout",
-    "woocommerce-cli-product-management"
+    "woocommerce-cli-product-management",
+    "woocommerce-password-strength-meter-checkout"
   ],
   "learning-care-without-feeling": [
     "when-ai-stops-being-a-tool",
@@ -170,8 +170,8 @@
   "make-product-attributes-linkable-woocommerce": [
     "improve-woocommerce-related-products-recommendations",
     "creating-a-custom-add-to-cart-link-woocommerce",
-    "woocommerce-password-strength-meter-checkout",
     "woocommerce-attributes-vs-variations",
+    "woocommerce-password-strength-meter-checkout",
     "woocommerce-cli-product-management",
     "disable-gtin-requirements-non-eligible-woocommerce-products"
   ],
@@ -250,8 +250,8 @@
   "what-is-a-web-developer": [
     "vibe-writing-line-between-human-machine",
     "when-ai-stops-being-a-tool",
-    "ai-slop-midas-touch-modern-internet",
     "what-is-vibe-coding-how-to-do-it",
+    "ai-slop-midas-touch-modern-internet",
     "wordpress-blocks-telex",
     "10-types-of-websites"
   ],
@@ -275,8 +275,8 @@
     "do-you-trust-your-instincts-making-smart-wordpress-choices",
     "creating-a-custom-add-to-cart-link-woocommerce",
     "improve-woocommerce-related-products-recommendations",
-    "make-product-attributes-linkable-woocommerce",
     "edit-orders-woocommerce",
+    "make-product-attributes-linkable-woocommerce",
     "woocommerce-cli-product-management"
   ],
   "woocommerce-cli-product-management": [
@@ -314,17 +314,17 @@
   "wordpress-site-performance-vs-desig": [
     "enhancing-wordpress-content-protection-beyond-right-click-blocks",
     "do-you-trust-your-instincts-making-smart-wordpress-choices",
+    "write-in-markdown",
     "10-types-of-websites",
     "top-5-essential-wordpress-plugins-i-always-install-and-why",
-    "write-in-markdown",
     "limits-of-machine-learning"
   ],
   "write-in-markdown": [
     "vibe-writing-line-between-human-machine",
     "adhd-planner",
     "10-types-of-websites",
+    "do-you-trust-your-instincts-making-smart-wordpress-choices",
     "ai-slop-midas-touch-modern-internet",
-    "when-ai-stops-being-a-tool",
-    "do-you-trust-your-instincts-making-smart-wordpress-choices"
+    "when-ai-stops-being-a-tool"
   ]
 }
