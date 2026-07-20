@@ -8,7 +8,7 @@
 // only uploads that MP3 to R2 — it never re-synthesizes. Flags (preview):
 // --voice/--style/--pace/--silence/--budget. Env:
 // GOOGLE_APPLICATION_CREDENTIALS (+ optional VERTEX_REGION/VERTEX_MODEL); per-essay
-// overrides via `audio:` frontmatter.
+// overrides via `audioVoice` / `audioStyle` / `audioPace` frontmatter.
 
 import { readFile, writeFile } from "node:fs/promises";
 import { readFileSync } from "node:fs";
@@ -57,7 +57,7 @@ async function main() {
 
   const raw = await readFile(file, "utf8");
 
-  // Voice/style/pace: CLI flag > essay `audio:` frontmatter > default.
+  // Voice/style/pace: CLI flag > essay `audio*` frontmatter > default.
   const fm = essayAudioConfig(raw);
   const voice = flags.voice ?? fm.voice ?? DEFAULT_VOICE;
   const style = flags.style ?? fm.style ?? DEFAULT_STYLE;

@@ -31,7 +31,9 @@ accumulate and go out as a batch. Do not push on every change.
   uploads that MP3 to the STATIC R2 bucket — commit only uploads, it never
   re-synthesizes. Env in `.env`: `GOOGLE_APPLICATION_CREDENTIALS` (Vertex
   service-account JSON path), optional `VERTEX_REGION` / `VERTEX_MODEL`.
-  Per-essay overrides via `audio:` frontmatter (voice / style / pace).
+  Per-essay overrides via flat `audioVoice` / `audioStyle` / `audioPace`
+  frontmatter (flat, not a nested `audio:` map — Obsidian's Properties editor
+  can't edit nested objects).
 - `npm run related` — rebuild the semantic related-posts map (normally left
   to the `related.yml` Action).
 - A pre-commit hook (`.githooks/`, wired by the `prepare` script) optimizes

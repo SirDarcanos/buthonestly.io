@@ -88,16 +88,21 @@ export function essayTitle(raw) {
   return String(matter(raw).data?.title ?? "").trim();
 }
 
-// Per-essay audio overrides from optional `audio:` frontmatter, e.g.
-//   audio:
-//     voice: Enceladus
-//     style: witty
-//     pace: brisk
+// Per-essay audio overrides from optional flat frontmatter, e.g.
+//   audioVoice: Enceladus
+//   audioStyle: witty
+//   audioPace: brisk
+// Flat rather than a nested `audio:` map because Obsidian's Properties editor
+// can't edit nested objects ("Unknown format").
 // Any field left blank/absent falls through to the CLI flag, then the default.
 export function essayAudioConfig(raw) {
-  const a = matter(raw).data?.audio ?? {};
+  const fm = matter(raw).data ?? {};
   const pick = (v) => (v == null || v === "" ? undefined : String(v).trim());
-  return { voice: pick(a.voice), style: pick(a.style), pace: pick(a.pace) };
+  return {
+    voice: pick(fm.audioVoice),
+    style: pick(fm.audioStyle),
+    pace: pick(fm.audioPace),
+  };
 }
 
 // Remove ``` and ~~~ fenced code blocks wholesale.
