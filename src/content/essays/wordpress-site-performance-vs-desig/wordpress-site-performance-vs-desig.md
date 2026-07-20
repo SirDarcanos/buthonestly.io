@@ -10,8 +10,9 @@ categories:
 tags:
   - Creativity
   - Performance
-coverAlt: "A white and blue high-speed train rushing forward with motion blur streaking past."
-originalCover: https://buthonestly.io/wp-content/uploads/2026/03/wordpress-performance-design.jpg
+coverAlt: A white and blue high-speed train rushing forward with motion blur streaking past.
+originalCover:
+cover: wordpress-performance.jpg
 ---
 
 > [!summary]- Quick Summary
@@ -40,7 +41,7 @@ When a page loads instantly, it gives the impression of quality and reliability.
 
 That’s why I built my blog around _speed first_. I rely on the WordPress Bitácora theme and minimal plugins, no visual builders, and no unnecessary scripts. I don’t use featured images, custom fonts, or heavy effects. Almost everything is native or custom-built for this site, lightweight, and easy to maintain.
 
-![Google Lighthouse report showing a perfect 100 WordPress performance score alongside metrics for speed, best practices, and SEO.](https://i0.wp.com/buthonestly.io/wp-content/uploads/2026/03/wordpress-performance-score.jpg?resize=830%2C647&quality=81&ssl=1 "Google PageSpeed Insight score results for BUT. Honestly on Desktop.")
+![Google Lighthouse report showing a perfect 100 WordPress performance score alongside metrics for speed, best practices, and SEO.](wordpress-performance-score.jpg "Google PageSpeed Insight score results for BUT. Honestly on Desktop.")
 
 The payoff is immediate:
 
@@ -58,7 +59,7 @@ Speed wins attention, but design keeps it.
 
 Once your site loads fast and feels smooth, visuals become the next piece of the puzzle. A clean but _well-designed_ layout builds trust, improves readability, and gives your content identity. It’s what makes visitors remember _your_ site among the thousands they scroll through.
 
-![Notebook page with hand-drawn website wireframes and layout boxes, showing early web design planning for a multi-section homepage.](https://i0.wp.com/buthonestly.io/wp-content/uploads/2026/03/wordpress-design-structure.jpg?resize=830%2C467&quality=81&ssl=1 "Photo by Sigmund on Unsplash")
+![Notebook page with hand-drawn website wireframes and layout boxes, showing early web design planning for a multi-section homepage.](website-design-structure.jpg "Photo by Sigmund on Unsplash")
 
 Design isn’t just about aesthetics. It’s about **communication**. Typography guides the eye, spacing gives clarity, and subtle color choices create hierarchy. Even something as simple as using an image can break up long posts and give them character.
 
@@ -76,7 +77,7 @@ Design and performance don’t have to be enemies, they just need boundaries. Th
 
 A practical rule I follow is this: **never let design elements exist without purpose**. If a slider doesn’t improve engagement, remove it. If an animation doesn’t guide attention, it’s just decoration that slows things down.
 
-![Flat illustration of website structure flow with a central browser window showing code, surrounded by CSS, HTML, JS panels, gears, charts and cloud upload icons.](https://i0.wp.com/buthonestly.io/wp-content/uploads/2026/03/website-structure-flow.jpg?resize=830%2C520&quality=81&ssl=1)
+![Flat illustration of website structure flow with a central browser window showing code, surrounded by CSS, HTML, JS panels, gears, charts and cloud upload icons.](website-structure-flow.jpg)
 
 You can absolutely have a beautiful, modern site _and_ great performance. Tools like **lazy loading**, **[WebP images](https://jetpack.com/features/design/content-delivery-network/)**, and **locally hosted fonts** make it easier to add design without hurting your scores. The trick is to measure every change. After each adjustment, recheck your Core Web Vitals and Google PageSpeed results. [[do-you-trust-your-instincts-making-smart-wordpress-choices|Make smart choices]] when it comes to adding plugins.
 

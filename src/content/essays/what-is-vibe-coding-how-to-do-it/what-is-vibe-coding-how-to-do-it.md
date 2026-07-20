@@ -4,8 +4,7 @@ date: 2025-11-04T02:00:51
 updated: 2025-11-28T08:42:13
 sticky: false
 cornerstone: false
-excerpt: Vibe coding turns natural language prompts into working code, shifting
-  programming from memorizing syntax to communicating intent.
+excerpt: Vibe coding turns natural language prompts into working code, shifting programming from memorizing syntax to communicating intent.
 categories:
   - Programming
 tags:
@@ -13,11 +12,11 @@ tags:
   - Automation
   - Creativity
   - Productivity
-coverAlt: "A grey cat in a blue harness asleep on a keyboard’s wrist rest, in front of two monitors showing code."
-originalCover: https://buthonestly.io/wp-content/uploads/2025/11/vibe-coding-programming-language.jpg
+coverAlt: A grey cat in a blue harness asleep on a keyboard’s wrist rest, in front of two monitors showing code.
+originalCover:
+cover: vibe-coding-cat.jpg
+coverCaption: Photo by John Moeses Bauan on Unsplash.
 ---
-
-What’s the hottest programming language of this year?
 
 > [!summary]- Quick Summary
 >
@@ -30,6 +29,8 @@ What’s the hottest programming language of this year?
 > - Traditional programming won’t vanish, but collaborating with AI on code will reshape how we build, ship, and think about software.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
+
+What’s the hottest programming language of this year?
 
 According to [Andrej Karpathy](https://en.wikipedia.org/wiki/Andrej_Karpathy), it’s your language! Andrej is the person who coined **vibe coding** as a term in his now world-famous post on X, where he introduced the concept of AI-assisted coding taken to its extreme.
 
@@ -77,7 +78,7 @@ It’s about **trusting the AI completely**, writing a natural-language prompt, 
 
 And he’s right. The difference isn’t about tools, it’s about _trust_.
 
-![hands in front of white and black background](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/10/pexels-photo-3541916.jpeg?resize=975%2C1300&quality=81&ssl=1 "Photo by Matheus Viana on Pexels.com")
+![Human and robotic hands reaching toward each other against a plain white textured background.](creation-human-ai.jpg)
 
 If you’re coding responsibly with ChatGPT, reviewing the output for safety, readability, and security, you’re not vibe coding. But if you just want the end result, a working feature, a simple app, or a snippet that “just works”, and you’re fine not knowing what’s under the hood, you’re officially vibe coding.
 

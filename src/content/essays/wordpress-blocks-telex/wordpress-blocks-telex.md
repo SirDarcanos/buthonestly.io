@@ -13,8 +13,10 @@ tags:
   - Productivity
   - WordPress
   - Workflow
-coverAlt: "A screenshot of Automattic’s Telex tool on an orange background, with a prompt box reading ‘Describe your idea. Telex will build a WordPress block for you.’"
-originalCover: https://buthonestly.io/wp-content/uploads/2025/11/vibe-coding-creating-wordpress-blocks-with-telex.png
+coverAlt: A screenshot of Automattic’s Telex tool on an orange background, with a prompt box reading ‘Describe your idea. Telex will build a WordPress block for you.’
+originalCover:
+cover: wordpress-blocks-telex.jpg
+coverCaption:
 ---
 
 > [!summary]- Quick Summary
@@ -103,7 +105,7 @@ On frontend, the user is able to refresh quotes with a button.
 
 The Enhance Prompt feature turned it into the more WordPress-appropriate prompt that you see above.
 
-![Telex prompt for creating a WordPress block with vibe coding](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/telex-wordpress-block-tutorial-enhance-prompt.jpeg?resize=830%2C321&quality=81&ssl=1 "Telex prompt for creating a WordPress block for the Gutenberg editor.")
+![Telex prompt for creating a WordPress block with vibe coding.](telex-wordpress-block-tutorial-enhance-prompt.jpeg "Telex prompt for creating a WordPress block for the Gutenberg editor.")
 
 I confirmed it was still what I wanted, submitted it, and Telex took it from there:
 
@@ -113,11 +115,11 @@ I confirmed it was still what I wanted, submitted it, and Telex took it from the
 - It built an editor interface that inherits typography from the core Paragraph block and exposes color controls.
 - It added full and wide alignment support and a styled container that responds to background color changes.
 
-![Telex creating WordPress blocks automatically](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/telex-creating-blocks-wordpress.jpeg?resize=830%2C440&quality=81&ssl=1 "Telex acknowledging the prompt and creating my custom WordPress block.")
+![Telex creating WordPress blocks automatically.](telex-creating-blocks-wordpress.jpeg "Telex acknowledging the prompt and creating my custom WordPress block.")
 
 And here is the working Gutenberg block:
 
-![](wordpress-block-example.gif)
+![The Christmas quotes Telex block in action, rotating famous Christmas quotes at the press of a green button.](wordpress-block-example.gif)
 
 If you were to do this by hand, you would go through all the usual steps: set up a plugin, configure build tooling, register the block, add attributes and controls, connect an AJAX or REST handler, and only then start polishing the UX. Telex effectively compresses that entire “WordPress create a block” journey into one prompt and a few iterations.
 
@@ -150,7 +152,7 @@ You will hit limits in a few places:
 - Anything that requires serious performance tuning or security hardening.
 - Fine-tuning block settings and options.
 
-![Telex WordPress block editor](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/telex-wordpress-block-editor-view.jpeg?resize=830%2C472&quality=81&ssl=1 "Telex didn’t create color options like you’d normally see in core WordPress blocks.")
+![Telex WordPress block editor.](telex-wordpress-block-editor-view.jpeg "Telex didn’t create color options like you’d normally see in core WordPress blocks.")
 
 Like most AI-generated code, its output can be “confident but wrong.” You may still need to review the workflow, especially when it touches user input, payments, authentication, or data storage. It is faster than doing everything by hand, but it is not a substitute for understanding how WordPress works or how to make sure your users’ data are safe.
 

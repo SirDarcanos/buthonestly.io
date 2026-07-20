@@ -4,19 +4,17 @@ date: 2017-04-01T11:00:00
 updated: 2025-12-13T07:05:51
 sticky: false
 cornerstone: false
-excerpt: Attributes describe product details. Variations turn those details into
-  concrete choices that control price, stock, and what customers buy.
+excerpt: Attributes describe product details. Variations turn those details into concrete choices that control price, stock, and what customers buy.
 categories:
   - Web
 tags:
   - WordPress
   - Workflow
-coverAlt: "Several leather belts in black, brown, and tan fanned out in a row on a dark surface."
-coverCaption: Photo by Shivam Patil on Pexels.com
-originalCover: https://buthonestly.io/wp-content/uploads/2017/04/pexels-photo-31959214.jpeg
+coverAlt: Close-up of overlapping brown leather belts with visible stitching and a brass buckle.
+coverCaption:
+originalCover:
+cover: woocommerce-attributes-variations.jpg
 ---
-
-Attributes describe your products. Variations turn those details into real choices.
 
 > [!summary]- Quick Summary
 >
@@ -25,6 +23,8 @@ Attributes describe your products. Variations turn those details into real choic
 > - Understanding WooCommerce attributes vs variations helps you model only the complexity that actually exists in your store.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
+
+Attributes describe your products. Variations turn those details into real choices.
 
 If you work with WooCommerce for more than a week, you run into the WooCommerce attributes vs variations topic. At first, they look similar. They even live in the same part of the product editor, so it is easy to blur them together and treat attributes and variations as the same idea.
 
@@ -58,7 +58,7 @@ Attributes can exist on almost any WooCommerce product type. You can add them to
 
 The key point is this: attributes do not always create choices. Sometimes they just explain.
 
-![the Attributes screen on a WooCommerce product showcasing three different product attributes: brand, color, and size, and their respective options](https://i0.wp.com/buthonestly.io/wp-content/uploads/2023/12/woocommerce-attributes.jpeg?resize=1030%2C539&quality=81&ssl=1 "The Attributes screen of a t-shirt.")
+![The Attributes screen on a WooCommerce product showcasing three different product attributes: brand, color, and size, and their respective options](woocommerce-attributes.jpeg "The Attributes screen of a t-shirt.")
 
 On their own, attributes are neutral. They do not affect price, stock, or availability. They are simply structured data that describes a product.
 
@@ -92,7 +92,7 @@ That gives you six possible variations.
 
 Each one can have its own price, stock status, SKU, and image. That is the power of variations. They turn your neat attribute data into real, purchasable versions of the product.
 
-![the variations screen on a WooCommerce product showing a clothing item with colors and sizes variations](https://i0.wp.com/buthonestly.io/wp-content/uploads/2023/12/woocommerce-variations.jpeg?resize=1030%2C524&quality=81&ssl=1 "The Variations screen of a t-shirt.")
+![The variations screen on a WooCommerce product showing a clothing item with colors and sizes variations](woocommerce-variations.jpeg "The Variations screen of a t-shirt.")
 
 Without attributes, you cannot create variations. Without variations, your attributes never become choices.
 
@@ -196,7 +196,7 @@ Sometimes you want attributes to do more than describe a product. You might want
 
 For example, you can turn product attributes into links that filter your catalog by that attribute. That way, when a customer clicks on “Black” or “Large”, they see all products that match.
 
-[I wrote about this in more detail here](https://buthonestly.io/wp-content/uploads/2016/03/pexels-photo-1082529.jpeg "Make Product Attributes Linkable").
+[[make-product-attributes-linkable-woocommerce|I wrote about this in more detail here]].
 
 This is another reason to treat attributes as first-class structure. They are not just internal settings. They can become a powerful way for customers to move through your store.
 

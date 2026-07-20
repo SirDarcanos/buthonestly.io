@@ -4,19 +4,17 @@ date: 2016-01-27T08:33:48
 updated: 2026-05-12T20:07:39
 sticky: false
 cornerstone: false
-excerpt: Tweak WooCommerce password strength without wrecking your checkout or
-  your customers’ patience.
+excerpt: Tweak WooCommerce password strength without wrecking your checkout or your customers’ patience.
 categories:
   - Programming
 tags:
   - Performance
   - PHP
   - WordPress
-coverAlt: "Two young children play tug-of-war on a grassy field at sunset; the child in front wears a leather aviator cap."
-originalCover: https://buthonestly.io/wp-content/uploads/2016/01/passowrd-strength-meter.jpg
+coverAlt: Two young children play tug-of-war on a grassy field at sunset; the child in front wears a leather aviator cap.
+originalCover:
+cover: password-strength.jpg
 ---
-
-The WooCommerce password strength meter is good for security, but it is bad for some checkouts.
 
 > [!summary]- Quick Summary
 >
@@ -25,6 +23,8 @@ The WooCommerce password strength meter is good for security, but it is bad for 
 > - If you relax or remove it, add a short hint near the password field encouraging unique, non-reused passwords.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
+
+The WooCommerce password strength meter is good for security, but it is bad for some checkouts.
 
 If you run a store, you sit in the middle of that trade-off. You want customers to use strong passwords because a compromised account exposes order data, addresses, and emails. At the same time, you do not want people to get stuck at the most fragile step in your funnel: creating an account while paying.
 

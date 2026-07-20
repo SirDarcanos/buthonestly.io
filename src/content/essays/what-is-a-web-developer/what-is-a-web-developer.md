@@ -12,8 +12,9 @@ tags:
   - Creativity
   - PHP
   - Workflow
-coverAlt: "A tired young person rests their head on one hand at a laptop, in a dimly lit bedroom at night."
-originalCover: https://buthonestly.io/wp-content/uploads/2025/12/what-is-a-web-developer.jpg
+coverAlt: A tired young person rests their head on one hand at a laptop, in a dimly lit bedroom at night.
+originalCover:
+cover: web-developer-learning.jpg
 ---
 
 > [!summary]- Quick Summary
@@ -55,7 +56,7 @@ A classmate introduced me to OGame, a browser-based RTS game where you built pla
 
 It all ran in the browser. No downloads, no installers. Just a URL and a login form. That alone felt like magic.
 
-![OGame browser game home screen.](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/12/ogame-browser-game.jpg?resize=830%2C467&quality=81&ssl=1 "The home screen of OGame. Screenshot by Gameforge 4D GmbH © 2002.")
+![OGame browser interface showing a planet overview, resources, research, shipyard, and a list of planets.](ogame-browser-game.jpg "The home screen of OGame. Screenshot by Gameforge 4D GmbH © 2002.")
 
 Inside OGame, I joined a massive alliance called DEFAL. It ran like a small, chaotic country. We had ministries, a constitution, laws, and hearings. The founder was very into politics and basically turned the alliance into a role-play parliament.
 
@@ -79,7 +80,7 @@ So I asked him where I could learn.
 
 He pointed me to HTML.it, an Italian site packed with free tutorials on XHTML, CSS, and the basics of _web development_. That became my first real classroom.
 
-![Early 2000s web development and browser on an old computer screen](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/12/web-development-in-2000s.jpg?resize=830%2C453&quality=81&ssl=1)
+![Early 2000s web development and browser on an old computer screen](web-development-in-2000s.jpg)
 
 ## Rebuilding A Website From “View Source”
 
@@ -125,7 +126,7 @@ Where was the text coming from? How was the page built? How did all these PHP fi
 
 That confusion pushed me into programming.
 
-![Web development was confusing at first. A cat looking confused.](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/12/what-is-a-web-developer-confused.jpg?resize=830%2C467&quality=81&ssl=1)
+![Curious tabby cat looking upward between two question marks on a bright orange and blue background.](confused-cat.jpg)
 
 I started with simple, linear PHP scripts. One file, top to bottom: print some text, maybe read something from a database with no concerns about security, perhaps show a variable. Nothing you’d put in a “jobs for web developers” ad, but enough to feel like I was finally talking to the server, not just the browser.
 
@@ -324,7 +325,7 @@ One good habit is to build a project with AI, ship it, then rebuild it from scra
 
 AI should compress time, not replace thinking.
 
-![An asian muslim woman thinking about modern web development an AI](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/12/ai-in-web-development.jpg?resize=830%2C467&quality=81&ssl=1)
+![Woman in a hijab concentrating at a desk between a laptop and tablet, with her hands pressed to her temples.](hijab-woman-focusing.jpg)
 
 Once you know how things work, AI becomes a multiplier. It can help you ship faster, explore more ideas, and avoid some dead ends. But the foundation is still yours.
 

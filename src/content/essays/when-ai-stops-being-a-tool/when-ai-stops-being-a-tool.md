@@ -4,8 +4,7 @@ date: 2026-06-23T16:00:00
 updated: 2026-06-30T16:36:28
 sticky: false
 cornerstone: false
-excerpt: We let AI set the rhythm. Instead of leading it, we let ourselves be
-  led by it, following it blindly.
+excerpt: We let AI set the rhythm. Instead of leading it, we let ourselves be led by it, following it blindly.
 categories:
   - Observations
 tags:
@@ -13,8 +12,10 @@ tags:
   - AI
   - Productivity
   - Workflow
-coverAlt: "Two colleagues in suits study a laptop screen together in a glass-walled office."
-originalCover: https://buthonestly.io/wp-content/uploads/2026/05/when-ai-stops-being-a-tool.jpg
+coverAlt: Two colleagues in suits study a laptop screen together in a glass-walled office.
+originalCover:
+cover: ai-leading.jpg
+coverCaption: Photo by Vitaly Gariev on Unsplash.
 ---
 
 > [!summary]- Quick Summary
@@ -184,7 +185,7 @@ I caught myself doing that too.
 
 Not maliciously, and not because I think AI is a bad tool. I have used it well. But I started to dislike how often it was my first answer.
 
-![Claude Chat prompt box, ready to accept a prompt.](https://i0.wp.com/buthonestly.io/wp-content/uploads/2026/05/claude-chat-prompt.jpg?resize=830%2C354&quality=81&ssl=1)
+![Claude Chat prompt box, ready to accept a prompt.](claude-chat-prompt.jpg)
 
 ## Who’s Leading Whom?
 
@@ -252,7 +253,7 @@ Nothing terrible happened. That is important to say.
 
 This was not a collapse. It was not a disaster. It was not one of those stories where everything burns down and the lesson becomes obvious.
 
-![A quiet home office at night, with an open laptop glowing on a desk and an empty chair pulled back.](https://i0.wp.com/buthonestly.io/wp-content/uploads/2026/05/what-it-costs.jpg?resize=830%2C467&quality=81&ssl=1)
+![Person working late at a laptop in a dim office, surrounded by charts and a coffee mug.](what-it-costs.jpg)
 
 It was quieter than that.
 

@@ -5,9 +5,11 @@
 // stray quote leaks into the filename), and a relative image that doesn't exist
 // beside the essay (which fails the Astro build with ImageNotFound).
 // Also flags a callout marker written `> ![tip]` instead of `> [!tip]`, which
-// is valid Markdown and so degrades silently to a plain blockquote.
-// External links and #anchors are not checked. Exits non-zero on any problem so
-// it can gate `npm run lint`.
+// is valid Markdown and so degrades silently to a plain blockquote; a
+// frontmatter `cover:` with no file beside the essay; raw <img> in hand-written
+// HTML (galleries); and leftover WordPress.com URLs now that every essay image
+// is local. Other external links and #anchors are not checked. Exits non-zero
+// on any problem so it can gate `npm run lint`.
 import fs from "node:fs";
 import path from "node:path";
 
@@ -49,7 +51,7 @@ for (const slug of dirs) {
   const raw = fs.readFileSync(path.join(ESSAYS, slug, `${slug}.md`), "utf8");
   const m = raw.match(/^---\n([\s\S]*?)\n---\n/);
   const fm = m?.[1] ?? "";
-  essays.push({ slug, body: raw.slice(m?.[0].length ?? 0) });
+  essays.push({ slug, fm, body: raw.slice(m?.[0].length ?? 0) });
   routes.add(`/${slug}/`);
   for (const c of listUnder(fm, "categories"))
     routes.add(`/section/${slugify(c)}/`);
@@ -95,8 +97,48 @@ function* markdownImages(text) {
 
 const norm = (p) => (p.endsWith("/") || /\.[a-z0-9]+$/i.test(p) ? p : `${p}/`);
 const issues = [];
-for (const { slug, body } of essays) {
+for (const { slug, fm, body } of essays) {
   const clean = body.replace(/```[\s\S]*?```/g, ""); // ignore code blocks
+
+  // Frontmatter `cover:`. Nothing else validates it — the schema only checks
+  // that `originalCover` parses as a URL — so a bad cover surfaces as a build
+  // failure (ImageNotFound), and can hide behind Astro's content cache until a
+  // cold build in CI. Every variant broke a build during the image migration:
+  // file missing, file saved without its extension, and reference missing one.
+  const cover = fm
+    .match(/^cover:[ \t]*(\S.*?)[ \t]*$/m)?.[1]
+    ?.replace(/^["']|["']$/g, "");
+  if (
+    cover &&
+    !/^https?:/i.test(cover) &&
+    !fs.existsSync(path.join(ESSAYS, slug, cover.replace(/^\.\//, "")))
+  ) {
+    issues.push([slug, "cover", cover]);
+  }
+
+  // Leftover WordPress.com URLs. Every essay image is local now, so an absolute
+  // wp.com / wp-content upload / wpcomstaging URL is a straggler that 404s.
+  // Matched only as a URL, so prose paths ("wp-content/themes/…") don't trip it.
+  for (const m of clean.matchAll(
+    /https?:\/\/[^\s)"'<>]*(?:\.wp\.com|wp-content\/uploads|wpcomstaging\.com)[^\s)"'<>]*/gi,
+  )) {
+    issues.push([slug, "wordpress url", m[0].slice(0, 90)]);
+  }
+
+  // Raw <img>. Galleries are hand-written HTML, so the Markdown scanner below
+  // never sees them.
+  for (const m of clean.matchAll(/<img[^>]+src=["']([^"']+)["']/gi)) {
+    const src = m[1].split(/[#?]/)[0];
+    if (
+      !src ||
+      /^(https?:)?\/\//i.test(src) ||
+      /^data:/i.test(src) ||
+      src.startsWith("/")
+    )
+      continue;
+    if (!fs.existsSync(path.join(ESSAYS, slug, src.replace(/^\.\//, ""))))
+      issues.push([slug, "image", src]);
+  }
   // `[[…]]` wikilinks, but not `![[…]]` embeds (audio players etc.).
   for (const m of clean.matchAll(/(?<!!)\[\[([^\]|#]+)/g)) {
     const target = m[1].trim();

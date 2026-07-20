@@ -4,20 +4,18 @@ date: 2015-09-01T09:45:38
 updated: 2026-05-12T22:45:17
 sticky: false
 cornerstone: false
-excerpt: Markdown keeps writing fast, portable, and distraction-free, working
-  across tools so you focus on ideas, not formatting or interfaces instead.
+excerpt: Markdown keeps writing fast, portable, and distraction-free, working across tools so you focus on ideas, not formatting or interfaces instead.
 categories:
   - Observations
 tags:
   - Blogging
   - Creativity
   - Workflow
-coverAlt: "Overhead view of a person in a white sweater typing on a laptop at a white desk, with a notebook, a glass of water, and small succulents."
-coverCaption: Photo by cottonbro studio on Pexels.com
-originalCover: https://buthonestly.io/wp-content/uploads/2015/09/pexels-photo-5076531.jpeg
+coverAlt: Overhead view of a person typing on a laptop at a wooden desk filled with notebooks, stationery, and office supplies.
+coverCaption:
+originalCover:
+cover: writing-markdown.jpg
 ---
-
-Writing feels better when the tool disappears.
 
 > [!summary]- Quick Summary
 >
@@ -27,6 +25,8 @@ Writing feels better when the tool disappears.
 > - Rich editors offer more features, but Markdown is the one that reliably gets out of the way.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
+
+Writing feels better when the tool disappears.
 
 Most writing apps promise help. They offer menus, templates, formatting bars, and collaboration modes. They look powerful. In practice, they often slow down the only thing that matters, which is getting words out of your head and onto the page.
 
@@ -70,7 +70,7 @@ No modal windows. No “format painter”. No mode switches. The tool is not try
 
 For me, this matters in the kind of writing I do most days. Documentation. Internal posts. Support replies. Essay drafts. The content is different, but the structure is the same, and Markdown stays stable under all of it.
 
-![man typing on computer](https://i0.wp.com/buthonestly.io/wp-content/uploads/2015/09/markdown-lets-me-focus.jpg?resize=1000%2C563&quality=81&ssl=1 "Photo by Vitaly Gariev on Unsplash")
+![Focused man working at a desktop computer in a colorful home office with plants, stationery, and a desk lamp.](markdown-focus.jpg "Photo by Vitaly Gariev on Unsplash")
 
 ## One Syntax, Many Places
 
@@ -122,7 +122,7 @@ Markdown is the thread that connects all of them. It is the same pattern in each
 
 If Ulysses vanished, or WordPress changed, or I needed to switch laptops, my writing would still live in simple text files that any editor can open.
 
-![Timeless writing ulysses](https://i0.wp.com/buthonestly.io/wp-content/uploads/2015/09/timeless-writing-ulysses.jpg?resize=1000%2C684&quality=81&ssl=1 "By Geoffrey Barker – Own work, CC BY-SA 4.0.")
+![Worn blue-covered copy of Ulysses by James Joyce resting on a white surface, with frayed pages and edges.](ulysses.jpg "By Geoffrey Barker – Own work, CC BY-SA 4.0.")
 
 ## Why I Still Write in Markdown
 

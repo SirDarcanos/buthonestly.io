@@ -4,19 +4,19 @@ date: 2023-12-04T10:00:00
 updated: 2025-12-16T11:59:54
 sticky: false
 cornerstone: false
-excerpt: Automatically validate EU VAT numbers at WooCommerce checkout with VIES
-  so B2B orders stay compliant and error free.
+excerpt: Automatically validate EU VAT numbers at WooCommerce checkout with VIES so B2B orders stay compliant and error free.
 categories:
   - Programming
 tags:
   - PHP
   - Productivity
   - WordPress
-coverAlt: "A night-time satellite view of Europe from space, city lights glowing across the continent."
-originalCover: https://buthonestly.io/wp-content/uploads/2023/12/woocommerce-eu-vat-number-validation.jpg
+coverAlt: A night-time satellite view of Europe from space, city lights glowing across the continent.
+originalCover:
 downloads:
   - file: eu-vat-rates.csv
     label: EU VAT rates (CSV)
+cover: woocommerce-vat-tax.jpg
 ---
 
 > [!summary]- Quick Summary
@@ -51,11 +51,11 @@ Before you touch VAT numbers, make sure WooCommerce is charging VAT in the right
 
 Go to **WooCommerce → Settings** and make sure your store address is correct. WooCommerce uses your store base location in a few important tax decisions, and “close enough” is how you end up with surprise reports.
 
-![The WooCommerce store address settings](https://i0.wp.com/buthonestly.io/wp-content/uploads/2023/12/woocommerce-eu-store-address.jpg?resize=830%2C439&quality=81&ssl=1)
+![The WooCommerce store address settings.](woocommerce-eu-store-address.jpg)
 
 Now go to **WooCommerce → Settings → Tax**. If you do not see a Tax tab, you likely need to enable taxes first in **WooCommerce → Settings → General → Enable Taxes** (wording varies slightly by version).
 
-![The WooCommerce checkbox to enable tax rates](https://i0.wp.com/buthonestly.io/wp-content/uploads/2023/12/woocommerce-eu-vat-taxes-enabled.jpg?resize=829%2C271&quality=81&ssl=1)
+![The WooCommerce checkbox to enable tax rates.](woocommerce-eu-vat-taxes-enabled.jpg)
 
 Once taxes are enabled, open the **Tax** tab.
 
@@ -70,7 +70,7 @@ There are two decisions here that quietly affect everything:
 
 Your accountant can help you decide on both of these settings.
 
-![WooCommerce settings to choose how to enter prices and calculate VAT rates](https://i0.wp.com/buthonestly.io/wp-content/uploads/2023/12/woocommerce-eu-vat-calculation-options.jpg?resize=830%2C303&quality=81&ssl=1)
+![WooCommerce settings to choose how to enter prices and calculate VAT rates.](woocommerce-eu-vat-calculation-options.jpg)
 
 ### Add Your VAT Rates
 
@@ -78,17 +78,17 @@ Now go to **Standard rates** (or the tax class you use) and add rates for the co
 
 WooCommerce can handle this as a table. You provide a country code and a percentage, and WooCommerce does the math at checkout.
 
-![List of WooCommerce EU VAT rates in the settings](https://i0.wp.com/buthonestly.io/wp-content/uploads/2023/12/woocommerce-eu-vat-rates.jpg?resize=830%2C422&quality=81&ssl=1)
+![List of WooCommerce EU VAT rates in the settings.](woocommerce-eu-vat-rates.jpg)
 
 This is where your accountant’s input matters a lot. The “right” rates depend on what you sell and where you sell it. WooCommerce will not stop you from entering something that looks plausible and is wrong.
 
 If you sell multiple types of products with different VAT treatment, use **additional tax classes** instead of trying to hack it into one table.
 
-![WooCommerce additional VAT rates for EU stores](https://i0.wp.com/buthonestly.io/wp-content/uploads/2023/12/woocommerce-tax-additional-rates.jpg?resize=830%2C515&quality=81&ssl=1)
+![WooCommerce additional VAT rates for EU stores.](woocommerce-tax-additional-rates.jpg)
 
 For your convenience, I compiled a ready-to-import CSV file with all the current tax rates of all EU states from the [Europa.eu website](https://europa.eu/youreurope/business/taxation/vat/vat-rules-rates/index_en.htm#inline-nav-6). You can import it from **WooCommerce → Settings → Tax → Standard rates → Import CSV**.
 
-![WooCommerce import EU VAT rates buttons](https://i0.wp.com/buthonestly.io/wp-content/uploads/2023/12/woocommerce-import-vat-rates.jpg?resize=830%2C363&quality=81&ssl=1)
+![WooCommerce import EU VAT rates buttons.](woocommerce-import-vat-rates.jpg)
 
 ## Where VAT Numbers Fit In
 
