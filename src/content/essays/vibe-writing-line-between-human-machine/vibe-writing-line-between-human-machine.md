@@ -13,12 +13,11 @@ tags:
   - Creativity
   - Productivity
   - Workflow
-coverAlt: "A close-up of a vintage typewriter with a sheet of paper that reads ‘Something worth reading.’"
+coverAlt: A close-up of a vintage typewriter with a sheet of paper that reads ‘Something worth reading.’
 coverCaption: Photo by Suzy Hazelwood on Pexels.com
-originalCover: https://buthonestly.io/wp-content/uploads/2025/10/pexels-photo-3695297.jpeg
+originalCover:
+cover: vibe-writing.jpg
 ---
-
-Why is _vibe writing_ still controversial when _vibe coding_ is already becoming normal?
 
 > [!summary]- Quick Summary
 >
@@ -30,6 +29,8 @@ Why is _vibe writing_ still controversial when _vibe coding_ is already becoming
 > - What matters most is the space we share with the machine and what we still choose to stand behind as ours.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
+
+Why is _vibe writing_ still controversial when _vibe coding_ is already becoming normal?
 
 Earlier this month, I wrote about [[what-is-vibe-coding-how-to-do-it|vibe coding]], the idea of building software by describing how it should _feel_ rather than how it should work. The concept is spreading fast: developers are experimenting with it, companies are hiring people around it, and tools are being built for it.
 
@@ -45,7 +46,7 @@ What started as a playful way to talk about intuition in design is now shaping h
 
 It’s a strange but natural evolution. As AI systems take over syntax and structure, human work shifts toward sense. Developers focus less on getting the function right and more on getting the feeling right. Some have started using [the term VibeOps](https://ezops.cloud/blog/vibeops-devops-future) to define people who write code by vibe coding, describing how software should feel instead of detailing how it should work internally.
 
-![digital code and light blending with human hand](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/10/abstract-concept-illustration-of-ai-assisted-programming-digital-code-and.png?resize=1024%2C768&quality=80&ssl=1)
+![Hand reaching toward a futuristic screen filled with glowing code, file lists, and data charts.](vibe-coding.jpg)
 
 In that world, “feel” becomes an interface. And that raises an obvious question: if we can code by vibe, why can’t we write by it, make art by it, or make music by it? But let’s stick to writing for now.
 
@@ -67,8 +68,6 @@ Still, I keep wondering where we draw the line. Is a chatbot writing support rep
 
 Maybe what we’re defending isn’t writing itself, but the illusion that certain words are more important than others and must come from a person.
 
-![Abstract minimal composition of two intersecting shapes: human and machine connection.](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/10/abstract-minimal-composition-of-two-intersecting-shapes-human-and-3.png?resize=1024%2C768&quality=80&ssl=1)
-
 ## The Different Ethics of Creation
 
 When AI assists in code, we call it productivity. When it assists in writing, we call it plagiarism.
@@ -83,7 +82,7 @@ Maybe it does. Not because of pride or ownership, but because originality still 
 
 We like to say there’s nothing new under the sun. Possibly that’s true most of the time. Most writing, like most code, is incremental. We build on what already exists, what we’ve seen, read, or felt before. Creation has always been a kind of collaboration across time.
 
-![two women standing while looking at papers](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/10/pexels-photo-5393572.jpeg?resize=867%2C1300&quality=81&ssl=1 "Photo by KATRIN BOLOVTSOVA on Pexels.com")
+![Two women collaborating at a desk with a laptop, camera, notebooks, and photos in a bright creative workspace.](cowriting.jpg "Photo by Vitaly Gariev on Unsplash")
 
 But that doesn’t mean originality is an illusion. It’s just rare. Every so often, someone manages to think or express something that nobody else has. Not because they worked in isolation, but because they saw something others didn’t. That spark of perspective, that leap, is what we call originality.
 
@@ -123,7 +122,7 @@ Writing with AI didn’t just shape this essay. It shaped how I think about crea
 
 Maybe that’s the point of all this. The goal isn’t to prove who’s more original, human or machine, but to stay aware of what makes creation meaningful.
 
-![sunset hands hand sun](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/10/pexels-photo-4586258.jpeg?resize=975%2C1300&quality=81&ssl=1 "Photo by Raphael Brasileiro on Pexels.com")
+![Hand reaching toward the setting sun over calm water, with its reflection stretching across the surface.](hand-reaching-light.jpg "Photo by Marc-Olivier Jodoin on Unsplash.")
 
 Writing this essay challenged a few of my own assumptions and beliefs. It made me see where I actually stand on vibe writing, vibe coding, and originality. I started out curious, maybe a bit skeptical, but somewhere along the way I realized that what matters most to me isn’t authorship or speed, it’s intention. Why we create, and what we hope others will feel when they read it.
 

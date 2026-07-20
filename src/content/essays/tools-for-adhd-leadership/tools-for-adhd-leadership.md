@@ -13,11 +13,12 @@ tags:
   - Automation
   - Productivity
   - Workflow
-coverAlt: "A person in a knit vest and headphones sits cross-legged on a desk, fidgeting with a small object in a home workspace."
-originalCover: https://buthonestly.io/wp-content/uploads/2026/04/leadership-tools-for-adhd.jpg
+coverAlt: A person in a knit vest and headphones sits cross-legged on a desk, fidgeting with a small object in a home workspace.
+originalCover:
 downloads:
   - file: quill-meetings-templates.zip
     label: Quill meeting templates
+cover: adhd-tools.jpg
 ---
 
 > [!summary]- Quick Summary
@@ -55,7 +56,7 @@ I remember sitting there thinking, how can I be trusted with complex projects bu
 
 Some time later, I went through testing and got a Combined ADHD diagnosis. It wasn’t a surprise, more like confirmation of something I’d been trying to work around for years. But knowing what it was changed how I approached work.
 
-![Child’s hands arranging domino tiles on an outdoor table, symbolizing strategic thinking, focus, and playful discovery in ADHD leadership development](https://i0.wp.com/buthonestly.io/wp-content/uploads/2026/04/adhd-leadership-discovery.jpg?resize=830%2C467&quality=81&ssl=1)
+![Child’s hands arranging domino tiles on an outdoor table, symbolizing strategic thinking, focus, and playful discovery in ADHD leadership development](adhd-leadership-discovery.jpg)
 
 Suddenly, the pattern made sense. The harder and more stimulating the task, the more focused I became. The simpler and more repetitive it was, the harder it became to start. Urgency worked better than routine. Interest worked better than obligation.
 
@@ -79,7 +80,7 @@ The biggest breakthrough came with **Quill Meetings**. For years, I struggled to
 
 You can download my custom templates from the **Downloads** section below, or on the [resources page](/resources/ "Resources & Assets").
 
-![Close-up of a MacBook screen in a dark room showing the dock with apps like browser, design software, and note-taking tools, representing digital ADHD productivity tools that support focused, creative work.](https://i0.wp.com/buthonestly.io/wp-content/uploads/2026/04/adhd-productivity-tools.jpg?resize=830%2C467&quality=81&ssl=1 "Photo by Supriya Bhandari on Unsplash")
+![Close-up of a MacBook screen in a dark room showing the dock with apps like browser, design software, and note-taking tools, representing digital ADHD productivity tools that support focused, creative work.](adhd-productivity-tools.jpg "Photo by Supriya Bhandari on Unsplash")
 
 **Email and P2s** are my quietest tools but also the most reliable. At Automattic, internal blogs (P2s) are where we discuss asynchronously. We have a saying that if it’s not on a P2, it didn’t happen. I subscribe to the ones that matter and receive digests by email instantly, daily, or weekly. I skim them quickly, deleting what’s irrelevant, reading what deserves attention.
 
@@ -107,7 +108,7 @@ Getting diagnosed didn’t change how I lead, it clarified why I lead the way I 
 
 It made me notice how much energy people spend hiding their friction points. Everyone has them, whether it’s attention, anxiety, or something else.
 
-![Elderly woman in a sleeveless top leaning sadly against metal bars, staring down with a tired expression, visually representing how ADHD hidden friction can make everyday life feel like being trapped behind invisible barriers.](https://i0.wp.com/buthonestly.io/wp-content/uploads/2026/04/adhd-hidden-friction.jpg?resize=830%2C467&quality=81&ssl=1)
+![Elderly woman in a sleeveless top leaning sadly against metal bars, staring down with a tired expression, visually representing how ADHD hidden friction can make everyday life feel like being trapped behind invisible barriers.](adhd-hidden-friction.jpg)
 
 It also deepened my curiosity. I’ve learned to [[mastering-effective-feedback-facts-feelings-curiosity|listen and ask more before giving feedback]]. When someone drops the ball, I ask what the bottleneck is before assuming it’s motivation. Often it’s structural, not personal.
 

@@ -5,9 +5,7 @@ updated: 2025-12-10T08:09:20
 sticky: false
 cornerstone: false
 draft: false
-excerpt: "Psychological safety grows from people-first leadership: daily
-  transparency, shared ownership, and empathy that help teams belong and
-  thrive."
+excerpt: "Psychological safety grows from people-first leadership: daily transparency, shared ownership, and empathy that help teams belong and thrive."
 categories:
   - Leadership
 tags:
@@ -15,11 +13,11 @@ tags:
   - Feedback
   - Team Building
   - Workflow
-coverAlt: "Four smiling colleagues take a selfie together in front of a chalkboard covered in hand-drawn diagrams."
-originalCover: https://buthonestly.io/wp-content/uploads/2025/11/psychological-safety-in-teams-leadership.jpg
+coverAlt: Four smiling colleagues take a selfie together in front of a chalkboard covered in hand-drawn diagrams.
+originalCover:
+cover: psychological-safety-teams-leadership.jpg
+coverCaption: Photo by Vitaly Gariev on Unsplash
 ---
-
-What makes people feel safe enough to speak up, disagree, or simply be themselves at work?
 
 > [!summary]- Quick Summary
 >
@@ -31,6 +29,8 @@ What makes people feel safe enough to speak up, disagree, or simply be themselve
 > - Psychological safety proves to be a habit: asking instead of telling, explaining decisions, treating failure with empathy, and modeling transparency.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
+
+What makes people feel safe enough to speak up, disagree, or simply be themselves at work?
 
 It is easy to say, “We want an open culture,” but psychological safety does not come from slogans or handbooks. It grows through consistent behavior, especially from those who lead.
 
@@ -50,7 +50,7 @@ Everyone proposed ideas, and we voted. After a few rounds of discussion, we chos
 
 We even designed a new logo together. None of us were designers, so we ended up commissioning a friend of mine to bring our sketches to life. But the process itself mattered far more than the result. Everyone participated. Everyone had ownership.
 
-![Team Horizon logo](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/horizon-logo.jpg?resize=998%2C168&quality=81&ssl=1 "Horizon team logo. © All Rights Reserved")
+![Team Horizon logo](horizon-logo.jpg "Horizon team logo. © All Rights Reserved")
 
 That’s when I first saw how inclusion builds psychological safety. When people feel they can shape the team’s identity, they stop worrying about “fitting in” and start focusing on contributing.
 
@@ -90,7 +90,7 @@ I listen to all opinions before making a decision, even when I already have one 
 
 People can handle hard news or directives if they understand the reasoning. What they struggle with is confusion and silence.
 
-![photo of people talking to each other](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/pexels-photo-3182765.jpeg?resize=1871%2C1300&quality=81&ssl=1 "Photo by fauxels on Pexels.com")
+![Team leader gestures while speaking as colleagues listen around a table with laptops and tablets in a bright meeting room.](listen-before-leading.jpg)
 
 ### Transparency and Admitting Mistakes
 

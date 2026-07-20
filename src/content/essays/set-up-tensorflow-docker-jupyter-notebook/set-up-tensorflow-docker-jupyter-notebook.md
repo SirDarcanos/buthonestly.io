@@ -4,19 +4,17 @@ date: 2025-10-25T02:00:03
 updated: 2025-12-04T06:30:07
 sticky: false
 cornerstone: false
-excerpt: Create a stable TensorFlow lab with Docker and Jupyter, avoiding
-  dependency hell and keeping notebooks reproducible.
+excerpt: Create a stable TensorFlow lab with Docker and Jupyter, avoiding dependency hell and keeping notebooks reproducible.
 categories:
   - Web
 tags:
   - AI
   - Python
   - Workflow
-coverAlt: "The Docker whale logo above the orange TensorFlow logo on a white background."
-originalCover: https://buthonestly.io/wp-content/uploads/2026/01/docker-tensorflow-environment.jpg
+coverAlt: The Docker whale logo above the orange TensorFlow logo on a white background.
+originalCover:
+cover: docker-tensorflow-jupyter.jpg
 ---
-
-Before the first line of code, you need an environment that won’t fight you.
 
 > [!summary]- Quick Summary
 >
@@ -28,6 +26,8 @@ Before the first line of code, you need an environment that won’t fight you.
 > - Once it runs, restarting your TensorFlow lab is just starting the same container, so experiments stay organized and repeatable.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
+
+Before the first line of code, you need an environment that won’t fight you.
 
 If you’ve ever tried setting up a deep learning environment locally, you know how quickly things can break.
 
@@ -61,7 +61,7 @@ If you don’t have Docker yet, download Docker Desktop for Windows from [docker
 
 Once it’s running, open it. You’ll see on the left tabs for _Containers_, _Images_, _Volumes_, etc. We’ll use the Images tab first. In the middle, there’s the **Search images to run** button.
 
-![Docker search image](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/docker-search-image.jpeg?resize=1000%2C685&quality=81&ssl=1)
+![Docker Desktop Images screen with a purple arrow pointing to the “Search images to run” button.](docker-search-image.jpeg)
 
 Click on it to open the search field and type in it:
 
@@ -71,7 +71,7 @@ tensorflow/tensorflow:latest-gpu-jupyter
 
 A dropdown with several options will appear. The first one should be `tensorflow/tensorflow`. From the **Tag** dropdown on the right, choose `latest-gpu-jupyter` and click **Pull**.
 
-![Docker tensorflow latest image](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/docker-tensorflow-latest-image.jpg?resize=921%2C631&quality=81&ssl=1)
+![Docker Desktop TensorFlow search results, with arrows highlighting the “latest” tag menu and “latest-gpu-jupyter” option.](docker-tensorflow-latest-image.jpg)
 
 This process downloads the official TensorFlow image that includes everything we need: Python, TensorFlow, CUDA, and Jupyter Notebook. It’s maintained by the TensorFlow team, so you can rely on it being compatible and up to date. The download might take a few minutes the first time.
 
@@ -103,7 +103,7 @@ The setup process should already take you to the container’s logs. If it does 
 
 Scroll through the logs and look for a long line starting with: `http://127.0.0.1:8888/tree?token=`
 
-![Docker container logs](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/docker-container-logs.jpeg?resize=921%2C631&quality=81&ssl=1)
+![Docker Desktop container logs with a purple arrow highlighting the JupyterLab access URL.](docker-container-logs.jpeg)
 
 That’s your unique Jupyter link. Click on it in your browser. You’ll see Jupyter’s familiar interface appear. Navigate to the `/notebooks` directory. That’s the folder you connected earlier. Anything you save here will stay on your computer, even after you stop or delete the container.
 

@@ -11,10 +11,10 @@ tags:
   - Performance
   - Productivity
   - Workflow
-cover:
-coverAlt: "A person crouches with a laptop in a dark data-centre aisle lit by blue light, between rows of server racks."
+cover: database-servers.jpg
+coverAlt: A person crouches with a laptop in a dark data-centre aisle lit by blue light, between rows of server racks.
 coverCaption:
-originalCover: https://buthonestly.io/wp-content/uploads/2025/12/sql-vs-nosql-database.jpg
+originalCover:
 downloads:
 ---
 
@@ -107,7 +107,7 @@ This makes it a strong fit for systems where relationships matter: online stores
 
 A well-known example is WordPress, which has relied on MySQL from the start. Its data model is predictable: posts, comments, users, and metadata. An SQL database keeps this structure clean at scale.
 
-![Simplified relationship diagram of WordPress posts/comments/users in its SQL database](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/12/mysql-example-structure.jpg?quality=81&ssl=1 "Simplified relationship diagram of WordPress posts/comments/users")
+![Simplified relationship diagram of WordPress posts/comments/users in its SQL database](mysql-example-structure.jpg)
 
 ### The Cost of Structure
 

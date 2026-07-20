@@ -4,20 +4,18 @@ date: 2025-10-22T08:50:50
 updated: 2025-11-18T07:43:11
 sticky: false
 cornerstone: false
-excerpt: These five WordPress plugins give you clean comments, SEO, analytics,
-  security, and safe customization without bloating your site.
+excerpt: These five WordPress plugins give you clean comments, SEO, analytics, security, and safe customization without bloating your site.
 categories:
   - Web
 tags:
   - Productivity
   - WordPress
   - Workflow
-coverAlt: "An assortment of hand tools — pliers, cutters, an awl, and a spool of wire — laid out on white paper."
-coverCaption: Photo by Pixabay on Pexels.com
-originalCover: https://buthonestly.io/wp-content/uploads/2025/10/pexels-photo-301703.jpeg
+coverAlt: WordPress admin Add Plugins screen showing Classic Editor, Gutenberg, and other plugin listings.
+coverCaption: Photo by Justin Morgan on Unsplash.
+originalCover:
+cover: top-wordpress-plugins.jpg
 ---
-
-Whenever I set up a new WordPress site, whether it’s a small personal blog or a larger project, there are a few plugins that always make it onto my list.
 
 > [!summary]- Quick Summary
 >
@@ -31,6 +29,8 @@ Whenever I set up a new WordPress site, whether it’s a small personal blog or 
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
+Whenever I set up a new WordPress site, whether it’s a small personal blog or a larger project, there are a few plugins that always make it onto my list.
+
 WordPress owes much of its flexibility to plugins, but that also makes it easy to overload a site with too many tools doing the same thing.
 
 Over the years, I’ve refined my setup down to a handful of reliable, lightweight, and well-maintained plugins that cover the essentials: SEO, analytics, security, and customization. These are plugins I’ve used across multiple websites, and they’ve proven to be stable, easy to manage, and genuinely useful in day-to-day site operations.
@@ -41,7 +41,7 @@ In this post, I’ll walk you through the **five WordPress plugins I always inst
 
 If you allow comments on your blog, spam is inevitable. Even with modern anti-spam measures, bots and malicious scripts constantly try to flood comment sections with irrelevant links. Left unchecked, this not only clutters your posts but can also hurt your site’s credibility and SEO.
 
-![man wearing brown suit jacket mocking on white telephone](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/10/pexels-photo-1587014.jpeg?resize=1880%2C1253&quality=81&ssl=1 "Photo by Moose Photos on Pexels.com")
+![Angry man shouting into a telephone handset while seated at a desk against a white background.](scam-call.jpg "Photo by Icons8 Team on Unsplash.")
 
 That’s where **[Akismet](https://akismet.com/)** comes in. It’s one of WordPress’s oldest and most trusted plugins, developed by Automattic, the same team behind WordPress.com, Jetpack, and WooCommerce. Once activated, Akismet automatically checks incoming comments and contact-form submissions against its global spam database, silently filtering out the junk before it reaches your moderation queue.
 
@@ -59,7 +59,7 @@ I’ve tried alternative plugins and manual spam solutions, but **Akismet remain
 
 No WordPress setup feels complete without an SEO plugin, and [Yoast SEO](https://yoast.com/) has been my go-to for years. It’s one of those plugins that quietly does a lot of heavy lifting behind the scenes — making sure your site is search-engine friendly without you having to dive deep into technical SEO.
 
-![person using macbook air](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/10/office-freelancer-computer-business-38547.jpeg?resize=1880%2C1249&quality=81&ssl=1 "Photo by Pixabay on Pexels.com")
+![Person using a laptop displaying Google Search at a wooden table beside a cup of coffee.](office-google-search.jpg "Photo by Firmbee.com on Unsplash.")
 
 At its core, Yoast helps you manage all the key on-page elements that matter for visibility:
 
@@ -79,7 +79,7 @@ In practice, I mostly rely on the free version and use the premium one on select
 
 Once your site is live, understanding how people find and use it becomes essential. You could log into multiple dashboards for Google Analytics, Search Console, and AdSense — or you could connect everything directly inside WordPress with [Site Kit by Google](https://sitekit.withgoogle.com/).
 
-![macbook pro on brown table](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/10/pexels-photo-139387.jpeg?resize=1880%2C1253&quality=81&ssl=1 "Photo by Negative Space on Pexels.com")
+![Google Analytics dashboard showing real-time users, traffic charts, revenue, and top countries.](site-kit-google.jpg "Photo by 1981 Digital on Unsplash")
 
 This plugin acts as a bridge between your site and Google’s key tools, giving you an integrated overview of performance right from your WordPress dashboard. With a few clicks, you can see:
 
@@ -98,7 +98,7 @@ If you’re already using multiple Google services, Site Kit is an easy win. It 
 
 [Jetpack](https://jetpack.com/) is one of those plugins that often divides opinions — some love it, others find it too heavy. Personally, I think it’s incredibly useful _if you know which features to activate_. Jetpack isn’t just one tool; it’s a full suite covering backups, security, uptime monitoring, image optimization, and stats.
 
-![a turbo gauge](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/10/pexels-photo-10638654.jpeg?resize=1880%2C1253&quality=81&ssl=1 "Photo by Igor Dedik on Pexels.com")
+![Ferrari dashboard showing the tachometer, speedometer, warning lights, and an open-door alert.](ferrari-performance.jpg "Photo by mostafa jamei on Unsplash")
 
 When setting up a new site, I usually enable a few key modules:
 
@@ -126,7 +126,7 @@ Every WordPress site ends up needing a few custom tweaks — maybe you want to d
 
 [Code Snippets](https://wordpress.org/plugins/code-snippets/) solves that problem elegantly. It provides a clean, organized interface right inside your dashboard where you can safely add, edit, and manage bits of PHP code. Each snippet can be toggled on or off, categorized, and even exported if you move your site later.
 
-![code on a screen](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/10/pexels-photo-4383298.jpeg?resize=1880%2C1253&quality=81&ssl=1 "Photo by Markus Spiske on Pexels.com")
+![Close-up of colorful programming code on a screen, with sharp text in the center and blurred edges.](code-snippets.jpg "Photo by Markus Spiske on Unsplash.")
 
 I use it to keep all small customizations centralized and version-controlled. For example, I might add snippets like:
 

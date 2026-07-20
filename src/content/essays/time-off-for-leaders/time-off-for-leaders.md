@@ -3,8 +3,7 @@ title: "Time Off for Leaders: Can You Really Step Away?"
 date: 2025-12-19T02:00:00
 sticky: false
 cornerstone: false
-excerpt: Leaders should carefully plan time off to build team trust and
-  ownership. Download the Handover Plan template.
+excerpt: Leaders should carefully plan time off to build team trust and ownership. Download the Handover Plan template.
 categories:
   - Leadership
 tags:
@@ -12,11 +11,13 @@ tags:
   - Performance
   - Team Building
   - Workflow
-coverAlt: "A person reclines in a wooden beach chair reading a book, facing a calm turquoise sea under a blue sky."
-originalCover: https://buthonestly.io/wp-content/uploads/2025/11/time-off-lead.jpg
+coverAlt: A person reclines in a wooden beach chair reading a book, facing a calm turquoise sea under a blue sky.
+originalCover:
 downloads:
   - file: time-off-handover-plan.zip
     label: Time Off Handover Plan
+cover: pto-leader.jpg
+coverCaption: Photo by Chen Mizrach on Unsplash.
 ---
 
 > [!summary]- Quick Summary
@@ -70,7 +71,7 @@ From the outside, this looks like dedication.
 
 But it often hides more profound issues:
 
-![a burnout lead looking at a laptop desperately](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/team-lead-burnout.jpg?resize=830%2C592&quality=81&ssl=1 "Photo by Francisco De Legarreta C. on Unsplash")
+![Stressed office worker in a suit covering his face beside a laptop, with city buildings visible through the windows.](team-lead-burnout.jpg)
 
 - A team that’s been trained to wait for you
 - A culture where people are scared to make the “wrong” call
@@ -123,7 +124,7 @@ Maybe people relax a bit, move slower, or experiment more. Perhaps they finally 
 
 All of that is data.
 
-![cute harvest mice on wheat stalk](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/11/mice-dancing.jpg?resize=830%2C554&quality=81&ssl=1 "Photo by Chen Mizrach on Unsplash")
+![Three small mice perched on a wheat stalk against a blurred green background.](mice-dancing.jpg)
 
 Your absence shows what’s _really_ going on in your culture:
 

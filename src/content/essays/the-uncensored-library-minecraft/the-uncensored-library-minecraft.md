@@ -12,10 +12,10 @@ tags:
   - Creativity
   - Gaming
   - Workflow
-cover:
-coverAlt: "A vast neoclassical library building with domes and columns, built in Minecraft and surrounded by manicured gardens."
+cover: uncensored-library-minecraft.jpg
+coverAlt: Aerial view of a vast Minecraft palace and formal gardens covering a forested island.
 coverCaption:
-originalCover: https://buthonestly.io/wp-content/uploads/2025/12/uncensored-library-minecraft.jpg
+originalCover:
 downloads:
 ---
 
@@ -54,7 +54,7 @@ The answer turned out to be a video game.
 
 [Minecraft](https://www.minecraft.net/) is not neutral, but it is widely tolerated. It is played globally. It is used in schools. It looks like entertainment. I played it myself for many hours.
 
-![Gameplay in the Minecraft video game, a blocky 3D sandbox world](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/12/minecraft.jpg?quality=81&ssl=1)
+![Gameplay in the Minecraft video game, a blocky 3D sandbox world](minecraft.jpg "Image by Mojang Studios.")
 
 Crucially, in many countries where news sites are blocked or heavily filtered, Minecraft remains accessible—chosen for what works under real constraints. [[10-types-of-websites|Picking the right tool for the actual job]] is a pragmatism that applies to websites as much as to libraries navigating censorship.
 
@@ -68,18 +68,9 @@ The Uncensored Library does not encrypt journalism or hide it behind technical t
 
 The library is a physical structure inside the game. It sits on a dedicated island, surrounded by water, separate from any other build. From a distance, it looks like a public institution.
 
-<div class="gallery cols-2">
-  <img src="https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/12/uncensored-library-minecraft-island-top.jpg?quality=81&ssl=1" alt="Aerial view of the Uncensored Library on its island in Minecraft, surrounded by water" />
-  <img src="https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/12/uncensored-library-minecraft-island.jpg?quality=81&ssl=1" alt="The Uncensored Library rising above its Minecraft island, seen across the water" />
-</div>
-
 The architecture is neoclassical. Columns, domes, wide staircases, long corridors. This is the visual language of courts, museums, and national libraries. The style is intentional. It signals authority and permanence, not rebellion.
 
-<div class="gallery cols-3">
-  <img src="https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/12/uncensored-library-minecraft-front-far.jpg?quality=81&ssl=1" alt="Wide view of the Uncensored Library's neoclassical facade, with columns and a central dome, in Minecraft" />
-  <img src="https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/12/uncensored-library-minecraft-front.jpg?quality=81&ssl=1" alt="The columned front entrance of the Uncensored Library in Minecraft" />
-  <img src="https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/12/uncensored-library-minecraft-gardens-top.jpg?quality=81&ssl=1" alt="Overhead view of the Uncensored Library's formal gardens and grounds in Minecraft" />
-</div>
+![Front view of The Uncensored Library in Minecraft, with a grand white facade, domed roof, gardens, and tree-lined paths.](uncensored-library-front.jpg)
 
 The building was constructed over three months, using more than 12.5 million blocks, by 24 builders from 16 countries. The central dome spans nearly 300 meters. Scale is part of the point.
 
@@ -93,13 +84,7 @@ There is no menu. You walk.
 
 Inside each wing are rooms lined with shelves. Each shelf holds Minecraft books. Each book contains a real journalistic article that has been censored in its country of origin. Articles appear in English and, where possible, in their original language.
 
-<div class="gallery cols-3">
-  <img src="https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/12/uncensored-library-minecraft-vietnam.jpg?quality=81&ssl=1" alt="The Vietnam wing inside the Uncensored Library, lined with shelves of Minecraft books" />
-  <img src="https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/12/uncensored-library-minecraft-hallway.jpg?quality=81&ssl=1" alt="A long, book-lined hallway inside the Uncensored Library in Minecraft" />
-  <img src="https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/12/uncensored-library-minecraft-corridors.jpg?quality=81&ssl=1" alt="Corridors branching between the country wings of the Uncensored Library in Minecraft" />
-  <img src="https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/12/uncensored-library-minecraft-corridors-top.jpg?quality=81&ssl=1" alt="Overhead view of the Uncensored Library's corridors and reading rooms in Minecraft" />
-  <img src="https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/12/uncensored-library-minecraft-dome.jpg?quality=81&ssl=1" alt="The interior of the Uncensored Library's central dome in Minecraft" />
-</div>
+![Grand Minecraft library hall with towering white columns, chandeliers, flags, and a bright tiled floor.](uncensored-library-hallway.jpg)
 
 You open a book and read it page by page. There is no scrolling. No search. No algorithm deciding what comes next.
 
@@ -123,7 +108,7 @@ The architecture varies slightly between sections, but the content is left alone
 
 Beyond the country wings, there is a room dedicated to the World Press Freedom Index.
 
-![The World Press Freedom Index room in the Uncensored Library — a Minecraft globe ringed by national flags](https://i0.wp.com/buthonestly.io/wp-content/uploads/2025/12/uncensored-library-minecraft-press-freedom-index.jpg?quality=81&ssl=1)
+![The World Press Freedom Index room in the Uncensored Library — a Minecraft globe ringed by national flags](uncensored-library-minecraft-press-freedom-index.jpg)
 
 At its center is a globe showing press freedom conditions across 180 countries. Flags ring the space. Reports explain where access to information is restricted and where it is not.
 
