@@ -13,7 +13,6 @@ tags:
   - WordPress
   - Workflow
 coverAlt: Overhead view of hands holding a phone showing an online-store app and a credit card, over a wooden desk with a laptop and coffee.
-originalCover:
 cover: creating-a-custom-add-to-cart-link-woocommerce.jpg
 coverCaption:
 ---

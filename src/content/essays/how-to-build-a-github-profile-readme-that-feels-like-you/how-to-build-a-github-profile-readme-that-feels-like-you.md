@@ -12,7 +12,6 @@ tags:
   - Creativity
   - Workflow
 coverAlt: A screenshot of Nicola Mustone’s GitHub profile with a custom README reading ‘Hi, I’m Nico — Leader. Writer. Builder.’ and a grid of technology badges.
-originalCover:
 cover: custom-github-profile.jpg
 ---
 

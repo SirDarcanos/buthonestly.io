@@ -14,7 +14,6 @@ tags:
   - WordPress
   - Workflow
 coverAlt: A screenshot of Automattic’s Telex tool on an orange background, with a prompt box reading ‘Describe your idea. Telex will build a WordPress block for you.’
-originalCover:
 cover: wordpress-blocks-telex.jpg
 coverCaption:
 ---

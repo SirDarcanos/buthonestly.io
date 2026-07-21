@@ -14,7 +14,6 @@ tags:
   - Productivity
   - Python
 coverAlt: A child in glasses and a yellow shirt leans over a tabletop game, moving small miniature figures while holding a card.
-originalCover:
 downloads:
   - file: dense-models-3d-print-cost-calculator.zip
     label: 3D-print cost calculator models

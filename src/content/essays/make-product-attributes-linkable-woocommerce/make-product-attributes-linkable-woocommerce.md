@@ -13,7 +13,6 @@ tags:
   - WordPress
 coverAlt: Three folded pairs of blue jeans in different washes arranged against a white background.
 coverCaption: Photo by <a href="https://www.pexels.com/@micaasato/">Mica Asato</a> on <a href="https://www.pexels.com/">Pexels.com</a>
-originalCover:
 cover: woocommerce-product-attributes.jpg
 ---
 

@@ -14,7 +14,6 @@ tags:
   - Python
   - Workflow
 coverAlt: Official artwork for the video game "Dead by Daylight" featuring survivors standing in front of menacing killers in a dark forest.
-originalCover:
 downloads:
   - file: distilroberta-emotion-analysis-dead-by-daylight-case-study.zip
     label: Steam reviews dataset + notebook

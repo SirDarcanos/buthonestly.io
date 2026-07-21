@@ -12,9 +12,9 @@ export type Post = {
   excerpt: string;
   date: string; // ISO
   modified: string; // ISO
-  // The cover for the Picture component: a local imported image (optimized to
-  // AVIF/WebP) or a remote URL string (WP CDN, during migration).
-  cover?: ImageMetadata | string;
+  // The cover for the Picture component — a local imported image, optimized to
+  // AVIF/WebP at build time.
+  cover?: ImageMetadata;
   featuredImage?: string; // absolute URL string, for og:image / social only
   featuredImageAlt?: string;
   featuredImageCaption?: string;

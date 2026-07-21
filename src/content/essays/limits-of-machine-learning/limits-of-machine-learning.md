@@ -14,7 +14,6 @@ tags:
   - Gaming
   - Python
 coverAlt: A person seated at a candlelit table gives a tarot reading, with a crystal ball and cards spread out against a red backdrop.
-originalCover:
 cover: limits-machine-learning.jpg
 ---
 

@@ -12,7 +12,6 @@ tags:
   - Team Building
   - Workflow
 coverAlt: A person reclines in a wooden beach chair reading a book, facing a calm turquoise sea under a blue sky.
-originalCover:
 downloads:
   - file: time-off-handover-plan.zip
     label: Time Off Handover Plan

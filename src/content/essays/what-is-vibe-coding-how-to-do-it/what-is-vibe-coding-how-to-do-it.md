@@ -13,7 +13,6 @@ tags:
   - Creativity
   - Productivity
 coverAlt: A grey cat in a blue harness asleep on a keyboard’s wrist rest, in front of two monitors showing code.
-originalCover:
 cover: vibe-coding-cat.jpg
 coverCaption: Photo by <a href="https://unsplash.com/@johnmoeses?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">John Moeses Bauan</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
 ---

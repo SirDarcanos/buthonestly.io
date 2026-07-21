@@ -13,7 +13,6 @@ tags:
   - Workflow
 coverAlt: A towering, colourful wall of stacked beverage crates full of bottles.
 coverCaption: Photo by <a href="https://www.pexels.com/@pixabay/">Pixabay</a> on <a href="https://www.pexels.com/">Pexels.com</a>
-originalCover:
 cover: bulk-edit-woocommerce-products-without-plugins.jpg
 ---
 

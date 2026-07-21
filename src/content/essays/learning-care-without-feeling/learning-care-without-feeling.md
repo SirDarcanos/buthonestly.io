@@ -13,7 +13,6 @@ tags:
   - Workflow
 coverAlt: A young child in a blue polka-dot shirt looks through a toy telescope indoors.
 coverCaption: Photo by <a href="https://unsplash.com/@josephandjosephandjoseph?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Joseph Rosales</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
-originalCover:
 cover: learning-to-care.jpg
 ---
 

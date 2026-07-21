@@ -24,15 +24,12 @@ export function toPost(entry: Essay): Post {
   const slug = entry.id;
   const date = d.date ? d.date.toISOString() : "";
   const modified = (d.updated ?? d.date)?.toISOString() ?? date;
-  // Local cover wins; fall back to the migrated WP URL until it's rebuilt. The
-  // raw cover (ImageMetadata for local, URL string for remote) goes to the
-  // Picture component; `featuredImage` is an absolute URL string for og:image.
-  // `||`, not `??`: an empty-string cover has to fall through to originalCover
-  // too, or Picture treats "" as a remote src. Matches the schema's own check.
-  const cover = d.cover || d.originalCover;
-  const featuredImage = d.cover
-    ? new URL(d.cover.src, SITE_URL).toString()
-    : d.originalCover;
+  // The imported cover goes to the Picture component; `featuredImage` is the
+  // same image as an absolute URL string, for og:image.
+  const cover = d.cover;
+  const featuredImage = cover
+    ? new URL(cover.src, SITE_URL).toString()
+    : undefined;
   const excerpt = d.excerpt ?? "";
 
   return {

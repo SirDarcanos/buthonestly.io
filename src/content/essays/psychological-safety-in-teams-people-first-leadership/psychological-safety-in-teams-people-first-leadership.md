@@ -14,7 +14,6 @@ tags:
   - Team Building
   - Workflow
 coverAlt: Four smiling colleagues take a selfie together in front of a chalkboard covered in hand-drawn diagrams.
-originalCover:
 cover: psychological-safety-teams-leadership.jpg
 coverCaption: Photo by <a href="https://unsplash.com/@silverkblack?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Vitaly Gariev</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
 ---

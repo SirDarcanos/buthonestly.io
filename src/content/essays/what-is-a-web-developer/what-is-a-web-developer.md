@@ -13,7 +13,6 @@ tags:
   - PHP
   - Workflow
 coverAlt: A tired young person rests their head on one hand at a laptop, in a dimly lit bedroom at night.
-originalCover:
 cover: web-developer-learning.jpg
 ---
 

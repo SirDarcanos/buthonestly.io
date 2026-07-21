@@ -13,7 +13,6 @@ tags:
   - WordPress
 coverAlt: A close-up of woman using a computer keyboard and a mouse.
 coverCaption:
-originalCover:
 cover: wordpress-security.jpg
 ---
 

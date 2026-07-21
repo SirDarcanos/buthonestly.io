@@ -12,7 +12,6 @@ tags:
   - Python
   - Workflow
 coverAlt: The Docker whale logo above the orange TensorFlow logo on a white background.
-originalCover:
 cover: docker-tensorflow-jupyter.jpg
 ---
 

@@ -13,7 +13,6 @@ tags:
   - Workflow
 coverAlt: WordPress admin Add Plugins screen showing Classic Editor, Gutenberg, and other plugin listings.
 coverCaption: Photo by <a href="https://unsplash.com/@justin_morgan?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Justin Morgan</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
-originalCover:
 cover: top-wordpress-plugins.jpg
 ---
 

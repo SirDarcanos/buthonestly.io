@@ -12,7 +12,6 @@ tags:
   - Workflow
 coverAlt: Close-up of overlapping brown leather belts with visible stitching and a brass buckle.
 coverCaption:
-originalCover:
 cover: woocommerce-attributes-variations.jpg
 ---
 

@@ -12,7 +12,6 @@ tags:
   - Creativity
   - Productivity
 coverAlt: A dense 3D pile of blue verified-checkmark badges, one glowing brightly at the centre.
-originalCover:
 cover: automated-x-account-cleanup.jpg
 ---
 

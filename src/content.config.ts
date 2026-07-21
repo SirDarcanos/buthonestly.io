@@ -31,7 +31,6 @@ const essays = defineCollection({
         cover: optional(image().optional()),
         coverAlt: optional(z.string().optional()),
         coverCaption: optional(z.string().optional()),
-        originalCover: optional(z.string().url().optional()), // migrated WP image, until a local cover exists
         excerpt: optional(z.string().optional()),
         tags: stringList,
         categories: stringList,
@@ -54,11 +53,7 @@ const essays = defineCollection({
           if (!ok) ctx.addIssue({ code: "custom", path: [path], message });
         };
         need(d.date, "date", "published date required once live/scheduled");
-        need(
-          d.cover || d.originalCover,
-          "cover",
-          "a local cover (or migrated originalCover) required once live/scheduled",
-        );
+        need(d.cover, "cover", "a local cover required once live/scheduled");
         need(d.coverAlt, "coverAlt", "alt text required once live/scheduled");
         need(
           d.categories.length,

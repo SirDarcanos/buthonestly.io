@@ -12,7 +12,6 @@ tags:
   - Productivity
   - WordPress
 coverAlt: A night-time satellite view of Europe from space, city lights glowing across the continent.
-originalCover:
 downloads:
   - file: eu-vat-rates.csv
     label: EU VAT rates (CSV)

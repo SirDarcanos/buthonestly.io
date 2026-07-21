@@ -75,9 +75,13 @@ opposite: git-ignored, uploaded to R2.
   transparency keeps a file as PNG (JPEG has no alpha). Animated sources are
   skipped rather than flattened. GIFs and SVGs are exempt entirely — the
   optimizer ignores them and they need not be 16:9.
-- Covers: `cover: ./file.jpg` in frontmatter. `originalCover` holds a
-  not-yet-migrated WordPress CDN URL; a local `cover` wins over it. Rendered
-  by `Picture.astro` as AVIF → WebP → JPEG.
+- Covers: `cover: ./file.jpg` in frontmatter, required once an essay is live.
+  Rendered by `Picture.astro` as AVIF → WebP → JPEG.
+- Captions are HTML. Unsplash and Pexels each give you a credit snippet to
+  copy — photographer and photo linked, `utm_` params included — so paste it
+  verbatim. In a body caption the Markdown title must be SINGLE-quoted, since
+  the snippet contains double quotes: get it wrong and the image stops parsing
+  as an image at all. `npm run check:links` catches that.
 - Body images: plain Markdown `![alt](./file.jpg "caption")` — the quoted
   title becomes a `<figcaption>`, rehype emits AVIF, and `image.layout`
   makes it responsive. Never hand-write `<picture>` or `<img>` in content

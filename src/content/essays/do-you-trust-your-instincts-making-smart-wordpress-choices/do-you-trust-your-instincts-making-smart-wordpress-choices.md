@@ -13,7 +13,6 @@ tags:
   - Workflow
 coverAlt: A festive holiday table setting featuring plates of cookies, cinnamon rolls, a glass teapot, and warm string lights in the background.
 coverCaption:
-originalCover:
 cover: smart-wordpress-choices.jpg
 ---
 

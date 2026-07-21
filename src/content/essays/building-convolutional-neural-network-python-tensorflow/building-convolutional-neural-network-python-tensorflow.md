@@ -13,7 +13,6 @@ tags:
   - Creativity
   - Python
 coverAlt: A long-exposure light painting of swirling red, green, and blue light trails against black, like tangled neural pathways.
-originalCover:
 downloads:
   - file: cnn-mnist-use-case-tensorflow.zip
     label: CNN + MNIST notebook

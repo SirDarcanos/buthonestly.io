@@ -15,7 +15,6 @@ tags:
   - Workflow
 coverAlt: A close-up of a vintage typewriter with a sheet of paper that reads ‘Something worth reading.’
 coverCaption: Photo by <a href="https://www.pexels.com/@suzyhazelwood/">Suzy Hazelwood</a> on <a href="https://www.pexels.com/">Pexels.com</a>
-originalCover:
 cover: vibe-writing.jpg
 ---
 

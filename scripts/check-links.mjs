@@ -104,10 +104,10 @@ const issues = [];
 for (const { slug, fm, body } of essays) {
   const clean = body.replace(/```[\s\S]*?```/g, ""); // ignore code blocks
 
-  // Frontmatter `cover:`. Nothing else validates it — the schema only checks
-  // that `originalCover` parses as a URL — so a bad cover surfaces as a build
-  // failure (ImageNotFound), and can hide behind Astro's content cache until a
-  // cold build in CI. Every variant broke a build during the image migration:
+  // Frontmatter `cover:`. Nothing else validates that the file exists, so a bad
+  // cover surfaces as a build failure (ImageNotFound), and can hide behind
+  // Astro's content cache until a cold build in CI. Every variant broke a build
+  // during the image migration:
   // file missing, file saved without its extension, and reference missing one.
   const cover = fm
     .match(/^cover:[ \t]*(\S.*?)[ \t]*$/m)?.[1]

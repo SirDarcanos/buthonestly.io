@@ -12,7 +12,6 @@ tags:
   - WordPress
 coverAlt: A close-up shot of a hand holding a black clothing price tag with the word "Brand" on it while a retail scanner scans the barcode.
 coverCaption: Photo by <a href="https://www.pexels.com/@karolina-grabowska/">Karolina Grabowska</a> on <a href="https://www.pexels.com/">Pexels.com</a>
-originalCover:
 cover: barcode-gtin-woocommerce.jpg
 ---
 

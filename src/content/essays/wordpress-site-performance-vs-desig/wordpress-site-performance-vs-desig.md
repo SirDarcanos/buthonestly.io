@@ -11,7 +11,6 @@ tags:
   - Creativity
   - Performance
 coverAlt: A white and blue high-speed train rushing forward with motion blur streaking past.
-originalCover:
 cover: wordpress-performance.jpg
 ---
 

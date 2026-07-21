@@ -14,7 +14,6 @@ tags:
   - Productivity
   - Workflow
 coverAlt: A person in a knit vest and headphones sits cross-legged on a desk, fidgeting with a small object in a home workspace.
-originalCover:
 downloads:
   - file: quill-meetings-templates.zip
     label: Quill meeting templates

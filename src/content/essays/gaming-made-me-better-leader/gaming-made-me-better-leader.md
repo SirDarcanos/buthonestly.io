@@ -14,7 +14,6 @@ tags:
   - Workflow
 coverAlt: A smiling woman celebrates at a computer while gaming with two teammates in an internet cafe with red and blue lights.
 coverCaption:
-originalCover:
 cover: gaming-and-leadership.jpg
 ---
 

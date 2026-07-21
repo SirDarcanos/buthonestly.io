@@ -11,7 +11,6 @@ tags:
   - WordPress
   - Workflow
 coverAlt: A shop worker in a green shirt and bandana leans over a counter to tap an order into a colourful point-of-sale tablet.
-originalCover:
 cover: edit-orders-woocommerce.jpg
 ---
 
