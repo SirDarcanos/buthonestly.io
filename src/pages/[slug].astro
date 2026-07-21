@@ -6,6 +6,7 @@ import Newsletter from "../components/Newsletter.astro";
 import Picture from "../components/Picture.astro";
 import ReadTime from "../components/ReadTime.astro";
 import TableOfContents from "../components/TableOfContents.astro";
+import TaxLinks from "../components/TaxLinks.astro";
 import SinglePost from "../layouts/SinglePost.astro";
 import { getPublishedEssays, getRelatedPosts, toPost } from "../lib/essays";
 
@@ -51,7 +52,7 @@ const publishDate = new Date(post.date);
     <header class="mb-10 space-y-6">
       <div class="flex items-center gap-3">
         <span class="label">
-          {post.categories.join(", ")}
+          <TaxLinks names={post.categories} base="section" />
         </span>
         <Divider width={20} />
         <span class="meta"
@@ -73,7 +74,7 @@ const publishDate = new Date(post.date);
           }
         </time>
         <p class="meta flex flex-1 justify-end">
-          In {post.tags.join(", ")}
+          In <TaxLinks names={post.tags} base="topic" />
         </p>
       </div>
     </header>

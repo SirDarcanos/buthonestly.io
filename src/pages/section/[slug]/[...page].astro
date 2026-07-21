@@ -40,17 +40,24 @@ const featuredPosts = isFirstPage ? sticky : [];
 const regularPosts = page.data;
 ---
 
-<Layout title={category.name} type="website">
-  <div slot="intro" class="flex items-end justify-between pt-8">
+<Layout title={category.name} description={category.description} type="website">
+  <div
+    slot="intro"
+    class="flex flex-col gap-4 pt-8 md:flex-row md:items-end md:justify-between md:gap-10"
+  >
     <div class="space-y-4">
       <p class="label max-w-lg text-left">Section</p>
       <h1 class="max-w-lg">
         {category.name}
       </h1>
     </div>
-    <p class="lead max-w-lg text-right text-lg">
-      {category.description}
-    </p>
+    {
+      category.description && (
+        <p class="lead max-w-lg text-left text-lg md:text-right">
+          {category.description}
+        </p>
+      )
+    }
   </div>
 
   {

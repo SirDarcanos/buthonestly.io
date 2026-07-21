@@ -1,6 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import ReadTime from "../../components/ReadTime.astro";
+import TaxLinks from "../../components/TaxLinks.astro";
 
 import { getAllPosts } from "../../lib/essays";
 
@@ -45,7 +46,9 @@ const { page } = Astro.props;
         return (
           <article class="border-line flex items-center gap-10 border-t py-7">
             <div class="flex-1">
-              <p class="label text-left">{post.categories.join(", ")}</p>
+              <p class="label text-left">
+                <TaxLinks names={post.categories} base="section" />
+              </p>
               <h3 class="mt-2">
                 <a href={post.url} class="text-ink hover:text-accent">
                   {post.title}

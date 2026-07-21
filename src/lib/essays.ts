@@ -1,5 +1,6 @@
 import { getCollection, type CollectionEntry } from "astro:content";
 import { SITE_URL } from "../consts.ts";
+import { taxDescription, taxSlug } from "../taxonomies.ts";
 import { type Post, type Tax } from "../types.ts";
 import relatedMap from "../../data/related.json";
 
@@ -16,15 +17,6 @@ function truncate(text: string, max = 160): string {
   const slice = text.slice(0, max);
   const lastSpace = slice.lastIndexOf(" ");
   return `${slice.slice(0, lastSpace > 0 ? lastSpace : max).trimEnd()}…`;
-}
-
-/** Matches the WordPress taxonomy slugs for this blog's simple names. */
-function slugify(name: string): string {
-  return name
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
 }
 
 export function toPost(entry: Essay): Post {
@@ -133,12 +125,10 @@ function taxFrom(names: string[]): Tax[] {
   const counts = new Map<string, number>();
   for (const name of names) counts.set(name, (counts.get(name) ?? 0) + 1);
   return [...counts.entries()]
-    .map(([name, count]) => ({
-      name,
-      slug: slugify(name),
-      description: "",
-      count,
-    }))
+    .map(([name, count]) => {
+      const slug = taxSlug(name);
+      return { name, slug, description: taxDescription(slug), count };
+    })
     .sort((a, b) => a.name.localeCompare(b.name));
 }
 

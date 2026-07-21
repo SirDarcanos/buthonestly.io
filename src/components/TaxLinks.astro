@@ -1,0 +1,32 @@
+---
+import { twMerge } from "tailwind-merge";
+import { taxUrl } from "../taxonomies.ts";
+
+interface Props {
+  names: string[];
+  base: "section" | "topic";
+  class?: string;
+}
+
+// Comma-separated links to the section/topic archives. Colour is inherited so
+// this drops into a `.label` (accent) or `.meta` (muted) context unchanged —
+// the underline on hover is the only affordance added.
+const { names, base, class: className } = Astro.props;
+---
+
+{
+  names.map((name, i) => (
+    <Fragment>
+      {i > 0 && ", "}
+      <a
+        href={taxUrl(base, name)}
+        class={twMerge(
+          "hover:text-accent underline-offset-4 transition-colors hover:underline",
+          className,
+        )}
+      >
+        {name}
+      </a>
+    </Fragment>
+  ))
+}

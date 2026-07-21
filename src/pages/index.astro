@@ -4,6 +4,7 @@ import Home from "../layouts/Home.astro";
 import Label from "../components/Label.astro";
 import Newsletter from "../components/Newsletter.astro";
 import ReadTime from "../components/ReadTime.astro";
+import TaxLinks from "../components/TaxLinks.astro";
 import { getAllPosts } from "../lib/essays";
 
 const posts = await getAllPosts();
@@ -45,7 +46,9 @@ const currentMonth = new Date().toLocaleString("default", {
         return (
           <article class="border-line space-y-3 border-b py-6 nth-last-[-n+2]:border-0">
             <div class="flex justify-between">
-              <p class="label text-left">{post.categories.join(", ")}</p>
+              <p class="label text-left">
+                <TaxLinks names={post.categories} base="section" />
+              </p>
               <div class="meta flex gap-2">
                 <p>{postDate}</p> &middot;
                 <ReadTime content={post.body} />
