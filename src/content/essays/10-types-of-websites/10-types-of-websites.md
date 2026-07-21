@@ -25,6 +25,12 @@ coverCaption: Photo by <a href="https://unsplash.com/@carzmaiquez?utm_source=uns
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
+<!-- audio:start -->
+
+![[10-types-of-websites.mp3]]
+
+<!-- audio:end -->
+
 If you gave me a random website to build tomorrow, I’d probably reach for WordPress. Not because it’s always the “best” tool in some abstract way, but because I know it well enough that I can bend it into almost any of the usual WordPress website types: blog, shop, membership, course, whatever. And because, honestly, I’m a bit lazy. If I can ship something solid with tools I already understand, I’ll do that.
 
 But that raises a better question:
@@ -34,6 +40,7 @@ If I _could_ do everything with WordPress… are there cases where a more specia
 That’s what this essay is about: ten **types of websites** and the specific tools I’d reach for. WordPress is still my default, but there are some exceptions.
 
 ## “Normal” Websites and Blogs
+
 ![The WordPress logo in a diamond shape with cicled .com and .org words.](wordpress-com-vs-org.jpg "Image by Automattic")
 
 For anything that looks like a normal website — home page, a few subpages, maybe a blog — I still don’t overthink it. I use WordPress.
