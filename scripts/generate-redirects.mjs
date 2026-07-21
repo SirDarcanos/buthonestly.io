@@ -159,6 +159,23 @@ const PAGINATION_REDIRECTS = [
 ];
 
 /**
+ * WordPress exposed a feed per category and per tag. This site has one feed, so
+ * point them all at it.
+ *
+ * Must precede ESSAY_SUBPAGE_REDIRECTS: its `/:slug/feed/` rule matches
+ * `/programming/feed/` with slug="programming" and lands a feed reader on an
+ * HTML archive page, whose XML parser then fails. Real breakage — a GitHub
+ * Action polling /programming/feed/ was erroring on exactly this.
+ */
+const ARCHIVE_FEED_REDIRECTS = [
+  ...SECTIONS.map((s) => [`/${s}/feed/`, "/feed.xml"]),
+  ["/section/:slug/feed/", "/feed.xml"],
+  ["/topic/:slug/feed/", "/feed.xml"],
+  ["/category/:slug/feed/", "/feed.xml"],
+  ["/tag/:slug/feed/", "/feed.xml"],
+];
+
+/**
  * Per-essay WordPress sub-pages that no longer exist — the feed every post used
  * to expose, and paginated comments (this site has no comments) — back to the
  * essay itself. Section-prefixed first, then the flat form.
@@ -292,9 +309,10 @@ const body = [
   ...INTERNAL_REDIRECTS.map(formatRule),
   ...SECTION_REDIRECTS.map(formatRule),
   ...PAGINATION_REDIRECTS.map(formatRule),
+  ...ARCHIVE_FEED_REDIRECTS.map(formatRule),
   ...ESSAY_SUBPAGE_REDIRECTS.map(formatRule),
-  // After the sub-page rules, so `/web/<slug>/feed/` still resolves as a feed
-  // rather than being swallowed as a two-segment essay path.
+  // After the sub-page rules, so `/web/<slug>/feed/` still reaches its essay
+  // rather than being swallowed as a two-segment legacy path.
   ...LEGACY_PREFIX_REDIRECTS.map(formatRule),
   ...DOWNLOAD_REDIRECTS.map(formatRule),
   ...R2_PASSTHROUGH_REDIRECTS.map(formatRule),
@@ -313,7 +331,8 @@ const dynamic = body
 console.log(
   `Wrote ${OUT} — ${POST_REDIRECTS.length} post + ${INTERNAL_REDIRECTS.length} internal + ` +
     `${SECTION_REDIRECTS.length} section + ${PAGINATION_REDIRECTS.length} pagination + ` +
-    `${ESSAY_SUBPAGE_REDIRECTS.length} essay sub-page + ${LEGACY_PREFIX_REDIRECTS.length} legacy prefix + ` +
+    `${ARCHIVE_FEED_REDIRECTS.length} archive feed + ${ESSAY_SUBPAGE_REDIRECTS.length} essay sub-page + ` +
+    `${LEGACY_PREFIX_REDIRECTS.length} legacy prefix + ` +
     `${DOWNLOAD_REDIRECTS.length} download + ` +
     `${R2_PASSTHROUGH_REDIRECTS.length} R2 passthrough + ${LEGACY_REDIRECTS.length} legacy rules ` +
     `(${dynamic} dynamic — Cloudflare Pages allows 100).`,
