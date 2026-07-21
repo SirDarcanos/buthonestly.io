@@ -857,7 +857,7 @@ None of this would have been possible without people who were willing to show th
 
 Huge thanks to **[NoobKillerRoof](https://www.speedrun.com/users/NoobKillerRoof)**, **[Thefoxy1978](https://www.speedrun.com/users/Thefoxy1978)**, and **[LeonMauriceMan](https://www.speedrun.com/users/LeonMauriceMan)** for sharing private attempts as well as public PBs; to **[Crash41596](https://www.speedrun.com/users/Crash41596)** for years of glitch-hunting and TAS work, and for his private splits which I ended up not using as they were for MediEvil 2019 and this essay is already long enough; and to all the runners who have submitted, routed, verified, and argued about their times in public where the rest of us can learn from them.
 
-Thanks also to **Dan’s Friend** for maintaining such an [amazing wiki](https://medievil.wiki/) full of data and knowledge.
+Thanks also to **Dan’s Friend** for maintaining such an [amazing wiki](https://medievil.wiki/w/Gallowpedia) full of data and knowledge.
 
 And a last thanks to **[Pap](https://www.youtube.com/@Papamanual)** for making _[The History of MediEvil Speedrunning](https://www.youtube.com/watch?v=bDcFlbygfxY)_ and stitching all of this into one coherent story instead of a pile of disconnected VODs and forum posts.
 

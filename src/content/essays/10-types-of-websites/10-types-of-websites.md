@@ -171,7 +171,7 @@ Courses are just structured content that people pay for, with a few extra expect
 If I were to run a course on my own site today, I’d start from WordPress again and layer on top:
 
 - [Sensei](https://senseilms.com/) is the one I’d look at first, especially if I’m already in the WooCommerce / Automattic world. It plugs nicely into that ecosystem and gives you lessons, modules, and basic course logic.
-- [LearnDash](https://www.learndash.com/) is another big name in WordPress courses. I haven’t personally used it, but it’s popular enough that if someone told me, “We run our whole course business on LearnDash,” I wouldn’t be surprised.
+- [LearnDash](https://www.liquidweb.com/software/learndash/) is another big name in WordPress courses. I haven’t personally used it, but it’s popular enough that if someone told me, “We run our whole course business on LearnDash,” I wouldn’t be surprised.
 
 Either way, the pattern is the same: WordPress holds the content and pages, and the course plugin adds structure.
 

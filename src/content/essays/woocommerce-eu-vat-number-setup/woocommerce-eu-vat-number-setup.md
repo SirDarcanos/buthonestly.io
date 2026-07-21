@@ -86,7 +86,7 @@ If you sell multiple types of products with different VAT treatment, use **addit
 
 ![WooCommerce additional VAT rates for EU stores.](woocommerce-tax-additional-rates.jpg)
 
-For your convenience, I compiled a ready-to-import CSV file with all the current tax rates of all EU states from the [Europa.eu website](https://europa.eu/youreurope/business/taxation/vat/vat-rules-rates/index_en.htm#inline-nav-6). You can import it from **WooCommerce → Settings → Tax → Standard rates → Import CSV**.
+For your convenience, I compiled a ready-to-import CSV file with all the current tax rates of all EU states from the [Europa.eu website](https://europa.eu/youreurope/business/finance-and-tax/vat/vat-rules-rates/index_en.htm). You can import it from **WooCommerce → Settings → Tax → Standard rates → Import CSV**.
 
 ![WooCommerce import EU VAT rates buttons.](woocommerce-import-vat-rates.jpg)
 

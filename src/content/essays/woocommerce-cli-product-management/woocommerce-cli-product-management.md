@@ -31,7 +31,7 @@ Everything you can do in the WooCommerce product editor, you can handle with Woo
 
 Clicking through the product editor is fine when you have ten products. It turns into a slog when you have hundreds. Or when you need to make the same change across the entire catalog.
 
-WooCommerce CLI, built on top of [WP-CLI](https://wp-cli.org/), lets you manage products without leaving the terminal. No loading spinners. No mouse. Just clear, repeatable commands you can script and automate.
+WooCommerce CLI, built on top of [WP-CLI](https://wordpress.org/cli/), lets you manage products without leaving the terminal. No loading spinners. No mouse. Just clear, repeatable commands you can script and automate.
 
 This guide walks through the basics of creating, updating, and deleting products with WooCommerce CLI, including variable products and bulk operations.
 

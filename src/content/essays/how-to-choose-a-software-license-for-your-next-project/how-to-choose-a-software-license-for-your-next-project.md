@@ -99,7 +99,7 @@ Patent protection matters increasingly as developers embrace AI-assisted develop
 
 ### Creative Commons (CC) Licenses
 
-[Creative Commons licenses](https://creativecommons.org/share-your-work/cclicenses/) are not for code, they’re for **content**: documentation, tutorials, UI assets, icons, videos, etc.
+[Creative Commons licenses](https://creativecommons.org/cc-licenses) are not for code, they’re for **content**: documentation, tutorials, UI assets, icons, videos, etc.
 
 - **CC-BY:** reuse allowed with attribution.
 - **CC-BY-SA:** same as above, but derivatives must use the same license (like GPL).
