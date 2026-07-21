@@ -1,0 +1,38 @@
+---
+import { twMerge } from "tailwind-merge";
+import { taxUrl } from "../taxonomies.ts";
+import { type Tax } from "../types.ts";
+
+interface Props {
+  terms: Tax[];
+  base: "section" | "topic";
+  class?: string;
+}
+
+// Card grid of section/topic archives — the hub tier of the site. Extracted
+// from about.astro, which had the only copy of this pattern.
+const { terms, base, class: className } = Astro.props;
+---
+
+<div class={twMerge("grid gap-4 sm:grid-cols-2", className)}>
+  {
+    terms.map((term) => (
+      <a
+        href={taxUrl(base, term.name)}
+        class="border-line bg-surface hover:border-accent group block border p-6 transition-colors"
+      >
+        <div class="flex items-baseline justify-between gap-4">
+          <h3 class="group-hover:text-accent text-lg transition-colors">
+            {term.name}
+          </h3>
+          <span class="meta flex-none">
+            {term.count} {term.count === 1 ? "essay" : "essays"}
+          </span>
+        </div>
+        {term.description && (
+          <p class="excerpt text-muted mt-2 text-base">{term.description}</p>
+        )}
+      </a>
+    ))
+  }
+</div>

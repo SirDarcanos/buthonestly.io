@@ -40,6 +40,10 @@ const essaySlugs = new Set(dirs);
 // Valid routes the site actually builds, plus known standalone pages.
 const routes = new Set([
   "/",
+  "/about/",
+  "/essays/",
+  "/section/", // hub index; per-term archives are added per essay below
+  "/topic/",
   "/privacy/",
   "/artificial-intelligence-tools/",
   "/resources/",

@@ -1,0 +1,35 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import TaxGrid from "../../components/TaxGrid.astro";
+
+import { getCategories } from "../../lib/essays";
+
+const categories = await getCategories();
+
+const description =
+  "Browse every section of BUT. Honestly — leadership, programming, building for the web, and observations on technology and modern life.";
+---
+
+<Layout title="Sections" description={description} type="website">
+  <div
+    slot="intro"
+    class="flex flex-col gap-4 pt-8 md:flex-row md:items-end md:justify-between md:gap-10"
+  >
+    <div class="space-y-4">
+      <p class="label max-w-lg text-left">Browse</p>
+      <h1 class="max-w-lg">Sections</h1>
+    </div>
+    <p class="lead max-w-lg text-left text-lg md:text-right">
+      {description}
+    </p>
+  </div>
+
+  <TaxGrid terms={categories} base="section" />
+
+  <div class="border-line mt-14 border-t pt-8 pb-16">
+    <p class="text-muted">
+      Looking for something narrower? Browse by <a href="/topic/">topic</a>, or
+      read the <a href="/essays/">full archive</a> in order.
+    </p>
+  </div>
+</Layout>
