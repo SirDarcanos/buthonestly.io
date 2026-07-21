@@ -46,6 +46,9 @@ accumulate and go out as a batch. Do not push on every change.
   committed ledger (`data/indexnow-pinged.json`) maps slug → content hash so
   unchanged URLs are never resubmitted; resubmitting is what gets a host
   throttled.
+- `npm run email-icons` — regenerate `public/email/*.png`, the social icons in
+  the Kit newsletter footer. PNG because Gmail strips inline SVG and Outlook
+  won't render it. Run by hand after a brand-colour change; committed output.
 - `npm run og` — regenerate `public/og-default.png`, the Open Graph card for
   pages with no cover of their own (home, archives, about, resources).
   Composed from the logo's vector paths and flat brand colour, so it needs

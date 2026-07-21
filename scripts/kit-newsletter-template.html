@@ -9,7 +9,7 @@
   scripts/notify-subscribers.mjs.
 
   Palette + type mirror the site (src/styles/global.css):
-    paper   #efeae0   surface #e7e1d5   ink #211d18   muted #665e51
+    paper   #f4f0e7   surface #e7e1d5   ink #211d18   muted #665e51
     accent  #7e2a1e   Newsreader (serif) · Archivo (sans)  → Georgia / Arial fallbacks
 
   Table-based, fully inline-styled, 600px, light theme only.
@@ -84,7 +84,7 @@
       <td align="center" style="padding:32px 12px;">
 
         <!--[if mso]><table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0"><tr><td><![endif]-->
-        <table role="presentation" class="bh-container bh-card" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px; max-width:600px; background-color:#efeae0; border:1px solid rgba(33,29,24,0.16);">
+        <table role="presentation" class="bh-container bh-card" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px; max-width:600px; background-color:#f4f0e7; border:1px solid rgba(33,29,24,0.16);">
 
           <!-- Masthead -->
           <tr>
@@ -131,22 +131,41 @@
               </p>
               <p class="bh-footer-text" style="margin:0 0 14px; font-family:'Archivo', Arial, Helvetica, sans-serif; font-size:13px; line-height:1.6; color:#665e51;">
                 <a href="https://buthonestly.io/" class="bh-link" style="color:#7e2a1e; text-decoration:none;">buthonestly.io</a>
-                &nbsp;&middot;&nbsp;
-                <a href="https://www.linkedin.com/in/nicolamustone/" class="bh-link" style="color:#7e2a1e; text-decoration:none;">LinkedIn</a>
-                &nbsp;&middot;&nbsp;
-                <a href="https://bsky.app/profile/nicolamustone.bsky.social" class="bh-link" style="color:#7e2a1e; text-decoration:none;">Bluesky</a>
-                &nbsp;&middot;&nbsp;
-                <a href="https://buthonestly.io/feed.xml" class="bh-link" style="color:#7e2a1e; text-decoration:none;">RSS</a>
               </p>
-              <p class="bh-muted" style="margin:0 0 6px; font-family:'Archivo', Arial, Helvetica, sans-serif; font-size:12px; line-height:1.6; color:#8a8172;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 16px;">
+                <tr>
+                  <td style="padding:0 10px 0 0;">
+                    <a href="https://github.com/SirDarcanos" style="text-decoration:none;"><img src="https://buthonestly.io/email/github.png" width="22" height="22" alt="GitHub" style="display:block; border:0; width:22px; height:22px;" /></a>
+                  </td>
+                  <td style="padding:0 10px 0 0;">
+                    <a href="https://www.linkedin.com/in/nicolamustone/" style="text-decoration:none;"><img src="https://buthonestly.io/email/linkedin.png" width="22" height="22" alt="LinkedIn" style="display:block; border:0; width:22px; height:22px;" /></a>
+                  </td>
+                  <td style="padding:0 10px 0 0;">
+                    <a href="https://bsky.app/profile/nicolamustone.bsky.social" style="text-decoration:none;"><img src="https://buthonestly.io/email/bluesky.png" width="22" height="22" alt="Bluesky" style="display:block; border:0; width:22px; height:22px;" /></a>
+                  </td>
+                  <td style="padding:0 10px 0 0;">
+                    <a href="https://indieweb.social/@nicolamustone" style="text-decoration:none;"><img src="https://buthonestly.io/email/mastodon.png" width="22" height="22" alt="Mastodon" style="display:block; border:0; width:22px; height:22px;" /></a>
+                  </td>
+                  <td style="padding:0 10px 0 0;">
+                    <a href="https://profiles.wordpress.org/nicolamustone/" style="text-decoration:none;"><img src="https://buthonestly.io/email/wordpress.png" width="22" height="22" alt="WordPress" style="display:block; border:0; width:22px; height:22px;" /></a>
+                  </td>
+                  <td style="padding:0 10px 0 0;">
+                    <a href="https://x.com/nicolamustone" style="text-decoration:none;"><img src="https://buthonestly.io/email/x.png" width="22" height="22" alt="X" style="display:block; border:0; width:22px; height:22px;" /></a>
+                  </td>
+                  <td style="padding:0 10px 0 0;">
+                    <a href="https://buthonestly.io/feed.xml" style="text-decoration:none;"><img src="https://buthonestly.io/email/rss.png" width="22" height="22" alt="RSS" style="display:block; border:0; width:22px; height:22px;" /></a>
+                  </td>
+                </tr>
+              </table>
+              <p class="bh-muted" style="margin:0 0 6px; font-family:'Archivo', Arial, Helvetica, sans-serif; font-size:12px; line-height:1.6; color:#665e51;">
                 You're receiving this because you subscribed at buthonestly.io.
               </p>
-              <p class="bh-muted" style="margin:0 0 6px; font-family:'Archivo', Arial, Helvetica, sans-serif; font-size:12px; line-height:1.6; color:#8a8172;">
-                <a href="{{ unsubscribe_url }}" class="bh-link" style="color:#8a8172; text-decoration:underline;">Unsubscribe</a>
+              <p class="bh-muted" style="margin:0 0 6px; font-family:'Archivo', Arial, Helvetica, sans-serif; font-size:12px; line-height:1.6; color:#665e51;">
+                <a href="{{ unsubscribe_url }}" class="bh-link" style="color:#665e51; text-decoration:underline;">Unsubscribe</a>
                 &nbsp;&middot;&nbsp;
-                <a href="{{ subscriber_preferences_url }}" class="bh-link" style="color:#8a8172; text-decoration:underline;">Update your preferences</a>
+                <a href="{{ subscriber_preferences_url }}" class="bh-link" style="color:#665e51; text-decoration:underline;">Update your preferences</a>
               </p>
-              <p class="bh-muted" style="margin:0; font-family:'Archivo', Arial, Helvetica, sans-serif; font-size:12px; line-height:1.6; color:#8a8172;">
+              <p class="bh-muted" style="margin:0; font-family:'Archivo', Arial, Helvetica, sans-serif; font-size:12px; line-height:1.6; color:#665e51;">
                 {{ address }}
               </p>
             </td>
