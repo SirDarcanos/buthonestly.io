@@ -15,7 +15,7 @@ tags:
   - Productivity
 coverAlt: The letters ‘AI?’ handwritten in dark marker on a whiteboard.
 originalCover:
-coverCaption: Photo by Nahrizul Kadri on Unsplash.
+coverCaption: Photo by <a href="https://unsplash.com/@nahrizuladib?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Nahrizul Kadri</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
 cover: ai-slop-midas-touch-modern-internet.jpg
 ---
 

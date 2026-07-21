@@ -59,7 +59,7 @@ Speed wins attention, but design keeps it.
 
 Once your site loads fast and feels smooth, visuals become the next piece of the puzzle. A clean but _well-designed_ layout builds trust, improves readability, and gives your content identity. It’s what makes visitors remember _your_ site among the thousands they scroll through.
 
-![Notebook page with hand-drawn website wireframes and layout boxes, showing early web design planning for a multi-section homepage.](website-design-structure.jpg "Photo by Sigmund on Unsplash")
+![Notebook page with hand-drawn website wireframes and layout boxes, showing early web design planning for a multi-section homepage.](website-design-structure.jpg 'Photo by <a href="https://unsplash.com/@sigmund?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Sigmund</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>')
 
 Design isn’t just about aesthetics. It’s about **communication**. Typography guides the eye, spacing gives clarity, and subtle color choices create hierarchy. Even something as simple as using an image can break up long posts and give them character.
 

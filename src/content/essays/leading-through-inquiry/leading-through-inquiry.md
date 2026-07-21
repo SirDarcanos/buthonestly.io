@@ -13,7 +13,7 @@ tags:
   - Workflow
 cover: coaching-questions.jpg
 coverAlt: Black-and-white close-up of an elderly bearded man peering through a magnifying glass.
-coverCaption: Photo by mari lezhava on Unsplash.
+coverCaption: Photo by <a href="https://unsplash.com/@marilezhava?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">mari lezhava</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
 downloads:
 audioVoice: Enceladus
 audioStyle: reflective

@@ -57,7 +57,7 @@ The key is to **look for features that align with your specific needs**. It’s 
 
 Ask yourself, do you really need five different sliders in your theme? Or do you really need 10 different portfolio styles on your company’s site? After all, [you’re only going to use one of them](https://wordpress.com/go/web-design/how-to-choose-the-best-wordpress-theme/).
 
-![A computer screen showing a code editor with WordPress PHP code written in it.](php-code.jpg "Photo by Negative Space on Pexels.com")
+![A computer screen showing a code editor with WordPress PHP code written in it.](php-code.jpg 'Photo by <a href="https://www.pexels.com/@negativespace/">Negative Space</a> on <a href="https://www.pexels.com/">Pexels.com</a>')
 
 ## Delving Deeper: Beyond First Impressions
 
@@ -77,7 +77,7 @@ When reading reviews:
 
 ### Balancing Quantity with Quality
 
-![A person a newspaper showing its cover that reads “Book Review”](plugin-reviews.jpeg "Photo by Gül Işık on Pexels.com")
+![A person a newspaper showing its cover that reads “Book Review”](plugin-reviews.jpeg 'Photo by <a href="https://www.pexels.com/@ekrulila/">Gül Işık</a> on <a href="https://www.pexels.com/">Pexels.com</a>')
 
 The number of reviews can be as telling as their content. A plugin with thousands of reviews offers a broader consensus than one with just a handful, but don’t discount the latter immediately. Sometimes, newer or niche plugins might have fewer reviews but could be hidden gems. The key is to balance the quantity of reviews with the quality of the information they provide.
 

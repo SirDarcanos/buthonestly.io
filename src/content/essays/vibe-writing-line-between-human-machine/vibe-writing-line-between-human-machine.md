@@ -14,7 +14,7 @@ tags:
   - Productivity
   - Workflow
 coverAlt: A close-up of a vintage typewriter with a sheet of paper that reads ‘Something worth reading.’
-coverCaption: Photo by Suzy Hazelwood on Pexels.com
+coverCaption: Photo by <a href="https://www.pexels.com/@suzyhazelwood/">Suzy Hazelwood</a> on <a href="https://www.pexels.com/">Pexels.com</a>
 originalCover:
 cover: vibe-writing.jpg
 ---
@@ -82,7 +82,7 @@ Maybe it does. Not because of pride or ownership, but because originality still 
 
 We like to say there’s nothing new under the sun. Possibly that’s true most of the time. Most writing, like most code, is incremental. We build on what already exists, what we’ve seen, read, or felt before. Creation has always been a kind of collaboration across time.
 
-![Two women collaborating at a desk with a laptop, camera, notebooks, and photos in a bright creative workspace.](cowriting.jpg "Photo by Vitaly Gariev on Unsplash")
+![Two women collaborating at a desk with a laptop, camera, notebooks, and photos in a bright creative workspace.](cowriting.jpg 'Photo by <a href="https://unsplash.com/@silverkblack?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Vitaly Gariev</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>')
 
 But that doesn’t mean originality is an illusion. It’s just rare. Every so often, someone manages to think or express something that nobody else has. Not because they worked in isolation, but because they saw something others didn’t. That spark of perspective, that leap, is what we call originality.
 
@@ -122,7 +122,7 @@ Writing with AI didn’t just shape this essay. It shaped how I think about crea
 
 Maybe that’s the point of all this. The goal isn’t to prove who’s more original, human or machine, but to stay aware of what makes creation meaningful.
 
-![Hand reaching toward the setting sun over calm water, with its reflection stretching across the surface.](hand-reaching-light.jpg "Photo by Marc-Olivier Jodoin on Unsplash.")
+![Hand reaching toward the setting sun over calm water, with its reflection stretching across the surface.](hand-reaching-light.jpg 'Photo by <a href="https://unsplash.com/@marcojodoin?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Marc-Olivier Jodoin</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>')
 
 Writing this essay challenged a few of my own assumptions and beliefs. It made me see where I actually stand on vibe writing, vibe coding, and originality. I started out curious, maybe a bit skeptical, but somewhere along the way I realized that what matters most to me isn’t authorship or speed, it’s intention. Why we create, and what we hope others will feel when they read it.
 

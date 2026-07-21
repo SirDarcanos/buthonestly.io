@@ -41,7 +41,7 @@ There’s a strange tension in that choice. On one hand, deleting feels liberati
 
 The truth is, there’s no universal rule. The right choice depends on what you want that account to be now. If you’re relaunching it with a new focus — to share your work, reconnect with a community, or simply be active again — then some curation helps. If the account has personal meaning, or if its old posts still say something true about your path, keeping them makes sense.
 
-![A close-up shot of a person's hands holding a dark smartphone while wearing a grey hoodie and dark trousers. A classic black dive watch with a rotating bezel and a black strap is visible on their wrist.](x-feed-balance.jpg "Photo by Nathan Dumlao on Unsplash.")
+![A close-up shot of a person's hands holding a dark smartphone while wearing a grey hoodie and dark trousers. A classic black dive watch with a rotating bezel and a black strap is visible on their wrist.](x-feed-balance.jpg 'Photo by <a href="https://unsplash.com/@nate_dumlao?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Nathan Dumlao</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>')
 
 In my case, I found two full years of automation. An unintended experiment in noise. I once had a plugin on this website that would automatically tweet one of my past articles each day to “keep things active.” It seemed clever at the time, but it turned my timeline into a random feed of links without context. By 2017, the automation doubled to two tweets a day, and I had thousands of repetitive posts that added no value and broken links that no longer worked.
 

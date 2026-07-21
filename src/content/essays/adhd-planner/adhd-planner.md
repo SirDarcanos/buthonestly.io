@@ -15,7 +15,7 @@ tags:
 coverAlt: Close-up of chrysanthemum petals glowing in rainbow colours against a dark background.
 originalCover:
 cover: adhd-planner.jpg
-coverCaption: Photo by Siora Photography on Unsplash.
+coverCaption: Photo by <a href="https://unsplash.com/@siora18?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Siora Photography</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
 ---
 
 > [!summary]- Quick Summary
@@ -46,7 +46,7 @@ Then it stopped.
 
 Not gradually. Suddenly. I woke up one day, opened the editor, and couldn’t do it. The thought of writing felt heavy, like walking through deep sand. The same blog that had filled me with energy now looked like work I couldn’t face.
 
-![A sad white and brown cat in a cage.](cat-in-cage.jpg "Photo by Tong Nguyen van on Unsplash.")
+![A sad white and brown cat in a cage.](cat-in-cage.jpg 'Photo by <a href="https://unsplash.com/@duytanphoto?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Tong Nguyen van</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>')
 
 That became the pattern. A few months of creativity, then silence. I’d come back with excitement, only to lose it again. The longer I stayed away, the harder it was to return.
 
@@ -143,7 +143,7 @@ When I disappear now, you probably don’t notice. Because I planned for it.
 
 ADHD didn’t make me inconsistent; it made me cyclical. And cycles, I’ve learned, are just another kind of rhythm. One that moves differently but still moves.
 
-![The inside of an orange tube with a spiralling line going towards a light in the center.](spiral.jpg "Photo by Lanju Fotografie on Unsplash.")
+![The inside of an orange tube with a spiralling line going towards a light in the center.](spiral.jpg 'Photo by <a href="https://unsplash.com/@lanju_fotografie?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Lanju Fotografie</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>')
 
 If you’ve ever felt that same pattern — the bursts of motivation, the sudden quiet, the guilt that follows — I’d love to hear your story. How do you balance creativity and burnout? Have you found your rhythm, or are you still figuring it out?
 

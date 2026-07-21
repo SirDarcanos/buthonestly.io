@@ -12,7 +12,7 @@ tags:
   - Team Building
   - Workflow
 coverAlt: A young child in a blue polka-dot shirt looks through a toy telescope indoors.
-coverCaption: Photo by Joseph Rosales on Unsplash
+coverCaption: Photo by <a href="https://unsplash.com/@josephandjosephandjoseph?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Joseph Rosales</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
 originalCover:
 cover: learning-to-care.jpg
 ---
@@ -89,7 +89,7 @@ Empathy, for me, isn’t emotional contagion. It’s precision. It’s understan
 
 And it all started with faking it.
 
-![A person holds up a pair of round, gold-rimmed glasses in focus against a blurry urban alley background.](learning-empathy.jpg "Photo by Josh Calabrese on Unsplash")
+![A person holds up a pair of round, gold-rimmed glasses in focus against a blurry urban alley background.](learning-empathy.jpg 'Photo by <a href="https://unsplash.com/@joshcala?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Josh Calabrese</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>')
 
 ## Practicing Curiosity in Support
 
@@ -123,7 +123,7 @@ It’s what allows me to hold empathy without drowning in it, to stay curious wi
 What matters is balance, knowing when to step closer and when to stay still.  
 Leadership often means knowing when to listen to the complaint and when to ask what they will do about it.
 
-![Silhouette of a person balancing on a rock on one leg with arms outstretched against a bright orange sunset over the water.](leadership-balance.jpg "Photo by Aziz Acharki on Unsplash")
+![Silhouette of a person balancing on a rock on one leg with arms outstretched against a bright orange sunset over the water.](leadership-balance.jpg 'Photo by <a href="https://unsplash.com/@acharki95?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Aziz Acharki</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>')
 
 ## When Curiosity Shifts
 

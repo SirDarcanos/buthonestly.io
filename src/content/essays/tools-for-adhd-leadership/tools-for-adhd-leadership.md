@@ -30,6 +30,8 @@ cover: adhd-tools.jpg
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
+
+
 I’ve been leading with ADHD for years without realizing it. I just thought I was bad at the simple stuff.
 
 I’d procrastinate on easy tasks, forget to post updates, or leave small follow-ups half-done. Nothing catastrophic, just loose ends that multiplied when I got busy. Long before I had a name for it, I was quietly looking for tools for ADHD that could keep those loose ends from piling up.
@@ -80,7 +82,7 @@ The biggest breakthrough came with **Quill Meetings**. For years, I struggled to
 
 You can download my custom templates from the **Downloads** section below, or on the [resources page](/resources/ "Resources & Assets").
 
-![Close-up of a MacBook screen in a dark room showing the dock with apps like browser, design software, and note-taking tools, representing digital ADHD productivity tools that support focused, creative work.](adhd-productivity-tools.jpg "Photo by Supriya Bhandari on Unsplash")
+![Close-up of a MacBook screen in a dark room showing the dock with apps like browser, design software, and note-taking tools, representing digital ADHD productivity tools that support focused, creative work.](adhd-productivity-tools.jpg 'Photo by <a href="https://unsplash.com/@supriyayyya?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Supriya Bhandari</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>')
 
 **Email and P2s** are my quietest tools but also the most reliable. At Automattic, internal blogs (P2s) are where we discuss asynchronously. We have a saying that if it’s not on a P2, it didn’t happen. I subscribe to the ones that matter and receive digests by email instantly, daily, or weekly. I skim them quickly, deleting what’s irrelevant, reading what deserves attention.
 

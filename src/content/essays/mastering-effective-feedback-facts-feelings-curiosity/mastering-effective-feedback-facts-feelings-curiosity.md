@@ -14,7 +14,7 @@ tags:
 coverAlt: A bunch of pink and orange smiley-face balloons — some smiling, some frowning — against a blue sky.
 originalCover:
 cover: effective-feedback.jpg
-coverCaption: Photo by Madison Oren on Unsplash
+coverCaption: Photo by <a href="https://unsplash.com/@artbyhybrid?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Madison Oren</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
 ---
 
 > [!summary]- Quick Summary
@@ -60,7 +60,7 @@ The structure is simple:
 
 It sounds small, but it changes everything. Instead of saying, _“You were disrespectful in that meeting,”_ you might say, _“When you interrupted me during that meeting, I felt dismissed.”_ The first statement sounds like an accusation. The second describes a fact and a feeling. It invites a response rather than a reaction.
 
-![A black-and-white photo of a banner reading “WE HEAR YOU.” in bold letters.](effective-feedback-model.jpg "Photo by Jon Tyson on Unsplash.")
+![A black-and-white photo of a banner reading “WE HEAR YOU.” in bold letters.](effective-feedback-model.jpg 'Photo by <a href="https://unsplash.com/@jontyson?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Jon Tyson</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>')
 
 I like this approach because it invites understanding rather than debate. No one can tell you that you did not feel a certain way. It also removes assumptions. You are not trying to guess someone’s intention, only sharing your perspective of what happened and how it affected you, the team, the project, the situation, etc.
 
@@ -76,7 +76,7 @@ Before jumping into feedback, I try to be curious.
 
 It is easy to assume that something went wrong or that someone made a poor decision. But often there is more to the story than I can see. Maybe the person did not have all the information, perhaps priorities changed, or possibly I did not communicate clearly enough in the first place.
 
-![Woman in white button up shirt sitting on gray couch, talking to another woman in a black blouse](sharing-critical-feedback.jpg "Photo by cottonbro studio on Pexels.com")
+![Woman in white button up shirt sitting on gray couch, talking to another woman in a black blouse](sharing-critical-feedback.jpg 'Photo by <a href="https://www.pexels.com/@cottonbro/">cottonbro studio</a> on <a href="https://www.pexels.com/">Pexels.com</a>')
 
 Curiosity gives space for understanding. It shifts the conversation from “_You did something wrong_” to “_Help me understand what happened._” That small change in tone makes a big difference. It turns feedback into a shared exploration instead of a correction.
 

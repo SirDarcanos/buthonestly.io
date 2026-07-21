@@ -13,7 +13,7 @@ tags:
   - Team Building
 cover: team-building-activities-for-work.jpeg
 coverAlt: "Two people in racing suits and helmets driving go-karts around an outdoor track lined with tyre barriers."
-coverCaption: Photo by Tima Miroshnichenko on Pexels.com
+coverCaption: Photo by <a href="https://www.pexels.com/@tima-miroshnichenko/">Tima Miroshnichenko</a> on <a href="https://www.pexels.com/">Pexels.com</a>
 ---
 
 > [!summary]- Quick Summary
@@ -78,7 +78,7 @@ It was fascinating to watch and play because this mirrored how we handle custome
 
 The people who guessed correctly weren’t the ones who asked the most, they were the ones who listened best and asked the right questions. It’s one of those team building activities that quietly sharpens how a group observes, asks, and listens. We trained curiosity and patience. All skills that translate directly to customer conversations.
 
-![Three coworkers in an office setting casually laughing and talking](casual-coworkers.jpg "Photo by Ahmet Kurt on Unsplash.")
+![Three coworkers in an office setting casually laughing and talking](casual-coworkers.jpg 'Photo by <a href="https://unsplash.com/@ahmetkurt?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Ahmet Kurt</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>')
 
 ## Unlock! Solving Problems as a Team
 

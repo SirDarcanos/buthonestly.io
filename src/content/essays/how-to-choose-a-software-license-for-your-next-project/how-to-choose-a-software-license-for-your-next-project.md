@@ -13,7 +13,7 @@ tags:
 coverAlt: A public sculpture of red and grey blocks arranged to spell ‘MIT’ outside a concrete building.
 originalCover:
 cover: mit-software-license.jpg
-coverCaption: Photo by Bernd Dittrich on Unsplash
+coverCaption: Photo by <a href="https://unsplash.com/@hdbernd?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Bernd Dittrich</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
 ---
 
 > [!summary]- Quick Summary
@@ -327,7 +327,7 @@ Even with the clearest license, infringements happen. Maybe someone copied your 
 
 Here’s how to handle it, calmly, methodically, and without burning bridges.
 
-![Black and white lithograph of diverse individuals, including a nun and a man using a magnifying glass, reading intensely at a library table.](software-license-violations.jpg "Photo by The New York Public Library on Unsplash")
+![Black and white lithograph of diverse individuals, including a nun and a man using a magnifying glass, reading intensely at a library table.](software-license-violations.jpg 'Photo by <a href="https://unsplash.com/@nypl?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">The New York Public Library</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>')
 
 ### Step 1. Confirm it’s really a violation.
 

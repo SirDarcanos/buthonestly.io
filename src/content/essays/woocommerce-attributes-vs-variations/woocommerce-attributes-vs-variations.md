@@ -58,7 +58,7 @@ Attributes can exist on almost any WooCommerce product type. You can add them to
 
 The key point is this: attributes do not always create choices. Sometimes they just explain.
 
-![The Attributes screen on a WooCommerce product showcasing three different product attributes: brand, color, and size, and their respective options](woocommerce-attributes.jpeg "The Attributes screen of a t-shirt.")
+![The Attributes screen on a WooCommerce product showcasing three different product attributes: brand, color, and size, and their respective options](woocommerce-attributes.jpeg "The Attributes screen of a t-shirt")
 
 On their own, attributes are neutral. They do not affect price, stock, or availability. They are simply structured data that describes a product.
 
@@ -92,7 +92,7 @@ That gives you six possible variations.
 
 Each one can have its own price, stock status, SKU, and image. That is the power of variations. They turn your neat attribute data into real, purchasable versions of the product.
 
-![The variations screen on a WooCommerce product showing a clothing item with colors and sizes variations](woocommerce-variations.jpeg "The Variations screen of a t-shirt.")
+![The variations screen on a WooCommerce product showing a clothing item with colors and sizes variations](woocommerce-variations.jpeg "The Variations screen of a t-shirt")
 
 Without attributes, you cannot create variations. Without variations, your attributes never become choices.
 

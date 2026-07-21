@@ -14,7 +14,7 @@ tags:
   - Python
 cover: gigabyte-gpu.jpg
 coverAlt: The inside of a gaming PC lit in red and blue, with a Gigabyte graphics card mounted above the motherboard.
-coverCaption: Photo by Rafael Pol on Unsplash.
+coverCaption: Photo by <a href="https://unsplash.com/@rapol?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Rafael Pol</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
 originalCover:
 downloads:
 ---
@@ -41,7 +41,7 @@ A graphics card is the whole assembly — circuit board, memory chips, power reg
 
 When someone says "NVIDIA GeForce RTX 5090" or "AMD Radeon RX 9060 XT," they're naming the card.
 
-![NVIDIA GeForce RTX 5090 graphics card, full assembly with cooling shroud and fans.](nvidia-geforce-rtx-5090.jpg "Image by NVIDIA.")
+![NVIDIA GeForce RTX 5090 graphics card, full assembly with cooling shroud and fans.](nvidia-geforce-rtx-5090.jpg "Image by NVIDIA")
 
 The GPU is one chip on that card. A microchip soldered onto the PCB (Printed Circuit Board) alongside the memory, the voltage regulators, and dozens of other components. NVIDIA calls the GPU on the RTX 5090 the **GB202**. AMD calls the one on the RX 9060 XT **Navi 44**. The chip is what does the actual computation. The card is what makes the chip usable.
 
@@ -116,7 +116,7 @@ NVIDIA responded by building cards purpose-built for that work. No display outpu
 
 The NVIDIA H100 is the best-known example.
 
-![NVIDIA H100 data-center GPU card with no display outputs and no fans, designed for server-rack installation.](h100-ari.jpeg "Image by NVIDIA.")
+![NVIDIA H100 data-center GPU card with no display outputs and no fans, designed for server-rack installation.](h100-ari.jpeg "Image by NVIDIA")
 
 The spec sheet looks different from a consumer card. Instead of the 32 GB of GDDR7 on an RTX 5090, the H100 has 80 GB of HBM3. That's a faster, more expensive memory technology used almost exclusively in data-center hardware. The GH100 chip inside it has 14,592 CUDA cores, fewer than the 5090's 21,760, but it makes up for that in Tensor core throughput and raw bandwidth. Memory bandwidth on the SXM variant tops 3.35 TB/s, almost double what the 5090 can move.
 
@@ -148,7 +148,7 @@ Once you stop conflating the card with the chip, the buying question gets simple
 
 The software side narrows the field. As covered in the last section, NVIDIA's CUDA platform is where almost every AI framework lives. Going outside that ecosystem means more work to get the same job done. If your goal is to learn, build, and ship without fighting tooling, that decision is mostly made for you.
 
-![An abstract image of an Apple M4 chip centered on a neon circuit board with glowing purple traces and green lights.](apple-m4-abstract.jpg "Photo by BoliviaInteligente on Unsplash.")
+![An abstract image of an Apple M4 chip centered on a neon circuit board with glowing purple traces and green lights.](apple-m4-abstract.jpg 'Photo by <a href="https://unsplash.com/@boliviainteligente?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">BoliviaInteligente</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>')
 
 There's a third path I've used: Apple Silicon. The trick is unified memory. On a Mac with an M-series chip, the GPU and CPU share the same memory pool. There's no separate VRAM with its own ceiling. A Mac with enough system RAM can sometimes load models that won't fit on a desktop card with much faster compute. The trade-off is speed: a Mac will train slower than a dedicated GPU, and not every framework supports its Metal backend cleanly. But for inference and for fitting larger models locally, it's a real option. The [[distilroberta-emotion-analysis-nlp-case-study|NLP analysis I ran on Steam reviews]] is the kind of work where memory ceiling matters more than raw speed.
 
@@ -160,7 +160,7 @@ Card prices have climbed sharply over the last several years. AI is the current 
 
 GPUs turned out to be excellent at the math behind proof-of-work mining. Same advantage as before: thousands of small cores running the same operation in parallel, except now the operation is hashing instead of matrix math. When Bitcoin became valuable and other coins like Ethereum followed, miners started buying consumer GPUs by the rack. The Ethereum booms of 2017–2018 and 2020–2021 each [pulled cards off shelves faster than they could be made](https://www.digitaltrends.com/computing/catastrophic-gpu-shortage-a-chronological-history/). Prices doubled or tripled on the secondary market. Gamers couldn't find stock at MSRP for months at a time.
 
-![Ethereum logo on a coin over a blurred cryptocurrency candlestick chart with a purple and teal background.](ethereum-market.jpg "Photo by Yiğit Ali Atasoy on Unsplash.")
+![Ethereum logo on a coin over a blurred cryptocurrency candlestick chart with a purple and teal background.](ethereum-market.jpg 'Photo by <a href="https://unsplash.com/@yigitaliatasoy?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Yiğit Ali Atasoy</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>')
 
 That cooled down in 2022 when Ethereum moved off proof-of-work and mining stopped being profitable on consumer cards. For a few months it looked like the market might normalize. Then ChatGPT launched, AI demand exploded, and the gap closed quickly.
 

@@ -12,7 +12,7 @@ tags:
   - Creativity
 cover: buildings-never-were.jpg
 coverAlt: "A car drives down a foggy forest road at dusk toward a weathered ‘Welcome to Raccoon City, Home of Umbrella’ sign."
-coverCaption: Image by Capcom.
+coverCaption: Image by Capcom
 ---
 
 > [!summary]- Quick Summary
@@ -36,7 +36,7 @@ Past the entryway with the empty front desk. Down the hall toward the records ro
 
 This was the Raccoon City Police Department. The RPD. The building that anchors the second Resident Evil game from 1998, its 2019 remake, and the third game from a different angle. And now the ninth, where I’d just walked in for the first time in years.
 
-![RPD main hall in ruins](rpd-main-hall.jpg "Image by Capcom.")
+![RPD main hall in ruins](rpd-main-hall.jpg "Image by Capcom")
 
 A cutscene showed the “Welcome Leon” ribbon. The same one his fellow officers had put up for him on his first day at the precinct. Inside the fiction, the ribbon is a taunt — Leon’s antagonist using a fragment of the past against him. I wasn’t who the taunt was for. It caught me anyway.
 
@@ -60,7 +60,7 @@ First, the street outside. In Resident Evil 2 and 3, the approach to the RPD was
 
 Resident Evil 9 brings you back to that same approach. The cars are in the same spots. I recognized geography that doesn’t exist.
 
-![Ruins of Raccoon City](raccoon-city-ruins.jpg "Image by Capcom.")
+![Ruins of Raccoon City](raccoon-city-ruins.jpg "Image by Capcom")
 
 Second, the building itself. Years have passed in the fiction and the place is in ruins. Offices wrecked, ceilings down, blood where there wasn’t blood before.
 
@@ -110,13 +110,13 @@ Buildings aren’t the only thing the franchise carries forward. The characters 
 
 Leon was new in 1998. A young officer fresh out of training, in over his head in a city overrun by zombies.
 
-![Leon S. Kennedy in Resident Evil 2](leon-young.jpg "Image by Capcom.")
+![Leon S. Kennedy in Resident Evil 2](leon-young.jpg "Image by Capcom")
 
 He came back in RE4 a few years older, still scrambling. He came back again across the years, the games marking the time. In Resident Evil 9 he’s visibly older.
 
 You age with him whether you like it or not.
 
-![Leon S. Kennedy in Resident Evil 9](leon-aged.jpg "Image by Capcom.")
+![Leon S. Kennedy in Resident Evil 9](leon-aged.jpg "Image by Capcom")
 
 This is what films can’t do at the same scale. A character in a franchise that releases every three or four years ages in real time alongside you.
 
@@ -126,7 +126,7 @@ Each is bound to a phase of my own life as much as to the franchise’s. The ord
 
 And then Resident Evil 9 introduces Grace. A new main character alongside Leon, an FBI technical analyst sent to investigate a string of deaths in a small town.
 
-![Grace Ashcroft in Resident Evil 9](grace-scared.jpg "Image by Capcom.")
+![Grace Ashcroft in Resident Evil 9](grace-scared.jpg "Image by Capcom")
 
 She’s anxious, in over her head, weak the way an analyst is weak when a quick investigation becomes a bioweapons lab. Realistic, in the sense that any character in a fictional world of zombies can be realistic.
 

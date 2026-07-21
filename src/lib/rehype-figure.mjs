@@ -2,6 +2,13 @@
 // as <p><img alt title></p> — to <figure><img><figcaption>caption. alt stays on
 // the img. Only images alone in a <p> qualify; inline/gallery images are left
 // as-is.
+//
+// The caption is emitted as raw HTML, because photo credits are pasted straight
+// from Unsplash or Pexels with their links and utm_ params intact. That means a
+// caption containing the snippet's double quotes must use a SINGLE-quoted title
+// — `![alt](src 'Photo by <a href="…">…')` — or the image stops parsing as an
+// image entirely. `npm run check:links` catches that.
+
 export default function rehypeFigure() {
   return (tree) => walk(tree);
 }
@@ -22,7 +29,7 @@ function walk(node) {
           type: "element",
           tagName: "figcaption",
           properties: {},
-          children: [{ type: "text", value: caption }],
+          children: [{ type: "raw", value: caption }],
         },
       ];
       continue; // don't recurse into the figure we just built

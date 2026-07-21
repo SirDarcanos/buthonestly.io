@@ -19,7 +19,7 @@ downloads:
   - file: distilroberta-emotion-analysis-dead-by-daylight-case-study.zip
     label: Steam reviews dataset + notebook
 cover: dead-by-daylight.jpg
-coverCaption: Image by Behaviour Interactive.
+coverCaption: Image by Behaviour Interactive
 ---
 
 > [!summary]- Quick Summary

@@ -12,7 +12,7 @@ tags:
   - WordPress
   - Workflow
 coverAlt: WordPress admin Add Plugins screen showing Classic Editor, Gutenberg, and other plugin listings.
-coverCaption: Photo by Justin Morgan on Unsplash.
+coverCaption: Photo by <a href="https://unsplash.com/@justin_morgan?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Justin Morgan</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
 originalCover:
 cover: top-wordpress-plugins.jpg
 ---
@@ -41,7 +41,7 @@ In this post, I’ll walk you through the **five WordPress plugins I always inst
 
 If you allow comments on your blog, spam is inevitable. Even with modern anti-spam measures, bots and malicious scripts constantly try to flood comment sections with irrelevant links. Left unchecked, this not only clutters your posts but can also hurt your site’s credibility and SEO.
 
-![Angry man shouting into a telephone handset while seated at a desk against a white background.](scam-call.jpg "Photo by Icons8 Team on Unsplash.")
+![Angry man shouting into a telephone handset while seated at a desk against a white background.](scam-call.jpg 'Photo by <a href="https://unsplash.com/@icons8?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Icons8 Team</a> on <a href="https://unsplash.com/photos/married-couple-standing-beside-beige-wall-IsRIjvgpj5Y?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>')
 
 That’s where **[Akismet](https://akismet.com/)** comes in. It’s one of WordPress’s oldest and most trusted plugins, developed by Automattic, the same team behind WordPress.com, Jetpack, and WooCommerce. Once activated, Akismet automatically checks incoming comments and contact-form submissions against its global spam database, silently filtering out the junk before it reaches your moderation queue.
 
@@ -59,7 +59,7 @@ I’ve tried alternative plugins and manual spam solutions, but **Akismet remain
 
 No WordPress setup feels complete without an SEO plugin, and [Yoast SEO](https://yoast.com/) has been my go-to for years. It’s one of those plugins that quietly does a lot of heavy lifting behind the scenes — making sure your site is search-engine friendly without you having to dive deep into technical SEO.
 
-![Person using a laptop displaying Google Search at a wooden table beside a cup of coffee.](office-google-search.jpg "Photo by Firmbee.com on Unsplash.")
+![Person using a laptop displaying Google Search at a wooden table beside a cup of coffee.](office-google-search.jpg 'Photo by <a href="https://unsplash.com/@firmbee?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Firmbee.com</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>')
 
 At its core, Yoast helps you manage all the key on-page elements that matter for visibility:
 
@@ -79,7 +79,7 @@ In practice, I mostly rely on the free version and use the premium one on select
 
 Once your site is live, understanding how people find and use it becomes essential. You could log into multiple dashboards for Google Analytics, Search Console, and AdSense — or you could connect everything directly inside WordPress with [Site Kit by Google](https://sitekit.withgoogle.com/).
 
-![Google Analytics dashboard showing real-time users, traffic charts, revenue, and top countries.](site-kit-google.jpg "Photo by 1981 Digital on Unsplash")
+![Google Analytics dashboard showing real-time users, traffic charts, revenue, and top countries.](site-kit-google.jpg 'Photo by <a href="https://unsplash.com/@1981digital?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">1981 Digital</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>')
 
 This plugin acts as a bridge between your site and Google’s key tools, giving you an integrated overview of performance right from your WordPress dashboard. With a few clicks, you can see:
 
@@ -98,7 +98,7 @@ If you’re already using multiple Google services, Site Kit is an easy win. It 
 
 [Jetpack](https://jetpack.com/) is one of those plugins that often divides opinions — some love it, others find it too heavy. Personally, I think it’s incredibly useful _if you know which features to activate_. Jetpack isn’t just one tool; it’s a full suite covering backups, security, uptime monitoring, image optimization, and stats.
 
-![Ferrari dashboard showing the tachometer, speedometer, warning lights, and an open-door alert.](ferrari-performance.jpg "Photo by mostafa jamei on Unsplash")
+![Ferrari dashboard showing the tachometer, speedometer, warning lights, and an open-door alert.](ferrari-performance.jpg 'Photo by <a href="https://unsplash.com/@mostafa_jamei?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">mostafa jamei</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>')
 
 When setting up a new site, I usually enable a few key modules:
 
@@ -126,7 +126,7 @@ Every WordPress site ends up needing a few custom tweaks — maybe you want to d
 
 [Code Snippets](https://wordpress.org/plugins/code-snippets/) solves that problem elegantly. It provides a clean, organized interface right inside your dashboard where you can safely add, edit, and manage bits of PHP code. Each snippet can be toggled on or off, categorized, and even exported if you move your site later.
 
-![Close-up of colorful programming code on a screen, with sharp text in the center and blurred edges.](code-snippets.jpg "Photo by Markus Spiske on Unsplash.")
+![Close-up of colorful programming code on a screen, with sharp text in the center and blurred edges.](code-snippets.jpg 'Photo by <a href="https://unsplash.com/@markusspiske?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Markus Spiske</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>')
 
 I use it to keep all small customizations centralized and version-controlled. For example, I might add snippets like:
 

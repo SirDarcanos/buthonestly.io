@@ -70,7 +70,7 @@ No modal windows. No “format painter”. No mode switches. The tool is not try
 
 For me, this matters in the kind of writing I do most days. Documentation. Internal posts. Support replies. Essay drafts. The content is different, but the structure is the same, and Markdown stays stable under all of it.
 
-![Focused man working at a desktop computer in a colorful home office with plants, stationery, and a desk lamp.](markdown-focus.jpg "Photo by Vitaly Gariev on Unsplash")
+![Focused man working at a desktop computer in a colorful home office with plants, stationery, and a desk lamp.](markdown-focus.jpg 'Photo by <a href="https://unsplash.com/@silverkblack?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Vitaly Gariev</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>')
 
 ## One Syntax, Many Places
 
@@ -122,7 +122,7 @@ Markdown is the thread that connects all of them. It is the same pattern in each
 
 If Ulysses vanished, or WordPress changed, or I needed to switch laptops, my writing would still live in simple text files that any editor can open.
 
-![Worn blue-covered copy of Ulysses by James Joyce resting on a white surface, with frayed pages and edges.](ulysses.jpg 'Photo by <a href="https://unsplash.com/@newartist?utm_source=unsplash">New Artist</a> on <a href="https://unsplash.com/photos/xyz?utm_source=unsplash">Unsplash</a>')
+![Worn blue-covered copy of Ulysses by James Joyce resting on a white surface, with frayed pages and edges.](ulysses.jpg "By Geoffrey Barker – Own work, CC BY-SA 4.0")
 
 ## Why I Still Write in Markdown
 

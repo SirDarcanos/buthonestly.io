@@ -18,10 +18,8 @@ downloads:
   - file: cnn-mnist-use-case-tensorflow.zip
     label: CNN + MNIST notebook
 cover: building-convolutional-neural-network-python-tensorflow.jpg
-coverCaption: Photo by Luis Lara on Unsplash.
+coverCaption: Photo by <a href="https://unsplash.com/@luisjlara343?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Luis Lara</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
 ---
-
-What does a CNN actually look like when you build it from scratch?
 
 > [!summary]- Quick Summary
 >
@@ -34,6 +32,8 @@ What does a CNN actually look like when you build it from scratch?
 > - The core takeaway is understanding how each CNN piece works so you can move beyond MNIST to tougher, real world datasets.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
+
+What does a CNN actually look like when you build it from scratch?
 
 There’s no better way to understand a convolutional neural network than to create one yourself. Most tutorials rush straight into pre-trained models or copy-paste architectures, but that skips the part that matters: learning how a CNN neural network actually works.
 
@@ -316,7 +316,7 @@ The optimizer and learning rate control _how_ the model learns. Think of the los
 
 We’ll let Bayesian optimization try different options later so you can _see_ the impact rather than memorize rules.
 
-![Illustration of the path followed by the gradient descent method to reach the minimum of a](optimizer-path.jpg "Image by ResearchGate.net.4.")
+![Illustration of the path followed by the gradient descent method to reach the minimum of a](optimizer-path.jpg "Image by ResearchGate.net.4")
 
 The figure above shows the classic “hill and valley” view of how an optimizer trains a neural network.  
 The colored surface represents the loss function — high points mean poor predictions, and low points mean better ones.  

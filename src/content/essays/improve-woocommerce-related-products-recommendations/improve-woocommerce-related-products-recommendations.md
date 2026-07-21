@@ -13,7 +13,7 @@ tags:
   - WordPress
 coverAlt: "A row of gadgets laid out on a white surface: Sony headphones, a phone battery, phone cases, and a Fujifilm camera."
 originalCover:
-coverCaption: Photo by Ady TeenagerInRO on Unsplash.
+coverCaption: Photo by <a href="https://unsplash.com/@teenagerinro?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Ady TeenagerInRO</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
 cover: woocommerce-related-products-recommendations.jpeg
 ---
 
@@ -197,7 +197,7 @@ The script in this article, and no other quick snippet, can do this. For this ad
 
 Personalized recommendations based on customer behavior involve more advanced analysis and statistical techniques. A single snippet or a couple of functions will not be able to do it.
 
-![A smiling senior man in eyeglasses and a black suit showing thumbs up and looking at camera](old-man-thumbs-up.jpg "Photo by Andrea Piacquadio on Pexels.com")
+![A smiling senior man in eyeglasses and a black suit showing thumbs up and looking at camera](old-man-thumbs-up.jpg 'Photo by <a href="https://www.pexels.com/@olly/">Andrea Piacquadio</a> on <a href="https://www.pexels.com/">Pexels.com</a>')
 
 ## Embrace the Future of Online Retail
 

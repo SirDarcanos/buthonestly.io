@@ -54,7 +54,7 @@ The answer turned out to be a video game.
 
 [Minecraft](https://www.minecraft.net/) is not neutral, but it is widely tolerated. It is played globally. It is used in schools. It looks like entertainment. I played it myself for many hours.
 
-![Gameplay in the Minecraft video game, a blocky 3D sandbox world](minecraft.jpg "Image by Mojang Studios.")
+![Gameplay in the Minecraft video game, a blocky 3D sandbox world](minecraft.jpg "Image by Mojang Studios")
 
 Crucially, in many countries where news sites are blocked or heavily filtered, Minecraft remains accessible—chosen for what works under real constraints. [[10-types-of-websites|Picking the right tool for the actual job]] is a pragmatism that applies to websites as much as to libraries navigating censorship.
 

@@ -51,7 +51,7 @@ The result is predictable. I either default to the same safe game or I don’t p
 
 Neither is satisfying.
 
-![A close-up shot focuses on a person's hands holding a black handheld gaming console under vibrant purple and blue ambient lighting.](steam-games-library.jpg "Photo by Amanz on Unsplash")
+![A close-up shot focuses on a person's hands holding a black handheld gaming console under vibrant purple and blue ambient lighting.](steam-games-library.jpg 'Photo by <a href="https://unsplash.com/@amanz?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Amanz</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>')
 
 ## The Real Problem Is Context, Not Taste
 
@@ -150,7 +150,7 @@ AI helped me reframe unfinished games as information instead of backlog debt.
 
 That shift made gaming lighter again.
 
-![A close-up of a backlit gaming keyboard glowing with multicolored keys, with a blurred game scene visible on a monitor in the background.](gaming-recommendations.jpg "Photo by Ahmed Atef on Unsplash")
+![A close-up of a backlit gaming keyboard glowing with multicolored keys, with a blurred game scene visible on a monitor in the background.](gaming-recommendations.jpg 'Photo by <a href="https://unsplash.com/@ahmedatef19?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Ahmed Atef</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>')
 
 ### What This Is Not
 

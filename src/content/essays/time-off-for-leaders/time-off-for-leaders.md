@@ -17,7 +17,7 @@ downloads:
   - file: time-off-handover-plan.zip
     label: Time Off Handover Plan
 cover: pto-leader.jpg
-coverCaption: Photo by Chen Mizrach on Unsplash.
+coverCaption: Photo by <a href="https://unsplash.com/@chenhanozel?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Chen Mizrach</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
 ---
 
 > [!summary]- Quick Summary

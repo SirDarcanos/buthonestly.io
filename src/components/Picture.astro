@@ -99,5 +99,10 @@ const fallback = isLocal ? "" : cdnUrl(src as string, width, height);
       />
     )
   }
-  {caption && <figcaption>{caption}</figcaption>}
+  {
+    /* Captions are authored HTML — the credit snippet Unsplash and Pexels give
+       you to copy, links and utm_ params intact. rehype-figure.mjs does the
+       same for body-image captions. */
+    caption && <figcaption set:html={caption} />
+  }
 </figure>

@@ -122,8 +122,21 @@
     background: var(--accent);
   }
 
+  /* Captions are mostly photo credits, occasionally a real caption. Italic
+     serif is the print convention for both, and keeps them inside the essay's
+     typographic voice — the previous monospace read as code output, which made
+     the quietest element on the page the one that drew the eye. Left-aligned
+     to sit flush with the text column and the image's own left edge. */
   figcaption {
-    @apply text-muted mt-2 text-right font-mono text-xs;
+    @apply text-muted mt-2 text-left font-serif text-sm italic;
+  }
+
+  figcaption a {
+    @apply decoration-faint underline underline-offset-2;
+  }
+
+  figcaption a:hover {
+    @apply text-accent decoration-current;
   }
 
   /* Essay prose (Markdown). */

@@ -48,7 +48,7 @@ Because sometimes a runner finds a new _skip_ — a trick, a glitch, a route cha
 
 This essay is about those collapses, and in particular about MediEvil, the 1998 PlayStation action-adventure game where you run around as Sir Daniel Fortesque, a resurrected skeleton knight with a sword and a lot of unresolved business.
 
-![Sir Daniel Fortesque poses with a sword and shield in a graveyard surrounded by zombies and an evil living tree.](sir-daniel-fortesque.jpg "Image by Sony Music Entertainement.")
+![Sir Daniel Fortesque poses with a sword and shield in a graveyard surrounded by zombies and an evil living tree.](sir-daniel-fortesque.jpg "Image by Sony Music Entertainement")
 
 I’ve collected a full MediEvil speedrunning dataset: all the official runs from speedrun.com (including mine), plus some private data from runners—failed attempts, local PBs, unsubmitted grinds. That gives us something rare: not just the shiny world records, but a glimpse into the process behind them.
 
@@ -657,7 +657,7 @@ From that perspective, the story is pretty tidy:
 - **Nazzareno** looks capped; the curve says his next PB should be roughly where he already is.
 - **BlackMenthol** has a bit of room to grow, but not much.
 
-![Screenshot of speedrunner NoobKillerRoof finishing a MediEvil Any% emulator run in 19:29, showing detailed splits on the left, a controller overlay, and the in-game dragon boss exploding as Twitch chat reacts to the new world record.](noobkillerroof-medievil-worldrecord.jpg "NoobKillerRoof setting the current MediEvil Any% world record.")
+![Screenshot of speedrunner NoobKillerRoof finishing a MediEvil Any% emulator run in 19:29, showing detailed splits on the left, a controller overlay, and the in-game dragon boss exploding as Twitch chat reacts to the new world record.](noobkillerroof-medievil-worldrecord.jpg "NoobKillerRoof setting the current MediEvil Any% world record")
 
 This is the classic “learning curve” move: compress years of grind into a neat little exponential and pretend the future will politely follow it.
 

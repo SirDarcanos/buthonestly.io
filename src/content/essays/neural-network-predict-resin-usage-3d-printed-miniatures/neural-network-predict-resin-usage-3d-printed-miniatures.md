@@ -87,7 +87,7 @@ So I had code that understood meshes, slicers that understood printing, and a gr
 
 If I wanted trustworthy estimates of resin consumption, I was still stuck slicing every file by hand.
 
-![A laptop displays a 3D animated male character being edited in Blender, placed next to a potted succulent.](3d-modeling.jpg "Photo by Jake Heinemann on Pexels.com")
+![A laptop displays a 3D animated male character being edited in Blender, placed next to a potted succulent.](3d-modeling.jpg 'Photo by <a href="https://www.pexels.com/@jakeheinemann/">Jake Heinemann</a> on <a href="https://www.pexels.com/">Pexels.com</a>')
 
 ## PrusaSlicer, UVtools, and a Real Data Pipeline
 

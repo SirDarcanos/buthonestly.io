@@ -15,7 +15,7 @@ tags:
 coverAlt: Two colleagues in suits study a laptop screen together in a glass-walled office.
 originalCover:
 cover: ai-leading.jpg
-coverCaption: Photo by Vitaly Gariev on Unsplash.
+coverCaption: Photo by <a href="https://unsplash.com/@silverkblack?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Vitaly Gariev</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
 ---
 
 > [!summary]- Quick Summary

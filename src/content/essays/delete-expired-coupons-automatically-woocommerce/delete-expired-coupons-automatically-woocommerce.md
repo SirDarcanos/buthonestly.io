@@ -13,7 +13,7 @@ tags:
   - Productivity
   - WordPress
 coverAlt: Two hands hold a colorful amusement park ticket reading "ADMIT ONE" and "FUN PASS AMUSEMENT PARK" against a dark background.
-coverCaption: Photo by Antoni Shkraba Studio on Pexels.com
+coverCaption: Photo by <a href="https://www.pexels.com/@shkrabaanthony/">Antoni Shkraba Studio</a> on <a href="https://www.pexels.com/">Pexels.com</a>
 originalCover:
 cover: delete-expired-coupons.jpg
 ---
