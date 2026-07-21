@@ -9,6 +9,8 @@ import TableOfContents from "../components/TableOfContents.astro";
 import TaxLinks from "../components/TaxLinks.astro";
 import SinglePost from "../layouts/SinglePost.astro";
 import { getPublishedEssays, getRelatedPosts, toPost } from "../lib/essays";
+import { breadcrumbList } from "../lib/schema.ts";
+import { taxUrl } from "../taxonomies.ts";
 
 import { render, type CollectionEntry } from "astro:content";
 import { type Post } from "../types.ts";
@@ -35,6 +37,19 @@ const { entry, related } = Astro.props;
 const post = toPost(entry);
 const { Content, headings } = await render(entry);
 const publishDate = new Date(post.date);
+
+// Trail through the essay's first section, so search results show
+// "buthonestly.io › Sections › Leadership" instead of a bare URL.
+const primarySection = post.categories[0];
+const jsonLd = [
+  breadcrumbList([
+    { name: "Sections", path: "/section/" },
+    ...(primarySection
+      ? [{ name: primarySection, path: taxUrl("section", primarySection) }]
+      : []),
+    { name: post.title },
+  ]),
+];
 ---
 
 <SinglePost
@@ -42,6 +57,7 @@ const publishDate = new Date(post.date);
   description={post.seo.description}
   type="article"
   article={post}
+  jsonLd={jsonLd}
 >
   {/* POST META */}
   <article
@@ -73,7 +89,7 @@ const publishDate = new Date(post.date);
             })
           }
         </time>
-        <p class="meta flex flex-1 justify-end">
+        <p class="meta flex-1 justify-end text-right">
           In <TaxLinks names={post.tags} base="topic" />
         </p>
       </div>

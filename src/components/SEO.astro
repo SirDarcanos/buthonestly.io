@@ -15,6 +15,8 @@ interface Props {
   type?: "website" | "article" | "profile";
   article?: Post;
   noindex?: boolean;
+  /** Extra schema.org nodes — build them with the helpers in lib/schema.ts. */
+  jsonLd?: Record<string, unknown>[];
 }
 
 const {
@@ -25,6 +27,7 @@ const {
   type = "website",
   article,
   noindex = false,
+  jsonLd: extraJsonLd = [],
 } = Astro.props;
 
 const fullTitle = title === SITE_NAME ? SITE_NAME : `${title} — ${SITE_NAME}`;
@@ -49,7 +52,10 @@ const jsonLd: Record<string, unknown>[] = [
   { "@context": "https://schema.org", ...PERSON },
 ];
 
-if (type === "website") {
+// Homepage only. This node claims to describe the site as a whole, so emitting
+// it on every type="website" page had every archive asserting it was the site.
+// Archives use CollectionPage with an isPartOf reference instead.
+if (Astro.url.pathname === "/") {
   jsonLd.push({
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -84,6 +90,8 @@ if (article) {
     mainEntityOfPage: article.seo.canonical,
   });
 }
+
+jsonLd.push(...extraJsonLd);
 ---
 
 <title>{fullTitle}</title>

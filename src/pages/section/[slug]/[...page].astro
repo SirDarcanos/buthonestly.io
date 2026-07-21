@@ -3,7 +3,15 @@ import FeaturedPosts from "../../../components/FeaturedPosts.astro";
 import Layout from "../../../layouts/Layout.astro";
 import ReadTime from "../../../components/ReadTime.astro";
 
-import { getAllPosts, getCategories } from "../../../lib/essays";
+import TaxCrossLinks from "../../../components/TaxCrossLinks.astro";
+
+import {
+  coOccurringTax,
+  getAllPosts,
+  getCategories,
+} from "../../../lib/essays";
+import { paginatedDescription, paginatedTitle } from "../../../lib/seo.ts";
+import { breadcrumbList, collectionPage } from "../../../lib/schema.ts";
 
 import type { GetStaticPaths, Page } from "astro";
 import { type Post, type Tax } from "../../../types.ts";
@@ -20,9 +28,12 @@ export const getStaticPaths = (async ({ paginate }) => {
     );
     const sticky = inCategory.filter((post) => post.sticky);
     const regular = inCategory.filter((post) => !post.sticky);
+    // Topics carried by this section's essays, most common first. The tail is
+    // long and thin (a topic on one essay isn't characteristic), so cap it.
+    const topics = coOccurringTax(inCategory, (post) => post.tags).slice(0, 6);
     return paginate(regular, {
       params: { slug: category.slug },
-      props: { category, sticky },
+      props: { category, sticky, topics },
       pageSize: 8,
     });
   });
@@ -32,15 +43,43 @@ interface Props {
   page: Page<Post>;
   category: Tax;
   sticky: Post[];
+  topics: Tax[];
 }
-const { page, category, sticky } = Astro.props;
+const { page, category, sticky, topics } = Astro.props;
 
 const isFirstPage = page.currentPage === 1;
 const featuredPosts = isFirstPage ? sticky : [];
 const regularPosts = page.data;
+
+// Sticky essays are lifted out of the paginated list and shown on page 1 only,
+// so they sit ahead of everything in the ItemList but aren't counted in
+// `page.start`. Offset page 2+ past them, or positions overlap page 1's.
+const listItems = isFirstPage
+  ? [...featuredPosts, ...regularPosts]
+  : regularPosts;
+const listStart = isFirstPage ? 0 : sticky.length + page.start;
+
+const jsonLd = [
+  breadcrumbList([
+    { name: "Sections", path: "/section/" },
+    { name: category.name },
+  ]),
+  collectionPage({
+    name: category.name,
+    description: category.description,
+    url: Astro.url.pathname,
+    items: listItems,
+    startIndex: listStart,
+  }),
+];
 ---
 
-<Layout title={category.name} description={category.description} type="website">
+<Layout
+  title={paginatedTitle(category.name, page)}
+  description={paginatedDescription(category.description, page)}
+  type="website"
+  jsonLd={jsonLd}
+>
   <div
     slot="intro"
     class="flex flex-col gap-4 pt-8 md:flex-row md:items-end md:justify-between md:gap-10"
@@ -107,7 +146,7 @@ const regularPosts = page.data;
   }
 
   <nav
-    class="meta flex items-center justify-center gap-6 pt-8 pb-16 font-medium"
+    class="meta flex items-center justify-center gap-6 pt-8 pb-10 font-medium"
   >
     {
       page.url.prev ? (
@@ -127,4 +166,10 @@ const regularPosts = page.data;
       ) : undefined
     }
   </nav>
+
+  <TaxCrossLinks
+    heading={`Topics in ${category.name}`}
+    terms={topics}
+    base="topic"
+  />
 </Layout>

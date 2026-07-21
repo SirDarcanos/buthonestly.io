@@ -15,7 +15,18 @@ import rehypeExternalLinks from "./src/lib/rehype-external-links.mjs";
 export default defineConfig({
   site: "https://buthonestly.io/",
   trailingSlash: "always",
-  integrations: [sitemap(), icon()],
+  integrations: [
+    // Page 2+ of the paginated archives stays crawlable and indexable — the
+    // "Older →" links reach it, and its titles/descriptions are unique. It just
+    // doesn't belong in the sitemap, which advertises canonical entry points.
+    sitemap({
+      // The middle segment is optional: /section/web/2/ has one, /essays/2/
+      // doesn't.
+      filter: (page) =>
+        !/\/(section|topic|essays)\/([^/]+\/)?\d+\/$/.test(page),
+    }),
+    icon(),
+  ],
   // Responsive images: Markdown body images get an auto srcset + sizes, clamped
   // to the source width (no upscaling), so a large source isn't shipped at full
   // size for a narrow column. The cover's explicit widths/sizes in Picture.astro

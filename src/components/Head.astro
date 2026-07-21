@@ -12,9 +12,10 @@ interface Props {
   type?: "website" | "article" | "profile";
   article?: Post;
   noindex?: boolean;
+  jsonLd?: Record<string, unknown>[];
 }
 
-const { title, description, type, article, noindex } = Astro.props;
+const { title, description, type, article, noindex, jsonLd } = Astro.props;
 ---
 
 <head>
@@ -47,6 +48,7 @@ const { title, description, type, article, noindex } = Astro.props;
     type={type}
     article={article}
     noindex={noindex}
+    jsonLd={jsonLd}
   />
 
   {/* Fathom analytics — production only. */}

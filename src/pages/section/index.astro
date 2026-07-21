@@ -3,14 +3,34 @@ import Layout from "../../layouts/Layout.astro";
 import TaxGrid from "../../components/TaxGrid.astro";
 
 import { getCategories } from "../../lib/essays";
+import { breadcrumbList, collectionPage } from "../../lib/schema.ts";
+import { taxUrl } from "../../taxonomies.ts";
 
 const categories = await getCategories();
 
 const description =
   "Browse every section of BUT. Honestly — leadership, programming, building for the web, and observations on technology and modern life.";
+
+const jsonLd = [
+  breadcrumbList([{ name: "Sections" }]),
+  collectionPage({
+    name: "Sections",
+    description,
+    url: Astro.url.pathname,
+    items: categories.map((c) => ({
+      title: c.name,
+      url: taxUrl("section", c.name),
+    })),
+  }),
+];
 ---
 
-<Layout title="Sections" description={description} type="website">
+<Layout
+  title="Sections"
+  description={description}
+  type="website"
+  jsonLd={jsonLd}
+>
   <div
     slot="intro"
     class="flex flex-col gap-4 pt-8 md:flex-row md:items-end md:justify-between md:gap-10"

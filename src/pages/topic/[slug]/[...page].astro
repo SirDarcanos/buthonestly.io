@@ -1,9 +1,12 @@
 ---
-import FeaturedPosts from "../../../components/FeaturedPosts.astro";
 import Layout from "../../../layouts/Layout.astro";
 import ReadTime from "../../../components/ReadTime.astro";
 
-import { getAllPosts, getTags } from "../../../lib/essays";
+import TaxCrossLinks from "../../../components/TaxCrossLinks.astro";
+
+import { coOccurringTax, getAllPosts, getTags } from "../../../lib/essays";
+import { paginatedDescription, paginatedTitle } from "../../../lib/seo.ts";
+import { breadcrumbList, collectionPage } from "../../../lib/schema.ts";
 
 import type { GetStaticPaths, Page } from "astro";
 import { type Post, type Tax } from "../../../types.ts";
@@ -13,9 +16,12 @@ export const getStaticPaths = (async ({ paginate }) => {
 
   return tags.flatMap((tag) => {
     const tagPosts = posts.filter((post) => post.tags.includes(tag.name));
+    // Sections this topic spans. Unlike section→topics this is narrow (a topic
+    // reaches 1–4 sections), so it isn't capped.
+    const sections = coOccurringTax(tagPosts, (post) => post.categories);
     return paginate(tagPosts, {
       params: { slug: tag.slug },
-      props: { tag: tag },
+      props: { tag, sections },
       pageSize: 8,
     });
   });
@@ -24,15 +30,32 @@ export const getStaticPaths = (async ({ paginate }) => {
 interface Props {
   page: Page<Post>;
   tag: Tax;
+  sections: Tax[];
 }
-const { page, tag } = Astro.props;
+const { page, tag, sections } = Astro.props;
 
-const isFirstPage = page.currentPage === 1;
-const featuredPosts = isFirstPage ? page.data.slice(0, 2) : [];
-const regularPosts = isFirstPage ? page.data.slice(2) : page.data;
+// No Featured block here — `sticky` is a section-level editorial signal, and
+// promoting "the two newest" was meaningless. Topics just list everything.
+const regularPosts = page.data;
+
+const jsonLd = [
+  breadcrumbList([{ name: "Topics", path: "/topic/" }, { name: tag.name }]),
+  collectionPage({
+    name: tag.name,
+    description: tag.description,
+    url: Astro.url.pathname,
+    items: regularPosts,
+    startIndex: page.start,
+  }),
+];
 ---
 
-<Layout title={tag.name} description={tag.description} type="website">
+<Layout
+  title={paginatedTitle(tag.name, page)}
+  description={paginatedDescription(tag.description, page)}
+  type="website"
+  jsonLd={jsonLd}
+>
   <div
     slot="intro"
     class="flex flex-col gap-4 pt-8 md:flex-row md:items-end md:justify-between md:gap-10"
@@ -51,16 +74,6 @@ const regularPosts = isFirstPage ? page.data.slice(2) : page.data;
       )
     }
   </div>
-
-  {
-    isFirstPage && (
-      <FeaturedPosts
-        slot="featured-posts"
-        posts={featuredPosts}
-        taxName={tag.name}
-      />
-    )
-  }
 
   {
     /* Show the "All essays" list whenever there are non-featured posts */
@@ -99,7 +112,7 @@ const regularPosts = isFirstPage ? page.data.slice(2) : page.data;
   }
 
   <nav
-    class="meta flex items-center justify-center gap-6 pt-8 pb-16 font-medium"
+    class="meta flex items-center justify-center gap-6 pt-8 pb-10 font-medium"
   >
     {
       page.url.prev ? (
@@ -119,4 +132,6 @@ const regularPosts = isFirstPage ? page.data.slice(2) : page.data;
       ) : undefined
     }
   </nav>
+
+  <TaxCrossLinks heading="Filed under" terms={sections} base="section" />
 </Layout>

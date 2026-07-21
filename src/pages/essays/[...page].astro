@@ -4,6 +4,8 @@ import ReadTime from "../../components/ReadTime.astro";
 import TaxLinks from "../../components/TaxLinks.astro";
 
 import { getAllPosts } from "../../lib/essays";
+import { paginatedDescription, paginatedTitle } from "../../lib/seo.ts";
+import { breadcrumbList, collectionPage } from "../../lib/schema.ts";
 
 import type { GetStaticPaths, Page } from "astro";
 import { type Post } from "../../types.ts";
@@ -17,17 +19,38 @@ interface Props {
   page: Page<Post>;
 }
 const { page } = Astro.props;
+
+const lead =
+  "Everything I've written, newest first — leadership, programming, and the messy overlap between humans and tech.";
+
+const jsonLd = [
+  breadcrumbList([{ name: "Essays" }]),
+  collectionPage({
+    name: "Essays",
+    description: lead,
+    url: Astro.url.pathname,
+    items: page.data,
+    startIndex: page.start,
+  }),
+];
 ---
 
-<Layout title="Essays" type="website">
-  <div slot="intro" class="flex items-end justify-between pt-8">
+<Layout
+  title={paginatedTitle("Essays", page)}
+  description={paginatedDescription(lead, page)}
+  type="website"
+  jsonLd={jsonLd}
+>
+  <div
+    slot="intro"
+    class="flex flex-col gap-4 pt-8 md:flex-row md:items-end md:justify-between md:gap-10"
+  >
     <div class="space-y-4">
       <p class="label max-w-lg text-left">The archive</p>
       <h1 class="max-w-lg">Essays</h1>
     </div>
-    <p class="lead max-w-lg text-right text-lg">
-      Everything I've written, newest first — leadership, programming, and the
-      messy overlap between humans and tech.
+    <p class="lead max-w-lg text-left text-lg md:text-right">
+      {lead}
     </p>
   </div>
 

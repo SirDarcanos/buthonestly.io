@@ -1,0 +1,37 @@
+---
+import { taxUrl } from "../taxonomies.ts";
+import { type Tax } from "../types.ts";
+
+interface Props {
+  heading: string;
+  terms: Tax[];
+  base: "section" | "topic";
+}
+
+// Cross-links between archives — the topics inside a section, or the sections a
+// topic spans. Sits below the pagination nav rather than above the essay list:
+// page 2+ otherwise has no outbound link except the footer, and putting nav
+// above the list would push the page's actual content down.
+const { heading, terms, base } = Astro.props;
+---
+
+{
+  terms.length > 0 && (
+    <nav class="border-line border-t pt-8 pb-16">
+      <p class="meta mb-4 font-bold">{heading}</p>
+      <ul class="flex flex-wrap gap-x-6 gap-y-3">
+        {terms.map((term) => (
+          <li>
+            <a
+              href={taxUrl(base, term.name)}
+              class="text-ink hover:text-accent transition-colors"
+            >
+              {term.name}
+              <span class="text-muted"> ({term.count})</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}

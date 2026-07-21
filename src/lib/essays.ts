@@ -132,6 +132,24 @@ function taxFrom(names: string[]): Tax[] {
     .sort((a, b) => a.name.localeCompare(b.name));
 }
 
+/**
+ * Taxonomy terms co-occurring across a set of posts, most common first — the
+ * topics inside a section, or the sections a topic spans. `count` is the
+ * co-occurrence count within `posts`, not the site-wide total, which is what
+ * makes it the right number to label a cross-link with.
+ *
+ * Takes posts rather than a term name so archive pages can pass the set they
+ * have already filtered in getStaticPaths instead of re-reading the collection.
+ */
+export function coOccurringTax(
+  posts: Post[],
+  pick: (post: Post) => string[],
+): Tax[] {
+  return taxFrom(posts.flatMap(pick)).sort(
+    (a, b) => b.count - a.count || a.name.localeCompare(b.name),
+  );
+}
+
 export async function getCategories(): Promise<Tax[]> {
   const posts = await getAllPosts();
   return taxFrom(posts.flatMap((p) => p.categories));

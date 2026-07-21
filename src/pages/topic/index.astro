@@ -3,14 +3,26 @@ import Layout from "../../layouts/Layout.astro";
 import TaxGrid from "../../components/TaxGrid.astro";
 
 import { getTags } from "../../lib/essays";
+import { breadcrumbList, collectionPage } from "../../lib/schema.ts";
+import { taxUrl } from "../../taxonomies.ts";
 
 const tags = await getTags();
 
 const description =
   "Every topic covered on BUT. Honestly, from WordPress and Python to feedback and focus — a way into the writing by what you actually care about.";
+
+const jsonLd = [
+  breadcrumbList([{ name: "Topics" }]),
+  collectionPage({
+    name: "Topics",
+    description,
+    url: Astro.url.pathname,
+    items: tags.map((t) => ({ title: t.name, url: taxUrl("topic", t.name) })),
+  }),
+];
 ---
 
-<Layout title="Topics" description={description} type="website">
+<Layout title="Topics" description={description} type="website" jsonLd={jsonLd}>
   <div
     slot="intro"
     class="flex flex-col gap-4 pt-8 md:flex-row md:items-end md:justify-between md:gap-10"
