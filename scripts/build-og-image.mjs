@@ -1,9 +1,7 @@
-// Generates public/og-default.png — the Open Graph card for pages with no cover
-// of their own. `npm run og`; run by hand after a logo or brand-colour change,
-// since the output is committed rather than built.
+// Generates public/og-default.png, the Open Graph card for pages with no cover.
+// `npm run og` — run by hand; the output is committed rather than built.
 //
-// Vector paths and flat colour only, no rendered text, so it doesn't depend on
-// which fonts the generating machine has.
+// Vector paths and flat colour only, so it needs no fonts installed.
 
 import { readFile, writeFile } from "node:fs/promises";
 import sharp from "sharp";
@@ -23,7 +21,6 @@ const logo = await sharp(await readFile("src/assets/buthonestly-logo.svg"))
   .toBuffer();
 const { height: logoHeight } = await sharp(logo).metadata();
 
-// Hairline rule under the mark, matching the site header.
 const rule = Buffer.from(
   `<svg xmlns="http://www.w3.org/2000/svg" width="${LOGO_WIDTH}" height="3">
      <rect width="${LOGO_WIDTH}" height="3" fill="${ACCENT}"/>

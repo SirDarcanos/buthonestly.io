@@ -1,7 +1,3 @@
-// Builders for the schema.org nodes pages pass to <SEO jsonLd={…}>. SEO.astro
-// takes a generic array rather than a prop per page type; these keep the shaping
-// type-checked at the call site.
-
 import { SITE_URL, SITE_TITLE } from "../consts.ts";
 
 type Schema = Record<string, unknown>;
@@ -14,7 +10,7 @@ export interface Crumb {
   path?: string;
 }
 
-/** Breadcrumb trail; "Home" is prepended. Renders as a visible path in SERPs. */
+/** "Home" is prepended; pass the rest in order. */
 export function breadcrumbList(crumbs: Crumb[]): Schema {
   const all: Crumb[] = [{ name: SITE_TITLE, path: "/" }, ...crumbs];
   return {
@@ -34,10 +30,7 @@ export interface CollectionItem {
   url: string;
 }
 
-/**
- * An archive or hub page and the entries it lists. `startIndex` is Astro's
- * `page.start`, so page 2's positions continue rather than restarting at 1.
- */
+/** `startIndex` is Astro's `page.start`, so page 2 continues rather than restarting. */
 export function collectionPage({
   name,
   description,

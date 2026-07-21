@@ -13,7 +13,6 @@ const { title, path, tags = [] } = Astro.props;
 
 const url = new URL(path, SITE_URL).href;
 
-// Hashtags from the essay's own tags — "Team Building" → #TeamBuilding.
 const hashtags = tags
   .map((t) => `#${t.replace(/[^A-Za-z0-9]+/g, "")}`)
   .filter((t) => t.length > 1)
@@ -23,8 +22,7 @@ const shareText = [title, hashtags].filter(Boolean).join(" ");
 
 const aiPrompt = `Read ${url} and summarise this essay for me, then answer my questions about it.`;
 
-// Plain links, not JS buttons: they survive middle-click and keyboard use, and
-// no third-party script rides along.
+// Plain links, not JS buttons — middle-click and keyboard work for free.
 const learn = [
   {
     icon: "openai",
@@ -52,14 +50,9 @@ const share = [
   {
     icon: "linkedin",
     label: "Share on LinkedIn",
-    // The documented endpoint. It takes a URL only — LinkedIn deprecated
-    // pre-filled text years ago (`text` on /shareArticle is silently ignored),
-    // deliberately, to push people towards writing their own commentary. So
-    // this opens an empty composer with a preview card built from our OG tags,
-    // and the sharer adds their own words.
-    //
-    // `/feed/?shareActive=true&text=<text>` does still prefill, but it's
-    // undocumented and would fail silently if LinkedIn changed it.
+    // URL only: LinkedIn deprecated pre-filled text, so `text` is ignored here
+    // and on /shareArticle. `/feed/?shareActive=true&text=` still prefills but
+    // is undocumented.
     href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
   },
   {

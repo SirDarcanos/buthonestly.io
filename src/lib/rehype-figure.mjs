@@ -1,10 +1,6 @@
-// Promote a standalone captioned image `![alt](src "caption")` to
-// <figure><img><figcaption>. Only images alone in a <p> qualify.
-//
-// The caption is emitted as raw HTML so photo credits pasted from Unsplash or
-// Pexels keep their links. A caption containing those double quotes needs a
-// single-quoted title, or the image stops parsing entirely — check-links catches
-// it.
+// Captions are raw HTML so pasted Unsplash/Pexels credits keep their links. One
+// containing double quotes needs a single-quoted Markdown title, or the image
+// stops parsing entirely — check-links catches it.
 
 export default function rehypeFigure() {
   return (tree) => walk(tree);

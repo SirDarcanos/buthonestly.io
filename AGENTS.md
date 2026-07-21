@@ -99,6 +99,35 @@ opposite: git-ignored, uploaded to R2.
 - Publishing is date-driven (a future `date` schedules the essay); WIP lives
   in `src/content/drafts/`, which is not a built collection.
 
+## Code style
+
+Code documents itself. Say it in a name, not a comment.
+
+**Do not comment.** The default is zero. Before writing one, rename the thing or
+extract a function instead — that is almost always the better fix. A comment is
+justified only when the reason for the code cannot live in the code:
+
+- An external constraint or gotcha: a platform limit, an API quirk, a spec
+  requirement, a bug being worked around.
+- A non-obvious _why_ behind a deliberate choice, where the obvious alternative
+  looks correct and isn't.
+
+That's it. Never write a comment that:
+
+- restates what the next line does
+- narrates steps (`// 1. Fetch`, `// ── Build the list ──`)
+- explains a language or framework feature
+- justifies a decision at length — one sentence, or move it to the commit message
+
+Keep them to a line or two. Long rationale belongs in the commit message, where
+it's attached to the change rather than rotting in the file.
+
+JSDoc only where a signature genuinely isn't self-evident — a non-obvious return
+shape, or a parameter whose meaning the type doesn't convey. Not on every export.
+
+Prefer clarity over cleverness: descriptive names, small functions, early
+returns. Match the surrounding file's conventions over any general preference.
+
 ## Styling
 
 Style with Tailwind utility classes directly in the markup. Do not add scoped

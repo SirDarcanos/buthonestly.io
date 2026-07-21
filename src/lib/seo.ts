@@ -1,6 +1,3 @@
-// Helpers for page-level SEO metadata shared across the paginated templates.
-
-/** Clamp to `max` characters at a word boundary, for meta descriptions. */
 export function clamp(text: string, max = 160): string {
   if (text.length <= max) return text;
   const slice = text.slice(0, max);
@@ -13,10 +10,7 @@ interface PageInfo {
   lastPage: number;
 }
 
-/**
- * Page 2+ would otherwise ship a byte-identical title and description to page 1.
- * Page 1 is left untouched — it's the one that ranks.
- */
+/** Page 1 is left untouched — it's the one that ranks. */
 export function paginatedTitle(base: string, page: PageInfo): string {
   return page.currentPage === 1 ? base : `${base} — Page ${page.currentPage}`;
 }

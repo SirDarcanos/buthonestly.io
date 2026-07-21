@@ -13,26 +13,17 @@ import rehypeFigure from "./src/lib/rehype-figure.mjs";
 import rehypeExternalLinks from "./src/lib/rehype-external-links.mjs";
 import { buildLastmodMap } from "./src/lib/sitemap-lastmod.mjs";
 
-// Read once at config load, not per URL — serialize() runs for all 69 entries.
 const LASTMOD = buildLastmodMap();
 
 export default defineConfig({
   site: "https://buthonestly.io/",
   trailingSlash: "always",
   integrations: [
-    // Page 2+ of the paginated archives stays crawlable and indexable — the
-    // "Older →" links reach it, and its titles/descriptions are unique. It just
-    // doesn't belong in the sitemap, which advertises canonical entry points.
+    // Paginated pages stay indexable via the "Older →" links; the sitemap just
+    // advertises canonical entry points.
     sitemap({
-      // The middle segment is optional: /section/web/2/ has one, /essays/2/
-      // doesn't.
       filter: (page) =>
         !/\/(section|topic|essays)\/([^/]+\/)?\d+\/$/.test(page),
-      // <lastmod> from the essays' own dates, so Google can prioritise what
-      // actually changed. Only set where it's genuinely known — a date that
-      // doesn't track real changes teaches Google to distrust the signal, so
-      // the static pages deliberately carry none. No changefreq or priority:
-      // Google has said publicly that it ignores both.
       serialize: (item) => {
         const lastmod = LASTMOD.get(new URL(item.url).pathname);
         return lastmod ? { ...item, lastmod: lastmod.toISOString() } : item;
@@ -40,18 +31,11 @@ export default defineConfig({
     }),
     icon(),
   ],
-  // Responsive images: Markdown body images get an auto srcset + sizes, clamped
-  // to the source width (no upscaling), so a large source isn't shipped at full
-  // size for a narrow column. The cover's explicit widths/sizes in Picture.astro
-  // still win where set.
   image: { layout: "constrained" },
   markdown: {
     shikiConfig: {
-      // Single theme — the site has no dark mode. `github-light-high-contrast`
-      // rather than `github-light` because code sits on the warm paper surface
-      // (#e7e1d5), not white: against that, plain github-light drops six token
-      // colours below AA, including keywords at 3.51 and comments at 3.70.
-      // Comments still need a nudge, done in global.css.
+      // High-contrast because code sits on the paper surface, not white —
+      // plain github-light drops six token colours below AA there.
       theme: "github-light-high-contrast",
     },
     processor: unified({

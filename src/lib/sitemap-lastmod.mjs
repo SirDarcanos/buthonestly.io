@@ -1,11 +1,7 @@
-// Path → last-modified map for the sitemap's <lastmod>.
+// Static pages get no lastmod on purpose: Google discounts the signal site-wide
+// if it doesn't track real changes, so absent beats invented.
 //
-// Only pages whose freshness we actually know get a date — essays and the
-// archives listing them. Static pages get none: Google discounts the signal
-// site-wide if it doesn't track real changes, so absent beats invented.
-//
-// Reads the Markdown directly because astro.config.mjs runs in plain Node before
-// the content layer exists.
+// Reads Markdown directly because astro.config.mjs runs before the content layer.
 
 import { readdirSync, readFileSync, existsSync } from "node:fs";
 import path from "node:path";
@@ -26,7 +22,6 @@ const asList = (v) => (Array.isArray(v) ? v : v ? [v] : []);
 export function buildLastmodMap() {
   const now = new Date();
   const map = new Map();
-  /** Keep the newest date seen for a path. */
   const bump = (p, d) => {
     const current = map.get(p);
     if (!current || d > current) map.set(p, d);
@@ -51,7 +46,6 @@ export function buildLastmodMap() {
         : published;
 
     bump(`/${slug}/`, lastmod);
-    // A listing is as fresh as the newest thing on it.
     bump("/", lastmod);
     bump("/essays/", lastmod);
     for (const c of asList(data.categories))
@@ -59,7 +53,6 @@ export function buildLastmodMap() {
     for (const t of asList(data.tags)) bump(`/topic/${slugify(t)}/`, lastmod);
   }
 
-  // The hub indexes list every term, so they change whenever anything does.
   const newest = [...map.values()].reduce(
     (a, b) => (b > a ? b : a),
     new Date(0),

@@ -1,13 +1,8 @@
-// Descriptions for section and topic archives. Each renders beside the <h1> and
-// becomes the page's meta description.
-//
-// Keep under ~160 characters, and describe the territory a term covers rather
-// than what's currently filed under it — an inventory goes stale on the next
-// essay. Keyed by slug so a rename of the display name can't silently drop one.
-// An absent entry renders no description and falls back to SITE_DESCRIPTION.
+// Rendered beside the archive <h1> and used as its meta description. Keep under
+// ~160 characters, and describe what a term covers rather than what's currently
+// filed under it — an inventory goes stale on the next essay.
 
 export const TAX_DESCRIPTIONS: Record<string, string> = {
-  // ── Sections (categories) ──────────────────────────────────────────────────
   leadership:
     "Essays on leading people honestly — feedback, trust, difficult conversations, and the judgment calls no management book prepares you for.",
   programming:
@@ -16,7 +11,6 @@ export const TAX_DESCRIPTIONS: Record<string, string> = {
   observations:
     "Essays on technology and modern life — attention, AI, and what our tools are quietly doing to how we work and think. Questions over hot takes.",
 
-  // ── Topics (tags) ──────────────────────────────────────────────────────────
   adhd: "Working and leading with ADHD — planning systems that survive a bad week, focus without burnout, and honest tradeoffs instead of productivity hacks.",
   ai: "Building with AI and naming its limits — practical machine learning, honest assessments, and why the hype rarely survives contact with real data.",
   automation:
@@ -44,18 +38,12 @@ export const TAX_DESCRIPTIONS: Record<string, string> = {
     "The systems behind the work — how things actually get built, edited and shipped, and how to keep a process that doesn't collapse under pressure.",
 };
 
-/** Description for a section or topic archive, or undefined if none is set. */
 export function taxDescription(slug: string): string | undefined {
   return TAX_DESCRIPTIONS[slug]?.trim() || undefined;
 }
 
-/**
- * Display name → URL slug. Matches the WordPress taxonomy slugs this blog
- * migrated from, so legacy inbound links keep resolving.
- *
- * `scripts/check-links.mjs` carries its own copy — it runs outside the Astro
- * build and can't import a .ts module. The two must stay character-identical.
- */
+// check-links.mjs carries a copy of this — it runs outside the Astro build and
+// can't import a .ts module. The two must stay character-identical.
 export function taxSlug(name: string): string {
   return name
     .toLowerCase()
@@ -64,7 +52,6 @@ export function taxSlug(name: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
-/** Archive URL for a category ("section") or tag ("topic") display name. */
 export function taxUrl(kind: "section" | "topic", name: string): string {
   return `/${kind}/${taxSlug(name)}/`;
 }

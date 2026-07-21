@@ -8,9 +8,8 @@ interface Props {
   base: "section" | "topic";
 }
 
-// Topics inside a section, or the sections a topic spans. Below the pagination
-// nav, not above the list — page 2+ otherwise has no outbound link but the
-// footer.
+// Below the pagination nav, not above the list — page 2+ otherwise has no
+// outbound link but the footer.
 const { heading, terms, base } = Astro.props;
 ---
 
