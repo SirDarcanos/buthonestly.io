@@ -5,6 +5,7 @@ import Downloads from "../components/Downloads.astro";
 import Newsletter from "../components/Newsletter.astro";
 import Picture from "../components/Picture.astro";
 import ReadTime from "../components/ReadTime.astro";
+import ShareLinks from "../components/ShareLinks.astro";
 import TableOfContents from "../components/TableOfContents.astro";
 import TaxLinks from "../components/TaxLinks.astro";
 import SinglePost from "../layouts/SinglePost.astro";
@@ -122,6 +123,8 @@ const jsonLd = [
       <span class="bg-accent mr-3 inline-block size-2"></span>End
     </p>
   </article>
+
+  <ShareLinks title={post.title} path={post.url} tags={post.tags} />
 
   <Downloads downloads={entry.data.downloads} />
 

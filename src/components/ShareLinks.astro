@@ -1,0 +1,115 @@
+---
+import { Icon } from "astro-icon/components";
+import { SITE_TITLE, SITE_URL } from "../consts.ts";
+
+interface Props {
+  title: string;
+  /** Site-relative essay path, e.g. "/my-essay/". */
+  path: string;
+  tags?: string[];
+}
+
+const { title, path, tags = [] } = Astro.props;
+
+const url = new URL(path, SITE_URL).href;
+
+// Hashtags from the essay's own tags — "Team Building" → #TeamBuilding.
+const hashtags = tags
+  .map((t) => `#${t.replace(/[^A-Za-z0-9]+/g, "")}`)
+  .filter((t) => t.length > 1)
+  .join(" ");
+
+const shareText = [title, hashtags].filter(Boolean).join(" ");
+
+// Plain links, not buttons with JS: they work without JavaScript, survive
+// middle-click and "open in new tab", and are keyboard-reachable for free.
+// Nothing here is a third-party script, so no tracker rides along.
+const aiPrompt = `Read ${url} and summarise this essay for me, then answer my questions about it.`;
+
+const learn = [
+  {
+    icon: "openai",
+    label: "Ask ChatGPT about this essay",
+    href: `https://chat.openai.com/?q=${encodeURIComponent(aiPrompt)}`,
+  },
+  {
+    icon: "claude",
+    label: "Ask Claude about this essay",
+    href: `https://claude.ai/new?q=${encodeURIComponent(aiPrompt)}`,
+  },
+  {
+    icon: "perplexity",
+    label: "Ask Perplexity about this essay",
+    href: `https://www.perplexity.ai/?q=${encodeURIComponent(aiPrompt)}`,
+  },
+];
+
+const share = [
+  {
+    icon: "bluesky",
+    label: "Share on Bluesky",
+    href: `https://bsky.app/intent/compose?text=${encodeURIComponent(`${shareText} ${url}`)}`,
+  },
+  {
+    icon: "linkedin",
+    label: "Share on LinkedIn",
+    // The documented endpoint. It takes a URL only — LinkedIn deprecated
+    // pre-filled text years ago (`text` on /shareArticle is silently ignored),
+    // deliberately, to push people towards writing their own commentary. So
+    // this opens an empty composer with a preview card built from our OG tags,
+    // and the sharer adds their own words.
+    //
+    // `/feed/?shareActive=true&text=<text>` does still prefill, but it's
+    // undocumented and would fail silently if LinkedIn changed it.
+    href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
+  },
+  {
+    icon: "x",
+    label: "Share on X",
+    href: `https://x.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(shareText)}&via=nicolamustone`,
+  },
+  {
+    icon: "facebook",
+    label: "Share on Facebook",
+    href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
+  },
+  {
+    icon: "whatsapp",
+    label: "Share on WhatsApp",
+    href: `https://wa.me/?text=${encodeURIComponent(`${title} — ${SITE_TITLE} ${url}`)}`,
+  },
+];
+---
+
+<section
+  class="border-line grid gap-8 border-t py-8 sm:grid-cols-2"
+  aria-label="Discuss and share this essay"
+>
+  {
+    [
+      { heading: "Learn more with", links: learn },
+      { heading: "Share on", links: share },
+    ].map(({ heading, links }) => (
+      <div>
+        <p class="meta mb-4 font-bold">{heading}</p>
+        <ul class="flex flex-wrap items-center gap-5">
+          {links.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                target="_blank"
+                rel="noopener nofollow"
+                title={link.label}
+                aria-label={link.label}
+                data-track={link.label}
+                class="text-ink hover:text-accent block transition-colors"
+              >
+                <Icon name={`simple-icons:${link.icon}`} size={22} />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))
+  }
+</section>
