@@ -1,9 +1,13 @@
 import { defineCollection, z } from "astro:content";
 import { glob } from "astro/loaders";
 
+// Derived from `z` rather than written as `z.ZodTypeAny`: zod 4 dropped the
+// type-level `z` namespace, so that spelling fails to compile.
+type Schema = Parameters<typeof z.preprocess>[1];
+
 // The template ships every property, so blanks arrive as YAML null, which
 // `.optional()` rejects (it allows only `undefined`).
-const optional = <T extends z.ZodTypeAny>(schema: T) =>
+const optional = <T extends Schema>(schema: T) =>
   z.preprocess((v) => (v === "" || v === null ? undefined : v), schema);
 
 const stringList = z.preprocess(
