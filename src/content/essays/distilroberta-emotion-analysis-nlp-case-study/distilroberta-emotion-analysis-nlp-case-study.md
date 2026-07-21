@@ -290,8 +290,8 @@ In other words, this is not a snapshot around a single patch. It’s a rolling d
 
 That’s useful for two reasons:
 
-1.  **We can look at trends**, not just static aggregates: how the share of positive reviews changes over time, where it spikes or crashes.
-2.  **We can line it up with the game’s own history**: new killer releases, big systems changes, anniversary events — all the stuff you see in the [patch notes and on the wiki](https://deadbydaylight.wiki.gg/wiki/Patches).
+1. **We can look at trends**, not just static aggregates: how the share of positive reviews changes over time, where it spikes or crashes.
+2. **We can line it up with the game’s own history**: new killer releases, big systems changes, anniversary events — all the stuff you see in the [patch notes and on the wiki](https://deadbydaylight.wiki.gg/wiki/Patches).
 
 We already knew the collection window was “2019 to November 2025” from the description, but it’s nice to see that the actual data matches the promise.
 
@@ -613,8 +613,8 @@ You can already see a few classic Dead by Daylight tensions bubbling up:
 
 This is still very crude: just word counts, no context, no sense of who is speaking (new vs. master). But it already confirms that:
 
-1.  Positive vs. negative reviews are _about_ the same game.
-2.  The difference lives in how people _relate_ to those same elements.
+1. Positive vs. negative reviews are _about_ the same game.
+2. The difference lives in how people _relate_ to those same elements.
 
 Later, we’ll repeat this kind of analysis inside each experience band and also per “mood” label from the emotion model to see how anger vs. disappointment vs. joy shapes the vocabulary.
 
@@ -1077,10 +1077,10 @@ Under the hood, this is just a small Transformer model from the `transformers` l
 
 Once that’s in place, the code does something very simple:
 
-1.  Take a sample of reviews (we don’t need all 277k to see the pattern).
-2.  Run them through the emotion model in batches.
-3.  Attach the predicted `emotion` label to each sampled review.
-4.  Compare this new label with the Steam `sentiment` column.
+1. Take a sample of reviews (we don’t need all 277k to see the pattern).
+2. Run them through the emotion model in batches.
+3. Attach the predicted `emotion` label to each sampled review.
+4. Compare this new label with the Steam `sentiment` column.
 
 This gives us a little 2D view of the data:
 
@@ -1260,9 +1260,9 @@ We also saw that even obviously negative moods like `anger` and `sadness` still 
 
 That’s interesting, but still abstract. To get a better picture, I looked at three things:
 
-1.  The **typical phrases** each mood uses (as bigrams).
-2.  How **long** those reviews are.
-3.  How many **hours** those players had when they wrote them.
+1. The **typical phrases** each mood uses (as bigrams).
+2. How **long** those reviews are.
+3. How many **hours** those players had when they wrote them.
 
 That’s where it starts to feel very Dead by Daylight.
 
@@ -1718,6 +1718,7 @@ In the notebook, this is just a few extra boolean columns (`mentions_blight`, `m
 In short, this dataset shows a community that mostly recommends Dead by Daylight while being increasingly conflicted the longer they play. New players (under 100 hours) are overwhelmingly positive; by the time someone hits thousands of hours, reviews are barely above a coin flip. Monthly sentiment stays generally high, but dips cluster around certain balance periods rather than the big chapter drops. When we add a mood label on top of Steam’s thumbs-up/down, the picture gets sharper: a third of reviews are clearly joyful, another third are neutral, and the rest are split between sadness, anger, fear, and disgust. Joy is almost always positive. Anger and sadness are mostly positive too—people rant but still recommend. Only disgust flips: it’s the mood of long, high-playtime reviews where people finally stop giving the game the benefit of the doubt.
 
 Zooming in on Blight, Nurse, and Spirit shows how you can turn all this into focused mini-studies. Reviews that mention any of the three are far less positive than the global 80% baseline, and their mood mix tilts heavily toward anger and disgust. Those same killers are all over the patch notes, which suggests a long-running tug of war between balance changes and player frustration. Together, these pieces show what this dataset is good for: connecting sentiment, mood, playtime, and patch history to answer very human questions about a live-service game—who’s happy, who’s exhausted, and what they’re mad about.
+
 ## What’s Next?
 
 From here, there’s a lot you can do next. You can reuse the same notebook for Steam reviews sentiment analysis on other games or swap in a different model if you want to experiment. You could model sentiment or mood directly, build “angry but still positive” detectors, or study what makes a review “helpful” or “funny.” You could compare free vs. paid players or trace how language around a specific killer or perk changes before and after major patches. Or you could ignore models entirely and just use the notebook as an interactive microscope on the game’s history, killer by killer, patch by patch.

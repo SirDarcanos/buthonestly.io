@@ -56,11 +56,11 @@ WooCommerce hides the bulk editor in plain sight. It lives above the product tab
 
 The basic flow looks like this:
 
-1.  Go to **Products → All Products** in your WordPress dashboard.
-2.  Use the checkboxes to select the products you want to edit.
-3.  Open the **Bulk actions** dropdown above the table.
-4.  Choose **Edit**, then click **Apply**.
-5.  Use the bulk edit panel that appears to change fields, then click **Update**.
+1. Go to **Products → All Products** in your WordPress dashboard.
+2. Use the checkboxes to select the products you want to edit.
+3. Open the **Bulk actions** dropdown above the table.
+4. Choose **Edit**, then click **Apply**.
+5. Use the bulk edit panel that appears to change fields, then click **Update**.
 
 At first, the panel looks strange. It does not show the current values of your products. Instead, it shows only possible changes.
 
@@ -78,12 +78,12 @@ This is the moment when many people install a plugin. They picture a special “
 
 In practice, the built-in bulk editor can handle this:
 
-1.  Filter your products by the category that will be on sale.
-2.  Select all products in the filtered list with the checkbox at the top.
-3.  Choose **Edit** from the **Bulk actions** menu and click **Apply**.
-4.  In the bulk panel, find the **Regular price** field.
-5.  Select **Decrease by %** and enter `20`.
-6.  Click **Update**.
+1. Filter your products by the category that will be on sale.
+2. Select all products in the filtered list with the checkbox at the top.
+3. Choose **Edit** from the **Bulk actions** menu and click **Apply**.
+4. In the bulk panel, find the **Regular price** field.
+5. Select **Decrease by %** and enter `20`.
+6. Click **Update**.
 
 WooCommerce recalculates the regular price for every selected product. There is no copy and paste. You do not open a single product page.
 
@@ -119,9 +119,9 @@ For many stores, this limit is fine. For some, it is undoubtedly where things st
 
 The bulk editor becomes far more useful once you adjust how you view your product list. A few small changes can remove a lot of friction.
 
-1.  **Filter before you select.** Use the dropdowns above the product table to narrow by category, product type, or stock status before you start selecting. The goal is not to change everything. The goal is to change the right subset in one go.
-2.  **Show more products per page.** In the top right corner of the admin, click **Screen Options**. Raise the number of items per page to something like 50 or 100, depending on what your server can handle. Seeing more products at once often works better than paging through lists of 20.
-3.  **Think in changes, not products.** Instead of “I need to edit these 200 products”, try “I need to apply this one change to every item in this group”. Once you see the work this way, the bulk editor is a natural fit.
+1. **Filter before you select.** Use the dropdowns above the product table to narrow by category, product type, or stock status before you start selecting. The goal is not to change everything. The goal is to change the right subset in one go.
+2. **Show more products per page.** In the top right corner of the admin, click **Screen Options**. Raise the number of items per page to something like 50 or 100, depending on what your server can handle. Seeing more products at once often works better than paging through lists of 20.
+3. **Think in changes, not products.** Instead of “I need to edit these 200 products”, try “I need to apply this one change to every item in this group”. Once you see the work this way, the bulk editor is a natural fit.
 
 If you like the command line, [[woocommerce-cli-product-management|WP CLI has `wp wc product` commands]] that mirror the same idea. You select a set of products, define a change, and run it as a repeatable script. It is the same pattern as bulk editing, just automated and version controlled.
 

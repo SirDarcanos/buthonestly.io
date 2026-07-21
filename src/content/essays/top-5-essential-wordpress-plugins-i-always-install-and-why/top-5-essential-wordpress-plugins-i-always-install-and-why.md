@@ -46,9 +46,9 @@ That’s where **[Akismet](https://akismet.com/)** comes in. It’s one of WordP
 
 Setting it up is straightforward:
 
-1.  Install and activate Akismet.
-2.  Connect it with an API key (free for personal sites).
-3.  That’s it — spam detection starts working immediately.
+1. Install and activate Akismet.
+2. Connect it with an API key (free for personal sites).
+3. That’s it — spam detection starts working immediately.
 
 Akismet gets better over time thanks to crowd-sourced data. Every time a comment is marked as spam across millions of WordPress sites, the system learns from it. The result is an accurate spam filter that rarely lets unwanted comments slip through.
 

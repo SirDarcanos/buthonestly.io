@@ -15,8 +15,6 @@ coverAlt: A dense 3D pile of blue verified-checkmark badges, one glowing brightl
 cover: automated-x-account-cleanup.jpg
 ---
 
-In Italy, the 2nd of November is the _Day of the Dead_. A time to remember and, in a way, revive what’s gone.
-
 > [!summary]- Quick Summary
 >
 > - Revisiting my old X account felt like digital archaeology: broken links, auto-retweets, and half-thoughts from a different version of me.
@@ -27,6 +25,8 @@ In Italy, the 2nd of November is the _Day of the Dead_. A time to remember and, 
 > - Backing up the archive, defining what to keep, avoiding total wipes, and running small tests turned cleanup into thoughtful curation, not erasure.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
+
+In Italy, the 2nd of November is the _Day of the Dead_. A time to remember and, in a way, revive what’s gone.
 
 So I thought, what better day to bring back my old X (formerly Twitter) account?
 
@@ -104,7 +104,8 @@ Next, open your browser’s console (usually `F12` or `Ctrl+Shift+I`) and past
 
 Monitor your browser’s console for any errors, and repeat the process as needed.
 
-**Note**: I used this script only once on my X account. I never tested it extensively. Use it at your own risk.
+> [!disclaimer]
+> I used this script only once on my X account. I never tested it extensively. Use it at your own risk.
 
 ```javascript
 // === CONFIG ===
