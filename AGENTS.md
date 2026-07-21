@@ -36,6 +36,22 @@ accumulate and go out as a batch. Do not push on every change.
   can't edit nested objects).
 - `npm run related` — rebuild the semantic related-posts map (normally left
   to the `related.yml` Action).
+- `npm run indexnow` — submit changed essays to IndexNow so Bing, Yandex,
+  Seznam and Naver recrawl within hours. Google does not participate; it
+  still discovers via the sitemap. Normally left to the `indexnow.yml`
+  Action (push + daily cron). `DRY_RUN=true` lists what would go without
+  submitting; `MODE=seed` records current state without submitting. The key
+  is NOT a secret — the protocol requires it to be publicly fetchable — so
+  it lives at `public/<key>.txt` and the script reads it from there. A
+  committed ledger (`data/indexnow-pinged.json`) maps slug → content hash so
+  unchanged URLs are never resubmitted; resubmitting is what gets a host
+  throttled.
+- `npm run og` — regenerate `public/og-default.png`, the Open Graph card for
+  pages with no cover of their own (home, archives, about, resources).
+  Composed from the logo's vector paths and flat brand colour, so it needs
+  no fonts installed. Run it by hand after a logo or brand-colour change;
+  the output is committed rather than built, to keep a binary out of every
+  build's diff.
 - A pre-commit hook (`.githooks/`, wired by the `prepare` script) optimizes
   staged essay images — blocking the commit on non-16:9 — and formats staged
   code. Prettier deliberately ignores `data/` (generated) and `src/content`
