@@ -43,7 +43,18 @@ const fullTitle =
       ? `${title}${suffix}`
       : title;
 const resolvedCanonical = article?.seo.canonical ?? canonical;
-const resolvedOgImage = article?.seo.ogImage ?? ogImage;
+
+// og:image is a REQUIRED Open Graph property, alongside title, type and url —
+// a page without one is an invalid card, and social scrapers fall back to
+// whatever image they can scrape off the page. Essays have covers; everything
+// else (home, archives, about, resources) gets the branded default.
+// Regenerate that with `npm run og`.
+const OG_FALLBACK = { src: "/og-default.png", width: 1200, height: 630 };
+const essayImage = article?.seo.ogImage ?? ogImage;
+const resolvedOgImage = essayImage ?? new URL(OG_FALLBACK.src, SITE_URL).href;
+const ogImageAlt = essayImage
+  ? (article?.featuredImageAlt ?? `${title} — ${SITE_NAME}`)
+  : `${SITE_NAME} — ${SITE_DESCRIPTION}`;
 
 const PERSON = {
   "@type": "Person",
@@ -116,7 +127,19 @@ jsonLd.push(...extraJsonLd);
 <meta property="og:description" content={description} />
 <meta property="og:url" content={resolvedCanonical} />
 <meta property="og:site_name" content={SITE_NAME} />
-{resolvedOgImage && <meta property="og:image" content={resolvedOgImage} />}
+<meta property="og:image" content={resolvedOgImage} />
+<meta property="og:image:alt" content={ogImageAlt} />
+{
+  /* Dimensions let a scraper lay the card out before it has fetched the image.
+     Only declared for the default, whose size we know; an essay cover is
+     whatever the author uploaded. */
+  !essayImage && (
+    <>
+      <meta property="og:image:width" content={String(OG_FALLBACK.width)} />
+      <meta property="og:image:height" content={String(OG_FALLBACK.height)} />
+    </>
+  )
+}
 <meta property="og:locale" content="en_US" />
 {
   article && (
@@ -129,13 +152,12 @@ jsonLd.push(...extraJsonLd);
 }
 
 {/* Twitter Card */}
-<meta
-  name="twitter:card"
-  content={resolvedOgImage ? "summary_large_image" : "summary"}
-/>
+{/* Always large now — there is always an image to show. */}
+<meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={fullTitle} />
 <meta name="twitter:description" content={description} />
-{resolvedOgImage && <meta name="twitter:image" content={resolvedOgImage} />}
+<meta name="twitter:image" content={resolvedOgImage} />
+<meta name="twitter:image:alt" content={ogImageAlt} />
 <meta name="twitter:site" content={TWITTER_HANDLE} />
 <meta name="twitter:creator" content={TWITTER_HANDLE} />
 
