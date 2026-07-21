@@ -63,7 +63,12 @@ const png = await sharp({
   // channel from the output.
   .flatten({ background: BACKGROUND })
   .removeAlpha()
-  .png({ compressionLevel: 9 })
+  // Palettised PNG, not JPEG. The card is flat colour plus hard-edged vector
+  // letterforms — PNG's best case and JPEG's worst, where it rings around the
+  // strokes. Measured on this image: 8-bit PNG 19 KB, JPEG q85 26 KB, and the
+  // JPEG has artefacts the PNG doesn't. WebP is smaller still (14 KB) but is
+  // unreliable as an og:image, so it isn't worth 5 KB.
+  .png({ palette: true, compressionLevel: 9, effort: 10 })
   .toBuffer();
 
 await writeFile("public/og-default.png", png);
