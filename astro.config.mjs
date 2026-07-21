@@ -11,6 +11,10 @@ import remarkCallouts from "./src/lib/remark-callouts.mjs";
 import rehypeImageFormat from "./src/lib/rehype-image-format.mjs";
 import rehypeFigure from "./src/lib/rehype-figure.mjs";
 import rehypeExternalLinks from "./src/lib/rehype-external-links.mjs";
+import { buildLastmodMap } from "./src/lib/sitemap-lastmod.mjs";
+
+// Read once at config load, not per URL — serialize() runs for all 69 entries.
+const LASTMOD = buildLastmodMap();
 
 export default defineConfig({
   site: "https://buthonestly.io/",
@@ -24,6 +28,15 @@ export default defineConfig({
       // doesn't.
       filter: (page) =>
         !/\/(section|topic|essays)\/([^/]+\/)?\d+\/$/.test(page),
+      // <lastmod> from the essays' own dates, so Google can prioritise what
+      // actually changed. Only set where it's genuinely known — a date that
+      // doesn't track real changes teaches Google to distrust the signal, so
+      // the static pages deliberately carry none. No changefreq or priority:
+      // Google has said publicly that it ignores both.
+      serialize: (item) => {
+        const lastmod = LASTMOD.get(new URL(item.url).pathname);
+        return lastmod ? { ...item, lastmod: lastmod.toISOString() } : item;
+      },
     }),
     icon(),
   ],
