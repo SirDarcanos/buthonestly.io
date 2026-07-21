@@ -12,6 +12,16 @@ Node 24 (LTS) everywhere: `.nvmrc`, `engines`, and the GitHub workflows.
 Astro does not hot-reload `astro.config.mjs` — restart the dev server after
 changing it (including the markdown remark/rehype plugins).
 
+A restart is not always enough. Astro caches processed Markdown in `.astro/`,
+and that cache survives one — so a change to a remark/rehype plugin keeps
+rendering the old output. `rm -rf .astro` before restarting.
+
+`astro dev stop` only stops the instance it tracks. Start a few and the old
+ones keep running on 4322, 4323… and serve stale or erroring content while
+you debug the wrong port. Check with
+`lsof -iTCP -sTCP:LISTEN -P -n | grep 432`; clear with
+`pkill -f "astro.mjs dev"`.
+
 ## Git
 
 Commit as work lands, but **do not push automatically**. Push only when the
