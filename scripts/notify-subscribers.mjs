@@ -196,8 +196,9 @@ function renderEmail(essay) {
   }
 
   parts.push(
-    `<p style="margin:0;"><a href="${essay.url}" ` +
+    `<p style="margin:0 0 26px;"><a href="${essay.url}" ` +
       `style="color:#7e2a1e; font-weight:600; text-decoration:underline; text-underline-offset:2px;">Read the full essay &rarr;</a></p>`,
+    `<p style="margin:0;">Settle in and give it a read when you have a quiet moment &mdash; I think you'll get something out of it.</p>`,
   );
 
   return parts.join("\n");

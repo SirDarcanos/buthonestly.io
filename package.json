@@ -23,7 +23,7 @@
     "lint:essay": "node scripts/lint-essay.mjs",
     "lint": "prettier --check . && node scripts/check-links.mjs",
     "og": "node scripts/build-og-image.mjs",
-    "email-icons": "node scripts/build-email-icons.mjs"
+    "email-assets": "node scripts/build-email-assets.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.2.0",
