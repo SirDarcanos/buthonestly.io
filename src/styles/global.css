@@ -5,7 +5,7 @@
   --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, monospace;
 
-  --color-background: #efeae0; /* page background */
+  --color-background: #f4f0e7; /* page background — matches the brand backdrop */
   --color-surface: #e7e1d5; /* cards & panels */
   --color-ink: #211d18; /* primary text, body, rules */
   --color-ink-soft: #4a443b; /* excerpts & summaries */

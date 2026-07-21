@@ -21,7 +21,7 @@ const HEIGHT = 630;
 
 // Mirrors :root in src/styles/global.css (light theme). The logo's paths are
 // already ink-coloured, so only the page and accent colours are needed here.
-const BACKGROUND = "#efeae0";
+const BACKGROUND = "#f4f0e7";
 const ACCENT = "#7e2a1e";
 
 const LOGO_WIDTH = 460;
@@ -57,6 +57,12 @@ const png = await sharp({
     { input: logo, top, left },
     { input: rule, top: top + logoHeight + GAP, left },
   ])
+  // Drop the alpha channel. The card is fully opaque anyway, and some social
+  // scrapers composite transparency onto black rather than white. `flatten`
+  // composites onto the background; `removeAlpha` is what actually drops the
+  // channel from the output.
+  .flatten({ background: BACKGROUND })
+  .removeAlpha()
   .png({ compressionLevel: 9 })
   .toBuffer();
 
