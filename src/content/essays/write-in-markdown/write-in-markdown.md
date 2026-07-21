@@ -122,7 +122,7 @@ Markdown is the thread that connects all of them. It is the same pattern in each
 
 If Ulysses vanished, or WordPress changed, or I needed to switch laptops, my writing would still live in simple text files that any editor can open.
 
-![Worn blue-covered copy of Ulysses by James Joyce resting on a white surface, with frayed pages and edges.](ulysses.jpg "By Geoffrey Barker – Own work, CC BY-SA 4.0.")
+![Worn blue-covered copy of Ulysses by James Joyce resting on a white surface, with frayed pages and edges.](ulysses.jpg 'Photo by <a href="https://unsplash.com/@newartist?utm_source=unsplash">New Artist</a> on <a href="https://unsplash.com/photos/xyz?utm_source=unsplash">Unsplash</a>')
 
 ## Why I Still Write in Markdown
 
