@@ -12,3 +12,4 @@ src/content
 
 # Hand-tuned Kit email template — inline styles must not be reflowed
 scripts/kit-newsletter-template.html
+scripts/kit-confirmation-email.html

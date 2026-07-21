@@ -46,6 +46,13 @@ accumulate and go out as a batch. Do not push on every change.
   committed ledger (`data/indexnow-pinged.json`) maps slug → content hash so
   unchanged URLs are never resubmitted; resubmitting is what gets a host
   throttled.
+- Two Kit email files, for two different editors:
+  `scripts/kit-newsletter-template.html` is a full HTML document for
+  Account → Email templates, which wraps broadcasts.
+  `scripts/kit-confirmation-email.html` is a fragment for the form's
+  confirmation email — that editor sanitises HTML into blocks, so a full
+  document leaks its comments and `<style>` into the body as visible text.
+  Never paste the template into the confirmation editor.
 - `npm run email-assets` — regenerate `public/email/*.png`, the masthead logo
   and social icons for the Kit newsletter. PNG because Gmail strips inline SVG
   and Outlook won't render it. Run by hand after a logo or brand-colour change;
