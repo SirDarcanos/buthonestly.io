@@ -211,17 +211,19 @@
     @apply border-line my-6 overflow-x-auto border p-4 text-base leading-normal;
   }
 
-  /* Shiki dual-theme code blocks. Fill with the theme-aware surface so the
-     block sits on the paper like other panels instead of Shiki's own dark box;
-     Shiki still colors the tokens. In dark mode, swap token + block colors to
-     the dark theme's `--shiki-dark` values (the `.dark` class is toggled in JS,
-     so Shiki's default prefers-color-scheme switching doesn't apply). */
+  /* Shiki code blocks. Fill with the surface so the block sits on the paper
+     like other panels instead of Shiki's own white box; Shiki still colors the
+     tokens. That background is why the theme is github-light-high-contrast —
+     see astro.config.mjs. */
   .post-content pre.astro-code {
     background-color: var(--color-surface) !important;
   }
-  :where(.dark) .post-content pre.astro-code,
-  :where(.dark) .post-content pre.astro-code span {
-    color: var(--shiki-dark) !important;
+
+  /* Comments are the one token the theme still fails on against the surface:
+     its #66707b lands at 3.87, under AA. `--color-muted` is 4.91 there, and
+     already the site's colour for de-emphasised text. */
+  .post-content pre.astro-code .line span[style*="#66707b"] {
+    color: var(--color-muted) !important;
   }
 
   .post-content > img,

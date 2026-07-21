@@ -51,10 +51,12 @@ export default defineConfig({
     // global.css. Block backgrounds are overridden to `--color-surface` there
     // so code reads as a warm-paper panel in both modes.
     shikiConfig: {
-      themes: {
-        light: "github-light",
-        dark: "github-dark",
-      },
+      // Single theme — the site has no dark mode. `github-light-high-contrast`
+      // rather than `github-light` because code sits on the warm paper surface
+      // (#e7e1d5), not white: against that, plain github-light drops six token
+      // colours below AA, including keywords at 3.51 and comments at 3.70.
+      // Comments still need a nudge, done in global.css.
+      theme: "github-light-high-contrast",
     },
     processor: unified({
       remarkPlugins: [remarkAudioEmbed, remarkWikiLinks, remarkCallouts],
