@@ -4,7 +4,7 @@ date: 2026-05-05T02:00:00
 updated: 2026-05-23T12:21:45
 sticky: true
 cornerstone: false
-excerpt: Push code to GitHub with no license file and it isn’t really open source — just visible. Choosing a license feels like a legal maze, but it’s one of the most important calls you’ll make.
+excerpt: Push code to GitHub with no license file and it isn’t really open source — just visible. Choosing one feels like a legal maze, but it matters.
 categories:
   - Programming
 tags:

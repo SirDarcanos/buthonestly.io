@@ -30,7 +30,18 @@ const {
   jsonLd: extraJsonLd = [],
 } = Astro.props;
 
-const fullTitle = title === SITE_NAME ? SITE_NAME : `${title} — ${SITE_NAME}`;
+// Google truncates titles around 60 characters, and the " — BUT. Honestly"
+// suffix costs 16 of them. Append it only when the page title leaves room:
+// brand recognition is worth having for free, but not worth cutting off the
+// words that earn the click. Long titles ship unbranded rather than truncated.
+const TITLE_MAX = 60;
+const suffix = ` — ${SITE_NAME}`;
+const fullTitle =
+  title === SITE_NAME
+    ? SITE_NAME
+    : title.length + suffix.length <= TITLE_MAX
+      ? `${title}${suffix}`
+      : title;
 const resolvedCanonical = article?.seo.canonical ?? canonical;
 const resolvedOgImage = article?.seo.ogImage ?? ogImage;
 

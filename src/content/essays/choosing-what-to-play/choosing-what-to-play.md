@@ -4,7 +4,7 @@ date: 2026-02-18T02:00:00
 updated: 2026-05-13T15:41:03
 sticky: false
 cornerstone: false
-excerpt: AI helps me pick games that match my mental state,
+excerpt: Choosing what to play is harder than playing. How I use AI to match a game to my state of mind, instead of losing the evening to my own library.
 categories:
   - Observations
 tags:

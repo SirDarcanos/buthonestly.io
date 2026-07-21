@@ -4,7 +4,7 @@ date: 2015-04-21T09:17:28
 updated: 2026-05-12T16:43:44
 sticky: false
 cornerstone: false
-excerpt: The best WooCommerce bulk editor is often WooCommerce itself. Before you reach for another plugin, the tools to edit products in bulk are already in your dashboard.
+excerpt: The best WooCommerce bulk editor is often WooCommerce itself — the tools to edit products in bulk are already in your dashboard.
 categories:
   - Web
 tags:

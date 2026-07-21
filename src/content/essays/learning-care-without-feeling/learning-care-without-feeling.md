@@ -4,7 +4,7 @@ date: 2026-06-07T02:00:00
 updated: 2026-06-12T16:36:04
 sticky: false
 cornerstone: false
-excerpt: Some days I know I should care — about a project, a person, a conversation — and the switch just stays off. This is about caring as something you do, not something you wait to feel.
+excerpt: Some days I know I should care — about a project, a person, a conversation — and the switch just stays off. Caring as something you do, not something you feel.
 categories:
   - Leadership
 tags:
