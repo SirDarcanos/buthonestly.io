@@ -5,30 +5,30 @@
     "wordpress-blocks-telex",
     "bulk-edit-woocommerce-products-without-plugins",
     "woocommerce-cli-product-management",
-    "woocommerce-attributes-vs-variations"
+    "creating-a-custom-add-to-cart-link-woocommerce"
   ],
   "adhd-planner": [
     "when-ai-stops-being-a-tool",
     "tools-for-adhd-leadership",
     "choosing-what-to-play",
-    "vibe-writing-line-between-human-machine",
     "write-in-markdown",
+    "vibe-writing-line-between-human-machine",
     "10-types-of-websites"
   ],
   "ai-slop-midas-touch-modern-internet": [
     "distilroberta-emotion-analysis-nlp-case-study",
     "vibe-writing-line-between-human-machine",
-    "choosing-what-to-play",
     "limits-of-machine-learning",
-    "when-ai-stops-being-a-tool",
-    "what-is-vibe-coding-how-to-do-it"
+    "choosing-what-to-play",
+    "what-is-vibe-coding-how-to-do-it",
+    "when-ai-stops-being-a-tool"
   ],
   "automated-x-account-cleanup": [
     "ai-slop-midas-touch-modern-internet",
-    "delete-expired-coupons-automatically-woocommerce",
     "neural-network-predict-resin-usage-3d-printed-miniatures",
+    "delete-expired-coupons-automatically-woocommerce",
     "what-is-vibe-coding-how-to-do-it",
-    "how-to-build-a-github-profile-readme-that-feels-like-you",
+    "limits-of-machine-learning",
     "tools-for-adhd-leadership"
   ],
   "building-convolutional-neural-network-python-tensorflow": [
@@ -57,8 +57,8 @@
   ],
   "choosing-what-to-play": [
     "when-ai-stops-being-a-tool",
-    "ai-slop-midas-touch-modern-internet",
     "tools-for-adhd-leadership",
+    "ai-slop-midas-touch-modern-internet",
     "adhd-planner",
     "learning-care-without-feeling",
     "limits-of-machine-learning"
@@ -139,8 +139,8 @@
     "vibe-writing-line-between-human-machine",
     "when-ai-stops-being-a-tool",
     "what-is-vibe-coding-how-to-do-it",
-    "10-types-of-websites",
     "how-to-build-a-github-profile-readme-that-feels-like-you",
+    "10-types-of-websites",
     "wordpress-blocks-telex"
   ],
   "improve-woocommerce-related-products-recommendations": [
@@ -188,8 +188,8 @@
     "limits-of-machine-learning",
     "what-is-vibe-coding-how-to-do-it",
     "ai-slop-midas-touch-modern-internet",
-    "when-ai-stops-being-a-tool",
-    "wordpress-blocks-telex"
+    "automated-x-account-cleanup",
+    "when-ai-stops-being-a-tool"
   ],
   "psychological-safety-in-teams-people-first-leadership": [
     "team-building-activities-for-work",
@@ -225,8 +225,8 @@
   ],
   "tools-for-adhd-leadership": [
     "when-ai-stops-being-a-tool",
-    "adhd-planner",
     "choosing-what-to-play",
+    "adhd-planner",
     "ai-slop-midas-touch-modern-internet",
     "wordpress-blocks-telex",
     "learning-care-without-feeling"
@@ -245,15 +245,15 @@
     "ai-slop-midas-touch-modern-internet",
     "write-in-markdown",
     "wordpress-blocks-telex",
-    "adhd-planner"
+    "what-is-a-web-developer"
   ],
   "what-is-a-web-developer": [
     "vibe-writing-line-between-human-machine",
     "when-ai-stops-being-a-tool",
     "what-is-vibe-coding-how-to-do-it",
-    "ai-slop-midas-touch-modern-internet",
     "wordpress-blocks-telex",
-    "10-types-of-websites"
+    "ai-slop-midas-touch-modern-internet",
+    "write-in-markdown"
   ],
   "what-is-vibe-coding-how-to-do-it": [
     "vibe-writing-line-between-human-machine",
@@ -316,15 +316,15 @@
     "do-you-trust-your-instincts-making-smart-wordpress-choices",
     "write-in-markdown",
     "top-5-essential-wordpress-plugins-i-always-install-and-why",
-    "10-types-of-websites",
-    "limits-of-machine-learning"
+    "limits-of-machine-learning",
+    "10-types-of-websites"
   ],
   "write-in-markdown": [
     "vibe-writing-line-between-human-machine",
     "adhd-planner",
     "10-types-of-websites",
     "do-you-trust-your-instincts-making-smart-wordpress-choices",
-    "ai-slop-midas-touch-modern-internet",
-    "when-ai-stops-being-a-tool"
+    "when-ai-stops-being-a-tool",
+    "what-is-a-web-developer"
   ]
 }
