@@ -159,8 +159,9 @@ const PAGINATION_REDIRECTS = [
 ];
 
 /**
- * WordPress exposed a feed per category and per tag. This site has one feed, so
- * point them all at it.
+ * WordPress exposed a feed per category and per tag. Category feeds map onto
+ * the per-section feeds at /section/<slug>/feed.xml; there are no per-topic
+ * feeds, so tag feeds fall back to the whole-site one.
  *
  * Must precede ESSAY_SUBPAGE_REDIRECTS: its `/:slug/feed/` rule matches
  * `/programming/feed/` with slug="programming" and lands a feed reader on an
@@ -168,10 +169,10 @@ const PAGINATION_REDIRECTS = [
  * Action polling /programming/feed/ was erroring on exactly this.
  */
 const ARCHIVE_FEED_REDIRECTS = [
-  ...SECTIONS.map((s) => [`/${s}/feed/`, "/feed.xml"]),
-  ["/section/:slug/feed/", "/feed.xml"],
+  ...SECTIONS.map((s) => [`/${s}/feed/`, `/section/${s}/feed.xml`]),
+  ["/section/:slug/feed/", "/section/:slug/feed.xml"],
+  ["/category/:slug/feed/", "/section/:slug/feed.xml"],
   ["/topic/:slug/feed/", "/feed.xml"],
-  ["/category/:slug/feed/", "/feed.xml"],
   ["/tag/:slug/feed/", "/feed.xml"],
 ];
 
