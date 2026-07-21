@@ -172,6 +172,23 @@ const ESSAY_SUBPAGE_REDIRECTS = [
   ["/:slug/comment-page-*", "/:slug/"],
 ];
 
+/**
+ * Any essay under any legacy category prefix → its flat slug.
+ *
+ * POST_REDIRECTS freezes the exact WordPress paths, but only one per essay, and
+ * posts were recategorised over the years — Search Console shows real traffic on
+ * `/web/choosing-what-to-play/` for an essay now filed under Observations, which
+ * 404'd. These four placeholder rules cover every prefix × slug combination, so
+ * a recategorised post can't strand an indexed URL again.
+ *
+ * Safe as a catch-all: no current route starts with one of these prefixes (the
+ * archives live at /section/<slug>/), and an unknown slug 404s either way.
+ */
+const LEGACY_PREFIX_REDIRECTS = SECTIONS.map((s) => [
+  `/${s}/:slug/`,
+  "/:slug/",
+]);
+
 /** Old WordPress Download-Monitor URLs → the files on the R2 downloads
  *  subdomain (served directly by an R2 custom domain). */
 const DOWNLOAD_REDIRECTS = [
@@ -276,6 +293,9 @@ const body = [
   ...SECTION_REDIRECTS.map(formatRule),
   ...PAGINATION_REDIRECTS.map(formatRule),
   ...ESSAY_SUBPAGE_REDIRECTS.map(formatRule),
+  // After the sub-page rules, so `/web/<slug>/feed/` still resolves as a feed
+  // rather than being swallowed as a two-segment essay path.
+  ...LEGACY_PREFIX_REDIRECTS.map(formatRule),
   ...DOWNLOAD_REDIRECTS.map(formatRule),
   ...R2_PASSTHROUGH_REDIRECTS.map(formatRule),
   ...LEGACY_REDIRECTS.map(formatRule),
@@ -293,7 +313,8 @@ const dynamic = body
 console.log(
   `Wrote ${OUT} — ${POST_REDIRECTS.length} post + ${INTERNAL_REDIRECTS.length} internal + ` +
     `${SECTION_REDIRECTS.length} section + ${PAGINATION_REDIRECTS.length} pagination + ` +
-    `${ESSAY_SUBPAGE_REDIRECTS.length} essay sub-page + ${DOWNLOAD_REDIRECTS.length} download + ` +
+    `${ESSAY_SUBPAGE_REDIRECTS.length} essay sub-page + ${LEGACY_PREFIX_REDIRECTS.length} legacy prefix + ` +
+    `${DOWNLOAD_REDIRECTS.length} download + ` +
     `${R2_PASSTHROUGH_REDIRECTS.length} R2 passthrough + ${LEGACY_REDIRECTS.length} legacy rules ` +
     `(${dynamic} dynamic — Cloudflare Pages allows 100).`,
 );
