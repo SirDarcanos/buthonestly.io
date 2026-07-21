@@ -1,22 +1,10 @@
-// Hand-written descriptions for section (category) and topic (tag) archives.
-// They render beside the <h1> on the archive page and become its meta
-// description, so keep them under ~160 characters and self-contained — they are
-// read out of context in search results.
+// Descriptions for section and topic archives. Each renders beside the <h1> and
+// becomes the page's meta description.
 //
-// Describe the TERRITORY, not the INVENTORY. A description that lists what's
-// currently filed under a term goes stale the moment the next essay lands;
-// one that states the term's scope and angle stays true. Domain nouns that
-// define the site (WordPress, WooCommerce, PHP) are fair game — individual
-// essay subjects are not.
-//
-// They're also the SERP snippet, so: front-load the promise (mobile truncates
-// near 120 characters, desktop near 160), and close on the reason to click this
-// result over the other nine.
-//
-// Keyed by slug (the URL segment), not by the display name in frontmatter, so
-// renaming a category's capitalisation doesn't silently drop its description.
-// An absent or empty entry is fine: the page renders no description and falls
-// back to SITE_DESCRIPTION for the meta tag.
+// Keep under ~160 characters, and describe the territory a term covers rather
+// than what's currently filed under it — an inventory goes stale on the next
+// essay. Keyed by slug so a rename of the display name can't silently drop one.
+// An absent entry renders no description and falls back to SITE_DESCRIPTION.
 
 export const TAX_DESCRIPTIONS: Record<string, string> = {
   // ── Sections (categories) ──────────────────────────────────────────────────

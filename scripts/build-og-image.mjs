@@ -1,26 +1,17 @@
-// Generates public/og-default.png — the Open Graph card for pages that have no
-// cover image of their own (home, archives, about, resources).
+// Generates public/og-default.png — the Open Graph card for pages with no cover
+// of their own. `npm run og`; run by hand after a logo or brand-colour change,
+// since the output is committed rather than built.
 //
-//   npm run og
-//
-// Run by hand, not in the build: the output is committed, and regenerating on
-// every build would churn a binary in git for no reason. Re-run it if the logo
-// or the brand colours change.
-//
-// Composed from the logo's vector paths and flat colour only — no text is
-// rendered, so the result doesn't depend on which fonts happen to be installed
-// on the machine that runs it.
+// Vector paths and flat colour only, no rendered text, so it doesn't depend on
+// which fonts the generating machine has.
 
 import { readFile, writeFile } from "node:fs/promises";
 import sharp from "sharp";
 
-// Facebook, LinkedIn and X all crop toward 1.91:1; 1200×630 is the size they
-// all accept without resampling.
-const WIDTH = 1200;
+const WIDTH = 1200; // 1.91:1 — what every platform crops toward
 const HEIGHT = 630;
 
-// Mirrors :root in src/styles/global.css (light theme). The logo's paths are
-// already ink-coloured, so only the page and accent colours are needed here.
+// Mirrors :root in src/styles/global.css.
 const BACKGROUND = "#f4f0e7";
 const ACCENT = "#7e2a1e";
 
@@ -32,8 +23,7 @@ const logo = await sharp(await readFile("src/assets/buthonestly-logo.svg"))
   .toBuffer();
 const { height: logoHeight } = await sharp(logo).metadata();
 
-// A hairline rule under the mark, in the accent — the same device the site uses
-// under its header.
+// Hairline rule under the mark, matching the site header.
 const rule = Buffer.from(
   `<svg xmlns="http://www.w3.org/2000/svg" width="${LOGO_WIDTH}" height="3">
      <rect width="${LOGO_WIDTH}" height="3" fill="${ACCENT}"/>
@@ -57,17 +47,11 @@ const png = await sharp({
     { input: logo, top, left },
     { input: rule, top: top + logoHeight + GAP, left },
   ])
-  // Drop the alpha channel. The card is fully opaque anyway, and some social
-  // scrapers composite transparency onto black rather than white. `flatten`
-  // composites onto the background; `removeAlpha` is what actually drops the
-  // channel from the output.
+  // No alpha: some scrapers composite transparency onto black.
   .flatten({ background: BACKGROUND })
   .removeAlpha()
-  // Palettised PNG, not JPEG. The card is flat colour plus hard-edged vector
-  // letterforms — PNG's best case and JPEG's worst, where it rings around the
-  // strokes. Measured on this image: 8-bit PNG 19 KB, JPEG q85 26 KB, and the
-  // JPEG has artefacts the PNG doesn't. WebP is smaller still (14 KB) but is
-  // unreliable as an og:image, so it isn't worth 5 KB.
+  // Palettised PNG beats JPEG here — flat colour and hard vector edges.
+  // Measured: 8-bit PNG 19 KB, JPEG q85 26 KB and it rings around the strokes.
   .png({ palette: true, compressionLevel: 9, effort: 10 })
   .toBuffer();
 

@@ -21,11 +21,10 @@ const hashtags = tags
 
 const shareText = [title, hashtags].filter(Boolean).join(" ");
 
-// Plain links, not buttons with JS: they work without JavaScript, survive
-// middle-click and "open in new tab", and are keyboard-reachable for free.
-// Nothing here is a third-party script, so no tracker rides along.
 const aiPrompt = `Read ${url} and summarise this essay for me, then answer my questions about it.`;
 
+// Plain links, not JS buttons: they survive middle-click and keyboard use, and
+// no third-party script rides along.
 const learn = [
   {
     icon: "openai",

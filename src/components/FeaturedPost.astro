@@ -14,12 +14,7 @@ const { post } = Astro.props;
 <article class="space-y-3">
   {
     post.cover ? (
-      <Picture
-        src={post.cover}
-        alt={post.featuredImageAlt ?? ""}
-        width={516}
-        height={344}
-      />
+      <Picture src={post.cover} alt={post.featuredImageAlt ?? ""} />
     ) : null
   }
   <p class="meta mt-6">

@@ -20,23 +20,6 @@
   --color-accent: #7e2a1e; /* kickers, links, marks */
   --color-accent-dark: #4a43bd; /* hover / pressed */
   --color-accent-soft: rgba(90, 82, 213, 0.13); /* tag & chip fills */
-
-  --color-on-dark: #f6f6fa;
-  --color-on-dark-muted: #adaac0;
-}
-@custom-variant dark (&:where(.dark, .dark *));
-
-.dark {
-  --color-background: #171310; /* deep cool near-black */
-  --color-surface: #1e1813; /* cards & panels */
-  --color-ink: #e9e0d2; /* primary text */
-  --color-muted: #9c9281; /* secondary text */
-  --color-faint: color-mix(
-    in oklab,
-    var(--color-ink) 16%,
-    transparent
-  ); /* mono metadata */
-  --color-accent: #c5563f; /* lightened for legibility on dark */
 }
 
 @layer base {
@@ -281,7 +264,7 @@
     @apply flex w-full items-center gap-3;
   }
 
-  /* Ink-based focus ring — darkens on light, lightens on dark. */
+  /* Ink-based focus ring. */
   .audio-player :focus-visible {
     outline: none;
     box-shadow: inset 0 0 0 100px
@@ -334,9 +317,6 @@
   .audio-speed {
     @apply text-muted hover:text-accent flex-none cursor-pointer border-0 bg-transparent p-0 text-right font-sans text-xs font-semibold tabular-nums;
     color-scheme: light;
-  }
-  .dark .audio-speed {
-    color-scheme: dark;
   }
 
   /* Uppercase label for callout + TOC panels. */

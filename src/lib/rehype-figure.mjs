@@ -1,13 +1,10 @@
-// Promote a standalone captioned image `![alt](src "caption")` — which renders
-// as <p><img alt title></p> — to <figure><img><figcaption>caption. alt stays on
-// the img. Only images alone in a <p> qualify; inline/gallery images are left
-// as-is.
+// Promote a standalone captioned image `![alt](src "caption")` to
+// <figure><img><figcaption>. Only images alone in a <p> qualify.
 //
-// The caption is emitted as raw HTML, because photo credits are pasted straight
-// from Unsplash or Pexels with their links and utm_ params intact. That means a
-// caption containing the snippet's double quotes must use a SINGLE-quoted title
-// — `![alt](src 'Photo by <a href="…">…')` — or the image stops parsing as an
-// image entirely. `npm run check:links` catches that.
+// The caption is emitted as raw HTML so photo credits pasted from Unsplash or
+// Pexels keep their links. A caption containing those double quotes needs a
+// single-quoted title, or the image stops parsing entirely — check-links catches
+// it.
 
 export default function rehypeFigure() {
   return (tree) => walk(tree);

@@ -8,10 +8,9 @@ interface Props {
   base: "section" | "topic";
 }
 
-// Cross-links between archives — the topics inside a section, or the sections a
-// topic spans. Sits below the pagination nav rather than above the essay list:
-// page 2+ otherwise has no outbound link except the footer, and putting nav
-// above the list would push the page's actual content down.
+// Topics inside a section, or the sections a topic spans. Below the pagination
+// nav, not above the list — page 2+ otherwise has no outbound link but the
+// footer.
 const { heading, terms, base } = Astro.props;
 ---
 

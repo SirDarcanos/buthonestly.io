@@ -30,10 +30,8 @@ const {
   jsonLd: extraJsonLd = [],
 } = Astro.props;
 
-// Google truncates titles around 60 characters, and the " — BUT. Honestly"
-// suffix costs 16 of them. Append it only when the page title leaves room:
-// brand recognition is worth having for free, but not worth cutting off the
-// words that earn the click. Long titles ship unbranded rather than truncated.
+// Google truncates around 60 characters and the suffix costs 16, so append it
+// only when the title leaves room. Long titles ship unbranded, not truncated.
 const TITLE_MAX = 60;
 const suffix = ` — ${SITE_NAME}`;
 const fullTitle =
@@ -44,11 +42,8 @@ const fullTitle =
       : title;
 const resolvedCanonical = article?.seo.canonical ?? canonical;
 
-// og:image is a REQUIRED Open Graph property, alongside title, type and url —
-// a page without one is an invalid card, and social scrapers fall back to
-// whatever image they can scrape off the page. Essays have covers; everything
-// else (home, archives, about, resources) gets the branded default.
-// Regenerate that with `npm run og`.
+// og:image is required by Open Graph; without it scrapers grab any image on the
+// page. Essays have covers, everything else gets the default (`npm run og`).
 const OG_FALLBACK = { src: "/og-default.png", width: 1200, height: 630 };
 const essayImage = article?.seo.ogImage ?? ogImage;
 const resolvedOgImage = essayImage ?? new URL(OG_FALLBACK.src, SITE_URL).href;
@@ -74,9 +69,8 @@ const jsonLd: Record<string, unknown>[] = [
   { "@context": "https://schema.org", ...PERSON },
 ];
 
-// Homepage only. This node claims to describe the site as a whole, so emitting
-// it on every type="website" page had every archive asserting it was the site.
-// Archives use CollectionPage with an isPartOf reference instead.
+// Homepage only — this node describes the whole site. Archives use
+// CollectionPage with an isPartOf reference instead.
 if (Astro.url.pathname === "/") {
   jsonLd.push({
     "@context": "https://schema.org",
@@ -130,9 +124,7 @@ jsonLd.push(...extraJsonLd);
 <meta property="og:image" content={resolvedOgImage} />
 <meta property="og:image:alt" content={ogImageAlt} />
 {
-  /* Dimensions let a scraper lay the card out before it has fetched the image.
-     Only declared for the default, whose size we know; an essay cover is
-     whatever the author uploaded. */
+  /* Only for the default, whose size we know. */
   !essayImage && (
     <>
       <meta property="og:image:width" content={String(OG_FALLBACK.width)} />
@@ -152,7 +144,6 @@ jsonLd.push(...extraJsonLd);
 }
 
 {/* Twitter Card */}
-{/* Always large now — there is always an image to show. */}
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={fullTitle} />
 <meta name="twitter:description" content={description} />

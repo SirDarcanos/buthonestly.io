@@ -130,13 +130,9 @@ function taxFrom(names: string[]): Tax[] {
 }
 
 /**
- * Taxonomy terms co-occurring across a set of posts, most common first — the
- * topics inside a section, or the sections a topic spans. `count` is the
- * co-occurrence count within `posts`, not the site-wide total, which is what
- * makes it the right number to label a cross-link with.
- *
- * Takes posts rather than a term name so archive pages can pass the set they
- * have already filtered in getStaticPaths instead of re-reading the collection.
+ * Taxonomy terms co-occurring across a set of posts, most common first. `count`
+ * is the count within `posts`, not the site-wide total. Takes posts so archives
+ * can pass the set they already filtered in getStaticPaths.
  */
 export function coOccurringTax(
   posts: Post[],

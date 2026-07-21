@@ -46,10 +46,6 @@ export default defineConfig({
   // still win where set.
   image: { layout: "constrained" },
   markdown: {
-    // Dual-theme Shiki: light tokens are inline by default; `--shiki-dark`
-    // holds the dark theme's colors, activated by the `.dark` class in
-    // global.css. Block backgrounds are overridden to `--color-surface` there
-    // so code reads as a warm-paper panel in both modes.
     shikiConfig: {
       // Single theme — the site has no dark mode. `github-light-high-contrast`
       // rather than `github-light` because code sits on the warm paper surface

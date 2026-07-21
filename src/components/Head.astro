@@ -30,15 +30,6 @@ const { title, description, type, article, noindex, jsonLd } = Astro.props;
   />
   <meta name="generator" content={Astro.generator} />
 
-  {/* Set theme before paint to avoid a flash. Dark is the default */}
-  <script is:inline>
-    {
-      if (localStorage.getItem("theme") !== "light") {
-        document.documentElement.classList.add("light");
-      }
-    }
-  </script>
-
   <Font cssVariable="--font-newsreader" preload />
   <Font cssVariable="--font-archivo" preload />
 

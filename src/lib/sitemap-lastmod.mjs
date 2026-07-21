@@ -1,15 +1,11 @@
-// Builds a path → last-modified map for the sitemap's <lastmod>.
+// Path → last-modified map for the sitemap's <lastmod>.
 //
-// Google uses lastmod to prioritise recrawls, but only where it trusts the
-// value — a date that doesn't correspond to a real change trains it to ignore
-// the signal site-wide. So this only returns a date for pages whose freshness we
-// genuinely know (essays, and the archives that list them) and returns nothing
-// for the static pages. An absent lastmod is better than an invented one.
+// Only pages whose freshness we actually know get a date — essays and the
+// archives listing them. Static pages get none: Google discounts the signal
+// site-wide if it doesn't track real changes, so absent beats invented.
 //
-// Imported by astro.config.mjs, which runs in plain Node before the content
-// layer exists — hence reading the Markdown directly rather than via
-// getCollection. Frontmatter parsing is duplicated from the standalone scripts
-// for the same reason; they can't import the TS lib either.
+// Reads the Markdown directly because astro.config.mjs runs in plain Node before
+// the content layer exists.
 
 import { readdirSync, readFileSync, existsSync } from "node:fs";
 import path from "node:path";

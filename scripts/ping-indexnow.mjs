@@ -1,19 +1,15 @@
-// Tell IndexNow which essays changed, so Bing (and Yandex, Seznam, Naver)
-// recrawl them in hours rather than whenever they next get round to it.
-// Google does not participate in IndexNow — it still discovers via the sitemap.
+// Submit changed essays to IndexNow so Bing, Yandex, Seznam and Naver recrawl
+// within hours. Google doesn't participate; it still uses the sitemap.
 //
 //   npm run indexnow                    # submit what changed
 //   MODE=seed npm run indexnow          # record current state, submit nothing
 //   DRY_RUN=true npm run indexnow       # show what would be submitted
 //
-// A committed ledger (data/indexnow-pinged.json) maps slug → content hash, so a
-// URL is only resubmitted when its content actually changed. Repeatedly
-// submitting unchanged URLs is what gets a host throttled.
+// The ledger (data/indexnow-pinged.json) maps slug → content hash so unchanged
+// URLs are never resubmitted — that's what gets a host throttled.
 //
-// Env: SITE_URL (default https://buthonestly.io). The key is NOT a secret — the
-// protocol requires it to be publicly fetchable — so it lives in public/, and
-// this reads it from there. One source of truth: the key we submit is by
-// construction the key the verifier will fetch.
+// Env: SITE_URL. The key is public by protocol, so it lives in public/ and is
+// read from there rather than duplicated as a secret.
 
 import { createHash } from "node:crypto";
 import { readdir, readFile, writeFile } from "node:fs/promises";
@@ -32,10 +28,9 @@ const DRY_RUN = process.env.DRY_RUN === "true";
 const NOW = new Date();
 
 /**
- * The key file in public/, named <key>.txt and containing exactly <key>. Those
- * two agreeing IS the verification, so identify the key by that property rather
- * than by a hardcoded name — and discover a mismatch here rather than from a
- * 403 later. Any other .txt in public/ is simply not a key file.
+ * The key file is public/<key>.txt containing exactly <key> — that agreement IS
+ * the verification, so find it by that property rather than a hardcoded name,
+ * and fail here instead of on a 403 later.
  */
 async function readKey() {
   const candidates = (await readdir("public"))
@@ -82,7 +77,6 @@ const slugify = (name) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
 
-// ── Gather published essays and hash their content ──────────────────────────
 const dirs = (await readdir(ESSAYS_DIR, { withFileTypes: true }))
   .filter((d) => d.isDirectory())
   .map((d) => d.name);
@@ -122,9 +116,8 @@ if (!changed.length) {
   process.exit(0);
 }
 
-// ── Build the URL list ──────────────────────────────────────────────────────
-// Changed essays, plus the listings a *new* essay actually alters. An edit to an
-// existing essay doesn't change the home page, so don't claim it did.
+// Changed essays, plus the listings a *new* essay alters. An edit to an existing
+// essay doesn't change the home page.
 const urls = new Set(changed.map((e) => `${SITE}/${e.slug}/`));
 if (isNew.length) {
   urls.add(`${SITE}/`);
@@ -135,9 +128,8 @@ if (isNew.length) {
   }
 }
 
-// Never submit a URL that isn't actually live — invalid submissions are what
-// IndexNow throttles a host for. A scheduled essay whose deploy hasn't finished
-// yet simply gets picked up on the next run.
+// Never submit a URL that isn't live — invalid submissions get a host throttled.
+// Anything mid-deploy is picked up next run.
 const verified = [];
 for (const url of urls) {
   const res = await fetch(url, { method: "HEAD" }).catch(() => null);
@@ -160,7 +152,6 @@ if (DRY_RUN) {
   process.exit(0);
 }
 
-// ── Submit ──────────────────────────────────────────────────────────────────
 const res = await fetch(ENDPOINT, {
   method: "POST",
   headers: { "Content-Type": "application/json; charset=utf-8" },
