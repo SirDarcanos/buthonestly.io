@@ -45,12 +45,8 @@ const escapeHtml = (s) =>
       })[c],
   );
 
-// Pull the essay's opening prose out of the Obsidian markdown for the email
-// teaser: the first real paragraph, plus the second when the first is short
-// (essays often open on a one-line hook). Skips furniture — callouts/blockquotes
-// (`>`), headings, images, embeds, rules, code fences, raw HTML — and strips
-// wikilinks/links/emphasis to plain text, capping each paragraph at a sentence
-// boundary. Returns an array of 1–2 plain-text paragraphs (or empty).
+// The email teaser: 1–2 plain-text paragraphs lifted from the essay's opening
+// prose, skipping furniture (callouts, headings, images, rules, fences, HTML).
 function openingParagraphs(markdown) {
   const paras = [];
   let buf = [];
@@ -74,9 +70,9 @@ function openingParagraphs(markdown) {
 
   const clean = (s) =>
     s
-      .replace(/!?\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, (_, a, b) => b || a) // wikilinks
-      .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1") // markdown links
-      .replace(/[*_`~]/g, "") // emphasis / code marks
+      .replace(/!?\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, (_, a, b) => b || a)
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+      .replace(/[*_`~]/g, "")
       .replace(/\s+/g, " ")
       .trim();
 
@@ -111,12 +107,12 @@ async function loadPublishedEssays() {
     const { data, content } = matter(await readFile(file, "utf8"));
     if (!data.date) continue; // no date → not live yet
     const date = new Date(data.date);
-    if (Number.isNaN(+date) || date > NOW) continue; // scheduled / future
+    if (Number.isNaN(+date) || date > NOW) continue;
     essays.push({
       slug,
       title: String(data.title ?? slug),
       coverAlt: data.coverAlt ? String(data.coverAlt) : "",
-      opening: openingParagraphs(content), // the essay's opening paragraph(s)
+      opening: openingParagraphs(content),
       date,
       url: `${SITE}/${slug}/`,
     });
@@ -136,11 +132,9 @@ async function saveLedger(set) {
   await writeFile(LEDGER, JSON.stringify([...set].sort(), null, 2) + "\n");
 }
 
-// Only email once the post is actually reachable on the site, so links never
-// 404. On a push this waits for the Cloudflare deploy; on the daily cron the
-// post is already live and this returns on the first try.
-// Returns the live page's HTML once reachable (so we can lift its og:image),
-// or null if it never came up.
+// Only email once the post is actually reachable, so links never 404 — on a
+// push this waits out the Cloudflare deploy. Returns the live page's HTML (for
+// its og:image), or null if it never came up.
 async function waitUntilLive(url, tries = 10, delayMs = 30000) {
   for (let i = 0; i < tries; i++) {
     try {
@@ -156,7 +150,7 @@ async function waitUntilLive(url, tries = 10, delayMs = 30000) {
 
 // The essay's cover is only resolved to a public, absolute URL inside Astro's
 // build, so we lift it from the rendered page's og:image rather than trying to
-// reconstruct the hashed `_astro/` path here. Handles both attribute orders.
+// reconstruct the hashed `_astro/` path here.
 function extractOgImage(html) {
   const m =
     html.match(
@@ -168,12 +162,10 @@ function extractOgImage(html) {
   return m ? m[1] : null;
 }
 
-// The broadcast body Kit drops into {{ message_content }}: an intro line, the
-// featured image, linked title, the essay's opening paragraph(s), then the
-// read link. The intro lives here (not the Kit template) so the template stays
-// essay-agnostic — a hand-written broadcast won't inherit an "new essay" lead.
-// Styles are inlined here so the body holds up in clients that ignore the
-// template's <style> (Outlook), not only Gmail.
+// The broadcast body Kit drops into {{ message_content }}. The intro lives here
+// rather than in the Kit template so a hand-written broadcast won't inherit a
+// "new essay" lead, and styles are inlined for clients that ignore the
+// template's <style> (Outlook).
 function renderEmail(essay) {
   const parts = [
     `<p style="margin:0 0 26px;">There's a new essay up on the site. Here's what it's about &mdash; and where to read the whole thing.</p>`,
@@ -244,9 +236,6 @@ async function createBroadcast(essay, send = SEND) {
 async function main() {
   const essays = await loadPublishedEssays();
 
-  // Test path: draft exactly one essay by slug, ignoring the ledger and never
-  // writing it, and always as a DRAFT (never emails). For exercising the
-  // pipeline from the workflow_dispatch UI without touching the back catalogue.
   const testSlug = process.env.TEST_SLUG?.trim();
   if (testSlug) {
     const essay = essays.find((e) => e.slug === testSlug);

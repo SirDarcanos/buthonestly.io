@@ -191,10 +191,6 @@ const blendSample = {
             class="border-line bg-background text-ink w-full border px-3 py-2.5 font-sans text-base disabled:opacity-50"
           />
         </div>
-        {
-          /* Full width on its own row until sm, where it returns to the end of
-            the field row. */
-        }
         <button
           data-bhktw="generate"
           type="button"
@@ -251,7 +247,6 @@ const blendSample = {
       </div>
     </div>
 
-    {/* HOW TO USE */}
     <section class="mt-14">
       <h2>How to use it</h2>
       <div class="post-content mt-4">
@@ -279,7 +274,6 @@ const blendSample = {
       </div>
     </section>
 
-    {/* VOICE SAMPLES — collapsed by default, like the TOC / Quick Summary */}
     <section class="mt-14">
       <details class="disclosure border-line border p-5">
         <summary class="callout-title">Voice samples</summary>
@@ -317,7 +311,6 @@ const blendSample = {
       </details>
     </section>
 
-    {/* GOOD TO KNOW */}
     <section class="mt-14">
       <h2>Good to know</h2>
       <div class="post-content mt-4">
@@ -352,20 +345,15 @@ const blendSample = {
   </Container>
 </Layout>
 
-{/* MP3 encoder — exposes window.lamejs, probed lazily by the module below. */}
+{/* Exposes window.lamejs, probed lazily by the module below. */}
 <script is:inline src="https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js"
 ></script>
 
 <script>
-  // BUT. Honestly — Kokoro TTS Web (browser-local TTS).
-  // Finds every .bh-kokoro-tts-app on the page and wires it up independently.
   import { chunkText } from "../../lib/chunk-text.mjs";
 
-  // Chunk budget in words. Kokoro silently truncates input past its ~512
-  // phoneme-token context (≈5 tokens/word ≈ 100 words) — a 100-word paragraph
-  // was observed to cut off after ~90. Keep chunks well under that so nothing
-  // is dropped. Short chunks may merge up to 1.2× this. The chunker itself
-  // lives in src/lib/chunk-text.mjs (shared with the Gemini narration script).
+  // Kokoro silently truncates input past its ~512 phoneme-token context
+  // (≈100 words); stay well under it. The chunker may still merge up to 1.2×.
   const MAX_CHUNK_WORDS = 60;
 
   function getLamejs() {
@@ -382,7 +370,6 @@ const blendSample = {
     return null;
   }
 
-  // Parse text into chunks separated by [Xs] silence markers.
   function parseChunks(raw) {
     const out = [];
     const re = /\[(\d+(?:\.\d+)?)s\]/g;
@@ -484,18 +471,14 @@ const blendSample = {
     return `${primary},${blendWith}`;
   }
 
-  // Human-readable duration for the download ETA.
   function fmtTime(seconds) {
     const s = Math.max(0, Math.round(seconds));
     if (s < 60) return `${s}s`;
     return `${Math.floor(s / 60)}m ${String(s % 60).padStart(2, "0")}s`;
   }
 
-  // Has the Kokoro model already been fetched into the browser's Cache
-  // Storage (by a previous visit)? transformers.js caches each file under
-  // some cache name; we scan them all for this model's .onnx weights, so the
-  // check survives library/cache-name changes. Best-effort — any failure just
-  // reports "not cached".
+  // transformers.js picks its own cache name, so scan them all for the model's
+  // .onnx weights — the check then survives library/cache-name changes.
   async function isModelCached() {
     if (!("caches" in window)) return false;
     try {
@@ -514,9 +497,6 @@ const blendSample = {
     return false;
   }
 
-  // Lazily import kokoro-js the first time any instance generates audio.
-  // Reports model-download progress through setStatus/setProgress so the user
-  // sees how much is left and a rough time estimate.
   let ttsPromise = null;
   async function getTts(setStatus, setProgress) {
     if (!ttsPromise) {
@@ -636,8 +616,6 @@ const blendSample = {
     function timestamp() {
       return new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
     }
-    // Point a download button (an <a download>) at a blob and name the file;
-    // track the URL so it's revoked on the next run. Returns the URL.
     function setDownload(btn, blob, filename) {
       const url = URL.createObjectURL(blob);
       objectUrls.push(url);
@@ -724,7 +702,6 @@ const blendSample = {
         setProgress(95);
         const merged = concatFloat32(audioParts);
 
-        // Release the previous run's blob URLs before creating new ones.
         for (const u of objectUrls) URL.revokeObjectURL(u);
         objectUrls.length = 0;
         const stamp = timestamp();
@@ -762,9 +739,7 @@ const blendSample = {
 
     generateBtn.addEventListener("click", doGenerate);
 
-    // Tailor the idle message to whether the model still needs downloading
-    // (green dot if it's already cached, grey if not), and note CPU-only
-    // browsers — which isn't an error, so it keeps the idle/ready dot.
+    // A CPU-only browser is not an error, so it keeps the idle/ready dot.
     (async () => {
       const cached = await isModelCached();
       const gpuNote = navigator.gpu

@@ -1,15 +1,6 @@
-// Verify internal links in essays resolve: [[wikilinks]] point to real essays,
-// and root-relative links (/…, /section/…, /topic/…, /downloads/…) match a real
-// route or download. Also checks Markdown images: a title with an unbalanced
-// quote (which swallows the closing paren, so the caption never renders and the
-// stray quote leaks into the filename), and a relative image that doesn't exist
-// beside the essay (which fails the Astro build with ImageNotFound).
-// Also flags a callout marker written `> ![tip]` instead of `> [!tip]`, which
-// is valid Markdown and so degrades silently to a plain blockquote; a
-// frontmatter `cover:` with no file beside the essay; raw <img> in hand-written
-// HTML (galleries); and leftover WordPress.com URLs now that every essay image
-// is local. Other external links and #anchors are not checked. Exits non-zero
-// on any problem so it can gate `npm run lint`.
+// Verify that internal links, essay-local images and covers resolve. External
+// links and #anchors are not checked. Exits non-zero so it can gate
+// `npm run lint`.
 import fs from "node:fs";
 import path from "node:path";
 
@@ -37,7 +28,6 @@ const dirs = fs
   .map((d) => d.name);
 const essaySlugs = new Set(dirs);
 
-// Valid routes the site actually builds, plus known standalone pages.
 const routes = new Set([
   "/",
   "/about/",
@@ -102,13 +92,11 @@ function* markdownImages(text) {
 const norm = (p) => (p.endsWith("/") || /\.[a-z0-9]+$/i.test(p) ? p : `${p}/`);
 const issues = [];
 for (const { slug, fm, body } of essays) {
-  const clean = body.replace(/```[\s\S]*?```/g, ""); // ignore code blocks
+  const clean = body.replace(/```[\s\S]*?```/g, "");
 
-  // Frontmatter `cover:`. Nothing else validates that the file exists, so a bad
-  // cover surfaces as a build failure (ImageNotFound), and can hide behind
-  // Astro's content cache until a cold build in CI. Every variant broke a build
-  // during the image migration:
-  // file missing, file saved without its extension, and reference missing one.
+  // Nothing else validates that a cover exists, so a bad one surfaces as an
+  // ImageNotFound build failure — and can hide behind Astro's content cache
+  // until a cold build in CI.
   const cover = fm
     .match(/^cover:[ \t]*(\S.*?)[ \t]*$/m)?.[1]
     ?.replace(/^["']|["']$/g, "");
@@ -120,9 +108,8 @@ for (const { slug, fm, body } of essays) {
     issues.push([slug, "cover", cover]);
   }
 
-  // Leftover WordPress.com URLs. Every essay image is local now, so an absolute
-  // wp.com / wp-content upload / wpcomstaging URL is a straggler that 404s.
-  // Matched only as a URL, so prose paths ("wp-content/themes/…") don't trip it.
+  // Every essay image is local now, so an absolute wp.com URL is a straggler
+  // that 404s. Matched only as a URL, so prose paths don't trip it.
   for (const m of clean.matchAll(
     /https?:\/\/[^\s)"'<>]*(?:\.wp\.com|wp-content\/uploads|wpcomstaging\.com)[^\s)"'<>]*/gi,
   )) {
@@ -149,16 +136,12 @@ for (const { slug, fm, body } of essays) {
     if (!essaySlugs.has(target))
       issues.push([slug, "wikilink", `[[${target}]]`]);
   }
-  // A callout marker with the bang outside the bracket — `> ![tip]` instead of
-  // `> [!tip]` — is still valid Markdown, so it silently degrades to a plain
-  // blockquote instead of rendering as a callout. Real images (`![alt](src)`)
-  // are excluded by the lookahead.
+  // `> ![tip]` instead of `> [!tip]` is still valid Markdown, so it silently
+  // degrades to a plain blockquote instead of rendering as a callout.
   for (const m of clean.matchAll(/^>[ \t]*!\[(\w+)\](?!\()/gm)) {
     issues.push([slug, "callout", `![${m[1]}] — did you mean [!${m[1]}]?`]);
   }
 
-  // Markdown images. Remote and root-relative sources are left to the link
-  // check below; these are the essay-local ones.
   for (const { target, broken, raw } of markdownImages(clean)) {
     if (broken) {
       // The target is unreliable once quoting is broken, so don't also file it

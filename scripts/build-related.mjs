@@ -1,7 +1,5 @@
-// Precomputes semantic "related posts" using sentence embeddings, at build time
-// (never at runtime). For each essay we embed title + excerpt + body with a
-// small local model (Transformers.js, bge-small-en-v1.5), then rank neighbours
-// by cosine similarity with a gentle same-category/tag nudge.
+// Precomputes semantic "related posts" from sentence embeddings, at build time
+// (never at runtime).
 //
 // Outputs (both committed):
 //   data/embeddings.json — { slug: { hash, vector } } cache; only essays whose
@@ -31,12 +29,12 @@ const TAG_BOOST = 0.06;
 
 function stripMarkdown(md) {
   return md
-    .replace(/```[\s\S]*?```/g, " ") // fenced code
-    .replace(/`[^`]*`/g, " ") // inline code
-    .replace(/!\[[^\]]*\]\([^)]*\)/g, " ") // images
-    .replace(/\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/g, "$1") // wikilinks
-    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1") // links → text
-    .replace(/^>\s?/gm, " ") // blockquote / callout markers
+    .replace(/```[\s\S]*?```/g, " ")
+    .replace(/`[^`]*`/g, " ")
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
+    .replace(/\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/g, "$1")
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+    .replace(/^>\s?/gm, " ")
     .replace(/[#*_~`>|-]/g, " ")
     .replace(/\s+/g, " ")
     .trim();
@@ -56,7 +54,7 @@ async function loadEssays() {
     if (!existsSync(file)) continue;
     const { data, content } = matter(await readFile(file, "utf8"));
     if (!data.date) continue; // draft / no date
-    if (new Date(data.date) > new Date()) continue; // scheduled — not published yet
+    if (new Date(data.date) > new Date()) continue;
     // Present-but-empty frontmatter arrives as null; clean it like the schema does.
     const list = (v) =>
       Array.isArray(v) ? v.filter((x) => x != null && x !== "") : [];
@@ -109,7 +107,6 @@ async function main() {
     ? JSON.parse(await readFile(EMB_FILE, "utf8"))
     : {};
 
-  // Re-embed only new or changed essays.
   const stale = essays.filter(
     (e) => !cache[e.slug] || cache[e.slug].hash !== e.hash,
   );
@@ -125,7 +122,6 @@ async function main() {
     console.log("All embeddings up to date.");
   }
 
-  // Drop vectors for deleted essays.
   for (const slug of Object.keys(cache)) {
     if (!bySlug.has(slug)) delete cache[slug];
   }
@@ -133,7 +129,6 @@ async function main() {
   await mkdir("data", { recursive: true });
   await writeFile(EMB_FILE, JSON.stringify(cache) + "\n");
 
-  // Rank neighbours for every essay that has a vector.
   const embedded = essays.filter((e) => cache[e.slug]?.vector);
   const related = {};
   for (const a of essays) {

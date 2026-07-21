@@ -4,7 +4,6 @@ import Container from "../components/Container.astro";
 import ReadTime from "../components/ReadTime.astro";
 import { getAllPosts } from "../lib/essays";
 
-// A few real essays to offer instead of a dead end.
 const suggestions = (await getAllPosts()).slice(0, 3);
 ---
 
@@ -62,8 +61,7 @@ const suggestions = (await getAllPosts()).slice(0, 3);
 </Layout>
 
 <script>
-  // Log the path that 404'd for anyone reading the console (a static page can't
-  // know it server-side).
+  // A static page can't know the 404'd path server-side.
   if (typeof location !== "undefined") {
     console.info(`404 — no page at ${location.pathname}`);
   }

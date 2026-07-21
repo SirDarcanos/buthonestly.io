@@ -8,14 +8,12 @@ export type Post = {
   url: string;
   type: "post";
   title: string;
-  body: string; // raw Markdown (used for reading-time; the page renders <Content />)
+  body: string; // raw Markdown
   excerpt: string;
   date: string; // ISO
   modified: string; // ISO
-  // The cover for the Picture component — a local imported image, optimized to
-  // AVIF/WebP at build time.
   cover?: ImageMetadata;
-  featuredImage?: string; // absolute URL string, for og:image / social only
+  featuredImage?: string; // absolute URL, for og:image / social only
   featuredImageAlt?: string;
   featuredImageCaption?: string;
   tags: string[];

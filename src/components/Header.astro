@@ -10,7 +10,6 @@ const categoryLinks = categories.map((category) => ({
   href: `/section/${category.slug}/`,
   label: category.name,
 }));
-// Shared by the inline desktop nav and the collapsed mobile menu.
 const navLinks = [{ href: "/", label: "Home" }, ...categoryLinks];
 ---
 
@@ -21,7 +20,6 @@ const navLinks = [{ href: "/", label: "Home" }, ...categoryLinks];
       >Clarity without the comfort.</span
     >
     <Divider />
-    {/* Full nav from lg up; below that it collapses into the menu button. */}
     <Nav
       class="hidden font-medium lg:flex"
       linkClass="text-muted"
@@ -69,10 +67,7 @@ const navLinks = [{ href: "/", label: "Home" }, ...categoryLinks];
     </button>
   </div>
 
-  {
-    /* Collapsed nav. `hidden` is toggled in JS; `lg:hidden` keeps it out of the
-      way once the inline nav takes over. */
-  }
+  {/* `hidden` here is state — the menu button toggles it in JS. */}
   <div id="mobile-nav" class="hidden lg:hidden">
     <Nav
       class="border-line flex-col gap-4 border-b py-5"
@@ -245,11 +240,8 @@ const navLinks = [{ href: "/", label: "Home" }, ...categoryLinks];
           tokens.some(
             (tok) =>
               tok.length >= MIN_QUERY &&
-              // The matched word must start with the query term (real prefix
-              // search, e.g. "coup" -> "coupon"), or be at most a two-char stem
-              // shorter (plurals, e.g. "coupons" -> "coupon"). Anything looser
-              // lets a short indexed word ("ada") match long gibberish
-              // ("adadawdwdad") via Pagefind's prefix-truncation fallback.
+              // Anything looser than "real prefix, or a two-char stem shorter"
+              // lets "ada" match "adadawdwdad" via that same fallback.
               (tok.startsWith(t) ||
                 (t.startsWith(tok) && t.length - tok.length <= 2)),
           ),
@@ -278,7 +270,6 @@ const navLinks = [{ href: "/", label: "Home" }, ...categoryLinks];
       highlight(false);
     }
 
-    // Keyboard selection across the rendered results (command-palette style).
     let selected = -1;
     function rows() {
       return [...results.querySelectorAll("[data-result]")];
@@ -325,7 +316,6 @@ const navLinks = [{ href: "/", label: "Home" }, ...categoryLinks];
     backdrop.addEventListener("click", close);
 
     document.addEventListener("keydown", (e) => {
-      // Cmd/Ctrl+K toggles the overlay from anywhere.
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
         overlay.classList.contains("hidden") ? open() : close();
@@ -335,7 +325,6 @@ const navLinks = [{ href: "/", label: "Home" }, ...categoryLinks];
         close();
         return;
       }
-      // "/" opens search unless the user is typing in a field.
       const tag = (e.target.tagName || "").toLowerCase();
       const typing =
         tag === "input" || tag === "textarea" || e.target.isContentEditable;
@@ -346,7 +335,6 @@ const navLinks = [{ href: "/", label: "Home" }, ...categoryLinks];
     });
   })();
 
-  /* Collapsed nav toggle (below md). */
   (function () {
     const btn = document.getElementById("menu-open");
     const nav = document.getElementById("mobile-nav");
@@ -364,7 +352,6 @@ const navLinks = [{ href: "/", label: "Home" }, ...categoryLinks];
     btn.addEventListener("click", () =>
       setOpen(nav.classList.contains("hidden")),
     );
-    // Following a link should leave the menu closed behind you.
     nav.addEventListener("click", (e) => {
       if (e.target.closest("a")) setOpen(false);
     });

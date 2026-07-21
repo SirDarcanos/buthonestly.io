@@ -1,7 +1,7 @@
 // Node port of the Honest_TTS Vertex AI client: signs a service-account JWT
-// (RS256) → bearer token → Gemini TTS, returns 16-bit PCM (24 kHz mono). No SDK
-// — node:crypto + global fetch. The "AUDIO PROFILE: Nico" prompt and style/pace
-// presets are carried over from the WordPress plugin to match the live voice.
+// (RS256) → bearer token → Gemini TTS, returns 16-bit PCM. No SDK — node:crypto
+// + global fetch. The "AUDIO PROFILE: Nico" prompt and style/pace presets are
+// carried over from the WordPress plugin to match the live voice.
 
 import crypto from "node:crypto";
 
@@ -13,9 +13,8 @@ export const DEFAULT_STYLE = "reflective";
 export const DEFAULT_PACE = "conversational";
 export const SAMPLE_RATE = 24000; // Gemini TTS returns 24 kHz mono 16-bit PCM.
 
-// Style presets — { text, role, scene } — carried over from the plugin. `text`
-// goes under "Style:" in the director's notes; role/scene set the AUDIO PROFILE
-// header when a style is chosen.
+// `text` goes under "Style:" in the director's notes; role/scene set the AUDIO
+// PROFILE header.
 const STYLE_PRESETS = {
   reflective: {
     text: "Thoughtful and contemplative. Land on concrete imagery, proper nouns, and dates with quiet weight. Treat em-dashes and semicolons as brief breaths, not full pauses. Avoid an announced, broadcast cadence — speak as if to a single listener.",
@@ -177,7 +176,7 @@ export class GeminiTTS {
     return this._token.value;
   }
 
-  // Synthesize one chunk → Buffer of raw PCM. Retries transient errors.
+  // Returns a Buffer of raw PCM.
   async synthesize(text, { voice = DEFAULT_VOICE, style, pace } = {}) {
     if (!text.trim()) throw new Error("No text to synthesize.");
     const input = buildInput(text, { style, pace });

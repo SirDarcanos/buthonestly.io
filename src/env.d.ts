@@ -8,8 +8,7 @@ interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
 
-// Fathom analytics, injected by its script (prod only). Optional so callers
-// guard with `?.`; see src/lib/track.ts.
+// Injected by the Fathom script, which loads in prod only — hence optional.
 interface Window {
   fathom?: { trackEvent?: (name: string) => void };
 }

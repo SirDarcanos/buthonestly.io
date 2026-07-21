@@ -1,11 +1,6 @@
-/**
- * Reading-time estimate.
- */
-
 const WORDS_PER_MINUTE = 225;
 const segmenter = new Intl.Segmenter("en", { granularity: "word" });
 
-/** Number of words in `input`, after stripping Markdown/HTML markup. */
 function countWords(input: string): number {
   const text = input
     .replace(/```[\s\S]*?```/g, " ") // fenced code blocks
@@ -24,7 +19,6 @@ function countWords(input: string): number {
   return words;
 }
 
-/** Estimated reading time in whole minutes (always ≥ 1). */
 export function readingMinutes(
   input: string,
   wpm: number = WORDS_PER_MINUTE,
@@ -32,7 +26,7 @@ export function readingMinutes(
   return Math.max(1, Math.round(countWords(input) / wpm));
 }
 
-/** Formatted label for a byline, e.g. "14 min read". */
+/** e.g. "14 min read" */
 export function readingTimeLabel(
   input: string,
   wpm: number = WORDS_PER_MINUTE,

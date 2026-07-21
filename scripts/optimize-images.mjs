@@ -1,17 +1,8 @@
-// Optimize essay source images in place so you can drop in full-size originals
-// (no more iloveimg). Resizes, recompresses, and normalizes formats to JPEG;
-// Astro re-encodes to AVIF at build, so this only keeps the committed SOURCES
-// predictable. A content-hash manifest makes re-runs idempotent. Local tool.
+// Optimize essay source images in place. Astro re-encodes to AVIF at build, so
+// this only keeps the committed SOURCES predictable.
 //
 //   npm run images                 # all essays + drafts
 //   npm run images -- <slug|path>  # just one essay
-//
-// Covers must be 16:9 (that's the shape the cover layout renders) — a non-16:9
-// cover is flagged and skipped, since resizing by width never crops and would
-// ship distorted; fix the source instead. Body images can be any shape; only
-// their width matters, and anything narrower than the reading column gets a
-// non-blocking note. WebP/AVIF/TIFF/BMP are converted to JPEG (PNG when they
-// carry transparency), with Markdown references rewritten to match.
 
 import { readFile, writeFile, readdir, unlink } from "node:fs/promises";
 import { createHash } from "node:crypto";
@@ -24,19 +15,15 @@ const MANIFEST = "data/images-optimized.json";
 const MAX_WIDTH = 1376; // 2× the 688px body column; ≥ the cover's 1160 need
 const JPEG_QUALITY = 80;
 const COLUMN_WIDTH = 688; // the reading column — body images below this look soft
-// Formats handled here. WebP/AVIF/TIFF/BMP are normalized to JPEG (or PNG when
-// they carry transparency) so essays ship two predictable source formats.
 // GIFs and SVGs are deliberately absent — they're served as-is (Astro emits
-// animated WebP for GIFs; see rehype-image-format.mjs) and exempt from all of
-// this. Animated sources of any format are skipped rather than flattened.
+// animated WebP for GIFs; see rehype-image-format.mjs) and exempt from all this.
 const IMAGE_RE = /\.(jpe?g|png|webp|avif|tiff?|bmp)$/i;
 const RATIO_16_9 = 16 / 9;
 const RATIO_TOLERANCE = 0.02;
 
 async function main() {
   const args = process.argv.slice(2).filter((a) => !a.startsWith("-"));
-  // Explicit image paths (the pre-commit hook passes staged files); otherwise a
-  // slug/essay; otherwise everything.
+  // The pre-commit hook passes explicit staged file paths.
   const fileMode = args.length > 0 && args.every((a) => IMAGE_RE.test(a));
   const manifest = await loadManifest();
   const files = fileMode
@@ -101,8 +88,6 @@ async function main() {
 }
 
 // The essay's `cover:` filename, so only that image is held to the 16:9 rule.
-// Body images carry whatever shape the content needs (a wide dataset strip, a
-// tall diagram) — width is what matters for them. Cached per essay folder.
 const coverCache = new Map();
 async function coverBasename(dir) {
   if (coverCache.has(dir)) return coverCache.get(dir);
@@ -148,19 +133,17 @@ async function processFile(abs, rel, manifest) {
   const curExt = path.extname(abs).toLowerCase();
   const curIsJpeg = curExt === ".jpg" || curExt === ".jpeg";
 
-  // Everything opaque normalizes to JPEG, whatever it started as and whatever
-  // it weighs. Only transparency keeps a file as PNG — JPEG has no alpha, so
-  // converting one would flatten it onto a black background.
+  // Only transparency keeps a file as PNG — JPEG has no alpha, so converting
+  // one would flatten it onto a black background.
   const targetExt = alpha ? ".png" : ".jpg";
 
   const toJpeg = targetExt === ".jpg";
   const renaming = toJpeg ? !curIsJpeg : curExt !== targetExt;
   const resized = width > MAX_WIDTH;
 
-  // Idempotence check, deliberately AFTER the format decision: a file already
-  // recorded under older rules (say a small PNG, back when only big ones became
-  // JPEG) still needs converting. Skipping on the hash alone would silently
-  // leave it — and report "unchanged" — forever.
+  // Deliberately AFTER the format decision: a file recorded under older rules
+  // still needs converting, and skipping on the hash alone would silently
+  // report it "unchanged" forever.
   if (!renaming && manifest[rel] === inputHash) {
     return { skipped: true, narrow: !isCover && width < COLUMN_WIDTH, width };
   }
@@ -172,8 +155,7 @@ async function processFile(abs, rel, manifest) {
     : pipeline.png({ compressionLevel: 9 });
   const out = await pipeline.toBuffer();
 
-  // Nothing structural changed and recompression didn't help: record the hash
-  // so we skip it next run, and leave the file untouched.
+  // Recompression didn't help: record the hash so the next run skips it.
   if (!renaming && !resized && out.length >= buf.length) {
     manifest[rel] = inputHash;
     return { skipped: true, narrow: !isCover && width < COLUMN_WIDTH, width };
@@ -206,7 +188,8 @@ async function processFile(abs, rel, manifest) {
   };
 }
 
-// A pixel that isn't fully opaque means real transparency — keep it a PNG.
+// `hasAlpha` only reports an alpha channel; a pixel below fully-opaque is what
+// proves the channel is actually used.
 async function hasTransparency(buf) {
   const { channels } = await sharp(buf).stats();
   return channels[channels.length - 1].min < 255;

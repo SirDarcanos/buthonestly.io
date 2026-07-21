@@ -60,7 +60,6 @@ const jsonLd = [
   article={post}
   jsonLd={jsonLd}
 >
-  {/* POST META */}
   <article
     id={"post-" + post.id}
     class="post border-line mt-20 border-b pb-10"
@@ -96,7 +95,6 @@ const jsonLd = [
       </div>
     </header>
 
-    {/* FEATURED IMAGE */}
     {
       post.cover && (
         <Picture
@@ -111,10 +109,8 @@ const jsonLd = [
       )
     }
 
-    {/* TABLE OF CONTENTS */}
     <TableOfContents headings={headings} />
 
-    {/* POST CONTENT */}
     <div class="post-content mt-7"><Content /></div>
 
     <p class="meta font-bold">
@@ -126,7 +122,6 @@ const jsonLd = [
 
   <Downloads downloads={entry.data.downloads} />
 
-  {/* RELATED POSTS */}
   {
     related.length > 0 && (
       <section class="my-16">

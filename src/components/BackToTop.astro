@@ -4,7 +4,6 @@
   aria-label="Back to top"
   class="border-line bg-surface text-muted hover:text-accent fixed right-5 bottom-5 z-40 hidden cursor-pointer rounded-full border p-2.5 shadow-sm transition-colors"
 >
-  {/* Arrow up */}
   <svg
     class="size-5"
     viewBox="0 0 24 24"
@@ -25,7 +24,6 @@
     const btn = document.getElementById("back-to-top");
     if (!btn) return;
 
-    // Show once the reader has scrolled a viewport past the top.
     const toggle = () => {
       btn.classList.toggle("hidden", window.scrollY < window.innerHeight);
     };

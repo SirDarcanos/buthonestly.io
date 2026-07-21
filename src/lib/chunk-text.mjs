@@ -1,14 +1,12 @@
 // Split clean text into TTS-sized chunks: paragraph boundaries first, falling
-// back to sentence, clause (; — – --), then comma when one exceeds the budget.
-// Never splits mid-word. Shared (via `maxWords`) by the Kokoro generator (~60)
-// and the Gemini narration script (~200). Pure — imported by both an Astro
-// <script> and a Node script.
+// back to sentence, clause, then comma when one exceeds the budget. Never
+// splits mid-word. Shared via `maxWords` by the Kokoro generator (~60) and the
+// Gemini narration script (~200).
 
 // A chunk under this many words can lose its last word to a TTS model's tail
-// handling, so it gets folded into a neighbour (see absorbShortChunks).
+// handling, so it gets folded into a neighbour.
 export const SHORT_EDGE_WORDS = 20;
 
-// Word count on whitespace-normalized text.
 export function countWords(text) {
   const clean = String(text).replace(/\s+/gu, " ").trim();
   return clean === "" ? 0 : clean.split(" ").length;
@@ -19,9 +17,6 @@ export function chunkText(text, maxWords) {
   if (text === "") return [];
   if (!Number.isFinite(maxWords) || maxWords < 10) maxWords = 10;
 
-  // Pack paragraphs greedily up to maxWords; adjacent short paragraphs join
-  // with a blank line, so seams still land on paragraph breaks when possible.
-  // An oversized paragraph falls through to sentence splitting.
   const chunks = [];
   let current = "";
   let currentWords = 0;
@@ -56,10 +51,8 @@ export function chunkText(text, maxWords) {
   return absorbShortChunks(chunks, maxWords);
 }
 
-// Fold short chunks into a neighbor: a trailing/isolated short chunk can lose
-// its last word to a model's tail handling, so any chunk under SHORT_EDGE_WORDS
-// merges into the PREVIOUS chunk (staying within 1.2× the cap). A still-short
-// first chunk folds forward into the next instead.
+// Merges backwards, staying within 1.2× the cap; a still-short first chunk
+// folds forward into the next instead.
 function absorbShortChunks(chunks, maxWords) {
   if (chunks.length < 2) return chunks;
   const cap = Math.round(maxWords * 1.2);
@@ -85,7 +78,6 @@ function absorbShortChunks(chunks, maxWords) {
   return result;
 }
 
-// Sentence-split an oversized paragraph, packing sentences up to the cap.
 function splitParagraph(para, maxWords) {
   let sentences = para.split(/(?<=[.!?])\s+(?=[A-Z\p{Lu}"'(])/u);
   if (sentences.length === 0) sentences = [para];
@@ -123,7 +115,6 @@ function splitParagraph(para, maxWords) {
   return chunks;
 }
 
-// Clause-split an oversized sentence on ; — – -- boundaries.
 function splitSentence(sentence, maxWords) {
   const parts = sentence.split(/(\s*(?:;|—|–|--)\s*)/u);
   if (parts.length < 3) return splitOnCommas(sentence, maxWords);
@@ -163,7 +154,6 @@ function splitSentence(sentence, maxWords) {
   return chunks;
 }
 
-// Last resort: split on commas, else pack words greedily into ≤max chunks.
 function splitOnCommas(segment, maxWords) {
   const parts = segment.split(/(\s*,\s*)/u);
   const hasCommas = parts.length > 1;

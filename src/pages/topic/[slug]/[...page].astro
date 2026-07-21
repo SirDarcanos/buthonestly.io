@@ -16,8 +16,7 @@ export const getStaticPaths = (async ({ paginate }) => {
 
   return tags.flatMap((tag) => {
     const tagPosts = posts.filter((post) => post.tags.includes(tag.name));
-    // Sections this topic spans. Unlike section→topics this is narrow (a topic
-    // reaches 1–4 sections), so it isn't capped.
+    // Uncapped, unlike section→topics: a topic reaches only 1–4 sections.
     const sections = coOccurringTax(tagPosts, (post) => post.categories);
     return paginate(tagPosts, {
       params: { slug: tag.slug },
@@ -76,7 +75,6 @@ const jsonLd = [
   </div>
 
   {
-    /* Show the "All essays" list whenever there are non-featured posts */
     regularPosts.length > 0 && (
       <section>
         <p class="meta mb-1 font-bold">All essays</p>
@@ -87,9 +85,8 @@ const jsonLd = [
             year: "numeric",
           });
 
-          // Meta leads on mobile — date left, read time right — matching the
-          // home cards. From sm it moves back beside the title as a right-hand
-          // column, hence the order swap.
+          // Meta leads on mobile, then moves beside the title from sm — hence
+          // the order swap.
           return (
             <article class="border-line flex flex-col gap-3 border-t py-7 sm:flex-row sm:items-center sm:gap-10">
               <div class="meta flex items-center justify-between gap-4 sm:order-2 sm:flex-none sm:flex-col sm:items-end sm:gap-0 sm:text-right">

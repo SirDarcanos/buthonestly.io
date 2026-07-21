@@ -2,8 +2,7 @@
 import Button from "./Button.astro";
 import { DOWNLOADS_BASE } from "../lib/cdn.mjs";
 
-// Renders an essay's `downloads` front-matter as button links (files served
-// directly from R2 at <DOWNLOADS_BASE>/<file>).
+// Files are served straight from R2 at <DOWNLOADS_BASE>/<file>.
 interface DownloadItem {
   file: string;
   label?: string;

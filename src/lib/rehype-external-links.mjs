@@ -1,7 +1,6 @@
-// External links (different host) open in a new tab with rel="noopener
-// noreferrer". Add "nofollow" to a link's title to also get rel="nofollow":
-//   [text](https://example.com "nofollow")   → rel="noopener noreferrer nofollow"
-//   [text](https://example.com "Tip nofollow") → title="Tip", rel="… nofollow"
+// External links open in a new tab with rel="noopener noreferrer". Authoring
+// convention: "nofollow" anywhere in a link's title adds rel="nofollow" and is
+// stripped from the title — [text](https://example.com "Tip nofollow").
 const SITE_HOST = "buthonestly.io";
 
 export default function rehypeExternalLinks() {
@@ -24,7 +23,7 @@ function apply(a) {
   try {
     url = new URL(href);
   } catch {
-    return; // relative/internal link — leave it alone
+    return; // relative/internal link
   }
   if (!/^https?:$/.test(url.protocol)) return; // mailto:, tel:, etc.
   if (url.hostname === SITE_HOST || url.hostname.endsWith(`.${SITE_HOST}`))

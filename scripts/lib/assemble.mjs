@@ -1,6 +1,4 @@
-// Assemble per-chunk PCM (24 kHz mono 16-bit) into one MP3: concatenate with
-// short silences between chunks (natural seams), then pipe through ffmpeg → 96
-// kbps. ffmpeg is required.
+// Assemble per-chunk PCM (24 kHz mono 16-bit) into one MP3. Requires ffmpeg.
 
 import { spawn } from "node:child_process";
 
@@ -9,7 +7,6 @@ import { SAMPLE_RATE } from "./gemini-tts.mjs";
 const BYTES_PER_SAMPLE = 2; // 16-bit
 const MP3_BITRATE = "96k";
 
-// Concatenate PCM buffers with `silenceMs` of silence between each.
 export function concatPcm(buffers, silenceMs = 200) {
   const silenceBytes =
     Math.round((SAMPLE_RATE * silenceMs) / 1000) * BYTES_PER_SAMPLE;
@@ -22,12 +19,10 @@ export function concatPcm(buffers, silenceMs = 200) {
   return Buffer.concat(parts);
 }
 
-// Duration in seconds of a raw PCM buffer.
 export function pcmDurationSeconds(pcm) {
   return pcm.length / BYTES_PER_SAMPLE / SAMPLE_RATE;
 }
 
-// Encode raw PCM → MP3 at `outPath` via ffmpeg (PCM piped over stdin).
 export function pcmToMp3(pcm, outPath) {
   return new Promise((resolve, reject) => {
     const ff = spawn("ffmpeg", [

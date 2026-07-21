@@ -1,13 +1,11 @@
 import { defineCollection, z } from "astro:content";
 import { glob } from "astro/loaders";
 
-// The template ships every property, so blanks arrive as YAML null. `.optional()`
-// allows `undefined` (missing) but NOT `null` (present-but-empty), so normalise
-// "" / null to absent before each optional validator, and clean list values.
+// The template ships every property, so blanks arrive as YAML null, which
+// `.optional()` rejects (it allows only `undefined`).
 const optional = <T extends z.ZodTypeAny>(schema: T) =>
   z.preprocess((v) => (v === "" || v === null ? undefined : v), schema);
 
-// null / "" / non-array → []; also drops blank items (e.g. an empty bullet).
 const stringList = z.preprocess(
   (v) => (Array.isArray(v) ? v.filter((x) => x != null && x !== "") : []),
   z.array(z.string()),
@@ -39,11 +37,9 @@ const essays = defineCollection({
             .array(z.object({ file: z.string(), label: z.string().optional() }))
             .optional(),
         ),
-        // Optional per-essay audio-narration overrides (npm run audio). Flat
-        // rather than a nested `audio:` map so Obsidian's Properties editor can
-        // edit them (it shows nested objects as "Unknown format"). Loose by
-        // design — the audio script validates voice/style/pace, so a typo never
-        // fails the site build.
+        // Flat rather than a nested `audio:` map because Obsidian's Properties
+        // editor shows nested objects as "Unknown format". Loose by design: the
+        // audio script validates these, so a typo never fails the site build.
         audioVoice: optional(z.string().optional()),
         audioStyle: optional(z.string().optional()),
         audioPace: optional(z.string().optional()),

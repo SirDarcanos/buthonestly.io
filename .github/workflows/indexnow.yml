@@ -1,13 +1,7 @@
 name: Ping IndexNow on publish
 
-# Tells Bing/Yandex/Seznam/Naver to recrawl essays that changed, via
-# scripts/ping-indexnow.mjs. Google doesn't participate — it still uses the
-# sitemap. A committed ledger (data/indexnow-pinged.json) maps slug → content
-# hash so unchanged URLs are never resubmitted.
-#
-# Runs on push (immediate) and daily (so future-dated essays get submitted when
-# their date passes). The script HEAD-checks each URL first, so a push that
-# lands before Cloudflare finishes deploying simply defers to the next run.
+# Submits changed essays to IndexNow. Daily as well as on push, so future-dated
+# essays go out when their date passes.
 
 on:
   push:
@@ -27,7 +21,6 @@ on:
         type: boolean
         default: false
 
-# Never let two runs submit at once.
 concurrency:
   group: indexnow
   cancel-in-progress: false
@@ -47,8 +40,7 @@ jobs:
         with:
           node-version: 24
 
-      # Give Cloudflare Pages time to deploy the push that triggered this, so
-      # the script's HEAD check sees the new essay rather than skipping it.
+      # So the script's HEAD check sees the new essay rather than skipping it.
       - name: Wait for deploy
         if: github.event_name == 'push'
         run: sleep 180
@@ -56,8 +48,7 @@ jobs:
       - name: Submit changed URLs
         run: node scripts/ping-indexnow.mjs
         env:
-          # No key secret: IndexNow keys are public by protocol, so the script
-          # reads public/<key>.txt — the same file the verifier fetches.
+          # No key secret — it's public by protocol; read from public/<key>.txt.
           SITE_URL: ${{ vars.NEWSLETTER_SITE_URL || 'https://buthonestly.io' }}
           MODE: ${{ github.event.inputs.mode || 'run' }}
           DRY_RUN: ${{ github.event.inputs.dry_run }}

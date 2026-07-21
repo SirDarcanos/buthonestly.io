@@ -21,8 +21,6 @@ const {
   ...rest
 } = Astro.props;
 
-// A download button gets the download icon automatically, unless an icon is
-// passed explicitly.
 const resolvedIcon = icon ?? (download ? "download" : undefined);
 
 const ICONS = {

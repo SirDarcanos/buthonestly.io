@@ -46,7 +46,6 @@ function transform(bq) {
     t0.value = t0.value.slice(nl + 1);
     bq.children.unshift(titleNode);
   } else {
-    // Marker line was the whole first paragraph — replace it with the title.
     bq.children[0] = titleNode;
   }
 

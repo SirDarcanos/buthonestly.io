@@ -1,8 +1,7 @@
 name: Notify subscribers on publish
 
-# Emails subscribers when a new essay goes live, via Kit's Broadcasts API
-# (scripts/notify-subscribers.mjs). Runs on push (immediate) and daily (so
-# future-dated essays go out when their date passes). A committed ledger
+# Emails subscribers when an essay goes live. Daily as well as on push, so
+# future-dated essays go out when their date passes. The ledger
 # (data/newsletter-sent.json) makes each essay email at most once.
 
 on:
@@ -27,7 +26,6 @@ on:
         type: string
         default: ""
 
-# Never let two runs email at the same time.
 concurrency:
   group: newsletter
   cancel-in-progress: false
@@ -57,8 +55,7 @@ jobs:
           # push & cron send for real; manual dispatch defaults to drafts.
           KIT_SEND: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.send) || 'true' }}
           MODE: ${{ github.event.inputs.mode || 'run' }}
-          # Set a NEWSLETTER_SITE_URL repo variable to the pages.dev URL until
-          # the domain cutover; defaults to the production domain.
+          # Set the NEWSLETTER_SITE_URL variable to override the domain.
           SITE_URL: ${{ vars.NEWSLETTER_SITE_URL || 'https://buthonestly.io' }}
           # Blank on push/cron; set only via the dispatch UI to draft one essay.
           TEST_SLUG: ${{ github.event.inputs.test_slug }}

@@ -1,6 +1,6 @@
 // Rewrite Obsidian audio embeds `![[name.mp3]]` → an <audio> player served from
-// R2 at <STATIC_BASE>/audio/<name> (AudioPlayer enhances it). MUST run before
-// remark-wiki-links, which would otherwise eat the `[[...]]` and break it.
+// R2 at <STATIC_BASE>/audio/<name>. MUST run before remark-wiki-links, which
+// would otherwise eat the `[[...]]` and break it.
 import { STATIC_BASE } from "./cdn.mjs";
 
 const EMBED = /!\[\[([^\]|]+?\.(?:mp3|m4a|ogg|wav))(?:\|[^\]]*)?\]\]/gi;

@@ -1,18 +1,15 @@
 name: Rebuild related posts
 
-# Regenerates semantic "related posts" (embeddings → neighbour map) whenever an
-# essay changes, then commits data/embeddings.json + data/related.json. The
-# heavy model (onnxruntime-node, ~200MB) is installed ad-hoc here, so it never
-# touches the Cloudflare deploy install. The commit (no [skip ci]) triggers a
-# normal Pages rebuild that ships the refreshed map.
+# Regenerates the semantic related-posts map and commits it, which triggers a
+# Pages rebuild. The model (onnxruntime-node, ~200MB) is installed ad-hoc so it
+# never touches the Cloudflare deploy install.
 
 on:
   push:
     branches: [main]
     paths:
       - "src/content/essays/**"
-  # Daily, so the map picks up essays that go live by their scheduled date
-  # (a date passing isn't a push). Only commits when the map actually changes.
+  # A date passing isn't a push, so scheduled essays need the cron.
   schedule:
     - cron: "0 12 * * *"
   workflow_dispatch:
@@ -39,7 +36,6 @@ jobs:
 
       - run: npm ci
 
-      # Model lives only on the runner, never in package.json / the deploy.
       - run: npm install --no-save @huggingface/transformers
 
       - run: npm run related

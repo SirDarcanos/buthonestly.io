@@ -1,10 +1,7 @@
 name: Publish scheduled essays
 
-# Future-dated essays are committed ahead of time and only render in a build
-# that runs on/after their date. This checks hourly and rebuilds ONLY when an
-# essay has come due but is still 404 — so builds stay rare (not a daily churn)
-# while scheduled essays go live within the hour of their timestamp. See
-# scripts/publish-scheduled.mjs. The newsletter cron (13:00 UTC) then emails it.
+# Rebuilds only when a scheduled essay has come due but is still 404, so builds
+# stay rare while going live within the hour. See scripts/publish-scheduled.mjs.
 
 on:
   schedule:

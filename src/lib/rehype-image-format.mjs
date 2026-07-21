@@ -1,12 +1,10 @@
-// Tag local Markdown <img>s with `format: "avif"` so Astro's built-in image
-// optimization emits AVIF. Runs before @astrojs/markdown-remark's rehypeImages
-// (which serializes <img> props into its getImage() call). Remote images are
-// left untouched; responsive srcset/sizes come from image.layout in the config;
-// covers are handled by Picture.astro.
-//
-// GIFs and SVGs are skipped: re-encoding an animated GIF to AVIF drops the
-// animation (and Astro's service passes it through mislabelled as .avif), and
-// rasterizing an SVG throws away its scalability. Both are served as-is.
+// Tag local Markdown <img>s with `format: "avif"` so Astro emits AVIF. Must run
+// before @astrojs/markdown-remark's rehypeImages, which serializes <img> props
+// into its getImage() call.
+
+// Re-encoding an animated GIF to AVIF drops the animation (and Astro's service
+// passes it through mislabelled as .avif); rasterizing an SVG throws away its
+// scalability. Both are served as-is.
 const SKIP_FORMAT_RE = /\.(gif|svg)$/i;
 
 export default function rehypeImageFormat() {

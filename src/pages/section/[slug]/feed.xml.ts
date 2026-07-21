@@ -5,8 +5,6 @@ import { getAllPosts, getCategories } from "../../../lib/essays";
 import { SITE_TITLE } from "../../../consts.ts";
 import { taxDescription } from "../../../taxonomies.ts";
 
-// Per-section feed at /section/<slug>/feed.xml, for subscribers who want one
-// part of the site rather than everything. The whole-site feed is /feed.xml.
 export const getStaticPaths = (async () => {
   const categories = await getCategories();
   return categories.map((category) => ({

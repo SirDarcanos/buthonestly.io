@@ -43,8 +43,7 @@ async function main() {
   const { slug, file } = await resolveEssay(positional[0]);
   const mp3Path = path.join(path.dirname(file), `${slug}.mp3`);
 
-  // Commit only uploads the MP3 a prior preview generated — it never
-  // re-synthesizes (that's the whole point of the preview/commit split).
+  // Commit only uploads the MP3 a prior preview generated — never re-synthesizes.
   if (flags.commit) {
     if (!(await exists(mp3Path)))
       die(
@@ -57,7 +56,6 @@ async function main() {
 
   const raw = await readFile(file, "utf8");
 
-  // Voice/style/pace: CLI flag > essay `audio*` frontmatter > default.
   const fm = essayAudioConfig(raw);
   const voice = flags.voice ?? fm.voice ?? DEFAULT_VOICE;
   const style = flags.style ?? fm.style ?? DEFAULT_STYLE;
@@ -67,7 +65,6 @@ async function main() {
   if (!listPaces().includes(pace))
     die(`Unknown pace "${pace}". One of: ${listPaces().join(", ")}`);
 
-  // 1. Markdown → narratable text → chunks.
   const text = essayToText(raw);
   if (!text.trim()) die(`No narratable text found in ${file}.`);
   const chunks = chunkText(text, budget);
@@ -75,7 +72,6 @@ async function main() {
     `${slug}: ${chunks.length} chunk(s), voice ${voice}, ${style}/${pace}.`,
   );
 
-  // 2. Synthesize each chunk.
   const tts = new GeminiTTS(await loadServiceAccount(), {
     region: process.env.VERTEX_REGION,
     model: process.env.VERTEX_MODEL,
@@ -87,13 +83,11 @@ async function main() {
     process.stdout.write(" ok\n");
   }
 
-  // 3. Assemble → git-ignored MP3 beside the essay.
   const pcm = concatPcm(pcms, silenceMs);
   await pcmToMp3(pcm, mp3Path);
   const dur = pcmDurationSeconds(pcm);
   console.log(`Wrote ${mp3Path} (${fmtDuration(dur)}).`);
 
-  // 4. Embed (idempotent) so it plays in Obsidian.
   await insertAudioTag(file, slug);
   console.log(`Embedded ![[${slug}.mp3]] — plays inline in Obsidian.`);
   console.log(`Preview done. Listen, then run --commit to upload to R2.`);
@@ -123,8 +117,6 @@ async function loadServiceAccount() {
     die(`Could not parse service account JSON at ${p}: ${e.message}`);
   }
 }
-
-// --- R2 ---------------------------------------------------------------------
 
 // The STATIC bucket name lives only in the git-ignored wrangler.toml (kept out
 // of the repo), so read it from there rather than hard-coding it.
@@ -175,16 +167,13 @@ async function uploadToR2(bucket, key, filePath) {
   });
 }
 
-// --- essay wiring -----------------------------------------------------------
-
 async function insertAudioTag(file, slug) {
   let raw = await readFile(file, "utf8");
   const block = [AUDIO_START, "", `![[${slug}.mp3]]`, "", AUDIO_END].join("\n");
   const esc = escapeRe(slug);
 
-  // Strip any existing embed for this essay so a re-run replaces rather than
-  // duplicates: the marked block, a bare ![[..]] (an editor may drop the
-  // comment markers), or an old <audio> tag. Then insert exactly one, below.
+  // Strip any existing embed so a re-run replaces rather than duplicates —
+  // including a bare ![[..]], since an editor may drop the comment markers.
   raw = raw
     .replace(
       new RegExp(
@@ -216,8 +205,6 @@ async function insertAudioTag(file, slug) {
   await writeFile(file, `${before}\n${block}\n\n${after}`);
 }
 
-// --- helpers ----------------------------------------------------------------
-
 function parseArgs(argv) {
   const positional = [];
   const flags = {};
@@ -230,8 +217,7 @@ function parseArgs(argv) {
   return { positional, flags };
 }
 
-// Minimal .env loader (no dotenv dependency): KEY=VALUE lines, existing
-// process.env wins, ignores comments and blank lines.
+// Minimal .env loader, to avoid a dotenv dependency. Existing process.env wins.
 function loadDotEnv() {
   let text;
   try {

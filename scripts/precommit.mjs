@@ -23,7 +23,6 @@ const staged = git("diff", "--cached", "--name-only", "--diff-filter=ACMR")
   .map((s) => s.trim())
   .filter(Boolean);
 
-// 1. Optimize staged essay images (resize/recompress/convert; block on non-16:9).
 const imgs = staged.filter(
   (f) => f.startsWith("src/content/") && IMAGE_RE.test(f) && existsSync(f),
 );
@@ -46,7 +45,6 @@ if (imgs.length) {
   add("data/images-optimized.json");
 }
 
-// 2. Format staged code (Prettier skips ignored paths like data/ and content).
 const code = staged.filter((f) => CODE_RE.test(f) && existsSync(f));
 if (code.length) {
   node("node_modules/prettier/bin/prettier.cjs", "--write", ...code);

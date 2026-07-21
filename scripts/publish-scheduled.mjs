@@ -1,12 +1,6 @@
 // Rebuild the site only when a scheduled essay has come due but isn't live yet.
-//
-// Future-dated essays are committed ahead of time; getPublishedEssays keeps
-// `date <= now`, so they only appear in a build that runs on/after their date.
-// Rather than rebuild on a blind daily cron, this checks hourly and POSTs the
-// Cloudflare Pages deploy hook ONLY when an essay whose date has passed still
-// returns 404 — so builds happen ~3×/year (when something's actually due), not
-// daily, and each scheduled essay goes live within the hour of its timestamp.
-// Self-healing: a skipped cron run is caught by the next one.
+// Run hourly: POSTing the deploy hook only on a due-but-404 essay keeps builds
+// to ~3×/year instead of a daily blind rebuild, and a skipped run self-heals.
 //
 // Env: CF_DEPLOY_HOOK_URL (required), SITE_URL (default https://buthonestly.io).
 
@@ -47,7 +41,7 @@ for (const slug of await readdir(ROOT)) {
     continue; // not an essay dir (no <slug>/<slug>.md)
   }
   const date = frontmatterDate(md);
-  if (!date || date > now) continue; // unpublished or not yet due
+  if (!date || date > now) continue;
   const res = await fetch(`${SITE}/${slug}/`, { method: "HEAD" });
   if (res.status === 404) dueButMissing.push(slug);
 }

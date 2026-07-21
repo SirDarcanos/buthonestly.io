@@ -145,7 +145,6 @@ const INTERNAL_REDIRECTS = [
 
 const SECTIONS = ["leadership", "observations", "programming", "web"];
 
-/** Old bare category URLs → the new /section/<slug>/ archives. */
 const SECTION_REDIRECTS = SECTIONS.map((s) => [`/${s}/`, `/section/${s}/`]);
 
 /**
@@ -167,10 +166,7 @@ const RENAMED_SLUG_REDIRECTS = RENAMED_SLUGS.flatMap(([from, to]) => [
   ...SECTIONS.map((s) => [`/${s}/${from}/`, `/${to}/`]),
 ]);
 
-/**
- * WordPress pagination → Astro's `/<n>/`. Covers the classic `/page/<n>/`
- * permalink on both the current archives and the old bare category prefixes.
- */
+/** WordPress's `/page/<n>/` permalink → Astro's `/<n>/`. */
 const PAGINATION_REDIRECTS = [
   ["/section/:slug/page/:n/", "/section/:slug/:n/"],
   ["/topic/:slug/page/:n/", "/topic/:slug/:n/"],
@@ -178,14 +174,11 @@ const PAGINATION_REDIRECTS = [
 ];
 
 /**
- * WordPress exposed a feed per category and per tag. Category feeds map onto
- * the per-section feeds at /section/<slug>/feed.xml; there are no per-topic
- * feeds, so tag feeds fall back to the whole-site one.
+ * There are no per-topic feeds, so tag feeds fall back to the whole-site one.
  *
  * Must precede ESSAY_SUBPAGE_REDIRECTS: its `/:slug/feed/` rule matches
  * `/programming/feed/` with slug="programming" and lands a feed reader on an
- * HTML archive page, whose XML parser then fails. Real breakage — a GitHub
- * Action polling /programming/feed/ was erroring on exactly this.
+ * HTML archive page, whose XML parser then fails.
  */
 const ARCHIVE_FEED_REDIRECTS = [
   ...SECTIONS.map((s) => [`/${s}/feed/`, `/section/${s}/feed.xml`]),
@@ -196,9 +189,8 @@ const ARCHIVE_FEED_REDIRECTS = [
 ];
 
 /**
- * Per-essay WordPress sub-pages that no longer exist — the feed every post used
- * to expose, and paginated comments (this site has no comments) — back to the
- * essay itself. Section-prefixed first, then the flat form.
+ * Per-essay WordPress sub-pages that no longer exist — the per-post feed and
+ * paginated comments — back to the essay itself.
  */
 const ESSAY_SUBPAGE_REDIRECTS = [
   ...SECTIONS.flatMap((s) => [
@@ -212,11 +204,9 @@ const ESSAY_SUBPAGE_REDIRECTS = [
 /**
  * Any essay under any legacy category prefix → its flat slug.
  *
- * POST_REDIRECTS freezes the exact WordPress paths, but only one per essay, and
- * posts were recategorised over the years — Search Console shows real traffic on
- * `/web/choosing-what-to-play/` for an essay now filed under Observations, which
- * 404'd. These four placeholder rules cover every prefix × slug combination, so
- * a recategorised post can't strand an indexed URL again.
+ * POST_REDIRECTS freezes only one WordPress path per essay, but posts were
+ * recategorised over the years, stranding indexed URLs like
+ * `/web/choosing-what-to-play/` for an essay now filed under Observations.
  *
  * Safe as a catch-all: no current route starts with one of these prefixes (the
  * archives live at /section/<slug>/), and an unknown slug 404s either way.
@@ -264,7 +254,6 @@ const R2_PASSTHROUGH_REDIRECTS = [
  * [from path, to URL] — `to` may be a same-site path or an external URL.
  */
 const LEGACY_REDIRECTS = [
-  // Old WooCommerce tutorials → archive on the personal blog
   [
     "/2014/09/30/create-localized-bookable-products-wpml-woocommerce-bookings/",
     "https://nicolamustone.blog/old-articles-archive/",
@@ -298,7 +287,6 @@ const LEGACY_REDIRECTS = [
     "https://nicolamustone.blog/old-articles-archive/",
   ],
 
-  // Specific tutorials migrated to buthonestly.io
   [
     "/category/wordpress/woocommerce/",
     "https://buthonestly.io/topic/wordpress/",

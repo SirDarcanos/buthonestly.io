@@ -1,12 +1,8 @@
 ---
 import Label from "./Label.astro";
 
-// Custom form posting to Kit (form 9685650). The markup is ours so it matches
-// the palette; submission is AJAX so the visitor stays on the page. Kit sends
-// the confirmation email (double opt-in) after a successful post.
-//
-// `inline` puts the copy and form side by side (used on the wide home page);
-// the default stacks them, which fits the narrow essay reading column.
+// Posts to Kit form 9685650 over AJAX so the visitor stays on the page; Kit
+// then sends the double opt-in confirmation email.
 interface Props {
   inline?: boolean;
 }

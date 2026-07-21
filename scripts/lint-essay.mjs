@@ -1,7 +1,6 @@
 // Style-guide lint for BUT. Honestly essays. Ported from the Cowork
-// lint-draft.py and adapted to this repo: internal links are wikilink-aware
-// (`[[slug]]`), and a "comments" CTA is a FAIL (this site has no comments)
-// rather than the expectation it was in the original guide.
+// lint-draft.py, with internal links made wikilink-aware and a "comments" CTA
+// turned into a FAIL — this site has no comments.
 //
 //   npm run lint:essay                 # all essays + drafts
 //   npm run lint:essay -- <slug|path>  # one essay (essays/ then drafts/)
@@ -16,7 +15,6 @@ import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { ESSAY_ROOTS, exists, die, resolveEssay } from "./lib/fs-util.mjs";
 
-// ── Thresholds (mirror the style guide) ──────────────────────────────────────
 const SENTENCE_HARD_MAX = 28;
 const SENTENCE_SOFT_MAX = 20;
 const PARA_MAX_SENTENCES = 5;
@@ -31,7 +29,6 @@ const SEMICOLON_PER_1K_WARN = 2;
 const HEDGE_PER_500_WARN = 1;
 const BOLD_PER_PARAGRAPH_MAX = 2;
 
-// ── Banned patterns ──────────────────────────────────────────────────────────
 // "ecosystem" is intentionally absent — it's the accurate word for "WordPress
 // ecosystem"; a reviewer can flag misuse by hand.
 const BUZZWORDS =
@@ -46,14 +43,13 @@ const HEDGE_INFLATORS =
 const COMMENT_CTA =
   /\b(in the comments|comment below|leave a comment|drop a comment|share (this )?in the comments)\b/gi;
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
 // Return [body, baseLine] where baseLine is the 1-indexed source line the body
 // starts on — so finding line numbers map back to the original file.
 function stripFrontmatter(text) {
   if (text.startsWith("---")) {
     const end = text.indexOf("\n---", 3);
     if (end > 0) {
-      const nl = text.indexOf("\n", end + 1); // newline after the closing ---
+      const nl = text.indexOf("\n", end + 1);
       const bodyStart = nl === -1 ? text.length : nl + 1;
       const base = text.slice(0, bodyStart).split("\n").length;
       return [text.slice(bodyStart), base];
@@ -74,9 +70,9 @@ function stripProse(text) {
   return text
     .replace(/```[\s\S]*?```/g, blank)
     .replace(/`[^`\n]+`/g, blank)
-    .replace(/!\[\[[^\]]*\]\]/g, blank) // ![[audio.mp3]] embeds
-    .replace(/!\[[^\]]*\]\([^)]*\)/g, blank) // ![alt](url) images
-    .replace(/\[!\w+\]/g, blank); // > [!info] callout markers
+    .replace(/!\[\[[^\]]*\]\]/g, blank)
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, blank)
+    .replace(/\[!\w+\]/g, blank);
 }
 
 const lineOfOffset = (text, off, base = 1) =>
@@ -132,7 +128,6 @@ const visibleText = (s) =>
     .replace(/\[\[([^\]|#]+)[^\]]*\]\]/g, "$1")
     .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1");
 
-// ── Report ───────────────────────────────────────────────────────────────────
 function makeReport(file) {
   return {
     file,
@@ -163,7 +158,6 @@ function makeReport(file) {
   };
 }
 
-// ── Checks ───────────────────────────────────────────────────────────────────
 function checkLength(prose, r) {
   const n = wordsIn(prose);
   r.word_count = n;
@@ -506,7 +500,6 @@ function checkStructure(body, base, r) {
       );
   }
 
-  // Reader CTA: a closing question is the voice; a comments CTA is banned here.
   const comment = [...findPatternHits(body, COMMENT_CTA, base)];
   for (const [line, match, ctx] of comment)
     r.add(
@@ -594,7 +587,6 @@ function lintText(file, raw) {
   return r;
 }
 
-// ── Output ───────────────────────────────────────────────────────────────────
 function formatReport(r, quiet) {
   const order = { FAIL: 0, WARN: 1, OK: 2 };
   const sym = { FAIL: "✗", WARN: "⚠", OK: "✓" };
@@ -633,7 +625,6 @@ function formatReport(r, quiet) {
   return out.join("\n");
 }
 
-// ── Main ─────────────────────────────────────────────────────────────────────
 async function allEssays() {
   const files = [];
   for (const root of ESSAY_ROOTS) {
