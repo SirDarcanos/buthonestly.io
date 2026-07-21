@@ -1,0 +1,76 @@
+name: Ping IndexNow on publish
+
+# Tells Bing/Yandex/Seznam/Naver to recrawl essays that changed, via
+# scripts/ping-indexnow.mjs. Google doesn't participate — it still uses the
+# sitemap. A committed ledger (data/indexnow-pinged.json) maps slug → content
+# hash so unchanged URLs are never resubmitted.
+#
+# Runs on push (immediate) and daily (so future-dated essays get submitted when
+# their date passes). The script HEAD-checks each URL first, so a push that
+# lands before Cloudflare finishes deploying simply defers to the next run.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/content/essays/**"
+  schedule:
+    - cron: "30 13 * * *" # daily, after the newsletter cron at 13:00
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "run, or seed to record current state without submitting"
+        type: string
+        default: "run"
+      dry_run:
+        description: "List what would be submitted without calling IndexNow"
+        type: boolean
+        default: false
+
+# Never let two runs submit at once.
+concurrency:
+  group: indexnow
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # full history so the ledger commit can rebase + push
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      # Give Cloudflare Pages time to deploy the push that triggered this, so
+      # the script's HEAD check sees the new essay rather than skipping it.
+      - name: Wait for deploy
+        if: github.event_name == 'push'
+        run: sleep 180
+
+      - name: Submit changed URLs
+        run: node scripts/ping-indexnow.mjs
+        env:
+          # No key secret: IndexNow keys are public by protocol, so the script
+          # reads public/<key>.txt — the same file the verifier fetches.
+          SITE_URL: ${{ vars.NEWSLETTER_SITE_URL || 'https://buthonestly.io' }}
+          MODE: ${{ github.event.inputs.mode || 'run' }}
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
+
+      - name: Record submissions
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/indexnow-pinged.json
+          if git diff --staged --quiet; then
+            echo "Ledger unchanged."
+          else
+            git commit -m "chore: record IndexNow submissions [skip ci]"
+            git pull --rebase origin main
+            git push
+          fi

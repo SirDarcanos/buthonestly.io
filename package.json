@@ -11,6 +11,7 @@
     "prebuild": "node scripts/generate-redirects.mjs",
     "build": "astro build",
     "related": "node scripts/build-related.mjs",
+    "indexnow": "node scripts/ping-indexnow.mjs",
     "audio": "node scripts/build-audio.mjs",
     "images": "node scripts/optimize-images.mjs",
     "postbuild": "pagefind --site dist",
