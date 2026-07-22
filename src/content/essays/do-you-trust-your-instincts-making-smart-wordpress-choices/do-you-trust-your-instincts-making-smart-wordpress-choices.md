@@ -26,6 +26,8 @@ cover: smart-wordpress-choices.jpg
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
+![[do-you-trust-your-instincts-making-smart-wordpress-choices.mp3]]
+
 Should we trust our instincts and go for the most visually appealing options?
 
 It’s tempting to judge solely based on a sleek design and an enticing feature list.
