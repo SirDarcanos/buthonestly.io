@@ -29,6 +29,8 @@ audioPace: conversational
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
+![[enhancing-wordpress-content-protection-beyond-right-click-blocks.mp3]]
+
 Trying to protect your content by blocking right-clicks? You’re actually locking out your readers, not the thieves.
 
 As a WordPress professional, I’ve seen all kinds of “security” tricks across websites. One, however, always makes me cringe: **blocking right-clicks**.  
@@ -83,7 +85,7 @@ If you want to take that last one further, consider adding a logout link to your
 
 ![Security guard with a flashlight looking into a room over a blue handrail.](security.jpg)
 
-If you really intend to prevent malicious users from copying your content, you can use add this CSS code in **Appearance > Additional CSS** to disable the feature via CSS:
+If you really intend to prevent malicious users from copying your content, you can add CSS code in **Appearance > Additional CSS** to disable the feature:
 
 ```css
 body {

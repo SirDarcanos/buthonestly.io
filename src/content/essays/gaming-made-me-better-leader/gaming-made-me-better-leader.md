@@ -31,6 +31,8 @@ audioPace: conversational
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
+![[gaming-made-me-better-leader.mp3]]
+
 Can playing games actually make you a better leader?
 
 It might sound strange at first. When most people think of leadership, they imagine meetings, strategies, and deadlines, not dice rolls, co-op sessions, or horror chases. Yet over time, I’ve realized that the games I’ve played have shaped how I lead, collaborate, and communicate more than any course or management book ever could.
