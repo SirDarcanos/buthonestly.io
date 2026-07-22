@@ -28,11 +28,7 @@ cover: ai-slop-midas-touch-modern-internet.jpg
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
-<!-- audio:start -->
-
 ![[ai-slop-midas-touch-modern-internet.mp3]]
-
-<!-- audio:end -->
 
 I love Dead by Daylight. If you don’t know what it is, [Dead by Daylight](https://store.steampowered.com/app/381210/Dead_by_Daylight/) (DbD) is an asymmetrical 4v1 multiplayer horror game where one Killer hunts four Survivors trying to escape.
 

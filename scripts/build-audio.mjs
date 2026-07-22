@@ -28,8 +28,6 @@ import {
 import { concatPcm, pcmToMp3, pcmDurationSeconds } from "./lib/assemble.mjs";
 
 const CHUNK_BUDGET_WORDS = 200; // Gemini's per-call sweet spot (vs Kokoro's 60).
-const AUDIO_START = "<!-- audio:start -->";
-const AUDIO_END = "<!-- audio:end -->";
 
 async function main() {
   loadDotEnv();
@@ -169,19 +167,11 @@ async function uploadToR2(bucket, key, filePath) {
 
 async function insertAudioTag(file, slug) {
   let raw = await readFile(file, "utf8");
-  const block = [AUDIO_START, "", `![[${slug}.mp3]]`, "", AUDIO_END].join("\n");
+  const block = `![[${slug}.mp3]]`;
   const esc = escapeRe(slug);
 
-  // Strip any existing embed so a re-run replaces rather than duplicates —
-  // including a bare ![[..]], since an editor may drop the comment markers.
+  // Strip any existing embed so a re-run replaces rather than duplicates.
   raw = raw
-    .replace(
-      new RegExp(
-        `\\n*${escapeRe(AUDIO_START)}[\\s\\S]*?${escapeRe(AUDIO_END)}\\n*`,
-        "g",
-      ),
-      "\n\n",
-    )
     .replace(new RegExp(`\\n*!\\[\\[${esc}\\.mp3\\]\\]\\n*`, "g"), "\n\n")
     .replace(
       new RegExp(

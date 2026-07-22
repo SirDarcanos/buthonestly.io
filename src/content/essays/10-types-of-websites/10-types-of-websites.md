@@ -25,11 +25,7 @@ coverCaption: Photo by <a href="https://unsplash.com/@carzmaiquez?utm_source=uns
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
-<!-- audio:start -->
-
 ![[10-types-of-websites.mp3]]
-
-<!-- audio:end -->
 
 If you gave me a random website to build tomorrow, I’d probably reach for WordPress. Not because it’s always the “best” tool in some abstract way, but because I know it well enough that I can bend it into almost any of the usual WordPress website types: blog, shop, membership, course, whatever. And because, honestly, I’m a bit lazy. If I can ship something solid with tools I already understand, I’ll do that.
 

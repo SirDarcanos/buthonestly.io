@@ -27,11 +27,7 @@ coverCaption: Photo by <a href="https://unsplash.com/@siora18?utm_source=unsplas
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
-<!-- audio:start -->
-
 ![[adhd-planner.mp3]]
-
-<!-- audio:end -->
 
 I used to think I just lacked discipline. Turns out, I was blogging with ADHD.
 

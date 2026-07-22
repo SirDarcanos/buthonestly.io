@@ -29,11 +29,7 @@ audioPace: conversational
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
-<!-- audio:start -->
-
 ![[leading-through-inquiry.mp3]]
-
-<!-- audio:end -->
 
 If you read enough leadership advice, you start to notice a pattern.
 

@@ -24,11 +24,7 @@ coverCaption: Photo by <a href="https://www.pexels.com/@tima-miroshnichenko/">Ti
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
-<!-- audio:start -->
-
 ![[team-building-activities-for-work.mp3]]
-
-<!-- audio:end -->
 
 Upskilling doesn’t always need a workshop; sometimes it starts with funny team building activities that are quietly useful.
 
