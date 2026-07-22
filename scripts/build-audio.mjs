@@ -67,7 +67,7 @@ async function main() {
   if (!text.trim()) die(`No narratable text found in ${file}.`);
   const chunks = chunkText(text, budget);
   console.log(
-    `${slug}: ${chunks.length} chunk(s), voice ${voice}, ${style}/${pace}.`,
+    `Generating: ${chunks.length} chunk(s), voice ${voice}, ${style}/${pace}.`,
   );
 
   const tts = new GeminiTTS(await loadServiceAccount(), {
@@ -94,9 +94,7 @@ async function main() {
 async function commitToR2(slug, mp3Path) {
   const bucket = await staticBucketName();
   await uploadToR2(bucket, `audio/${slug}.mp3`, mp3Path);
-  console.log(
-    `Uploaded to R2: ${bucket}/audio/${slug}.mp3 — serves at https://static.buthonestly.io/audio/${slug}.mp3`,
-  );
+  console.log(`Uploaded to R2: ${bucket}/audio/${slug}.mp3`);
 }
 
 async function loadServiceAccount() {
