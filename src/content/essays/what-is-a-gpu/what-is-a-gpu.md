@@ -16,6 +16,9 @@ cover: gigabyte-gpu.jpg
 coverAlt: The inside of a gaming PC lit in red and blue, with a Gigabyte graphics card mounted above the motherboard.
 coverCaption: Photo by <a href="https://unsplash.com/@rapol?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Rafael Pol</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
 downloads:
+audioVoice: Enceladus
+audioStyle: reflective
+audioPace: conversational
 ---
 
 > [!summary]- Quick Summary

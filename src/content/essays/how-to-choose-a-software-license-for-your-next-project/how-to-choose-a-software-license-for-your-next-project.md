@@ -13,6 +13,9 @@ tags:
 coverAlt: A public sculpture of red and grey blocks arranged to spell ‘MIT’ outside a concrete building.
 cover: mit-software-license.jpg
 coverCaption: Photo by <a href="https://unsplash.com/@hdbernd?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Bernd Dittrich</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+audioVoice: Enceladus
+audioStyle: reflective
+audioPace: conversational
 ---
 
 > [!summary]- Quick Summary

@@ -17,6 +17,9 @@ downloads:
     label: Time Off Handover Plan
 cover: pto-leader.jpg
 coverCaption: Photo by <a href="https://unsplash.com/@chenhanozel?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Chen Mizrach</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+audioVoice: Enceladus
+audioStyle: reflective
+audioPace: conversational
 ---
 
 > [!summary]- Quick Summary

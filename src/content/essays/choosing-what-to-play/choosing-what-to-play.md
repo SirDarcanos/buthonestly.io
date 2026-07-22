@@ -14,6 +14,9 @@ tags:
   - Workflow
 coverAlt: A dark gaming desk lit in blue and purple neon, with a diamond ‘Game Zone’ sign, a monitor, and a hand on a backlit keyboard.
 cover: choosing-what-to-play.jpg
+audioVoice: Enceladus
+audioStyle: reflective
+audioPace: conversational
 ---
 
 > [!summary]- Quick Summary

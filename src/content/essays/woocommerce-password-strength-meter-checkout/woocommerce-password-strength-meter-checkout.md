@@ -13,6 +13,9 @@ tags:
   - WordPress
 coverAlt: Two young children play tug-of-war on a grassy field at sunset; the child in front wears a leather aviator cap.
 cover: password-strength.jpg
+audioVoice: Enceladus
+audioStyle: reflective
+audioPace: conversational
 ---
 
 > [!summary]- Quick Summary

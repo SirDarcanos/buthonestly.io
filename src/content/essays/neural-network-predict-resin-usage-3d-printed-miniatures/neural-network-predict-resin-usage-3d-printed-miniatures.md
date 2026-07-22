@@ -19,6 +19,9 @@ downloads:
     label: 3D-print cost calculator models
 cover: 3d-printing-cost-calculator-dense-network.jpg
 coverCaption:
+audioVoice: Enceladus
+audioStyle: reflective
+audioPace: conversational
 ---
 
 > [!summary]- Quick Summary

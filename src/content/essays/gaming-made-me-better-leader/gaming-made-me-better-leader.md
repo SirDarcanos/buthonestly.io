@@ -15,6 +15,9 @@ tags:
 coverAlt: A smiling woman celebrates at a computer while gaming with two teammates in an internet cafe with red and blue lights.
 coverCaption:
 cover: gaming-and-leadership.jpg
+audioVoice: Enceladus
+audioStyle: reflective
+audioPace: conversational
 ---
 
 > [!summary]- Quick Summary

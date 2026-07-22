@@ -15,6 +15,9 @@ tags:
 coverAlt: Two hands hold a colorful amusement park ticket reading "ADMIT ONE" and "FUN PASS AMUSEMENT PARK" against a dark background.
 coverCaption: Photo by Antoni Shkraba Studio on <a href="https://www.pexels.com/">Pexels.com</a>
 cover: delete-expired-coupons.jpg
+audioVoice: Enceladus
+audioStyle: reflective
+audioPace: conversational
 ---
 
 > [!summary]- Quick Summary

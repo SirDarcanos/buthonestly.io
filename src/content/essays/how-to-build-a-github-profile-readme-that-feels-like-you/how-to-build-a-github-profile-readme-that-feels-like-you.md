@@ -13,6 +13,9 @@ tags:
   - Workflow
 coverAlt: A screenshot of Nicola Mustone’s GitHub profile with a custom README reading ‘Hi, I’m Nico — Leader. Writer. Builder.’ and a grid of technology badges.
 cover: custom-github-profile.jpg
+audioVoice: Enceladus
+audioStyle: reflective
+audioPace: conversational
 ---
 
 > [!summary]- Quick Summary

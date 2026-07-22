@@ -14,6 +14,9 @@ tags:
 coverAlt: A bunch of pink and orange smiley-face balloons — some smiling, some frowning — against a blue sky.
 cover: effective-feedback.jpg
 coverCaption: Photo by <a href="https://unsplash.com/@artbyhybrid?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Madison Oren</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+audioVoice: Enceladus
+audioStyle: reflective
+audioPace: conversational
 ---
 
 > [!summary]- Quick Summary

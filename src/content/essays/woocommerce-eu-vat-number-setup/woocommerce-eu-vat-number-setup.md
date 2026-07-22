@@ -16,6 +16,9 @@ downloads:
   - file: eu-vat-rates.csv
     label: EU VAT rates (CSV)
 cover: woocommerce-vat-tax.jpg
+audioVoice: Enceladus
+audioStyle: reflective
+audioPace: conversational
 ---
 
 > [!summary]- Quick Summary

@@ -13,6 +13,9 @@ tags:
 cover: buildings-never-were.jpg
 coverAlt: "A car drives down a foggy forest road at dusk toward a weathered ‘Welcome to Raccoon City, Home of Umbrella’ sign."
 coverCaption: Image by Capcom
+audioVoice: Enceladus
+audioStyle: reflective
+audioPace: conversational
 ---
 
 > [!summary]- Quick Summary

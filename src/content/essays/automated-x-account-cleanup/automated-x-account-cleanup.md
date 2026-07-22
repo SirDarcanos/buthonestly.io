@@ -13,6 +13,9 @@ tags:
   - Productivity
 coverAlt: A dense 3D pile of blue verified-checkmark badges, one glowing brightly at the centre.
 cover: automated-x-account-cleanup.jpg
+audioVoice: Enceladus
+audioStyle: reflective
+audioPace: conversational
 ---
 
 > [!summary]- Quick Summary

@@ -15,6 +15,9 @@ tags:
 coverAlt: Close-up of chrysanthemum petals glowing in rainbow colours against a dark background.
 cover: adhd-planner.jpg
 coverCaption: Photo by <a href="https://unsplash.com/@siora18?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Siora Photography</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+audioVoice: Enceladus
+audioStyle: reflective
+audioPace: conversational
 ---
 
 > [!summary]- Quick Summary

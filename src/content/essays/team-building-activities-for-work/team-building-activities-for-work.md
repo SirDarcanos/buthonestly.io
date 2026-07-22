@@ -14,6 +14,9 @@ tags:
 cover: team-building-activities-for-work.jpeg
 coverAlt: "Two people in racing suits and helmets driving go-karts around an outdoor track lined with tyre barriers."
 coverCaption: Photo by <a href="https://www.pexels.com/@tima-miroshnichenko/">Tima Miroshnichenko</a> on <a href="https://www.pexels.com/">Pexels.com</a>
+audioVoice: Enceladus
+audioStyle: reflective
+audioPace: conversational
 ---
 
 > [!summary]- Quick Summary

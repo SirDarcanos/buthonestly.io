@@ -15,6 +15,9 @@ cover: database-servers.jpg
 coverAlt: A person crouches with a laptop in a dark data-centre aisle lit by blue light, between rows of server racks.
 coverCaption:
 downloads:
+audioVoice: Enceladus
+audioStyle: reflective
+audioPace: conversational
 ---
 
 > [!summary]- Quick Summary

@@ -14,6 +14,9 @@ tags:
 coverAlt: A close-up of woman using a computer keyboard and a mouse.
 coverCaption:
 cover: wordpress-security.jpg
+audioVoice: Enceladus
+audioStyle: reflective
+audioPace: conversational
 ---
 
 > [!summary]- Quick Summary

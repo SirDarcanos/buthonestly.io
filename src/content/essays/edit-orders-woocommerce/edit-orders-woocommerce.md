@@ -12,6 +12,9 @@ tags:
   - Workflow
 coverAlt: A shop worker in a green shirt and bandana leans over a counter to tap an order into a colourful point-of-sale tablet.
 cover: edit-orders-woocommerce.jpg
+audioVoice: Enceladus
+audioStyle: reflective
+audioPace: conversational
 ---
 
 > [!summary]- Quick Summary

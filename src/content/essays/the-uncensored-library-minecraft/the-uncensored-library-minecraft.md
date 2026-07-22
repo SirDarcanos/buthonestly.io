@@ -16,6 +16,9 @@ cover: uncensored-library-minecraft.jpg
 coverAlt: Aerial view of a vast Minecraft palace and formal gardens covering a forested island.
 coverCaption:
 downloads:
+audioVoice: Enceladus
+audioStyle: reflective
+audioPace: conversational
 ---
 
 > [!summary]- Quick Summary

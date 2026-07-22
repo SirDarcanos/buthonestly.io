@@ -14,6 +14,9 @@ tags:
 coverAlt: An open laptop on a wooden desk showing a website-design mockup that reads ‘Build your dream website,’ beside a black coffee mug.
 cover: 10-types-of-websites.jpg
 coverCaption: Photo by <a href="https://unsplash.com/@carzmaiquez?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Carriza Maiquez</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+audioVoice: Enceladus
+audioStyle: reflective
+audioPace: conversational
 ---
 
 > [!summary]- Quick Summary

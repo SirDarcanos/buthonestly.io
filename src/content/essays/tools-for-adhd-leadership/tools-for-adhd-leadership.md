@@ -18,6 +18,9 @@ downloads:
   - file: quill-meetings-templates.zip
     label: Quill meeting templates
 cover: adhd-tools.jpg
+audioVoice: Enceladus
+audioStyle: reflective
+audioPace: conversational
 ---
 
 > [!summary]- Quick Summary

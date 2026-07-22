@@ -13,6 +13,9 @@ tags:
   - Workflow
 coverAlt: The Docker whale logo above the orange TensorFlow logo on a white background.
 cover: docker-tensorflow-jupyter.jpg
+audioVoice: Enceladus
+audioStyle: reflective
+audioPace: conversational
 ---
 
 > [!summary]- Quick Summary

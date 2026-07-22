@@ -14,6 +14,9 @@ tags:
 coverAlt: Three folded pairs of blue jeans in different washes arranged against a white background.
 coverCaption: Photo by <a href="https://www.pexels.com/@micaasato/">Mica Asato</a> on <a href="https://www.pexels.com/">Pexels.com</a>
 cover: woocommerce-product-attributes.jpg
+audioVoice: Enceladus
+audioStyle: reflective
+audioPace: conversational
 ---
 
 > [!summary]- Quick Summary

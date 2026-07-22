@@ -19,6 +19,9 @@ downloads:
     label: Steam reviews dataset + notebook
 cover: dead-by-daylight.jpg
 coverCaption: Image by Behaviour Interactive
+audioVoice: Enceladus
+audioStyle: reflective
+audioPace: conversational
 ---
 
 > [!summary]- Quick Summary

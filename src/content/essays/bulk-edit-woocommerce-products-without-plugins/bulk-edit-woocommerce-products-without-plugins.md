@@ -14,6 +14,9 @@ tags:
 coverAlt: A towering, colourful wall of stacked beverage crates full of bottles.
 coverCaption: Photo by <a href="https://www.pexels.com/@pixabay/">Pixabay</a> on <a href="https://www.pexels.com/">Pexels.com</a>
 cover: bulk-edit-woocommerce-products-without-plugins.jpg
+audioVoice: Enceladus
+audioStyle: reflective
+audioPace: conversational
 ---
 
 > [!summary]- Quick Summary

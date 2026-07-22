@@ -18,6 +18,9 @@ downloads:
     label: CNN + MNIST notebook
 cover: building-convolutional-neural-network-python-tensorflow.jpg
 coverCaption: Photo by <a href="https://unsplash.com/@luisjlara343?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Luis Lara</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+audioVoice: Enceladus
+audioStyle: reflective
+audioPace: conversational
 ---
 
 > [!summary]- Quick Summary

@@ -13,6 +13,9 @@ tags:
 coverAlt: Close-up of overlapping brown leather belts with visible stitching and a brass buckle.
 coverCaption:
 cover: woocommerce-attributes-variations.jpg
+audioVoice: Enceladus
+audioStyle: reflective
+audioPace: conversational
 ---
 
 > [!summary]- Quick Summary

@@ -14,6 +14,9 @@ tags:
 coverAlt: Overhead view of a person typing on a laptop at a wooden desk filled with notebooks, stationery, and office supplies.
 coverCaption:
 cover: writing-markdown.jpg
+audioVoice: Enceladus
+audioStyle: reflective
+audioPace: conversational
 ---
 
 > [!summary]- Quick Summary

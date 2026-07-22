@@ -14,6 +14,9 @@ tags:
 coverAlt: A festive holiday table setting featuring plates of cookies, cinnamon rolls, a glass teapot, and warm string lights in the background.
 coverCaption:
 cover: smart-wordpress-choices.jpg
+audioVoice: Enceladus
+audioStyle: reflective
+audioPace: conversational
 ---
 
 > [!summary]- Quick Summary

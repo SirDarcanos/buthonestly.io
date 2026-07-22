@@ -14,6 +14,9 @@ tags:
 coverAlt: "A row of gadgets laid out on a white surface: Sony headphones, a phone battery, phone cases, and a Fujifilm camera."
 coverCaption: Photo by <a href="https://unsplash.com/@teenagerinro?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Ady TeenagerInRO</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
 cover: woocommerce-related-products-recommendations.jpeg
+audioVoice: Enceladus
+audioStyle: reflective
+audioPace: conversational
 ---
 
 > [!summary]- Quick Summary

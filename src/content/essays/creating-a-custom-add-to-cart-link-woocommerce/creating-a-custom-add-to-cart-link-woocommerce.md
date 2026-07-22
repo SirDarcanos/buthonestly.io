@@ -15,6 +15,9 @@ tags:
 coverAlt: Overhead view of hands holding a phone showing an online-store app and a credit card, over a wooden desk with a laptop and coffee.
 cover: creating-a-custom-add-to-cart-link-woocommerce.jpg
 coverCaption:
+audioVoice: Enceladus
+audioStyle: reflective
+audioPace: conversational
 ---
 
 > [!summary]- Quick Summary

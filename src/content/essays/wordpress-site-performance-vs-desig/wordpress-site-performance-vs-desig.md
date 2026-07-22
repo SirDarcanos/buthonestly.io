@@ -12,6 +12,9 @@ tags:
   - Performance
 coverAlt: A white and blue high-speed train rushing forward with motion blur streaking past.
 cover: wordpress-performance.jpg
+audioVoice: Enceladus
+audioStyle: reflective
+audioPace: conversational
 ---
 
 > [!summary]- Quick Summary
