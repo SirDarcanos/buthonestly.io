@@ -5,21 +5,21 @@
     "wordpress-blocks-telex",
     "bulk-edit-woocommerce-products-without-plugins",
     "woocommerce-cli-product-management",
-    "creating-a-custom-add-to-cart-link-woocommerce"
+    "woocommerce-attributes-vs-variations"
   ],
   "adhd-planner": [
     "when-ai-stops-being-a-tool",
     "tools-for-adhd-leadership",
     "choosing-what-to-play",
-    "write-in-markdown",
     "vibe-writing-line-between-human-machine",
+    "write-in-markdown",
     "10-types-of-websites"
   ],
   "ai-slop-midas-touch-modern-internet": [
     "distilroberta-emotion-analysis-nlp-case-study",
     "vibe-writing-line-between-human-machine",
-    "limits-of-machine-learning",
     "choosing-what-to-play",
+    "limits-of-machine-learning",
     "what-is-vibe-coding-how-to-do-it",
     "when-ai-stops-being-a-tool"
   ],
@@ -101,7 +101,7 @@
     "top-5-essential-wordpress-plugins-i-always-install-and-why",
     "wordpress-blocks-telex",
     "vibe-writing-line-between-human-machine",
-    "bulk-edit-woocommerce-products-without-plugins"
+    "enhancing-wordpress-content-protection-beyond-right-click-blocks"
   ],
   "edit-orders-woocommerce": [
     "bulk-edit-woocommerce-products-without-plugins",
@@ -141,7 +141,7 @@
     "what-is-vibe-coding-how-to-do-it",
     "how-to-build-a-github-profile-readme-that-feels-like-you",
     "10-types-of-websites",
-    "wordpress-blocks-telex"
+    "what-is-a-web-developer"
   ],
   "improve-woocommerce-related-products-recommendations": [
     "make-product-attributes-linkable-woocommerce",
@@ -225,8 +225,8 @@
   ],
   "tools-for-adhd-leadership": [
     "when-ai-stops-being-a-tool",
-    "choosing-what-to-play",
     "adhd-planner",
+    "choosing-what-to-play",
     "ai-slop-midas-touch-modern-internet",
     "wordpress-blocks-telex",
     "learning-care-without-feeling"
@@ -245,15 +245,15 @@
     "ai-slop-midas-touch-modern-internet",
     "write-in-markdown",
     "wordpress-blocks-telex",
-    "what-is-a-web-developer"
+    "adhd-planner"
   ],
   "what-is-a-web-developer": [
     "vibe-writing-line-between-human-machine",
     "when-ai-stops-being-a-tool",
     "what-is-vibe-coding-how-to-do-it",
     "wordpress-blocks-telex",
-    "ai-slop-midas-touch-modern-internet",
-    "write-in-markdown"
+    "write-in-markdown",
+    "choosing-what-to-play"
   ],
   "what-is-vibe-coding-how-to-do-it": [
     "vibe-writing-line-between-human-machine",
@@ -316,8 +316,8 @@
     "do-you-trust-your-instincts-making-smart-wordpress-choices",
     "write-in-markdown",
     "top-5-essential-wordpress-plugins-i-always-install-and-why",
-    "limits-of-machine-learning",
-    "10-types-of-websites"
+    "10-types-of-websites",
+    "limits-of-machine-learning"
   ],
   "write-in-markdown": [
     "vibe-writing-line-between-human-machine",
@@ -325,6 +325,6 @@
     "10-types-of-websites",
     "do-you-trust-your-instincts-making-smart-wordpress-choices",
     "when-ai-stops-being-a-tool",
-    "what-is-a-web-developer"
+    "ai-slop-midas-touch-modern-internet"
   ]
 }
