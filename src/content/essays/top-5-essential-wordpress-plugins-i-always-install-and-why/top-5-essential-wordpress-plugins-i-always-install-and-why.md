@@ -31,6 +31,8 @@ audioPace: conversational
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
+![[top-5-essential-wordpress-plugins-i-always-install-and-why.mp3]]
+
 Whenever I set up a new WordPress site, whether it’s a small personal blog or a larger project, there are a few plugins that always make it onto my list.
 
 WordPress owes much of its flexibility to plugins, but that also makes it easy to overload a site with too many tools doing the same thing.

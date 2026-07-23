@@ -30,6 +30,8 @@ audioPace: conversational
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
+![[mastering-effective-feedback-facts-feelings-curiosity.mp3]]
+
 Feedback is one of the hardest things to get right. It is uncomfortable, easy to misunderstand, and often takes courage from both sides. But when it is done well, it becomes one of the strongest drivers of growth for individuals, teams, and entire organizations.
 
 Over the years, I have come to see effective feedback as a skill that sits at the heart of good leadership. I’ve learned that effective feedback isn’t about judging or correcting someone. It’s about creating a space for honesty and curiosity, where both sides can learn something. It starts with facts, acknowledges feelings, and invites understanding before assuming.

@@ -32,6 +32,8 @@ audioPace: conversational
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
+![[psychological-safety-in-teams-people-first-leadership.mp3]]
+
 What makes people feel safe enough to speak up, disagree, or simply be themselves at work?
 
 It is easy to say, “We want an open culture,” but psychological safety does not come from slogans or handbooks. It grows through consistent behavior, especially from those who lead.

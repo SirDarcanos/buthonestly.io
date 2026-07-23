@@ -33,6 +33,8 @@ audioPace: conversational
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
+![[time-off-for-leaders.mp3]]
+
 How hard is time off for leaders, really?
 
 I keep meeting leads who quietly assume the answer is “not really.”

@@ -32,6 +32,8 @@ audioPace: conversational
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
+![[vibe-writing-line-between-human-machine.mp3]]
+
 Why is _vibe writing_ still controversial when _vibe coding_ is already becoming normal?
 
 Earlier this month, I wrote about [[what-is-vibe-coding-how-to-do-it|vibe coding]], the idea of building software by describing how it should _feel_ rather than how it should work. The concept is spreading fast: developers are experimenting with it, companies are hiring people around it, and tools are being built for it.

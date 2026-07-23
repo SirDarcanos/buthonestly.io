@@ -32,7 +32,7 @@ audioPace: conversational
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
-
+![[tools-for-adhd-leadership.mp3]]
 
 I’ve been leading with ADHD for years without realizing it. I just thought I was bad at the simple stuff.
 

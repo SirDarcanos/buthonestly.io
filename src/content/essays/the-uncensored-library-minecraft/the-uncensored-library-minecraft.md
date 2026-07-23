@@ -30,6 +30,8 @@ audioPace: conversational
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
+![[the-uncensored-library-minecraft.mp3]]
+
 Freedom of speech survives in unexpected places because the web is no longer neutral.
 
 For a long time, we treated the internet as if it were a level playing field. Publish something online and, in theory, anyone could reach it. Speech traveled as packets. Distribution felt automatic. Censorship looked like a legal problem, not a technical one.

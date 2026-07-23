@@ -28,6 +28,8 @@ audioPace: conversational
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
+![[learning-care-without-feeling.mp3]]
+
 What happens when caring isn’t natural, but still necessary?
 
 There are days when I know I should care — about a project, a person, a conversation — and yet nothing moves. The switch stays off. I can see what needs to be done, and I understand why it matters, but there’s no spark behind it.
