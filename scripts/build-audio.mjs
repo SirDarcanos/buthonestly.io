@@ -26,6 +26,7 @@ import {
   listPaces,
 } from "./lib/gemini-tts.mjs";
 import { concatPcm, pcmToMp3, pcmDurationSeconds } from "./lib/assemble.mjs";
+import { checkPace, formatPaceReport } from "./lib/pace-check.mjs";
 
 const CHUNK_BUDGET_WORDS = 200; // Gemini's per-call sweet spot (vs Kokoro's 60).
 
@@ -85,6 +86,12 @@ async function main() {
   await pcmToMp3(pcm, mp3Path);
   const dur = pcmDurationSeconds(pcm);
   console.log(`Wrote ${mp3Path} (${fmtDuration(dur)}).`);
+  for (const line of formatPaceReport(
+    checkPace(chunks, pcms, silenceMs),
+    chunks.length,
+    fmtDuration,
+  ))
+    console.log(line);
 
   await insertAudioTag(file, slug);
   console.log(`Embedded ![[${slug}.mp3]] — plays inline in Obsidian.`);
@@ -230,6 +237,10 @@ function loadDotEnv() {
   }
 }
 
+// The API reports success for audio that quietly dropped or repeated a clause,
+// and only the speaking rate gives it away. Comparing each chunk against the
+// run's own median points at the minute worth listening to, rather than all of
+// them — an absolute band is no use when voice and pace are configurable.
 function fmtDuration(s) {
   const m = Math.floor(s / 60);
   const sec = Math.round(s % 60);
