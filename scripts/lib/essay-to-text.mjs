@@ -4,9 +4,15 @@ import matter from "gray-matter";
 
 // The AI summary duplicates the article, so it isn't read aloud. Other callouts
 // are unwrapped: their marker line goes, their prose stays.
-const DROP_CALLOUTS = new Set(["summary"]);
+//
+// `screen-only` and `audio-only` mark which medium a passage belongs to — see
+// remark-callouts.mjs, which drops and keeps the opposite pair. Transparent
+// ones keep the text after the marker, since there it is prose, not a title.
+const DROP_CALLOUTS = new Set(["summary", "screen-only", "gallery"]);
+const TRANSPARENT_CALLOUTS = new Set(["audio-only"]);
 
-const CALLOUT_RE = /^\[!(\w+)\][+-]?\s*(.*)$/;
+const CALLOUT_RE = /^\[!([\w-]+)\][+-]?\s*(.*)$/;
+const MARKER_RE = /^\[![\w-]+\][+-]?[ \t]*/;
 
 // "dot IO" is written out so the voice says "dot eye-oh" rather than trying to
 // read a URL.
@@ -41,7 +47,9 @@ export function essayToText(raw) {
       const first = block.find((l) => l.trim() !== "") ?? "";
       const m = first.trim().match(CALLOUT_RE);
       if (m && DROP_CALLOUTS.has(m[1].toLowerCase())) continue;
-      if (m) {
+      if (m && TRANSPARENT_CALLOUTS.has(m[1].toLowerCase())) {
+        out.push("", stripMarker(block).join("\n").trim(), "");
+      } else if (m) {
         out.push("", dropFirstNonEmpty(block).join("\n").trim(), "");
       } else {
         out.push("", `Quote. ${block.join("\n").trim()} End quote.`, "");
@@ -108,6 +116,13 @@ function stripFencedCode(text) {
     out.push(line);
   }
   return out.join("\n");
+}
+
+function stripMarker(block) {
+  const out = [...block];
+  const i = out.findIndex((l) => l.trim() !== "");
+  if (i >= 0) out[i] = out[i].replace(MARKER_RE, "");
+  return out;
 }
 
 function dropFirstNonEmpty(block) {

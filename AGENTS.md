@@ -118,7 +118,17 @@ opposite: git-ignored, uploaded to R2.
 
 - The site has no comments — never add "share in the comments" CTAs.
 - Publishing is date-driven (a future `date` schedules the essay); WIP lives
-  in `src/content/drafts/`, which is not a built collection.
+  in `src/content/drafts/`, which is not a built collection. A scheduled essay
+  still renders on the dev server, so it can be proofread before it lands.
+- `> [!gallery] 2` (or 3, 4) is a grid of the Markdown images inside it —
+  authored as a callout so Obsidian previews it, since a raw `<div>` is hidden
+  by Live Preview and its images would skip the AVIF pipeline. Silent in audio.
+- `> [!screen-only]` and `> [!audio-only]` pick a medium for a passage: the
+  first renders as ordinary prose and is dropped from the narration, the second
+  is omitted from the page and read aloud. Use them where prose leans on an
+  image ("below is a diagram…") and needs different wording to stand alone in
+  the audio. Rewriting one sentence to work in both is usually better than a
+  pair; reach for these only when the two versions genuinely differ.
 
 ## Code style
 
