@@ -25,8 +25,10 @@ export function renderTranscript(slug, chunks, hash) {
     "",
   ].join("\n");
 
+  // Blank lines inside a chunk are the essay's paragraph breaks and reach the
+  // model as written, so only the redundant one after each header is dropped.
   const body = chunks
-    .map((c, i) => `--- chunk ${i + 1} ---\n\n${c.trim()}\n`)
+    .map((c, i) => `--- chunk ${i + 1} ---\n${c.trim()}\n`)
     .join("\n");
 
   return `${header}\n${body}`;
