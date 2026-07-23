@@ -12,8 +12,22 @@ import matter from "gray-matter";
 const DROP_CALLOUTS = new Set(["summary", "screen-only", "gallery"]);
 const TRANSPARENT_CALLOUTS = new Set(["audio-only"]);
 
+// On screen a tinted box shows where these begin and end. A listener gets no
+// such frame, and these are the ones where losing it changes the meaning of
+// what follows — a disclaimer's hedging read as part of the argument, a
+// warning's scope stretched over the next paragraph. Closed like quotes.
+const BRACKETED_CALLOUTS = new Set([
+  "disclaimer",
+  "warning",
+  "caution",
+  "danger",
+  "error",
+]);
+
 const CALLOUT_RE = /^\[!([\w-]+)\][+-]?\s*(.*)$/;
 const MARKER_RE = /^\[![\w-]+\][+-]?[ \t]*/;
+
+const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 
 // "dot IO" is written out so the voice says "dot eye-oh" rather than trying to
 // read a URL.
@@ -51,13 +65,12 @@ export function essayToText(raw) {
       if (m && TRANSPARENT_CALLOUTS.has(m[1].toLowerCase())) {
         out.push("", reflow(stripMarker(block)), "");
       } else if (m) {
-        // A title the author typed is content and gets read as a lead-in; one
-        // the site derives from the type is just the box's label, so it stays
-        // where it is useful — on screen.
-        const title = m[2].trim();
+        const type = m[1].toLowerCase();
+        const title = m[2].trim() || cap(type);
         const body = reflow(dropFirstNonEmpty(block));
         const stop = /[.?!]$/.test(title) ? "" : ".";
-        out.push("", title ? `${title}${stop}\n\n${body}` : body, "");
+        const close = BRACKETED_CALLOUTS.has(type) ? `\n\nEnd ${type}.` : "";
+        out.push("", `${title}${stop}\n\n${body}${close}`, "");
       } else {
         out.push("", `Quote. ${reflow(block)} End quote.`, "");
       }
