@@ -3,7 +3,8 @@
 import matter from "gray-matter";
 
 // The AI summary duplicates the article, so it isn't read aloud. Other callouts
-// are unwrapped: their marker line goes, their prose stays.
+// are unwrapped: the marker goes, the prose stays, and an authored title is
+// read as a lead-in sentence.
 //
 // `screen-only` and `audio-only` mark which medium a passage belongs to — see
 // remark-callouts.mjs, which drops and keeps the opposite pair. Transparent
@@ -50,7 +51,13 @@ export function essayToText(raw) {
       if (m && TRANSPARENT_CALLOUTS.has(m[1].toLowerCase())) {
         out.push("", reflow(stripMarker(block)), "");
       } else if (m) {
-        out.push("", reflow(dropFirstNonEmpty(block)), "");
+        // A title the author typed is content and gets read as a lead-in; one
+        // the site derives from the type is just the box's label, so it stays
+        // where it is useful — on screen.
+        const title = m[2].trim();
+        const body = reflow(dropFirstNonEmpty(block));
+        const stop = /[.?!]$/.test(title) ? "" : ".";
+        out.push("", title ? `${title}${stop}\n\n${body}` : body, "");
       } else {
         out.push("", `Quote. ${reflow(block)} End quote.`, "");
       }
