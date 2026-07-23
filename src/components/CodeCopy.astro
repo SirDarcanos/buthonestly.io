@@ -1,0 +1,59 @@
+---
+// Button styles live in global.css: the DOM is built client-side, so scoped
+// styles can't reach it.
+---
+
+<script>
+  const COPY = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="1.5" /><path d="M5 15V5a1.5 1.5 0 0 1 1.5-1.5H15" /></svg>`;
+  const DONE = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12.5 9.5 18 20 7" /></svg>`;
+
+  function enhance(pre: HTMLPreElement): void {
+    if (pre.dataset.copyable) return;
+    pre.dataset.copyable = "1";
+
+    // The button hangs off a wrapper rather than the <pre>, which scrolls
+    // horizontally — inside it, the button would slide away with the code.
+    const wrap = document.createElement("div");
+    wrap.className = "code-block";
+    pre.parentNode?.insertBefore(wrap, pre);
+    wrap.appendChild(pre);
+
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "code-copy";
+    btn.dataset.track = "Code copied";
+    btn.setAttribute("aria-label", "Copy code");
+    btn.innerHTML = COPY;
+    wrap.appendChild(btn);
+
+    let revert: ReturnType<typeof setTimeout>;
+    btn.addEventListener("click", async () => {
+      const code = pre.querySelector("code") ?? pre;
+      try {
+        await navigator.clipboard.writeText(
+          (code.textContent ?? "").replace(/\n+$/, ""),
+        );
+      } catch {
+        return;
+      }
+      btn.innerHTML = DONE;
+      btn.setAttribute("aria-label", "Copied");
+      clearTimeout(revert);
+      revert = setTimeout(() => {
+        btn.innerHTML = COPY;
+        btn.setAttribute("aria-label", "Copy code");
+      }, 2000);
+    });
+  }
+
+  function init(): void {
+    // Without a secure context there is no clipboard to write to, so no button.
+    if (!navigator.clipboard) return;
+    document
+      .querySelectorAll<HTMLPreElement>("pre.astro-code")
+      .forEach(enhance);
+  }
+
+  init();
+  document.addEventListener("astro:page-load", init);
+</script>

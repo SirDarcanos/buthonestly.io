@@ -201,6 +201,25 @@
     color: var(--color-muted) !important;
   }
 
+  /* Wrapper and button are built in CodeCopy.astro. The <pre> keeps its own
+     margin, so the wrapper stays margin-free. */
+  .code-block {
+    @apply relative;
+  }
+
+  /* Opaque, because a long first line scrolls underneath it. */
+  .code-copy {
+    @apply text-muted hover:text-accent bg-surface absolute top-2 right-2 cursor-pointer p-1.5 opacity-60 transition-opacity hover:opacity-100;
+  }
+
+  .code-copy:focus-visible {
+    @apply opacity-100;
+  }
+
+  .code-copy svg {
+    @apply block size-4;
+  }
+
   .post-content > img,
   .post-content p > img,
   .post-content figure {
