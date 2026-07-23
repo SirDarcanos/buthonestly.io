@@ -139,19 +139,27 @@ function dropFirstNonEmpty(block) {
 }
 
 function inlineClean(text) {
-  return text
-    .replace(/<figure[\s\S]*?<\/figure>/gi, "")
-    .replace(/<picture[\s\S]*?<\/picture>/gi, "")
-    .replace(/<(video|audio|iframe)[\s\S]*?<\/\1>/gi, "")
-    .replace(/<img\b[^>]*>/gi, "")
-    .replace(/!\[[^\]]*\]\([^)]*\)/g, "")
-    .replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, (_, s, l) => (l ?? s).trim())
-    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
-    .replace(/`([^`]*)`/g, "$1")
-    .replace(/(\*\*|__)(.*?)\1/g, "$2")
-    .replace(/(\*|_)(.*?)\1/g, "$2")
-    .replace(/~~(.*?)~~/g, "$1")
-    .replace(/<[^>]+>/g, "")
-    .replace(/\n{3,}/g, "\n\n")
-    .replace(/[ \t]+$/gm, "");
+  return (
+    text
+      .replace(/<figure[\s\S]*?<\/figure>/gi, "")
+      .replace(/<picture[\s\S]*?<\/picture>/gi, "")
+      .replace(/<(video|audio|iframe)[\s\S]*?<\/\1>/gi, "")
+      .replace(/<img\b[^>]*>/gi, "")
+      .replace(/!\[[^\]]*\]\([^)]*\)/g, "")
+      // Obsidian embeds, before the wikilink rule below strips their brackets and
+      // leaves the filename behind — a re-run would otherwise narrate the `![[
+      // <slug>.mp3]]` that the previous run inserted.
+      .replace(/!\[\[[^\]]*\]\]/g, "")
+      .replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, (_, s, l) =>
+        (l ?? s).trim(),
+      )
+      .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+      .replace(/`([^`]*)`/g, "$1")
+      .replace(/(\*\*|__)(.*?)\1/g, "$2")
+      .replace(/(\*|_)(.*?)\1/g, "$2")
+      .replace(/~~(.*?)~~/g, "$1")
+      .replace(/<[^>]+>/g, "")
+      .replace(/\n{3,}/g, "\n\n")
+      .replace(/[ \t]+$/gm, "")
+  );
 }
