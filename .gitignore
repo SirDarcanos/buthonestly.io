@@ -16,6 +16,8 @@ wrangler.toml
 # Generated essay audio narrations (npm run audio) — kept locally next to each
 # essay and uploaded to R2, but never committed (binary bloat; R2 is the source)
 src/content/**/*.mp3
+# Editable narration scripts (npm run audio) — regenerated on demand.
+src/content/**/*.audio.txt
 
 .DS_Store
 

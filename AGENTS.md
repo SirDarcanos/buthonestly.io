@@ -34,13 +34,24 @@ accumulate and go out as a batch. Do not push on every change.
   resize to max 1376px, recompress, convert opaque images to JPEG (updating
   Markdown references). Non-16:9 images are flagged and skipped. Idempotent
   via `data/images-optimized.json`.
-- `npm run audio -- <slug>` — synthesize an essay narration (Gemini TTS on
-  Vertex AI) into a git-ignored MP3 beside the essay and insert an Obsidian
+- `npm run audio -- <slug>` — narrate an essay with Gemini TTS on Vertex AI.
+  **It runs twice, and the first run costs nothing.** It writes
+  `<slug>.audio.txt`, the narration script: the essay reduced to what will be
+  spoken, split into the chunks each TTS call receives. Read it, fix anything
+  that should sound different — an acronym spelled out, an image caption
+  rephrased so it stands on its own — then re-run to synthesize *from that
+  file*, not from the Markdown. `--refresh` rebuilds it from the essay and
+  discards the edits; editing the essay afterwards only warns, since the
+  script is the input of record. Both it and the MP3 are git-ignored.
+  Synthesis writes the MP3 beside the essay, inserts an Obsidian
   `![[<slug>.mp3]]` embed (plays in the vault; the site renders it as the
-  audio player). Listen first, then `npm run audio -- <slug> --commit`
-  uploads that MP3 to the STATIC R2 bucket — commit only uploads, it never
-  re-synthesizes. Env in `.env`: `GOOGLE_APPLICATION_CREDENTIALS` (Vertex
-  service-account JSON path), optional `VERTEX_REGION` / `VERTEX_MODEL`.
+  audio player), and flags any chunk whose speaking rate is far off the run's
+  median — that is where a dropped or repeated clause shows up, so a long
+  narration needs a spot check rather than a full listen. Then
+  `npm run audio -- <slug> --commit` uploads that MP3 to the STATIC R2
+  bucket — commit only uploads, it never re-synthesizes. Env in `.env`:
+  `GOOGLE_APPLICATION_CREDENTIALS` (Vertex service-account JSON path),
+  optional `VERTEX_REGION` / `VERTEX_MODEL`.
   Per-essay overrides via flat `audioVoice` / `audioStyle` / `audioPace`
   frontmatter (flat, not a nested `audio:` map — Obsidian's Properties editor
   can't edit nested objects).

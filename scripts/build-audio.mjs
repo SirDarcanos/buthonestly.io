@@ -1,12 +1,13 @@
 // Generate an essay audio narration with Gemini TTS (Vertex AI).
 //
-//   npm run audio -- <slug|path>            # preview: synthesize MP3 + ![[embed]]
+//   npm run audio -- <slug|path>            # 1st run writes the narration script;
+//                                           # 2nd synthesizes MP3 + ![[embed]]
 //   npm run audio -- <slug|path> --commit   # upload the previewed MP3 to R2
 //
 // Preview writes a git-ignored MP3 beside the essay and inserts an Obsidian audio
 // embed (plays in the vault; remark-audio-embed renders it on the site). --commit
 // only uploads that MP3 to R2 — it never re-synthesizes. Flags (preview):
-// --voice/--style/--pace/--silence/--budget. Env:
+// --voice/--style/--pace/--silence/--budget/--refresh. Env:
 // GOOGLE_APPLICATION_CREDENTIALS (+ optional VERTEX_REGION/VERTEX_MODEL); per-essay
 // overrides via `audioVoice` / `audioStyle` / `audioPace` frontmatter.
 
@@ -27,6 +28,11 @@ import {
 } from "./lib/gemini-tts.mjs";
 import { concatPcm, pcmToMp3, pcmDurationSeconds } from "./lib/assemble.mjs";
 import { checkPace, formatPaceReport } from "./lib/pace-check.mjs";
+import {
+  sourceHash,
+  readTranscript,
+  writeTranscript,
+} from "./lib/transcript.mjs";
 
 const CHUNK_BUDGET_WORDS = 200; // Gemini's per-call sweet spot (vs Kokoro's 60).
 
@@ -41,6 +47,7 @@ async function main() {
 
   const { slug, file } = await resolveEssay(positional[0]);
   const mp3Path = path.join(path.dirname(file), `${slug}.mp3`);
+  const scriptPath = path.join(path.dirname(file), `${slug}.audio.txt`);
 
   // Commit only uploads the MP3 a prior preview generated — never re-synthesizes.
   if (flags.commit) {
@@ -66,9 +73,35 @@ async function main() {
 
   const text = essayToText(raw);
   if (!text.trim()) die(`No narratable text found in ${file}.`);
-  const chunks = chunkText(text, budget);
+
+  // The narration script is the input to synthesis, so it gets reviewed before
+  // anything is spent generating from it.
+  const hash = sourceHash(text);
+  const haveScript = !flags.refresh && (await exists(scriptPath));
+  if (!haveScript) {
+    const fresh = chunkText(text, budget);
+    await writeTranscript(scriptPath, slug, fresh, hash);
+    console.log(
+      `Wrote ${scriptPath} (${fresh.length} chunk(s)).\n` +
+        `Read it, edit anything that should sound different, then re-run to synthesize:\n` +
+        `  npm run audio -- ${slug}`,
+    );
+    return;
+  }
+
+  const script = await readTranscript(scriptPath);
+  if (!script.chunks.length)
+    die(
+      `${scriptPath} has no chunks — rebuild it: npm run audio -- ${slug} --refresh`,
+    );
+  if (script.hash && script.hash !== hash)
+    console.log(
+      `  ! The essay changed since ${path.basename(scriptPath)} was written. Synthesizing the script as it stands — rebuild with --refresh to pick the edits up.`,
+    );
+
+  const chunks = script.chunks;
   console.log(
-    `Generating: ${chunks.length} chunk(s), voice ${voice}, ${style}/${pace}.`,
+    `Generating from ${path.basename(scriptPath)}: ${chunks.length} chunk(s), voice ${voice}, ${style}/${pace}.`,
   );
 
   const tts = new GeminiTTS(await loadServiceAccount(), {
@@ -206,6 +239,7 @@ function parseArgs(argv) {
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === "--commit") flags.commit = true;
+    else if (a === "--refresh") flags.refresh = true;
     else if (a.startsWith("--")) flags[a.slice(2)] = argv[++i];
     else positional.push(a);
   }
