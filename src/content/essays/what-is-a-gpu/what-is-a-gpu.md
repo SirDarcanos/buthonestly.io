@@ -49,10 +49,10 @@ The GPU is one chip on that card. A microchip soldered onto the PCB (Printed Cir
 
 Below: two images by _W1zzard on techpowerup.com_: the GB202 chip itself, and the PCB it sits on in an RTX 5090. The chip is the small square in the middle of the board; everything else around it is what the card adds.
 
-<div class="gallery cols-2">
-  <img src="gpu.jpg" alt="NVIDIA GB202 GPU die, the bare silicon chip without its surrounding components." />
-  <img src="rtx-5090-pcb.jpg" alt="NVIDIA GeForce RTX 5090 printed circuit board with the GB202 GPU at center, surrounded by VRAM modules and power delivery components." />
-</div>
+> [!gallery] 2
+> ![NVIDIA GB202 GPU die, the bare silicon chip without its surrounding components.](gpu.jpg)
+> ![NVIDIA GeForce RTX 5090 printed circuit board with the GB202 GPU at center, surrounded by VRAM modules and power delivery components.](rtx-5090-pcb.jpg)
+
 ## What's Inside a Graphics Card?
 
 Now that the chip-and-card distinction is clear, let's look at what else lives on the PCB.

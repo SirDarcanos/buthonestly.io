@@ -1,10 +1,10 @@
 <%*
 // Insert an image gallery (grid). Pick a column count, then add images one by
-// one — leave the file blank to finish. Produces a <div class="gallery cols-N">
-// that the site renders as a grid (see .gallery in global.css).
+// one — leave the file blank to finish. Produces a `> [!gallery] N` callout,
+// which Obsidian previews in place and remark-gallery.mjs turns into a grid.
 const cols = await tp.system.suggester(
-["2 columns", "3 columns"],
-["cols-2", "cols-3"],
+["2 columns", "3 columns", "4 columns"],
+["2", "3", "4"],
 );
 let out = "";
 if (cols) {
@@ -17,9 +17,9 @@ while (
 ))
 ) {
 const alt = (await tp.system.prompt("Alt text (describe the image)", "")) || "";
-imgs.push(`  <img src="${file}" alt="${alt.replace(/"/g, "&quot;")}" />`);
+imgs.push(`> ![${alt.replace(/[[\]]/g, "")}](${file})`);
 }
-if (imgs.length) out = `<div class="gallery ${cols}">\n${imgs.join("\n")}\n</div>`;
+if (imgs.length) out = `> [!gallery] ${cols}\n${imgs.join("\n")}`;
 }
 tR += out;
 -%>

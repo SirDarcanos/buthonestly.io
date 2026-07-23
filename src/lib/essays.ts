@@ -61,9 +61,10 @@ export function toPost(entry: Essay): Post {
 
 export async function getPublishedEssays(): Promise<Essay[]> {
   const now = new Date();
-  const published = await getCollection(
-    "essays",
-    ({ data }) => !!data.date && data.date <= now,
+  // Scheduled essays are previewable on the dev server and only withheld from
+  // the production build, so a future `date` can be proofread before it lands.
+  const published = await getCollection("essays", ({ data }) =>
+    import.meta.env.PROD ? !!data.date && data.date <= now : !!data.date,
   );
   return published.sort(
     (a, b) => (b.data.date?.valueOf() ?? 0) - (a.data.date?.valueOf() ?? 0),

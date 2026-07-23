@@ -8,6 +8,7 @@ import { unified } from "@astrojs/markdown-remark";
 import remarkAudioEmbed from "./src/lib/remark-audio-embed.mjs";
 import remarkWikiLinks from "./src/lib/remark-wiki-links.mjs";
 import remarkCallouts from "./src/lib/remark-callouts.mjs";
+import remarkGallery from "./src/lib/remark-gallery.mjs";
 import rehypeImageFormat from "./src/lib/rehype-image-format.mjs";
 import rehypeFigure from "./src/lib/rehype-figure.mjs";
 import rehypeExternalLinks from "./src/lib/rehype-external-links.mjs";
@@ -39,7 +40,12 @@ export default defineConfig({
       theme: "github-light-high-contrast",
     },
     processor: unified({
-      remarkPlugins: [remarkAudioEmbed, remarkWikiLinks, remarkCallouts],
+      remarkPlugins: [
+        remarkAudioEmbed,
+        remarkWikiLinks,
+        remarkGallery,
+        remarkCallouts,
+      ],
       rehypePlugins: [rehypeImageFormat, rehypeFigure, rehypeExternalLinks],
     }),
   },

@@ -215,17 +215,13 @@
     @apply aspect-auto object-contain;
   }
 
-  /* Image galleries — a responsive grid of images. Markup:
-     <div class="gallery cols-3"><img .../><img .../></div> */
-  .post-content .gallery {
-    @apply my-6 grid gap-2 md:grid-cols-2;
+  /* A gallery callout's images share one paragraph, which would be the single
+     grid item — stacking them in a column. Promote the images instead. */
+  .post-content .grid p {
+    display: contents;
   }
-  .post-content .gallery.cols-3 {
-    @apply md:grid-cols-3;
-  }
-  /* Gallery tiles stay a uniform grid, so they keep the 16:9 crop. */
-  .post-content .gallery img {
-    @apply my-0 aspect-video h-full w-full object-cover;
+  .post-content .grid img {
+    @apply my-0;
   }
 
   .post-content table {
