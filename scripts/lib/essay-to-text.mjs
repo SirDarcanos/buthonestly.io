@@ -48,11 +48,11 @@ export function essayToText(raw) {
       const m = first.trim().match(CALLOUT_RE);
       if (m && DROP_CALLOUTS.has(m[1].toLowerCase())) continue;
       if (m && TRANSPARENT_CALLOUTS.has(m[1].toLowerCase())) {
-        out.push("", stripMarker(block).join("\n").trim(), "");
+        out.push("", reflow(stripMarker(block)), "");
       } else if (m) {
-        out.push("", dropFirstNonEmpty(block).join("\n").trim(), "");
+        out.push("", reflow(dropFirstNonEmpty(block)), "");
       } else {
-        out.push("", `Quote. ${block.join("\n").trim()} End quote.`, "");
+        out.push("", `Quote. ${reflow(block)} End quote.`, "");
       }
       continue;
     }
@@ -116,6 +116,33 @@ function stripFencedCode(text) {
     out.push(line);
   }
   return out.join("\n");
+}
+
+// A `>` prefix makes every wrapped line its own line, which would otherwise
+// survive into the narration as a mid-sentence break the model reads as a
+// pause. Ordinary prose already arrives one paragraph per line.
+function reflow(lines) {
+  const paragraphs = [];
+  let current = [];
+  const flush = () => {
+    if (current.length) paragraphs.push(current.join(" "));
+    current = [];
+  };
+  for (const line of lines) {
+    const text = line.trim();
+    if (text === "") {
+      flush();
+      continue;
+    }
+    if (/^([-*+]|\d+\.)\s/.test(text)) {
+      flush();
+      paragraphs.push(text);
+      continue;
+    }
+    current.push(text);
+  }
+  flush();
+  return paragraphs.join("\n\n").trim();
 }
 
 function stripMarker(block) {
