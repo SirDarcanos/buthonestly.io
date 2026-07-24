@@ -52,8 +52,8 @@
     "creating-a-custom-add-to-cart-link-woocommerce",
     "edit-orders-woocommerce",
     "top-5-essential-wordpress-plugins-i-always-install-and-why",
-    "10-types-of-websites",
-    "woocommerce-attributes-vs-variations"
+    "woocommerce-attributes-vs-variations",
+    "10-types-of-websites"
   ],
   "choosing-what-to-play": [
     "when-ai-stops-being-a-tool",
@@ -72,8 +72,8 @@
     "improve-woocommerce-related-products-recommendations"
   ],
   "delete-expired-coupons-automatically-woocommerce": [
-    "woocommerce-eu-vat-number-setup",
     "woocommerce-cli-product-management",
+    "woocommerce-eu-vat-number-setup",
     "woocommerce-password-strength-meter-checkout",
     "improve-woocommerce-related-products-recommendations",
     "bulk-edit-woocommerce-products-without-plugins",
@@ -145,8 +145,8 @@
   ],
   "improve-woocommerce-related-products-recommendations": [
     "make-product-attributes-linkable-woocommerce",
-    "creating-a-custom-add-to-cart-link-woocommerce",
     "woocommerce-attributes-vs-variations",
+    "creating-a-custom-add-to-cart-link-woocommerce",
     "disable-gtin-requirements-non-eligible-woocommerce-products",
     "woocommerce-cli-product-management",
     "woocommerce-password-strength-meter-checkout"
@@ -275,8 +275,8 @@
     "do-you-trust-your-instincts-making-smart-wordpress-choices",
     "creating-a-custom-add-to-cart-link-woocommerce",
     "improve-woocommerce-related-products-recommendations",
-    "edit-orders-woocommerce",
     "make-product-attributes-linkable-woocommerce",
+    "edit-orders-woocommerce",
     "woocommerce-cli-product-management"
   ],
   "woocommerce-cli-product-management": [
@@ -324,7 +324,7 @@
     "adhd-planner",
     "10-types-of-websites",
     "do-you-trust-your-instincts-making-smart-wordpress-choices",
-    "when-ai-stops-being-a-tool",
-    "ai-slop-midas-touch-modern-internet"
+    "ai-slop-midas-touch-modern-internet",
+    "when-ai-stops-being-a-tool"
   ]
 }
