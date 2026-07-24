@@ -26,6 +26,8 @@ audioPace: conversational
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
+![[woocommerce-attributes-vs-variations.mp3]]
+
 Attributes describe your products. Variations turn those details into real choices.
 
 If you work with WooCommerce for more than a week, you run into the WooCommerce attributes vs variations topic. At first, they look similar. They even live in the same part of the product editor, so it is easy to blur them together and treat attributes and variations as the same idea.

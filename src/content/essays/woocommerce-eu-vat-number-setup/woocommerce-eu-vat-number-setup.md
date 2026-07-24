@@ -1,7 +1,7 @@
 ---
 title: "WooCommerce EU VAT Number: Set Up VAT for Your Store"
 date: 2023-12-04T10:00:00
-updated: 2025-12-16T11:59:54
+updated: 2026-07-24T07:00:00
 sticky: false
 cornerstone: false
 excerpt: Automatically validate EU VAT numbers at WooCommerce checkout with VIES so B2B orders stay compliant and error free.
@@ -29,6 +29,8 @@ audioPace: conversational
 > - **This is not sponsored**. I just use the extension and recommend it based on personal experience.
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
+
+![[woocommerce-eu-vat-number-setup.mp3]]
 
 VAT is not hard in WooCommerce. The hard part is being consistent.
 
@@ -88,7 +90,7 @@ If you sell multiple types of products with different VAT treatment, use **addit
 
 ![WooCommerce additional VAT rates for EU stores.](woocommerce-tax-additional-rates.jpg)
 
-For your convenience, I compiled a ready-to-import CSV file with all the current tax rates of all EU states from the [Europa.eu website](https://europa.eu/youreurope/business/finance-and-tax/vat/vat-rules-rates/index_en.htm). You can import it from **WooCommerce → Settings → Tax → Standard rates → Import CSV**.
+For your convenience, I compiled a ready-to-import CSV file with all the current tax rates of all EU states from the [Europa.eu website](https://europa.eu/youreurope/business/finance-and-tax/vat/vat-rules-rates/index_en.htm). You can import it from **WooCommerce → Settings → Tax → Standard rates → Import CSV**. You can find the download file at the end of this essay.
 
 ![WooCommerce import EU VAT rates buttons.](woocommerce-import-vat-rates.jpg)
 

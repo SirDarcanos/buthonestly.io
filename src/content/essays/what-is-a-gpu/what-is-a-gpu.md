@@ -31,6 +31,8 @@ audioPace: conversational
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
+![[what-is-a-gpu.mp3]]
+
 I trained AI models on an RTX 3090 before I realized I was using the word _GPU_ wrong.
 
 I kept bouncing between machines: a MacBook Pro M3, a desktop with one RTX 3090, then two in parallel, then Google Colab when nothing else was enough. The surprise was how unpredictable the trade-offs were. Some [[neural-network-predict-resin-usage-3d-printed-miniatures|models I'd built locally]] ran fine on the Mac. Others I expected to fly on the desktop ran out of memory before they got started. When the desktop choked, sometimes the Mac picked it up. When the Mac couldn't load the weights, the 3090s did fine.
@@ -47,7 +49,14 @@ When someone says "NVIDIA GeForce RTX 5090" or "AMD Radeon RX 9060 XT," they're 
 
 The GPU is one chip on that card. A microchip soldered onto the PCB (Printed Circuit Board) alongside the memory, the voltage regulators, and dozens of other components. NVIDIA calls the GPU on the RTX 5090 the **GB202**. AMD calls the one on the RX 9060 XT **Navi 44**. The chip is what does the actual computation. The card is what makes the chip usable.
 
-Below: two images by _W1zzard on techpowerup.com_: the GB202 chip itself, and the PCB it sits on in an RTX 5090. The chip is the small square in the middle of the board; everything else around it is what the card adds.
+> [!screen-only]
+> Below: two images by _W1zzard_ on _techpowerup.com_ — the GB202
+> chip itself, and the PCB it sits on in an RTX 5090.
+
+> [!audio-only]
+> W1zzard photographed both the chip and the board it sits on.
+> The chip is a small square at the centre; everything else is what the card
+> adds around it.
 
 > [!gallery] 2
 > ![NVIDIA GB202 GPU die, the bare silicon chip without its surrounding components.](gpu.jpg)
@@ -61,21 +70,21 @@ Below is an annotated diagram of an RTX 5090 PCB. Not every component is marked.
 
 ![Annotated diagram of the NVIDIA RTX 5090 printed circuit board, with display outputs, power connector, VRAM modules, and the GB202 GPU labeled.](nvidia-geforce-rtx-5090-pcb-diagram.jpg)
 
-#### Display Output
+### Display Output
 
 The display output lets you connect the card to a monitor. Most cards have at least one, usually HDMI or DisplayPort. Some don't. Not every graphics card is meant to drive a screen, which is the first hint that AI cards play by different rules. More on that later.
 
-#### Power Connector
+### Power Connector
 
 The power connector is exactly what it sounds like. Modern cards draw enough power that the PCIe slot alone can't feed them. A high-end card like the 5090 has a 575W TDP, more than most CPUs. So they get a dedicated cable from the power supply. Without it, the card doesn't function. Some systems boot to a warning, others refuse to start at all.
 
-#### VRAM
+### VRAM
 
 VRAM is video memory, the GPU's dedicated RAM. It works like the regular DDR4 or DDR5 sticks in your computer, but tuned for different work. Regular RAM is used by the CPU for fast, latency-sensitive operations. VRAM is used by the GPU for moving large chunks of data at once.
 
 The trade-off is bandwidth versus latency. VRAM (GDDR6, GDDR7, and so on) is built to transfer enormous amounts of information per second. Each individual access is slower than a DDR5 access would be, but the volume is far higher. It sits physically next to the GPU on the PCB so the chip can reach it as fast as possible. Every nanosecond of distance matters at these speeds.
 
-#### GPU
+### GPU
 
 The GPU is the chip that does the actual graphics work. It looks like a CPU at first glance, with the same silicon die, solder pads, and heat-spreader on top. But the architecture inside is different. A CPU is built for a few fast, sequential, complex operations at a time. A GPU is built for thousands of simple operations running in parallel.
 
@@ -97,8 +106,8 @@ The answer is that GPU cores aren't doing the same kind of work. They're smaller
 
 Add them up: 21,760 + 680 + 170 = 22,610. All of them live on the same GPU chip.
 
-> [!info]
-> **Ray tracing, briefly.** It simulates how light actually behaves: rays from a source bounce off surfaces, refract, get absorbed, and produce realistic reflections, shadows, and indirect lighting. Traditional rendering fakes these effects with cheaper approximations. Ray tracing computes them honestly, frame by frame. It's expensive math, which is why GPUs ship dedicated RT cores.
+> [!info]- Ray tracing, briefly explained
+> It simulates how light actually behaves: rays from a source bounce off surfaces, refract, get absorbed, and produce realistic reflections, shadows, and indirect lighting. Traditional rendering fakes these effects with cheaper approximations. Ray tracing computes them honestly, frame by frame. It's expensive math, which is why GPUs ship dedicated RT cores.
 
 ![Block diagram of the NVIDIA RTX 5090 GPU showing the layout of CUDA cores, Tensor cores, and RT cores across the chip.](nvidia-geforce-rtx-5090-gpu-cores.jpg)
 

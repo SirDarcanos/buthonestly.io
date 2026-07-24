@@ -30,6 +30,8 @@ audioPace: conversational
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
+![[when-ai-stops-being-a-tool.mp3]]
+
 I came back from three months off work and within days I was building software for eighteen hours a day.
 
 My sabbatical had been quiet in the way sabbaticals are supposed to be quiet. No meetings. No pings. No half-context from three different Slack threads. No small fires waiting for a decision.

@@ -32,6 +32,8 @@ audioPace: conversational
 >
 > AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
 
+![[what-is-vibe-coding-how-to-do-it.mp3]]
+
 What’s the hottest programming language of this year?
 
 According to [Andrej Karpathy](https://en.wikipedia.org/wiki/Andrej_Karpathy), it’s your language! Andrej is the person who coined **vibe coding** as a term in his now world-famous post on X, where he introduced the concept of AI-assisted coding taken to its extreme.
