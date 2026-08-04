@@ -9,7 +9,7 @@ on:
     paths:
       - "src/content/essays/**"
   schedule:
-    - cron: "30 13 * * *" # daily, after the newsletter cron at 13:00
+    - cron: "45 13 * * *" # daily, after the newsletter cron at 13:30
   workflow_dispatch:
     inputs:
       mode:
