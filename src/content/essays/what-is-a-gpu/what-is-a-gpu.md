@@ -1,6 +1,6 @@
 ---
 title: What is a GPU and Why Does AI Need Them?
-date: 2026-08-04T16:00:00
+date: 2026-08-04T13:00:00
 updated:
 sticky: false
 cornerstone: false
