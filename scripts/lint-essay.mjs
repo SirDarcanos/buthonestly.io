@@ -66,13 +66,16 @@ const stripHtmlComments = (t) => t.replace(/<!--[\s\S]*?-->/g, blank);
 
 // Neutralize non-prose so voice checks don't trip on code, images, embeds, or
 // Obsidian callout tokens (`[!info]` carries a `!`) — blanked, not removed.
+// Table rows go too: with no terminal punctuation a whole table reads as one
+// enormous sentence, which trips the length check on every table ever written.
 function stripProse(text) {
   return text
     .replace(/```[\s\S]*?```/g, blank)
     .replace(/`[^`\n]+`/g, blank)
     .replace(/!\[\[[^\]]*\]\]/g, blank)
     .replace(/!\[[^\]]*\]\([^)]*\)/g, blank)
-    .replace(/\[!\w+\]/g, blank);
+    .replace(/^[ \t]*\|.*$/gm, blank)
+    .replace(/\[![\w-]+\]/g, blank);
 }
 
 const lineOfOffset = (text, off, base = 1) =>
@@ -506,21 +509,10 @@ function checkStructure(body, base, r) {
       "FAIL",
       "Structure",
       `comments CTA '${match}'`,
-      "this site has no comments — end with a question + newsletter instead",
+      "this site has no comments — end on the closing line instead",
       line,
       ctx,
     );
-
-  if (paras.length) {
-    const lastPara = paras[paras.length - 1];
-    if (!lastPara.includes("?"))
-      r.add(
-        "WARN",
-        "Structure",
-        "no reader CTA at end",
-        "essays typically close with a question and an invitation",
-      );
-  }
 }
 
 function checkLinks(body, r) {
