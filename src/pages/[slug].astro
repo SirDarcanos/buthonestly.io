@@ -79,8 +79,13 @@ const jsonLd = [
       <p class="lead">
         {post.excerpt}
       </p>
-      <div class="border-line flex border-y py-4">
-        <time datetime={publishDate.toISOString()} class="label">
+      <div
+        class="border-line flex flex-wrap items-baseline gap-x-6 gap-y-1 border-y py-4"
+      >
+        <time
+          datetime={publishDate.toISOString()}
+          class="label tracking-widest"
+        >
           {
             publishDate.toLocaleString("default", {
               day: "numeric",
@@ -89,7 +94,7 @@ const jsonLd = [
             })
           }
         </time>
-        <p class="meta flex-1 justify-end text-right">
+        <p class="meta flex-1 tracking-widest sm:text-right">
           In <TaxLinks names={post.tags} base="topic" />
         </p>
       </div>

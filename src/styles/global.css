@@ -239,8 +239,20 @@
   .post-content .grid p {
     display: contents;
   }
+
+  /* The grid box carries the rhythm the promoted images can no longer supply;
+     its top margin collapses with the preceding paragraph's. */
+  .post-content .grid {
+    @apply my-6;
+  }
+
+  /* Stretch every frame to the tallest in the row so screenshots that differ by
+     a few pixels of height still line up; object-contain letterboxes inside
+     rather than cropping, so each image keeps its own ratio. min-height, not
+     height: a percentage height overrides the width/height attributes' implied
+     aspect-ratio, collapsing the box to nothing until the lazy image loads. */
   .post-content .grid img {
-    @apply my-0;
+    @apply my-0 min-h-full w-full;
   }
 
   .post-content table {
