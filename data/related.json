@@ -37,7 +37,7 @@
     "limits-of-machine-learning",
     "what-is-vibe-coding-how-to-do-it",
     "distilroberta-emotion-analysis-nlp-case-study",
-    "ai-slop-midas-touch-modern-internet"
+    "what-is-a-gpu"
   ],
   "buildings-never-were": [
     "ai-slop-midas-touch-modern-internet",
@@ -164,8 +164,8 @@
     "neural-network-predict-resin-usage-3d-printed-miniatures",
     "building-convolutional-neural-network-python-tensorflow",
     "distilroberta-emotion-analysis-nlp-case-study",
-    "choosing-what-to-play",
-    "what-is-vibe-coding-how-to-do-it"
+    "what-is-a-gpu",
+    "choosing-what-to-play"
   ],
   "make-product-attributes-linkable-woocommerce": [
     "improve-woocommerce-related-products-recommendations",
@@ -188,8 +188,8 @@
     "limits-of-machine-learning",
     "what-is-vibe-coding-how-to-do-it",
     "ai-slop-midas-touch-modern-internet",
-    "automated-x-account-cleanup",
-    "when-ai-stops-being-a-tool"
+    "what-is-a-gpu",
+    "automated-x-account-cleanup"
   ],
   "psychological-safety-in-teams-people-first-leadership": [
     "team-building-activities-for-work",
@@ -202,10 +202,10 @@
   "set-up-tensorflow-docker-jupyter-notebook": [
     "building-convolutional-neural-network-python-tensorflow",
     "neural-network-predict-resin-usage-3d-printed-miniatures",
+    "what-is-a-gpu",
     "distilroberta-emotion-analysis-nlp-case-study",
     "wordpress-blocks-telex",
-    "limits-of-machine-learning",
-    "when-ai-stops-being-a-tool"
+    "limits-of-machine-learning"
   ],
   "team-building-activities-for-work": [
     "psychological-safety-in-teams-people-first-leadership",
@@ -246,6 +246,14 @@
     "write-in-markdown",
     "wordpress-blocks-telex",
     "adhd-planner"
+  ],
+  "what-is-a-gpu": [
+    "limits-of-machine-learning",
+    "neural-network-predict-resin-usage-3d-printed-miniatures",
+    "choosing-what-to-play",
+    "set-up-tensorflow-docker-jupyter-notebook",
+    "building-convolutional-neural-network-python-tensorflow",
+    "ai-slop-midas-touch-modern-internet"
   ],
   "what-is-a-web-developer": [
     "vibe-writing-line-between-human-machine",
