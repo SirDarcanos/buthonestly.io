@@ -176,5 +176,9 @@
   "src/content/essays/wordpress-to-astro/pagespeed-new.jpg": "bc45e6a4457402e1ee74a900a5296630884404385c0134f4183c59476b1537f5",
   "src/content/essays/wordpress-to-astro/plan-abandoned.jpg": "7bef9f68ffb4ac92478b6c9b34e5d1e5cd0b5a29e33dd612e771d7fa14c2ee6f",
   "src/content/essays/wordpress-to-astro/wordpress-to-astro.jpg": "f6a269698085be7e3e026c243b7e460b39e8fdb2c3f17dca9136f28371a4184a",
-  "src/content/essays/wordpress-to-astro/gallery-obsidian.jpg": "7c65094ee55402e08ec8bbb8253b7ab8e91dcf6c5c97e874156e991444e02908"
+  "src/content/essays/wordpress-to-astro/gallery-obsidian.jpg": "7c65094ee55402e08ec8bbb8253b7ab8e91dcf6c5c97e874156e991444e02908",
+  "src/content/essays/javascript-dice-roller-shows-its-work/openfray-dice.jpg": "06441a4896c8e2d183f4671964277d3b1c8d111d6add68c3967baacd0b0ab37b",
+  "src/content/essays/javascript-dice-roller-shows-its-work/roll-log.jpg": "c1ecef465b05047bddfc5d8023f741242b38987a896942b8a5cb70d12bc04163",
+  "src/content/essays/javascript-dice-roller/openfray-dice.jpg": "66588c6c0aea061133f95d1a018090472824457f2c2b17cef0696854d2d11c3d",
+  "src/content/essays/javascript-dice-roller/roll-log.jpg": "c84e5a504093cb41fcdd5488ac1c72a36d508798eb489c86352daab0fbe6a1b9"
 }
