@@ -1,6 +1,6 @@
 ---
 title: "SQL vs NoSQL: Choosing the Right Database for Your Data"
-date: 2026-10-06T04:00:00
+date: 2026-10-06T02:00:00
 updated:
 sticky: false
 cornerstone: false
