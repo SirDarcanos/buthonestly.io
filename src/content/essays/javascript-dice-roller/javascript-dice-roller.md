@@ -24,7 +24,7 @@ audioPace: conversational
 >
 > - A fight that felt rigged left me unable to honestly tell my players they had only been unlucky, because I had no way of knowing whether that was true.
 > - A tool that shows its work is still asking you to believe the work it shows is the work it did.
-> - `@openfray/dice` is an open source JS library that takes a formula like `2d6+3` and returns the total plus the evidence: every die rolled, which ones counted, and each modifier listed separately rather than summed.
+> - `opendice` is an open source JS library that takes a formula like `2d6+3` and returns the total plus the evidence: every die rolled, which ones counted, and each modifier listed separately rather than summed.
 > - Fairness is not a setting. It uses `crypto.getRandomValues` rather than `Math.random`, removes modulo bias by rejection, draws once per die, and never nudges a result.
 > - Much of the design is refusals — no division, no rules of its own, no line breaks inside a formula — each one handing a decision back to whoever should be making it.
 >
@@ -66,16 +66,16 @@ Two sources, then, and I could account for neither.
 
 So I wrote my own dice roller library.
 
-It was meant to be its own library from the first commit rather than something I carved out later, and they went up on npm as [`@openfray/dice`](https://www.npmjs.com/package/@openfray/dice). Anybody can use it to roll dice in JavaScript or TypeScript, regardless if they are using it for D&D or something unrelated to games. Install it with:
+It was meant to be its own library from the first commit rather than something I carved out later, and they went up on npm as [`opendice`](https://www.npmjs.com/package/opendice). Anybody can use it to roll dice in JavaScript or TypeScript, regardless if they are using it for D&D or something unrelated to games. Install it with:
 
 ```bash
-npm install @openfray/dice
+npm install opendice
 ```
 
 You write a formula as text. You get back a number, plus every die that produced it.
 
 ```ts
-import { roll } from '@openfray/dice'
+import { roll } from 'opendice'
 
 const result = roll('2d6+3')
 
@@ -330,7 +330,7 @@ All of this arrives without being switched on. There are no options for fairness
 
 `Math.random()` is not required to be good. The JavaScript standard leaves the algorithm to the implementation and makes no promises about quality. So the answer to "how random is it" depends on which engine you happen to be running in.
 
-`@openfray/dice` use `crypto.getRandomValues` instead. It is in every browser and in Node, it costs nothing at the scale a dice roller works at, and it does not vary underneath you.
+`opendice` use `crypto.getRandomValues` instead. It is in every browser and in Node, it costs nothing at the scale a dice roller works at, and it does not vary underneath you.
 
 ### The Bias Nobody Would Notice
 
