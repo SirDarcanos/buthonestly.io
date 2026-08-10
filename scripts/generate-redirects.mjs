@@ -174,8 +174,6 @@ const PAGINATION_REDIRECTS = [
 ];
 
 /**
- * There are no per-topic feeds, so tag feeds fall back to the whole-site one.
- *
  * Must precede ESSAY_SUBPAGE_REDIRECTS: its `/:slug/feed/` rule matches
  * `/programming/feed/` with slug="programming" and lands a feed reader on an
  * HTML archive page, whose XML parser then fails.
@@ -184,8 +182,8 @@ const ARCHIVE_FEED_REDIRECTS = [
   ...SECTIONS.map((s) => [`/${s}/feed/`, `/section/${s}/feed.xml`]),
   ["/section/:slug/feed/", "/section/:slug/feed.xml"],
   ["/category/:slug/feed/", "/section/:slug/feed.xml"],
-  ["/topic/:slug/feed/", "/feed.xml"],
-  ["/tag/:slug/feed/", "/feed.xml"],
+  ["/topic/:slug/feed/", "/topic/:slug/feed.xml"],
+  ["/tag/:slug/feed/", "/topic/:slug/feed.xml"],
 ];
 
 /**
