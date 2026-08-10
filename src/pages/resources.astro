@@ -141,9 +141,9 @@ const sections: Section[] = [
         ],
       },
       {
-        title: "shotlist - Annotated UI screenshots",
+        title: "shotlist — Annotated UI Screenshots",
         description:
-          "Take repeatable, annotated UI screenshots from declarative recipes. No code per shot. MIT licensed, runs in the browser and in Node 20+.",
+          "Take repeatable, annotated UI screenshots from declarative recipes. No code per shot: each one is a YAML file, and shotlist opens your running site, drives it to the state you describe, clips a region, and <strong>draws the callouts on the image</strong>. A <code>--check</code> run re-shoots against the committed images, so a stale screenshot turns up in CI instead of in the docs. MIT licensed, a CLI for Node 20+, with <code>playwright</code> as an optional peer dependency.",
         // TODO: add the "Read the Essay" action
         actions: [
           {
