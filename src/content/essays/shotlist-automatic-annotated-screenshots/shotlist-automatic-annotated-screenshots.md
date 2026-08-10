@@ -2,7 +2,7 @@
 title: "shotlist: Annotated Screenshots, Described as Data"
 date: 2026-08-10T13:00:00
 updated:
-sticky: false
+sticky: true
 cornerstone: false
 excerpt: I built shotlist because I knew I'd never keep docs screenshots up to date by hand. Each annotated shot becomes a YAML recipe you run instead of redo.
 categories:
