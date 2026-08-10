@@ -7,6 +7,7 @@ import TaxCrossLinks from "../../../components/TaxCrossLinks.astro";
 import { coOccurringTax, getAllPosts, getTags } from "../../../lib/essays";
 import { paginatedDescription, paginatedTitle } from "../../../lib/seo.ts";
 import { breadcrumbList, collectionPage } from "../../../lib/schema.ts";
+import { SITE_TITLE } from "../../../consts.ts";
 
 import type { GetStaticPaths, Page } from "astro";
 import { type Post, type Tax } from "../../../types.ts";
@@ -54,6 +55,10 @@ const jsonLd = [
   description={paginatedDescription(tag.description, page)}
   type="website"
   jsonLd={jsonLd}
+  feed={{
+    title: `${tag.name} — ${SITE_TITLE}`,
+    href: `/topic/${tag.slug}/feed.xml`,
+  }}
 >
   <div
     slot="intro"

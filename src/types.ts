@@ -28,6 +28,11 @@ export type Post = {
   };
 };
 
+export type Feed = {
+  title: string;
+  href: string;
+};
+
 export type Tax = {
   name: string;
   slug: string;

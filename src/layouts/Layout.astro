@@ -4,7 +4,7 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import BackToTop from "../components/BackToTop.astro";
 
-import { type Post } from "../types.ts";
+import { type Feed, type Post } from "../types.ts";
 
 interface Props {
   title: string;
@@ -13,9 +13,11 @@ interface Props {
   article?: Post;
   noindex?: boolean;
   jsonLd?: Record<string, unknown>[];
+  feed?: Feed;
 }
 
-const { title, description, type, article, noindex, jsonLd } = Astro.props;
+const { title, description, type, article, noindex, jsonLd, feed } =
+  Astro.props;
 ---
 
 <!doctype html>
@@ -27,6 +29,7 @@ const { title, description, type, article, noindex, jsonLd } = Astro.props;
     article={article}
     noindex={noindex}
     jsonLd={jsonLd}
+    feed={feed}
   />
   <body class="flex min-h-dvh flex-col">
     <a

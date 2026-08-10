@@ -12,6 +12,7 @@ import {
 } from "../../../lib/essays";
 import { paginatedDescription, paginatedTitle } from "../../../lib/seo.ts";
 import { breadcrumbList, collectionPage } from "../../../lib/schema.ts";
+import { SITE_TITLE } from "../../../consts.ts";
 
 import type { GetStaticPaths, Page } from "astro";
 import { type Post, type Tax } from "../../../types.ts";
@@ -79,6 +80,10 @@ const jsonLd = [
   description={paginatedDescription(category.description, page)}
   type="website"
   jsonLd={jsonLd}
+  feed={{
+    title: `${category.name} — ${SITE_TITLE}`,
+    href: `/section/${category.slug}/feed.xml`,
+  }}
 >
   <div
     slot="intro"
