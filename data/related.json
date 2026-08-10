@@ -128,12 +128,12 @@
     "distilroberta-emotion-analysis-nlp-case-study"
   ],
   "how-to-build-a-github-profile-readme-that-feels-like-you": [
+    "shotlist-automatic-annotated-screenshots",
     "wordpress-blocks-telex",
     "write-in-markdown",
     "what-is-vibe-coding-how-to-do-it",
     "how-to-choose-a-software-license-for-your-next-project",
-    "automated-x-account-cleanup",
-    "building-convolutional-neural-network-python-tensorflow"
+    "automated-x-account-cleanup"
   ],
   "how-to-choose-a-software-license-for-your-next-project": [
     "vibe-writing-line-between-human-machine",
@@ -141,7 +141,7 @@
     "what-is-vibe-coding-how-to-do-it",
     "how-to-build-a-github-profile-readme-that-feels-like-you",
     "10-types-of-websites",
-    "what-is-a-web-developer"
+    "shotlist-automatic-annotated-screenshots"
   ],
   "improve-woocommerce-related-products-recommendations": [
     "make-product-attributes-linkable-woocommerce",
@@ -206,6 +206,14 @@
     "distilroberta-emotion-analysis-nlp-case-study",
     "wordpress-blocks-telex",
     "limits-of-machine-learning"
+  ],
+  "shotlist-automatic-annotated-screenshots": [
+    "how-to-build-a-github-profile-readme-that-feels-like-you",
+    "distilroberta-emotion-analysis-nlp-case-study",
+    "how-to-choose-a-software-license-for-your-next-project",
+    "wordpress-blocks-telex",
+    "tools-for-adhd-leadership",
+    "write-in-markdown"
   ],
   "team-building-activities-for-work": [
     "psychological-safety-in-teams-people-first-leadership",
