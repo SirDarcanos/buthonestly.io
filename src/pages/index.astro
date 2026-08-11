@@ -9,7 +9,7 @@ import { getAllPosts } from "../lib/essays";
 
 const posts = await getAllPosts();
 const [lead, ...rest] = posts;
-const recent = rest.slice(1, 7);
+const recent = rest.slice(0, 6);
 
 const currentMonth = new Date().toLocaleString("default", {
   month: "long",
