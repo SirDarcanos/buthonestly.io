@@ -1,7 +1,7 @@
 const WORDS_PER_MINUTE = 225;
 const segmenter = new Intl.Segmenter("en", { granularity: "word" });
 
-function countWords(input: string): number {
+export function countWords(input: string): number {
   const text = input
     .replace(/```[\s\S]*?```/g, " ") // fenced code blocks
     .replace(/!\[[^\]]*\]\([^)]*\)/g, " ") // images (drop alt + URL)

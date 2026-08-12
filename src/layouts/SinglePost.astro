@@ -6,6 +6,7 @@ import BackToTop from "../components/BackToTop.astro";
 import CodeCopy from "../components/CodeCopy.astro";
 
 import { type Post } from "../types.ts";
+import { SITE_LANG } from "../consts.ts";
 
 interface Props {
   title: string;
@@ -20,7 +21,7 @@ const { title, description, type, article, noindex, jsonLd } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={SITE_LANG}>
   <Head
     title={title}
     description={description}

@@ -5,6 +5,7 @@ import Footer from "../components/Footer.astro";
 import BackToTop from "../components/BackToTop.astro";
 
 import { type Feed, type Post } from "../types.ts";
+import { SITE_LANG } from "../consts.ts";
 
 interface Props {
   title: string;
@@ -21,7 +22,7 @@ const { title, description, type, article, noindex, jsonLd, feed } =
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={SITE_LANG}>
   <Head
     title={title}
     description={description}

@@ -55,9 +55,9 @@ const jsonLd = [
   </div>
 
   <section>
-    <p class="meta mb-1 font-bold">
+    <h2 class="meta mb-1 font-bold">
       {page.total} essay{page.total === 1 ? "" : "s"}
-    </p>
+    </h2>
     {
       page.data.map((post) => {
         const postDate = new Date(post.date).toLocaleString("default", {

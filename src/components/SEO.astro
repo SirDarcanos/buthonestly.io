@@ -1,6 +1,12 @@
 ---
 import type { Post } from "../types.ts";
-import { SITE_URL, SITE_TITLE, SITE_DESCRIPTION } from "../consts.ts";
+import {
+  SITE_URL,
+  SITE_TITLE,
+  SITE_DESCRIPTION,
+  SITE_LANG,
+} from "../consts.ts";
+import { countWords } from "../lib/reading-time.ts";
 
 const SITE_NAME = SITE_TITLE;
 const AUTHOR_NAME = "Nicola Mustone";
@@ -92,6 +98,7 @@ if (type === "profile") {
 }
 
 if (article) {
+  const { cover, featuredImage } = article;
   jsonLd.push({
     "@context": "https://schema.org",
     "@type": "Article",
@@ -100,9 +107,23 @@ if (article) {
     url: article.seo.canonical,
     datePublished: article.date,
     dateModified: article.modified,
-    ...(article.featuredImage ? { image: article.featuredImage } : {}),
+    ...(featuredImage
+      ? {
+          image: {
+            "@type": "ImageObject",
+            url: featuredImage,
+            ...(cover ? { width: cover.width, height: cover.height } : {}),
+          },
+        }
+      : {}),
     author: PERSON,
     publisher: PERSON,
+    inLanguage: SITE_LANG,
+    wordCount: countWords(article.body),
+    ...(article.categories.length
+      ? { articleSection: article.categories }
+      : {}),
+    ...(article.tags.length ? { keywords: article.tags } : {}),
     mainEntityOfPage: article.seo.canonical,
   });
 }
@@ -132,7 +153,8 @@ jsonLd.push(...extraJsonLd);
     </>
   )
 }
-<meta property="og:locale" content="en_US" />
+{/* Open Graph wants the underscore form, BCP 47 the hyphen. */}
+<meta property="og:locale" content={SITE_LANG.replace("-", "_")} />
 {
   article && (
     <>
