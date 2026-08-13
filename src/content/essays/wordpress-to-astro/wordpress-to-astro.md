@@ -1,6 +1,6 @@
 ---
 title: "The Block That Almost Did What I Wanted: WordPress to Astro"
-date: 2026-08-18T02:00:00
+date: 2026-08-18
 updated:
 sticky: false
 cornerstone: false

@@ -1,6 +1,6 @@
 ---
 title: What If WordPress Hadn't Been GPL?
-date: 2026-09-15T13:00:00
+date: 2026-09-01
 updated:
 sticky: false
 cornerstone: false
