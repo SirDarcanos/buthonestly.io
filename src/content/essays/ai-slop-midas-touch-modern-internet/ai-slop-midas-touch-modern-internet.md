@@ -4,7 +4,7 @@ date: 2025-11-24T16:05:32
 updated: 2026-05-12T22:44:57
 sticky: false
 cornerstone: false
-excerpt: Is the term “AI Slop” used too widely and slapped on anything touched by AI like a cursed Midas Touch?
+excerpt: I shared six years of Steam review data on Reddit. The thread skipped the methodology and argued about the AI-made infographic instead.
 categories:
   - Observations
 tags:
@@ -190,7 +190,7 @@ So when they see text that feels “AI-ish” or an AI-branded infographic, thei
 
 > “You tricked me. This isn’t _you_.”
 
-Even when it actually _is_ you, your thinking, your structure, and your decisions, with a tool smoothing the edges. And that’s precisely why this Reddit experience got to me on a personal level.
+Even when it actually _is_ you, your thinking, your structure, and your decisions, with a tool smoothing the edges. That is why the Reddit thread got to me.
 
 I’m not interested in pretending I don’t use that tool. If an AI model helps me say what I mean more clearly, I’m going to use it.
 

@@ -4,7 +4,7 @@ date: 2026-05-05T02:00:00
 updated: 2026-05-23T12:21:45
 sticky: true
 cornerstone: true
-excerpt: Push code to GitHub with no license file and it isn’t really open source — just visible. Choosing one feels like a legal maze, but it matters.
+excerpt: Push code to GitHub with no license file and it isn’t really open source — just visible. By default nobody can legally use it, fork it, or fix your bug.
 categories:
   - Programming
 tags:
@@ -38,7 +38,7 @@ By default, _no license_ means **all rights reserved**. Others can’t legally r
 
 Licensing your software early prevents headaches later. It protects your intentions, defines what others can do with your code, and helps your project grow under clear rules.
 
-This guide explains how to choose a software license that fits your goals, whether you’re sharing open-source tools or protecting private projects.
+So here is how I pick one, whether the project is something I want shared or something I want kept.
 
 > [!disclaimer]
 > Everything shared in this essay reflects **my own opinions and experience**. I’m speaking solely on my behalf — **not on behalf of Automattic Inc.** or any of its brands.
@@ -81,15 +81,13 @@ WordPress, Linux, and thousands of other projects rely on GPL to guarantee that 
 
 **Best for:** projects where openness matters more than commercial flexibility.
 
-> _“The GPL isn’t just a license, it’s a promise that freedom stays built into your software.”_
-
 ### Apache License 2.0
 
 [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) is permissive like MIT but adds **patent protection**.
 
 If someone contributes code to your project and later tries to sue you over a patent related to that contribution, the Apache license invalidates their claim.
 
-Patent protection matters increasingly as developers embrace AI-assisted development and [[what-is-vibe-coding-how-to-do-it|vibe coding practices]] where code authorship becomes less clear-cut.
+This matters more now that people build with AI. When you [[what-is-vibe-coding-how-to-do-it|vibe code]], who wrote which line gets harder to answer.
 
 **Best for:** large or corporate-backed projects, or if you want explicit legal protection.
 
@@ -140,9 +138,7 @@ It defines what users _can do_ (install, use, modify internally) and _cannot do_
 
 ## How to Choose the Right Software License
 
-Choosing a license isn’t about memorizing legal jargon — it’s about aligning with your goals. The steps to choose a license outlined below are a guideline for you to follow, although you might want to dig deeper based on your specific case.
-
-> _“Licensing decisions shape your project’s future before the first user even downloads it.”_
+You don’t need to memorize legal jargon. You need to know what you want the project to do. The steps to choose a license outlined below are a guideline for you to follow, although you might want to dig deeper based on your specific case.
 
 ### Step 1. Clarify your goals.
 
@@ -321,8 +317,6 @@ Consistency builds trust. Your license file, headers, and metadata should all sa
 
 If you ever update your license (say from GPLv2 to GPLv3), change it everywhere in one go.
 
-> _“Your license isn’t just a file — it’s a declaration of intent. Make it impossible to miss.”_
-
 ## What to Do If Someone Violates Your License
 
 Even with the clearest license, infringements happen. Maybe someone copied your code without attribution, resold your GPL-licensed plugin without sharing the source, or used your assets in a way your license doesn’t allow.
@@ -376,8 +370,6 @@ Whether you want your code to empower others or stay private, decide intentional
 
 Next time you push a project live, take a moment for the license.  
 It’s the smallest file in your repo but often the most powerful one.
-
-> _“The smallest file in your repo might be the one that protects it most.”_
 
 ## What About This Essay?
 
