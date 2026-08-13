@@ -187,6 +187,31 @@ const ARCHIVE_FEED_REDIRECTS = [
 ];
 
 /**
+ * Bare WordPress taxonomy archives. Only the `/feed/` variants were covered, so
+ * `/category/leadership/` and `/tag/adhd/` — the archive pages themselves —
+ * returned 404. Must follow ARCHIVE_FEED_REDIRECTS: first match wins, and
+ * `/category/:slug/` would otherwise swallow `/category/:slug/feed/`.
+ *
+ * A slug that no longer exists lands on the hub rather than another 404, which
+ * is why the wildcards come after the placeholder rules.
+ */
+const TAXONOMY_ARCHIVE_REDIRECTS = [
+  ["/category/:slug/", "/section/:slug/"],
+  ["/tag/:slug/", "/topic/:slug/"],
+];
+
+/**
+ * Catch-alls for taxonomy paths the placeholder rules miss — multi-segment ones
+ * like `/category/wordpress/woocommerce/`. Emitted dead last, after
+ * LEGACY_REDIRECTS: a wildcard here would otherwise shadow the specific legacy
+ * rules for exactly those paths.
+ */
+const TAXONOMY_CATCHALL_REDIRECTS = [
+  ["/category/*", "/section/"],
+  ["/tag/*", "/topic/"],
+];
+
+/**
  * Per-essay WordPress sub-pages that no longer exist — the per-post feed and
  * paginated comments — back to the essay itself.
  */
@@ -319,6 +344,7 @@ const body = [
   ...SECTION_REDIRECTS.map(formatRule),
   ...PAGINATION_REDIRECTS.map(formatRule),
   ...ARCHIVE_FEED_REDIRECTS.map(formatRule),
+  ...TAXONOMY_ARCHIVE_REDIRECTS.map(formatRule),
   ...ESSAY_SUBPAGE_REDIRECTS.map(formatRule),
   // After the sub-page rules, so `/web/<slug>/feed/` still reaches its essay
   // rather than being swallowed as a two-segment legacy path.
@@ -326,6 +352,7 @@ const body = [
   ...DOWNLOAD_REDIRECTS.map(formatRule),
   ...R2_PASSTHROUGH_REDIRECTS.map(formatRule),
   ...LEGACY_REDIRECTS.map(formatRule),
+  ...TAXONOMY_CATCHALL_REDIRECTS.map(formatRule),
 ].join("\n");
 
 await mkdir(fileURLToPath(new URL("../public", import.meta.url)), {
@@ -341,7 +368,7 @@ console.log(
   `Wrote ${OUT} — ${POST_REDIRECTS.length} post + ${RENAMED_SLUG_REDIRECTS.length} renamed slug + ` +
     `${INTERNAL_REDIRECTS.length} internal + ` +
     `${SECTION_REDIRECTS.length} section + ${PAGINATION_REDIRECTS.length} pagination + ` +
-    `${ARCHIVE_FEED_REDIRECTS.length} archive feed + ${ESSAY_SUBPAGE_REDIRECTS.length} essay sub-page + ` +
+    `${ARCHIVE_FEED_REDIRECTS.length} archive feed + ${TAXONOMY_ARCHIVE_REDIRECTS.length + TAXONOMY_CATCHALL_REDIRECTS.length} taxonomy archive + ${ESSAY_SUBPAGE_REDIRECTS.length} essay sub-page + ` +
     `${LEGACY_PREFIX_REDIRECTS.length} legacy prefix + ` +
     `${DOWNLOAD_REDIRECTS.length} download + ` +
     `${R2_PASSTHROUGH_REDIRECTS.length} R2 passthrough + ${LEGACY_REDIRECTS.length} legacy rules ` +

@@ -61,8 +61,16 @@ const suggestions = (await getAllPosts()).slice(0, 3);
 </Layout>
 
 <script>
-  // A static page can't know the 404'd path server-side.
+  import { track } from "../lib/track";
+
+  // A static page can't know the 404'd path server-side, and Cloudflare's logs
+  // aren't reachable from here — so the only way to learn which URLs are dead is
+  // to report the path from the browser. Diagnostic, not a metric: it creates one
+  // Fathom event per distinct bad path, so read it after a few weeks and then
+  // decide whether to keep it. Truncated because event names are not unbounded.
   if (typeof location !== "undefined") {
+    const path = location.pathname.slice(0, 60);
     console.info(`404 — no page at ${location.pathname}`);
+    track(`404: ${path}`);
   }
 </script>
