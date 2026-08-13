@@ -45,7 +45,13 @@ for (const slug of dirs) {
   const raw = fs.readFileSync(path.join(ESSAYS, slug, `${slug}.md`), "utf8");
   const m = raw.match(/^---\n([\s\S]*?)\n---\n/);
   const fm = m?.[1] ?? "";
-  essays.push({ slug, fm, body: raw.slice(m?.[0].length ?? 0) });
+  const date = fm.match(/^date:[ \t]*(\S+)/m)?.[1];
+  essays.push({
+    slug,
+    fm,
+    body: raw.slice(m?.[0].length ?? 0),
+    scheduled: !!date && new Date(date) > new Date(),
+  });
   routes.add(`/${slug}/`);
   for (const c of listUnder(fm, "categories"))
     routes.add(`/section/${slugify(c)}/`);
@@ -91,7 +97,11 @@ function* markdownImages(text) {
 
 const norm = (p) => (p.endsWith("/") || /\.[a-z0-9]+$/i.test(p) ? p : `${p}/`);
 const issues = [];
-for (const { slug, fm, body } of essays) {
+const scheduledSlugs = new Set(
+  essays.filter((e) => e.scheduled).map((e) => e.slug),
+);
+
+for (const { slug, fm, body, scheduled } of essays) {
   const clean = body.replace(/```[\s\S]*?```/g, "");
 
   // Nothing else validates that a cover exists, so a bad one surfaces as an
@@ -133,8 +143,15 @@ for (const { slug, fm, body } of essays) {
   // `[[…]]` wikilinks, but not `![[…]]` embeds (audio players etc.).
   for (const m of clean.matchAll(/(?<!!)\[\[([^\]|#]+)/g)) {
     const target = m[1].trim();
-    if (!essaySlugs.has(target))
+    if (!essaySlugs.has(target)) {
       issues.push([slug, "wikilink", `[[${target}]]`]);
+      continue;
+    }
+    // A future-dated essay is withheld from the production build, so a link to
+    // one from an already-published essay is a 404 the moment this is pushed.
+    // The dev server builds both, which is exactly why it goes unnoticed.
+    if (!scheduled && scheduledSlugs.has(target))
+      issues.push([slug, "unpublished", `[[${target}]] is not live yet`]);
   }
   // `> ![tip]` instead of `> [!tip]` is still valid Markdown, so it silently
   // degrades to a plain blockquote instead of rendering as a callout.

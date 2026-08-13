@@ -125,7 +125,7 @@ If I’m charging for something, I might not even handle the payment on the site
 
 Portfolios are where people often overcomplicate things.
 
-You don’t need a headless CMS and three front-end frameworks to show a few projects and an email address — though I did eventually [[wordpress-to-astro|move this site to Astro]], for reasons that had nothing to do with need. You need a place where people can understand what you do, see some proof, and contact you.
+You don’t need a headless CMS and three front-end frameworks to show a few projects and an email address. You need a place where people can understand what you do, see some proof, and contact you.
 
 For that, I again use WordPress, but I strip it down aggressively:
 

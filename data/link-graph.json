@@ -1,8 +1,7 @@
 {
   "10-types-of-websites": {
     "out": [
-      "woocommerce-attributes-vs-variations",
-      "wordpress-to-astro"
+      "woocommerce-attributes-vs-variations"
     ],
     "in": [
       "bulk-edit-woocommerce-products-without-plugins",
@@ -58,8 +57,7 @@
   "buildings-never-were": {
     "out": [
       "gaming-made-me-better-leader",
-      "learning-care-without-feeling",
-      "uncensored-library-minecraft"
+      "learning-care-without-feeling"
     ],
     "in": [
       "choosing-what-to-play",
@@ -387,9 +385,7 @@
       "10-types-of-websites",
       "enhancing-wordpress-content-protection-beyond-right-click-blocks"
     ],
-    "in": [
-      "buildings-never-were"
-    ]
+    "in": []
   },
   "vibe-writing-line-between-human-machine": {
     "out": [
@@ -538,9 +534,7 @@
       "wordpress-site-performance-vs-desig",
       "write-in-markdown"
     ],
-    "in": [
-      "10-types-of-websites"
-    ]
+    "in": []
   },
   "write-in-markdown": {
     "out": [
