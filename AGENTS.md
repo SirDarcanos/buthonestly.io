@@ -163,7 +163,13 @@ links` reports how many essays in each cluster reach theirs. Only durable
   pieces qualify — a cornerstone accumulates links for years, so pointing one at
   something destined for a rewrite wastes the accumulation.
 - `.claude/skills/essay-checkup/` diagnoses one existing essay against all of
-  the above. Local and gitignored, like the Style Guide. It never edits.
+  the above. `.claude/skills/share-essay/` drafts the LinkedIn, Bluesky and
+  Mastodon posts for one, new or resurfaced. Both are local and gitignored, like
+  the Style Guide, and neither edits or publishes anything.
+- Tag every shared link — `?utm_source=linkedin&utm_medium=social` and the
+  Bluesky and Mastodon equivalents. Mastodon clients and the Bluesky app strip
+  the referrer, so an untagged visit is indistinguishable from a bookmark in
+  Fathom. The newsletter has clean numbers only because Kit tags it.
 - Publishing is date-driven (a future `date` schedules the essay); WIP lives
   in `src/content/drafts/`, which is not a built collection. A scheduled essay
   still renders on the dev server, so it can be proofread before it lands.
