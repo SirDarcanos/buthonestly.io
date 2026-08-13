@@ -1,6 +1,6 @@
 # Marketing Context — BUT. Honestly
 
-**Document version:** v2
+**Document version:** v1
 **Last updated:** 2026-08-13
 
 > Context for skills that write or plan content for buthonestly.io. This is a personal
@@ -13,7 +13,9 @@
 
 ## What the site is
 
-**One-liner:** Honest, long-form essays on leadership, code, and the overlap between humans and tech.
+**One-liner:** Honest writing on leadership, code, and the overlap between humans and tech.
+
+Most pieces are essays of 1,500–3,000 words, but length is not the defining trait — see *Length, and when not to write an essay* in the Style Guide. Write to the size of the thought.
 
 **The line that leads: "Clarity without the comfort."** Everything else — including the meta description about "the messy overlap between humans and tech" — is descriptive. That one is the promise.
 
@@ -21,9 +23,11 @@
 
 The essays are honest. No clickbait, no engineered curiosity gaps, no headline the piece doesn't pay off. The truth as it is, however uncomfortable, embarrassing or controversial it is — for the author or for the reader.
 
-**This is the site's hardest constraint, and it binds titles and excerpts especially.** A title may be clearer, more specific, or better matched to how someone would actually search. It may not be baited. The test is whether the essay delivers exactly what the title promised: sharpening a title toward accuracy is fine, sharpening it toward a click is not.
+**This is the site's hardest constraint, and it binds titles and excerpts especially.** Write them to be clicked — see *Why it exists*. The constraint is on the method, not the ambition: no engineered curiosity gap, no headline the essay does not pay off. **The test is whether the essay delivers exactly what the title promised.** If it does, sharpening for the click is fair game.
 
 It is also why the writing includes the parts that don't flatter him — killed traffic, the disavow-tool mistake, leading with ADHD. Vulnerability isn't a stylistic device here; it's what the name commits to.
+
+**The standard is live, not aspirational.** Asked whether he had ever dropped a piece because it would cost him, the answer was no. The nearest case is one he is planning: a critical essay about WordPress being slow to modernise, written while wondering what Matt Mullenweg would make of it. His conclusion — write it anyway, carefully, with the usual disclaimer. *"It's just the truth."* Employer disclaimers here mark whose opinion it is; they are not a signal that anything has been softened.
 
 **What it does:** 1–4 essays a month across four sections. Each pairs a personal story with a usable framework, written from having done the thing rather than from teaching it. Free tools and templates sit alongside the writing.
 
@@ -35,23 +39,55 @@ It is also why the writing includes the parts that don't flatter him — killed 
 
 ## Why it exists
 
-Three goals, in the author's own priority:
+**In the author's own words: "I have something to say and I want people to listen to it."**
 
-1. **Thinking in public.** The writing is the point. Working an idea out properly — in public, where it has to hold up — is what forces the rigour.
-2. **Professional signal.** A body of work that shows how he thinks, for the people who find him through it.
-3. **Building an audience.** Real, but downstream of the first two. Readership grows because the writing is worth reading, not because it was optimised to.
+That is the goal. Not money — there is none and none is coming. He wants the site read, the essays found, the tools used, and the writing to reach people. Everything else is method.
 
-**What follows from that order:** the writing is never bent to serve reach. An essay that would rank better as a listicle stays an essay. Growth tactics that cost honesty are off the table — that is the whole premise of the name.
+Three things follow from that, and they are means rather than ends:
+
+1. **Thinking in public.** Working an idea out where it has to hold up is what makes it worth reading. It serves the goal; it is not the goal.
+2. **Professional signal.** A body of work that shows how he thinks, aimed at the wider tech community rather than at hiring or at the WordPress ecosystem specifically.
+3. **Being findable.** Readers who cannot find the essay are not readers. Search is how most people arrive today — mostly at the archive he does not want to be known for, which is the problem rather than the plan. See *Who it's for*.
+
+**Clicks matter, and honesty is a constraint on how you earn them, not a reason to stop trying.**
+
+- Titles, headings, excerpts and descriptions should be **written to rank and to be clicked** — matched to how people actually search, specific enough to win against nine other results.
+- The line is content, not effort. No engineered curiosity gap, no headline the essay does not pay off, no thin piece built to catch a keyword. **Everything short of that is fair game.**
+- An honest title nobody searches for is a failure, not a principle. So is position 30 because nobody checked the query.
+- The target is not rank 1 for everything, and not rank 30 for everything. Page one where the essay is genuinely the best answer.
+
+Never bend the *substance* to chase a term. Do sharpen the title, headings and excerpt for the query.
+
+**The current blocker is not reach. It is the voice.** In his words: *"The voice is not mine, it doesn't sound like me, it sounds like Enceladus, or Claude."* He is frustrated by the state of the blog and has several essays he wants to write. Fixing how it sounds comes before growing how many people hear it — a bigger audience for writing he does not recognise is not the goal.
 
 ## Who it's for
 
-**The reader in mind:** practitioners — people leading small technical teams or building for the web who want the honest version with the tradeoffs included — and more broadly, anyone tech-adjacent who wants a considered take rather than a hot one.
+**There is more than one reader, and they barely overlap.** The WooCommerce developer looking up an attribute filter and the lead reading about caring without feeling it are different people who arrive by different routes and rarely read each other's essays. Treat them as separate audiences rather than one blended persona.
 
-**Assumed level:** you have shipped something. Not expert-only, but not a first-timer's guide either. Exception: the older WooCommerce tutorials are genuinely beginner-level, which is a legacy of when they were written, not a change in target.
+- **Practitioners** — people leading small technical teams or building for the web, who want the honest version with the tradeoffs named. The Leadership and Observations essays are for them.
+- **Searchers with a specific problem** — mostly WordPress and WooCommerce, arriving from Google for one answer. The Programming and Web archive serves them.
+
+**What follows:** an excerpt or title should be written for whichever audience that essay actually serves, not for a blended average. Cross-linking between the two groups is worth less than linking inside them, so do not force it.
+
+**Assumed level differs by audience.** For practitioners: you have shipped something. Not expert-only, but not a first-timer's guide. For searchers: they arrive knowing only their problem, and the older WooCommerce tutorials are written accordingly — genuinely beginner-level, which is a legacy of when they were written rather than a change in target.
 
 **Who arrives instead.** Search overwhelmingly finds the 2015–2018 WooCommerce archive: `woocommerce_min_password_strength` (position 7.0), `woocommerce attributes and variations` (14.5), plus software-licensing queries (9–12).
 
-**This is a known and accepted divergence, not a problem to solve.** That archive is a **legacy tail**: keep it correct, don't build on it, don't let it define the site. Do not treat WooCommerce search demand as a signal about what to write next.
+**Leave it correct and leave it alone.** In his words: *"I don't want traffic from WooCommerce posts. They are there and they can stay, but I don't want to be known for that only. I want to be known for the new content."*
+
+- **Do** keep it accurate — snippets that work, dates that are honest, links that resolve. It helps whoever lands there.
+- **Do not** spend optimisation effort on it. Every winnable ranking the site has sits in this archive, and winning more of them grows an audience that will not read anything else.
+- **Rarely extend it.** WordPress and WooCommerce essays will appear occasionally, not consistently.
+
+**This is a deliberate refusal of the easiest traffic available, and it should be respected rather than re-litigated.** A future session will notice those positions and want to chase them. Don't.
+
+**What follows, and it is uncomfortable.** The content he wants to be known for — Leadership and Observations — has almost no search traction, and it is **shareable rather than searchable**: nobody googles "how to care without feeling it". Declining the WooCommerce traffic means declining the only easy search wins the site has.
+
+So SEO is the wrong lever for the goal. For this content the levers are:
+
+- **Distribution.** Today: the Kit broadcast fires on publish, and he posts somewhere manually when he remembers. That is the whole channel list, and it is the biggest untouched opportunity on this page.
+- **The essays being worth passing on.** Which is the voice problem, which is why that outranks reach.
+- **Brand queries.** "but honestly", "the automation of joy essay", "team building essay" already appear. People searching for an essay by name is the only search signal that measures the thing he actually wants.
 
 ## What readers get here that they don't elsewhere
 
@@ -61,7 +97,13 @@ Three goals, in the author's own priority:
 - **Code is dated.** Snippets carry `@tested-up-to`, and get revised when they rot.
 - **AI use is disclosed** on every essay, linking to `/artificial-intelligence-tools/`.
 
-Not framed as competition. Hosting-company blogs and big WordPress publications out-rank the site by orders of magnitude on head terms, and that is fine — measured proof: `10-types-of-websites` has held position 24–30 for six months on "types of websites", 4,223 impressions, 1 click. **Head terms are not winnable and not worth chasing.** Value comes from specificity and honesty, not reach.
+Hosting-company blogs and big WordPress publications out-rank the site on broad head terms by orders of magnitude. `10-types-of-websites` has held position 24–30 for six months on "types of websites" — 4,223 impressions, 1 click.
+
+**Read that as a targeting problem rather than proof that search is hopeless.** Broad head terms against Wix and Hostinger are a poor bet at any effort level.
+
+The winnable positions the site holds — 7.0, 10.5, 10.9, 11.5, 13.6 — are all in the WooCommerce archive, and by the author's decision they stay unoptimised. See *Who it's for*.
+
+Where search work does belong: the newer essays that are genuinely searchable, `what-is-a-gpu`, `sql-vs-nosql`, `how-to-choose-a-software-license`. On those, position 30 on a query the essay could serve is a bug worth fixing in the title, headings and excerpt.
 
 ## Language
 
@@ -102,19 +144,38 @@ Not framed as competition. Hosting-company blogs and big WordPress publications 
 
 **Conversion action:** newsletter signup via Kit — "New essays and the occasional tool, 1–4 times a month. No spam, and you can unsubscribe anytime." Subscriber count not recorded here.
 
+## What success looks like
+
+The goal is "I have something to say and I want people to listen to it." These are the numbers that measure *that*, which is not the same as measuring traffic.
+
+| Metric | Baseline (28 days to 2026-08-13) | Why this one |
+|---|---|---|
+| **Newsletter subscribers** | **known to the author, low; not recorded here** | People who chose to keep hearing from him. The only audience that does not depend on Google, and the closest thing to "listening". |
+| **Search clicks to non-archive essays** | **19** of 27 | Total clicks are misleading: 8 of 27 went to the WooCommerce archive he has declined to grow. This splits out the content he wants to be known for. |
+| **Referral visits (Fathom)** | **not recorded — get this number** | Anyone arriving from somewhere other than a search engine. The direct measure of whether anything is being shared, and the one tied to the distribution gap. |
+| **Brand queries** | 3 seen: "but honestly", "the automation of joy essay", "team building essay" | People looking for him or an essay by name. The only search signal that measures being known rather than being found. |
+
+**Deliberately not tracked: total search clicks, and queries ranking page one.** Both are dominated by the WooCommerce archive, so both would rise while the actual goal went nowhere. An earlier draft used them; they measure the traffic he turned down.
+
+All figures are provisional until URL consolidation finishes around October 2026 — see *Where things stand*. Set targets then, not against migration-distorted numbers.
+
 ## Deliberately not in this document
 
 | Section | Why |
 |---|---|
 | Personas | Single author, no buying committee, no sale. |
-| Competitive landscape | The site does not compete for reach; framing hosting blogs as rivals misreads the intent. |
+| Competitive landscape | Kept in spirit under *What readers get here*: the site does not out-resource hosting blogs, so it competes on specificity. It does compete. |
 | Objections | Nothing is sold, so there is no sales objection to handle. |
 | Switching dynamics | The four-forces frame describes product switching, not reading. |
 | Brand voice | Owned by `src/content/drafts/Style Guide.md`. Restating it here would create a second source of truth. |
 
 ## Open questions
 
-None outstanding. The four from v2 — what the name means, which line leads, what the tools are for, and whether monetisation is coming — were answered by the author and are now recorded above.
+**Should the blog split?** Raised by the author: move the technical writing to `nicolamustone.com` and leave BUT. Honestly for the essays. It follows directly from the two-audience finding, and it would resolve several tensions at once — the register target that only fits a handful of essays, a search identity built on content he does not want to be known for, and an archive whose readers never read the rest. It would also cost the site its only real rankings and its one backlink. **Not decided. The biggest open question on this page.**
+
+**Distribution.** The site's reach depends almost entirely on Google, in a category where Google will not deliver. No plan exists for anything else. This is the gap most likely to decide whether the goal is met.
+
+**Newsletter subscriber count** — he knows it and calls it low. Not written down here yet, and it is one of the three success metrics.
 
 Worth revisiting around **October 2026**, when URL consolidation finishes and the traffic numbers become a real baseline rather than a migration artefact.
 
@@ -122,6 +183,4 @@ Worth revisiting around **October 2026**, when URL consolidation finishes and th
 
 *Newest first. One line per revision: what changed and why.*
 
-- v3 (2026-08-13) — Answered the four open questions from the author. Added *What the name means* — no clickbait, the truth however uncomfortable — and made it binding on titles and excerpts, which is the constraint most likely to be violated by SEO advice. Named "Clarity without the comfort" as the line that leads. Recorded that free tools are byproducts rather than a strategy, so the AI voice generator's click share is not a signal to build more. Recorded no monetisation as very likely permanent.
-- v2 (2026-08-13) — Reshaped for a personal site after author review: removed Personas, Competitive Landscape, Objections and Switching Dynamics as product-only fiction; delegated voice to the Style Guide instead of duplicating it; recorded purpose (thinking in public, professional signal, audience) and reader (practitioners, tech-adjacent); reframed the WooCommerce archive as an accepted legacy tail rather than a positioning gap.
-- v1 (2026-08-13) — Initial context, auto-drafted from repo copy, the Style Guide, all 49 essays and 28 days of Search Console data.
+- v1 (2026-08-13) — Initial context, built with the author from repo copy, the Style Guide, all 49 essays and 28 days of Search Console data.
