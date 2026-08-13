@@ -6,7 +6,7 @@ sticky: false
 cornerstone: false
 excerpt: Choosing between SQL and NoSQL is about data stability and constraints, not speed or hype.
 categories:
-  - Web
+  - Programming
 tags:
   - Performance
   - Productivity

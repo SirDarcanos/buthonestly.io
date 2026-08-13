@@ -6,7 +6,7 @@ sticky: false
 cornerstone: false
 excerpt: Freedom of speech survives in unexpected places because access, not legality, is what breaks first.
 categories:
-  - Web
+  - Observations
 tags:
   - Blogging
   - Creativity
