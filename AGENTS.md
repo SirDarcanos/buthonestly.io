@@ -39,8 +39,8 @@ accumulate and go out as a batch. Do not push on every change.
   `<slug>.audio.txt`, the narration script: the essay reduced to what will be
   spoken, split into the chunks each TTS call receives. Read it, fix anything
   that should sound different — an acronym spelled out, an image caption
-  rephrased so it stands on its own — then re-run to synthesize *from that
-  file*, not from the Markdown. `--refresh` rebuilds it from the essay and
+  rephrased so it stands on its own — then re-run to synthesize _from that
+  file_, not from the Markdown. `--refresh` rebuilds it from the essay and
   discards the edits; editing the essay afterwards only warns, since the
   script is the input of record. Both it and the MP3 are git-ignored.
   Synthesis writes the MP3 beside the essay, inserts an Obsidian
@@ -57,6 +57,14 @@ accumulate and go out as a batch. Do not push on every change.
   can't edit nested objects).
 - `npm run related` — rebuild the semantic related-posts map (normally left
   to the `related.yml` Action).
+- `npm run links` — map the editorial internal-link graph and write
+  `data/link-graph.json` (committed, so a diff shows an essay gaining an inbound
+  link). Counts only links written into prose: the related-posts block, taxonomy
+  links and the footer already give every essay inbound links, so including them
+  would report a healthy graph no matter what was written. Reports orphans, dead
+  ends, cluster density and cornerstone reach. Scheduled essays are counted
+  separately — a link only exists once its source publishes. Advisory; `--strict`
+  exits non-zero for CI.
 - `npm run indexnow` — submit changed essays to IndexNow so Bing, Yandex,
   Seznam and Naver recrawl within hours. Google does not participate; it
   still discovers via the sitemap. Normally left to the `indexnow.yml`
@@ -84,6 +92,12 @@ accumulate and go out as a batch. Do not push on every change.
   no fonts installed. Run it by hand after a logo or brand-colour change;
   the output is committed rather than built, to keep a binary out of every
   build's diff.
+- `npm run lint:essay -- <slug>` — style-guide lint, advisory. Suppress a
+  finding from inside the essay with an HTML comment, which is invisible both on
+  the site and in Obsidian: `<!-- lint-ignore -->` covers that line and the next,
+  `<!-- lint-ignore sentence -->` narrows it to rules containing "sentence", and
+  `<!-- lint-ignore-file em dash -->` applies to the whole essay. The report
+  prints how many it suppressed, so nothing disappears silently.
 - A pre-commit hook (`.githooks/`, wired by the `prepare` script) optimizes
   staged essay images — blocking the commit on non-16:9 — and formats staged
   code. Prettier deliberately ignores `data/` (generated) and `src/content`
@@ -131,6 +145,25 @@ opposite: git-ignored, uploaded to R2.
   lives in `src/content/drafts/Style Guide.md` and only there — the marketing
   doc points at it rather than repeating it.
 - The site has no comments — never add "share in the comments" CTAs.
+- `excerpt` is the meta description, hard-truncated at 160 characters by
+  `toPost()`, and it also renders as the lead paragraph above the essay. So it
+  must not repeat or reword the opening line — a reader would meet that sentence
+  twice. Aim for 130–160 characters. The Style Guide covers what makes a good
+  one.
+- `updated` renders a visible "Last updated" line at the foot of the essay, but
+  only when it is later than `date`. Leave it blank on first publish, and don't
+  bump it for mechanical edits like an image path rewrite — a modified date that
+  tracks no content change misleads readers and is a poor freshness signal.
+- **Never link a live essay to a scheduled one.** A future-dated essay is
+  withheld from the production build, so the link 404s the moment you push. The
+  dev server builds both, which is why this looks fine locally; `check:links`
+  catches it.
+- `cornerstone: true` marks an evergreen hub other essays link to. `npm run
+links` reports how many essays in each cluster reach theirs. Only durable
+  pieces qualify — a cornerstone accumulates links for years, so pointing one at
+  something destined for a rewrite wastes the accumulation.
+- `.claude/skills/essay-checkup/` diagnoses one existing essay against all of
+  the above. Local and gitignored, like the Style Guide. It never edits.
 - Publishing is date-driven (a future `date` schedules the essay); WIP lives
   in `src/content/drafts/`, which is not a built collection. A scheduled essay
   still renders on the dev server, so it can be proofread before it lands.

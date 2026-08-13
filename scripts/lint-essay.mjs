@@ -8,6 +8,13 @@
 //   npm run lint:essay -- <slug> --json    # machine-readable
 //   npm run lint:essay -- <slug> --strict  # exit 1 on FAILs (default: advisory)
 //
+// Suppress a finding from inside the essay, as an HTML comment — invisible on
+// the site and in Obsidian's preview:
+//
+//   <!-- lint-ignore -->               this line and the next, every rule
+//   <!-- lint-ignore sentence -->      only rules containing "sentence"
+//   <!-- lint-ignore-file em dash -->  that rule, anywhere in the essay
+//
 // Advisory by default (exit 0) so it never blocks a commit or CI. Thresholds
 // mirror the style guide kept in local/ (uncommitted).
 
@@ -413,9 +420,13 @@ function checkFormatting(body, base, r) {
     }
   }
 
+  // Single-asterisk emphasis only. Without the lookarounds this matches the gap
+  // *between* two `**bold**` runs — the closing pair of one and the opening pair
+  // of the next — and reports the ordinary prose in between as one long italic.
+  // Any paragraph with two bold terms tripped it, which is most of them.
   for (const [line, match] of findPatternHits(
     body,
-    /\*[^*\n]{15,}?\*/g,
+    /(?<![*\w])\*(?!\*)[^*\n]{15,}?(?<!\*)\*(?![*\w])/g,
     base,
   )) {
     const words = wc(visibleText(match));
@@ -564,6 +575,48 @@ function checkLinks(body, r) {
     );
 }
 
+/**
+ * Suppressions authored in the essay itself, as HTML comments — invisible both
+ * on the site and in Obsidian's preview. Read from the raw text because
+ * stripHtmlComments() blanks them before any check runs.
+ *
+ *   <!-- lint-ignore -->                 everything on this line and the next
+ *   <!-- lint-ignore sentence -->        only rules containing "sentence"
+ *   <!-- lint-ignore-file em dash -->    that rule, anywhere in the essay
+ *
+ * A directive covers its own line and the one after it, so it can sit above the
+ * offending sentence or at the end of it. Fragments match as substrings and
+ * case-insensitively: rule names carry counts, like "italics over 3 words (7)",
+ * so anything stricter would be unusable.
+ */
+function collectIgnores(raw) {
+  const byLine = new Map();
+  const global = [];
+  raw.split("\n").forEach((text, i) => {
+    for (const m of text.matchAll(
+      /<!--\s*lint-ignore(-file)?\b\s*([^>]*?)\s*-->/g,
+    )) {
+      const fragment = (m[2] || "").trim().toLowerCase();
+      if (m[1]) {
+        global.push(fragment);
+        continue;
+      }
+      for (const line of [i + 1, i + 2]) {
+        if (!byLine.has(line)) byLine.set(line, []);
+        byLine.get(line).push(fragment);
+      }
+    }
+  });
+  return { byLine, global };
+}
+
+function isIgnored(finding, ignores) {
+  const rule = `${finding.rule}`.toLowerCase();
+  const hit = (f) => f === "" || rule.includes(f);
+  if (ignores.global.some(hit)) return true;
+  return (ignores.byLine.get(finding.line) ?? []).some(hit);
+}
+
 function lintText(file, raw) {
   const [afterFm, base] = stripFrontmatter(raw);
   const body = stripHtmlComments(afterFm);
@@ -576,6 +629,11 @@ function lintText(file, raw) {
   checkFormatting(body, base, r);
   checkStructure(body, base, r);
   checkLinks(body, r);
+
+  const ignores = collectIgnores(raw);
+  const kept = r.findings.filter((f) => !isIgnored(f, ignores));
+  r.ignored = r.findings.length - kept.length;
+  r.findings = kept;
   return r;
 }
 
@@ -592,7 +650,11 @@ function formatReport(r, quiet) {
   out.push(
     `Links: ${r.internal_links} internal · ${r.external_links} external   Em dashes: ${r.em_dashes} · Semicolons: ${r.semicolons}`,
   );
-  out.push(`FAILs: ${r.fails.length} · WARNs: ${r.warns.length}\n`);
+  out.push(
+    `FAILs: ${r.fails.length} · WARNs: ${r.warns.length}` +
+      (r.ignored ? ` · ${r.ignored} ignored` : "") +
+      "\n",
+  );
 
   const byCat = {};
   for (const f of r.findings) {
