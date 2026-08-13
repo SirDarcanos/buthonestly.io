@@ -3,7 +3,7 @@ title: How to Choose a Software License for Your Next Project
 date: 2026-05-05T02:00:00
 updated: 2026-05-23T12:21:45
 sticky: true
-cornerstone: false
+cornerstone: true
 excerpt: Push code to GitHub with no license file and it isn’t really open source — just visible. Choosing one feels like a legal maze, but it matters.
 categories:
   - Programming
