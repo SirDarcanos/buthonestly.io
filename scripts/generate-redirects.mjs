@@ -328,8 +328,19 @@ const LEGACY_REDIRECTS = [
   ],
 ];
 
+/**
+ * Cloudflare Pages 308s `/about` → `/about/` for pages it actually serves, but
+ * that normalisation happens *after* `_redirects` is matched. So a rule written
+ * as `/web/:slug/` never sees `/web/some-essay` and the visitor gets a 404 —
+ * which is what happens to every legacy link ever shared without a trailing
+ * slash. Emit both forms.
+ *
+ * Wildcards are left alone: `/static/*` already matches `/static/x` either way.
+ */
 function formatRule([from, to]) {
-  return `${from}  ${to}  301`;
+  const rule = `${from}  ${to}  301`;
+  if (!from.endsWith("/") || from === "/") return rule;
+  return `${rule}\n${from.slice(0, -1)}  ${to}  301`;
 }
 
 // Order matters — first match wins, so specific paths precede the placeholder
