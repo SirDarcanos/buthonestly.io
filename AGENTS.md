@@ -174,6 +174,16 @@ links` reports how many essays in each cluster reach theirs. Only durable
   `utm_source` alone is enough; `utm_medium=social` adds nothing and costs 18
   characters against Bluesky's 300-character limit. The newsletter has clean
   numbers only because Kit tags it.
+- **`date` is effectively UTC.** It is a naive datetime, so it is read in the
+  runner's timezone — and every thing that decides publication runs on UTC:
+  `publish-scheduled.mjs` on GitHub Actions and the Cloudflare Pages build. The
+  dev server reads it as Europe/Bucharest, so a scheduled essay looks two or
+  three hours earlier in preview than it goes live. Trust CI.
+- **Schedule before 13:30 UTC.** The daily crons are fixed: related posts at
+  12:00, the Kit newsletter at 13:30, IndexNow at 13:45, and an hourly job at
+  `:05` that fires the deploy. An essay live after 13:30 waits a full day for
+  its newsletter. `13:00` is the usual slot — 16:00 in Bucharest during summer,
+  09:00 US Eastern — and leaves the newsletter about 25 minutes of margin.
 - Publishing is date-driven (a future `date` schedules the essay); WIP lives
   in `src/content/drafts/`, which is not a built collection. A scheduled essay
   still renders on the dev server, so it can be proofread before it lands.
