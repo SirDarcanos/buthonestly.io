@@ -127,6 +127,9 @@ opposite: git-ignored, uploaded to R2.
 
 ## Content
 
+- Who the site is for and why it exists: `.agents/product-marketing.md`. Voice
+  lives in `src/content/drafts/Style Guide.md` and only there — the marketing
+  doc points at it rather than repeating it.
 - The site has no comments — never add "share in the comments" CTAs.
 - Publishing is date-driven (a future `date` schedules the essay); WIP lives
   in `src/content/drafts/`, which is not a built collection. A scheduled essay

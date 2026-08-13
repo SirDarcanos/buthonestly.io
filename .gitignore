@@ -19,6 +19,10 @@ src/content/**/*.mp3
 # Editable narration scripts (npm run audio) — regenerated on demand.
 src/content/**/*.audio.txt
 
+# Local agent tooling config (launch.json, per-machine permissions). The shared
+# context in .agents/ IS committed.
+.claude/
+
 .DS_Store
 
 npm-debug.log*
