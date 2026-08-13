@@ -102,7 +102,7 @@ It becomes relevant when you sell B2B, and especially when you sell across EU bo
 
 And this is the fork in the road:
 
-- You can DIY it: add a VAT field, validate via VIES, store it on the order, and decide what happens to VAT.
+- You can DIY it: add a VAT field, validate via VIES, store it on the order, and decide what happens to VAT. It lands in the billing block, where [[edit-orders-woocommerce|editing an order]] can quietly undo it.
 - Or you can use a purpose-built extension that already handles the edge cases you only discover after your first “Why did this order get taxed?” email.
 
 I used to write snippets for this. I don’t anymore.

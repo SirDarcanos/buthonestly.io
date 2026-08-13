@@ -200,7 +200,7 @@ Sometimes you want attributes to do more than describe a product. You might want
 
 For example, you can turn product attributes into links that filter your catalog by that attribute. That way, when a customer clicks on “Black” or “Large”, they see all products that match.
 
-[[make-product-attributes-linkable-woocommerce|I wrote about this in more detail here]].
+[[make-product-attributes-linkable-woocommerce|I wrote about this in more detail here]]. Attributes also decide what WooCommerce considers similar, which is why they matter for [[improve-woocommerce-related-products-recommendations|related products]], and why setting them across a catalogue is a job for [[bulk-edit-woocommerce-products-without-plugins|bulk editing]].
 
 This is another reason to treat attributes as first-class structure. They are not just internal settings. They can become a powerful way for customers to move through your store.
 

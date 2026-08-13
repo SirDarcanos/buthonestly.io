@@ -46,7 +46,7 @@ You can easily adjust how many products are added by changing `&quantity=X` in t
 
 ## Custom Add to Cart Link for Variable Products
 
-With new WooCommerce versions, this process is simpler. It’s like with simple products, but use the variation ID found under Variations on the Edit Product page.
+With new WooCommerce versions, this process is simpler. It’s like with simple products, but use the variation ID found under Variations on the Edit Product page. If you are not sure whether you need a variation at all, [[woocommerce-attributes-vs-variations|the difference between attributes and variations]] decides it.
 
 ![The Variations tab of a variable product highlighting the variation ID.](variation-id.jpg)
 

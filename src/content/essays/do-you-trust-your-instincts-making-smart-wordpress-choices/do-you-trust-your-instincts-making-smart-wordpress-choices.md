@@ -55,9 +55,9 @@ The true test of smart WordPress choices lies in functionality, not just in the 
 
 Imagine encountering a plugin that claims to do it all. It’s easy to get swept up in the excitement of such promises. We’ve all experienced the allure of a feature-rich plugin, only to find it clunky to configure, or worse, it doesn’t quite deliver on its lofty promises.
 
-Then there’s the concern of performance. More features can mean more code, and more code can mean a heavier load on your site. The dreaded “white screen of death” is a stark reminder of this. A plugin that promises the moon might end up crashing your site, leaving you staring at a blank screen in disbelief.
+Then there’s the concern of performance. More features can mean more code, and more code can mean a heavier load on your site — the same trade [[wordpress-site-performance-vs-desig|design makes against speed]]. The dreaded “white screen of death” is a stark reminder of this. A plugin that promises the moon might end up crashing your site, leaving you staring at a blank screen in disbelief.
 
-The key is to **look for features that align with your specific needs**. It’s not about the quantity of features a plugin or theme boasts, but their quality and relevance to your site. The most effective tools are those that offer what you need, not everything you could ever imagine. After all, a lean, efficient website often outperforms a feature-saturated one.
+My own shortlist is short for exactly this reason: [[top-5-essential-wordpress-plugins-i-always-install-and-why|five plugins I install on nearly every site]], and not much else. The key is to **look for features that align with your specific needs**. It’s not about the quantity of features a plugin or theme boasts, but their quality and relevance to your site. The most effective tools are those that offer what you need, not everything you could ever imagine. After all, a lean, efficient website often outperforms a feature-saturated one.
 
 Ask yourself, do you really need five different sliders in your theme? Or do you really need 10 different portfolio styles on your company’s site? After all, [you’re only going to use one of them](https://wordpress.com/go/web-design/how-to-choose-the-best-wordpress-theme/).
 

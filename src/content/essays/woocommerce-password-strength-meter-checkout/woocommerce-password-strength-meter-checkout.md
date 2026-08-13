@@ -80,7 +80,7 @@ Add this to your theme’s `functions.php` or to a small functionality plugin:
 /**
  * @snippet       WooCommerce Password Strength Meter: Keep It or Remove It
  * @author        Nicola Mustone
- * @author_url    https://buthonestly.io/programming/woocommerce-password-strength-meter-checkout/
+ * @author_url    https://buthonestly.io/woocommerce-password-strength-meter-checkout/
  * @tested-up-to  WooCommerce 10.3.X
  * @license       GPLv2
  */
@@ -112,7 +112,7 @@ This kind of hint is cheap to add and still better than nothing. To do that, put
 /**
  * @snippet       WooCommerce Password Strength Meter: Keep It or Remove It
  * @author        Nicola Mustone
- * @author_url    https://buthonestly.io/programming/woocommerce-password-strength-meter-checkout/
+ * @author_url    https://buthonestly.io/woocommerce-password-strength-meter-checkout/
  * @tested-up-to  WooCommerce 10.3.X
  * @license       GPLv2
  */
@@ -151,7 +151,7 @@ Add this to `functions.php`:
 /**
  * @snippet       WooCommerce Password Strength Meter: Keep It or Remove It
  * @author        Nicola Mustone
- * @author_url    https://buthonestly.io/programming/woocommerce-password-strength-meter-checkout/
+ * @author_url    https://buthonestly.io/woocommerce-password-strength-meter-checkout/
  * @tested-up-to  WooCommerce 10.3.X
  * @license       GPLv2
  */
@@ -183,6 +183,8 @@ The trade-off is that you add another plugin to maintain, and some of these tool
 - Last updated date (for both of these it’s already 1 year ago as of today)
 - Tested up to which WordPress and WooCommerce version
 - Number of active installs and recent reviews
+
+That is the same test I would apply to any plugin, and I have written up [[do-you-trust-your-instincts-making-smart-wordpress-choices|how I judge one]] at more length.
 
 If you are comfortable editing `functions.php`, **I would still take the code route**. It is one small function, easy to track in version control, and does not depend on a third party.
 

@@ -51,7 +51,7 @@ Not all of these data can be changed by the administrator. For example, the orde
 
 To change the order status (4) click on the little arrow in the status field and choose the new one as needed. The same goes for the customer (5): click on the little `x` to remove the currently assigned customer and then click on the arrow to show a search field to select the new customer.
 
-Editing the billing (6) and shipping (7) details is possible by clicking the pencil icon next to each address. By editing the billing details you can also change some transaction details, but I recommend not to do it unless you know exactly what to write in those fields (and only if necessary).
+Editing the billing (6) and shipping (7) details is possible by clicking the pencil icon next to each address. By editing the billing details you can also change some transaction details, but I recommend not to do it unless you know exactly what to write in those fields (and only if necessary). On B2B stores the billing block is also where [[woocommerce-eu-vat-number-setup|the customer’s VAT number]] ends up, and that one is worth leaving alone once the order is placed.
 
 ## Order actions and notes
 

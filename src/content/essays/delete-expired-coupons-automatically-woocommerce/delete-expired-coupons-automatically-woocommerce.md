@@ -1,7 +1,7 @@
 ---
 title: Automatically Delete Expired Coupons in WooCommerce
 date: 2018-08-01T10:00:00
-updated: 2018-08-01T10:00:00
+updated: 2025-11-18T07:43:41
 sticky: false
 cornerstone: false
 excerpt: Automatically remove expired WooCommerce coupons daily so your database stays lean and your marketing screen uncluttered.
@@ -32,7 +32,7 @@ audioPace: conversational
 
 Do you still have hundreds of expired coupons sitting in your database?
 
-If you’re giving discounts to first-time buyers or loyal customers, chances are your store creates coupons automatically. That’s great, everyone loves a discount. But once those coupons expire, WooCommerce doesn’t delete them. They just sit there, taking up space for no reason.
+If you’re giving discounts to first-time buyers or loyal customers, chances are your store creates coupons automatically. That’s great, everyone loves a discount. But once those coupons expire, WooCommerce doesn’t delete them. They just sit there, taking up space for no reason. If you would rather clear them by hand once and be done, the same job is a one-liner from [[woocommerce-cli-product-management|the WooCommerce CLI]].
 
 Let’s fix that.
 
@@ -56,7 +56,7 @@ Open your **functions.php** file in **wp-content/themes/your-child-theme-name/**
 /**
  * @snippet       Delete Expired Coupons Automatically
  * @author        Nicola Mustone
- * @author_url    https://buthonestly.io/programming/delete-expired-coupons-automatically-woocommerce/
+ * @author_url    https://buthonestly.io/delete-expired-coupons-automatically-woocommerce/
  * @tested-up-to  WooCommerce 10.3.X
  * @license       GPLv2
  */
@@ -75,8 +75,8 @@ add_action('delete_expired_coupons_hook', function () {
             [ 'key' => 'date_expires', 'compare' => 'EXISTS' ],
             // already expired
             [ 'key' => 'date_expires', 'value' => time(), 'compare' => '<', 'type' => 'NUMERIC' ],
-            // exclude AutomateWoo
-            [ 'key' => '_is_aw_coupon', 'value' => false ],
+            // leave AutomateWoo's own coupons alone
+            [ 'key' => '_is_aw_coupon', 'compare' => 'NOT EXISTS' ],
         ],
     ]);
 
@@ -92,25 +92,35 @@ add_action('init', function () {
 });
 
 add_action('restrict_manage_posts', function () {
-    if ( 'shop_coupon' !== ( $GLOBALS['typenow'] ?? '' ) ) return; ?>
-    <form method="post" style="display:inline;">
-        <input type="hidden" name="custom_action" value="delete_expired_coupons">
-        <?php wp_nonce_field('custom_delete_expired_coupons','custom_delete_nonce'); ?>
-        <input type="submit" class="button" value="Delete Expired Coupons"
-               onclick="return confirm('Delete all expired coupons now?');" />
-    </form>
-    <?php if ( isset($_GET['custom_deleted']) && 'true' === $_GET['custom_deleted'] ) {
-        echo '<div class="updated"><p>Expired coupons deleted.</p></div>';
-    }
+    if ( 'shop_coupon' !== ( $GLOBALS['typenow'] ?? '' ) ) return;
+
+    $url = wp_nonce_url(
+        add_query_arg( 'bh_delete_expired', '1', admin_url('edit.php?post_type=shop_coupon') ),
+        'bh_delete_expired_coupons'
+    );
+
+    printf(
+        '<a href="%s" class="button" onclick="return confirm(\'%s\');">%s</a>',
+        esc_url( $url ),
+        esc_js( 'Delete all expired coupons now?' ),
+        esc_html( 'Delete Expired Coupons' )
+    );
 });
 
 add_action('admin_init', function () {
-    if ( isset($_POST['custom_action'], $_POST['custom_delete_nonce'])
-         && 'delete_expired_coupons' === $_POST['custom_action']
-         && wp_verify_nonce($_POST['custom_delete_nonce'], 'custom_delete_expired_coupons') ) {
-        do_action('delete_expired_coupons_hook');
-        wp_redirect( add_query_arg(['custom_deleted'=>'true'], admin_url('edit.php?post_type=shop_coupon')) );
-        exit;
+    if ( empty( $_GET['bh_delete_expired'] ) ) return;
+    if ( ! current_user_can( 'manage_woocommerce' ) ) return;
+    check_admin_referer( 'bh_delete_expired_coupons' );
+
+    do_action('delete_expired_coupons_hook');
+
+    wp_safe_redirect( add_query_arg( 'bh_deleted', '1', admin_url('edit.php?post_type=shop_coupon') ) );
+    exit;
+});
+
+add_action('admin_notices', function () {
+    if ( ! empty( $_GET['bh_deleted'] ) && 'shop_coupon' === ( $GLOBALS['typenow'] ?? '' ) ) {
+        echo '<div class="updated notice"><p>Expired coupons deleted.</p></div>';
     }
 });
 ```
@@ -123,13 +133,13 @@ From there, you can delete them permanently with one click, regardless of whethe
 If you prefer to delete them permanently right away, change this line:
 
 ```php
-wp_trash_post( $coupon->ID );
+wp_trash_post( $coupon_id );
 ```
 
 to:
 
 ```php
-wp_delete_post( $coupon->ID, true );
+wp_delete_post( $coupon_id, true );
 ```
 
 Be careful: once a coupon is permanently deleted, it can’t be recovered.

@@ -1,7 +1,7 @@
 ---
 title: "WooCommerce Related Products: What and How to Improve Them"
 date: 2023-12-21T09:00:00
-updated: 2023-12-21T09:00:00
+updated: 2025-11-18T07:43:12
 sticky: false
 cornerstone: false
 excerpt: Use attributes, filters, and smarter recommendations to turn WooCommerce related products into genuinely helpful upsell suggestions.
@@ -86,7 +86,7 @@ This script filters related products based on their shared attributes. It offers
 /**
  * @snippet       Get Related Products by Attributes
  * @author        Nicola Mustone
- * @author_url    https://buthonestly.io/programming/improve-woocommerce-related-products-recommendations/
+ * @author_url    https://buthonestly.io/improve-woocommerce-related-products-recommendations/
  * @tested-up-to  WooCommerce 10.3.X
  * @license       GPLv2
  */

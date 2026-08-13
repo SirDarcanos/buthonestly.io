@@ -1,7 +1,7 @@
 ---
 title: How to Disable GTIN for Non-Eligible WooCommerce Products
 date: 2023-11-20T09:00:00
-updated: 2023-11-20T09:00:00
+updated: 2025-11-18T07:43:41
 sticky: false
 cornerstone: false
 excerpt: Tell Google which WooCommerce products lack GTINs by outputting identifier_exists “no” only for truly exempt items.
@@ -40,7 +40,7 @@ Before we dive into the technical snippet, let’s briefly discuss what a GTIN i
 
 ### When Does a Product Not Need a GTIN?
 
-Not every product sold needs a GTIN. Handmade items, vintage goods, or custom products often do not have a GTIN. Google recognizes this and does not require GTINs for such non-standard items. However, their system still looks for this information, and it’s crucial to communicate when a product genuinely does not have a GTIN to avoid data errors and potential listing issues.
+Not every product sold needs a GTIN. Handmade items, vintage goods, or custom products often do not have a GTIN. Google recognizes this and does not require GTINs for such non-standard items. However, their system still looks for this information, and it’s crucial to communicate when a product genuinely does not have a GTIN to avoid data errors and potential listing issues. If the exemption applies to a whole catalogue rather than one product, [[bulk-edit-woocommerce-products-without-plugins|bulk editing]] beats opening each product in turn.
 
 ## Implementing the GTIN Exemption in WooCommerce
 
@@ -52,7 +52,7 @@ For those special cases where your products do not require a GTIN, inserting the
 /**
  * @snippet       Add identifier_exists set to False in the Product schema
  * @author        Nicola Mustone
- * @author_url    https://buthonestly.io/programming/disable-gtin-requirements-non-eligible-woocommerce-products/
+ * @author_url    https://buthonestly.io/disable-gtin-requirements-non-eligible-woocommerce-products/
  * @tested-up-to  WooCommerce 10.3.X
  * @license       GPLv2
  */
@@ -75,7 +75,7 @@ If your catalog has a mix of products that need GTIN and others that do not, you
 /**
  * @snippet       Add identifier_exists set to False in the Product schema, conditionally
  * @author        Nicola Mustone
- * @author_url    https://buthonestly.io/programming/disable-gtin-requirements-non-eligible-woocommerce-products/
+ * @author_url    https://buthonestly.io/disable-gtin-requirements-non-eligible-woocommerce-products/
  * @tested-up-to  WooCommerce 10.3.X
  * @license       GPLv2
  */

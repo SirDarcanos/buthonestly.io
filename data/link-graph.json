@@ -62,7 +62,10 @@
       "woocommerce-attributes-vs-variations",
       "woocommerce-cli-product-management"
     ],
-    "in": []
+    "in": [
+      "disable-gtin-requirements-non-eligible-woocommerce-products",
+      "woocommerce-attributes-vs-variations"
+    ]
   },
   "choosing-what-to-play": {
     "out": [
@@ -75,15 +78,21 @@
     ]
   },
   "creating-a-custom-add-to-cart-link-woocommerce": {
-    "out": [],
+    "out": [
+      "woocommerce-attributes-vs-variations"
+    ],
     "in": []
   },
   "delete-expired-coupons-automatically-woocommerce": {
-    "out": [],
+    "out": [
+      "woocommerce-cli-product-management"
+    ],
     "in": []
   },
   "disable-gtin-requirements-non-eligible-woocommerce-products": {
-    "out": [],
+    "out": [
+      "bulk-edit-woocommerce-products-without-plugins"
+    ],
     "in": [
       "how-to-choose-a-software-license-for-your-next-project"
     ]
@@ -99,21 +108,29 @@
     ]
   },
   "do-you-trust-your-instincts-making-smart-wordpress-choices": {
-    "out": [],
+    "out": [
+      "top-5-essential-wordpress-plugins-i-always-install-and-why",
+      "wordpress-site-performance-vs-desig"
+    ],
     "in": [
       "bulk-edit-woocommerce-products-without-plugins",
       "enhancing-wordpress-content-protection-beyond-right-click-blocks",
       "how-to-choose-a-software-license-for-your-next-project",
       "sql-vs-nosql-choosing-the-right-database",
       "top-5-essential-wordpress-plugins-i-always-install-and-why",
+      "woocommerce-password-strength-meter-checkout",
       "wordpress-site-performance-vs-desig",
       "wordpress-to-astro"
     ],
     "cornerstone": true
   },
   "edit-orders-woocommerce": {
-    "out": [],
-    "in": []
+    "out": [
+      "woocommerce-eu-vat-number-setup"
+    ],
+    "in": [
+      "woocommerce-eu-vat-number-setup"
+    ]
   },
   "enhancing-wordpress-content-protection-beyond-right-click-blocks": {
     "out": [
@@ -169,7 +186,8 @@
       "make-product-attributes-linkable-woocommerce"
     ],
     "in": [
-      "sql-vs-nosql-choosing-the-right-database"
+      "sql-vs-nosql-choosing-the-right-database",
+      "woocommerce-attributes-vs-variations"
     ]
   },
   "javascript-dice-roller": {
@@ -333,6 +351,7 @@
       "do-you-trust-your-instincts-making-smart-wordpress-choices"
     ],
     "in": [
+      "do-you-trust-your-instincts-making-smart-wordpress-choices",
       "wordpress-site-performance-vs-desig"
     ]
   },
@@ -401,10 +420,13 @@
   },
   "woocommerce-attributes-vs-variations": {
     "out": [
+      "bulk-edit-woocommerce-products-without-plugins",
+      "improve-woocommerce-related-products-recommendations",
       "make-product-attributes-linkable-woocommerce"
     ],
     "in": [
       "bulk-edit-woocommerce-products-without-plugins",
+      "creating-a-custom-add-to-cart-link-woocommerce",
       "enhancing-wordpress-content-protection-beyond-right-click-blocks",
       "make-product-attributes-linkable-woocommerce",
       "woocommerce-cli-product-management"
@@ -416,16 +438,22 @@
       "woocommerce-attributes-vs-variations"
     ],
     "in": [
-      "bulk-edit-woocommerce-products-without-plugins"
+      "bulk-edit-woocommerce-products-without-plugins",
+      "delete-expired-coupons-automatically-woocommerce"
     ]
   },
   "woocommerce-eu-vat-number-setup": {
-    "out": [],
-    "in": []
+    "out": [
+      "edit-orders-woocommerce"
+    ],
+    "in": [
+      "edit-orders-woocommerce"
+    ]
   },
   "woocommerce-password-strength-meter-checkout": {
     "out": [
-      "10-types-of-websites"
+      "10-types-of-websites",
+      "do-you-trust-your-instincts-making-smart-wordpress-choices"
     ],
     "in": [
       "adhd-planner"
@@ -446,6 +474,7 @@
       "top-5-essential-wordpress-plugins-i-always-install-and-why"
     ],
     "in": [
+      "do-you-trust-your-instincts-making-smart-wordpress-choices",
       "wordpress-to-astro"
     ]
   },

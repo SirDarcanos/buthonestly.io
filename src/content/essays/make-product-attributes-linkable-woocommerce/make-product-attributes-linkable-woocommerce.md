@@ -93,7 +93,7 @@ You are about to edit PHP. Even a missing semicolon can break your site. Before 
 /**
  * @snippet       Make Product Attributes Linkable + Optional New Tab
  * @author        Nicola Mustone
- * @author_url    https://buthonestly.io/programming/make-product-attributes-linkable-woocommerce/
+ * @author_url    https://buthonestly.io/make-product-attributes-linkable-woocommerce/
  * @tested-up-to  WooCommerce 10.3.X
  * @license       GPLv2
  */
@@ -129,15 +129,15 @@ function bh_add_attribute_url_meta_field() {
 	wp_nonce_field( basename( __FILE__ ), 'attribute_url_meta_nonce' );
 	?>
 	<div class="form-field">
-		<label for="attribute_url"><?php esc_html_e( 'URL', 'woocommerce' ); ?></label>
+		<label for="attribute_url"><?php esc_html_e( 'URL', 'your-textdomain' ); ?></label>
 		<input type="url" name="attribute_url" id="attribute_url" value="" class="regular-text" />
-		<p class="description"><?php esc_html_e( 'Optional. If set, the attribute value will link to this URL.', 'woocommerce' ); ?></p>
+		<p class="description"><?php esc_html_e( 'Optional. If set, the attribute value will link to this URL.', 'your-textdomain' ); ?></p>
 	</div>
 
 	<div class="form-field">
 		<label for="attribute_url_blank">
 			<input type="checkbox" name="attribute_url_blank" id="attribute_url_blank" value="1" />
-			<?php esc_html_e( 'Open in a new tab', 'woocommerce' ); ?>
+			<?php esc_html_e( 'Open in a new tab', 'your-textdomain' ); ?>
 		</label>
 	</div>
 	<?php
@@ -153,16 +153,16 @@ function bh_edit_attribute_url_meta_field( $term ) {
 	?>
 	<tr class="form-field">
 		<th scope="row" valign="top">
-			<label for="attribute_url"><?php esc_html_e( 'URL', 'woocommerce' ); ?></label>
+			<label for="attribute_url"><?php esc_html_e( 'URL', 'your-textdomain' ); ?></label>
 		</th>
 		<td>
 			<input type="url" name="attribute_url" id="attribute_url" value="<?php echo esc_url( $url ); ?>" class="regular-text" />
-			<p class="description"><?php esc_html_e( 'Optional. If set, the attribute value will link to this URL.', 'woocommerce' ); ?></p>
+			<p class="description"><?php esc_html_e( 'Optional. If set, the attribute value will link to this URL.', 'your-textdomain' ); ?></p>
 		</td>
 	</tr>
 	<tr class="form-field">
 		<th scope="row" valign="top">
-			<label for="attribute_url_blank"><?php esc_html_e( 'Open in a new tab', 'woocommerce' ); ?></label>
+			<label for="attribute_url_blank"><?php esc_html_e( 'Open in a new tab', 'your-textdomain' ); ?></label>
 		</th>
 		<td>
 			<input type="checkbox" name="attribute_url_blank" id="attribute_url_blank" value="1" <?php checked( $blank, '1' ); ?> />
