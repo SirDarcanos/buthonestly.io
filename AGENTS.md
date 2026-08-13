@@ -162,10 +162,12 @@ opposite: git-ignored, uploaded to R2.
 links` reports how many essays in each cluster reach theirs. Only durable
   pieces qualify — a cornerstone accumulates links for years, so pointing one at
   something destined for a rewrite wastes the accumulation.
-- `.claude/skills/buthonestly-essay-checkup/` diagnoses one existing essay against all of
-  the above. `.claude/skills/buthonestly-share-essay/` drafts the LinkedIn, Bluesky and
-  Mastodon posts for one, new or resurfaced. Both are local and gitignored, like
-  the Style Guide, and neither edits or publishes anything.
+- Three local skills live in `.claude/skills/`, all gitignored like the Style
+  Guide, and none of them edit or publish anything on their own:
+  `buthonestly-draft-essay` decides whether an idea is worth writing and then
+  drafts it, `buthonestly-essay-checkup` diagnoses one existing essay against all of
+  the above, and `buthonestly-share-essay` writes the LinkedIn, Bluesky and
+  Mastodon posts for one, new or resurfaced.
 - Tag every shared link — `?utm_source=linkedin`, `?utm_source=bluesky`,
   `?utm_source=mastodon`. Mastodon clients and the Bluesky app strip the
   referrer, so an untagged visit is indistinguishable from a bookmark in Fathom.
