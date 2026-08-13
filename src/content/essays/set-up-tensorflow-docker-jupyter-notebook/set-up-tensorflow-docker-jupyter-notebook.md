@@ -59,7 +59,7 @@ Docker’s reproducibility becomes even more valuable in modern development work
 
 ## TensorFlow Docker Setup: Installing and Pulling the Image
 
-If you don’t have Docker yet, download Docker Desktop for Windows from [docker.com](https://www.docker.com/products/docker-desktop/) and follow the installer’s steps. If you are on macOS or Linux, download the respective installer. At the moment of writing, I’m using version 4.49.0 on macOS.
+If you don’t have Docker yet, download Docker Desktop for Windows from [docker.com](https://www.docker.com/products/docker-desktop/) and follow the installer’s steps. If you are on macOS or Linux, download the respective installer. I was on Docker Desktop 4.49.0 for macOS when I wrote this in October 2025; any recent version behaves the same way.
 
 Once it’s running, open it. You’ll see on the left tabs for _Containers_, _Images_, _Volumes_, etc. We’ll use the Images tab first. In the middle, there’s the **Search images to run** button.
 

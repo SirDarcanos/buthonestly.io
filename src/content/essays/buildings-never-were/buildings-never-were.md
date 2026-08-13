@@ -189,7 +189,7 @@ What I’m describing isn’t loyalty. It’s not nostalgia in the comforting se
 
 It’s a working map of a place that doesn’t exist. A relationship with people who were never people. A grief, on revisit, that’s exactly the size of a real grief.
 
-Long-running games do this to you over decades. Multiple games, multiple consoles, multiple phases of your own life — and at the end you can still find the records room with your eyes closed.
+Long-running games do this to you over decades. Multiple games, multiple consoles, multiple phases of your own life — and at the end you can still find the records room with your eyes closed. It is the same reason games taught me things [[gaming-made-me-better-leader|I could not learn from a management book]], and the reason a library built in Minecraft can be [[uncensored-library-minecraft|a real place to real people]].
 
 The franchise built a building inside your head and let it sit there. Sometimes other studios borrowed the floor plan. Sometimes the building came back rewritten. Either way, the map persisted.
 

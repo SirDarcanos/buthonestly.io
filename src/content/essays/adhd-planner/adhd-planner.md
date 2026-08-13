@@ -38,7 +38,7 @@ For years, my blog lived in cycles. Weeks of obsessive writing followed by month
 
 When I wasn’t writing, it wasn’t about laziness or distraction; it was a wall. A powerful, invisible block that made the idea of writing feel almost unbearable. People could tell me to do it, to just sit and write, but my mind would push back with such force that I couldn’t explain it.
 
-What I didn’t realize was that I already had a rhythm, one that would later become my mental ADHD planner. Not a tool, but a set of self-imposed simple rules and habits that finally helped me keep blogging without burning out.
+What I didn’t realize was that I already had a rhythm, one that would later become my mental ADHD planner. Not a tool, but a set of self-imposed simple rules and habits that finally helped me keep blogging without burning out. The one actual tool underneath all of it is [[write-in-markdown|plain Markdown]], because a draft that opens anywhere is a draft I can start on a bad day.
 
 ## The Highs and the Crashes
 

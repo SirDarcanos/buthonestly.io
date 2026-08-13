@@ -15,7 +15,8 @@
     "out": [
       "choosing-what-to-play",
       "gaming-made-me-better-leader",
-      "woocommerce-password-strength-meter-checkout"
+      "woocommerce-password-strength-meter-checkout",
+      "write-in-markdown"
     ],
     "in": [
       "choosing-what-to-play",
@@ -56,7 +57,9 @@
   },
   "buildings-never-were": {
     "out": [
-      "learning-care-without-feeling"
+      "gaming-made-me-better-leader",
+      "learning-care-without-feeling",
+      "uncensored-library-minecraft"
     ],
     "in": [
       "choosing-what-to-play",
@@ -166,6 +169,7 @@
     "in": [
       "adhd-planner",
       "ai-slop-midas-touch-modern-internet",
+      "buildings-never-were",
       "distilroberta-emotion-analysis-nlp-case-study",
       "javascript-dice-roller",
       "leading-through-inquiry",
@@ -383,13 +387,16 @@
       "10-types-of-websites",
       "enhancing-wordpress-content-protection-beyond-right-click-blocks"
     ],
-    "in": []
+    "in": [
+      "buildings-never-were"
+    ]
   },
   "vibe-writing-line-between-human-machine": {
     "out": [
       "ai-slop-midas-touch-modern-internet",
       "what-is-vibe-coding-how-to-do-it",
-      "when-ai-stops-being-a-tool"
+      "when-ai-stops-being-a-tool",
+      "write-in-markdown"
     ],
     "in": [
       "ai-slop-midas-touch-modern-internet",
@@ -543,9 +550,11 @@
       "what-is-vibe-coding-how-to-do-it"
     ],
     "in": [
+      "adhd-planner",
       "how-to-build-a-github-profile-readme-that-feels-like-you",
       "make-product-attributes-linkable-woocommerce",
       "team-building-activities-for-work",
+      "vibe-writing-line-between-human-machine",
       "wordpress-to-astro"
     ],
     "cornerstone": true

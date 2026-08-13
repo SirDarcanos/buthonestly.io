@@ -47,7 +47,7 @@ That’s why I built my blog around _speed first_. I rely on the WordPress Bitá
 
 The payoff is immediate:
 
-- Google PageSpeed Insights shows **81 / 100** on mobile and **100 / 100** on desktop at the moment of writing.
+- Google PageSpeed Insights showed **81 / 100** on mobile and **100 / 100** on desktop when I measured it in March 2026.
 - Pages load almost instantly, even on slow connections.
 - Updates are simple; fewer moving parts mean fewer issues. In the case of this blog, I have all plugins and theme updated automatically through [Jetpack](https://jetpack.com).
 

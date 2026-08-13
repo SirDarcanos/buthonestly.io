@@ -245,7 +245,7 @@ If you want web developer jobs in front-end or full-stack work, TypeScript is di
 
 PHP is not trendy, but it’s everywhere. You’ll read online that PHP is dead, but [it powers 72.9% of all websites](https://w3techs.com/technologies/history_overview/programming_language). This is only a myth that has existed since I can remember.
 
-WordPress is built with PHP, and it powers a massive slice of the internet ([43.2% as of today](https://w3techs.com/technologies/overview/content_management)). Many real businesses depend on it.
+WordPress is built with PHP, and it powers a massive slice of the internet ([43.2% of the web in January 2026](https://w3techs.com/technologies/overview/content_management)). Many real businesses depend on it.
 
 Knowing PHP lets you:
 

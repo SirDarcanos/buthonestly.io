@@ -180,7 +180,7 @@ If you would rather not touch PHP at all, there are also general password streng
 
 The trade-off is that you add another plugin to maintain, and some of these tools lag behind WooCommerce core versions. Always check:
 
-- Last updated date (for both of these it’s already 1 year ago as of today)
+- Last updated date (both were already a year stale when I checked in May 2026)
 - Tested up to which WordPress and WooCommerce version
 - Number of active installs and recent reviews
 

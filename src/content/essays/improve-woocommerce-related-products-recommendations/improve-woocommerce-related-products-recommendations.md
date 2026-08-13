@@ -53,7 +53,7 @@ You cannot overstate the importance of product recommendations in an online stor
 
 ### How Do WooCommerce Related Products Work?
 
-On default WooCommerce installations, the plugin adds four related products for each product on a single page automatically. As of today, you cannot manually add them, nor can you display related products using a shortcode on a page.
+On default WooCommerce installations, the plugin adds four related products for each product on a single page automatically. As of WooCommerce 10.3, you cannot manually add them, nor can you display related products using a shortcode on a page.
 
 ### How Does WooCommerce Determine Related Products?
 

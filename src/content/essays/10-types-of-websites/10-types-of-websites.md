@@ -46,7 +46,7 @@ For anything that looks like a normal website — home page, a few subpages, may
 
 I like that it’s mature. Not only that, but I like that it’s been around long enough to prove it’s not going anywhere. That usually means the things I build on it will still be alive in a few years too.
 
-These days I’d pick a **Full Site Editing (FSE)** theme and do everything in the block editor: header, footer, templates, blog index, and typography. I would rather not edit PHP files anymore. I want to design the structure once, set some sensible defaults, and then focus on content.
+I’d pick a **Full Site Editing (FSE)** theme and do everything in the block editor: header, footer, templates, blog index, and typography. I would rather not edit PHP files anymore. I want to design the structure once, set some sensible defaults, and then focus on content.
 
 If you told me, “I just need a site for my thing,” I wouldn’t send you shopping for website builders. I’d set you up on WordPress, write a few pages with you, and ship it.
 

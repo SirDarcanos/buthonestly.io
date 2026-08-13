@@ -96,7 +96,7 @@ Machines can imitate our patterns, but they don’t know what any of it means. T
 
 ## Where We Draw the Line
 
-Maybe the real question isn’t what AI can do, but what we still want to do ourselves.
+Maybe the real question isn’t what AI can do, but what we still want to do ourselves. I still want the drafting part, which is why I keep doing it [[write-in-markdown|in a plain text file]] rather than anywhere a model can autocomplete over my shoulder.
 
 There’s a difference between using a tool and sharing authorship. Between asking for help and giving up direction. That’s the thin line vibe writing keeps tracing, somewhere between collaboration and surrender. Cross it far enough and [[when-ai-stops-being-a-tool|the tool starts setting the rhythm]]. Cross it in the other direction and the work gets [[ai-slop-midas-touch-modern-internet|dismissed for having been touched at all]].
 
