@@ -38,6 +38,15 @@ const { entry, related } = Astro.props;
 const post = toPost(entry);
 const { Content, headings } = await render(entry);
 const publishDate = new Date(post.date);
+// `modified` falls back to `date`, so only a real revision earns a line.
+const modifiedDate = new Date(post.modified);
+const updatedDate = modifiedDate > publishDate ? modifiedDate : null;
+const longDate = (d: Date) =>
+  d.toLocaleString("default", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 
 // Trail through the essay's first section, so search results show
 // "buthonestly.io › Sections › Leadership" instead of a bare URL.
@@ -86,13 +95,7 @@ const jsonLd = [
           datetime={publishDate.toISOString()}
           class="label tracking-widest"
         >
-          {
-            publishDate.toLocaleString("default", {
-              day: "numeric",
-              month: "long",
-              year: "numeric",
-            })
-          }
+          {longDate(publishDate)}
         </time>
         <p class="meta flex-1 tracking-widest sm:text-right">
           In <TaxLinks names={post.tags} base="topic" />
@@ -118,9 +121,21 @@ const jsonLd = [
 
     <div class="post-content mt-7"><Content /></div>
 
-    <p class="meta font-bold">
-      <span class="bg-accent mr-3 inline-block size-2"></span>End
-    </p>
+    <div class="flex flex-wrap items-baseline gap-x-6 gap-y-1">
+      <p class="meta font-bold">
+        <span class="bg-accent mr-3 inline-block size-2"></span>End
+      </p>
+      {
+        updatedDate && (
+          <time
+            datetime={updatedDate.toISOString()}
+            class="meta flex-1 tracking-widest sm:text-right"
+          >
+            Last updated {longDate(updatedDate)}
+          </time>
+        )
+      }
+    </div>
   </article>
 
   <ShareLinks title={post.title} path={post.url} tags={post.tags} />

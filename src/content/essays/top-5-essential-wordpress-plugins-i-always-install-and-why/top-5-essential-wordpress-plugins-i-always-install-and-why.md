@@ -1,7 +1,7 @@
 ---
 title: Top 5 Essential WordPress Plugins I Always Install (and Why)
 date: 2025-10-22T08:50:50
-updated: 2025-11-18T07:43:11
+updated: 2025-10-22T08:50:50
 sticky: false
 cornerstone: false
 excerpt: These five WordPress plugins give you clean comments, SEO, analytics, security, and safe customization without bloating your site.

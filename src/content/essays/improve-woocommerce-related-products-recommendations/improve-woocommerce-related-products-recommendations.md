@@ -1,7 +1,7 @@
 ---
 title: "WooCommerce Related Products: What and How to Improve Them"
 date: 2023-12-21T09:00:00
-updated: 2025-11-18T07:43:12
+updated: 2023-12-21T09:00:00
 sticky: false
 cornerstone: false
 excerpt: Use attributes, filters, and smarter recommendations to turn WooCommerce related products into genuinely helpful upsell suggestions.
