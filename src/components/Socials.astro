@@ -12,14 +12,21 @@ interface Props {
   links: NavLink[];
   class?: string;
   linkClass?: string;
+  /** Names the landmark. Every nav on a page needs a distinct one. */
+  label?: string;
 }
 
-const { links: links, class: className, linkClass } = Astro.props;
+const {
+  links: links,
+  class: className,
+  linkClass,
+  label = "Social",
+} = Astro.props;
 
 const path = Astro.url.pathname;
 ---
 
-<nav class={twMerge("meta flex gap-6", className)}>
+<nav class={twMerge("meta flex gap-6", className)} aria-label={label}>
   {
     links.map((link) => (
       <a

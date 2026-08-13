@@ -21,6 +21,7 @@ const navLinks = [{ href: "/", label: "Home" }, ...categoryLinks];
     >
     <Divider />
     <Nav
+      label="Main"
       class="hidden font-medium lg:flex"
       linkClass="text-muted"
       links={navLinks}
@@ -70,6 +71,7 @@ const navLinks = [{ href: "/", label: "Home" }, ...categoryLinks];
   {/* `hidden` here is state — the menu button toggles it in JS. */}
   <div id="mobile-nav" class="hidden lg:hidden">
     <Nav
+      label="Main"
       class="border-line flex-col gap-4 border-b py-5"
       linkClass="text-muted"
       links={navLinks}

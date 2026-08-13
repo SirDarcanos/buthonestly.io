@@ -15,7 +15,7 @@ const { heading, terms, base } = Astro.props;
 
 {
   terms.length > 0 && (
-    <nav class="border-line border-t pt-8 pb-16">
+    <nav class="border-line border-t pt-8 pb-16" aria-label={heading}>
       <p class="meta mb-4 font-bold">{heading}</p>
       <ul class="flex flex-wrap gap-x-6 gap-y-3">
         {terms.map((term) => (

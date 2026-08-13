@@ -13,6 +13,8 @@ interface Props {
   links?: NavLink[];
   class?: string;
   linkClass?: string;
+  /** Names the landmark. Every nav on a page needs a distinct one. */
+  label: string;
   heading?: string;
   tag?: keyof astroHTML.JSX.IntrinsicElements;
   headingClass?: string;
@@ -22,6 +24,7 @@ const {
   links = [{ href: "/", label: "Home" }],
   class: className,
   linkClass,
+  label,
   heading,
   tag = "h3",
   headingClass,
@@ -31,7 +34,7 @@ const path = Astro.url.pathname;
 const Tag = tag as any;
 ---
 
-<nav class={twMerge("meta flex gap-6", className)}>
+<nav class={twMerge("meta flex gap-6", className)} aria-label={label}>
   {
     heading && (
       <Tag class={headingClass ? headingClass : undefined}>{heading}</Tag>

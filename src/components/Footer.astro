@@ -67,17 +67,23 @@ const tagLinks2 = tagLinks.filter((_, i) => i % 2 === 1);
         ]}
       />
     </div>
+    {
+      /* One topic list dealt into two columns, so two landmarks name one thing. */
+    }
     <Nav
+      label="Topics"
       links={tagLinks1}
       class="flex-col gap-2"
       linkClass="text-muted font-medium"
     />
     <Nav
+      label="Topics, continued"
       links={tagLinks2}
       class="flex-col gap-2"
       linkClass="text-muted font-medium"
     />
     <Nav
+      label="Site"
       links={[
         {
           href: "/about/",
