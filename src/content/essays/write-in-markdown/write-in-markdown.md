@@ -83,7 +83,7 @@ In daily work I see it in:
 - WordPress posts and pages
 - P2 threads
 - GitHub READMEs
-- Documentation portals
+- Documentation portals ([[shotlist-automatic-annotated-screenshots|screenshots included]])
 - Slack messages
 - AI prompt templates
 - Google Docs ([as of 2022](https://techcrunch.com/2022/03/30/google-adds-limited-markdown-support-to-google-docs/))

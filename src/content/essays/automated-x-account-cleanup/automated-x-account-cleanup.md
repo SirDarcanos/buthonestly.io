@@ -79,7 +79,7 @@ After realizing how slow the manual process was, I decided to go this route; not
 
 Once I accepted that manual deletion wasn’t realistic, I started looking for a smarter way. Most tools I found could bulk delete posts, but they were all-or-nothing; perfect for wiping your account clean, not for keeping what still mattered.
 
-I wanted something more selective: delete by date range, skip posts that linked the current domain of this website, and preserve discussions with users I still follow or value.
+I wanted something more selective: delete by date range, skip posts that linked the current domain of this website, and preserve discussions with users I still follow or value. Writing the thing myself rather than trusting a tool is the same instinct I apply to [[do-you-trust-your-instincts-making-smart-wordpress-choices|picking a plugin]].
 
 That’s when I came across a [post by Maximiliano Fonseca](https://medium.com/@maxfonseca.r/how-i-automated-bulk-cleanup-of-my-x-twitter-account-with-a-simple-console-script-e869c22e2116). His approach was refreshingly simple: a JavaScript snippet you can run directly from your browser console. It scrolls through your profile, finds your posts, and deletes them right from the web interface. No API tokens, no rate limits, no third-party logins.
 

@@ -446,7 +446,7 @@ That was enough to feel like a superpower.
 
 Looking back, this project changed how I think about “AI projects” in general.
 
-It didn’t require cutting-edge research. There were no giant models, no GPU clusters, and no viral demos. Just STLs from a few artists, PrusaSlicer and UVtools on the command line, a homemade dataset, and a tiny model that learned to behave like a 3D printing cost calculator.
+It didn’t require cutting-edge research. There were no giant models, no [[what-is-a-gpu|GPU]] clusters, and no viral demos. Just STLs from a few artists, PrusaSlicer and UVtools on the command line, a homemade dataset, and a tiny model that learned to behave like a 3D printing cost calculator.
 
 The important pieces weren’t magical. They were practical:
 

@@ -35,7 +35,7 @@ If you’ve ever tried setting up a deep learning environment locally, you know 
 
 This TensorFlow Docker setup guide provides a complete TensorFlow Jupyter Docker environment that solves dependency conflicts and creates a reproducible machine learning environment. Whether you’re dealing with CUDA compatibility issues or Python version mismatches, this Docker TensorFlow environment setup eliminates those headaches.
 
-Before we start coding, we need a place to work that’s clean, predictable, and easy to rebuild. Machine learning libraries depend on specific versions of Python and GPU drivers, and setting them up manually can quickly turn into a frustrating loop of errors. Believe me, I learned this the hard way.
+Before we start coding, we need a place to work that’s clean, predictable, and easy to rebuild. Machine learning libraries depend on specific versions of Python and [[what-is-a-gpu|GPU]] drivers, and setting them up manually can quickly turn into a frustrating loop of errors. Believe me, I learned this the hard way.
 
 To avoid that, we’ll run everything inside a contained environment, one that isolates our setup from the rest of the system and gives us a fresh start every time.
 

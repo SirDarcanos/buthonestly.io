@@ -1,6 +1,9 @@
 {
   "10-types-of-websites": {
-    "out": [],
+    "out": [
+      "woocommerce-attributes-vs-variations",
+      "wordpress-to-astro"
+    ],
     "in": [
       "bulk-edit-woocommerce-products-without-plugins",
       "uncensored-library-minecraft",
@@ -29,17 +32,22 @@
       "mastering-effective-feedback-facts-feelings-curiosity",
       "vibe-writing-line-between-human-machine"
     ],
-    "in": []
+    "in": [
+      "vibe-writing-line-between-human-machine"
+    ]
   },
   "automated-x-account-cleanup": {
-    "out": [],
+    "out": [
+      "do-you-trust-your-instincts-making-smart-wordpress-choices"
+    ],
     "in": [
       "wordpress-to-astro"
     ]
   },
   "building-convolutional-neural-network-python-tensorflow": {
     "out": [
-      "set-up-tensorflow-docker-jupyter-notebook"
+      "set-up-tensorflow-docker-jupyter-notebook",
+      "what-is-a-gpu"
     ],
     "in": [
       "neural-network-predict-resin-usage-3d-printed-miniatures",
@@ -51,12 +59,14 @@
       "learning-care-without-feeling"
     ],
     "in": [
+      "choosing-what-to-play",
       "wordpress-to-astro"
     ]
   },
   "bulk-edit-woocommerce-products-without-plugins": {
     "out": [
       "10-types-of-websites",
+      "creating-a-custom-add-to-cart-link-woocommerce",
       "do-you-trust-your-instincts-making-smart-wordpress-choices",
       "enhancing-wordpress-content-protection-beyond-right-click-blocks",
       "woocommerce-attributes-vs-variations",
@@ -70,6 +80,7 @@
   "choosing-what-to-play": {
     "out": [
       "adhd-planner",
+      "buildings-never-were",
       "tools-for-adhd-leadership"
     ],
     "in": [
@@ -81,13 +92,17 @@
     "out": [
       "woocommerce-attributes-vs-variations"
     ],
-    "in": []
+    "in": [
+      "bulk-edit-woocommerce-products-without-plugins"
+    ]
   },
   "delete-expired-coupons-automatically-woocommerce": {
     "out": [
       "woocommerce-cli-product-management"
     ],
-    "in": []
+    "in": [
+      "woocommerce-cli-product-management"
+    ]
   },
   "disable-gtin-requirements-non-eligible-woocommerce-products": {
     "out": [
@@ -100,7 +115,8 @@
   "distilroberta-emotion-analysis-nlp-case-study": {
     "out": [
       "gaming-made-me-better-leader",
-      "set-up-tensorflow-docker-jupyter-notebook"
+      "set-up-tensorflow-docker-jupyter-notebook",
+      "what-is-a-gpu"
     ],
     "in": [
       "ai-slop-midas-touch-modern-internet",
@@ -113,6 +129,7 @@
       "wordpress-site-performance-vs-desig"
     ],
     "in": [
+      "automated-x-account-cleanup",
       "bulk-edit-woocommerce-products-without-plugins",
       "enhancing-wordpress-content-protection-beyond-right-click-blocks",
       "how-to-choose-a-software-license-for-your-next-project",
@@ -177,7 +194,8 @@
     "in": [
       "javascript-dice-roller",
       "shotlist-automatic-annotated-screenshots",
-      "what-if-wordpress-wasnt-gpl"
+      "what-if-wordpress-wasnt-gpl",
+      "what-is-vibe-coding-how-to-do-it"
     ],
     "cornerstone": true
   },
@@ -226,6 +244,7 @@
     ],
     "in": [
       "what-is-a-gpu",
+      "what-is-vibe-coding-how-to-do-it",
       "wordpress-to-astro"
     ]
   },
@@ -256,7 +275,8 @@
   },
   "neural-network-predict-resin-usage-3d-printed-miniatures": {
     "out": [
-      "building-convolutional-neural-network-python-tensorflow"
+      "building-convolutional-neural-network-python-tensorflow",
+      "what-is-a-gpu"
     ],
     "in": [
       "limits-of-machine-learning",
@@ -282,6 +302,7 @@
   },
   "set-up-tensorflow-docker-jupyter-notebook": {
     "out": [
+      "what-is-a-gpu",
       "what-is-vibe-coding-how-to-do-it"
     ],
     "in": [
@@ -298,7 +319,9 @@
       "neural-network-predict-resin-usage-3d-printed-miniatures",
       "wordpress-blocks-telex"
     ],
-    "in": []
+    "in": [
+      "write-in-markdown"
+    ]
   },
   "sql-vs-nosql-choosing-the-right-database": {
     "out": [
@@ -364,11 +387,14 @@
   },
   "vibe-writing-line-between-human-machine": {
     "out": [
-      "what-is-vibe-coding-how-to-do-it"
+      "ai-slop-midas-touch-modern-internet",
+      "what-is-vibe-coding-how-to-do-it",
+      "when-ai-stops-being-a-tool"
     ],
     "in": [
       "ai-slop-midas-touch-modern-internet",
       "limits-of-machine-learning",
+      "what-is-vibe-coding-how-to-do-it",
       "when-ai-stops-being-a-tool",
       "write-in-markdown"
     ]
@@ -388,7 +414,12 @@
       "neural-network-predict-resin-usage-3d-printed-miniatures",
       "set-up-tensorflow-docker-jupyter-notebook"
     ],
-    "in": []
+    "in": [
+      "building-convolutional-neural-network-python-tensorflow",
+      "distilroberta-emotion-analysis-nlp-case-study",
+      "neural-network-predict-resin-usage-3d-printed-miniatures",
+      "set-up-tensorflow-docker-jupyter-notebook"
+    ]
   },
   "what-is-a-web-developer": {
     "out": [
@@ -396,10 +427,17 @@
       "what-is-vibe-coding-how-to-do-it",
       "wordpress-blocks-telex"
     ],
-    "in": []
+    "in": [
+      "wordpress-to-astro"
+    ]
   },
   "what-is-vibe-coding-how-to-do-it": {
-    "out": [],
+    "out": [
+      "how-to-choose-a-software-license-for-your-next-project",
+      "limits-of-machine-learning",
+      "vibe-writing-line-between-human-machine",
+      "wordpress-blocks-telex"
+    ],
     "in": [
       "how-to-choose-a-software-license-for-your-next-project",
       "limits-of-machine-learning",
@@ -416,7 +454,9 @@
       "tools-for-adhd-leadership",
       "vibe-writing-line-between-human-machine"
     ],
-    "in": []
+    "in": [
+      "vibe-writing-line-between-human-machine"
+    ]
   },
   "woocommerce-attributes-vs-variations": {
     "out": [
@@ -425,6 +465,7 @@
       "make-product-attributes-linkable-woocommerce"
     ],
     "in": [
+      "10-types-of-websites",
       "bulk-edit-woocommerce-products-without-plugins",
       "creating-a-custom-add-to-cart-link-woocommerce",
       "enhancing-wordpress-content-protection-beyond-right-click-blocks",
@@ -435,6 +476,7 @@
   },
   "woocommerce-cli-product-management": {
     "out": [
+      "delete-expired-coupons-automatically-woocommerce",
       "woocommerce-attributes-vs-variations"
     ],
     "in": [
@@ -465,7 +507,8 @@
     ],
     "in": [
       "shotlist-automatic-annotated-screenshots",
-      "what-is-a-web-developer"
+      "what-is-a-web-developer",
+      "what-is-vibe-coding-how-to-do-it"
     ]
   },
   "wordpress-site-performance-vs-desig": {
@@ -484,13 +527,17 @@
       "buildings-never-were",
       "do-you-trust-your-instincts-making-smart-wordpress-choices",
       "limits-of-machine-learning",
+      "what-is-a-web-developer",
       "wordpress-site-performance-vs-desig",
       "write-in-markdown"
     ],
-    "in": []
+    "in": [
+      "10-types-of-websites"
+    ]
   },
   "write-in-markdown": {
     "out": [
+      "shotlist-automatic-annotated-screenshots",
       "tools-for-adhd-leadership",
       "vibe-writing-line-between-human-machine",
       "what-is-vibe-coding-how-to-do-it"

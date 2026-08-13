@@ -58,7 +58,7 @@ I know very well about the battle of .org vs. .com. I’d personally prefer [Wor
 
 ![The Stripe logo on a blue background](stripe.jpg "Image by Stripe")
 
-When it comes to taking money online, I think in two sizes: **tiny** and **serious**.
+When it comes to taking money online, I think in two sizes: **tiny** and **serious**. Once a shop gets serious, the product data is where the work goes — starting with [[woocommerce-attributes-vs-variations|attributes versus variations]].
 
 If all you require is a way for people to pay you for one thing — a donation, a single product, or maybe a “pay what you want” experiment — I wouldn’t build a full store. That’s like buying an industrial fridge for two yogurts.
 
@@ -125,7 +125,7 @@ If I’m charging for something, I might not even handle the payment on the site
 
 Portfolios are where people often overcomplicate things.
 
-You don’t need a headless CMS and three front-end frameworks to show a few projects and an email address. You need a place where people can understand what you do, see some proof, and contact you.
+You don’t need a headless CMS and three front-end frameworks to show a few projects and an email address — though I did eventually [[wordpress-to-astro|move this site to Astro]], for reasons that had nothing to do with need. You need a place where people can understand what you do, see some proof, and contact you.
 
 For that, I again use WordPress, but I strip it down aggressively:
 

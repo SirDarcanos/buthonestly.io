@@ -224,7 +224,7 @@ The first thing the class does is remember what kind of images it will receive a
 
 `num_classes` tells the final layer how many probabilities to produce. For MNIST we set it to 10 because there are ten digits, 0 through 9. If you later point the same class at a different dataset, say, five types of traffic signs, you’d only change `num_classes` to 5 (or the `NUM_CLASSES` global constant) and the rest of the network would adapt. Keeping these two pieces, shape and number of classes, at the top makes the model reusable without touching the internal blocks.
 
-Right after that, the constructor checks your hardware. If there’s more than one GPU, it prepares a mirrored strategy so the same model runs on all of them in parallel. If there isn’t, it quietly falls back to a single GPU or CPU. You don’t need to change any training code for either case.
+Right after that, the constructor checks your hardware. If there’s more than one [[what-is-a-gpu|GPU]], it prepares a mirrored strategy so the same model runs on all of them in parallel. If there isn’t, it quietly falls back to a single GPU or CPU. You don’t need to change any training code for either case.
 
 ```python
 class SimpleCNN:

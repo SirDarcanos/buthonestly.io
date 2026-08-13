@@ -113,7 +113,7 @@ Things like:
 
 Sometimes I add constraints. Short session. Controller only. No story. Sometimes I ask for a genre. Sometimes I say I just want something familiar. Sometimes I say nothing and I just ask to suggest the best next game.
 
-The key is that GPT does not replace my judgment. It structures it.
+The key is that GPT does not replace my judgment. It structures it. What it cannot tell me is which places will stay with me afterwards — [[buildings-never-were|the ones I still navigate from memory]] were never the ones I planned to love.
 
 It turns a vague internal state into explicit criteria. That alone reduces friction.
 

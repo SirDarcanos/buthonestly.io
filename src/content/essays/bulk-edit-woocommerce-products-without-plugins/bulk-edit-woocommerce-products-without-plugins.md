@@ -142,7 +142,7 @@ Once you rely on tools like this, something shifts. You reach less frequently fo
 
 ## When Extra Tools Still Make Sense
 
-There are real cases where the built-in bulk editor is not enough. Some stores depend on complex pricing logic. Others lean heavily on custom fields or deep variation data.
+There are real cases where the built-in bulk editor is not enough. Some stores depend on complex pricing logic. Others lean heavily on custom fields or deep variation data. Some of it is not bulk work at all — [[creating-a-custom-add-to-cart-link-woocommerce|a direct add-to-cart link]] is a per-product job you do by hand once.
 
 Extra tools can be useful when you often need to:
 

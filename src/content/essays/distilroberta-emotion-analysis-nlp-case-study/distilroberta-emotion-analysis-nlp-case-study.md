@@ -173,7 +173,7 @@ The good news: almost everything is there. The only missing values are in the `r
 
 The dates are stored as strings for now, but they’re clean enough that we can convert them to proper datetimes in one line. The two playtime columns are already in minutes (`author_playtime_forever_min` and `author_playtime_at_review_min`), which makes it easy to bucket players into “new / regular / veteran / master” later.
 
-Memory-wise, the whole thing sits around **25 MB**, so you can open it on a laptop without needing a GPU shrine in the corner of your room. As I am writing this, I am indeed running the code on a MacBook Pro with no external GPU.
+Memory-wise, the whole thing sits around **25 MB**, so you can open it on a laptop without needing a [[what-is-a-gpu|GPU]] shrine in the corner of your room. As I am writing this, I am indeed running the code on a MacBook Pro with no external GPU.
 
 I also like to look at how long the reviews are, just to set expectations. The notebook adds a simple `text_len` column and runs:
 

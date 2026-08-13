@@ -88,7 +88,7 @@ If you’re coding responsibly with ChatGPT, reviewing the output for safety, re
 
 ## When Is Vibe Coding Bad?
 
-Vibe coding is fun and empowering, but it’s also risky. Large language models are powerful, but they’re not infallible. They can generate code that’s inefficient, insecure, or simply wrong.
+Vibe coding is fun and empowering, but it’s also risky. Large language models are powerful, but they’re not infallible. They can generate code that’s inefficient, insecure, or simply wrong. The failure I keep coming back to is subtler than a bug: [[limits-of-machine-learning|a model will answer confidently past the edge of what it knows]].
 
 The answer to when is vibe coding bad or good is relative, but here is my list after having researched the topic and after learning and witnessing what code AI can generate:
 
@@ -102,7 +102,7 @@ If your project fits these criteria, I say go ahead, vibe code away. Otherwise, 
 
 ## How to Start Vibe Coding
 
-You might be already doing it without realizing.
+You might be already doing it without realizing. The same shift has been happening in writing, where I ended up calling it [[vibe-writing-line-between-human-machine|vibe writing]], and inside the block editor with [[wordpress-blocks-telex|Telex]]. Whatever you ship this way is still yours to license, which is [[how-to-choose-a-software-license-for-your-next-project|a decision worth making deliberately]].
 
 There are plenty of tools worth exploring to get started with vibe coding:
 

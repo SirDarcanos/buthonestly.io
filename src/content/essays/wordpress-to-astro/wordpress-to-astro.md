@@ -341,7 +341,7 @@ If your site works and you don’t want to spend a month inside it, your site wo
 
 ## Settling Is Quiet
 
-The thing I learned isn’t that Astro is better than WordPress. It isn’t. They’re answers to different questions, and I was asking the wrong one for years without noticing.
+The thing I learned isn’t that Astro is better than WordPress. It isn’t. It is the same lesson [[what-is-a-web-developer|the slow way I learned to build for the web]] keeps teaching me. They’re answers to different questions, and I was asking the wrong one for years without noticing.
 
 What I learned is that settling doesn’t feel like settling.
 

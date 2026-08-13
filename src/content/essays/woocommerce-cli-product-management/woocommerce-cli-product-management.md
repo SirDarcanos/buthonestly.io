@@ -48,6 +48,8 @@ With WooCommerce CLI, you can:
 - Get a single product
 - List all products
 - Get registered product types
+
+Coupons are their own post type and the CLI treats them the same way, which is one route to [[delete-expired-coupons-automatically-woocommerce|clearing out expired ones]].
 - Get product categories
 
 For the full list of commands and options, refer to the [official WooCommerce CLI documentation](https://developer.woocommerce.com/docs/wc-cli/cli-overview/), which is updated as WooCommerce evolves.
