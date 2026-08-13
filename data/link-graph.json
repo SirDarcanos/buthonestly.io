@@ -1,0 +1,474 @@
+{
+  "10-types-of-websites": {
+    "out": [],
+    "in": [
+      "bulk-edit-woocommerce-products-without-plugins",
+      "uncensored-library-minecraft",
+      "what-if-wordpress-wasnt-gpl",
+      "woocommerce-password-strength-meter-checkout"
+    ],
+    "cornerstone": true
+  },
+  "adhd-planner": {
+    "out": [
+      "choosing-what-to-play",
+      "gaming-made-me-better-leader",
+      "woocommerce-password-strength-meter-checkout"
+    ],
+    "in": [
+      "choosing-what-to-play",
+      "javascript-dice-roller",
+      "learning-care-without-feeling",
+      "shotlist-automatic-annotated-screenshots",
+      "when-ai-stops-being-a-tool"
+    ]
+  },
+  "ai-slop-midas-touch-modern-internet": {
+    "out": [
+      "distilroberta-emotion-analysis-nlp-case-study",
+      "gaming-made-me-better-leader",
+      "mastering-effective-feedback-facts-feelings-curiosity",
+      "vibe-writing-line-between-human-machine"
+    ],
+    "in": []
+  },
+  "automated-x-account-cleanup": {
+    "out": [],
+    "in": [
+      "wordpress-to-astro"
+    ]
+  },
+  "building-convolutional-neural-network-python-tensorflow": {
+    "out": [
+      "set-up-tensorflow-docker-jupyter-notebook"
+    ],
+    "in": [
+      "neural-network-predict-resin-usage-3d-printed-miniatures",
+      "what-is-a-gpu"
+    ]
+  },
+  "buildings-never-were": {
+    "out": [
+      "learning-care-without-feeling"
+    ],
+    "in": [
+      "wordpress-to-astro"
+    ]
+  },
+  "bulk-edit-woocommerce-products-without-plugins": {
+    "out": [
+      "10-types-of-websites",
+      "do-you-trust-your-instincts-making-smart-wordpress-choices",
+      "enhancing-wordpress-content-protection-beyond-right-click-blocks",
+      "woocommerce-attributes-vs-variations",
+      "woocommerce-cli-product-management"
+    ],
+    "in": []
+  },
+  "choosing-what-to-play": {
+    "out": [
+      "adhd-planner",
+      "tools-for-adhd-leadership"
+    ],
+    "in": [
+      "adhd-planner",
+      "tools-for-adhd-leadership"
+    ]
+  },
+  "creating-a-custom-add-to-cart-link-woocommerce": {
+    "out": [],
+    "in": []
+  },
+  "delete-expired-coupons-automatically-woocommerce": {
+    "out": [],
+    "in": []
+  },
+  "disable-gtin-requirements-non-eligible-woocommerce-products": {
+    "out": [],
+    "in": [
+      "how-to-choose-a-software-license-for-your-next-project"
+    ]
+  },
+  "distilroberta-emotion-analysis-nlp-case-study": {
+    "out": [
+      "gaming-made-me-better-leader",
+      "set-up-tensorflow-docker-jupyter-notebook"
+    ],
+    "in": [
+      "ai-slop-midas-touch-modern-internet",
+      "what-is-a-gpu"
+    ]
+  },
+  "do-you-trust-your-instincts-making-smart-wordpress-choices": {
+    "out": [],
+    "in": [
+      "bulk-edit-woocommerce-products-without-plugins",
+      "enhancing-wordpress-content-protection-beyond-right-click-blocks",
+      "how-to-choose-a-software-license-for-your-next-project",
+      "sql-vs-nosql-choosing-the-right-database",
+      "top-5-essential-wordpress-plugins-i-always-install-and-why",
+      "wordpress-site-performance-vs-desig",
+      "wordpress-to-astro"
+    ]
+  },
+  "edit-orders-woocommerce": {
+    "out": [],
+    "in": []
+  },
+  "enhancing-wordpress-content-protection-beyond-right-click-blocks": {
+    "out": [
+      "do-you-trust-your-instincts-making-smart-wordpress-choices",
+      "woocommerce-attributes-vs-variations"
+    ],
+    "in": [
+      "bulk-edit-woocommerce-products-without-plugins",
+      "uncensored-library-minecraft"
+    ]
+  },
+  "gaming-made-me-better-leader": {
+    "out": [
+      "team-building-activities-for-work"
+    ],
+    "in": [
+      "adhd-planner",
+      "ai-slop-midas-touch-modern-internet",
+      "distilroberta-emotion-analysis-nlp-case-study",
+      "javascript-dice-roller",
+      "leading-through-inquiry",
+      "mastering-effective-feedback-facts-feelings-curiosity",
+      "psychological-safety-in-teams-people-first-leadership",
+      "team-building-activities-for-work",
+      "time-off-for-leaders",
+      "tools-for-adhd-leadership"
+    ]
+  },
+  "how-to-build-a-github-profile-readme-that-feels-like-you": {
+    "out": [
+      "write-in-markdown"
+    ],
+    "in": [
+      "shotlist-automatic-annotated-screenshots"
+    ]
+  },
+  "how-to-choose-a-software-license-for-your-next-project": {
+    "out": [
+      "disable-gtin-requirements-non-eligible-woocommerce-products",
+      "do-you-trust-your-instincts-making-smart-wordpress-choices",
+      "what-is-vibe-coding-how-to-do-it"
+    ],
+    "in": [
+      "javascript-dice-roller",
+      "shotlist-automatic-annotated-screenshots",
+      "what-if-wordpress-wasnt-gpl"
+    ],
+    "cornerstone": true
+  },
+  "improve-woocommerce-related-products-recommendations": {
+    "out": [
+      "make-product-attributes-linkable-woocommerce"
+    ],
+    "in": [
+      "sql-vs-nosql-choosing-the-right-database"
+    ]
+  },
+  "javascript-dice-roller": {
+    "out": [
+      "adhd-planner",
+      "gaming-made-me-better-leader",
+      "how-to-choose-a-software-license-for-your-next-project",
+      "tools-for-adhd-leadership"
+    ],
+    "in": []
+  },
+  "leading-through-inquiry": {
+    "out": [
+      "gaming-made-me-better-leader",
+      "mastering-effective-feedback-facts-feelings-curiosity",
+      "time-off-for-leaders"
+    ],
+    "in": []
+  },
+  "learning-care-without-feeling": {
+    "out": [
+      "adhd-planner",
+      "mastering-effective-feedback-facts-feelings-curiosity",
+      "psychological-safety-in-teams-people-first-leadership",
+      "tools-for-adhd-leadership"
+    ],
+    "in": [
+      "buildings-never-were"
+    ]
+  },
+  "limits-of-machine-learning": {
+    "out": [
+      "neural-network-predict-resin-usage-3d-printed-miniatures",
+      "vibe-writing-line-between-human-machine",
+      "what-is-vibe-coding-how-to-do-it"
+    ],
+    "in": [
+      "what-is-a-gpu",
+      "wordpress-to-astro"
+    ]
+  },
+  "make-product-attributes-linkable-woocommerce": {
+    "out": [
+      "woocommerce-attributes-vs-variations",
+      "write-in-markdown"
+    ],
+    "in": [
+      "improve-woocommerce-related-products-recommendations",
+      "woocommerce-attributes-vs-variations"
+    ]
+  },
+  "mastering-effective-feedback-facts-feelings-curiosity": {
+    "out": [
+      "gaming-made-me-better-leader",
+      "psychological-safety-in-teams-people-first-leadership"
+    ],
+    "in": [
+      "ai-slop-midas-touch-modern-internet",
+      "leading-through-inquiry",
+      "learning-care-without-feeling",
+      "psychological-safety-in-teams-people-first-leadership",
+      "team-building-activities-for-work",
+      "time-off-for-leaders",
+      "tools-for-adhd-leadership"
+    ]
+  },
+  "neural-network-predict-resin-usage-3d-printed-miniatures": {
+    "out": [
+      "building-convolutional-neural-network-python-tensorflow"
+    ],
+    "in": [
+      "limits-of-machine-learning",
+      "shotlist-automatic-annotated-screenshots",
+      "sql-vs-nosql-choosing-the-right-database",
+      "what-is-a-gpu",
+      "what-is-a-web-developer"
+    ]
+  },
+  "psychological-safety-in-teams-people-first-leadership": {
+    "out": [
+      "gaming-made-me-better-leader",
+      "mastering-effective-feedback-facts-feelings-curiosity"
+    ],
+    "in": [
+      "learning-care-without-feeling",
+      "mastering-effective-feedback-facts-feelings-curiosity",
+      "team-building-activities-for-work",
+      "time-off-for-leaders",
+      "tools-for-adhd-leadership"
+    ],
+    "cornerstone": true
+  },
+  "set-up-tensorflow-docker-jupyter-notebook": {
+    "out": [
+      "what-is-vibe-coding-how-to-do-it"
+    ],
+    "in": [
+      "building-convolutional-neural-network-python-tensorflow",
+      "distilroberta-emotion-analysis-nlp-case-study",
+      "what-is-a-gpu"
+    ]
+  },
+  "shotlist-automatic-annotated-screenshots": {
+    "out": [
+      "adhd-planner",
+      "how-to-build-a-github-profile-readme-that-feels-like-you",
+      "how-to-choose-a-software-license-for-your-next-project",
+      "neural-network-predict-resin-usage-3d-printed-miniatures",
+      "wordpress-blocks-telex"
+    ],
+    "in": []
+  },
+  "sql-vs-nosql-choosing-the-right-database": {
+    "out": [
+      "do-you-trust-your-instincts-making-smart-wordpress-choices",
+      "improve-woocommerce-related-products-recommendations",
+      "neural-network-predict-resin-usage-3d-printed-miniatures"
+    ],
+    "in": []
+  },
+  "team-building-activities-for-work": {
+    "out": [
+      "gaming-made-me-better-leader",
+      "mastering-effective-feedback-facts-feelings-curiosity",
+      "psychological-safety-in-teams-people-first-leadership",
+      "write-in-markdown"
+    ],
+    "in": [
+      "gaming-made-me-better-leader"
+    ]
+  },
+  "time-off-for-leaders": {
+    "out": [
+      "gaming-made-me-better-leader",
+      "mastering-effective-feedback-facts-feelings-curiosity",
+      "psychological-safety-in-teams-people-first-leadership"
+    ],
+    "in": [
+      "leading-through-inquiry",
+      "tools-for-adhd-leadership"
+    ]
+  },
+  "tools-for-adhd-leadership": {
+    "out": [
+      "choosing-what-to-play",
+      "gaming-made-me-better-leader",
+      "mastering-effective-feedback-facts-feelings-curiosity",
+      "psychological-safety-in-teams-people-first-leadership",
+      "time-off-for-leaders"
+    ],
+    "in": [
+      "choosing-what-to-play",
+      "javascript-dice-roller",
+      "learning-care-without-feeling",
+      "when-ai-stops-being-a-tool",
+      "write-in-markdown"
+    ]
+  },
+  "top-5-essential-wordpress-plugins-i-always-install-and-why": {
+    "out": [
+      "do-you-trust-your-instincts-making-smart-wordpress-choices"
+    ],
+    "in": [
+      "wordpress-site-performance-vs-desig"
+    ]
+  },
+  "uncensored-library-minecraft": {
+    "out": [
+      "10-types-of-websites",
+      "enhancing-wordpress-content-protection-beyond-right-click-blocks"
+    ],
+    "in": []
+  },
+  "vibe-writing-line-between-human-machine": {
+    "out": [
+      "what-is-vibe-coding-how-to-do-it"
+    ],
+    "in": [
+      "ai-slop-midas-touch-modern-internet",
+      "limits-of-machine-learning",
+      "when-ai-stops-being-a-tool",
+      "write-in-markdown"
+    ]
+  },
+  "what-if-wordpress-wasnt-gpl": {
+    "out": [
+      "10-types-of-websites",
+      "how-to-choose-a-software-license-for-your-next-project"
+    ],
+    "in": []
+  },
+  "what-is-a-gpu": {
+    "out": [
+      "building-convolutional-neural-network-python-tensorflow",
+      "distilroberta-emotion-analysis-nlp-case-study",
+      "limits-of-machine-learning",
+      "neural-network-predict-resin-usage-3d-printed-miniatures",
+      "set-up-tensorflow-docker-jupyter-notebook"
+    ],
+    "in": []
+  },
+  "what-is-a-web-developer": {
+    "out": [
+      "neural-network-predict-resin-usage-3d-printed-miniatures",
+      "what-is-vibe-coding-how-to-do-it",
+      "wordpress-blocks-telex"
+    ],
+    "in": []
+  },
+  "what-is-vibe-coding-how-to-do-it": {
+    "out": [],
+    "in": [
+      "how-to-choose-a-software-license-for-your-next-project",
+      "limits-of-machine-learning",
+      "set-up-tensorflow-docker-jupyter-notebook",
+      "vibe-writing-line-between-human-machine",
+      "what-is-a-web-developer",
+      "wordpress-blocks-telex",
+      "write-in-markdown"
+    ]
+  },
+  "when-ai-stops-being-a-tool": {
+    "out": [
+      "adhd-planner",
+      "tools-for-adhd-leadership",
+      "vibe-writing-line-between-human-machine"
+    ],
+    "in": []
+  },
+  "woocommerce-attributes-vs-variations": {
+    "out": [
+      "make-product-attributes-linkable-woocommerce"
+    ],
+    "in": [
+      "bulk-edit-woocommerce-products-without-plugins",
+      "enhancing-wordpress-content-protection-beyond-right-click-blocks",
+      "make-product-attributes-linkable-woocommerce",
+      "woocommerce-cli-product-management"
+    ]
+  },
+  "woocommerce-cli-product-management": {
+    "out": [
+      "woocommerce-attributes-vs-variations"
+    ],
+    "in": [
+      "bulk-edit-woocommerce-products-without-plugins"
+    ]
+  },
+  "woocommerce-eu-vat-number-setup": {
+    "out": [],
+    "in": []
+  },
+  "woocommerce-password-strength-meter-checkout": {
+    "out": [
+      "10-types-of-websites"
+    ],
+    "in": [
+      "adhd-planner"
+    ]
+  },
+  "wordpress-blocks-telex": {
+    "out": [
+      "what-is-vibe-coding-how-to-do-it"
+    ],
+    "in": [
+      "shotlist-automatic-annotated-screenshots",
+      "what-is-a-web-developer"
+    ]
+  },
+  "wordpress-site-performance-vs-desig": {
+    "out": [
+      "do-you-trust-your-instincts-making-smart-wordpress-choices",
+      "top-5-essential-wordpress-plugins-i-always-install-and-why"
+    ],
+    "in": [
+      "wordpress-to-astro"
+    ]
+  },
+  "wordpress-to-astro": {
+    "out": [
+      "automated-x-account-cleanup",
+      "buildings-never-were",
+      "do-you-trust-your-instincts-making-smart-wordpress-choices",
+      "limits-of-machine-learning",
+      "wordpress-site-performance-vs-desig",
+      "write-in-markdown"
+    ],
+    "in": []
+  },
+  "write-in-markdown": {
+    "out": [
+      "tools-for-adhd-leadership",
+      "vibe-writing-line-between-human-machine",
+      "what-is-vibe-coding-how-to-do-it"
+    ],
+    "in": [
+      "how-to-build-a-github-profile-readme-that-feels-like-you",
+      "make-product-attributes-linkable-woocommerce",
+      "team-building-activities-for-work",
+      "wordpress-to-astro"
+    ]
+  }
+}
