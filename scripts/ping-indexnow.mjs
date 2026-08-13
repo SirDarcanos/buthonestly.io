@@ -15,6 +15,7 @@ import { createHash } from "node:crypto";
 import { readdir, readFile, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
+import { publishDate } from "../src/lib/publish-time.mjs";
 
 const ESSAYS_DIR = "src/content/essays";
 const LEDGER = "data/indexnow-pinged.json";
@@ -56,8 +57,8 @@ function frontmatterDate(md) {
   const fm = md.match(/^---\r?\n([\s\S]*?)\r?\n---/);
   const line = fm?.[1].match(/^date:\s*(.+?)\s*$/m);
   if (!line) return null;
-  const dt = new Date(line[1].replace(/^["']|["']$/g, ""));
-  return Number.isNaN(dt.valueOf()) ? null : dt;
+  const dt = publishDate(line[1]);
+  return dt;
 }
 
 function listUnder(fm, key) {

@@ -13,6 +13,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
+import { publishDate } from "../src/lib/publish-time.mjs";
 
 const ESSAYS = "src/content/essays";
 const OUT_FILE = "data/link-graph.json";
@@ -66,7 +67,7 @@ for (const [slug, node] of Object.entries(graph)) {
 
 const meta = (slug) => {
   const d = essays.get(slug).data;
-  const date = d.date ? new Date(d.date) : null;
+  const date = publishDate(d.date);
   return {
     title: d.title ?? slug,
     date,

@@ -1,6 +1,7 @@
 import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
 import { z } from "astro/zod";
+import { publishDate } from "./lib/publish-time.mjs";
 
 // Derived from `z` rather than written as `z.ZodTypeAny`: zod 4 dropped the
 // type-level `z` namespace, so that spelling fails to compile.
@@ -16,6 +17,10 @@ const stringList = z.preprocess(
   z.array(z.string()),
 );
 
+// Frontmatter dates are UTC regardless of the machine reading them, and a bare
+// date takes the standard publish slot. See src/lib/publish-time.mjs.
+const utcDate = z.preprocess((v) => publishDate(v) ?? undefined, z.date());
+
 // One folder per essay: src/content/essays/<slug>/<slug>.md, images colocated.
 const essays = defineCollection({
   loader: glob({
@@ -27,8 +32,8 @@ const essays = defineCollection({
     z
       .object({
         title: z.string(),
-        date: optional(z.coerce.date().optional()),
-        updated: optional(z.coerce.date().optional()),
+        date: optional(utcDate.optional()),
+        updated: optional(utcDate.optional()),
         sticky: optional(z.boolean().default(false)),
         cornerstone: optional(z.boolean().default(false)),
         cover: optional(image().optional()),

@@ -6,6 +6,7 @@
 
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
+import { publishDate } from "../src/lib/publish-time.mjs";
 
 const HOOK = process.env.CF_DEPLOY_HOOK_URL;
 const SITE = (process.env.SITE_URL || "https://buthonestly.io").replace(
@@ -28,8 +29,8 @@ function frontmatterDate(md) {
   if (!fm) return null;
   const line = fm[1].match(/^date:\s*(.+?)\s*$/m);
   if (!line) return null;
-  const dt = new Date(line[1].replace(/^["']|["']$/g, ""));
-  return Number.isNaN(dt.valueOf()) ? null : dt;
+  const dt = publishDate(line[1]);
+  return dt;
 }
 
 const dueButMissing = [];

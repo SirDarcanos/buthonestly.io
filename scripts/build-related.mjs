@@ -18,6 +18,7 @@ import { existsSync } from "node:fs";
 import { createHash } from "node:crypto";
 import path from "node:path";
 import matter from "gray-matter";
+import { publishDate } from "../src/lib/publish-time.mjs";
 
 const ESSAYS_DIR = "src/content/essays";
 const EMB_FILE = "data/embeddings.json";
@@ -54,7 +55,7 @@ async function loadEssays() {
     if (!existsSync(file)) continue;
     const { data, content } = matter(await readFile(file, "utf8"));
     if (!data.date) continue; // draft / no date
-    if (new Date(data.date) > new Date()) continue;
+    if (publishDate(data.date) > new Date()) continue;
     // Present-but-empty frontmatter arrives as null; clean it like the schema does.
     const list = (v) =>
       Array.isArray(v) ? v.filter((x) => x != null && x !== "") : [];

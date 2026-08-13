@@ -20,6 +20,7 @@ import { readFile, readdir, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
+import { publishDate } from "../src/lib/publish-time.mjs";
 
 const ESSAYS_DIR = "src/content/essays";
 const LEDGER = "data/newsletter-sent.json";
@@ -106,7 +107,7 @@ async function loadPublishedEssays() {
     if (!existsSync(file)) continue;
     const { data, content } = matter(await readFile(file, "utf8"));
     if (!data.date) continue; // no date → not live yet
-    const date = new Date(data.date);
+    const date = publishDate(data.date);
     if (Number.isNaN(+date) || date > NOW) continue;
     essays.push({
       slug,

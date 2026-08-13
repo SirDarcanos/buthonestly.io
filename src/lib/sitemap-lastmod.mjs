@@ -6,6 +6,7 @@
 import { readdirSync, readFileSync, existsSync } from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
+import { publishDate } from "./publish-time.mjs";
 
 const ESSAYS_DIR = "src/content/essays";
 
@@ -34,7 +35,7 @@ export function buildLastmodMap() {
     if (!existsSync(file)) continue;
 
     const { data } = matter(readFileSync(file, "utf8"));
-    const published = data.date ? new Date(data.date) : null;
+    const published = publishDate(data.date);
     if (!published || Number.isNaN(published.valueOf()) || published > now) {
       continue; // mirrors getPublishedEssays — future-dated essays aren't built
     }
