@@ -1,6 +1,6 @@
 ---
 title: Leading Through Inquiry
-date: 2026-09-22
+date: 2026-10-06
 updated:
 sticky: false
 cornerstone: false

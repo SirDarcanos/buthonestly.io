@@ -1,6 +1,6 @@
 ---
 title: A JavaScript Dice Roller That Shows Its Work
-date: 2026-10-06
+date: 2026-09-01
 updated:
 sticky: false
 cornerstone: false
