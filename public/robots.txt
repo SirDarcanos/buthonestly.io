@@ -1,0 +1,4 @@
+# Cloudflare prepends its managed robots.txt to this file, so a User-agent group
+# here would duplicate the one it emits. Sitemap is a non-group field (RFC 9309).
+
+Sitemap: https://buthonestly.io/sitemap-index.xml
