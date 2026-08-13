@@ -3,7 +3,7 @@ title: "WooCommerce Attributes vs Variations: the Real Difference"
 date: 2017-04-01T11:00:00
 updated: 2025-12-13T07:05:51
 sticky: false
-cornerstone: false
+cornerstone: true
 excerpt: Attributes describe product details. Variations turn those details into concrete choices that control price, stock, and what customers buy.
 categories:
   - Web

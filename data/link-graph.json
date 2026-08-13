@@ -6,8 +6,7 @@
       "uncensored-library-minecraft",
       "what-if-wordpress-wasnt-gpl",
       "woocommerce-password-strength-meter-checkout"
-    ],
-    "cornerstone": true
+    ]
   },
   "adhd-planner": {
     "out": [
@@ -109,7 +108,8 @@
       "top-5-essential-wordpress-plugins-i-always-install-and-why",
       "wordpress-site-performance-vs-desig",
       "wordpress-to-astro"
-    ]
+    ],
+    "cornerstone": true
   },
   "edit-orders-woocommerce": {
     "out": [],
@@ -140,7 +140,8 @@
       "team-building-activities-for-work",
       "time-off-for-leaders",
       "tools-for-adhd-leadership"
-    ]
+    ],
+    "cornerstone": true
   },
   "how-to-build-a-github-profile-readme-that-feels-like-you": {
     "out": [
@@ -407,7 +408,8 @@
       "enhancing-wordpress-content-protection-beyond-right-click-blocks",
       "make-product-attributes-linkable-woocommerce",
       "woocommerce-cli-product-management"
-    ]
+    ],
+    "cornerstone": true
   },
   "woocommerce-cli-product-management": {
     "out": [
@@ -469,6 +471,7 @@
       "make-product-attributes-linkable-woocommerce",
       "team-building-activities-for-work",
       "wordpress-to-astro"
-    ]
+    ],
+    "cornerstone": true
   }
 }

@@ -3,7 +3,7 @@ title: Do You Trust Your Instincts? Making Smart WordPress Choices
 date: 2023-11-22T11:55:11
 updated: 2023-11-22T11:55:11
 sticky: false
-cornerstone: false
+cornerstone: true
 excerpt: Smart WordPress choices mix instincts with research, prioritizing real reviews, compatibility, and performance over shiny feature lists.
 categories:
   - Web
