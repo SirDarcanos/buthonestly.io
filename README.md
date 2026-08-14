@@ -204,8 +204,14 @@ for how to add a file.
 
 Environment variables (see `.env.example`):
 
-| Variable                         | Used for                                        |
-| -------------------------------- | ----------------------------------------------- |
-| `FATHOM_SITE_ID`                 | Analytics, production builds only.              |
-| `GOOGLE_APPLICATION_CREDENTIALS` | Vertex AI service-account JSON, for narrations. |
-| `VERTEX_REGION` / `VERTEX_MODEL` | Optional TTS overrides.                         |
+| Variable                         | Used for                                         |
+| -------------------------------- | ------------------------------------------------ |
+| `FATHOM_SITE_ID`                 | Analytics, `main`-branch production builds only. |
+| `GOOGLE_APPLICATION_CREDENTIALS` | Vertex AI service-account JSON, for narrations.  |
+| `VERTEX_REGION` / `VERTEX_MODEL` | Optional TTS overrides.                          |
+
+The Fathom script is skipped when `CF_PAGES_BRANCH` is set to anything but
+`main`, so preview deploys never pollute the stats even if the variable is set
+for the Preview environment. To keep your own visits out, run
+`fathom.blockTrackingForMe()` once in the browser console on the live site —
+it persists in local storage (`enableTrackingForMe()` reverses it).

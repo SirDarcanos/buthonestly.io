@@ -95,6 +95,10 @@
     audio.addEventListener("ended", () => {
       delete wrap.dataset.playing;
       btn.setAttribute("aria-label", "Play");
+      if (!audio.dataset.trackedEnd) {
+        audio.dataset.trackedEnd = "1"; // once per player — a finish rate, with "Audio play" as the base
+        track("Audio complete");
+      }
     });
     audio.addEventListener("loadedmetadata", () => {
       durEl.textContent = fmt(audio.duration);

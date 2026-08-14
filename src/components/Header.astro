@@ -205,6 +205,7 @@ const navLinks = [{ href: "/", label: "Home" }, ...categoryLinks];
       );
 
     const MIN_QUERY = 3;
+    let searchTracked = false;
     async function run(query) {
       query = query.trim();
       if (query.length < MIN_QUERY) {
@@ -214,6 +215,13 @@ const navLinks = [{ href: "/", label: "Home" }, ...categoryLinks];
           ? `Type at least ${MIN_QUERY} characters.`
           : "";
         return;
+      }
+      // Search is live, so most searches never submit — count the first query
+      // long enough to run instead, once per page load. Inline script — call
+      // Fathom directly (can't import the track() helper).
+      if (!searchTracked) {
+        searchTracked = true;
+        window.fathom?.trackEvent?.("Search");
       }
       const pf = await getPagefind();
       if (!pf) return;
@@ -293,8 +301,6 @@ const navLinks = [{ href: "/", label: "Home" }, ...categoryLinks];
     form.addEventListener("submit", (e) => {
       e.preventDefault();
       run(input.value);
-      // Inline script — call Fathom directly (can't import the track() helper).
-      if (input.value.trim()) window.fathom?.trackEvent?.("Search");
     });
     input.addEventListener("input", () => run(input.value));
     input.addEventListener("keydown", (e) => {

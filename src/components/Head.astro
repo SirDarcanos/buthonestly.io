@@ -20,6 +20,11 @@ interface Props {
 const { title, description, type, article, noindex, jsonLd, feed } =
   Astro.props;
 
+// Preview deploys are PROD builds too, so the branch — set by Cloudflare Pages
+// CI, absent locally — is what separates production from previews.
+const isProductionDeploy =
+  (import.meta.env.CF_PAGES_BRANCH ?? "main") === "main";
+
 // The page's own feed goes first: readers that offer a single subscribe action
 // take the first alternate, and on an archive that should be the archive.
 const feeds = [feed, { title: SITE_TITLE, href: "/feed.xml" }].filter(
@@ -57,23 +62,30 @@ const feeds = [feed, { title: SITE_TITLE, href: "/feed.xml" }].filter(
 
   {/* Fathom analytics — production only. */}
   {
-    import.meta.env.PROD && import.meta.env.FATHOM_SITE_ID && (
-      <script
-        src="https://cdn.usefathom.com/script.js"
-        data-site={import.meta.env.FATHOM_SITE_ID}
-        defer
-        is:inline
-      />
-    )
+    import.meta.env.PROD &&
+      import.meta.env.FATHOM_SITE_ID &&
+      isProductionDeploy && (
+        <script
+          src="https://cdn.usefathom.com/script.js"
+          data-site={import.meta.env.FATHOM_SITE_ID}
+          defer
+          is:inline
+        />
+      )
   }
 
   {/* Fire a Fathom event for any clicked element carrying data-track. */}
   <script>
     import { track } from "../lib/track";
-    document.addEventListener("click", (e) => {
+    const trackClick = (e: MouseEvent) => {
       const el = (e.target as HTMLElement).closest<HTMLElement>("[data-track]");
       const name = el?.dataset.track;
       if (name) track(name);
+    };
+    document.addEventListener("click", trackClick);
+    // Middle-click opens a new tab without a click event — only auxclick.
+    document.addEventListener("auxclick", (e) => {
+      if (e.button === 1) trackClick(e);
     });
   </script>
 </head>
