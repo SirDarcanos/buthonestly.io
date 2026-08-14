@@ -152,7 +152,7 @@ The goal is "I have something to say and I want people to listen to it." These a
 |---|---|---|
 | **Newsletter subscribers** | **known to the author, low; not recorded here** | People who chose to keep hearing from him. The only audience that does not depend on Google, and the closest thing to "listening". |
 | **Search clicks to non-archive essays** | **19** of 27 | Total clicks are misleading: 8 of 27 went to the WooCommerce archive he has declined to grow. This splits out the content he wants to be known for. |
-| **Referral visits (Fathom)** | **not recorded — get this number** | Anyone arriving from somewhere other than a search engine. The direct measure of whether anything is being shared, and the one tied to the distribution gap. |
+| **Referral visits (Fathom)** | **12 — over the full export window** (2025-11-17 to 2026-08-14: LinkedIn 7, WordPress 3, Instagram 1, GitHub 1), so the 28-day figure is a handful at most | Anyone arriving from somewhere other than a search engine. The direct measure of whether anything is being shared, and the one tied to the distribution gap. |
 | **Brand queries** | 3 seen: "but honestly", "the automation of joy essay", "team building essay" | People looking for him or an essay by name. The only search signal that measures being known rather than being found. |
 
 **Deliberately not tracked: total search clicks, and queries ranking page one.** Both are dominated by the WooCommerce archive, so both would rise while the actual goal went nowhere. An earlier draft used them; they measure the traffic he turned down.
