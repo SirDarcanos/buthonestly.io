@@ -1,6 +1,6 @@
 ---
 title: "The Uncensored Library: A Minecraft World About Free Speech"
-date: 2026-10-27
+date: 2026-11-10
 updated:
 sticky: false
 cornerstone: false
