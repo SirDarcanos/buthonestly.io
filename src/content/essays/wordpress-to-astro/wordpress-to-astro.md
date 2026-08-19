@@ -24,8 +24,8 @@ audioPace: conversational
 
 > [!summary]- Quick Summary
 >
-> - The old site worked, which is exactly why it took me so long to leave. Every time the Site Editor almost did what I wanted, I shipped the almost.
-> - My first plan was headless WordPress. The pre-flight checks passed, and passing is what showed me the backend wasn’t earning its place.
+> - The old site worked, which is exactly why it took me so long to leave. Each time I found a block that did most of what I had in mind, I shipped that and stopped there.
+> - My first plan was headless WordPress. The pre-flight checks passed, and passing is what showed me how little of it I was still using.
 > - An essay is now a folder: one Markdown file and its images. A future date schedules it, and publishing is a commit.
 > - Four small remark plugins teach the build Obsidian’s dialect, so the file I write in the vault is the file the site renders.
 > - Related posts come from sentence embeddings rather than term matching. With internal links, the real cost was never adding them. It was finding where they belonged.
@@ -38,11 +38,11 @@ audioPace: conversational
 
 I never disliked the old site. That was the problem.
 
-If I had hated it, I would have never shipped it like that to begin with. Instead I liked it fine. It loaded, it looked reasonable, people read it, it had no serious performance concerns. Every time something bothered me I opened the Site Editor, found the block that almost did what I wanted, and shipped the almost.
+If I had hated it, I would have never shipped it like that to begin with. Instead I liked it fine. It loaded, it looked reasonable, people read it, it had no serious performance concerns. Every time something bothered me I opened the Site Editor, found the block that came closest to what I had in mind, and shipped the almost.
 
 That’s not a dramatic failure. Nobody writes an essay about a site that works.
 
-But the almosts add up. After enough of them you stop asking for the thing you actually want, because you already know the answer. You start designing inside the shape of the tool, and after a while you can’t tell where the tool’s limits end and your taste begins.
+But the almosts add up. After enough of them you stop asking for the thing you actually want, because you have already decided it isn’t worth the detour. You start designing inside the shape of the tool, and after a while you can’t tell where the tool’s shape ends and your taste begins.
 
 I only noticed once it was gone.
 
@@ -50,17 +50,17 @@ It runs on [Astro](https://astro.build) now. The essays are Markdown files in a 
 
 ## What I Was Actually Annoyed By
 
-The Site Editor isn’t a bad piece of software. It’s a general-purpose tool doing a general-purpose job, and it does that job for millions of sites that aren’t mine.
+The Site Editor is a good piece of software. It’s a general-purpose tool doing a general-purpose job, and it does that job well for millions of sites that aren’t mine.
 
-That’s the friction. My site is one person writing essays. I don’t need a theme that can become a restaurant, a storefront, and a portfolio. I need a reading column, a typographic scale I chose, and the ability to change one of them without discovering which four other things it also changed.
+That’s the friction. My site is one person writing essays. I don’t need a theme that can become a restaurant, a storefront, and a portfolio. I need a reading column, a typographic scale I chose, and the ability to change one of them knowing in advance what else moves with it.
 
-Every fix was a negotiation. I would want a small change — spacing, a border, the way a caption sat under an image. The path to it ran through a settings panel, then a theme.json value, then some custom CSS wedged into the Additional CSS box. Which is where styles go to be forgotten.
+Every fix ran through a few places. I would want a small change — spacing, a border, the way a caption sat under an image. The route to it went through a settings panel, then a theme.json value, then a rule in the Additional CSS box. Three places to look, and six months later I would no longer remember which one held the answer.
 
-Sometimes I went searching for a plugin that adds the one block I wanted. More often I wrote the PHP snippet myself. The alternative was paying for a bloated plugin that does what a single function does.
+Sometimes I went searching for a plugin that adds the one block I wanted. More often I wrote the PHP snippet myself, because the plugins that covered it covered a great deal else besides, and I only ever wanted the one function.
 
 The result worked. It just wasn’t designed so much as *arrived at*.
 
-The difference is easiest to see side by side. The old home page put a tall wordmark in a column of its own and stacked everything else beside it. That was the arrangement the blocks made comfortable. The new one has a masthead across the top, a dated lead essay, and a reading width I chose on purpose.
+The difference is easiest to see side by side. The old home page put a tall wordmark in a column of its own and stacked everything else beside it. That was the arrangement I settled on, and then stopped looking at. The new one has a masthead across the top, a dated lead essay, and a reading width I chose on purpose.
 
 > [!gallery] 2
 > ![The old home page: a tall serif wordmark filling a left-hand column, with Author’s Recommendations and Latest Reads stacked in the space beside it.](home-old.jpg)
@@ -68,7 +68,7 @@ The difference is easiest to see side by side. The old home page put a tall word
 
 Neither of those is a dramatic redesign. That is rather the point — the second one is what I wanted the whole time, and it was never more than a layout decision away.
 
-> _“You start designing inside the shape of the tool, and after a while you can’t tell where the tool’s limits end and your taste begins.”_
+> _“You start designing inside the shape of the tool, and after a while you can’t tell where the tool’s shape ends and your taste begins.”_
 
 ## The Plan I Abandoned
 
@@ -84,27 +84,27 @@ Most of it passed. The API handed back clean JSON with excerpts, featured images
 
 Then two things.
 
-The SEO check passed in a way that made the backend look thin. There was no plugin output worth inheriting — the Jetpack fields existed and were empty. Whatever metadata the new site needed, I was going to generate it in Astro myself.
+The SEO check passed, and what it showed me was how little I had ever put there. The Jetpack fields existed and I had left every one of them empty. Whatever metadata the new site needed, I was going to write it in Astro myself.
 
 The second was smaller, and it decided the whole thing.
 
-A static site has to be told when to rebuild. In a headless setup that trigger is a webhook, fired on publish. WordPress.com doesn’t have one on plugin-enabled sites.
+A static site has to be told when to rebuild. In a headless setup that trigger is a webhook, fired on publish. On a plugin-enabled WordPress.com site there isn’t one out of the box. Which is fair enough: almost nobody publishing there is also building the front end elsewhere.
 
-So I was back to the familiar two options. Install something that does it along with thirty things I never asked for, or write the one function myself.
+So it was the same choice as always. Reach for a plugin that does it along with a lot I didn’t need, or write the one function myself.
 
 I wrote the function. It’s about as small as you would expect, it works, and it still runs on my portfolio site today.
 
-Which is when I noticed the shape of what I was doing. This was the same trade I had been making inside the Site Editor for years, one layer further down. Want one specific thing, get told to install something enormous or build it yourself.
+Which is when I noticed the shape of what I was doing. This was the same trade I had been making inside the Site Editor for years, one layer further down. I wanted one specific thing, and a specific thing is nobody’s job to ship but mine.
 
 Then I looked at what I actually had. A publish trigger I wrote. Metadata I was generating myself. A front end I was about to build from scratch.
 
 That was the moment I stopped.
 
-What was WordPress still doing? Holding text in a database, and giving me an editor I didn’t need.
+What was left for WordPress to do? Hold the text in a database, and offer me an editor I had already stopped opening, because by then I was drafting everything in Markdown anyway.
 
-The checklist said go. The instinct said the backend was dead weight, and I have [[do-you-trust-your-instincts-making-smart-wordpress-choices|written before about trusting that instinct]] on WordPress decisions.
+The checklist said go. The instinct said I was carefully keeping a layer I had stopped using, and I have [[do-you-trust-your-instincts-making-smart-wordpress-choices|written before about trusting that instinct]] on WordPress decisions.
 
-I was one phase away from carefully preserving the exact thing I wanted to leave.
+I was one phase away from carefully preserving a layer I had already replaced.
 
 ## Markdown, Obsidian, and a Folder
 
@@ -124,7 +124,7 @@ There’s no draft toggle and no status field. A date in the future means the es
 
 Two small things shaped this more than they should have.
 
-Obsidian’s property editor can’t edit nested objects — it shows them as an unknown format. So the narration settings are three flat fields rather than one tidy `audio` map. The data model bent to fit the editor. There is some irony in leaving one editor’s limits and then designing around another’s. The difference is that I picked this editor, and I can see exactly where the limit sits.
+Obsidian’s property editor can’t edit nested objects — it shows them as an unknown format. So the narration settings are three flat fields rather than one tidy `audio` map. The data model bent to fit the editor. There is some irony in trading one editor’s constraints for another’s. The difference is that I picked this one, and I can see exactly where the constraint sits.
 
 The other is smaller. Every field in my `new-essay` template ships blank, and a blank YAML value arrives as `null` rather than as nothing at all, which a strict schema rejects. So the schema has a preprocessor that turns empty into absent. It took twenty minutes to find and one line to fix.
 
@@ -176,9 +176,9 @@ The unglamorous part is that the plugins fight over the same characters. Audio e
 
 All four are in the [repository](https://github.com/SirDarcanos/buthonestly.io), which is public and MIT licensed. The code is worth exactly what you paid for it. But if you want to see what teaching Markdown a dialect looks like, it is about two hundred lines of nothing clever. The essays themselves stay mine, under a Creative Commons licence — the front end is the part I am giving away.
 
-That is the honest version of "fully customizable." It doesn’t mean everything is easy. It means the constraints are mine, written down in a file I can open.
+That is the honest version of what I was after. It doesn’t mean everything is easy. It means the constraints are mine, written down in a file I can open.
 
-If I want to change how things work, and I might eventually, I open a file and edit it. I don’t have to file a request and wait for a release cycle that isn’t built around one person’s blog.
+If I want to change how things work, and I might eventually, I open a file and edit it. Nobody else has to agree with me first. That is only workable because this site has exactly one person to please, which is not the position most projects are in.
 
 ## Images and Audio Live in Opposite Places
 
@@ -224,7 +224,7 @@ Every new essay creates link opportunities inside essays I wrote months or years
 
 So I did it once, at publication, and then I mostly didn’t. The archive slowly drifted out of date with itself.
 
-There are tools for this. SEO plugins that crawl your content and suggest where to link. The ones that work well are very expensive, and the ones I tried at the price I was willing to pay didn’t work well enough to keep.
+There are tools for this. SEO plugins that crawl your content and suggest where to link, and the good ones are priced for sites that earn their keep. Mine doesn’t, so I never got past the tier I was willing to pay for.
 
 Now the whole body of work is plain text in one folder. I can point a model at it and ask where a new essay should be linked *from*, and get back specific paragraphs in specific posts. Then I read the list and throw half of it away, because a suggestion is only a suggestion and the judgment is the part worth keeping.
 
@@ -238,11 +238,11 @@ The ones the site chooses are the related posts under each essay, and those I wa
 
 Jetpack’s version does more than people assume. It doesn’t just match tags. It runs the actual post content through Elasticsearch on WordPress.com’s servers, and weighs categories and tags alongside it. It won’t render at all unless it finds at least three results it rates as good. All of that happens in their cloud, so it costs your server nothing.
 
-It’s a good piece of engineering. It just wasn’t as precise as I want it to be.
+It’s a good piece of engineering, and it does exactly what it says it does. The mismatch was on my end.
 
-In practice the matching is lexical. Two essays using the same words score as related. Two essays making the same argument in different vocabulary often don’t. So a post about WooCommerce coupons can land under a post about leading a team, because both talk about a store. Meanwhile the essay that genuinely continues the argument sits elsewhere, using none of the same nouns.
+The matching is lexical, which is the right call almost everywhere: if two posts share vocabulary, they are usually about the same thing. Mine is the awkward archive. I keep circling one argument from different angles. The essay that genuinely continues another often shares none of its nouns. Meanwhile a post about WooCommerce coupons and a post about leading a team both mention a store, and look like a pair.
 
-The plugins that promised better were mostly paid, and the free ones did the same job worse.
+Nothing off the shelf was going to know that, because it isn’t a general problem. It is a property of my particular pile of essays.
 
 So now a neural network does it.
 
@@ -315,11 +315,11 @@ A perfect score doesn’t mean a page is as fast as it can be. It means it clear
 
 The mobile gain is the same change made visible. Mobile testing assumes a slower processor and a worse network, so it punishes work. Nothing here is optimized in a way the old site wasn’t. There is simply less to do.
 
-A page is a file. It was built days ago, it sits on a CDN near whoever asked for it, and answering the request means handing it over. No PHP starts up, no database is queried, no plugin gets a chance to add a script to the head.
+A page is a file. It was built days ago, it sits on a CDN near whoever asked for it, and answering the request means handing it over. Nothing starts up, nothing is queried, nothing is assembled at the moment you ask.
 
 The whole site ships about thirteen kilobytes of JavaScript across five small files, none of it a framework. Images arrive as AVIF at the size the layout actually uses, with their dimensions known in advance, which is the entire reason layout shift went to zero. Nothing reflows, because nothing arrives unannounced.
 
-None of that is clever engineering. It’s the same page with fewer participants.
+None of that is clever engineering. It’s the same page, built ahead of time instead of on request.
 
 And a personal essay site is the easy case. No logged-in users, no cart, no comments, nothing that has to be true at the moment you ask for it. Everything I removed was something I could afford to remove, which is not a general argument about anything.
 
