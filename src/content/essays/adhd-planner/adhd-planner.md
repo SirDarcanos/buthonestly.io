@@ -108,7 +108,7 @@ It’s just how I work when I stop pretending I can work like everyone else. I r
 
 > _“It turned out my brain wasn’t broken — I was just using the wrong map.”_
 
-I also plan for silence. After every writing sprint, I expect downtime. I let it happen. During those quieter weeks, I edit, format, or outline future pieces. Things that keep the blog alive without forcing creativity. Or I simply live my life, [[choosing-what-to-play|choosing what to play]] or reading or just thinking, and ignore the blog entirely for a while to recharge, but with pre-scheduled reminders to just open the Dashboard and check my drafts.
+I also plan for silence. After every writing sprint, I expect downtime. I let it happen. During those quieter weeks, I edit, format, or outline future pieces. Things that keep the blog alive without forcing creativity. Or I simply live my life, [[choosing-what-to-play|choosing what to play]] or reading or just thinking, and ignore the blog entirely for a while to recharge, but with pre-scheduled reminders to open the drafts folder and see what is sitting there.
 
 AI helps too. Tools like ChatGPT are now part of my writing process. Not for ideas I don’t have, but for the ones I can’t quite articulate yet. They turn messy notes into structure and help me reconnect with ideas I left half-written.
 
@@ -148,7 +148,5 @@ When I disappear now, you probably don’t notice. Because I planned for it.
 ADHD didn’t make me inconsistent; it made me cyclical. And cycles, I’ve learned, are just another kind of rhythm. One that moves differently but still moves.
 
 ![The inside of an orange tube with a spiralling line going towards a light in the center.](spiral.jpg 'Photo by <a href="https://unsplash.com/@lanju_fotografie?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Lanju Fotografie</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>')
-
-If you’ve ever felt that same pattern — the bursts of motivation, the sudden quiet, the guilt that follows — I’d love to hear your story. How do you balance creativity and burnout? Have you found your rhythm, or are you still figuring it out?
 
 The more we talk about how our brains actually work — especially in creative fields — the easier it gets to build systems that fit _us_, not the other way around.

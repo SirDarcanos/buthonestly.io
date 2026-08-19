@@ -1,7 +1,7 @@
 ---
 title: Building Psychological Safety in Teams Through People-First Leadership
 date: 2025-10-01T02:00:00
-updated: 2025-12-10T08:09:20
+updated: 2026-08-19
 sticky: false
 cornerstone: true
 draft: false
@@ -177,7 +177,5 @@ If I could summarize what I’ve learned in one sentence, it would be this: **ps
 When leaders model openness, transparency, and empathy, teams don’t just perform better, **they thrive**. They collaborate, innovate, and grow together.
 
 Building safety takes time, consistency, and courage. But once you have it, it becomes the quiet strength behind everything a team can achieve.
-
-What’s your experience? How do you foster psychological safety in your team? I’d love to hear your thoughts below.
 
 1.  Timothy R. Clark. “_The 4 Stages of Psychological Safety: Defining the Path to Inclusion and Innovation_.” Berrett-Koehler Publishers. March 3, 2020 [↩︎](#5a4e8570-6991-4e1f-b422-95e4b53ae11f-link)

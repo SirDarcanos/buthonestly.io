@@ -75,7 +75,7 @@ When reading reviews:
 
 - **Look for Specifics**: General statements like “great plugin” or “didn’t work” offer little insight. Seek out reviews that detail specific experiences, such as ease of setup, compatibility with other plugins, or customer support responsiveness.
 - **Identify Patterns**: One or two negative reviews in a sea of positives might not be alarming, but if you notice recurring complaints or praises about certain features or aspects, take them seriously.
-- **Consider the Context**: Sometimes, a negative review might stem from user error or specific circumstances that might not apply to your situation. Try to understand the context in which the feedback was given. For example, if a plugin gives a compatibility error with a theme that you’re not using, the review might not be very relevant for your specific case, but it’s still something to keep in mind!
+- **Consider the Context**: Sometimes, a negative review might stem from user error or specific circumstances that might not apply to your situation. Try to understand the context in which the feedback was given. For example, if a plugin gives a compatibility error with a theme that you’re not using, the review might not be very relevant for your specific case, but it’s still something to keep in mind.
 - **Check Dates**: Reviews from several years ago may not accurately represent the current state of a plugin or theme. Focus on recent feedback for the most relevant insights. Don’t forget to check the changelog to get an insight of how frequent the updates are and when was the last one.
 - **Relevance to Your Needs**: A plugin or theme may be highly rated for e-commerce sites but less so for portfolio sites. Ensure the feedback aligns with your intended use.
 
@@ -106,6 +106,4 @@ While instincts are a valuable part for making smart WordPress choices, they sho
 
 It cuts the other way too. Years later I planned to [[wordpress-to-astro|rebuild this blog and keep WordPress underneath it]]. Every check I ran came back clean, and I stopped anyway, because passing them was what showed me I no longer needed the part I was carefully preserving.
 
-**I’d love to hear your experiences!** Have you ever faced a dilemma in choosing a WordPress plugin or theme? What strategies have you found effective? Have you been deceived by the appeal and promises of a plugin or theme?
-
-If you’re up for more reading, here is an interesting article by Smashing Magazine that shows how trying to [over-optimize the performance of WordPress can easily go wrong](https://www.smashingmagazine.com/2014/03/wordpress-performance-improvements-that-can-go-wrong/), such as when installing security or caching plugins that we don’t really understand or know how to use, or multiple of them at the same time!
+If you’re up for more reading, here is an interesting article by Smashing Magazine that shows how trying to [over-optimize the performance of WordPress can easily go wrong](https://www.smashingmagazine.com/2014/03/wordpress-performance-improvements-that-can-go-wrong/), such as when installing security or caching plugins that we don’t really understand or know how to use, or multiple of them at the same time.

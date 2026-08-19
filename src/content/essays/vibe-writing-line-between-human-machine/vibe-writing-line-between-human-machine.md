@@ -1,7 +1,7 @@
 ---
 title: Vibe Writing and the Line Between Human and Machine
 date: 2025-11-14T02:00:57
-updated: 2026-05-13T15:36:49
+updated: 2026-08-19
 sticky: false
 cornerstone: false
 excerpt: Vibe writing treats AI as a thinking partner, raising fresh questions about originality, intention, and what makes writing human.
@@ -131,5 +131,3 @@ Maybe that’s the point of all this. The goal isn’t to prove who’s more ori
 Writing this essay challenged a few of my own assumptions and beliefs. It made me see where I actually stand on vibe writing, vibe coding, and originality. I started out curious, maybe a bit skeptical, but somewhere along the way I realized that what matters most to me isn’t authorship or speed, it’s intention. Why we create, and what we hope others will feel when they read it.
 
 I didn’t write this to defend vibe writing or to reject it. I wrote it to understand where feeling ends and language begins, and what happens when that space is shared.
-
-What do you think? Would you ever call this kind of writing your own?
