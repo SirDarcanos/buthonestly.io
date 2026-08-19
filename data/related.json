@@ -2,10 +2,10 @@
   "10-types-of-websites": [
     "top-5-essential-wordpress-plugins-i-always-install-and-why",
     "do-you-trust-your-instincts-making-smart-wordpress-choices",
+    "wordpress-to-astro",
     "wordpress-blocks-telex",
     "bulk-edit-woocommerce-products-without-plugins",
-    "woocommerce-cli-product-management",
-    "woocommerce-attributes-vs-variations"
+    "woocommerce-cli-product-management"
   ],
   "adhd-planner": [
     "when-ai-stops-being-a-tool",
@@ -97,11 +97,11 @@
   ],
   "do-you-trust-your-instincts-making-smart-wordpress-choices": [
     "10-types-of-websites",
+    "wordpress-to-astro",
     "woocommerce-attributes-vs-variations",
     "top-5-essential-wordpress-plugins-i-always-install-and-why",
     "wordpress-blocks-telex",
-    "vibe-writing-line-between-human-machine",
-    "enhancing-wordpress-content-protection-beyond-right-click-blocks"
+    "vibe-writing-line-between-human-machine"
   ],
   "edit-orders-woocommerce": [
     "bulk-edit-woocommerce-products-without-plugins",
@@ -112,12 +112,12 @@
     "delete-expired-coupons-automatically-woocommerce"
   ],
   "enhancing-wordpress-content-protection-beyond-right-click-blocks": [
+    "wordpress-to-astro",
     "wordpress-site-performance-vs-desig",
     "do-you-trust-your-instincts-making-smart-wordpress-choices",
     "top-5-essential-wordpress-plugins-i-always-install-and-why",
     "make-product-attributes-linkable-woocommerce",
-    "woocommerce-password-strength-meter-checkout",
-    "improve-woocommerce-related-products-recommendations"
+    "woocommerce-password-strength-meter-checkout"
   ],
   "gaming-made-me-better-leader": [
     "team-building-activities-for-work",
@@ -133,7 +133,7 @@
     "write-in-markdown",
     "what-is-vibe-coding-how-to-do-it",
     "automated-x-account-cleanup",
-    "how-to-choose-a-software-license-for-your-next-project"
+    "wordpress-to-astro"
   ],
   "how-to-choose-a-software-license-for-your-next-project": [
     "vibe-writing-line-between-human-machine",
@@ -245,7 +245,7 @@
     "wordpress-blocks-telex",
     "bulk-edit-woocommerce-products-without-plugins",
     "woocommerce-cli-product-management",
-    "enhancing-wordpress-content-protection-beyond-right-click-blocks"
+    "wordpress-to-astro"
   ],
   "vibe-writing-line-between-human-machine": [
     "what-is-vibe-coding-how-to-do-it",
@@ -269,7 +269,7 @@
     "what-is-vibe-coding-how-to-do-it",
     "ai-slop-midas-touch-modern-internet",
     "wordpress-blocks-telex",
-    "write-in-markdown"
+    "wordpress-to-astro"
   ],
   "what-is-vibe-coding-how-to-do-it": [
     "vibe-writing-line-between-human-machine",
@@ -328,19 +328,27 @@
     "do-you-trust-your-instincts-making-smart-wordpress-choices"
   ],
   "wordpress-site-performance-vs-desig": [
+    "wordpress-to-astro",
     "enhancing-wordpress-content-protection-beyond-right-click-blocks",
     "do-you-trust-your-instincts-making-smart-wordpress-choices",
     "top-5-essential-wordpress-plugins-i-always-install-and-why",
     "write-in-markdown",
+    "10-types-of-websites"
+  ],
+  "wordpress-to-astro": [
+    "write-in-markdown",
+    "do-you-trust-your-instincts-making-smart-wordpress-choices",
     "10-types-of-websites",
-    "limits-of-machine-learning"
+    "enhancing-wordpress-content-protection-beyond-right-click-blocks",
+    "wordpress-blocks-telex",
+    "wordpress-site-performance-vs-desig"
   ],
   "write-in-markdown": [
+    "wordpress-to-astro",
     "vibe-writing-line-between-human-machine",
     "adhd-planner",
     "10-types-of-websites",
     "do-you-trust-your-instincts-making-smart-wordpress-choices",
-    "ai-slop-midas-touch-modern-internet",
-    "when-ai-stops-being-a-tool"
+    "ai-slop-midas-touch-modern-internet"
   ]
 }
