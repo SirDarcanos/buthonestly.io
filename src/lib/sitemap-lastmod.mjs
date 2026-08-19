@@ -40,11 +40,8 @@ export function buildLastmodMap() {
       continue; // mirrors getPublishedEssays — future-dated essays aren't built
     }
 
-    const updated = data.updated ? new Date(data.updated) : null;
-    const lastmod =
-      updated && !Number.isNaN(updated.valueOf()) && updated > published
-        ? updated
-        : published;
+    const updated = publishDate(data.updated);
+    const lastmod = updated && updated > published ? updated : published;
 
     bump(`/${slug}/`, lastmod);
     bump("/", lastmod);
