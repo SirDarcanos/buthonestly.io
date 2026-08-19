@@ -104,6 +104,8 @@ Another critical aspect in smart WordPress choices is compatibility and performa
 
 While instincts are a valuable part for making smart WordPress choices, they should be informed by a deeper understanding and thorough research. By looking beyond the surface and understanding the full picture, we can make choices that are not only appealing but also beneficial in the long run.
 
+It cuts the other way too. Years later I planned to [[wordpress-to-astro|rebuild this blog and keep WordPress underneath it]]. Every check I ran came back clean, and I stopped anyway, because passing them was what showed me I no longer needed the part I was carefully preserving.
+
 **I’d love to hear your experiences!** Have you ever faced a dilemma in choosing a WordPress plugin or theme? What strategies have you found effective? Have you been deceived by the appeal and promises of a plugin or theme?
 
 If you’re up for more reading, here is an interesting article by Smashing Magazine that shows how trying to [over-optimize the performance of WordPress can easily go wrong](https://www.smashingmagazine.com/2014/03/wordpress-performance-improvements-that-can-go-wrong/), such as when installing security or caching plugins that we don’t really understand or know how to use, or multiple of them at the same time!

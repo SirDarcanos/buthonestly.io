@@ -52,6 +52,8 @@ If you told me, “I just need a site for my thing,” I wouldn’t send you sho
 
 Specialized tools don’t really beat WordPress here. They mostly move the same boxes around with different names.
 
+My own blog is the exception rather than the counterexample. I [[wordpress-to-astro|moved it to Astro]] because it is one person writing essays and I wanted the constraints to be mine. For the site most people mean when they say they need one, the answer above is still WordPress.
+
 I know very well about the battle of .org vs. .com. I’d personally prefer [WordPress.com](https://wordpress.com "WordPress.com"). I never had bad experiences; sites on any plan run very fast, and I don’t have to worry about backups and updates.
 
 ## Tiny Shops and Serious Shops

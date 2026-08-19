@@ -178,7 +178,7 @@ All four are in the [repository](https://github.com/SirDarcanos/buthonestly.io),
 
 That is the honest version of "fully customizable." It doesn’t mean everything is easy. It means the constraints are mine, written down in a file I can open.
 
-If I want to change how things work, and I might eventually, I open a file and edit it. I don’t have to report a feature request, hope it gets approved, then wait for it to be developed, included in a release. Then two years later an update changes it.
+If I want to change how things work, and I might eventually, I open a file and edit it. I don’t have to file a request and wait for a release cycle that isn’t built around one person’s blog.
 
 ## Images and Audio Live in Opposite Places
 

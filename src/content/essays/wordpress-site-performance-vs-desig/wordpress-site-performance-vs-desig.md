@@ -85,6 +85,8 @@ You can absolutely have a beautiful, modern site _and_ great performance. Tools 
 
 Another good habit is to set a **performance baseline**. For example, keep mobile speed at least 80 on PageSpeed Insights. Whenever you make a design update, test again. If your score dips significantly, you know the change wasn’t worth it.
 
+I ran that rule for years, and I would add one caveat to it now. A baseline you never revisit can only subtract. When I [[wordpress-to-astro|rebuilt this site on Astro]], I found a list of things I had quietly talked myself out of to protect the number.
+
 In the end, both design and speed serve the same goal: a better user experience and more engagement and conversions. Performance earns trust instantly; design builds connection over time. The right balance is the one that makes your site _feel effortless_ to read and enjoy.
 
 ## What It Comes Down To

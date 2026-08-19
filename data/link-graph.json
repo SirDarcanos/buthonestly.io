@@ -1,7 +1,8 @@
 {
   "10-types-of-websites": {
     "out": [
-      "woocommerce-attributes-vs-variations"
+      "woocommerce-attributes-vs-variations",
+      "wordpress-to-astro"
     ],
     "in": [
       "bulk-edit-woocommerce-products-without-plugins",
@@ -15,6 +16,7 @@
       "choosing-what-to-play",
       "gaming-made-me-better-leader",
       "woocommerce-password-strength-meter-checkout",
+      "wordpress-to-astro",
       "write-in-markdown"
     ],
     "in": [
@@ -60,8 +62,7 @@
       "learning-care-without-feeling"
     ],
     "in": [
-      "choosing-what-to-play",
-      "wordpress-to-astro"
+      "choosing-what-to-play"
     ]
   },
   "bulk-edit-woocommerce-products-without-plugins": {
@@ -127,7 +128,8 @@
   "do-you-trust-your-instincts-making-smart-wordpress-choices": {
     "out": [
       "top-5-essential-wordpress-plugins-i-always-install-and-why",
-      "wordpress-site-performance-vs-desig"
+      "wordpress-site-performance-vs-desig",
+      "wordpress-to-astro"
     ],
     "in": [
       "automated-x-account-cleanup",
@@ -517,7 +519,8 @@
   "wordpress-site-performance-vs-desig": {
     "out": [
       "do-you-trust-your-instincts-making-smart-wordpress-choices",
-      "top-5-essential-wordpress-plugins-i-always-install-and-why"
+      "top-5-essential-wordpress-plugins-i-always-install-and-why",
+      "wordpress-to-astro"
     ],
     "in": [
       "do-you-trust-your-instincts-making-smart-wordpress-choices",
@@ -527,14 +530,18 @@
   "wordpress-to-astro": {
     "out": [
       "automated-x-account-cleanup",
-      "buildings-never-were",
       "do-you-trust-your-instincts-making-smart-wordpress-choices",
       "limits-of-machine-learning",
       "what-is-a-web-developer",
       "wordpress-site-performance-vs-desig",
       "write-in-markdown"
     ],
-    "in": []
+    "in": [
+      "10-types-of-websites",
+      "adhd-planner",
+      "do-you-trust-your-instincts-making-smart-wordpress-choices",
+      "wordpress-site-performance-vs-desig"
+    ]
   },
   "write-in-markdown": {
     "out": [

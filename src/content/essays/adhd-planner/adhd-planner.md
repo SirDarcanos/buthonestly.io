@@ -104,7 +104,7 @@ After the diagnosis, I stopped trying to copy other people’s productivity habi
 
 It’s not a fancy app or a system with stickers and timers. I tried all of them before, and none of them, digital or analog, work with me.
 
-It’s just how I work when I stop pretending I can work like everyone else. I realized that when the motivation hits, I can do in one week what might take others a month. So instead of trying to slow that down, I _use it_. I write multiple essays in a single burst, then schedule them months ahead. That way, my future self doesn’t need to start from scratch when the energy dips.
+It’s just how I work when I stop pretending I can work like everyone else. I realized that when the motivation hits, I can do in one week what might take others a month. So instead of trying to slow that down, I _use it_. I write multiple essays in a single burst, then schedule them months ahead. That way, my future self doesn’t need to start from scratch when the energy dips. Since I [[wordpress-to-astro|moved the site to Astro]], that scheduling is just a date on a file. A piece written in June goes live in August without me opening anything.
 
 > _“It turned out my brain wasn’t broken — I was just using the wrong map.”_
 

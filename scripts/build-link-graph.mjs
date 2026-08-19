@@ -48,7 +48,9 @@ const now = new Date();
  * that appears on every essay and would flatten the graph.
  */
 function linksFrom(body) {
-  const prose = body.replace(/^> \[!summary\][\s\S]*?(?=\n\n)/, "");
+  const prose = body
+    .replace(/^> \[!summary\][\s\S]*?(?=\n\n)/, "")
+    .replace(/```[\s\S]*?```|`[^`\n]*`/g, "");
   const wiki = [...prose.matchAll(/\[\[([^\]|#]+)(?:[|#][^\]]*)?\]\]/g)];
   const md = [...prose.matchAll(/\]\(\/([a-z0-9-]+)\/\)/g)];
   return [...wiki, ...md].map((m) => m[1].trim());
