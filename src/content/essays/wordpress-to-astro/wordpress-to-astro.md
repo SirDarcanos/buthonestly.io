@@ -1,7 +1,7 @@
 ---
 title: "The Block That Almost Did What I Wanted: WordPress to Astro"
 date: 2026-08-18
-updated:
+updated: 2026-08-19
 sticky: false
 cornerstone: false
 excerpt: Liking a site is not the same as loving it. Why I left the WordPress Site Editor for Astro and Markdown, what it cost, and what the site runs on now.

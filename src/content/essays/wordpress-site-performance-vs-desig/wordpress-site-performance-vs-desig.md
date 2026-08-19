@@ -1,7 +1,7 @@
 ---
 title: "Design vs. Performance: Balance for Your WordPress Site"
 date: 2026-03-02T02:00:00
-updated: 2026-05-12T22:42:14
+updated: 2026-08-19
 sticky: true
 cornerstone: false
 excerpt: No animations, no custom fonts, barely any images — and a 100 on desktop PageSpeed. Fast and beautiful aren’t opposites, but every flourish quietly costs speed.

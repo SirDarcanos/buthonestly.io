@@ -1,7 +1,7 @@
 ---
 title: "My Mental ADHD Planner: How I Blog Without Burning Out"
 date: 2026-02-07T02:00:00
-updated: 2026-05-23T15:50:23
+updated: 2026-08-19
 sticky: false
 cornerstone: false
 excerpt: How I stopped fighting ADHD, accepted creative cycles, and built a simple mental planner to blog consistently without burning out.
