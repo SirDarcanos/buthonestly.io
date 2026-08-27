@@ -55,6 +55,8 @@ test("the post-build projection publishes portable editorial Markdown", (context
 <figure><picture><source srcset="/_astro/picture.webp"><img src="/_astro/picture.jpg" alt="A useful diagram"></picture><figcaption>Photo by <a href="https://example.com/artist">Example Artist</a></figcaption></figure>
 <div class="content-gallery"><figure><img src="/first.jpg" alt="First image"></figure><figure><img src="/second.jpg" alt="Second image"></figure></div>
 <details class="callout quick-summary"><summary>Quick Summary</summary><ul><li>Summary point</li></ul><p class="summary-disclosure">Generated furniture</p></details>
+<ol><li>First step</li></ol>
+<ul><li>Parent item<ul><li>Child item</li></ul></li></ul>
 <aside class="callout callout-tip"><p class="callout-title">Keep this title</p><p>Keep the meaning.</p></aside>
 <blockquote><p>Useful words.</p><cite><a href="https://example.com/source">Ada Example</a></cite></blockquote>
 <audio src="/sample.mp3" data-audio-label="Heart — American English"></audio>
@@ -95,7 +97,8 @@ test("the post-build projection publishes portable editorial Markdown", (context
     path.join(siteDirectory, "fixture-essay.md"),
     "utf8",
   );
-  assert.match(essay, /^---\ntitle: "Fixture Essay"/);
+  assert.match(essay, /^---\ncanonical:/);
+  assert.doesNotMatch(essay, /^title:/m);
   assert.match(
     essay,
     /canonical: "https:\/\/buthonestly\.io\/fixture-essay\/"/,
@@ -120,6 +123,9 @@ test("the post-build projection publishes portable editorial Markdown", (context
   );
   assert.ok(essay.indexOf("First image") < essay.indexOf("Second image"));
   assert.match(essay, /> \*\*Quick Summary\*\*/);
+  assert.match(essay, /^> - Summary point$/m);
+  assert.match(essay, /^1\. First step$/m);
+  assert.match(essay, /^- Parent item\n  - Child item$/m);
   assert.match(essay, /> \*\*Keep this title\*\*/);
   assert.match(essay, /> Useful words\./);
   assert.match(
@@ -128,7 +134,7 @@ test("the post-build projection publishes portable editorial Markdown", (context
   );
   assert.match(
     essay,
-    /- +\[Read the essay\]\(https:\/\/buthonestly\.io\/fixture-essay\.md\)\n- +\[Download\.zip\]\(https:\/\/buthonestly\.io\/download\.zip\)/,
+    /- \[Read the essay\]\(https:\/\/buthonestly\.io\/fixture-essay\.md\)\n- \[Download\.zip\]\(https:\/\/buthonestly\.io\/download\.zip\)/,
   );
   assert.match(essay, /```js\nconst answer = 42;\n```/);
   assert.doesNotMatch(

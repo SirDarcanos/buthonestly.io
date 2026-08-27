@@ -58,7 +58,8 @@ test("the production agent index leads to every editorial Markdown alternative",
     const file = fileForUrl(url);
     assert.equal(existsSync(file), true, `${url} was advertised but not built`);
     const markdown = readFileSync(file, "utf8");
-    assert.match(markdown, /^---\n/);
+    assert.match(markdown, /^---\ncanonical:/);
+    assert.doesNotMatch(markdown, /^title:/m);
     assert.match(
       markdown,
       new RegExp(
@@ -74,6 +75,10 @@ test("the production agent index leads to every editorial Markdown alternative",
       `${url} must contain one document title`,
     );
     assert.match(markdown, /^# .+\n\n\S/m);
+    assert.doesNotMatch(
+      withoutFencedCode(markdown),
+      /^(?:> )*(?:[-+*]|\d+\.) {2,}\S/m,
+    );
     assert.doesNotMatch(
       markdown,
       /data-agent-|data-pagefind|newsletterIntro|contentHash|<script|<form/i,

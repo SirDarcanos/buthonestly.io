@@ -69,6 +69,27 @@ const createConverter = () => {
   });
   converter.use(gfm);
 
+  converter.addRule("compactListItem", {
+    filter: "li",
+    replacement: (content, node, options) => {
+      const parent = node.parentNode;
+      let prefix = `${options.bulletListMarker} `;
+      if (parent.nodeName === "OL") {
+        const start = parent.getAttribute("start");
+        const index = Array.prototype.indexOf.call(parent.children, node);
+        prefix = `${start ? Number(start) + index : index + 1}. `;
+      }
+
+      const endsWithParagraph = /\n$/.test(content);
+      const item = content.replace(/^\n+|\n+$/g, "");
+      const indented = `${item}${endsWithParagraph ? "\n" : ""}`.replace(
+        /\n/g,
+        `\n${" ".repeat(prefix.length)}`,
+      );
+      return `${prefix}${indented}${node.nextSibling ? "\n" : ""}`;
+    },
+  });
+
   converter.addRule("linkedAudio", {
     filter: "audio",
     replacement: (_content, node) => {
@@ -146,7 +167,6 @@ const rewriteLink = (href, canonical, alternatives) => {
 
 const metadataLines = (metadata, canonical) => {
   const fields = [
-    ["title", metadata.title],
     ["canonical", canonical],
     ["description", metadata.description],
     ["published", metadata.published],
