@@ -22,6 +22,7 @@ src/content/**/*.audio.txt
 # Local agent tooling config (launch.json, per-machine permissions). The shared
 # context in .agents/ IS committed.
 .claude/
+.pi/
 
 .DS_Store
 

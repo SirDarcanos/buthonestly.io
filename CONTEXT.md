@@ -1,0 +1,45 @@
+# But Honestly Publishing
+
+But Honestly is a single-author publication whose essays are prepared in advance and released through a date-driven publishing process.
+
+## Language
+
+**Essay**:
+The authored publication unit, including its prose, metadata, and colocated media.
+_Avoid_: Post, article
+
+**Scheduled essay**:
+An essay whose publication time is in the future. It may be previewed before publication.
+_Avoid_: Draft, queued post
+
+**Publication day**:
+The UTC calendar date on which a scheduled essay publishes at the fixed 13:00 UTC publication slot. Authored times do not alter the slot.
+_Avoid_: Publication date, release date
+
+**Published essay**:
+An essay whose publication day has reached 13:00 UTC, whether or not the latest production deployment is online yet.
+_Avoid_: Due essay, released essay
+
+**Live essay**:
+A published essay whose production URL is reachable. Publication follow-up actions wait for the essay to become live.
+_Avoid_: Published essay, deployed essay
+
+**Semantic related essays**:
+Essays selected because their subjects are meaningfully similar, with taxonomy used as an additional relevance signal.
+_Avoid_: Recommended posts, related content
+
+**Internal prose link**:
+A link written by the author from one essay’s prose to another essay. Links added automatically by navigation, taxonomy, or semantic recommendations are not internal prose links.
+_Avoid_: Internal link
+
+**Internal link graph**:
+The editorial model formed exclusively from internal prose links, used to identify isolated essays and assess connections between subjects.
+_Avoid_: Link graph, site graph
+
+**Newsletter introduction**:
+The longer plain-text introduction used in an essay’s publication email, distinct from the shorter excerpt used for search metadata.
+_Avoid_: Newsletter excerpt, email excerpt
+
+**Narration**:
+An audio edition of an essay produced and uploaded independently of the site’s publishing automation.
+_Avoid_: Audio embed, text-to-speech output
