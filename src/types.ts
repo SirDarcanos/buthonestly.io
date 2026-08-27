@@ -20,6 +20,9 @@ export type Post = {
   categories: string[];
   sticky: boolean;
   cornerstone: boolean;
+  contentHash: string;
+  narrationUrl?: string;
+  downloads: { file: string; label?: string }[];
   seo: {
     title: string;
     description: string;

@@ -1,3 +1,5 @@
+import { taxonomySlug } from "./lib/essay-inventory.mjs";
+
 // Rendered beside the archive <h1> and used as its meta description. Keep under
 // ~160 characters, and describe what a term covers rather than what's currently
 // filed under it — an inventory goes stale on the next essay.
@@ -42,14 +44,8 @@ export function taxDescription(slug: string): string | undefined {
   return TAX_DESCRIPTIONS[slug]?.trim() || undefined;
 }
 
-// check-links.mjs carries a copy of this — it runs outside the Astro build and
-// can't import a .ts module. The two must stay character-identical.
 export function taxSlug(name: string): string {
-  return name
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
+  return taxonomySlug(name);
 }
 
 export function taxUrl(kind: "section" | "topic", name: string): string {

@@ -3,6 +3,7 @@
 // `npm run lint`.
 import fs from "node:fs";
 import path from "node:path";
+import { taxonomySlug } from "../src/lib/essay-inventory.mjs";
 
 const essaysDirectoryArgument = process.argv.indexOf("--essays-dir");
 const ESSAYS =
@@ -14,13 +15,6 @@ if (!ESSAYS) {
   console.error("Usage: node scripts/check-links.mjs [--essays-dir <path>]");
   process.exit(2);
 }
-
-const slugify = (n) =>
-  n
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
 
 const listUnder = (fm, key) => {
   const block =
@@ -64,8 +58,9 @@ for (const slug of dirs) {
   });
   routes.add(`/${slug}/`);
   for (const c of listUnder(fm, "categories"))
-    routes.add(`/section/${slugify(c)}/`);
-  for (const t of listUnder(fm, "tags")) routes.add(`/topic/${slugify(t)}/`);
+    routes.add(`/section/${taxonomySlug(c)}/`);
+  for (const t of listUnder(fm, "tags"))
+    routes.add(`/topic/${taxonomySlug(t)}/`);
   for (const d of fm.matchAll(/^[ \t]*-[ \t]*file:[ \t]*(\S+)/gm))
     downloadFiles.add(d[1]);
 }

@@ -12,9 +12,11 @@ import remarkGallery from "./src/lib/remark-gallery.mjs";
 import rehypeImageFormat from "./src/lib/rehype-image-format.mjs";
 import rehypeFigure from "./src/lib/rehype-figure.mjs";
 import rehypeExternalLinks from "./src/lib/rehype-external-links.mjs";
+import { loadEssayInventory } from "./src/lib/essay-inventory.mjs";
 import { buildLastmodMap } from "./src/lib/sitemap-lastmod.mjs";
 
-const LASTMOD = buildLastmodMap();
+const ESSAY_INVENTORY = loadEssayInventory();
+const LASTMOD = buildLastmodMap(ESSAY_INVENTORY);
 
 export default defineConfig({
   site: "https://buthonestly.io/",

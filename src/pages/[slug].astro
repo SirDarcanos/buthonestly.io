@@ -9,33 +9,39 @@ import ShareLinks from "../components/ShareLinks.astro";
 import TableOfContents from "../components/TableOfContents.astro";
 import TaxLinks from "../components/TaxLinks.astro";
 import SinglePost from "../layouts/SinglePost.astro";
-import { getPublishedEssays, getRelatedPosts, toPost } from "../lib/essays";
+import {
+  getRelatedPosts,
+  getRenderableEssays,
+  toPost,
+  type RenderableEssay,
+} from "../lib/essays";
 import { breadcrumbList } from "../lib/schema.ts";
 import { taxUrl } from "../taxonomies.ts";
 
-import { render, type CollectionEntry } from "astro:content";
+import { render } from "astro:content";
 import { type Post } from "../types.ts";
 
 export async function getStaticPaths() {
-  const entries = await getPublishedEssays();
+  const essays = await getRenderableEssays();
   return Promise.all(
-    entries.map(async (entry) => ({
-      params: { slug: entry.id },
+    essays.map(async (essay) => ({
+      params: { slug: essay.record.slug },
       props: {
-        entry,
-        related: await getRelatedPosts(toPost(entry), 6),
+        essay,
+        related: await getRelatedPosts(toPost(essay), 6),
       },
     })),
   );
 }
 
 interface Props {
-  entry: CollectionEntry<"essays">;
+  essay: RenderableEssay;
   related: Post[];
 }
 
-const { entry, related } = Astro.props;
-const post = toPost(entry);
+const { essay, related } = Astro.props;
+const { entry } = essay;
+const post = toPost(essay);
 const { Content, headings } = await render(entry);
 const publishDate = new Date(post.date);
 // `modified` falls back to `date`, so only a real revision earns a line.
@@ -73,6 +79,7 @@ const jsonLd = [
     id={"post-" + post.id}
     class="post border-line mt-20 border-b pb-10"
     data-pagefind-body
+    data-content-version={post.contentHash}
   >
     <header class="mb-10 space-y-6">
       <div class="flex items-center gap-3">
@@ -140,7 +147,7 @@ const jsonLd = [
 
   <ShareLinks title={post.title} path={post.url} tags={post.tags} />
 
-  <Downloads downloads={entry.data.downloads} />
+  <Downloads downloads={post.downloads} />
 
   {
     related.length > 0 && (
