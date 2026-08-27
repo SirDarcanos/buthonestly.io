@@ -1,10 +1,12 @@
 ---
 title: "WooCommerce CLI Product Management: A Practical Guide"
-date: 2016-03-10T12:44:32
-updated: 2016-03-10T12:44:32
+date: 2016-03-10
+updated: 2016-03-10
 sticky: false
 cornerstone: false
 excerpt: Manage WooCommerce products from the terminal, including variable products and bulk changes, with clear, scriptable CLI commands.
+newsletterIntro: |-
+  Manage WooCommerce products from the terminal, including variable products and bulk changes, with clear, scriptable CLI commands.
 categories:
   - Web
 tags:
@@ -15,19 +17,19 @@ tags:
 coverAlt: Green Matrix-style streams of code characters falling down a black screen.
 coverCaption: Photo by <a href="https://unsplash.com/@markusspiske?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Markus Spiske</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
 cover: matrix-woocommerce-cli.jpg
-audioVoice: Enceladus
-audioStyle: reflective
-audioPace: conversational
+
 ---
 
-> [!summary]- Quick Summary
->
-> - WooCommerce CLI product management lets you handle products from the terminal with repeatable, scriptable commands.
-> - You can create simple, external, grouped, and variable products, including attributes and variations defined as arrays.
-> - Deleting, updating, and bulk operations become single commands instead of long sessions in the product editor.
-> - For heavy catalogs or frequent changes, the CLI turns product management into a reliable workflow instead of manual busywork.
->
-> AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
+import QuickSummary from "../../../components/content/QuickSummary.astro";
+
+<QuickSummary>
+
+- WooCommerce CLI product management lets you handle products from the terminal with repeatable, scriptable commands.
+- You can create simple, external, grouped, and variable products, including attributes and variations defined as arrays.
+- Deleting, updating, and bulk operations become single commands instead of long sessions in the product editor.
+- For heavy catalogs or frequent changes, the CLI turns product management into a reliable workflow instead of manual busywork.
+
+</QuickSummary>
 
 Everything you can do in the WooCommerce product editor, you can handle with WooCommerce CLI product management directly in your terminal.
 
@@ -49,7 +51,7 @@ With WooCommerce CLI, you can:
 - List all products
 - Get registered product types
 
-Coupons are their own post type and the CLI treats them the same way, which is one route to [[delete-expired-coupons-automatically-woocommerce|clearing out expired ones]].
+Coupons are their own post type and the CLI treats them the same way, which is one route to [clearing out expired ones](/delete-expired-coupons-automatically-woocommerce/).
 - Get product categories
 
 For the full list of commands and options, refer to the [official WooCommerce CLI documentation](https://developer.woocommerce.com/docs/wc-cli/cli-overview/), which is updated as WooCommerce evolves.
@@ -133,7 +135,7 @@ Replace `123` with the ID of your grouped product. Any simple product created wi
 
 Variable products are where WooCommerce CLI gets interesting. Handling attributes and variations from the terminal is where many store owners first feel the payoff of WooCommerce variable products CLI workflows.
 
-Variable products combine attributes (like Color or Size) with multiple variations, each with its own price and settings. Understanding the difference between attributes and variations can take a moment, so [[woocommerce-attributes-vs-variations|I wrote a detailed essay about it]].
+Variable products combine attributes (like Color or Size) with multiple variations, each with its own price and settings. Understanding the difference between attributes and variations can take a moment, so [I wrote a detailed essay about it](/woocommerce-attributes-vs-variations/).
 
 WooCommerce CLI treats attributes and variations as arrays. You refer to each one by its index in that array. Indexes start at 0, not 1.
 
