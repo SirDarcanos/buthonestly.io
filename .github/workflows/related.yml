@@ -1,6 +1,6 @@
-name: Rebuild related posts
+name: Prepare semantic related essays
 
-# Regenerates the semantic related-posts map and commits it, which triggers a
+# Regenerates the semantic related-essay map and commits it, which triggers a
 # Pages rebuild. The model (onnxruntime-node, ~200MB) is installed ad-hoc so it
 # never touches the Cloudflare deploy install.
 
@@ -9,14 +9,13 @@ on:
     branches: [main]
     paths:
       - "src/content/essays/**"
-  # A date passing isn't a push, so scheduled essays need the cron.
-  schedule:
-    - cron: "0 12 * * *"
+      - "scripts/build-related.mjs"
+      - "src/lib/related-essays.mjs"
   workflow_dispatch:
 
 concurrency:
   group: related
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 permissions:
   contents: write
@@ -36,7 +35,7 @@ jobs:
 
       - run: npm ci
 
-      - run: npm install --no-save @huggingface/transformers
+      - run: npm install --no-save @huggingface/transformers@4.2.0
 
       - run: npm run related
 
@@ -48,7 +47,6 @@ jobs:
           if git diff --staged --quiet; then
             echo "Related map unchanged."
           else
-            git commit -m "chore: rebuild related posts"
-            git pull --rebase origin main
+            git commit -m "chore: rebuild related essays"
             git push
           fi

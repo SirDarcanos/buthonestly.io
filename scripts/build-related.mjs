@@ -1,154 +1,74 @@
-// Precomputes semantic "related posts" from sentence embeddings, at build time
-// (never at runtime).
-//
-// Outputs (both committed):
-//   data/embeddings.json — { slug: { hash, vector } } cache; only essays whose
-//                          text changed get re-embedded.
-//   data/related.json    — { slug: [slug, ...] } top neighbours, read by
-//                          getRelatedPosts() with a taxonomy fallback.
-//
-// The model (onnxruntime-node, ~200MB) is intentionally NOT a project
-// dependency — it's installed ad-hoc by .github/workflows/related.yml (or
-// locally: `npm install --no-save @huggingface/transformers`). This keeps the
-// Cloudflare deploy install light; recomputing related.json from the cached
-// vectors needs no model at all.
-
-import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
-import { createHash } from "node:crypto";
+import { mkdir, readFile } from "node:fs/promises";
 import { loadEssayInventory } from "../src/lib/essay-inventory.mjs";
-const EMB_FILE = "data/embeddings.json";
-const OUT_FILE = "data/related.json";
+import {
+  buildSemanticState,
+  writeGeneratedFile,
+} from "../src/lib/related-essays.mjs";
+
+const EMBEDDINGS_FILE = "data/embeddings.json";
+const RELATED_FILE = "data/related.json";
 const MODEL = "Xenova/bge-small-en-v1.5";
-const TOP_N = 6;
-const CAT_BOOST = 0.02;
-const TAG_BOOST = 0.06;
-
-function stripMarkdown(md) {
-  return md
-    .replace(/```[\s\S]*?```/g, " ")
-    .replace(/`[^`]*`/g, " ")
-    .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
-    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
-    .replace(/^>\s?/gm, " ")
-    .replace(/[#*_~`>|-]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
-const hashText = (t) =>
-  createHash("sha256").update(t).digest("hex").slice(0, 16);
-const round = (x) => Math.round(x * 1e6) / 1e6;
-
-async function loadEssays() {
-  return loadEssayInventory().published.map((essay) => {
-    const text =
-      `${essay.title}. ${essay.excerpt}. ${stripMarkdown(essay.body)}`.slice(
-        0,
-        4000,
-      );
-    return {
-      slug: essay.slug,
-      title: essay.title,
-      categories: essay.categories.map(({ name }) => name),
-      tags: essay.tags.map(({ name }) => name),
-      text,
-      hash: hashText(text),
-    };
-  });
-}
+const MODEL_REVISION = "ea104dacec62c0de699686887e3f920caeb4f3e3";
+const EMBEDDING_VERSION = `${MODEL}@${MODEL_REVISION}:mean-normalized:input-v1`;
+const round = (value) => Math.round(value * 1e6) / 1e6;
 
 async function embed(texts) {
   let pipeline;
   try {
     ({ pipeline } = await import("@huggingface/transformers"));
-  } catch {
-    console.warn(
-      "⚠  @huggingface/transformers not installed — skipping (re)embedding.\n" +
-        "   Install it to refresh vectors: npm install --no-save @huggingface/transformers",
+  } catch (error) {
+    throw new Error(
+      "Changed essays require @huggingface/transformers: npm install --no-save @huggingface/transformers@4.2.0",
+      { cause: error },
     );
-    return null;
   }
-  const extractor = await pipeline("feature-extraction", MODEL);
+
+  console.log(`Embedding ${texts.length} new/changed essay(s)…`);
+  const extractor = await pipeline("feature-extraction", MODEL, {
+    revision: MODEL_REVISION,
+  });
   const vectors = [];
   for (const text of texts) {
-    const out = await extractor(text, { pooling: "mean", normalize: true });
-    vectors.push(Array.from(out.data, round));
+    const output = await extractor(text, { pooling: "mean", normalize: true });
+    vectors.push(Array.from(output.data, round));
   }
   return vectors;
 }
 
-const dot = (a, b) => {
-  let s = 0;
-  for (let i = 0; i < a.length; i++) s += a[i] * b[i];
-  return s;
-};
-
 async function main() {
-  const essays = await loadEssays();
-  const bySlug = new Map(essays.map((e) => [e.slug, e]));
-
-  const cache = existsSync(EMB_FILE)
-    ? JSON.parse(await readFile(EMB_FILE, "utf8"))
+  const inventory = loadEssayInventory();
+  const cache = existsSync(EMBEDDINGS_FILE)
+    ? JSON.parse(await readFile(EMBEDDINGS_FILE, "utf8"))
     : {};
-
-  const stale = essays.filter(
-    (e) => !cache[e.slug] || cache[e.slug].hash !== e.hash,
-  );
-  if (stale.length) {
-    console.log(`Embedding ${stale.length} new/changed essay(s)…`);
-    const vectors = await embed(stale.map((e) => e.text));
-    if (vectors) {
-      stale.forEach((e, i) => {
-        cache[e.slug] = { hash: e.hash, vector: vectors[i] };
-      });
-    }
-  } else {
-    console.log("All embeddings up to date.");
-  }
-
-  for (const slug of Object.keys(cache)) {
-    if (!bySlug.has(slug)) delete cache[slug];
-  }
+  const state = await buildSemanticState({
+    inventory,
+    cache,
+    embed,
+    embeddingVersion: EMBEDDING_VERSION,
+  });
 
   await mkdir("data", { recursive: true });
-  await writeFile(EMB_FILE, JSON.stringify(cache) + "\n");
+  const embeddingsChanged = await writeGeneratedFile(
+    EMBEDDINGS_FILE,
+    `${JSON.stringify(state.cache)}\n`,
+  );
+  const rankingsChanged = await writeGeneratedFile(
+    RELATED_FILE,
+    `${JSON.stringify(state.related, null, 2)}\n`,
+  );
+  const embeddedCount = Object.values(state.cache).filter(
+    ({ vector }) => vector,
+  ).length;
 
-  const embedded = essays.filter((e) => cache[e.slug]?.vector);
-  const related = {};
-  for (const a of essays) {
-    const va = cache[a.slug]?.vector;
-    if (!va) {
-      related[a.slug] = [];
-      continue;
-    }
-    related[a.slug] = embedded
-      .filter((b) => b.slug !== a.slug)
-      .map((b) => {
-        const sharedCat = a.categories.filter((c) =>
-          b.categories.includes(c),
-        ).length;
-        const sharedTag = a.tags.filter((t) => b.tags.includes(t)).length;
-        return {
-          slug: b.slug,
-          score:
-            dot(va, cache[b.slug].vector) +
-            CAT_BOOST * sharedCat +
-            TAG_BOOST * sharedTag,
-        };
-      })
-      .sort((x, y) => y.score - x.score)
-      .slice(0, TOP_N)
-      .map((x) => x.slug);
-  }
-
-  await writeFile(OUT_FILE, JSON.stringify(related, null, 2) + "\n");
   console.log(
-    `Wrote related.json (${essays.length} essays, ${embedded.length} with vectors).`,
+    embeddingsChanged || rankingsChanged
+      ? `Updated semantic state (${inventory.essays.length} essays, ${embeddedCount} with vectors).`
+      : "Semantic state unchanged.",
   );
 }
 
-main().catch((err) => {
-  console.error(err);
+main().catch((error) => {
+  console.error(error);
   process.exit(1);
 });
