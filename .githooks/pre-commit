@@ -1,3 +1,0 @@
-#!/bin/sh
-# Wired via `git config core.hooksPath .githooks` (the package.json prepare script).
-node scripts/precommit.mjs

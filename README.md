@@ -146,23 +146,20 @@ Import `Figure`, `Gallery`, `QuickSummary`, `Callout`, and `Blockquote` from
 
 ## Tooling
 
-| Command                      | What it does                                                                                               |
-| ---------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `npm run dev`                | Dev server on port 4321.                                                                                   |
-| `npm test`                   | Runs the automated test suite, including deliberate CI-stage failure fixtures.                             |
-| `npm run build`              | Generates redirects, builds to `dist/`, then projects editorial Markdown alternatives.                     |
-| `npm run lint`               | Prettier check plus link check.                                                                            |
-| `npm run check:links`        | Verifies canonical internal links, publication safety, and local assets.                                   |
-| `npm run links`              | Prints advisory prose-link analysis; pass `-- --json <path>` for local JSON.                               |
-| `npm run lint:essay`         | Advisory style-guide lint for a single essay.                                                              |
-| `npm run images [-- <slug>]` | Resizes to 1376px, recompresses, converts opaque images to JPEG and updates source references. Idempotent. |
-| `npm run related`            | Rebuilds the semantic related-posts map.                                                                   |
-| `npm run indexnow`           | Submits changed essays to IndexNow.                                                                        |
-| `npm run og`                 | Regenerates `public/og-default.png`.                                                                       |
-| `npm run email-assets`       | Regenerates the newsletter's masthead and social icons.                                                    |
-
-A pre-commit hook (`.githooks/`, wired by `npm install`) optimizes staged essay
-images, blocks the commit on a non-16:9 cover, and formats staged code.
+| Command                      | What it does                                                                                                  |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `npm run dev`                | Dev server on port 4321.                                                                                      |
+| `npm test`                   | Runs the automated test suite, including deliberate CI-stage failure fixtures.                                |
+| `npm run build`              | Generates redirects, builds to `dist/`, then projects editorial Markdown alternatives.                        |
+| `npm run lint`               | Prettier check plus link check.                                                                               |
+| `npm run check:links`        | Verifies canonical internal links, publication safety, and local assets.                                      |
+| `npm run links`              | Prints advisory prose-link analysis; pass `-- --json <path>` for local JSON.                                  |
+| `npm run lint:essay`         | Advisory style-guide lint for a single essay.                                                                 |
+| `npm run images [-- <slug>]` | Manually resizes and compresses oversized sources and converts opaque images to JPEG, printing renamed paths. |
+| `npm run related`            | Rebuilds the semantic related-posts map.                                                                      |
+| `npm run indexnow`           | Submits changed essays to IndexNow.                                                                           |
+| `npm run og`                 | Regenerates `public/og-default.png`.                                                                          |
+| `npm run email-assets`       | Regenerates the newsletter's masthead and social icons.                                                       |
 
 ## Automation
 

@@ -6,7 +6,6 @@
     "node": ">=24.0.0"
   },
   "scripts": {
-    "prepare": "git config core.hooksPath .githooks || true",
     "dev": "astro dev",
     "prebuild": "node scripts/generate-redirects.mjs",
     "build": "astro build",

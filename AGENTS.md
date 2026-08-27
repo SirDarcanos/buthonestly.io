@@ -30,10 +30,10 @@ accumulate and go out as a batch. Do not push on every change.
 
 ## Tooling
 
-- `npm run images [-- <slug>]` — optimize essay source images in place:
-  resize to max 1376px, recompress, convert opaque images to JPEG (updating
-  source references). Non-16:9 images are flagged and skipped. Idempotent
-  via `data/images-optimized.json`.
+- `npm run images [-- <slug>]` — manually optimize essay source images in
+  place: resize oversized files to max 1376px, recompress them, and convert
+  opaque images to JPEG. A conversion prints both paths; update authored MDX
+  references yourself. Invalid cover proportions block the command.
 - `npm run related` — rebuild the semantic related-posts map (normally left
   to the `related.yml` Action).
 - `npm run links` — print advisory analysis of the editorial internal-link
@@ -75,9 +75,7 @@ accumulate and go out as a batch. Do not push on every change.
   `<!-- lint-ignore sentence -->` narrows it to rules containing "sentence", and
   `<!-- lint-ignore-file em dash -->` applies to the whole essay. The report
   prints how many it suppressed, so nothing disappears silently.
-- A pre-commit hook (`.githooks/`, wired by the `prepare` script) optimizes
-  staged essay images — blocking the commit on non-16:9 — and formats staged
-  code. Prettier deliberately ignores `data/` (generated) and `src/content`
+- Prettier deliberately ignores `data/` (generated) and `src/content`
   (authored prose and Templater files); don't format those.
 
 ## Images
@@ -87,16 +85,16 @@ that Astro re-encodes to AVIF/WebP for the site. Audio MP3s are the
 opposite: git-ignored, uploaded to R2.
 
 - **Covers must be 16:9**; ~1376px wide is the target (2× the reading column).
-  `npm run images` (and the pre-commit hook) enforce that and block the commit
-  on a non-16:9 cover — resizing by width never crops, so a wrong ratio would
-  ship distorted.
+  `npm run images` enforces that and blocks on a non-16:9 cover — resizing by
+  width never crops, so a wrong ratio would ship distorted.
 - **Body images can be any shape** — a wide dataset strip or a tall diagram is
   fine. Only width matters: anything over 1376px is resized down, and anything
   narrower than the 688px reading column gets a non-blocking note.
 - **Opaque images are converted to JPEG** — PNG, WebP, AVIF, TIFF, BMP, at any
-  size — and the MDX/frontmatter references are rewritten to match. Only
-  transparency keeps a file as PNG (JPEG has no alpha). Animated sources are
-  skipped rather than flattened. GIFs and SVGs are exempt entirely — the
+  size. The command prints renamed paths so you can update MDX/frontmatter
+  references yourself. Only transparency keeps a file as PNG (JPEG has no
+  alpha). Animated sources are skipped rather than flattened. GIFs and SVGs are
+  exempt entirely — the
   optimizer ignores them and they need not be 16:9.
 - Covers: `cover: ./file.jpg` in frontmatter, required once an essay is live.
   Rendered by `Picture.astro` as AVIF → WebP → JPEG.
