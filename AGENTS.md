@@ -36,14 +36,12 @@ accumulate and go out as a batch. Do not push on every change.
   via `data/images-optimized.json`.
 - `npm run related` — rebuild the semantic related-posts map (normally left
   to the `related.yml` Action).
-- `npm run links` — map the editorial internal-link graph and write
-  `data/link-graph.json` (committed, so a diff shows an essay gaining an inbound
-  link). Counts only links written into prose: the related-posts block, taxonomy
-  links and the footer already give every essay inbound links, so including them
-  would report a healthy graph no matter what was written. Reports orphans, dead
-  ends, cluster density and cornerstone reach. Scheduled essays are counted
-  separately — a link only exists once its source publishes. Advisory; `--strict`
-  exits non-zero for CI.
+- `npm run links` — print advisory analysis of the editorial internal-link
+  graph. Counts only links written into prose: summaries, related essays,
+  taxonomy links, and the footer are excluded. Reports orphans, dead ends,
+  cluster density, and cornerstone reach, with scheduled essays counted
+  separately. Pass `-- --json <path>` to write local JSON analysis explicitly;
+  no graph artifact is tracked or written by default.
 - `npm run indexnow` — submit changed essays to IndexNow so Bing, Yandex,
   Seznam and Naver recrawl within hours. Google does not participate; it
   still discovers via the sitemap. Normally left to the `indexnow.yml`

@@ -154,7 +154,8 @@ Import `Figure`, `Gallery`, `QuickSummary`, `Callout`, and `Blockquote` from
 | `npm test`                   | Runs the automated test suite, including deliberate CI-stage failure fixtures.                             |
 | `npm run build`              | Generates redirects, builds to `dist/`, then indexes it with Pagefind.                                     |
 | `npm run lint`               | Prettier check plus link check.                                                                            |
-| `npm run check:links`        | Verifies internal links and local assets resolve.                                                          |
+| `npm run check:links`        | Verifies canonical internal links, publication safety, and local assets.                                   |
+| `npm run links`              | Prints advisory prose-link analysis; pass `-- --json <path>` for local JSON.                               |
 | `npm run lint:essay`         | Advisory style-guide lint for a single essay.                                                              |
 | `npm run images [-- <slug>]` | Resizes to 1376px, recompresses, converts opaque images to JPEG and updates source references. Idempotent. |
 | `npm run related`            | Rebuilds the semantic related-posts map.                                                                   |
