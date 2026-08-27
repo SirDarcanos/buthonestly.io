@@ -166,6 +166,20 @@ const metadataLines = (metadata, canonical) => {
 };
 
 const prepareContent = ({ content, canonical }, alternatives) => {
+  Array.from(content.querySelectorAll("[data-agent-card]")).forEach((card) => {
+    const heading = card.querySelector("h1, h2, h3, h4, h5, h6");
+    const href = card.getAttribute("href");
+    if (!heading || !href) return;
+
+    const link = content.ownerDocument.createElement("a");
+    link.setAttribute("href", href);
+    while (heading.firstChild) link.appendChild(heading.firstChild);
+    heading.appendChild(link);
+
+    const replacement = content.ownerDocument.createElement("div");
+    while (card.firstChild) replacement.appendChild(card.firstChild);
+    card.parentNode.replaceChild(replacement, card);
+  });
   Array.from(content.querySelectorAll("[data-agent-actions]")).forEach(
     (actions) => {
       const list = content.ownerDocument.createElement("ul");

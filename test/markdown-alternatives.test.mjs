@@ -72,7 +72,8 @@ test("the post-build projection publishes portable editorial Markdown", (context
         title: "About",
         description: "About this publication.",
       },
-      content: "<h1>About this publication</h1><p>Authored page content.</p>",
+      content: `<h1>About this publication</h1><p>Authored page content.</p>
+<div><a data-agent-card href="/section/leadership/"><div><h3>Leadership</h3><span>7 essays</span></div><p>Essays on leading people honestly.</p></a></div>`,
     }),
   );
   writeRoute(
@@ -139,4 +140,9 @@ test("the post-build projection publishes portable editorial Markdown", (context
   assert.match(about, /# About/);
   assert.match(about, /## About this publication/);
   assert.match(about, /Authored page content/);
+  assert.match(
+    about,
+    /### \[Leadership\]\(https:\/\/buthonestly\.io\/section\/leadership\/\)\n\n7 essays\n\nEssays on leading people honestly\./,
+  );
+  assert.doesNotMatch(about, /^\[$|^\]\(/m);
 });
