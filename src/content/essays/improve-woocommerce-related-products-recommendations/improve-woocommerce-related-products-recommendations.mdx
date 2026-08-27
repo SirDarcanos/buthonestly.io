@@ -100,43 +100,43 @@ add_filter( 'woocommerce_related_products', 'nm_related_products_by_attributes',
 function nm_related_products_by_attributes( $related_posts, $product_id, $args ) {
     $product = wc_get_product( $product_id );
 
-	$attributes           = array( 'pa_attribute_1', 'pa_attribute_2', 'pa_attribute_3' );
-	$new_related_products = array();
+    $attributes           = array( 'pa_attribute_1', 'pa_attribute_2', 'pa_attribute_3' );
+    $new_related_products = array();
 
-	foreach( $attributes as $attribute ) {
-		$terms = $product->get_attribute( $attribute );
+    foreach( $attributes as $attribute ) {
+        $terms = $product->get_attribute( $attribute );
 
-		if ( ! empty( $terms ) ) {
-			$new_related_products = array_merge( $new_related_products, nm_get_related_products( $product_id, $attribute, $terms ) );
-		}
-	}
+        if ( ! empty( $terms ) ) {
+            $new_related_products = array_merge( $new_related_products, nm_get_related_products( $product_id, $attribute, $terms ) );
+        }
+    }
 
-	if ( count( $new_related_products ) < 4 ) {
-		$related_posts = array_slice( array_merge( $new_related_products, $related_posts ), 0, 4 );
-	} else {
-		$related_posts = array_slice( $new_related_products, 0, 4 );
-	}
+    if ( count( $new_related_products ) < 4 ) {
+        $related_posts = array_slice( array_merge( $new_related_products, $related_posts ), 0, 4 );
+    } else {
+        $related_posts = array_slice( $new_related_products, 0, 4 );
+    }
 
     return $related_posts;
 }
 
 function nm_get_related_products( $product_id, $attribute, $terms ) {
-	$args = array(
-		'post_type'      => 'product',
-		'posts_per_page' => 4,
-		'post__not_in'   => array( $product_id ),
-		'orderby'        => 'rand',
-		'tax_query'      => array(
-			array(
-				'taxonomy' => $attribute,
-				'field'    => 'name',
-				'terms'    => array_map( 'trim', explode( ',', $terms ) ),
-			),
-		),
-	);
+    $args = array(
+        'post_type'      => 'product',
+        'posts_per_page' => 4,
+        'post__not_in'   => array( $product_id ),
+        'orderby'        => 'rand',
+        'tax_query'      => array(
+            array(
+                'taxonomy' => $attribute,
+                'field'    => 'name',
+                'terms'    => array_map( 'trim', explode( ',', $terms ) ),
+            ),
+        ),
+    );
 
-	$query            = new WP_Query( $args );
-	$related_products = wp_list_pluck( $query->posts, 'ID' );
+    $query            = new WP_Query( $args );
+    $related_products = wp_list_pluck( $query->posts, 'ID' );
 
     return $related_products;
 }

@@ -75,6 +75,7 @@ test("the production agent index leads to every editorial Markdown alternative",
       `${url} must contain one document title`,
     );
     assert.match(markdown, /^# .+\n\n\S/m);
+    assert.doesNotMatch(markdown, /\t/);
     assert.doesNotMatch(
       withoutFencedCode(markdown),
       /^(?:> )*(?:[-+*]|\d+\.) {2,}\S/m,

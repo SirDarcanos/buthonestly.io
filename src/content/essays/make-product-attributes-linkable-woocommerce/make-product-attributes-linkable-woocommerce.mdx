@@ -108,97 +108,97 @@ You are about to edit PHP. Even a missing semicolon can break your site. Before 
  */
 add_action( 'woocommerce_after_register_taxonomy', 'bh_register_attributes_url_meta' );
 function bh_register_attributes_url_meta() {
-	if ( ! is_admin() ) {
-		return;
-	}
+    if ( ! is_admin() ) {
+        return;
+    }
 
-	$attributes = wc_get_attribute_taxonomies();
-	if ( empty( $attributes ) ) {
-		return;
-	}
+    $attributes = wc_get_attribute_taxonomies();
+    if ( empty( $attributes ) ) {
+        return;
+    }
 
-	foreach ( $attributes as $tax ) {
-		$name = wc_attribute_taxonomy_name( $tax->attribute_name );
+    foreach ( $attributes as $tax ) {
+        $name = wc_attribute_taxonomy_name( $tax->attribute_name );
 
-		add_action( "{$name}_add_form_fields", 'bh_add_attribute_url_meta_field' );
-		add_action( "{$name}_edit_form_fields", 'bh_edit_attribute_url_meta_field', 10 );
-		add_action( "edited_{$name}", 'bh_save_attribute_url' );
-		add_action( "create_{$name}", 'bh_save_attribute_url' );
-	}
+        add_action( "{$name}_add_form_fields", 'bh_add_attribute_url_meta_field' );
+        add_action( "{$name}_edit_form_fields", 'bh_edit_attribute_url_meta_field', 10 );
+        add_action( "edited_{$name}", 'bh_save_attribute_url' );
+        add_action( "create_{$name}", 'bh_save_attribute_url' );
+    }
 }
 
 /**
  * Add URL + checkbox field to the new attribute term form.
  */
 function bh_add_attribute_url_meta_field() {
-	wp_nonce_field( basename( __FILE__ ), 'attribute_url_meta_nonce' );
-	?>
-	<div class="form-field">
-		<label for="attribute_url"><?php esc_html_e( 'URL', 'your-textdomain' ); ?></label>
-		<input type="url" name="attribute_url" id="attribute_url" value="" class="regular-text" />
-		<p class="description"><?php esc_html_e( 'Optional. If set, the attribute value will link to this URL.', 'your-textdomain' ); ?></p>
-	</div>
+    wp_nonce_field( basename( __FILE__ ), 'attribute_url_meta_nonce' );
+    ?>
+    <div class="form-field">
+        <label for="attribute_url"><?php esc_html_e( 'URL', 'your-textdomain' ); ?></label>
+        <input type="url" name="attribute_url" id="attribute_url" value="" class="regular-text" />
+        <p class="description"><?php esc_html_e( 'Optional. If set, the attribute value will link to this URL.', 'your-textdomain' ); ?></p>
+    </div>
 
-	<div class="form-field">
-		<label for="attribute_url_blank">
-			<input type="checkbox" name="attribute_url_blank" id="attribute_url_blank" value="1" />
-			<?php esc_html_e( 'Open in a new tab', 'your-textdomain' ); ?>
-		</label>
-	</div>
-	<?php
+    <div class="form-field">
+        <label for="attribute_url_blank">
+            <input type="checkbox" name="attribute_url_blank" id="attribute_url_blank" value="1" />
+            <?php esc_html_e( 'Open in a new tab', 'your-textdomain' ); ?>
+        </label>
+    </div>
+    <?php
 }
 
 /**
  * Add URL + checkbox field to the edit attribute term form.
  */
 function bh_edit_attribute_url_meta_field( $term ) {
-	$url   = get_term_meta( $term->term_id, 'attribute_url', true );
-	$blank = get_term_meta( $term->term_id, 'attribute_url_blank', true );
-	wp_nonce_field( basename( __FILE__ ), 'attribute_url_meta_nonce' );
-	?>
-	<tr class="form-field">
-		<th scope="row" valign="top">
-			<label for="attribute_url"><?php esc_html_e( 'URL', 'your-textdomain' ); ?></label>
-		</th>
-		<td>
-			<input type="url" name="attribute_url" id="attribute_url" value="<?php echo esc_url( $url ); ?>" class="regular-text" />
-			<p class="description"><?php esc_html_e( 'Optional. If set, the attribute value will link to this URL.', 'your-textdomain' ); ?></p>
-		</td>
-	</tr>
-	<tr class="form-field">
-		<th scope="row" valign="top">
-			<label for="attribute_url_blank"><?php esc_html_e( 'Open in a new tab', 'your-textdomain' ); ?></label>
-		</th>
-		<td>
-			<input type="checkbox" name="attribute_url_blank" id="attribute_url_blank" value="1" <?php checked( $blank, '1' ); ?> />
-		</td>
-	</tr>
-	<?php
+    $url   = get_term_meta( $term->term_id, 'attribute_url', true );
+    $blank = get_term_meta( $term->term_id, 'attribute_url_blank', true );
+    wp_nonce_field( basename( __FILE__ ), 'attribute_url_meta_nonce' );
+    ?>
+    <tr class="form-field">
+        <th scope="row" valign="top">
+            <label for="attribute_url"><?php esc_html_e( 'URL', 'your-textdomain' ); ?></label>
+        </th>
+        <td>
+            <input type="url" name="attribute_url" id="attribute_url" value="<?php echo esc_url( $url ); ?>" class="regular-text" />
+            <p class="description"><?php esc_html_e( 'Optional. If set, the attribute value will link to this URL.', 'your-textdomain' ); ?></p>
+        </td>
+    </tr>
+    <tr class="form-field">
+        <th scope="row" valign="top">
+            <label for="attribute_url_blank"><?php esc_html_e( 'Open in a new tab', 'your-textdomain' ); ?></label>
+        </th>
+        <td>
+            <input type="checkbox" name="attribute_url_blank" id="attribute_url_blank" value="1" <?php checked( $blank, '1' ); ?> />
+        </td>
+    </tr>
+    <?php
 }
 
 /**
  * Save URL + checkbox field for attribute terms.
  */
 function bh_save_attribute_url( $term_id ) {
-	if ( ! isset( $_POST['attribute_url_meta_nonce'] ) ||
-		 ! wp_verify_nonce( $_POST['attribute_url_meta_nonce'], basename( __FILE__ ) ) ) {
-		return;
-	}
+    if ( ! isset( $_POST['attribute_url_meta_nonce'] ) ||
+         ! wp_verify_nonce( $_POST['attribute_url_meta_nonce'], basename( __FILE__ ) ) ) {
+        return;
+    }
 
-	if ( ! current_user_can( 'manage_product_terms' ) ) {
-		return;
-	}
+    if ( ! current_user_can( 'manage_product_terms' ) ) {
+        return;
+    }
 
-	$new_url   = isset( $_POST['attribute_url'] ) ? esc_url_raw( wp_unslash( $_POST['attribute_url'] ) ) : '';
-	$new_blank = isset( $_POST['attribute_url_blank'] ) ? '1' : '0';
+    $new_url   = isset( $_POST['attribute_url'] ) ? esc_url_raw( wp_unslash( $_POST['attribute_url'] ) ) : '';
+    $new_blank = isset( $_POST['attribute_url_blank'] ) ? '1' : '0';
 
-	if ( '' === $new_url ) {
-		delete_term_meta( $term_id, 'attribute_url' );
-		delete_term_meta( $term_id, 'attribute_url_blank' );
-	} else {
-		update_term_meta( $term_id, 'attribute_url', $new_url );
-		update_term_meta( $term_id, 'attribute_url_blank', $new_blank );
-	}
+    if ( '' === $new_url ) {
+        delete_term_meta( $term_id, 'attribute_url' );
+        delete_term_meta( $term_id, 'attribute_url_blank' );
+    } else {
+        update_term_meta( $term_id, 'attribute_url', $new_url );
+        update_term_meta( $term_id, 'attribute_url_blank', $new_blank );
+    }
 }
 
 /**
@@ -206,59 +206,59 @@ function bh_save_attribute_url( $term_id ) {
  */
 add_filter( 'woocommerce_attribute', 'bh_make_product_atts_linkable', 10, 3 );
 function bh_make_product_atts_linkable( $text, $attribute, $values ) {
-	$new_values = array();
+    $new_values = array();
 
-	foreach ( (array) $values as $value ) {
-		if ( $attribute['is_taxonomy'] ) {
-			// Handle global (taxonomy) attributes.
-			$term = get_term_by( 'slug', sanitize_title( $value ), $attribute['name'] );
-			if ( ! $term || is_wp_error( $term ) ) {
-				// Fallback to name if needed.
-				$term = get_term_by( 'name', $value, $attribute['name'] );
-			}
+    foreach ( (array) $values as $value ) {
+        if ( $attribute['is_taxonomy'] ) {
+            // Handle global (taxonomy) attributes.
+            $term = get_term_by( 'slug', sanitize_title( $value ), $attribute['name'] );
+            if ( ! $term || is_wp_error( $term ) ) {
+                // Fallback to name if needed.
+                $term = get_term_by( 'name', $value, $attribute['name'] );
+            }
 
-			if ( $term && ! is_wp_error( $term ) ) {
-				$url = get_term_meta( $term->term_id, 'attribute_url', true );
-				if ( ! empty( $url ) ) {
-					$blank = get_term_meta( $term->term_id, 'attribute_url_blank', true );
-					$target_attr = ( '1' === $blank ) ? ' target="_blank"' : '';
+            if ( $term && ! is_wp_error( $term ) ) {
+                $url = get_term_meta( $term->term_id, 'attribute_url', true );
+                if ( ! empty( $url ) ) {
+                    $blank = get_term_meta( $term->term_id, 'attribute_url_blank', true );
+                    $target_attr = ( '1' === $blank ) ? ' target="_blank"' : '';
 
-					$new_values[] = sprintf(
-						'<a href="%s" title="%s"%s>%s</a>',
-						esc_url( $url ),
-						esc_attr( $term->name ),
-						$target_attr,
-						esc_html( $term->name )
-					);
-					continue;
-				}
-			}
+                    $new_values[] = sprintf(
+                        '<a href="%s" title="%s"%s>%s</a>',
+                        esc_url( $url ),
+                        esc_attr( $term->name ),
+                        $target_attr,
+                        esc_html( $term->name )
+                    );
+                    continue;
+                }
+            }
 
-			$new_values[] = esc_html( $value );
-		} else {
-			// Handle local attributes (Markdown-style [text](url)).
-			if ( preg_match( '/[(.*?)]((.*?))(?:{(blank)})?/', $value, $matches ) ) {
-				$link_text = esc_html( $matches[1] );
-				$link_url  = strip_tags( $matches[2] );
-				$target    = isset( $matches[3] ) && $matches[3] === 'blank' ? ' target="_blank"' : '';
+            $new_values[] = esc_html( $value );
+        } else {
+            // Handle local attributes (Markdown-style [text](url)).
+            if ( preg_match( '/[(.*?)]((.*?))(?:{(blank)})?/', $value, $matches ) ) {
+                $link_text = esc_html( $matches[1] );
+                $link_url  = strip_tags( $matches[2] );
+                $target    = isset( $matches[3] ) && $matches[3] === 'blank' ? ' target="_blank"' : '';
 
-				if ( filter_var( $link_url, FILTER_VALIDATE_URL ) ) {
-					$new_values[] = sprintf(
-						'<a href="%s"%s>%s</a>',
-						esc_url( $link_url ),
-						$target,
-						$link_text
-					);
-				} else {
-					$new_values[] = $link_text;
-				}
-			}
+                if ( filter_var( $link_url, FILTER_VALIDATE_URL ) ) {
+                    $new_values[] = sprintf(
+                        '<a href="%s"%s>%s</a>',
+                        esc_url( $link_url ),
+                        $target,
+                        $link_text
+                    );
+                } else {
+                    $new_values[] = $link_text;
+                }
+            }
 
-		}
-	}
+        }
+    }
 
-	// Fallback to original text if nothing changed.
-	return $new_values ? implode( ', ', $new_values ) : $text;
+    // Fallback to original text if nothing changed.
+    return $new_values ? implode( ', ', $new_values ) : $text;
 }
 ```
 
