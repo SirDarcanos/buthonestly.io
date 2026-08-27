@@ -126,7 +126,18 @@ const jsonLd = [
 
     <TableOfContents headings={headings} />
 
-    <div class="post-content mt-7"><Content /></div>
+    <div class="post-content mt-7">
+      {
+        post.narrationUrl && (
+          <audio
+            class="audio-enhance"
+            src={post.narrationUrl}
+            data-audio-label="Listen instead of reading"
+          />
+        )
+      }
+      <Content />
+    </div>
 
     <div class="flex flex-wrap items-baseline gap-x-6 gap-y-1">
       <p class="meta font-bold">

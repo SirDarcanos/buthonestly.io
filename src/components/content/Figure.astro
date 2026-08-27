@@ -9,6 +9,7 @@ interface Props {
 
 const { src, alt } = Astro.props;
 const hasCaption = Astro.slots.has("default");
+const formats = src.format === "gif" ? ["webp"] : ["avif", "webp"];
 ---
 
 <figure>
@@ -17,7 +18,7 @@ const hasCaption = Astro.slots.has("default");
     alt={alt}
     widths={[580, 768, 960, 1160, 1376]}
     sizes="(max-width: 820px) 100vw, 580px"
-    formats={["avif", "webp"]}
+    formats={formats}
     loading="lazy"
     decoding="async"
     class="block h-auto max-w-full"

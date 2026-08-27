@@ -1,0 +1,248 @@
+---
+title: "shotlist: Annotated Screenshots, Described as Data"
+date: 2026-08-10
+updated:
+sticky: true
+cornerstone: false
+excerpt: I built shotlist because I knew I'd never keep docs screenshots up to date by hand. Each annotated shot becomes a YAML recipe you run instead of redo.
+newsletterIntro: |-
+  I built shotlist because I knew I'd never keep docs screenshots up to date by hand. Each annotated shot becomes a YAML recipe you run instead of redo.
+categories:
+  - Programming
+tags:
+  - Automation
+  - Workflow
+cover: shotlist-automatic-annotated-screenshots.jpg
+coverAlt: The shotlist.dev homepage hero — the headline "Annotated UI screenshots, described as data" over a light grid background, above install tabs and a sample YAML recipe.
+coverCaption:
+downloads:
+---
+
+import Figure from "../../../components/content/Figure.astro";
+import QuickSummary from "../../../components/content/QuickSummary.astro";
+import shotlistOgImage from "./shotlist-og-image.jpg";
+
+<QuickSummary>
+
+- I built shotlist because keeping docs screenshots up to date by hand depended on discipline I don't have — every app change silently made an old screenshot wrong without telling anyone.
+- In shotlist, each annotated screenshot is a YAML recipe read in three moves: drive the page to a state, clip a region, draw the callouts. There is no per-screenshot code.
+- It began as a crude Python script with recipes hard-coded in the code, then moved to TypeScript so the tool installs and runs alongside the web project it documents.
+- `shotlist --check` re-shoots every recipe and fails a build when an image no longer matches the site, so docs can't quietly drift; `mask` and `check.ignore` handle the parts that are private or meant to change.
+- It grew to sign in once and reuse the session, reach inside iframes with `frame:` (the WordPress block editor), and stay safe with an `--untrusted` mode that never reads your `.env`.
+- shotlist is open source under the MIT license, with docs and install instructions at [shotlist.dev](https://shotlist.dev).
+
+</QuickSummary>
+
+I built a tool to take screenshots because I knew I'd never take them by hand.
+
+Not because taking a screenshot is hard. It isn't. I was writing the docs for [OpenFray](https://openfray.app/docs/), and several pages needed a picture: this panel, that dialog, the settings screen with one option circled. I used CleanShot X. I knew how to use it.
+
+So I took the first one. Cropped it, drew an arrow, added a label, renamed the file, dropped it into the docs folder. Then the next. Then the one after that.
+
+Then OpenFray changed. A button moved. A panel got a new name. And every screenshot I'd already taken was quietly wrong — still rendering, still sitting in the docs, just no longer true.
+
+That's the part that got me. Not the work. The rot. A screenshot doesn't tell you when it stops matching the thing it shows. It keeps lying, politely, until a reader notices before you do.
+
+I could already see how it would go. I'd redo them for a while, then get busy, skip one, skip two, and let the docs drift out of sync with the app. Not from laziness — from friction. The task was too small to schedule and too dull to enjoy, which is exactly the kind of task I don't do.
+
+So I didn't trust myself. I wrote the tool instead.
+
+## The Loop That Doesn't Survive a Changing App
+
+Taking a screenshot is a one-time act. Keeping a folder of them true is not.
+
+That's the gap nobody warns you about. A screenshot is bound to a moving target, a UI that ships changes every week, and the image has no idea the target moved. Code at least has tests. Break something, and a red build tells you. A screenshot has none of that. When the interface changes underneath it, the file keeps rendering the old screen, perfectly, forever.
+
+So the docs don't break. They lie. Which is worse, because nothing is broken enough to notice.
+
+I did the honest math. OpenFray had dozens of screens worth documenting, and each one might change two or three times before things settled. That's not a screenshot task. It's a standing subscription to one — every release, hunt down which images went stale, then re-crop, re-annotate, re-name, re-drop. By the second release I'd be cutting corners. By the third I'd have stopped.
+
+The fix wasn't discipline. It was making the act repeatable. Suppose I could describe a screenshot once: where to point the app, what to frame, what to draw on it. Then re-taking it is one command, and keeping the set true stops being willpower. It becomes running the command again.
+
+That is the whole idea [shotlist](https://shotlist.dev) is built on.
+
+> A screenshot you can reproduce is a screenshot you can trust.
+
+## Why It Started in Python — and Didn't Stay
+
+The first version was a Python script.
+
+That's just where my hand goes for a quick automation. It's the same reflex that had me [build a small neural network to solve a problem from my own workshop](/neural-network-predict-resin-usage-3d-printed-miniatures/) rather than keep doing the sums by hand. Point a headless browser at a URL, grab a PNG, draw a box on it, save. Python is good at that, and it got me my first automated screenshot faster than anything else would have.
+
+And it was crude. There were no YAML recipes — no recipes at all, really. Each screenshot lived inside the script, so adding one meant editing the code. The annotations were whatever I'd hard-coded: a rectangle, a numbered marker, a line of text with an arrow. That was the whole vocabulary. Nothing else.
+
+But it sat in the wrong place. OpenFray is a web app. Its whole toolchain is JavaScript — the dev server, the build, the scripts I already run with `npm`. A Python script sitting next to it meant a second runtime, a second set of dependencies, a second thing to explain to anyone who cloned the repo. The tool that documented the app didn't live with the app.
+
+There was no real reason for that. A tool that photographs websites can run in the same place websites run. So I rewrote it in TypeScript.
+
+The rewrite wasn't about the language being nicer. It was about removing a boundary. In TypeScript, shotlist installs as a dev dependency and runs inside the same `npm` scripts as everything else. If you need to, you can import it and call it straight from a `.ts` file. One toolchain, one `npm install`. The screenshots became part of the project instead of a chore bolted to its side.
+
+But the rewrite changed something bigger than where the tool ran. It was the moment the recipes left the code.
+
+## A Screenshot Is a Recipe
+
+Here is the idea the whole tool is named for. In shotlist, a screenshot is a file you write, not code that runs. You describe the picture you want, and shotlist works out how to take it.
+
+A recipe is a YAML file, and it reads top to bottom in three moves. Drive the page to a state, clip a region of it, draw on what the clip contains. That is the entire model. Everything else is detail.
+
+Here is a real one — the recipe behind shotlist's own Open Graph image. It's the card you see when someone shares shotlist.dev in a chat or a tweet. Nothing is trimmed for the essay. This is the whole file.
+
+```yaml
+name: og
+install: public
+url: http://localhost:4321/og
+viewport: { width: 1200, height: 630 }
+scale: 2
+clip: viewport
+
+marks:
+  install: { within: clip, text: npm i -D shotlist }
+
+callouts:
+  - { mark: install, text: Start here, place: right, inside: true, gap: 200 }
+```
+
+<Figure src={shotlistOgImage} alt={"The shotlist Open Graph card the recipe above produces: the heading \"Annotated UI screenshots, described as data\" over a light grid, and a bottom line reading \"shotlist.dev · MIT · npm i -D shotlist\" where the install command is boxed in red with an arrow to a \"Start here\" label."} />
+
+Read it top to bottom.
+
+The first block just points at a page. `url` is where to go. `viewport` sets the frame at 1200 by 630, the size a social card wants. `scale: 2` shoots it at double resolution so it stays crisp. There is no setup here at all — the state I want is a purpose-built `/og` page, so there is nothing to drive. Driving the page is the first of the three moves, and the first one you skip when the state is only a URL.
+
+**`clip: viewport`** says frame the whole thing. No element query, no hunting — the entire 1200 by 630 box. That is the plainest of the clip options. Elsewhere you point it at a single element and let shotlist find the box.
+
+**`marks:` and `callouts:`** are the annotations. I name one mark, the spot on the page whose text is `npm i -D shotlist`, then pin a `Start here` label to its right. `inside: true` keeps the label within the frame instead of growing the canvas, and `gap` sets how far off the mark it sits. shotlist works out the exact position and, when a label does need room, grows the image to fit it.
+
+That last part is what the old Python version couldn't touch. Back then a callout was a rectangle at pixel coordinates I had typed in by hand. Move the element and the box pointed at nothing. Here I point at the text and let the tool find it.
+
+When you need to be more specific than a line of text, the query narrows:
+
+```yaml
+clip: { css: '.order-row', contains: Acme Corp, pad: 20 }
+
+marks:
+  amount: { within: clip, text: $42.00 }
+
+callouts:
+  - { mark: amount, text: What they owe, place: left }
+```
+
+Find an element by CSS, role, label, or text, then narrow it until one thing matches. The `.order-row` that `contains: Acme Corp`. The `$42.00` inside it. The recipe names what it wants, not where it happens to sit this week.
+
+And that is the trick the title is pointing at. A recipe is not a script that draws a screenshot. It is a description of one.
+
+> A recipe is a YAML file, and nothing in it runs. No JavaScript step, no plugin hook that turns into one.
+
+Which means anyone can read a recipe without knowing the codebase, and whoever notices it broke can open the file and fix it. It is the quality I wanted in a [GitHub README you can actually keep current](/how-to-build-a-github-profile-readme-that-feels-like-you/): something readable is something maintainable. The screenshot stops being a picture someone took once. It becomes a thing you can run again.
+
+## Taking Your First Shot
+
+Enough theory. Here is the whole path from nothing to one screenshot on disk.
+
+Install shotlist and Playwright as dev dependencies:
+
+```bash
+npm i -D shotlist playwright
+```
+
+Playwright is the browser engine shotlist drives, and it is a separate install on purpose. Its setup downloads a few hundred megabytes of browsers, and nobody wants that happening every time they install a project that merely depends on shotlist. So you add it yourself, once, if you need it.
+
+Then let shotlist scaffold itself:
+
+```bash
+npx shotlist --init
+```
+
+That writes a config file and a first recipe to edit. The config is where you tell shotlist about your site:
+
+```yaml
+site:
+  url: http://localhost:4321
+  serve: npm run dev
+  viewport: { width: 1280, height: 800 }
+  scale: 2
+
+paths:
+  recipes: screenshots/recipes
+  out: screenshots/out
+
+install:
+  public: public
+```
+
+`site.url` is where your app runs. The `serve` command starts it — shotlist runs it, waits until the URL answers, takes the shots, and stops it again. If a dev server is already up, it uses that instead of fighting for the port. The `paths` block is where recipes live and where finished images land. And `install` maps a name to a destination, so a recipe that says `install: public` drops its image into your `public` folder, renamed and ready.
+
+Write one recipe per screenshot, then shoot them all:
+
+```bash
+npx shotlist --all --install
+```
+
+That is the loop. shotlist starts your site, runs each recipe, draws the callouts, and installs every image where its recipe said to put it. Change a recipe, run it again, and the picture updates itself.
+
+The first time I ran that against OpenFray, a folder of annotated screenshots appeared — correct, labelled, named. It was the first time the docs felt like they would stay true without me babysitting them.
+
+## When the Interface Changes
+
+Go back to the problem I started with. A screenshot never tells you it went stale. The image keeps rendering the old screen, and nothing anywhere flags that it no longer matches the app.
+
+Once a screenshot is a recipe, that stops being true.
+
+```bash
+npx shotlist --check
+```
+
+`--check` re-shoots every recipe and compares each result against the image you committed. If they match, nothing happens. If one drifted, it says so and exits non-zero:
+
+```text
+$ npx shotlist --check
+same order-row
+same modal-detail
+CHANGED billing-plan — 3.41% of pixels differ
+committed: content/guide/images/billing-plan.png
+1 of 3 need attention
+```
+
+Put that one line in CI and a screenshot that no longer matches the site becomes a failing build. Not a nagging reminder, not a note in a backlog. A red check, next to the code change that caused it, before it ships.
+
+> The docs can't quietly drift anymore, because drift is now the thing that breaks the build.
+
+There is a catch, and shotlist is honest about it. Some things on a page are supposed to change. A clock. A running total. A live figure pulled from an API. Compare those pixel for pixel and `--check` would cry wolf on every run.
+
+So you name them instead of tolerating them. A `mask` paints over a region: a private number, a person's avatar, a password. The rest of the shot stays under drift detection. `check.ignore` goes lighter. It shoots the region as it really is but leaves it out of the comparison. It still reports, though, if that box moves, resizes, or renders nothing at all. The parts allowed to change are declared, so a real change somewhere else still gets caught.
+
+When something does drift and you want to look, `--diff` writes a three-up image: committed, re-shot, and the changed pixels between them. You can tell a moved button from a re-rendered font at a glance. And `--json` reports the whole run for something that isn't a person, if you would rather wire it into your own tooling.
+
+One last honest touch: run `--check` on a machine other than the one that took the images, and it says so first. A different renderer draws text a hair differently — not the change you meant to catch.
+
+## Logins, iframes, and Not Trusting a Config
+
+Everything so far assumes the screen you want is one anonymous click away. Plenty aren't.
+
+The first wall was a login. A lot of what is worth documenting sits behind one — a dashboard, an account page, a settings screen. Signing in is just more driving. Fill the email, fill the password, click the button, wait for the app to land. shotlist does it once, saves the session, and reuses it for every shot, so the password never lives in a recipe. A login is not a special case. It is a few more verbs, done once.
+
+Some sign-ins you can't script, though — an SSO redirect, a browser extension in the way. For those, shotlist can annotate an image you already have. Point a recipe at a file with `source: file` instead of a URL, and you still get the same callouts, drawn the same way, installed to the same place. The automation stops at the capture. The annotation doesn't.
+
+Then there was WordPress. I wanted to shoot the block editor, the same one I dug into while [vibe coding blocks with Telex](/wordpress-blocks-telex/), and it renders its whole canvas inside an iframe. A query against the page can't cross into a frame on its own. It looks right past it, so every mark I tried came up empty. So a query can now name the frame it lives in:
+
+```yaml
+marks:
+  upload:
+    frame: { css: 'iframe[name="editor-canvas"]' }
+    text: Upload
+```
+
+`frame:` names the iframe with a query of its own, and everything beside it resolves in the document inside. The coordinates get translated back, so a callout lands where the reader sees the element — not where the frame thinks it is. The full walkthrough, sign-in and all, is its own tutorial: [documenting a client's WordPress site](https://shotlist.dev/docs/tutorials/document-a-wordpress-site/).
+
+The last addition wasn't a feature so much as a line I decided to hold. A recipe is data, but a config is not quite as innocent. It can name a command to run your server and URLs to open. A config you did not write is something to be careful with. So shotlist stays narrow by default: it only ever opens its own site, and it never reads your `.env`. Run `--untrusted` and it gives up even more, the flag you reach for when the config isn't yours, as in CI. The tool that removes a chore should not quietly become a way in.
+
+## The Tool That Removes the Excuse
+
+I did not build shotlist to save minutes. I built it because I knew the work would depend on my staying disciplined, and that is a bet I lose.
+
+That is the pattern worth naming. The tasks that rot are rarely the hard ones. They are the small, dull, skippable ones — below the threshold of getting scheduled, above the threshold of being worth automating until they have burned you a few times. Willpower is the wrong tool for them. I've [written before about leaning on systems instead of discipline](/adhd-planner/), and shotlist is that same idea aimed at a chore.
+
+shotlist grew a long way from that first Python script that drew rectangles at coordinates I typed by hand. It's [MIT-licensed](/how-to-choose-a-software-license-for-your-next-project/) and public now. It drives logins, reaches inside iframes, masks the parts that are meant to move, and fails a build when a picture stops matching the app. But the shape of the idea never changed. Describe the screenshot once, as data, and keeping it true becomes running a command instead of remembering to care.
+
+It started as a way to dodge a chore. It became the thing I trust to tell me when my own docs have started to lie.
+
+I still don't take screenshots by hand. That was the point.
