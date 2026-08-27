@@ -84,7 +84,7 @@ const dirs = (await readdir(ESSAYS_DIR, { withFileTypes: true }))
 
 const live = [];
 for (const slug of dirs) {
-  const file = path.join(ESSAYS_DIR, slug, `${slug}.md`);
+  const file = path.join(ESSAYS_DIR, slug, `${slug}.mdx`);
   if (!existsSync(file)) continue;
   const md = await readFile(file, "utf8");
   const date = frontmatterDate(md);

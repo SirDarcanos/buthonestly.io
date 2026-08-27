@@ -15,8 +15,7 @@ const MANIFEST = "data/images-optimized.json";
 const MAX_WIDTH = 1376; // 2× the 688px body column; ≥ the cover's 1160 need
 const JPEG_QUALITY = 80;
 const COLUMN_WIDTH = 688; // the reading column — body images below this look soft
-// GIFs and SVGs are deliberately absent — they're served as-is (Astro emits
-// animated WebP for GIFs; see rehype-image-format.mjs) and exempt from all this.
+// GIFs and SVGs are deliberately absent and exempt from optimization.
 const IMAGE_RE = /\.(jpe?g|png|webp|avif|tiff?|bmp)$/i;
 const RATIO_16_9 = 16 / 9;
 const RATIO_TOLERANCE = 0.02;
@@ -93,15 +92,26 @@ async function coverBasename(dir) {
   if (coverCache.has(dir)) return coverCache.get(dir);
   let name = null;
   try {
-    const text = await readFile(
-      path.join(dir, `${path.basename(dir)}.md`),
-      "utf8",
-    );
-    const fm = text.match(/^---\r?\n([\s\S]*?)\r?\n---/);
-    const m = fm?.[1].match(/^cover:\s*(.+?)\s*$/m);
-    if (m) name = path.basename(m[1].replace(/^["']|["']$/g, ""));
+    const basename = path.basename(dir);
+    const extensions = dir.includes(`${path.sep}drafts${path.sep}`)
+      ? [".mdx", ".md"]
+      : [".mdx"];
+    const source = (
+      await Promise.all(
+        extensions.map(async (extension) => {
+          const file = path.join(dir, `${basename}${extension}`);
+          return (await exists(file)) ? file : null;
+        }),
+      )
+    ).find(Boolean);
+    if (source) {
+      const text = await readFile(source, "utf8");
+      const fm = text.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+      const m = fm?.[1].match(/^cover:\s*(.+?)\s*$/m);
+      if (m) name = path.basename(m[1].replace(/^["']|["']$/g, ""));
+    }
   } catch {
-    // No essay markdown beside the image — treat everything as a body image.
+    // An unreadable source leaves the image classified as a body image.
   }
   coverCache.set(dir, name);
   return name;
@@ -196,8 +206,12 @@ async function hasTransparency(buf) {
 }
 
 async function updateMarkdownRefs(dir, oldName, newName) {
-  for (const md of (await readdir(dir)).filter((f) => f.endsWith(".md"))) {
-    const file = path.join(dir, md);
+  for (const source of (await readdir(dir)).filter((file) =>
+    dir.includes(`${path.sep}drafts${path.sep}`)
+      ? file.endsWith(".md") || file.endsWith(".mdx")
+      : file.endsWith(".mdx"),
+  )) {
+    const file = path.join(dir, source);
     const text = await readFile(file, "utf8");
     if (!text.includes(oldName)) continue;
     await writeFile(file, text.split(oldName).join(newName));

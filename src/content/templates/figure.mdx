@@ -1,0 +1,11 @@
+<%*
+const file = (await tp.system.prompt("Image filename", "")) || "";
+const alt = (await tp.system.prompt("Alt text", "")) || "";
+const caption = (await tp.system.prompt("Caption or credit (optional)", "")) || "";
+const imageName = `image${file
+  .split("/")
+  .pop()
+  .replace(/\.[^.]+$/, "")
+  .replace(/[^a-zA-Z0-9]+(.)/g, (_, next) => next.toUpperCase())}`;
+tR += `import Figure from "../../../components/content/Figure.astro";\nimport ${imageName} from "./${file}";\n\n<Figure src={${imageName}} alt={${JSON.stringify(alt)}}>${caption ? `\n  ${caption}\n` : ""}</Figure>`;
+-%>

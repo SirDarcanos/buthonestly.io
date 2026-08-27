@@ -6,12 +6,6 @@ import tailwindcss from "@tailwindcss/vite";
 
 import { unified } from "@astrojs/markdown-remark";
 
-import remarkAudioEmbed from "./src/lib/remark-audio-embed.mjs";
-import remarkWikiLinks from "./src/lib/remark-wiki-links.mjs";
-import remarkCallouts from "./src/lib/remark-callouts.mjs";
-import remarkGallery from "./src/lib/remark-gallery.mjs";
-import rehypeImageFormat from "./src/lib/rehype-image-format.mjs";
-import rehypeFigure from "./src/lib/rehype-figure.mjs";
 import rehypeExternalLinks from "./src/lib/rehype-external-links.mjs";
 import { loadEssayInventory } from "./src/lib/essay-inventory.mjs";
 import { buildLastmodMap } from "./src/lib/sitemap-lastmod.mjs";
@@ -19,15 +13,7 @@ import { buildLastmodMap } from "./src/lib/sitemap-lastmod.mjs";
 const ESSAY_INVENTORY = loadEssayInventory();
 const LASTMOD = buildLastmodMap(ESSAY_INVENTORY);
 const contentProcessor = () =>
-  unified({
-    remarkPlugins: [
-      remarkAudioEmbed,
-      remarkWikiLinks,
-      remarkGallery,
-      remarkCallouts,
-    ],
-    rehypePlugins: [rehypeImageFormat, rehypeFigure, rehypeExternalLinks],
-  });
+  unified({ rehypePlugins: [rehypeExternalLinks] });
 
 export default defineConfig({
   site: "https://buthonestly.io/",

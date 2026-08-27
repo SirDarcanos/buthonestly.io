@@ -69,9 +69,7 @@ const captionHtml = caption.replace(/<a\b[^>]*>/gi, secureCaptionAnchor);
     class={imgClass}
   />
   {
-    /* Captions are authored HTML — the credit snippet Unsplash and Pexels give
-       you to copy, links and utm_ params intact. rehype-figure.mjs does the
-       same for body-image captions. */
+    /* Cover credits retain the linked HTML supplied by the image source. */
     caption && <figcaption set:html={captionHtml} />
   }
 </figure>

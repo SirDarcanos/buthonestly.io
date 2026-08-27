@@ -1,6 +1,6 @@
 // Style-guide lint for BUT. Honestly essays. Ported from the Cowork
-// lint-draft.py, with internal links made wikilink-aware and a "comments" CTA
-// turned into a FAIL — this site has no comments.
+// lint-draft.py, with a "comments" CTA turned into a FAIL because this site has
+// no comments.
 //
 //   npm run lint:essay                 # all essays + drafts
 //   npm run lint:essay -- <slug|path>  # one essay (essays/ then drafts/)
@@ -71,18 +71,16 @@ const blank = (m) => m.replace(/[^\n]/g, " ");
 
 const stripHtmlComments = (t) => t.replace(/<!--[\s\S]*?-->/g, blank);
 
-// Neutralize non-prose so voice checks don't trip on code, images, embeds, or
-// Obsidian callout tokens (`[!info]` carries a `!`) — blanked, not removed.
-// Table rows go too: with no terminal punctuation a whole table reads as one
-// enormous sentence, which trips the length check on every table ever written.
+// Neutralize non-prose so voice checks don't trip on code or images. Table rows
+// go too: without terminal punctuation a table reads as one enormous sentence.
 function stripProse(text) {
   return text
     .replace(/```[\s\S]*?```/g, blank)
     .replace(/`[^`\n]+`/g, blank)
-    .replace(/!\[\[[^\]]*\]\]/g, blank)
+    .replace(/^import\s.+;$/gm, blank)
+    .replace(/<\/?[A-Z][^>]*>/g, blank)
     .replace(/!\[[^\]]*\]\([^)]*\)/g, blank)
-    .replace(/^[ \t]*\|.*$/gm, blank)
-    .replace(/\[![\w-]+\]/g, blank);
+    .replace(/^[ \t]*\|.*$/gm, blank);
 }
 
 const lineOfOffset = (text, off, base = 1) =>
@@ -130,13 +128,7 @@ function splitParagraphs(text) {
 
 const wc = (s) => (s.match(/\b\w+\b/g) || []).length;
 
-// Reader-visible text: `[[target|label]]`→`label`, `[[target]]`→`target`,
-// `[label](url)`→`label`. Used where a word count should reflect what shows.
-const visibleText = (s) =>
-  s
-    .replace(/\[\[[^\]|#]*(?:#[^\]|]*)?\|([^\]]+)\]\]/g, "$1")
-    .replace(/\[\[([^\]|#]+)[^\]]*\]\]/g, "$1")
-    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1");
+const visibleText = (source) => source.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1");
 
 function makeReport(file) {
   return {
@@ -285,7 +277,6 @@ function checkSentences(prose, base, r) {
   for (const para of paras) {
     for (const s of splitSentences(para)) {
       all.push(s);
-      // Count reader-visible words: a wikilink slug or link URL isn't prose.
       const n = wc(visibleText(s));
       if (n > SENTENCE_HARD_MAX) long.push([n, s]);
     }
@@ -527,10 +518,7 @@ function checkStructure(body, base, r) {
 }
 
 function checkLinks(body, r) {
-  // Internal: wikilinks `[[slug]]` (not `![[embeds]]`), root-relative, or
-  // buthonestly.io. External: other http(s) markdown links.
-  const wikilinks = (body.match(/(?<!!)\[\[[^\]|#]+/g) || []).length;
-  let internal = wikilinks;
+  let internal = 0;
   let external = 0;
   for (const m of body.matchAll(/\[([^\]]+)\]\(([^)]+)\)/g)) {
     const href = m[2].trim();
@@ -685,8 +673,11 @@ async function allEssays() {
     if (!(await exists(root))) continue;
     for (const entry of await readdir(root, { withFileTypes: true })) {
       if (!entry.isDirectory()) continue;
-      const file = path.join(root, entry.name, `${entry.name}.md`);
-      if (await exists(file)) files.push(file);
+      const extensions = root.endsWith("/drafts") ? [".mdx", ".md"] : [".mdx"];
+      for (const extension of extensions) {
+        const file = path.join(root, entry.name, `${entry.name}${extension}`);
+        if (await exists(file)) files.push(file);
+      }
     }
   }
   return files;

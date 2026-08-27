@@ -40,7 +40,7 @@ if (imgs.length) {
       const converted = f.replace(/\.[^.]+$/, ext);
       if (converted !== f && existsSync(converted)) add(converted);
     }
-    add(essayMd(f)); // markdown ref rewritten on conversion
+    add(essaySource(f));
   }
   add("data/images-optimized.json");
 }
@@ -51,9 +51,13 @@ if (code.length) {
   add(...code);
 }
 
-// The essay markdown sits beside its images as <slug>/<slug>.md.
-function essayMd(imgPath) {
-  const dir = path.dirname(imgPath);
-  const md = path.join(dir, `${path.basename(dir)}.md`);
-  return existsSync(md) ? md : null;
+function essaySource(imagePath) {
+  const directory = path.dirname(imagePath);
+  const basename = path.basename(directory);
+  const extensions = directory.includes(`${path.sep}drafts${path.sep}`)
+    ? [".mdx", ".md"]
+    : [".mdx"];
+  return extensions
+    .map((extension) => path.join(directory, `${basename}${extension}`))
+    .find(existsSync);
 }

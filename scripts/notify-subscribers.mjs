@@ -16,11 +16,8 @@
 // and never writes it, and always drafts (never sends). Set it from the
 // newsletter.yml dispatch UI to exercise the pipeline without side effects.
 
-import { readFile, readdir, writeFile } from "node:fs/promises";
-import { existsSync } from "node:fs";
-import path from "node:path";
-import matter from "gray-matter";
-import { publishDate } from "../src/lib/publish-time.mjs";
+import { readFile, writeFile } from "node:fs/promises";
+import { loadEssayInventory } from "../src/lib/essay-inventory.mjs";
 
 const ESSAYS_DIR = "src/content/essays";
 const LEDGER = "data/newsletter-sent.json";
@@ -46,79 +43,24 @@ const escapeHtml = (s) =>
       })[c],
   );
 
-// The email teaser: 1–2 plain-text paragraphs lifted from the essay's opening
-// prose, skipping furniture (callouts, headings, images, rules, fences, HTML).
-function openingParagraphs(markdown) {
-  const paras = [];
-  let buf = [];
-  const flush = () => {
-    if (buf.length) paras.push(buf.join(" ").trim());
-    buf = [];
-  };
-  for (const raw of String(markdown).split(/\r?\n/)) {
-    const line = raw.trim();
-    if (!line) {
-      flush();
-      continue;
-    }
-    if (/^(>|#{1,6}\s|!?\[\[|!\[|-{3,}|\*{3,}|_{3,}|```|~~~|<)/.test(line)) {
-      flush();
-      continue;
-    }
-    buf.push(line);
-  }
-  flush();
-
-  const clean = (s) =>
-    s
-      .replace(/!?\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, (_, a, b) => b || a)
-      .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
-      .replace(/[*_`~]/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
-
-  const MAX = 360;
-  const cap = (s) => {
-    if (s.length <= MAX) return s;
-    const cut = s.slice(0, MAX);
-    const stop = Math.max(
-      cut.lastIndexOf(". "),
-      cut.lastIndexOf("! "),
-      cut.lastIndexOf("? "),
-    );
-    return stop > MAX * 0.5 ? cut.slice(0, stop + 1) : cut.trimEnd() + "…";
-  };
-
-  const cleaned = paras.map(clean).filter(Boolean);
-  if (!cleaned.length) return [];
-  const out = [cap(cleaned[0])];
-  const SHORT = 140; // a thin opening (often a one-line hook) — add the next para
-  if (cleaned[0].length < SHORT && cleaned[1]) out.push(cap(cleaned[1]));
-  return out;
-}
-
 async function loadPublishedEssays() {
-  const entries = await readdir(ESSAYS_DIR, { withFileTypes: true });
-  const essays = [];
-  for (const entry of entries) {
-    if (!entry.isDirectory()) continue;
-    const slug = entry.name;
-    const file = path.join(ESSAYS_DIR, slug, `${slug}.md`);
-    if (!existsSync(file)) continue;
-    const { data, content } = matter(await readFile(file, "utf8"));
-    if (!data.date) continue; // no date → not live yet
-    const date = publishDate(data.date);
-    if (Number.isNaN(+date) || date > NOW) continue;
-    essays.push({
-      slug,
-      title: String(data.title ?? slug),
-      coverAlt: data.coverAlt ? String(data.coverAlt) : "",
-      opening: openingParagraphs(content),
-      date,
-      url: `${SITE}/${slug}/`,
-    });
-  }
-  return essays.sort((a, b) => +a.date - +b.date); // oldest first
+  return loadEssayInventory({
+    essaysDirectory: ESSAYS_DIR,
+    siteUrl: SITE,
+    now: NOW,
+  })
+    .published.map((essay) => ({
+      slug: essay.slug,
+      title: essay.title,
+      coverAlt: essay.coverAlt,
+      newsletterParagraphs: essay.newsletterIntro
+        .split(/\r?\n\s*\r?\n/)
+        .map((paragraph) => paragraph.replace(/\s+/g, " ").trim())
+        .filter(Boolean),
+      date: essay.publishedAt,
+      url: essay.canonicalUrl,
+    }))
+    .sort((a, b) => +a.date - +b.date);
 }
 
 async function loadLedger() {
@@ -185,9 +127,9 @@ function renderEmail(essay) {
       `<a href="${essay.url}" style="color:#211d18; text-decoration:none;">${escapeHtml(essay.title)}</a></h2>`,
   );
 
-  const opening = essay.opening ?? [];
-  if (opening.length) {
-    for (const p of opening) {
+  const newsletterParagraphs = essay.newsletterParagraphs ?? [];
+  if (newsletterParagraphs.length) {
+    for (const p of newsletterParagraphs) {
       parts.push(`<p style="margin:0 0 26px;">${escapeHtml(p)}</p>`);
     }
   } else {
@@ -214,7 +156,7 @@ async function createBroadcast(essay, send = SEND) {
     public: false,
     published_at: iso,
     send_at: send ? iso : null, // null = draft; timestamp = send now
-    preview_text: (essay.opening[0] || essay.title).slice(0, 150),
+    preview_text: (essay.newsletterParagraphs[0] || essay.title).slice(0, 150),
     subscriber_filter: [{ all: [], any: null, none: null }], // everyone
   };
 

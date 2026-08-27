@@ -4,9 +4,7 @@
 //
 // Env: CF_DEPLOY_HOOK_URL (required), SITE_URL (default https://buthonestly.io).
 
-import { readdir, readFile } from "node:fs/promises";
-import path from "node:path";
-import { publishDate } from "../src/lib/publish-time.mjs";
+import { loadEssayInventory } from "../src/lib/essay-inventory.mjs";
 
 const HOOK = process.env.CF_DEPLOY_HOOK_URL;
 const SITE = (process.env.SITE_URL || "https://buthonestly.io").replace(
@@ -20,31 +18,11 @@ if (!HOOK) {
   process.exit(1);
 }
 
-// Mirror getPublishedEssays: new Date(<frontmatter date>) <= new Date(). Both
-// this job and the Cloudflare build run in UTC, so the comparison agrees.
-const now = new Date();
-
-function frontmatterDate(md) {
-  const fm = md.match(/^---\r?\n([\s\S]*?)\r?\n---/);
-  if (!fm) return null;
-  const line = fm[1].match(/^date:\s*(.+?)\s*$/m);
-  if (!line) return null;
-  const dt = publishDate(line[1]);
-  return dt;
-}
-
 const dueButMissing = [];
-for (const slug of await readdir(ROOT)) {
-  let md;
-  try {
-    md = await readFile(path.join(ROOT, slug, `${slug}.md`), "utf8");
-  } catch {
-    continue; // not an essay dir (no <slug>/<slug>.md)
-  }
-  const date = frontmatterDate(md);
-  if (!date || date > now) continue;
-  const res = await fetch(`${SITE}/${slug}/`, { method: "HEAD" });
-  if (res.status === 404) dueButMissing.push(slug);
+const inventory = loadEssayInventory({ essaysDirectory: ROOT, siteUrl: SITE });
+for (const essay of inventory.published) {
+  const res = await fetch(essay.canonicalUrl, { method: "HEAD" });
+  if (res.status === 404) dueButMissing.push(essay.slug);
 }
 
 if (dueButMissing.length === 0) {

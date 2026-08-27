@@ -13,14 +13,10 @@
 // Cloudflare deploy install light; recomputing related.json from the cached
 // vectors needs no model at all.
 
-import { readFile, readdir, writeFile, mkdir } from "node:fs/promises";
+import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { createHash } from "node:crypto";
-import path from "node:path";
-import matter from "gray-matter";
-import { publishDate } from "../src/lib/publish-time.mjs";
-
-const ESSAYS_DIR = "src/content/essays";
+import { loadEssayInventory } from "../src/lib/essay-inventory.mjs";
 const EMB_FILE = "data/embeddings.json";
 const OUT_FILE = "data/related.json";
 const MODEL = "Xenova/bge-small-en-v1.5";
@@ -33,7 +29,6 @@ function stripMarkdown(md) {
     .replace(/```[\s\S]*?```/g, " ")
     .replace(/`[^`]*`/g, " ")
     .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
-    .replace(/\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/g, "$1")
     .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
     .replace(/^>\s?/gm, " ")
     .replace(/[#*_~`>|-]/g, " ")
@@ -46,32 +41,21 @@ const hashText = (t) =>
 const round = (x) => Math.round(x * 1e6) / 1e6;
 
 async function loadEssays() {
-  const dirs = await readdir(ESSAYS_DIR, { withFileTypes: true });
-  const essays = [];
-  for (const dir of dirs) {
-    if (!dir.isDirectory()) continue;
-    const slug = dir.name;
-    const file = path.join(ESSAYS_DIR, slug, `${slug}.md`);
-    if (!existsSync(file)) continue;
-    const { data, content } = matter(await readFile(file, "utf8"));
-    if (!data.date) continue; // draft / no date
-    if (publishDate(data.date) > new Date()) continue;
-    // Present-but-empty frontmatter arrives as null; clean it like the schema does.
-    const list = (v) =>
-      Array.isArray(v) ? v.filter((x) => x != null && x !== "") : [];
-    const text = `${data.title ?? slug}. ${data.excerpt ?? ""}. ${stripMarkdown(
-      content,
-    )}`.slice(0, 4000);
-    essays.push({
-      slug,
-      title: data.title ?? slug,
-      categories: list(data.categories),
-      tags: list(data.tags),
+  return loadEssayInventory().published.map((essay) => {
+    const text =
+      `${essay.title}. ${essay.excerpt}. ${stripMarkdown(essay.body)}`.slice(
+        0,
+        4000,
+      );
+    return {
+      slug: essay.slug,
+      title: essay.title,
+      categories: essay.categories.map(({ name }) => name),
+      tags: essay.tags.map(({ name }) => name),
       text,
       hash: hashText(text),
-    });
-  }
-  return essays;
+    };
+  });
 }
 
 async function embed(texts) {

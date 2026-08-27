@@ -10,12 +10,14 @@ import {
   loadEssayInventory,
 } from "../src/lib/essay-inventory.mjs";
 import { buildLastmodMap } from "../src/lib/sitemap-lastmod.mjs";
+import { publishDate } from "../src/lib/publish-time.mjs";
 
 const frontmatter = (overrides = {}) => {
   const metadata = {
     title: "Fixture essay",
     date: "2026-09-15",
     excerpt: "A fixture excerpt.",
+    newsletterIntro: "A fixture newsletter introduction.",
     cover: "cover.jpg",
     coverAlt: "A fixture cover.",
     categories: ["Programming"],
@@ -50,7 +52,7 @@ test("sitemap freshness is projected from the published inventory", (testContext
   writeEssay(
     directory,
     "published",
-    "md",
+    "mdx",
     frontmatter({ date: "2026-01-10", updated: "2026-01-12" }),
   );
   writeEssay(
@@ -82,8 +84,8 @@ test("public hashes track reader-facing changes and ignore workflow metadata ord
   writeEssay(
     directory,
     "hash-example",
-    "md",
-    frontmatter({ audioVoice: "Enceladus", cornerstone: false }).replace(
+    "mdx",
+    frontmatter({ cornerstone: false }).replace(
       "tags:",
       "downloads:\n  - file: guide.pdf\n    label: Guide\ntags:",
     ),
@@ -93,7 +95,7 @@ test("public hashes track reader-facing changes and ignore workflow metadata ord
   );
 
   const reordered = `---
-audioVoice: Other voice
+newsletterIntro: A fixture newsletter introduction.
 downloads:
   - label: Guide
     file: guide.pdf
@@ -111,12 +113,13 @@ cornerstone: true
 
 Fixture prose.
 `;
-  writeEssay(directory, "hash-example", "md", reordered);
+  writeEssay(directory, "hash-example", "mdx", reordered);
   const equivalent = loadEssayInventory({ essaysDirectory: directory }).get(
     "hash-example",
   );
 
   assert.equal(equivalent.publicContentHash, first.publicContentHash);
+  assert.equal(equivalent.narrationUrl, undefined);
   assert.equal(
     getPublicationState(equivalent, {
       at: new Date("2026-09-16T00:00:00.000Z"),
@@ -135,7 +138,7 @@ Fixture prose.
   writeEssay(
     directory,
     "hash-example",
-    "md",
+    "mdx",
     reordered.replace("Fixture prose.", "Changed public prose."),
   );
   const changed = loadEssayInventory({ essaysDirectory: directory }).get(
@@ -156,10 +159,7 @@ test("inventory normalizes metadata, freshness, taxonomy, and narration", (testC
       "tags:",
       "downloads:\n  - file: ' guide.pdf '\n    label: ' Guide '\ntags:",
     )
-    .replace(
-      "Fixture prose.",
-      "Fixture prose.\n\n![[fixture.mp3]]\n\n`![[documentation.mp3]]`",
-    );
+    .replace("tags:", "audio: fixture narration.mp3\ntags:");
   writeEssay(directory, "normalized", "mdx", source);
 
   const essay = loadEssayInventory({ essaysDirectory: directory }).get(
@@ -167,6 +167,7 @@ test("inventory normalizes metadata, freshness, taxonomy, and narration", (testC
   );
 
   assert.equal(essay.title, "Normalized title");
+  assert.equal(essay.newsletterIntro, "A fixture newsletter introduction.");
   assert.equal(essay.freshnessAt.toISOString(), "2026-09-20T13:00:00.000Z");
   assert.equal(essay.pathname, "/normalized/");
   assert.equal(essay.canonicalUrl, "https://buthonestly.io/normalized/");
@@ -188,7 +189,7 @@ test("inventory normalizes metadata, freshness, taxonomy, and narration", (testC
   assert.deepEqual(essay.downloads, [{ file: "guide.pdf", label: "Guide" }]);
   assert.equal(
     essay.narrationUrl,
-    "https://static.buthonestly.io/audio/fixture.mp3",
+    "https://static.buthonestly.io/audio/fixture%20narration.mp3",
   );
 });
 
@@ -197,12 +198,15 @@ test("inventory rejects missing reader-facing metadata", (testContext) => {
   writeEssay(
     directory,
     "invalid-metadata",
-    "md",
+    "mdx",
     frontmatter({
       title: "",
+      newsletterIntro: "",
       coverAlt: "",
       categories: [],
       sticky: "sometimes",
+      audio: "audio/fixture.mp3",
+      unexpected: "metadata",
     }),
   );
 
@@ -210,15 +214,29 @@ test("inventory rejects missing reader-facing metadata", (testContext) => {
     () => loadEssayInventory({ essaysDirectory: directory }),
     (error) =>
       error instanceof EssayInventoryError &&
-      ["title", "coverAlt", "categories", "sticky"].every((field) =>
+      [
+        "title",
+        "newsletterIntro",
+        "coverAlt",
+        "categories",
+        "sticky",
+        "audio",
+        "unexpected",
+      ].every((field) =>
         error.diagnostics.some((diagnostic) => diagnostic.field === field),
       ),
   );
 });
 
 test("inventory resolves publication boundaries and rejects impossible dates", (testContext) => {
+  assert.equal(publishDate("2026-09-15T10:00:00Z"), null);
+  assert.equal(
+    publishDate(new Date("2026-09-15T10:00:00Z")).toISOString(),
+    "2026-09-15T13:00:00.000Z",
+  );
+
   const directory = fixtureDirectory(testContext);
-  writeEssay(directory, "scheduled", "md");
+  writeEssay(directory, "scheduled", "mdx");
 
   const inventory = loadEssayInventory({
     essaysDirectory: directory,
@@ -241,14 +259,26 @@ test("inventory resolves publication boundaries and rejects impossible dates", (
   writeEssay(
     invalidDirectory,
     "invalid-date",
-    "md",
+    "mdx",
     frontmatter({ date: "2026-02-30" }),
   );
   writeEssay(
     invalidDirectory,
     "invalid-timestamp",
-    "md",
-    frontmatter({ date: "2026-02-30T10:00:00Z" }),
+    "mdx",
+    frontmatter({ date: "2026-09-15T10:00:00Z" }),
+  );
+  writeEssay(
+    invalidDirectory,
+    "invalid-offset",
+    "mdx",
+    frontmatter({ date: "2026-09-15T10:00:00+03:00" }),
+  );
+  writeEssay(
+    invalidDirectory,
+    "invalid-updated",
+    "mdx",
+    frontmatter({ updated: "2026-09-20T13:00:00Z" }),
   );
   assert.throws(
     () => loadEssayInventory({ essaysDirectory: invalidDirectory }),
@@ -256,32 +286,28 @@ test("inventory resolves publication boundaries and rejects impossible dates", (
       error instanceof EssayInventoryError &&
       error.diagnostics.filter(
         (diagnostic) => diagnostic.code === "invalid-date",
-      ).length === 2,
+      ).length === 4,
   );
 });
 
-test("inventory discovers Markdown and MDX and rejects duplicate slugs", (testContext) => {
+test("inventory accepts MDX as the sole essay source format", (testContext) => {
   const directory = fixtureDirectory(testContext);
-  writeEssay(directory, "markdown-essay", "md");
   writeEssay(directory, "mdx-essay", "mdx");
 
   const inventory = loadEssayInventory({ essaysDirectory: directory });
 
   assert.deepEqual(
-    inventory.essays.map(({ slug, sourceFormat }) => ({ slug, sourceFormat })),
-    [
-      { slug: "markdown-essay", sourceFormat: "markdown" },
-      { slug: "mdx-essay", sourceFormat: "mdx" },
-    ],
+    inventory.essays.map(({ slug }) => slug),
+    ["mdx-essay"],
   );
 
-  writeEssay(directory, "markdown-essay", "mdx");
+  writeEssay(directory, "markdown-essay", "md");
   assert.throws(
     () => loadEssayInventory({ essaysDirectory: directory }),
     (error) =>
       error instanceof EssayInventoryError &&
       error.diagnostics.some(
-        (diagnostic) => diagnostic.code === "duplicate-slug",
+        (diagnostic) => diagnostic.code === "invalid-source-format",
       ),
   );
 });

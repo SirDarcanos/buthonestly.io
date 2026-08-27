@@ -20,14 +20,12 @@ Honest essays on leadership, programming, and the messy overlap between humans a
 ## Overview
 
 The front-end source of [buthonestly.io](https://buthonestly.io) — a static
-[Astro](https://astro.build) site built from plain Markdown.
+[Astro](https://astro.build) site built from MDX.
 
-Essays live in `src/content/essays`, one folder per essay, holding the Markdown
-and its images side by side. That folder is also an Obsidian vault, so the same
-files are written in Obsidian and rendered by Astro: wikilinks, callouts and
-image embeds are resolved at build time by custom remark and rehype plugins
-rather than being pasted in as HTML. There is no CMS and no database — a new
-essay is a commit.
+Essays live in `src/content/essays`, one folder per essay, holding an MDX source
+and its images side by side. Ordinary prose uses standard Markdown; figures,
+galleries, summaries, callouts, and attributed quotations use a small set of
+Astro components. There is no CMS and no database — a new essay is a commit.
 
 **What the build gives you beyond the pages:**
 
@@ -35,8 +33,8 @@ essay is a commit.
   Action rebuilds when one comes due. Drafts live outside the built collection.
 - **Local-first images.** Covers and body images are committed, then optimized
   in place (16:9 covers, opaque sources to JPEG) and re-encoded to AVIF/WebP.
-- **Audio narration.** Each essay can be narrated with Gemini TTS on Vertex AI
-  and served from R2, with an in-page player.
+- **Audio narration.** An optional audio filename adds an in-page player for a
+  narration hosted on the fixed media domain.
 - **Semantic related posts**, precomputed from sentence embeddings rather than
   tag overlap.
 - **Feeds and machine-readable indexes** — a site feed plus one per section and
@@ -91,13 +89,13 @@ npm run preview
 ```
 ├─ src/
 │  ├─ components/        # Astro components
-│  ├─ content/           # Obsidian vault
-│  │  ├─ essays/<slug>/  # one folder per essay: <slug>.md plus its images
+│  ├─ content/
+│  │  ├─ essays/<slug>/  # one folder per essay: <slug>.mdx plus its images
 │  │  ├─ drafts/         # work in progress, not a built collection
 │  │  ├─ templates/      # Templater snippets for new essays, images, galleries
 │  │  └─ Style Guide.md  # how the essays are meant to read
 │  ├─ layouts/
-│  ├─ lib/               # content helpers, SEO/schema, remark + rehype plugins
+│  ├─ lib/               # content inventory, SEO/schema, and rendering helpers
 │  ├─ pages/             # routes, RSS feeds, llms.txt
 │  ├─ styles/global.css
 │  ├─ consts.ts          # site title, URL, description
@@ -110,80 +108,62 @@ npm run preview
 
 ## Writing an essay
 
-Create `src/content/essays/<slug>/<slug>.md` and drop the images beside it.
+Create `src/content/essays/<slug>/<slug>.mdx` and drop the images beside it.
 
 ```yaml
 ---
 title: What is a GPU and Why Does AI Need Them?
-date: 2026-08-04T13:00:00
+date: 2026-08-04
 excerpt: GPUs are crucial for AI due to their ability to perform parallel calculations.
-cover: gigabyte-gpu.jpg
+newsletterIntro: |-
+  GPUs do more than draw games. This essay explains why their parallel design
+  became essential to modern AI.
+cover: ./gigabyte-gpu.jpg
 coverAlt: The inside of a gaming PC lit in red and blue, with a graphics card above the motherboard.
 categories:
   - Programming
 tags:
   - AI
   - Performance
+audio: what-is-a-gpu.mp3
 ---
 ```
 
-| Field                                     | Notes                                                              |
-| ----------------------------------------- | ------------------------------------------------------------------ |
-| `title`                                   | Required.                                                          |
-| `date`                                    | Publication date. In the future, the essay is scheduled.           |
-| `updated`                                 | Feeds the sitemap's `lastmod`.                                     |
-| `cover` / `coverAlt` / `coverCaption`     | Local path. **Covers must be 16:9**; alt text describes the image. |
-| `excerpt`                                 | Used for the listings, meta description and feeds.                 |
-| `categories` / `tags`                     | Sections and topics. At least one of each.                         |
-| `sticky` / `cornerstone`                  | Editorial flags — featured on its section, weighted in SEO.        |
-| `downloads`                               | Files served from R2, rendered as a download block.                |
-| `audioVoice` / `audioStyle` / `audioPace` | Per-essay narration overrides.                                     |
+| Field                                 | Notes                                                              |
+| ------------------------------------- | ------------------------------------------------------------------ |
+| `title`                               | Required.                                                          |
+| `date`                                | Required `YYYY-MM-DD`; every essay publishes at 13:00 UTC.         |
+| `updated`                             | Optional `YYYY-MM-DD`; feeds the sitemap's `lastmod`.              |
+| `cover` / `coverAlt` / `coverCaption` | Local path. **Covers must be 16:9**; alt text describes the image. |
+| `excerpt`                             | Used for listings, metadata, feeds, and the on-page lead.          |
+| `newsletterIntro`                     | Required plain-text email introduction.                            |
+| `categories` / `tags`                 | Sections and topics. At least one of each.                         |
+| `sticky` / `cornerstone`              | Editorial flags — featured on its section, weighted in SEO.        |
+| `downloads`                           | Files served from R2, rendered as a download block.                |
+| `audio`                               | Optional filename served from `static.buthonestly.io/audio/`.      |
 
-`date`, `cover`, `coverAlt` and at least one category and tag are enforced by
-the content schema once an essay is live or scheduled — a missing one fails the
-build rather than shipping quietly.
-
-Obsidian-flavoured Markdown that the plugins understand:
-
-| Syntax                      | Renders as                                          |
-| --------------------------- | --------------------------------------------------- |
-| `[[other-essay]]`           | An internal link, checked by `npm run check:links`. |
-| `![alt](img.jpg 'caption')` | A `<figure>` with caption, re-encoded to AVIF/WebP. |
-| `> [!gallery] 2`            | A grid of the images inside the callout.            |
-| `> [!screen-only]`          | Prose on the page, dropped from the narration.      |
-| `> [!audio-only]`           | Read aloud, omitted from the page.                  |
-
-Image paths are bare filenames, resolved against the essay's own folder, and
-captions are **single-quoted** — the Unsplash and Pexels credit snippets you
-paste in contain double quotes, and mixing them up stops the image parsing as an
-image at all. `npm run check:links` catches that.
+Use standard Markdown links, including root-relative links to other essays.
+Import `Figure`, `Gallery`, `QuickSummary`, `Callout`, and `Blockquote` from
+`src/components/content` only when their extra semantics are needed.
 
 ## Tooling
 
-| Command                      | What it does                                                                                           |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `npm run dev`                | Dev server on port 4321.                                                                               |
-| `npm test`                   | Runs the automated test suite, including deliberate CI-stage failure fixtures.                         |
-| `npm run build`              | Generates redirects, builds to `dist/`, then indexes it with Pagefind.                                 |
-| `npm run lint`               | Prettier check plus link check.                                                                        |
-| `npm run check:links`        | Verifies wikilinks, internal links and image references resolve.                                       |
-| `npm run lint:essay`         | Advisory style-guide lint for a single essay.                                                          |
-| `npm run images [-- <slug>]` | Resizes to 1376px, recompresses, converts opaque images to JPEG and rewrites the Markdown. Idempotent. |
-| `npm run audio -- <slug>`    | Narrates an essay with Gemini TTS. Run it twice — see below.                                           |
-| `npm run related`            | Rebuilds the semantic related-posts map.                                                               |
-| `npm run indexnow`           | Submits changed essays to IndexNow.                                                                    |
-| `npm run og`                 | Regenerates `public/og-default.png`.                                                                   |
-| `npm run email-assets`       | Regenerates the newsletter's masthead and social icons.                                                |
+| Command                      | What it does                                                                                               |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `npm run dev`                | Dev server on port 4321.                                                                                   |
+| `npm test`                   | Runs the automated test suite, including deliberate CI-stage failure fixtures.                             |
+| `npm run build`              | Generates redirects, builds to `dist/`, then indexes it with Pagefind.                                     |
+| `npm run lint`               | Prettier check plus link check.                                                                            |
+| `npm run check:links`        | Verifies internal links and local assets resolve.                                                          |
+| `npm run lint:essay`         | Advisory style-guide lint for a single essay.                                                              |
+| `npm run images [-- <slug>]` | Resizes to 1376px, recompresses, converts opaque images to JPEG and updates source references. Idempotent. |
+| `npm run related`            | Rebuilds the semantic related-posts map.                                                                   |
+| `npm run indexnow`           | Submits changed essays to IndexNow.                                                                        |
+| `npm run og`                 | Regenerates `public/og-default.png`.                                                                       |
+| `npm run email-assets`       | Regenerates the newsletter's masthead and social icons.                                                    |
 
 A pre-commit hook (`.githooks/`, wired by `npm install`) optimizes staged essay
 images, blocks the commit on a non-16:9 cover, and formats staged code.
-
-> [!TIP]
-> `npm run audio` runs twice and **the first run costs nothing**. It writes
-> `<slug>.audio.txt`, the narration script — the essay reduced to what will
-> actually be spoken. Read it, fix anything that should sound different, then
-> re-run to synthesize from that file. `npm run audio -- <slug> --commit`
-> uploads the result to R2; it never re-synthesizes.
 
 ## Automation
 
@@ -216,11 +196,9 @@ for how to add a file.
 
 Environment variables (see `.env.example`):
 
-| Variable                         | Used for                                         |
-| -------------------------------- | ------------------------------------------------ |
-| `FATHOM_SITE_ID`                 | Analytics, `main`-branch production builds only. |
-| `GOOGLE_APPLICATION_CREDENTIALS` | Vertex AI service-account JSON, for narrations.  |
-| `VERTEX_REGION` / `VERTEX_MODEL` | Optional TTS overrides.                          |
+| Variable         | Used for                                         |
+| ---------------- | ------------------------------------------------ |
+| `FATHOM_SITE_ID` | Analytics, `main`-branch production builds only. |
 
 The Fathom script is skipped when `CF_PAGES_BRANCH` is set to anything but
 `main`, so preview deploys never pollute the stats even if the variable is set

@@ -13,7 +13,6 @@
     "related": "node scripts/build-related.mjs",
     "links": "node scripts/build-link-graph.mjs",
     "indexnow": "node scripts/ping-indexnow.mjs",
-    "audio": "node scripts/build-audio.mjs",
     "images": "node scripts/optimize-images.mjs",
     "postbuild": "pagefind --site dist",
     "preview": "astro preview",

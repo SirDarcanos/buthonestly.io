@@ -4,6 +4,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { taxonomySlug } from "../src/lib/essay-inventory.mjs";
+import { publishDate } from "../src/lib/publish-time.mjs";
 
 const essaysDirectoryArgument = process.argv.indexOf("--essays-dir");
 const ESSAYS =
@@ -30,8 +31,6 @@ const dirs = fs
   .readdirSync(ESSAYS, { withFileTypes: true })
   .filter((d) => d.isDirectory())
   .map((d) => d.name);
-const essaySlugs = new Set(dirs);
-
 const routes = new Set([
   "/",
   "/about/",
@@ -47,11 +46,9 @@ const downloadFiles = new Set();
 const essays = [];
 for (const slug of dirs) {
   const directory = path.join(ESSAYS, slug);
-  const source = [".md", ".mdx"]
-    .map((extension) => path.join(directory, `${slug}${extension}`))
-    .find((candidate) => fs.existsSync(candidate));
-  if (!source) {
-    console.error(`${slug}: missing ${slug}.md or ${slug}.mdx`);
+  const source = path.join(directory, `${slug}.mdx`);
+  if (!fs.existsSync(source)) {
+    console.error(`${slug}: missing ${slug}.mdx`);
     process.exitCode = 1;
     continue;
   }
@@ -63,7 +60,7 @@ for (const slug of dirs) {
     slug,
     fm,
     body: raw.slice(m?.[0].length ?? 0),
-    scheduled: !!date && new Date(date) > new Date(),
+    scheduled: !!date && publishDate(date) > new Date(),
   });
   routes.add(`/${slug}/`);
   for (const c of listUnder(fm, "categories"))
@@ -74,45 +71,10 @@ for (const slug of dirs) {
     downloadFiles.add(d[1]);
 }
 
-// Walk `![alt](target "title")` image refs. Scanned rather than regex-matched
-// because a quoted title may itself contain parens ("… MediEvil (1998)."), and
-// because an unterminated quote — the failure we want to catch — can't be
-// expressed as a match. A quote that only "closes" on a later line is broken.
-function* markdownImages(text) {
-  const re = /!\[[^\]]*\]\(/g;
-  let m;
-  while ((m = re.exec(text)) !== null) {
-    let i = re.lastIndex;
-    while (i < text.length && /[ \t]/.test(text[i])) i++;
-    const tStart = i;
-    while (i < text.length && !/[\s)]/.test(text[i])) i++;
-    const target = text.slice(tStart, i).replace(/^<|>$/g, "");
-    while (i < text.length && /[ \t]/.test(text[i])) i++;
-
-    let broken = false;
-    if (text[i] === '"' || text[i] === "'") {
-      const close = text.indexOf(text[i], i + 1);
-      const nl = text.indexOf("\n", i + 1);
-      if (close === -1 || (nl !== -1 && close > nl)) broken = true;
-      else i = close + 1;
-    }
-    if (!broken) {
-      while (i < text.length && /[ \t]/.test(text[i])) i++;
-      if (text[i] !== ")") broken = true;
-    }
-    const eol = text.indexOf("\n", m.index);
-    yield {
-      target,
-      broken,
-      raw: text.slice(m.index, eol === -1 ? text.length : eol).slice(0, 90),
-    };
-  }
-}
-
 const norm = (p) => (p.endsWith("/") || /\.[a-z0-9]+$/i.test(p) ? p : `${p}/`);
 const issues = [];
 const scheduledSlugs = new Set(
-  essays.filter((e) => e.scheduled).map((e) => e.slug),
+  essays.filter((essay) => essay.scheduled).map((essay) => essay.slug),
 );
 
 for (const { slug, fm, body, scheduled } of essays) {
@@ -140,8 +102,6 @@ for (const { slug, fm, body, scheduled } of essays) {
     issues.push([slug, "wordpress url", m[0].slice(0, 90)]);
   }
 
-  // Raw <img>. Galleries are hand-written HTML, so the Markdown scanner below
-  // never sees them.
   for (const m of clean.matchAll(/<img[^>]+src=["']([^"']+)["']/gi)) {
     const src = m[1].split(/[#?]/)[0];
     if (
@@ -154,38 +114,6 @@ for (const { slug, fm, body, scheduled } of essays) {
     if (!fs.existsSync(path.join(ESSAYS, slug, src.replace(/^\.\//, ""))))
       issues.push([slug, "image", src]);
   }
-  // `[[…]]` wikilinks, but not `![[…]]` embeds (audio players etc.).
-  for (const m of clean.matchAll(/(?<!!)\[\[([^\]|#]+)/g)) {
-    const target = m[1].trim();
-    if (!essaySlugs.has(target)) {
-      issues.push([slug, "wikilink", `[[${target}]]`]);
-      continue;
-    }
-    // A future-dated essay is withheld from the production build, so a link to
-    // one from an already-published essay is a 404 the moment this is pushed.
-    // The dev server builds both, which is exactly why it goes unnoticed.
-    if (!scheduled && scheduledSlugs.has(target))
-      issues.push([slug, "unpublished", `[[${target}]] is not live yet`]);
-  }
-  // `> ![tip]` instead of `> [!tip]` is still valid Markdown, so it silently
-  // degrades to a plain blockquote instead of rendering as a callout.
-  for (const m of clean.matchAll(/^>[ \t]*!\[(\w+)\](?!\()/gm)) {
-    issues.push([slug, "callout", `![${m[1]}] — did you mean [!${m[1]}]?`]);
-  }
-
-  for (const { target, broken, raw } of markdownImages(clean)) {
-    if (broken) {
-      // The target is unreliable once quoting is broken, so don't also file it
-      // as a missing image.
-      issues.push([slug, "image title", raw]);
-      continue;
-    }
-    const src = target.split(/[#?]/)[0];
-    if (!src || /^(https?:)?\/\//i.test(src) || /^data:/i.test(src)) continue;
-    if (src.startsWith("/")) continue; // public/ asset — not essay-local
-    if (!fs.existsSync(path.join(ESSAYS, slug, src.replace(/^\.\//, ""))))
-      issues.push([slug, "image", src]);
-  }
   for (const m of clean.matchAll(
     /\]\((\/[^)\s#]*)(?:#[^)\s]*)?(?:[ \t]+"[^"]*")?\)/g,
   )) {
@@ -195,13 +123,18 @@ for (const { slug, fm, body, scheduled } of essays) {
         issues.push([slug, "download", p]);
     } else if (!routes.has(p)) {
       issues.push([slug, "internal", p]);
+    } else {
+      const targetSlug = p.match(/^\/([^/]+)\/$/)?.[1];
+      if (!scheduled && targetSlug && scheduledSlugs.has(targetSlug)) {
+        issues.push([slug, "unpublished", `${p} is not live yet`]);
+      }
     }
   }
 }
 
 if (issues.length === 0) {
   console.log(
-    `✓ Links OK — ${essays.length} essays; wikilinks, internal links and images all resolve.`,
+    `✓ Links OK — ${essays.length} essays; internal links and local assets resolve.`,
   );
   process.exit(0);
 }

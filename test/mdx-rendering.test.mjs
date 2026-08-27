@@ -30,9 +30,9 @@ test("MDX renders ordinary Markdown and the semantic content modules", (context)
   assert.match(ordinary, /Ordinary prose survives MDX/);
   assert.match(
     ordinary,
-    /href="https:\/\/example\.com\/reference"[^>]*title="nofollow"[^>]*target="_blank"[^>]*rel="noopener noreferrer"/,
+    /href="https:\/\/example\.com\/reference"[^>]*target="_blank"[^>]*rel="noopener noreferrer"/,
   );
-  assert.doesNotMatch(ordinary, /rel="[^"]*nofollow/);
+  assert.doesNotMatch(ordinary, /nofollow/);
 
   const rich = readBuiltPage("rich");
   assert.match(rich, /<picture>/);

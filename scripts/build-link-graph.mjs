@@ -24,8 +24,8 @@ const MIN_DENSITY = 0.5;
 
 const read = (slug) => {
   const dir = path.join(ESSAYS, slug);
-  const md = fs.readdirSync(dir).find((f) => f.endsWith(".md"));
-  return md ? matter(fs.readFileSync(path.join(dir, md), "utf8")) : null;
+  const source = path.join(dir, `${slug}.mdx`);
+  return fs.existsSync(source) ? matter(fs.readFileSync(source, "utf8")) : null;
 };
 
 const slugs = fs
@@ -42,18 +42,11 @@ for (const slug of slugs) {
 const known = new Set(essays.keys());
 const now = new Date();
 
-/**
- * Editorial links only: wikilinks and Markdown links to an internal essay path.
- * The AI-summary callout is stripped first — its "Read more" is boilerplate
- * that appears on every essay and would flatten the graph.
- */
 function linksFrom(body) {
-  const prose = body
-    .replace(/^> \[!summary\][\s\S]*?(?=\n\n)/, "")
-    .replace(/```[\s\S]*?```|`[^`\n]*`/g, "");
-  const wiki = [...prose.matchAll(/\[\[([^\]|#]+)(?:[|#][^\]]*)?\]\]/g)];
-  const md = [...prose.matchAll(/\]\(\/([a-z0-9-]+)\/\)/g)];
-  return [...wiki, ...md].map((m) => m[1].trim());
+  const prose = body.replace(/```[\s\S]*?```|`[^`\n]*`/g, "");
+  return [...prose.matchAll(/\]\(\/([a-z0-9-]+)\/\)/g)].map((match) =>
+    match[1].trim(),
+  );
 }
 
 const graph = {};

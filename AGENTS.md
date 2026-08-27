@@ -32,29 +32,8 @@ accumulate and go out as a batch. Do not push on every change.
 
 - `npm run images [-- <slug>]` — optimize essay source images in place:
   resize to max 1376px, recompress, convert opaque images to JPEG (updating
-  Markdown references). Non-16:9 images are flagged and skipped. Idempotent
+  source references). Non-16:9 images are flagged and skipped. Idempotent
   via `data/images-optimized.json`.
-- `npm run audio -- <slug>` — narrate an essay with Gemini TTS on Vertex AI.
-  **It runs twice, and the first run costs nothing.** It writes
-  `<slug>.audio.txt`, the narration script: the essay reduced to what will be
-  spoken, split into the chunks each TTS call receives. Read it, fix anything
-  that should sound different — an acronym spelled out, an image caption
-  rephrased so it stands on its own — then re-run to synthesize _from that
-  file_, not from the Markdown. `--refresh` rebuilds it from the essay and
-  discards the edits; editing the essay afterwards only warns, since the
-  script is the input of record. Both it and the MP3 are git-ignored.
-  Synthesis writes the MP3 beside the essay, inserts an Obsidian
-  `![[<slug>.mp3]]` embed (plays in the vault; the site renders it as the
-  audio player), and flags any chunk whose speaking rate is far off the run's
-  median — that is where a dropped or repeated clause shows up, so a long
-  narration needs a spot check rather than a full listen. Then
-  `npm run audio -- <slug> --commit` uploads that MP3 to the STATIC R2
-  bucket — commit only uploads, it never re-synthesizes. Env in `.env`:
-  `GOOGLE_APPLICATION_CREDENTIALS` (Vertex service-account JSON path),
-  optional `VERTEX_REGION` / `VERTEX_MODEL`.
-  Per-essay overrides via flat `audioVoice` / `audioStyle` / `audioPace`
-  frontmatter (flat, not a nested `audio:` map — Obsidian's Properties editor
-  can't edit nested objects).
 - `npm run related` — rebuild the semantic related-posts map (normally left
   to the `related.yml` Action).
 - `npm run links` — map the editorial internal-link graph and write
@@ -117,25 +96,17 @@ opposite: git-ignored, uploaded to R2.
   fine. Only width matters: anything over 1376px is resized down, and anything
   narrower than the 688px reading column gets a non-blocking note.
 - **Opaque images are converted to JPEG** — PNG, WebP, AVIF, TIFF, BMP, at any
-  size — and the Markdown/frontmatter references are rewritten to match. Only
+  size — and the MDX/frontmatter references are rewritten to match. Only
   transparency keeps a file as PNG (JPEG has no alpha). Animated sources are
   skipped rather than flattened. GIFs and SVGs are exempt entirely — the
   optimizer ignores them and they need not be 16:9.
 - Covers: `cover: ./file.jpg` in frontmatter, required once an essay is live.
   Rendered by `Picture.astro` as AVIF → WebP → JPEG.
-- Captions are HTML. Unsplash and Pexels each give you a credit snippet to
-  copy — photographer and photo linked, `utm_` params included — so paste it
-  verbatim. In a body caption the Markdown title must be SINGLE-quoted, since
-  the snippet contains double quotes: get it wrong and the image stops parsing
-  as an image at all. `npm run check:links` catches that.
-- Body images: plain Markdown `![alt](./file.jpg "caption")` — the quoted
-  title becomes a `<figcaption>`, rehype emits AVIF, and `image.layout`
-  makes it responsive. Never hand-write `<picture>` or `<img>` in content
-  for local images.
-- Animated GIFs: reference them the same way (`![alt](./file.gif)`).
-  `rehype-image-format.mjs` skips the AVIF tag for GIFs (AVIF is single-frame),
-  so Astro emits a responsive **animated WebP** and animation is preserved.
-  SVGs are likewise served as-is.
+- Body images use imported image metadata and `Figure`. Externally licensed
+  photography keeps its linked credit in the caption children; original media
+  may omit the caption. Never hand-write `<picture>` or `<img>` in essays.
+- Group figures with `Gallery`, using two, three, or four columns. Source order
+  remains reading order on narrow screens.
 - `coverAlt` must describe what is actually in the image, not repeat the
   essay title or SEO copy.
 
@@ -174,29 +145,18 @@ links` reports how many essays in each cluster reach theirs. Only durable
   `utm_source` alone is enough; `utm_medium=social` adds nothing and costs 18
   characters against Bluesky's 300-character limit. The newsletter has clean
   numbers only because Kit tags it.
-- **`date` is UTC.** YAML parses a naive timestamp as UTC, so `2026-09-15T13:00:00`
-  means 13:00 UTC on every machine — preview and production agree. A bare
-  `2026-09-15` with no time would land at UTC midnight, so
-  `src/lib/publish-time.mjs` moves it to the standard slot instead; that helper
-  is the single reading of the field, shared by the schema and by every script
-  that decides when an essay is live.
-- **Schedule before 13:30 UTC.** The daily crons are fixed: related posts at
-  12:00, the Kit newsletter at 13:30, IndexNow at 13:45, and an hourly job at
-  `:05` that fires the deploy. An essay live after 13:30 waits a full day for
-  its newsletter. `13:00` is the usual slot — 16:00 in Bucharest during summer,
-  09:00 US Eastern — and leaves the newsletter about 25 minutes of margin.
+- **`date` and `updated` are calendar dates.** Author them only as `YYYY-MM-DD`;
+  timestamps are invalid. Every publication date resolves to 13:00 UTC through
+  `src/lib/publish-time.mjs`, shared by the schema and publishing tools.
+- `newsletterIntro` is required plain text. Use one to three paragraphs with
+  enough context for the publication email; it is not rendered as MDX.
 - Publishing is date-driven (a future `date` schedules the essay); WIP lives
   in `src/content/drafts/`, which is not a built collection. A scheduled essay
   still renders on the dev server, so it can be proofread before it lands.
-- `> [!gallery] 2` (or 3, 4) is a grid of the Markdown images inside it —
-  authored as a callout so Obsidian previews it, since a raw `<div>` is hidden
-  by Live Preview and its images would skip the AVIF pipeline. Silent in audio.
-- `> [!screen-only]` and `> [!audio-only]` pick a medium for a passage: the
-  first renders as ordinary prose and is dropped from the narration, the second
-  is omitted from the page and read aloud. Use them where prose leans on an
-  image ("below is a diagram…") and needs different wording to stand alone in
-  the audio. Rewriting one sentence to work in both is usually better than a
-  pair; reach for these only when the two versions genuinely differ.
+- Essays are MDX. Prose, headings, lists, code, and links stay standard Markdown;
+  use `Figure`, `Gallery`, `QuickSummary`, `Callout`, and `Blockquote` only for
+  their named semantics. Internal links are ordinary root-relative Markdown
+  links. Narration playback comes only from the optional `audio` filename.
 
 ## Code style
 

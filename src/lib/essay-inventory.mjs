@@ -4,12 +4,25 @@ import path from "node:path";
 import matter from "gray-matter";
 import { SITE_URL } from "../consts.ts";
 import { STATIC_BASE } from "./cdn.mjs";
-import { narrationFiles, narrationUrl } from "./narration.mjs";
+import { narrationUrl } from "./narration.mjs";
 import { publishDate } from "./publish-time.mjs";
 
-const SOURCE_EXTENSIONS = new Map([
-  [".md", "markdown"],
-  [".mdx", "mdx"],
+const ESSAY_EXTENSION = ".mdx";
+const METADATA_FIELDS = new Set([
+  "title",
+  "date",
+  "updated",
+  "sticky",
+  "cornerstone",
+  "cover",
+  "coverAlt",
+  "coverCaption",
+  "excerpt",
+  "newsletterIntro",
+  "tags",
+  "categories",
+  "downloads",
+  "audio",
 ]);
 
 export class EssayInventoryError extends Error {
@@ -54,21 +67,15 @@ const normalizedDate = (
   if (optional && !authored && (data[key] == null || data[key] === "")) {
     return null;
   }
-  const authoredCalendarDay = authored?.match(
-    /^(\d{4}-\d{2}-\d{2})(?:$|[T ])/,
-  )?.[1];
-  if (authoredCalendarDay && !strictDateOnly(authoredCalendarDay)) {
-    diagnostics.push(
-      diagnostic("invalid-date", file, `${key} is not a calendar date`, key),
-    );
-    return null;
-  }
-  if (authored === authoredCalendarDay) return publishDate(authored);
+  if (authored && strictDateOnly(authored)) return publishDate(authored);
 
-  const parsed = publishDate(data[key]);
-  if (parsed && !Number.isNaN(+parsed)) return parsed;
   diagnostics.push(
-    diagnostic("invalid-date", file, `${key} must be a valid date`, key),
+    diagnostic(
+      "invalid-date",
+      file,
+      `${key} must use the YYYY-MM-DD date-only format`,
+      key,
+    ),
   );
   return null;
 };
@@ -259,7 +266,8 @@ const discoverSources = (essaysDirectory) => {
     const candidates = readdirSync(directory, { withFileTypes: true })
       .filter(
         (file) =>
-          file.isFile() && SOURCE_EXTENSIONS.has(path.extname(file.name)),
+          file.isFile() &&
+          [".md", ESSAY_EXTENSION].includes(path.extname(file.name)),
       )
       .sort((a, b) => a.name.localeCompare(b.name));
 
@@ -267,6 +275,16 @@ const discoverSources = (essaysDirectory) => {
       const extension = path.extname(candidate.name);
       const basename = path.basename(candidate.name, extension);
       const sourcePath = path.join(directory, candidate.name);
+      if (extension !== ESSAY_EXTENSION) {
+        diagnostics.push(
+          diagnostic(
+            "invalid-source-format",
+            sourcePath,
+            "essay sources must use the .mdx extension",
+          ),
+        );
+        continue;
+      }
       if (basename !== entry.name) {
         diagnostics.push(
           diagnostic(
@@ -277,29 +295,8 @@ const discoverSources = (essaysDirectory) => {
         );
         continue;
       }
-      sources.push({
-        slug: entry.name,
-        sourcePath,
-        sourceFormat: SOURCE_EXTENSIONS.get(extension),
-      });
+      sources.push({ slug: entry.name, sourcePath });
     }
-  }
-
-  const pathsBySlug = new Map();
-  for (const source of sources) {
-    const paths = pathsBySlug.get(source.slug) ?? [];
-    paths.push(source.sourcePath);
-    pathsBySlug.set(source.slug, paths);
-  }
-  for (const [slug, paths] of pathsBySlug) {
-    if (paths.length < 2) continue;
-    diagnostics.push(
-      diagnostic(
-        "duplicate-slug",
-        paths.join(", "),
-        `multiple essay sources resolve to "${slug}"`,
-      ),
-    );
   }
 
   return { sources, diagnostics };
@@ -320,6 +317,18 @@ export function loadEssayInventory({
   for (const source of sources) {
     const sourceContent = readFileSync(source.sourcePath, "utf8");
     const parsed = matter(sourceContent);
+    for (const field of Object.keys(parsed.data)) {
+      if (!METADATA_FIELDS.has(field)) {
+        diagnostics.push(
+          diagnostic(
+            "invalid-metadata",
+            source.sourcePath,
+            `${field} is not supported essay metadata`,
+            field,
+          ),
+        );
+      }
+    }
     const rawFrontmatter = sourceContent.match(
       /^---[ \t]*\r?\n([\s\S]*?)\r?\n---[ \t]*(?:\r?\n|$)/,
     )?.[1];
@@ -347,6 +356,12 @@ export function loadEssayInventory({
     const excerpt = requiredString(
       parsed.data,
       "excerpt",
+      source.sourcePath,
+      diagnostics,
+    );
+    const newsletterIntro = requiredString(
+      parsed.data,
+      "newsletterIntro",
       source.sourcePath,
       diagnostics,
     );
@@ -395,20 +410,20 @@ export function loadEssayInventory({
       source.sourcePath,
       diagnostics,
     );
-    const embeddedNarrations = [...new Set(narrationFiles(parsed.content))];
-    if (embeddedNarrations.length > 1) {
+    const narrationFile =
+      typeof parsed.data.audio === "string" && parsed.data.audio.trim()
+        ? parsed.data.audio.trim()
+        : undefined;
+    if (narrationFile && /[\\/]/.test(narrationFile)) {
       diagnostics.push(
         diagnostic(
-          "multiple-narrations",
+          "invalid-metadata",
           source.sourcePath,
-          "an essay may reference only one narration file",
+          "audio must be a filename without a directory",
           "audio",
         ),
       );
     }
-    const narrationFile =
-      (typeof parsed.data.audio === "string" && parsed.data.audio.trim()) ||
-      embeddedNarrations[0];
     if (!publishedAt) continue;
 
     const pathname = `/${source.slug}/`;
@@ -418,6 +433,7 @@ export function loadEssayInventory({
       body: parsed.content.replace(/\r\n?/g, "\n"),
       title,
       excerpt,
+      newsletterIntro,
       publishedAt,
       publicationDay: publishedAt.toISOString().slice(0, 10),
       updatedAt,
@@ -427,9 +443,10 @@ export function loadEssayInventory({
       canonicalUrl: new URL(pathname, siteBase).toString(),
       categories,
       tags,
-      narrationUrl: narrationFile
-        ? narrationUrl(narrationFile, staticBaseUrl.toString())
-        : undefined,
+      narrationUrl:
+        narrationFile && !/[\\/]/.test(narrationFile)
+          ? narrationUrl(narrationFile, staticBaseUrl.toString())
+          : undefined,
       cover,
       coverAlt,
       coverCaption:
@@ -439,11 +456,6 @@ export function loadEssayInventory({
       downloads,
       sticky,
       cornerstone,
-      workflow: {
-        audioVoice: parsed.data.audioVoice,
-        audioStyle: parsed.data.audioStyle,
-        audioPace: parsed.data.audioPace,
-      },
     };
     essays.push({
       ...essay,
