@@ -21,12 +21,12 @@ const stringList = z.preprocess(
 // date takes the standard publish slot. See src/lib/publish-time.mjs.
 const utcDate = z.preprocess((v) => publishDate(v) ?? undefined, z.date());
 
-// One folder per essay: src/content/essays/<slug>/<slug>.md, images colocated.
+// One folder per essay: src/content/essays/<slug>/<slug>.{md,mdx}, images colocated.
 const essays = defineCollection({
   loader: glob({
-    pattern: "**/*.md",
+    pattern: "**/*.{md,mdx}",
     base: "./src/content/essays",
-    generateId: ({ entry }) => entry.replace(/\/[^/]+\.md$/, ""),
+    generateId: ({ entry }) => entry.replace(/\/[^/]+\.mdx?$/, ""),
   }),
   schema: ({ image }) =>
     z

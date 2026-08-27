@@ -21,21 +21,34 @@ audioStyle: reflective
 audioPace: conversational
 ---
 
-> [!summary]- Quick Summary
->
-> - A GPU is the chip inside a graphics card, not the whole card.
-> - GPUs are useful for AI because they run thousands of small calculations in parallel.
-> - That matches how neural networks work: lots of matrix math, repeated at scale.
-> - For AI, VRAM, memory bandwidth, Tensor cores, and software support matter more than gaming performance.
-> - The real story is not the card on the shelf, but the chip inside it and the stack built around it.
->
-> AI-generated summary based on the text of the article and checked by the author. [Read more](/artificial-intelligence-tools/ "BUT. Honestly Artificial Intelligence Tools") about how BUT. Honestly uses AI.
+import Figure from "../../../components/content/Figure.astro";
+import Gallery from "../../../components/content/Gallery.astro";
+import QuickSummary from "../../../components/content/QuickSummary.astro";
+import Callout from "../../../components/content/Callout.astro";
+import nvidiaGeForceRtx5090 from "./nvidia-geforce-rtx-5090.jpg";
+import gpu from "./gpu.jpg";
+import rtx5090Pcb from "./rtx-5090-pcb.jpg";
+import pcbDiagram from "./nvidia-geforce-rtx-5090-pcb-diagram.jpg";
+import gpuCores from "./nvidia-geforce-rtx-5090-gpu-cores.jpg";
+import h100 from "./h100-ari.jpeg";
+import appleM4 from "./apple-m4-abstract.jpg";
+import ethereumMarket from "./ethereum-market.jpg";
+
+<QuickSummary>
+
+- A GPU is the chip inside a graphics card, not the whole card.
+- GPUs are useful for AI because they run thousands of small calculations in parallel.
+- That matches how neural networks work: lots of matrix math, repeated at scale.
+- For AI, VRAM, memory bandwidth, Tensor cores, and software support matter more than gaming performance.
+- The real story is not the card on the shelf, but the chip inside it and the stack built around it.
+
+</QuickSummary>
 
 ![[what-is-a-gpu.mp3]]
 
 I trained AI models on an RTX 3090 before I realized I was using the word _GPU_ wrong.
 
-I kept bouncing between machines: a MacBook Pro M3, a desktop with one RTX 3090, then two in parallel, then Google Colab when nothing else was enough. The surprise was how unpredictable the trade-offs were. Some [[neural-network-predict-resin-usage-3d-printed-miniatures|models I'd built locally]] ran fine on the Mac. Others I expected to fly on the desktop ran out of memory before they got started. When the desktop choked, sometimes the Mac picked it up. When the Mac couldn't load the weights, the 3090s did fine.
+I kept bouncing between machines: a MacBook Pro M3, a desktop with one RTX 3090, then two in parallel, then Google Colab when nothing else was enough. The surprise was how unpredictable the trade-offs were. Some [models I'd built locally](/neural-network-predict-resin-usage-3d-printed-miniatures/) ran fine on the Mac. Others I expected to fly on the desktop ran out of memory before they got started. When the desktop choked, sometimes the Mac picked it up. When the Mac couldn't load the weights, the 3090s did fine.
 
 The whole time, I called the 3090 my GPU. Most people do. But that's the card — the whole assembly that bolts into a PCIe slot. The GPU is one chip on that card. On the 3090 it's the GA102. On the 5090 it's the GB202. On the H100 sitting in OpenAI's data centers, it's the GH100. Different chips, different names. And the trade-offs I kept tripping over weren't really between cards. They were between chips, and how each one handles memory.
 
@@ -45,22 +58,18 @@ A graphics card is the whole assembly — circuit board, memory chips, power reg
 
 When someone says "NVIDIA GeForce RTX 5090" or "AMD Radeon RX 9060 XT," they're naming the card.
 
-![NVIDIA GeForce RTX 5090 graphics card, full assembly with cooling shroud and fans.](nvidia-geforce-rtx-5090.jpg "Image by NVIDIA")
+<Figure src={nvidiaGeForceRtx5090} alt="NVIDIA GeForce RTX 5090 graphics card, full assembly with cooling shroud and fans.">
+  Image by NVIDIA
+</Figure>
 
 The GPU is one chip on that card. A microchip soldered onto the PCB (Printed Circuit Board) alongside the memory, the voltage regulators, and dozens of other components. NVIDIA calls the GPU on the RTX 5090 the **GB202**. AMD calls the one on the RX 9060 XT **Navi 44**. The chip is what does the actual computation. The card is what makes the chip usable.
 
-> [!screen-only]
-> Below: two images by _W1zzard_ on _techpowerup.com_ — the GB202
-> chip itself, and the PCB it sits on in an RTX 5090.
+Below: two images by _W1zzard_ on _techpowerup.com_ — the GB202 chip itself, and the PCB it sits on in an RTX 5090.
 
-> [!audio-only]
-> W1zzard photographed both the chip and the board it sits on.
-> The chip is a small square at the centre; everything else is what the card
-> adds around it.
-
-> [!gallery] 2
-> ![NVIDIA GB202 GPU die, the bare silicon chip without its surrounding components.](gpu.jpg)
-> ![NVIDIA GeForce RTX 5090 printed circuit board with the GB202 GPU at center, surrounded by VRAM modules and power delivery components.](rtx-5090-pcb.jpg)
+<Gallery columns={2}>
+  <Figure src={gpu} alt="NVIDIA GB202 GPU die, the bare silicon chip without its surrounding components." />
+  <Figure src={rtx5090Pcb} alt="NVIDIA GeForce RTX 5090 printed circuit board with the GB202 GPU at center, surrounded by VRAM modules and power delivery components." />
+</Gallery>
 
 ## What's Inside a Graphics Card?
 
@@ -68,7 +77,7 @@ Now that the chip-and-card distinction is clear, let's look at what else lives o
 
 Below is an annotated diagram of an RTX 5090 PCB. Not every component is marked. The actual board has many more, but these are the ones worth knowing.
 
-![Annotated diagram of the NVIDIA RTX 5090 printed circuit board, with display outputs, power connector, VRAM modules, and the GB202 GPU labeled.](nvidia-geforce-rtx-5090-pcb-diagram.jpg)
+<Figure src={pcbDiagram} alt="Annotated diagram of the NVIDIA RTX 5090 printed circuit board, with display outputs, power connector, VRAM modules, and the GB202 GPU labeled." />
 
 ### Display Output
 
@@ -106,10 +115,11 @@ The answer is that GPU cores aren't doing the same kind of work. They're smaller
 
 Add them up: 21,760 + 680 + 170 = 22,610. All of them live on the same GPU chip.
 
-> [!info]- Ray tracing, briefly explained
-> It simulates how light actually behaves: rays from a source bounce off surfaces, refract, get absorbed, and produce realistic reflections, shadows, and indirect lighting. Traditional rendering fakes these effects with cheaper approximations. Ray tracing computes them honestly, frame by frame. It's expensive math, which is why GPUs ship dedicated RT cores.
+<Callout type="information" title="Ray tracing, briefly explained">
+  It simulates how light actually behaves: rays from a source bounce off surfaces, refract, get absorbed, and produce realistic reflections, shadows, and indirect lighting. Traditional rendering fakes these effects with cheaper approximations. Ray tracing computes them honestly, frame by frame. It's expensive math, which is why GPUs ship dedicated RT cores.
+</Callout>
 
-![Block diagram of the NVIDIA RTX 5090 GPU showing the layout of CUDA cores, Tensor cores, and RT cores across the chip.](nvidia-geforce-rtx-5090-gpu-cores.jpg)
+<Figure src={gpuCores} alt="Block diagram of the NVIDIA RTX 5090 GPU showing the layout of CUDA cores, Tensor cores, and RT cores across the chip." />
 
 Each type would do badly at what a CPU does. Running an operating system, juggling browser tabs, handling complex branching logic, switching contexts: these are CPU jobs. CPU cores are big and complicated because they need to do them well. GPU cores are designed for the opposite case: a huge number of small, repetitive tasks running at the same time. To simplify, they take calculations from the CPU and decide which pixels on a monitor should turn on and what color each should be.
 
@@ -121,13 +131,15 @@ A neural network is, at its core, a stack of matrix multiplications. Inputs go i
 
 The hinge moment was 2012. Alex Krizhevsky, Ilya Sutskever, and Geoffrey Hinton trained a network called AlexNet on a pair of GeForce GTX 580 cards. It demolished the ImageNet competition by a wide margin. Work that had taken weeks on CPUs now took days on consumer gaming hardware. It's not an overstatement to say that everything in modern AI traces back to that result.
 
-After AlexNet, the industry realized GPUs weren't just useful for graphics. They were the right tool for any workload built on matrix math at scale. Which turns out to be most of machine learning. From [[building-convolutional-neural-network-python-tensorflow|my own small CNN experiments]] on a single 3090, up to the cluster-scale training runs at OpenAI and Anthropic, the underlying compute is the same shape. Just more of it.
+After AlexNet, the industry realized GPUs weren't just useful for graphics. They were the right tool for any workload built on matrix math at scale. Which turns out to be most of machine learning. From [my own small CNN experiments](/building-convolutional-neural-network-python-tensorflow/) on a single 3090, up to the cluster-scale training runs at OpenAI and Anthropic, the underlying compute is the same shape. Just more of it.
 
 NVIDIA responded by building cards purpose-built for that work. No display outputs. No fans, because they expect rack-level cooling. Designed to be linked to dozens of identical cards on the same node, behaving as a single computational unit. Meant for server racks, not desktops.
 
 The NVIDIA H100 is the best-known example.
 
-![NVIDIA H100 data-center GPU card with no display outputs and no fans, designed for server-rack installation.](h100-ari.jpeg "Image by NVIDIA")
+<Figure src={h100} alt="NVIDIA H100 data-center GPU card with no display outputs and no fans, designed for server-rack installation.">
+  Image by NVIDIA
+</Figure>
 
 The spec sheet looks different from a consumer card. Instead of the 32 GB of GDDR7 on an RTX 5090, the H100 has 80 GB of HBM3. That's a faster, more expensive memory technology used almost exclusively in data-center hardware. The GH100 chip inside it has 14,592 CUDA cores, fewer than the 5090's 21,760, but it makes up for that in Tensor core throughput and raw bandwidth. Memory bandwidth on the SXM variant tops 3.35 TB/s, almost double what the 5090 can move.
 
@@ -143,7 +155,7 @@ Hardware is half the story. The other half is the stack that makes it usable.
 
 NVIDIA has spent nearly twenty years building that stack. **CUDA**, their parallel-computing platform, launched in 2007. It let developers write general-purpose programs that ran on the GPU, instead of treating the GPU as a black box that only knew how to draw triangles. Every major deep-learning framework (PyTorch, TensorFlow, JAX) has CUDA support as a first-class citizen. Most ship with it as the default.
 
-AMD has had a competing platform, **ROCm**, since 2016. The hardware is genuinely competitive on paper. The software is not. ROCm is mostly Linux-only. Model coverage is narrower, tooling is patchier, and most of the prebuilt containers, tutorials, and Stack Overflow answers assume NVIDIA. If you've ever spent a Saturday afternoon trying to get [[set-up-tensorflow-docker-jupyter-notebook|CUDA, drivers, and Python versions to agree]], you've experienced the easy version of this problem. The AMD equivalent is worse.
+AMD has had a competing platform, **ROCm**, since 2016. The hardware is genuinely competitive on paper. The software is not. ROCm is mostly Linux-only. Model coverage is narrower, tooling is patchier, and most of the prebuilt containers, tutorials, and Stack Overflow answers assume NVIDIA. If you've ever spent a Saturday afternoon trying to get [CUDA, drivers, and Python versions to agree](/set-up-tensorflow-docker-jupyter-notebook/), you've experienced the easy version of this problem. The AMD equivalent is worse.
 
 This is why the comparison between cards isn't only about TFLOPS. Drivers and runtime libraries decide how much of that hardware you can actually use. An older NVIDIA card on a recent CUDA release will often outpace a newer AMD card running an unsupported configuration.
 
@@ -159,9 +171,11 @@ Once you stop conflating the card with the chip, the buying question gets simple
 
 The software side narrows the field. As covered in the last section, NVIDIA's CUDA platform is where almost every AI framework lives. Going outside that ecosystem means more work to get the same job done. If your goal is to learn, build, and ship without fighting tooling, that decision is mostly made for you.
 
-![An abstract image of an Apple M4 chip centered on a neon circuit board with glowing purple traces and green lights.](apple-m4-abstract.jpg 'Photo by <a href="https://unsplash.com/@boliviainteligente?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">BoliviaInteligente</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>')
+<Figure src={appleM4} alt="An abstract image of an Apple M4 chip centered on a neon circuit board with glowing purple traces and green lights.">
+  Photo by [BoliviaInteligente](https://unsplash.com/@boliviainteligente?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
+</Figure>
 
-There's a third path I've used: Apple Silicon. The trick is unified memory. On a Mac with an M-series chip, the GPU and CPU share the same memory pool. There's no separate VRAM with its own ceiling. A Mac with enough system RAM can sometimes load models that won't fit on a desktop card with much faster compute. The trade-off is speed: a Mac will train slower than a dedicated GPU, and not every framework supports its Metal backend cleanly. But for inference and for fitting larger models locally, it's a real option. The [[distilroberta-emotion-analysis-nlp-case-study|NLP analysis I ran on Steam reviews]] is the kind of work where memory ceiling matters more than raw speed.
+There's a third path I've used: Apple Silicon. The trick is unified memory. On a Mac with an M-series chip, the GPU and CPU share the same memory pool. There's no separate VRAM with its own ceiling. A Mac with enough system RAM can sometimes load models that won't fit on a desktop card with much faster compute. The trade-off is speed: a Mac will train slower than a dedicated GPU, and not every framework supports its Metal backend cleanly. But for inference and for fitting larger models locally, it's a real option. The [NLP analysis I ran on Steam reviews](/distilroberta-emotion-analysis-nlp-case-study/) is the kind of work where memory ceiling matters more than raw speed.
 
 The blunt summary: pick what serves the work. A gaming card built for frames per second is the wrong tool for training, and a card stripped of display outputs is the wrong tool for gaming. They're built for different problems. The price reflects that.
 
@@ -171,7 +185,9 @@ Card prices have climbed sharply over the last several years. AI is the current 
 
 GPUs turned out to be excellent at the math behind proof-of-work mining. Same advantage as before: thousands of small cores running the same operation in parallel, except now the operation is hashing instead of matrix math. When Bitcoin became valuable and other coins like Ethereum followed, miners started buying consumer GPUs by the rack. The Ethereum booms of 2017–2018 and 2020–2021 each [pulled cards off shelves faster than they could be made](https://www.digitaltrends.com/computing/catastrophic-gpu-shortage-a-chronological-history/). Prices doubled or tripled on the secondary market. Gamers couldn't find stock at MSRP for months at a time.
 
-![Ethereum logo on a coin over a blurred cryptocurrency candlestick chart with a purple and teal background.](ethereum-market.jpg 'Photo by <a href="https://unsplash.com/@yigitaliatasoy?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Yiğit Ali Atasoy</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>')
+<Figure src={ethereumMarket} alt="Ethereum logo on a coin over a blurred cryptocurrency candlestick chart with a purple and teal background.">
+  Photo by [Yiğit Ali Atasoy](https://unsplash.com/@yigitaliatasoy?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
+</Figure>
 
 That cooled down in 2022 when Ethereum moved off proof-of-work and mining stopped being profitable on consumer cards. For a few months it looked like the market might normalize. Then ChatGPT launched, AI demand exploded, and the gap closed quickly.
 
@@ -193,4 +209,4 @@ The chip is the actual unit of work. It gets manufactured at TSMC and parceled o
 
 That changes how the news reads. When someone says NVIDIA shipped a million H100s last quarter, that's a story about the GH100 chip. When export controls limit GPU sales to a country, the rule isn't about cards. It's written around the chips, with specific performance thresholds spelled out in the regulation. When OpenAI announces a new training run, what they actually bought was a few thousand specific chips that NVIDIA couldn't produce fast enough.
 
-None of that changes what's on your desk. The card still bolts into the same slot, the fans still spin the same way. But the next time a headline mentions an AI lab buying compute, or export controls, or a price spike that doesn't quite explain itself, you'll know where to look. Not at the card. At the chip inside it, and at the small list of people who can make them. The chip is also where the limits live: [[limits-of-machine-learning|what AI can do, what it can't, and where it's headed]].
+None of that changes what's on your desk. The card still bolts into the same slot, the fans still spin the same way. But the next time a headline mentions an AI lab buying compute, or export controls, or a price spike that doesn't quite explain itself, you'll know where to look. Not at the card. At the chip inside it, and at the small list of people who can make them. The chip is also where the limits live: [what AI can do, what it can't, and where it's headed](/limits-of-machine-learning/).

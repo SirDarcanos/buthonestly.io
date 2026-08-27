@@ -1,5 +1,6 @@
 import { defineConfig, fontProviders } from "astro/config";
 import icon from "astro-icon";
+import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 
@@ -17,11 +18,22 @@ import { buildLastmodMap } from "./src/lib/sitemap-lastmod.mjs";
 
 const ESSAY_INVENTORY = loadEssayInventory();
 const LASTMOD = buildLastmodMap(ESSAY_INVENTORY);
+const contentProcessor = () =>
+  unified({
+    remarkPlugins: [
+      remarkAudioEmbed,
+      remarkWikiLinks,
+      remarkGallery,
+      remarkCallouts,
+    ],
+    rehypePlugins: [rehypeImageFormat, rehypeFigure, rehypeExternalLinks],
+  });
 
 export default defineConfig({
   site: "https://buthonestly.io/",
   trailingSlash: "always",
   integrations: [
+    mdx({ processor: contentProcessor() }),
     // Paginated pages stay indexable via the "Older →" links; the sitemap just
     // advertises canonical entry points.
     sitemap({
@@ -41,15 +53,7 @@ export default defineConfig({
       // plain github-light drops six token colours below AA there.
       theme: "github-light-high-contrast",
     },
-    processor: unified({
-      remarkPlugins: [
-        remarkAudioEmbed,
-        remarkWikiLinks,
-        remarkGallery,
-        remarkCallouts,
-      ],
-      rehypePlugins: [rehypeImageFormat, rehypeFigure, rehypeExternalLinks],
-    }),
+    processor: contentProcessor(),
   },
   vite: {
     plugins: [tailwindcss()],

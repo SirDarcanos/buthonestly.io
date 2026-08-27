@@ -1,0 +1,28 @@
+---
+interface Props {
+  author: string;
+  source?: string;
+}
+
+const { author, source } = Astro.props;
+const externalSource = source && /^https?:\/\//i.test(source);
+---
+
+<blockquote>
+  <slot />
+  <cite class="meta mt-4 block not-italic">
+    {
+      source ? (
+        <a
+          href={source}
+          target={externalSource ? "_blank" : undefined}
+          rel={externalSource ? "noopener noreferrer" : undefined}
+        >
+          {author}
+        </a>
+      ) : (
+        author
+      )
+    }
+  </cite>
+</blockquote>

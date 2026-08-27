@@ -1,0 +1,11 @@
+import { defineConfig } from "astro/config";
+import mdx from "@astrojs/mdx";
+import { unified } from "@astrojs/markdown-remark";
+import rehypeExternalLinks from "../../../src/lib/rehype-external-links.mjs";
+
+export default defineConfig({
+  integrations: [mdx()],
+  markdown: {
+    processor: unified({ rehypePlugins: [rehypeExternalLinks] }),
+  },
+});

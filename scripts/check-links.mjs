@@ -46,7 +46,16 @@ const routes = new Set([
 const downloadFiles = new Set();
 const essays = [];
 for (const slug of dirs) {
-  const raw = fs.readFileSync(path.join(ESSAYS, slug, `${slug}.md`), "utf8");
+  const directory = path.join(ESSAYS, slug);
+  const source = [".md", ".mdx"]
+    .map((extension) => path.join(directory, `${slug}${extension}`))
+    .find((candidate) => fs.existsSync(candidate));
+  if (!source) {
+    console.error(`${slug}: missing ${slug}.md or ${slug}.mdx`);
+    process.exitCode = 1;
+    continue;
+  }
+  const raw = fs.readFileSync(source, "utf8");
   const m = raw.match(/^---\n([\s\S]*?)\n---\n/);
   const fm = m?.[1] ?? "";
   const date = fm.match(/^date:[ \t]*(\S+)/m)?.[1];
