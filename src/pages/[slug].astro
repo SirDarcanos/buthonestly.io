@@ -54,8 +54,6 @@ const longDate = (d: Date) =>
     year: "numeric",
   });
 
-// Trail through the essay's first section, so search results show
-// "buthonestly.io › Sections › Leadership" instead of a bare URL.
 const primarySection = post.categories[0];
 const jsonLd = [
   breadcrumbList([
@@ -78,7 +76,6 @@ const jsonLd = [
   <article
     id={"post-" + post.id}
     class="post border-line mt-20 border-b pb-10"
-    data-pagefind-body
     data-content-version={post.contentHash}
   >
     <header class="mb-10 space-y-6">
@@ -126,13 +123,26 @@ const jsonLd = [
 
     <TableOfContents headings={headings} />
 
-    <div class="post-content mt-7">
+    <div
+      class="post-content mt-7"
+      data-agent-document
+      data-agent-metadata={JSON.stringify({
+        title: post.title,
+        description: post.seo.description,
+        published: post.date.slice(0, 10),
+        updated: updatedDate ? post.modified.slice(0, 10) : undefined,
+        sections: post.categories,
+        topics: post.tags,
+        narration: post.narrationUrl,
+      })}
+    >
       {
         post.narrationUrl && (
           <audio
             class="audio-enhance"
             src={post.narrationUrl}
             data-audio-label="Listen instead of reading"
+            data-agent-ignore
           />
         )
       }

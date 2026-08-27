@@ -4,6 +4,7 @@ import { taxDescription } from "../taxonomies.ts";
 import { type Post, type Tax } from "../types.ts";
 
 const abs = (path: string) => `${SITE_URL}${path}`;
+const markdownPath = (path: string) => `${path.replace(/\/$/, "")}.md`;
 
 const link = (name: string, path: string, description?: string) =>
   description
@@ -13,7 +14,7 @@ const link = (name: string, path: string, description?: string) =>
 const essayLine = (post: Post) =>
   link(
     post.title,
-    post.url,
+    markdownPath(post.url),
     [post.date.slice(0, 10), post.excerpt].filter(Boolean).join(" — "),
   );
 
@@ -67,7 +68,7 @@ export async function GET() {
     "",
     "Long-form essays, published newest first. Sections are the four broad areas the writing falls into; topics are finer-grained and cut across them, so an essay is filed under one or more of each.",
     "",
-    "Every archive page has an RSS feed at its own URL plus `feed.xml` — for example https://buthonestly.io/topic/team-building/feed.xml. Pages are HTML; there are no Markdown versions.",
+    "Essays and authored editorial pages use portable Markdown alternatives. Archives and feeds remain HTML or XML. Every archive page has an RSS feed at its own URL plus `feed.xml` — for example https://buthonestly.io/topic/team-building/feed.xml.",
     "",
     "## Essays",
     "",
@@ -83,7 +84,9 @@ export async function GET() {
     "",
     "## Pages",
     "",
-    ...PAGES.map(([name, path, description]) => link(name, path, description)),
+    ...PAGES.map(([name, path, description]) =>
+      link(name, markdownPath(path), description),
+    ),
     link("Essays", "/essays/", "The full archive, newest first, paginated."),
     link("Sections", "/section/", "Index of the four sections."),
     link("Topics", "/topic/", "Index of every topic."),
@@ -94,7 +97,7 @@ export async function GET() {
     "",
     "## Optional",
     "",
-    ...OPTIONAL.map(([name, path]) => link(name, path)),
+    ...OPTIONAL.map(([name, path]) => link(name, markdownPath(path))),
     "",
   ].join("\n");
 

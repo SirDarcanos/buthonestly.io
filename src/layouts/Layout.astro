@@ -15,10 +15,25 @@ interface Props {
   noindex?: boolean;
   jsonLd?: Record<string, unknown>[];
   feed?: Feed;
+  markdown?: boolean;
 }
 
-const { title, description, type, article, noindex, jsonLd, feed } =
-  Astro.props;
+const {
+  title,
+  description,
+  type,
+  article,
+  noindex,
+  jsonLd,
+  feed,
+  markdown = false,
+} = Astro.props;
+const agentAttributes = markdown
+  ? {
+      "data-agent-document": "",
+      "data-agent-metadata": JSON.stringify({ title, description }),
+    }
+  : {};
 ---
 
 <!doctype html>
@@ -56,6 +71,7 @@ const { title, description, type, article, noindex, jsonLd, feed } =
       id="main"
       tabindex="-1"
       class="mx-auto mt-20 w-full max-w-6xl flex-1 px-6 focus:outline-none md:px-10"
+      {...agentAttributes}
     >
       <slot />
     </main>

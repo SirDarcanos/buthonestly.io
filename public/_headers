@@ -20,6 +20,9 @@
   Cross-Origin-Opener-Policy: same-origin
   Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://static.cloudflareinsights.com https://cdn.usefathom.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://cdn.usefathom.com; font-src 'self'; media-src 'self' blob: data: https://static.buthonestly.io; worker-src 'self' blob:; connect-src 'self' blob: https://cdn.usefathom.com https://cloudflareinsights.com https://app.kit.com https://cdn.jsdelivr.net https://huggingface.co https://*.hf.co https://*.huggingface.co https://static.buthonestly.io https://downloads.buthonestly.io; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'
 
+/*.md
+  Content-Type: text/markdown; charset=utf-8
+
 # /_astro/ is content-hashed, so a change ships a new URL and these can be
 # immutable. HTML stays on the default so deploys show up immediately.
 /_astro/*

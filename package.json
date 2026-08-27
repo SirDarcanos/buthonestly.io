@@ -14,7 +14,7 @@
     "links": "node scripts/build-link-graph.mjs",
     "indexnow": "node scripts/ping-indexnow.mjs",
     "images": "node scripts/optimize-images.mjs",
-    "postbuild": "pagefind --site dist",
+    "postbuild": "node scripts/build-markdown-alternatives.mjs",
     "preview": "astro preview",
     "astro": "astro",
     "test": "node --test",
@@ -39,12 +39,14 @@
   },
   "devDependencies": {
     "@iconify-json/simple-icons": "^1.2.88",
+    "@mixmark-io/domino": "^2.2.0",
     "gray-matter": "^4.0.3",
-    "pagefind": "^1.5.2",
     "prettier": "^3.8.4",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "sharp": "^0.34.5",
+    "turndown": "^7.2.4",
+    "turndown-plugin-gfm": "^1.0.2",
     "typescript": "^6.0.3"
   }
 }

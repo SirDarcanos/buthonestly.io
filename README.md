@@ -38,10 +38,8 @@ Astro components. There is no CMS and no database — a new essay is a commit.
 - **Semantic related posts**, precomputed from sentence embeddings rather than
   tag overlap.
 - **Feeds and machine-readable indexes** — a site feed plus one per section and
-  per topic, `sitemap.xml` with real `lastmod` dates, `llms.txt`, and IndexNow
-  submissions on publish.
-- **Client-side search** via [Pagefind](https://pagefind.app), indexed after the
-  build.
+  per topic, `sitemap.xml` with real `lastmod` dates, `llms.txt`, portable
+  Markdown alternatives, and IndexNow submissions on publish.
 - **Generated redirects** for the legacy WordPress URLs — old post paths, feeds,
   paginated archives and downloads — so old links keep working.
 
@@ -75,9 +73,9 @@ npm run preview
 ```
 
 > [!NOTE]
-> Search only works against a real build. Pagefind indexes `dist/` in a
-> `postbuild` step, so in `astro dev` the search overlay reports that the index
-> isn't available. Use `npm run preview` to try it.
+> The `postbuild` step projects marked editorial regions into portable Markdown
+> alternatives. Use `npm run build` before checking the `.md` links advertised
+> in `dist/llms.txt`.
 
 > [!IMPORTANT]
 > Astro does not hot-reload `astro.config.mjs`, and `.astro/` caches processed
@@ -152,7 +150,7 @@ Import `Figure`, `Gallery`, `QuickSummary`, `Callout`, and `Blockquote` from
 | ---------------------------- | ---------------------------------------------------------------------------------------------------------- |
 | `npm run dev`                | Dev server on port 4321.                                                                                   |
 | `npm test`                   | Runs the automated test suite, including deliberate CI-stage failure fixtures.                             |
-| `npm run build`              | Generates redirects, builds to `dist/`, then indexes it with Pagefind.                                     |
+| `npm run build`              | Generates redirects, builds to `dist/`, then projects editorial Markdown alternatives.                     |
 | `npm run lint`               | Prettier check plus link check.                                                                            |
 | `npm run check:links`        | Verifies canonical internal links, publication safety, and local assets.                                   |
 | `npm run links`              | Prints advisory prose-link analysis; pass `-- --json <path>` for local JSON.                               |
