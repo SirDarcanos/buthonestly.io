@@ -1,0 +1,3 @@
+const fixture={message:"formatting must fail"}
+
+export default fixture

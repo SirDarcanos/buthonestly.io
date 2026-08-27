@@ -59,6 +59,16 @@ npm run dev
 The dev server runs at http://localhost:4321. Scheduled essays render there so
 they can be proofread before they land.
 
+Run the automated test suite before opening a pull request:
+
+```bash
+npm test
+```
+
+The command exits nonzero when a test fails. Its fixtures deliberately prove
+that formatting, content correctness, and production-build failures are all
+detected.
+
 To check the production output:
 
 ```bash
@@ -153,6 +163,7 @@ image at all. `npm run check:links` catches that.
 | Command                      | What it does                                                                                           |
 | ---------------------------- | ------------------------------------------------------------------------------------------------------ |
 | `npm run dev`                | Dev server on port 4321.                                                                               |
+| `npm test`                   | Runs the automated test suite, including deliberate CI-stage failure fixtures.                         |
 | `npm run build`              | Generates redirects, builds to `dist/`, then indexes it with Pagefind.                                 |
 | `npm run lint`               | Prettier check plus link check.                                                                        |
 | `npm run check:links`        | Verifies wikilinks, internal links and image references resolve.                                       |
@@ -176,13 +187,14 @@ images, blocks the commit on a non-16:9 cover, and formats staged code.
 
 ## Automation
 
-| Workflow                | Runs                       | Does                                                              |
-| ----------------------- | -------------------------- | ----------------------------------------------------------------- |
-| `scheduled-rebuild.yml` | Hourly                     | Rebuilds only when a scheduled essay is due but still 404.        |
-| `related.yml`           | On essay push, daily       | Regenerates and commits the related-posts map.                    |
-| `newsletter.yml`        | On essay push, daily 13:30 | Emails subscribers once per essay, tracked by a committed ledger. |
-| `indexnow.yml`          | On essay push, daily 13:45 | Submits new URLs to Bing, Yandex, Seznam and Naver.               |
-| `lint-essays.yml`       | On essay push              | Advisory style lint. Never blocks — style is the author's call.   |
+| Workflow                | Runs                       | Does                                                                |
+| ----------------------- | -------------------------- | ------------------------------------------------------------------- |
+| `ci.yml`                | Pull requests, main pushes | Tests failure detection, formatting, content, and production build. |
+| `scheduled-rebuild.yml` | Hourly                     | Rebuilds only when a scheduled essay is due but still 404.          |
+| `related.yml`           | On essay push, daily       | Regenerates and commits the related-posts map.                      |
+| `newsletter.yml`        | On essay push, daily 13:30 | Emails subscribers once per essay, tracked by a committed ledger.   |
+| `indexnow.yml`          | On essay push, daily 13:45 | Submits new URLs to Bing, Yandex, Seznam and Naver.                 |
+| `lint-essays.yml`       | On essay push              | Advisory style lint. Never blocks — style is the author's call.     |
 
 The daily crons exist because a date passing is not a push: they are what makes
 a scheduled essay go live, get emailed and get crawled without anyone touching

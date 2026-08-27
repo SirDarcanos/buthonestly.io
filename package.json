@@ -18,6 +18,7 @@
     "postbuild": "pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro",
+    "test": "node --test",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "check:links": "node scripts/check-links.mjs",

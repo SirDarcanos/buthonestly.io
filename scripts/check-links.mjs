@@ -4,7 +4,17 @@
 import fs from "node:fs";
 import path from "node:path";
 
-const ESSAYS = "src/content/essays";
+const essaysDirectoryArgument = process.argv.indexOf("--essays-dir");
+const ESSAYS =
+  essaysDirectoryArgument === -1
+    ? "src/content/essays"
+    : process.argv[essaysDirectoryArgument + 1];
+
+if (!ESSAYS) {
+  console.error("Usage: node scripts/check-links.mjs [--essays-dir <path>]");
+  process.exit(2);
+}
+
 const slugify = (n) =>
   n
     .toLowerCase()
