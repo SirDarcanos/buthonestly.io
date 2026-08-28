@@ -30,7 +30,8 @@ Astro components. There is no CMS and no database — a new essay is a commit.
 **What the build gives you beyond the pages:**
 
 - **Date-driven publishing.** A future `date` schedules an essay; an hourly
-  Action rebuilds when one comes due. Drafts live outside the built collection.
+  Action deploys a missing or stale public version, waits for its content hash,
+  then notifies IndexNow. Drafts live outside the built collection.
 - **Local-first images.** Covers and body images are committed, then optimized
   in place (16:9 covers, opaque sources to JPEG) and re-encoded to AVIF/WebP.
 - **Audio narration.** An optional audio filename adds an in-page player for a
@@ -99,9 +100,9 @@ npm run preview
 │  ├─ consts.ts          # site title, URL, description
 │  └─ taxonomies.ts      # section and topic descriptions
 ├─ scripts/              # build and maintenance CLIs — see Tooling
-├─ data/                 # generated but committed: related map, ledgers
+├─ data/                 # generated but committed: semantic and publication state
 ├─ public/               # static assets, _headers, generated _redirects
-└─ .github/workflows/    # publishing, newsletter, IndexNow, related posts
+└─ .github/workflows/    # correctness, publication, newsletter, related essays
 ```
 
 ## Writing an essay
@@ -157,33 +158,39 @@ Import `Figure`, `Gallery`, `QuickSummary`, `Callout`, and `Blockquote` from
 | `npm run lint:essay`         | Advisory style-guide lint for a single essay.                                                                 |
 | `npm run images [-- <slug>]` | Manually resizes and compresses oversized sources and converts opaque images to JPEG, printing renamed paths. |
 | `npm run related`            | Rebuilds the semantic related-posts map.                                                                      |
-| `npm run indexnow`           | Submits changed essays to IndexNow.                                                                           |
+| `npm run publication`        | Verifies live content, deploys stale versions, and submits changed public content to IndexNow.                |
 | `npm run og`                 | Regenerates `public/og-default.png`.                                                                          |
 | `npm run email-assets`       | Regenerates the newsletter's masthead and social icons.                                                       |
 
 ## Automation
 
-| Workflow                | Runs                       | Does                                                                |
-| ----------------------- | -------------------------- | ------------------------------------------------------------------- |
-| `ci.yml`                | Pull requests, main pushes | Tests failure detection, formatting, content, and production build. |
-| `scheduled-rebuild.yml` | Hourly                     | Rebuilds only when a scheduled essay is due but still 404.          |
-| `related.yml`           | On essay push, daily       | Regenerates and commits the related-posts map.                      |
-| `newsletter.yml`        | On essay push, daily 13:30 | Emails subscribers once per essay, tracked by a committed ledger.   |
-| `indexnow.yml`          | On essay push, daily 13:45 | Submits new URLs to Bing, Yandex, Seznam and Naver.                 |
-| `lint-essays.yml`       | On essay push              | Advisory style lint. Never blocks — style is the author's call.     |
+| Workflow          | Runs                              | Does                                                                           |
+| ----------------- | --------------------------------- | ------------------------------------------------------------------------------ |
+| `ci.yml`          | Pull requests, main pushes        | Tests failure detection, formatting, content, and production build.            |
+| `publication.yml` | Hourly, essay pushes, manual      | Deploys expected content versions and submits changed public URLs to IndexNow. |
+| `related.yml`     | Essay pushes, manual              | Regenerates and commits the semantic related-essay map.                        |
+| `newsletter.yml`  | Essay pushes, daily 13:30, manual | Emails subscribers once per essay, tracked by a committed ledger.              |
+| `lint-essays.yml` | Essay pushes                      | Advisory style lint. Never blocks — style is the author's call.                |
 
-The daily crons exist because a date passing is not a push: they are what makes
-a scheduled essay go live, get emailed and get crawled without anyone touching
-the repo.
+Scheduled runs matter because a date passing is not a push. The publication
+orchestrator makes an essay live within the hourly window and records successful
+IndexNow work independently; the newsletter workflow still follows separately.
 
 ## Deployment
 
-Cloudflare Pages builds `dist/` from `main`. Rebuilds that aren't triggered by a
-push — a scheduled essay coming due — go through a Pages deploy hook, held as
-the `CF_DEPLOY_HOOK_URL` repository secret. Two R2 buckets are served directly
-over custom domains: `downloads.buthonestly.io` for essay downloads and
+Cloudflare Pages builds `dist/` from `main`. The publication orchestrator reads
+each pending essay's `data-content-version`, requests the Pages deploy hook when
+the expected hash is missing or stale, and waits for that exact version before
+IndexNow follow-up. The hook is held as the `CF_DEPLOY_HOOK_URL` repository
+secret. Two R2 buckets are served directly over custom domains:
+`downloads.buthonestly.io` for essay downloads and
 `static.buthonestly.io` for audio narrations. See [DOWNLOADS.md](DOWNLOADS.md)
 for how to add a file.
+
+Successful IndexNow hashes are committed to `data/publication-state.json`. A
+failed deployment or submission remains pending, while an independent success
+is preserved; rerun `publication.yml` manually to recover without repeating
+completed work.
 
 > [!IMPORTANT]
 > `wrangler.toml` is git-ignored so the bucket names stay out of the public

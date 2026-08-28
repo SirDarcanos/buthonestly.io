@@ -42,16 +42,12 @@ accumulate and go out as a batch. Do not push on every change.
   cluster density, and cornerstone reach, with scheduled essays counted
   separately. Pass `-- --json <path>` to write local JSON analysis explicitly;
   no graph artifact is tracked or written by default.
-- `npm run indexnow` — submit changed essays to IndexNow so Bing, Yandex,
-  Seznam and Naver recrawl within hours. Google does not participate; it
-  still discovers via the sitemap. Normally left to the `indexnow.yml`
-  Action (push + daily cron). `DRY_RUN=true` lists what would go without
-  submitting; `MODE=seed` records current state without submitting. The key
-  is NOT a secret — the protocol requires it to be publicly fetchable — so
-  it lives at `public/<key>.txt` and the script reads it from there. A
-  committed ledger (`data/indexnow-pinged.json`) maps slug → content hash so
-  unchanged URLs are never resubmitted; resubmitting is what gets a host
-  throttled.
+- `npm run publication` — run deployment verification and IndexNow follow-up.
+  Normally left to `publication.yml`, which runs hourly, on essay changes, and
+  by manual dispatch. It can call live providers: use manual dispatch for
+  recovery rather than running it casually. The IndexNow key is public by
+  protocol and lives at `public/<key>.txt`. Durable per-essay hashes live in
+  `data/publication-state.json`; unchanged public content is never resubmitted.
 - Two Kit email files, for two different editors:
   `scripts/kit-newsletter-template.html` is a full HTML document for
   Account → Email templates, which wraps broadcasts.

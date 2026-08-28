@@ -4,7 +4,7 @@ node_modules
 package-lock.json
 public/_redirects
 
-# Generated data (embeddings, related map, ledgers, image manifest)
+# Generated semantic and publication state
 data
 
 # Authored content + Obsidian/Templater files — not code, don't reflow

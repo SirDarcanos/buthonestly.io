@@ -11,7 +11,6 @@
     "build": "astro build",
     "related": "node scripts/build-related.mjs",
     "links": "node scripts/build-link-graph.mjs",
-    "indexnow": "node scripts/ping-indexnow.mjs",
     "images": "node scripts/optimize-images.mjs",
     "postbuild": "node scripts/build-markdown-alternatives.mjs",
     "preview": "astro preview",
@@ -23,7 +22,8 @@
     "lint:essay": "node scripts/lint-essay.mjs",
     "lint": "prettier --check . && node scripts/check-links.mjs",
     "og": "node scripts/build-og-image.mjs",
-    "email-assets": "node scripts/build-email-assets.mjs"
+    "email-assets": "node scripts/build-email-assets.mjs",
+    "publication": "node scripts/orchestrate-publication.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.2.0",
