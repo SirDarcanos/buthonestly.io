@@ -1,0 +1,24 @@
+---
+type CalloutType = "disclaimer" | "information" | "tip";
+
+interface Props {
+  type: CalloutType;
+  title?: string;
+}
+
+const { type, title } = Astro.props;
+const labels: Record<CalloutType, string> = {
+  disclaimer: "Disclaimer",
+  information: "Information",
+  tip: "Tip",
+};
+
+if (!Object.hasOwn(labels, type)) {
+  throw new TypeError("Callout type must be disclaimer, information, or tip");
+}
+---
+
+<aside class:list={["callout", `callout-${type}`]}>
+  <p class="callout-title">{title ?? labels[type]}</p>
+  <slot />
+</aside>

@@ -1,0 +1,33 @@
+---
+import { Picture } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+}
+
+const { src, alt } = Astro.props;
+const hasCaption = Astro.slots.has("default");
+const formats = src.format === "gif" ? ["webp"] : ["avif", "webp"];
+---
+
+<figure>
+  <Picture
+    src={src}
+    alt={alt}
+    widths={[580, 768, 960, 1160, 1376]}
+    sizes="(max-width: 820px) 100vw, 580px"
+    formats={formats}
+    loading="lazy"
+    decoding="async"
+    class="block h-auto max-w-full"
+  />
+  {
+    hasCaption && (
+      <figcaption class="[&>p]:mb-0">
+        <slot />
+      </figcaption>
+    )
+  }
+</figure>

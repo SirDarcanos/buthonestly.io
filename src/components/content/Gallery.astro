@@ -1,0 +1,27 @@
+---
+type Columns = 2 | 3 | 4;
+
+interface Props {
+  columns?: Columns;
+}
+
+const { columns = 2 } = Astro.props;
+const columnClasses: Record<Columns, string> = {
+  2: "md:grid-cols-2",
+  3: "md:grid-cols-3",
+  4: "md:grid-cols-4",
+};
+
+if (!(columns in columnClasses)) {
+  throw new TypeError("Gallery columns must be 2, 3, or 4");
+}
+---
+
+<div
+  class:list={[
+    "content-gallery my-6 grid grid-cols-1 gap-2 [&>figure]:my-0 [&>figure]:w-full",
+    columnClasses[columns],
+  ]}
+>
+  <slot />
+</div>

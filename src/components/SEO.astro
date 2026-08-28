@@ -49,7 +49,7 @@ const fullTitle =
 const resolvedCanonical = article?.seo.canonical ?? canonical;
 
 // og:image is required by Open Graph; without it scrapers grab any image on the
-// page. Essays have covers, everything else gets the default (`npm run og`).
+// page. Essays have covers; everything else uses the committed default.
 const OG_FALLBACK = { src: "/og-default.png", width: 1200, height: 630 };
 const essayImage = article?.seo.ogImage ?? ogImage;
 const resolvedOgImage = essayImage ?? new URL(OG_FALLBACK.src, SITE_URL).href;

@@ -9,33 +9,39 @@ import ShareLinks from "../components/ShareLinks.astro";
 import TableOfContents from "../components/TableOfContents.astro";
 import TaxLinks from "../components/TaxLinks.astro";
 import SinglePost from "../layouts/SinglePost.astro";
-import { getPublishedEssays, getRelatedPosts, toPost } from "../lib/essays";
+import {
+  getRelatedPosts,
+  getRenderableEssays,
+  toPost,
+  type RenderableEssay,
+} from "../lib/essays";
 import { breadcrumbList } from "../lib/schema.ts";
 import { taxUrl } from "../taxonomies.ts";
 
-import { render, type CollectionEntry } from "astro:content";
+import { render } from "astro:content";
 import { type Post } from "../types.ts";
 
 export async function getStaticPaths() {
-  const entries = await getPublishedEssays();
+  const essays = await getRenderableEssays();
   return Promise.all(
-    entries.map(async (entry) => ({
-      params: { slug: entry.id },
+    essays.map(async (essay) => ({
+      params: { slug: essay.record.slug },
       props: {
-        entry,
-        related: await getRelatedPosts(toPost(entry), 6),
+        essay,
+        related: await getRelatedPosts(toPost(essay), 6),
       },
     })),
   );
 }
 
 interface Props {
-  entry: CollectionEntry<"essays">;
+  essay: RenderableEssay;
   related: Post[];
 }
 
-const { entry, related } = Astro.props;
-const post = toPost(entry);
+const { essay, related } = Astro.props;
+const { entry } = essay;
+const post = toPost(essay);
 const { Content, headings } = await render(entry);
 const publishDate = new Date(post.date);
 // `modified` falls back to `date`, so only a real revision earns a line.
@@ -48,8 +54,6 @@ const longDate = (d: Date) =>
     year: "numeric",
   });
 
-// Trail through the essay's first section, so search results show
-// "buthonestly.io › Sections › Leadership" instead of a bare URL.
 const primarySection = post.categories[0];
 const jsonLd = [
   breadcrumbList([
@@ -72,7 +76,7 @@ const jsonLd = [
   <article
     id={"post-" + post.id}
     class="post border-line mt-20 border-b pb-10"
-    data-pagefind-body
+    data-content-version={post.contentHash}
   >
     <header class="mb-10 space-y-6">
       <div class="flex items-center gap-3">
@@ -105,21 +109,47 @@ const jsonLd = [
 
     {
       post.cover && (
-        <Picture
-          src={post.cover}
-          alt={post.featuredImageAlt ?? ""}
-          caption={post.featuredImageCaption ?? ""}
-          widths={[580, 768, 960, 1160, 1376]}
-          sizes="(max-width: 820px) 100vw, 580px"
-          class="w-full"
-          priority
-        />
+        <div data-agent-cover>
+          <Picture
+            src={post.cover}
+            alt={post.featuredImageAlt ?? ""}
+            caption={post.featuredImageCaption ?? ""}
+            widths={[580, 768, 960, 1160, 1376]}
+            sizes="(max-width: 820px) 100vw, 580px"
+            class="w-full"
+            priority
+          />
+        </div>
       )
     }
 
     <TableOfContents headings={headings} />
 
-    <div class="post-content mt-7"><Content /></div>
+    <div
+      class="post-content mt-7"
+      data-agent-document
+      data-agent-metadata={JSON.stringify({
+        title: post.title,
+        description: post.seo.description,
+        published: post.date.slice(0, 10),
+        updated: updatedDate ? post.modified.slice(0, 10) : undefined,
+        sections: post.categories,
+        topics: post.tags,
+        narration: post.narrationUrl,
+      })}
+    >
+      {
+        post.narrationUrl && (
+          <audio
+            class="audio-enhance"
+            src={post.narrationUrl}
+            data-audio-label="Listen instead of reading"
+            data-agent-ignore
+          />
+        )
+      }
+      <Content />
+    </div>
 
     <div class="flex flex-wrap items-baseline gap-x-6 gap-y-1">
       <p class="meta font-bold">
@@ -140,7 +170,7 @@ const jsonLd = [
 
   <ShareLinks title={post.title} path={post.url} tags={post.tags} />
 
-  <Downloads downloads={entry.data.downloads} />
+  <Downloads downloads={post.downloads} />
 
   {
     related.length > 0 && (

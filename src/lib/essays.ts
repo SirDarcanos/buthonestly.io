@@ -1,14 +1,20 @@
 import { getCollection, type CollectionEntry } from "astro:content";
 import { SITE_URL } from "../consts.ts";
+import { loadEssayInventory } from "./essay-inventory.mjs";
+import { selectRelatedEssays } from "./related-essays.mjs";
 import { taxDescription, taxSlug } from "../taxonomies.ts";
 import { type Post, type Tax } from "../types.ts";
 import relatedMap from "../../data/related.json";
 
 type Essay = CollectionEntry<"essays">;
+type EssayRecord = ReturnType<typeof loadEssayInventory>["essays"][number];
+export type RenderableEssay = {
+  entry: Essay;
+  record: EssayRecord;
+};
 
-// Precomputed semantic neighbours (slug -> ranked slugs), built from sentence
-// embeddings by scripts/build-related.mjs. Missing/unknown slugs fall back to
-// taxonomy scoring below.
+const INVENTORY = loadEssayInventory({ siteUrl: SITE_URL });
+const PUBLISHED_SLUGS = new Set(INVENTORY.published.map(({ slug }) => slug));
 const RELATED = relatedMap as Record<string, string[]>;
 
 /** Clamp to ~160 chars at a word boundary for a meta description. */
@@ -19,104 +25,85 @@ function truncate(text: string, max = 160): string {
   return `${slice.slice(0, lastSpace > 0 ? lastSpace : max).trimEnd()}…`;
 }
 
-export function toPost(entry: Essay): Post {
-  const d = entry.data;
-  const slug = entry.id;
-  const date = d.date ? d.date.toISOString() : "";
-  const modified = (d.updated ?? d.date)?.toISOString() ?? date;
-  // The imported cover goes to the Picture component; `featuredImage` is the
-  // same image as an absolute URL string, for og:image.
-  const cover = d.cover;
+export function toPost({ entry, record }: RenderableEssay): Post {
+  const cover = entry.data.cover;
   const featuredImage = cover
     ? new URL(cover.src, SITE_URL).toString()
     : undefined;
-  const excerpt = d.excerpt ?? "";
 
   return {
-    id: slug,
-    slug,
-    url: `/${slug}/`,
+    id: record.slug,
+    slug: record.slug,
+    url: record.pathname,
     type: "post",
-    title: d.title,
-    body: entry.body ?? "",
-    excerpt,
-    date,
-    modified,
+    title: record.title,
+    body: record.body,
+    excerpt: record.excerpt,
+    date: record.publishedAt.toISOString(),
+    modified: record.freshnessAt.toISOString(),
     cover,
     featuredImage,
-    featuredImageAlt: d.coverAlt,
-    featuredImageCaption: d.coverCaption,
-    tags: d.tags,
-    categories: d.categories,
-    sticky: d.sticky,
-    cornerstone: d.cornerstone,
+    featuredImageAlt: record.coverAlt,
+    featuredImageCaption: record.coverCaption,
+    tags: record.tags.map(({ name }) => name),
+    categories: record.categories.map(({ name }) => name),
+    sticky: record.sticky,
+    cornerstone: record.cornerstone,
+    contentHash: record.publicContentHash,
+    narrationUrl: record.narrationUrl,
+    downloads: record.downloads,
     seo: {
-      title: d.title,
-      description: truncate(excerpt),
+      title: record.title,
+      description: truncate(record.excerpt),
       ogImage: featuredImage,
-      canonical: `${SITE_URL}/${slug}/`,
+      canonical: record.canonicalUrl,
     },
   };
 }
 
-export async function getPublishedEssays(): Promise<Essay[]> {
-  const now = new Date();
-  // Scheduled essays are previewable on the dev server and only withheld from
-  // the production build, so a future `date` can be proofread before it lands.
-  const published = await getCollection("essays", ({ data }) =>
-    import.meta.env.PROD ? !!data.date && data.date <= now : !!data.date,
+export async function getRenderableEssays(): Promise<RenderableEssay[]> {
+  const entries = await getCollection("essays");
+  const entriesBySlug = new Map(entries.map((entry) => [entry.id, entry]));
+  const inventorySlugs = new Set(INVENTORY.essays.map(({ slug }) => slug));
+  const missingEntries = INVENTORY.essays.filter(
+    ({ slug }) => !entriesBySlug.has(slug),
   );
-  return published.sort(
-    (a, b) => (b.data.date?.valueOf() ?? 0) - (a.data.date?.valueOf() ?? 0),
-  );
+  const unknownEntries = entries.filter(({ id }) => !inventorySlugs.has(id));
+  if (missingEntries.length || unknownEntries.length) {
+    throw new Error(
+      `Essay inventory and Astro collection disagree: ${[
+        ...missingEntries.map(({ slug }) => `missing ${slug}`),
+        ...unknownEntries.map(({ id }) => `unknown ${id}`),
+      ].join(", ")}`,
+    );
+  }
+
+  const records = import.meta.env.PROD ? INVENTORY.published : INVENTORY.essays;
+  return records
+    .map((record) => ({ record, entry: entriesBySlug.get(record.slug)! }))
+    .sort(
+      (a, b) =>
+        b.record.publishedAt.valueOf() - a.record.publishedAt.valueOf() ||
+        a.record.slug.localeCompare(b.record.slug),
+    );
 }
 
 export async function getAllPosts(): Promise<Post[]> {
-  return (await getPublishedEssays()).map(toPost);
+  return (await getRenderableEssays()).map(toPost);
 }
 
 export async function getPostBySlug(slug: string): Promise<Post | undefined> {
   return (await getAllPosts()).find((p) => p.slug === slug);
 }
 
-/**
- * Precomputed semantic neighbours (RELATED) first, topped up with shared
- * taxonomy (categories weighted above tags), then recency — so a brand-new
- * essay not yet in the embedding map still gets sensible related posts.
- */
 export async function getRelatedPosts(post: Post, size = 3): Promise<Post[]> {
-  const all = await getAllPosts();
-  const bySlug = new Map(all.map((p) => [p.slug, p]));
-  const picked: Post[] = [];
-  const seen = new Set<string>([post.slug]);
-
-  for (const slug of RELATED[post.slug] ?? []) {
-    if (seen.has(slug)) continue;
-    const p = bySlug.get(slug);
-    if (!p) continue; // slug not published (yet)
-    picked.push(p);
-    seen.add(slug);
-    if (picked.length >= size) return picked;
-  }
-
-  const scored = all
-    .filter((p) => !seen.has(p.slug))
-    .map((p) => ({
-      post: p,
-      score:
-        p.categories.filter((c) => post.categories.includes(c)).length * 2 +
-        p.tags.filter((t) => post.tags.includes(t)).length,
-    }))
-    .sort(
-      (a, b) =>
-        b.score - a.score ||
-        new Date(b.post.date).valueOf() - new Date(a.post.date).valueOf(),
-    );
-  for (const { post: p } of scored) {
-    picked.push(p);
-    if (picked.length >= size) break;
-  }
-  return picked;
+  return selectRelatedEssays({
+    source: post,
+    essays: await getAllPosts(),
+    rankedSlugs: RELATED[post.slug] ?? [],
+    publishedSlugs: PUBLISHED_SLUGS,
+    size,
+  });
 }
 
 function taxFrom(names: string[]): Tax[] {

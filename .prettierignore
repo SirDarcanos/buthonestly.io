@@ -4,12 +4,17 @@ node_modules
 package-lock.json
 public/_redirects
 
-# Generated data (embeddings, related map, ledgers, image manifest)
+# Generated semantic and publication state
 data
 
-# Authored content + Obsidian/Templater files — not code, don't reflow
+# Authored editorial content — don't reflow prose
 src/content
+
+# Authored product strategy — prose formatting is editorial
+.agents/product-marketing.md
 
 # Hand-tuned Kit email template — inline styles must not be reflowed
 scripts/kit-newsletter-template.html
-scripts/kit-confirmation-email.html
+
+# Intentionally invalid inputs used to prove CI checks reject failures
+test/fixtures

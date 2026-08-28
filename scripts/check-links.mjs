@@ -1,197 +1,161 @@
-// Verify that internal links, essay-local images and covers resolve. External
-// links and #anchors are not checked. Exits non-zero so it can gate
-// `npm run lint`.
 import fs from "node:fs";
 import path from "node:path";
+import { loadEssayInventory } from "../src/lib/essay-inventory.mjs";
+import {
+  contentWithoutMarkdownCode,
+  extractInternalMarkdownLinks,
+} from "../src/lib/internal-prose-links.mjs";
 
-const ESSAYS = "src/content/essays";
-const slugify = (n) =>
-  n
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-
-const listUnder = (fm, key) => {
-  const block =
-    fm.match(
-      new RegExp(`^${key}:[ \\t]*\\n((?:[ \\t]*-[ \\t]+.+\\n?)+)`, "m"),
-    )?.[1] ?? "";
-  return [...block.matchAll(/-[ \t]+(.+)/g)].map((m) =>
-    m[1].trim().replace(/^["']|["']$/g, ""),
-  );
+const valueAfter = (flag) => {
+  const index = process.argv.indexOf(flag);
+  return index === -1 ? undefined : process.argv[index + 1];
 };
 
-const dirs = fs
-  .readdirSync(ESSAYS, { withFileTypes: true })
-  .filter((d) => d.isDirectory())
-  .map((d) => d.name);
-const essaySlugs = new Set(dirs);
+const essaysDirectory = valueAfter("--essays-dir") ?? "src/content/essays";
+const pagesDirectory = valueAfter("--pages-dir") ?? "src/pages";
+const publicDirectory = valueAfter("--public-dir") ?? "public";
+if (!essaysDirectory || !pagesDirectory || !publicDirectory) {
+  console.error(
+    "Usage: node scripts/check-links.mjs [--essays-dir <path>] [--pages-dir <path>] [--public-dir <path>]",
+  );
+  process.exit(2);
+}
 
-const routes = new Set([
-  "/",
-  "/about/",
-  "/essays/",
-  "/section/", // hub index; per-term archives are added per essay below
-  "/topic/",
-  "/privacy/",
-  "/artificial-intelligence-tools/",
-  "/resources/",
-  "/resources/free-ai-voice-generator/",
-]);
-const downloadFiles = new Set();
-const essays = [];
-for (const slug of dirs) {
-  const raw = fs.readFileSync(path.join(ESSAYS, slug, `${slug}.md`), "utf8");
-  const m = raw.match(/^---\n([\s\S]*?)\n---\n/);
-  const fm = m?.[1] ?? "";
-  const date = fm.match(/^date:[ \t]*(\S+)/m)?.[1];
-  essays.push({
-    slug,
-    fm,
-    body: raw.slice(m?.[0].length ?? 0),
-    scheduled: !!date && new Date(date) > new Date(),
+let inventory;
+try {
+  inventory = loadEssayInventory({ essaysDirectory });
+} catch (error) {
+  console.error(error.message);
+  process.exit(1);
+}
+
+const staticRoutes = (directory, relative = "") => {
+  if (!fs.existsSync(directory)) return [];
+  return fs.readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const relativePath = path.posix.join(relative, entry.name);
+    if (entry.isDirectory()) {
+      return staticRoutes(path.join(directory, entry.name), relativePath);
+    }
+    if (relativePath.split("/").some((segment) => segment.includes("["))) {
+      return [];
+    }
+    const routeFile = relativePath.replace(/\.(?:astro|ts)$/, "");
+    if (routeFile === relativePath) return [];
+    const withoutIndex = routeFile.replace(/(?:^|\/)index$/, "");
+    const pathname = `/${withoutIndex}`.replace(/\/{2,}/g, "/");
+    return [
+      pathname === "/" || path.posix.extname(pathname)
+        ? pathname
+        : `${pathname}/`,
+    ];
   });
-  routes.add(`/${slug}/`);
-  for (const c of listUnder(fm, "categories"))
-    routes.add(`/section/${slugify(c)}/`);
-  for (const t of listUnder(fm, "tags")) routes.add(`/topic/${slugify(t)}/`);
-  for (const d of fm.matchAll(/^[ \t]*-[ \t]*file:[ \t]*(\S+)/gm))
-    downloadFiles.add(d[1]);
+};
+
+const routes = new Set(["/essays/", ...staticRoutes(pagesDirectory)]);
+for (const essay of inventory.essays) {
+  routes.add(essay.pathname);
+  for (const category of essay.categories) routes.add(category.pathname);
+  for (const tag of essay.tags) routes.add(tag.pathname);
 }
 
-// Walk `![alt](target "title")` image refs. Scanned rather than regex-matched
-// because a quoted title may itself contain parens ("… MediEvil (1998)."), and
-// because an unterminated quote — the failure we want to catch — can't be
-// expressed as a match. A quote that only "closes" on a later line is broken.
-function* markdownImages(text) {
-  const re = /!\[[^\]]*\]\(/g;
-  let m;
-  while ((m = re.exec(text)) !== null) {
-    let i = re.lastIndex;
-    while (i < text.length && /[ \t]/.test(text[i])) i++;
-    const tStart = i;
-    while (i < text.length && !/[\s)]/.test(text[i])) i++;
-    const target = text.slice(tStart, i).replace(/^<|>$/g, "");
-    while (i < text.length && /[ \t]/.test(text[i])) i++;
-
-    let broken = false;
-    if (text[i] === '"' || text[i] === "'") {
-      const close = text.indexOf(text[i], i + 1);
-      const nl = text.indexOf("\n", i + 1);
-      if (close === -1 || (nl !== -1 && close > nl)) broken = true;
-      else i = close + 1;
-    }
-    if (!broken) {
-      while (i < text.length && /[ \t]/.test(text[i])) i++;
-      if (text[i] !== ")") broken = true;
-    }
-    const eol = text.indexOf("\n", m.index);
-    yield {
-      target,
-      broken,
-      raw: text.slice(m.index, eol === -1 ? text.length : eol).slice(0, 90),
-    };
-  }
-}
-
-const norm = (p) => (p.endsWith("/") || /\.[a-z0-9]+$/i.test(p) ? p : `${p}/`);
-const issues = [];
-const scheduledSlugs = new Set(
-  essays.filter((e) => e.scheduled).map((e) => e.slug),
+const downloads = new Set(
+  inventory.essays.flatMap((essay) =>
+    essay.downloads.map(({ file }) => `/downloads/${file}`),
+  ),
 );
+const publishedSlugs = new Set(inventory.published.map(({ slug }) => slug));
+const issues = [];
+const addIssue = (essay, kind, value) => issues.push([essay.slug, kind, value]);
+const pathnameFrom = (url) => url.split(/[?#]/, 1)[0];
+const canonicalPath = (pathname) =>
+  pathname === "/" || pathname.endsWith("/") || path.posix.extname(pathname)
+    ? pathname
+    : `${pathname}/`;
 
-for (const { slug, fm, body, scheduled } of essays) {
-  const clean = body.replace(/```[\s\S]*?```/g, "");
-
-  // Nothing else validates that a cover exists, so a bad one surfaces as an
-  // ImageNotFound build failure — and can hide behind Astro's content cache
-  // until a cold build in CI.
-  const cover = fm
-    .match(/^cover:[ \t]*(\S.*?)[ \t]*$/m)?.[1]
-    ?.replace(/^["']|["']$/g, "");
+for (const essay of inventory.essays) {
+  const essayDirectory = path.dirname(essay.sourcePath);
   if (
-    cover &&
-    !/^https?:/i.test(cover) &&
-    !fs.existsSync(path.join(ESSAYS, slug, cover.replace(/^\.\//, "")))
+    !/^https?:\/\//i.test(essay.cover) &&
+    !fs.existsSync(path.resolve(essayDirectory, essay.cover))
   ) {
-    issues.push([slug, "cover", cover]);
+    addIssue(essay, "cover", essay.cover);
   }
 
-  // Every essay image is local now, so an absolute wp.com URL is a straggler
-  // that 404s. Matched only as a URL, so prose paths don't trip it.
-  for (const m of clean.matchAll(
+  const scannableBody = contentWithoutMarkdownCode(essay.body);
+  for (const match of scannableBody.matchAll(
+    /^import(?:\s+[\s\S]*?\s+from\s+)?["']([^"']+)["'];?[ \t]*$/gm,
+  )) {
+    const importedPath = match[1];
+    if (
+      importedPath.startsWith(".") &&
+      !fs.existsSync(path.resolve(essayDirectory, importedPath))
+    ) {
+      addIssue(essay, "asset", importedPath);
+    }
+  }
+
+  for (const match of scannableBody.matchAll(
     /https?:\/\/[^\s)"'<>]*(?:\.wp\.com|wp-content\/uploads|wpcomstaging\.com)[^\s)"'<>]*/gi,
   )) {
-    issues.push([slug, "wordpress url", m[0].slice(0, 90)]);
+    addIssue(essay, "wordpress url", match[0].slice(0, 90));
   }
 
-  // Raw <img>. Galleries are hand-written HTML, so the Markdown scanner below
-  // never sees them.
-  for (const m of clean.matchAll(/<img[^>]+src=["']([^"']+)["']/gi)) {
-    const src = m[1].split(/[#?]/)[0];
-    if (
-      !src ||
-      /^(https?:)?\/\//i.test(src) ||
-      /^data:/i.test(src) ||
-      src.startsWith("/")
-    )
-      continue;
-    if (!fs.existsSync(path.join(ESSAYS, slug, src.replace(/^\.\//, ""))))
-      issues.push([slug, "image", src]);
-  }
-  // `[[…]]` wikilinks, but not `![[…]]` embeds (audio players etc.).
-  for (const m of clean.matchAll(/(?<!!)\[\[([^\]|#]+)/g)) {
-    const target = m[1].trim();
-    if (!essaySlugs.has(target)) {
-      issues.push([slug, "wikilink", `[[${target}]]`]);
-      continue;
-    }
-    // A future-dated essay is withheld from the production build, so a link to
-    // one from an already-published essay is a 404 the moment this is pushed.
-    // The dev server builds both, which is exactly why it goes unnoticed.
-    if (!scheduled && scheduledSlugs.has(target))
-      issues.push([slug, "unpublished", `[[${target}]] is not live yet`]);
-  }
-  // `> ![tip]` instead of `> [!tip]` is still valid Markdown, so it silently
-  // degrades to a plain blockquote instead of rendering as a callout.
-  for (const m of clean.matchAll(/^>[ \t]*!\[(\w+)\](?!\()/gm)) {
-    issues.push([slug, "callout", `![${m[1]}] — did you mean [!${m[1]}]?`]);
-  }
-
-  for (const { target, broken, raw } of markdownImages(clean)) {
-    if (broken) {
-      // The target is unreliable once quoting is broken, so don't also file it
-      // as a missing image.
-      issues.push([slug, "image title", raw]);
-      continue;
-    }
-    const src = target.split(/[#?]/)[0];
-    if (!src || /^(https?:)?\/\//i.test(src) || /^data:/i.test(src)) continue;
-    if (src.startsWith("/")) continue; // public/ asset — not essay-local
-    if (!fs.existsSync(path.join(ESSAYS, slug, src.replace(/^\.\//, ""))))
-      issues.push([slug, "image", src]);
-  }
-  for (const m of clean.matchAll(
-    /\]\((\/[^)\s#]*)(?:#[^)\s]*)?(?:[ \t]+"[^"]*")?\)/g,
+  for (const match of scannableBody.matchAll(
+    /(?:<img[^>]+src=["']|!\[[^\]]*\]\(\s*)([^"'\s)>]+)/gi,
   )) {
-    const p = norm(m[1]);
-    if (p.startsWith("/downloads/")) {
-      if (!downloadFiles.has(p.slice("/downloads/".length)))
-        issues.push([slug, "download", p]);
-    } else if (!routes.has(p)) {
-      issues.push([slug, "internal", p]);
+    const assetPath = match[1].replace(/^<|>$/g, "").split(/[?#]/, 1)[0];
+    if (
+      !assetPath ||
+      /^(?:https?:)?\/\//i.test(assetPath) ||
+      assetPath.startsWith("data:")
+    ) {
+      continue;
     }
+    const resolvedAsset = assetPath.startsWith("/")
+      ? path.resolve(publicDirectory, assetPath.replace(/^\/+/, ""))
+      : path.resolve(essayDirectory, assetPath);
+    if (!fs.existsSync(resolvedAsset)) {
+      addIssue(essay, "asset", assetPath);
+    }
+  }
+
+  for (const url of extractInternalMarkdownLinks(essay.body)) {
+    const pathname = pathnameFrom(url);
+    if (pathname.startsWith("/downloads/")) {
+      if (!downloads.has(pathname)) addIssue(essay, "download", pathname);
+      continue;
+    }
+
+    const expectedPath = canonicalPath(pathname);
+    if (routes.has(pathname)) {
+      const targetSlug = pathname.match(/^\/([^/]+)\/$/)?.[1];
+      if (
+        publishedSlugs.has(essay.slug) &&
+        targetSlug &&
+        inventory.get(targetSlug) &&
+        !publishedSlugs.has(targetSlug)
+      ) {
+        addIssue(essay, "unpublished", `${pathname} is not live yet`);
+      }
+      continue;
+    }
+    if (routes.has(expectedPath)) {
+      addIssue(essay, "canonical", `${pathname} should be ${expectedPath}`);
+      continue;
+    }
+    addIssue(essay, "internal", pathname);
   }
 }
 
 if (issues.length === 0) {
   console.log(
-    `✓ Links OK — ${essays.length} essays; wikilinks, internal links and images all resolve.`,
+    `✓ Links OK — ${inventory.essays.length} essays; internal links and local assets resolve.`,
   );
   process.exit(0);
 }
+
 console.error(`✗ ${issues.length} problem(s):\n`);
-for (const [slug, kind, link] of issues)
-  console.error(`  ${slug}  [${kind}]  ${link}`);
+for (const [slug, kind, value] of issues) {
+  console.error(`  ${slug}  [${kind}]  ${value}`);
+}
 process.exit(1);

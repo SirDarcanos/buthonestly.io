@@ -2,8 +2,7 @@ dist/
 .astro/
 node_modules/
 local/
-public/_redirects
-.obsidian/
+data/link-graph.json
 
 *.log*
 .env
@@ -13,15 +12,14 @@ public/_redirects
 wrangler.toml
 .wrangler/
 
-# Generated essay audio narrations (npm run audio) — kept locally next to each
-# essay and uploaded to R2, but never committed (binary bloat; R2 is the source)
+# Narration artifacts belong to the separate manual tool; R2 owns published audio.
 src/content/**/*.mp3
-# Editable narration scripts (npm run audio) — regenerated on demand.
 src/content/**/*.audio.txt
 
 # Local agent tooling config (launch.json, per-machine permissions). The shared
 # context in .agents/ IS committed.
 .claude/
+.pi/
 
 .DS_Store
 

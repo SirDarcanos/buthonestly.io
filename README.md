@@ -20,31 +20,32 @@ Honest essays on leadership, programming, and the messy overlap between humans a
 ## Overview
 
 The front-end source of [buthonestly.io](https://buthonestly.io) — a static
-[Astro](https://astro.build) site built from plain Markdown.
+[Astro](https://astro.build) site built from MDX.
 
-Essays live in `src/content/essays`, one folder per essay, holding the Markdown
-and its images side by side. That folder is also an Obsidian vault, so the same
-files are written in Obsidian and rendered by Astro: wikilinks, callouts and
-image embeds are resolved at build time by custom remark and rehype plugins
-rather than being pasted in as HTML. There is no CMS and no database — a new
-essay is a commit.
+Essays live in `src/content/essays`, one folder per essay, holding an MDX source
+and its images side by side. Ordinary prose uses standard Markdown; figures,
+galleries, summaries, callouts, and attributed quotations use a small set of
+Astro components. The shared essay inventory owns source discovery, metadata,
+publication state, URLs, and reader-facing hashes. Astro's content collection
+adds rendering and image metadata. There is no CMS and no database — a new essay
+is a commit.
 
 **What the build gives you beyond the pages:**
 
-- **Date-driven publishing.** A future `date` schedules an essay; an hourly
-  Action rebuilds when one comes due. Drafts live outside the built collection.
+- **Date-driven publishing.** A future publication day schedules an essay; an
+  hourly Action deploys a missing or stale public version, waits for its content hash,
+  then independently notifies IndexNow and delivers its Kit broadcast. Drafts
+  live outside the built collection.
 - **Local-first images.** Covers and body images are committed, then optimized
   in place (16:9 covers, opaque sources to JPEG) and re-encoded to AVIF/WebP.
-- **Audio narration.** Each essay can be narrated with Gemini TTS on Vertex AI
-  and served from R2, with an in-page player.
-- **Semantic related posts**, precomputed from sentence embeddings rather than
-  tag overlap.
+- **Audio narration.** An optional audio filename adds an in-page player for a
+  narration hosted on the fixed media domain.
+- **Semantic related essays**, precomputed from sentence embeddings with
+  taxonomy as an additional signal.
 - **Feeds and machine-readable indexes** — a site feed plus one per section and
-  per topic, `sitemap.xml` with real `lastmod` dates, `llms.txt`, and IndexNow
-  submissions on publish.
-- **Client-side search** via [Pagefind](https://pagefind.app), indexed after the
-  build.
-- **Generated redirects** for the legacy WordPress URLs — old post paths, feeds,
+  per topic, a sitemap index with real `lastmod` dates, `llms.txt`, portable
+  Markdown alternatives, and IndexNow updates.
+- **Static redirects** for legacy WordPress URLs — old post paths, feeds,
   paginated archives and downloads — so old links keep working.
 
 ## Getting started
@@ -59,6 +60,16 @@ npm run dev
 The dev server runs at http://localhost:4321. Scheduled essays render there so
 they can be proofread before they land.
 
+Run the automated test suite before opening a pull request:
+
+```bash
+npm test
+```
+
+The command exits nonzero when a test fails. Its fixtures deliberately prove
+that formatting, content correctness, and production-build failures are all
+detected.
+
 To check the production output:
 
 ```bash
@@ -67,9 +78,9 @@ npm run preview
 ```
 
 > [!NOTE]
-> Search only works against a real build. Pagefind indexes `dist/` in a
-> `postbuild` step, so in `astro dev` the search overlay reports that the index
-> isn't available. Use `npm run preview` to try it.
+> The `postbuild` step projects marked editorial regions into portable Markdown
+> alternatives. Use `npm run build` before checking the `.md` links advertised
+> in `dist/llms.txt`.
 
 > [!IMPORTANT]
 > Astro does not hot-reload `astro.config.mjs`, and `.astro/` caches processed
@@ -81,121 +92,106 @@ npm run preview
 ```
 ├─ src/
 │  ├─ components/        # Astro components
-│  ├─ content/           # Obsidian vault
-│  │  ├─ essays/<slug>/  # one folder per essay: <slug>.md plus its images
-│  │  ├─ drafts/         # work in progress, not a built collection
-│  │  ├─ templates/      # Templater snippets for new essays, images, galleries
-│  │  └─ Style Guide.md  # how the essays are meant to read
+│  ├─ content/
+│  │  ├─ essays/<slug>/  # one folder per essay: <slug>.mdx plus its images
+│  │  └─ drafts/         # work in progress, not a built collection
 │  ├─ layouts/
-│  ├─ lib/               # content helpers, SEO/schema, remark + rehype plugins
+│  ├─ lib/               # content inventory, SEO/schema, and rendering helpers
 │  ├─ pages/             # routes, RSS feeds, llms.txt
 │  ├─ styles/global.css
 │  ├─ consts.ts          # site title, URL, description
 │  └─ taxonomies.ts      # section and topic descriptions
 ├─ scripts/              # build and maintenance CLIs — see Tooling
-├─ data/                 # generated but committed: related map, ledgers
-├─ public/               # static assets, _headers, generated _redirects
-└─ .github/workflows/    # publishing, newsletter, IndexNow, related posts
+├─ data/                 # generated but committed: semantic and publication state
+├─ public/               # static assets, _headers, and legacy _redirects
+└─ .github/workflows/    # correctness, publication, and related essays
 ```
 
 ## Writing an essay
 
-Create `src/content/essays/<slug>/<slug>.md` and drop the images beside it.
+Create `src/content/essays/<slug>/<slug>.mdx` and drop the images beside it.
 
 ```yaml
 ---
 title: What is a GPU and Why Does AI Need Them?
-date: 2026-08-04T13:00:00
+date: 2026-08-04
 excerpt: GPUs are crucial for AI due to their ability to perform parallel calculations.
-cover: gigabyte-gpu.jpg
+newsletterIntro: |-
+  GPUs do more than draw games. This essay explains why their parallel design
+  became essential to modern AI.
+cover: ./gigabyte-gpu.jpg
 coverAlt: The inside of a gaming PC lit in red and blue, with a graphics card above the motherboard.
 categories:
   - Programming
 tags:
   - AI
   - Performance
+audio: what-is-a-gpu.mp3
 ---
 ```
 
-| Field                                     | Notes                                                              |
-| ----------------------------------------- | ------------------------------------------------------------------ |
-| `title`                                   | Required.                                                          |
-| `date`                                    | Publication date. In the future, the essay is scheduled.           |
-| `updated`                                 | Feeds the sitemap's `lastmod`.                                     |
-| `cover` / `coverAlt` / `coverCaption`     | Local path. **Covers must be 16:9**; alt text describes the image. |
-| `excerpt`                                 | Used for the listings, meta description and feeds.                 |
-| `categories` / `tags`                     | Sections and topics. At least one of each.                         |
-| `sticky` / `cornerstone`                  | Editorial flags — featured on its section, weighted in SEO.        |
-| `downloads`                               | Files served from R2, rendered as a download block.                |
-| `audioVoice` / `audioStyle` / `audioPace` | Per-essay narration overrides.                                     |
+| Field                                 | Notes                                                              |
+| ------------------------------------- | ------------------------------------------------------------------ |
+| `title`                               | Required.                                                          |
+| `date`                                | Required `YYYY-MM-DD`; every essay publishes at 13:00 UTC.         |
+| `updated`                             | Optional later `YYYY-MM-DD`; feeds the sitemap's `lastmod`.        |
+| `cover` / `coverAlt` / `coverCaption` | Local path. **Covers must be 16:9**; alt text describes the image. |
+| `excerpt`                             | Used for listings, metadata, feeds, and the on-page lead.          |
+| `newsletterIntro`                     | Required plain-text email introduction.                            |
+| `categories` / `tags`                 | Sections and topics. At least one of each.                         |
+| `sticky` / `cornerstone`              | Feature an essay in its section / mark an evergreen link hub.      |
+| `downloads`                           | Files served from R2, rendered as a download block.                |
+| `audio`                               | Optional filename served from `static.buthonestly.io/audio/`.      |
 
-`date`, `cover`, `coverAlt` and at least one category and tag are enforced by
-the content schema once an essay is live or scheduled — a missing one fails the
-build rather than shipping quietly.
-
-Obsidian-flavoured Markdown that the plugins understand:
-
-| Syntax                      | Renders as                                          |
-| --------------------------- | --------------------------------------------------- |
-| `[[other-essay]]`           | An internal link, checked by `npm run check:links`. |
-| `![alt](img.jpg 'caption')` | A `<figure>` with caption, re-encoded to AVIF/WebP. |
-| `> [!gallery] 2`            | A grid of the images inside the callout.            |
-| `> [!screen-only]`          | Prose on the page, dropped from the narration.      |
-| `> [!audio-only]`           | Read aloud, omitted from the page.                  |
-
-Image paths are bare filenames, resolved against the essay's own folder, and
-captions are **single-quoted** — the Unsplash and Pexels credit snippets you
-paste in contain double quotes, and mixing them up stops the image parsing as an
-image at all. `npm run check:links` catches that.
+Use standard Markdown links, including root-relative links to other essays.
+Import `Figure`, `Gallery`, `QuickSummary`, `Callout`, and `Blockquote` from
+`src/components/content` only when their extra semantics are needed.
 
 ## Tooling
 
-| Command                      | What it does                                                                                           |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `npm run dev`                | Dev server on port 4321.                                                                               |
-| `npm run build`              | Generates redirects, builds to `dist/`, then indexes it with Pagefind.                                 |
-| `npm run lint`               | Prettier check plus link check.                                                                        |
-| `npm run check:links`        | Verifies wikilinks, internal links and image references resolve.                                       |
-| `npm run lint:essay`         | Advisory style-guide lint for a single essay.                                                          |
-| `npm run images [-- <slug>]` | Resizes to 1376px, recompresses, converts opaque images to JPEG and rewrites the Markdown. Idempotent. |
-| `npm run audio -- <slug>`    | Narrates an essay with Gemini TTS. Run it twice — see below.                                           |
-| `npm run related`            | Rebuilds the semantic related-posts map.                                                               |
-| `npm run indexnow`           | Submits changed essays to IndexNow.                                                                    |
-| `npm run og`                 | Regenerates `public/og-default.png`.                                                                   |
-| `npm run email-assets`       | Regenerates the newsletter's masthead and social icons.                                                |
-
-A pre-commit hook (`.githooks/`, wired by `npm install`) optimizes staged essay
-images, blocks the commit on a non-16:9 cover, and formats staged code.
-
-> [!TIP]
-> `npm run audio` runs twice and **the first run costs nothing**. It writes
-> `<slug>.audio.txt`, the narration script — the essay reduced to what will
-> actually be spoken. Read it, fix anything that should sound different, then
-> re-run to synthesize from that file. `npm run audio -- <slug> --commit`
-> uploads the result to R2; it never re-synthesizes.
+| Command                      | What it does                                                                                                  |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `npm run dev`                | Dev server on port 4321.                                                                                      |
+| `npm test`                   | Runs the automated test suite, including deliberate CI-stage failure fixtures.                                |
+| `npm run build`              | Builds to `dist/`, then projects editorial Markdown alternatives.                                             |
+| `npm run lint`               | Prettier check plus link check.                                                                               |
+| `npm run check:links`        | Verifies canonical internal links, publication safety, and local assets.                                      |
+| `npm run links`              | Prints advisory prose-link analysis; pass `-- --json <path>` for local JSON.                                  |
+| `npm run images [-- <slug>]` | Manually resizes and compresses oversized sources and converts opaque images to JPEG, printing renamed paths. |
+| `npm run related`            | Rebuilds the semantic related-essays map.                                                                     |
+| `npm run publication`        | Verifies live content, deploys stale versions, resumes Kit delivery, and submits changed content to IndexNow. |
 
 ## Automation
 
-| Workflow                | Runs                       | Does                                                              |
-| ----------------------- | -------------------------- | ----------------------------------------------------------------- |
-| `scheduled-rebuild.yml` | Hourly                     | Rebuilds only when a scheduled essay is due but still 404.        |
-| `related.yml`           | On essay push, daily       | Regenerates and commits the related-posts map.                    |
-| `newsletter.yml`        | On essay push, daily 13:30 | Emails subscribers once per essay, tracked by a committed ledger. |
-| `indexnow.yml`          | On essay push, daily 13:45 | Submits new URLs to Bing, Yandex, Seznam and Naver.               |
-| `lint-essays.yml`       | On essay push              | Advisory style lint. Never blocks — style is the author's call.   |
+| Workflow          | Runs                         | Does                                                                                     |
+| ----------------- | ---------------------------- | ---------------------------------------------------------------------------------------- |
+| `ci.yml`          | Pull requests, main pushes   | Tests failure detection, formatting, content, and production build.                      |
+| `publication.yml` | Hourly, essay pushes, manual | Deploys expected versions, resumes Kit broadcasts, and submits changed URLs to IndexNow. |
+| `related.yml`     | Essay pushes, manual         | Regenerates and commits the semantic related-essay map.                                  |
 
-The daily crons exist because a date passing is not a push: they are what makes
-a scheduled essay go live, get emailed and get crawled without anyone touching
-the repo.
+Scheduled runs matter because a date passing is not a push. The publication
+orchestrator makes an essay live within the hourly window. It records a Kit draft
+identity before delivery, waits until at least 13:15 UTC, and preserves Kit and
+IndexNow successes independently.
 
 ## Deployment
 
-Cloudflare Pages builds `dist/` from `main`. Rebuilds that aren't triggered by a
-push — a scheduled essay coming due — go through a Pages deploy hook, held as
-the `CF_DEPLOY_HOOK_URL` repository secret. Two R2 buckets are served directly
-over custom domains: `downloads.buthonestly.io` for essay downloads and
+Cloudflare Pages builds `dist/` from `main`. The publication orchestrator reads
+each pending essay's `data-content-version`, requests the Pages deploy hook when
+the expected hash is missing or stale, and waits for that exact version before
+IndexNow follow-up. The hook is held as the `CF_DEPLOY_HOOK_URL` repository
+secret. Two R2 buckets are served directly over custom domains:
+`downloads.buthonestly.io` for essay downloads and
 `static.buthonestly.io` for audio narrations. See [DOWNLOADS.md](DOWNLOADS.md)
 for how to add a file.
+
+Successful IndexNow hashes and Kit broadcast identities are committed to
+`data/publication-state.json`. Kit keeps ownership of forms, contacts, consent,
+broadcasts, and unsubscribes. The workflow requires `KIT_API_KEY`; the optional
+`KIT_EMAIL_TEMPLATE_ID` repository variable pins the maintained account template.
+A failed provider action remains pending while an independent success is
+preserved; rerun `publication.yml` manually to recover without repeating
+durably checkpointed work.
 
 > [!IMPORTANT]
 > `wrangler.toml` is git-ignored so the bucket names stay out of the public
@@ -204,11 +200,13 @@ for how to add a file.
 
 Environment variables (see `.env.example`):
 
-| Variable                         | Used for                                         |
-| -------------------------------- | ------------------------------------------------ |
-| `FATHOM_SITE_ID`                 | Analytics, `main`-branch production builds only. |
-| `GOOGLE_APPLICATION_CREDENTIALS` | Vertex AI service-account JSON, for narrations.  |
-| `VERTEX_REGION` / `VERTEX_MODEL` | Optional TTS overrides.                          |
+| Variable                | Used for                                                    |
+| ----------------------- | ----------------------------------------------------------- |
+| `FATHOM_SITE_ID`        | Analytics, `main`-branch production builds only.            |
+| `CF_DEPLOY_HOOK_URL`    | Cloudflare Pages deployment requests.                       |
+| `KIT_API_KEY`           | Kit broadcast lookup, draft creation, and delivery.         |
+| `KIT_EMAIL_TEMPLATE_ID` | Optional maintained Kit account template.                   |
+| `SITE_URL`              | Optional production-origin override for publication checks. |
 
 The Fathom script is skipped when `CF_PAGES_BRANCH` is set to anything but
 `main`, so preview deploys never pollute the stats even if the variable is set

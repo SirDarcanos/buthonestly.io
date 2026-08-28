@@ -6,28 +6,24 @@
     "node": ">=24.0.0"
   },
   "scripts": {
-    "prepare": "git config core.hooksPath .githooks || true",
     "dev": "astro dev",
-    "prebuild": "node scripts/generate-redirects.mjs",
     "build": "astro build",
     "related": "node scripts/build-related.mjs",
     "links": "node scripts/build-link-graph.mjs",
-    "indexnow": "node scripts/ping-indexnow.mjs",
-    "audio": "node scripts/build-audio.mjs",
     "images": "node scripts/optimize-images.mjs",
-    "postbuild": "pagefind --site dist",
+    "postbuild": "node scripts/build-markdown-alternatives.mjs",
     "preview": "astro preview",
     "astro": "astro",
+    "test": "node --test",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "check:links": "node scripts/check-links.mjs",
-    "lint:essay": "node scripts/lint-essay.mjs",
     "lint": "prettier --check . && node scripts/check-links.mjs",
-    "og": "node scripts/build-og-image.mjs",
-    "email-assets": "node scripts/build-email-assets.mjs"
+    "publication": "node scripts/orchestrate-publication.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.2.0",
+    "@astrojs/mdx": "^7.0.8",
     "@astrojs/rss": "^4.0.18",
     "@astrojs/sitemap": "^3.7.3",
     "@tailwindcss/vite": "^4.3.1",
@@ -38,12 +34,14 @@
   },
   "devDependencies": {
     "@iconify-json/simple-icons": "^1.2.88",
+    "@mixmark-io/domino": "^2.2.0",
     "gray-matter": "^4.0.3",
-    "pagefind": "^1.5.2",
     "prettier": "^3.8.4",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "sharp": "^0.34.5",
+    "turndown": "^7.2.4",
+    "turndown-plugin-gfm": "^1.0.2",
     "typescript": "^6.0.3"
   }
 }

@@ -1,58 +1,24 @@
-// Static pages get no lastmod on purpose: Google discounts the signal site-wide
-// if it doesn't track real changes, so absent beats invented.
-//
-// Reads Markdown directly because astro.config.mjs runs before the content layer.
-
-import { readdirSync, readFileSync, existsSync } from "node:fs";
-import path from "node:path";
-import matter from "gray-matter";
-import { publishDate } from "./publish-time.mjs";
-
-const ESSAYS_DIR = "src/content/essays";
-
-const slugify = (name) =>
-  String(name)
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-
-const asList = (v) => (Array.isArray(v) ? v : v ? [v] : []);
-
-/** @returns {Map<string, Date>} site-relative path (with trailing slash) → date */
-export function buildLastmodMap() {
-  const now = new Date();
+// Static pages get no lastmod: an absent signal is more honest than an invented
+// date that causes search engines to discount freshness across the site.
+export function buildLastmodMap(inventory) {
   const map = new Map();
-  const bump = (p, d) => {
-    const current = map.get(p);
-    if (!current || d > current) map.set(p, d);
+  const bump = (pathname, freshnessAt) => {
+    const current = map.get(pathname);
+    if (!current || freshnessAt > current) map.set(pathname, freshnessAt);
   };
 
-  if (!existsSync(ESSAYS_DIR)) return map;
-
-  for (const slug of readdirSync(ESSAYS_DIR)) {
-    const file = path.join(ESSAYS_DIR, slug, `${slug}.md`);
-    if (!existsSync(file)) continue;
-
-    const { data } = matter(readFileSync(file, "utf8"));
-    const published = publishDate(data.date);
-    if (!published || Number.isNaN(published.valueOf()) || published > now) {
-      continue; // mirrors getPublishedEssays — future-dated essays aren't built
+  for (const essay of inventory.published) {
+    bump(essay.pathname, essay.freshnessAt);
+    bump("/", essay.freshnessAt);
+    bump("/essays/", essay.freshnessAt);
+    for (const category of essay.categories) {
+      bump(category.pathname, essay.freshnessAt);
     }
-
-    const updated = publishDate(data.updated);
-    const lastmod = updated && updated > published ? updated : published;
-
-    bump(`/${slug}/`, lastmod);
-    bump("/", lastmod);
-    bump("/essays/", lastmod);
-    for (const c of asList(data.categories))
-      bump(`/section/${slugify(c)}/`, lastmod);
-    for (const t of asList(data.tags)) bump(`/topic/${slugify(t)}/`, lastmod);
+    for (const tag of essay.tags) bump(tag.pathname, essay.freshnessAt);
   }
 
   const newest = [...map.values()].reduce(
-    (a, b) => (b > a ? b : a),
+    (latest, freshnessAt) => (freshnessAt > latest ? freshnessAt : latest),
     new Date(0),
   );
   if (newest > new Date(0)) {

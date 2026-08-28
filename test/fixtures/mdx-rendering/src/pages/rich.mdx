@@ -1,0 +1,43 @@
+import Figure from "../../../../../src/components/content/Figure.astro";
+import Gallery from "../../../../../src/components/content/Gallery.astro";
+import QuickSummary from "../../../../../src/components/content/QuickSummary.astro";
+import Callout from "../../../../../src/components/content/Callout.astro";
+import Blockquote from "../../../../../src/components/content/Blockquote.astro";
+import CoverPicture from "../../../../../src/components/Picture.astro";
+import sample from "../sample.jpg";
+
+<QuickSummary>
+
+- One concise point.
+- Another concise point.
+
+</QuickSummary>
+
+<Figure src={sample} alt="A small test fixture">
+  Photo credit from [Example](https://example.com/photo)
+</Figure>
+
+<Gallery columns={2}>
+  <Figure src={sample} alt="The first fixture" />
+  <Figure src={sample} alt="The second fixture" />
+</Gallery>
+
+<Gallery columns={3} />
+
+<Gallery columns={4} />
+
+<Callout type="tip">A useful tip.</Callout>
+
+<Callout type="information">Useful information.</Callout>
+
+<Callout type="disclaimer">A useful disclaimer.</Callout>
+
+<CoverPicture
+  src={sample}
+  alt="A cover fixture"
+  caption={'Photo by <a href="https://example.com/cover-credit">Cover Artist</a>'}
+/>
+
+<Blockquote author="Ada Example" source="https://example.com/source">
+  Useful words.
+</Blockquote>

@@ -2,6 +2,7 @@
 import { Picture as AstroPicture } from "astro:assets";
 import { twMerge } from "tailwind-merge";
 import type { ImageMetadata } from "astro";
+import { isExternalHttpHref } from "../lib/rehype-external-links.mjs";
 
 // Responsive image: AVIF → WebP → JPEG. Local images only.
 interface Props {
@@ -27,6 +28,31 @@ const {
 } = Astro.props;
 
 const imgClass = twMerge("block h-auto max-w-full", className);
+
+const setAnchorAttribute = (tag: string, name: string, value: string) => {
+  const attribute = new RegExp(`\\s${name}=(['"])[\\s\\S]*?\\1`, "i");
+  return attribute.test(tag)
+    ? tag.replace(attribute, ` ${name}="${value}"`)
+    : tag.replace(/>$/, ` ${name}="${value}">`);
+};
+
+const secureCaptionAnchor = (tag: string) => {
+  const href = tag.match(/\shref=(['"])(.*?)\1/i)?.[2];
+  if (!href || !isExternalHttpHref(href)) return tag;
+
+  const existingRel = tag.match(/\srel=(['"])(.*?)\1/i)?.[2] ?? "";
+  const rel = new Set(existingRel.split(/\s+/).filter(Boolean));
+  rel.add("noopener");
+  rel.add("noreferrer");
+
+  return setAnchorAttribute(
+    setAnchorAttribute(tag, "target", "_blank"),
+    "rel",
+    [...rel].join(" "),
+  );
+};
+
+const captionHtml = caption.replace(/<a\b[^>]*>/gi, secureCaptionAnchor);
 ---
 
 <figure>
@@ -43,9 +69,7 @@ const imgClass = twMerge("block h-auto max-w-full", className);
     class={imgClass}
   />
   {
-    /* Captions are authored HTML — the credit snippet Unsplash and Pexels give
-       you to copy, links and utm_ params intact. rehype-figure.mjs does the
-       same for body-image captions. */
-    caption && <figcaption set:html={caption} />
+    /* Cover credits retain the linked HTML supplied by the image source. */
+    caption && <figcaption set:html={captionHtml} />
   }
 </figure>

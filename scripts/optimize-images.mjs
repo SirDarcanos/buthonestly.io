@@ -1,244 +1,232 @@
-// Optimize essay source images in place. Astro re-encodes to AVIF at build, so
-// this only keeps the committed SOURCES predictable.
-//
-//   npm run images                 # all essays + drafts
-//   npm run images -- <slug|path>  # just one essay
-
-import { readFile, writeFile, readdir, unlink } from "node:fs/promises";
-import { createHash } from "node:crypto";
+import { readFile, readdir, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 import sharp from "sharp";
 
-import { exists, die, resolveEssay, ESSAY_ROOTS } from "./lib/fs-util.mjs";
+import { readEssayCoverPath } from "../src/lib/essay-inventory.mjs";
+import { die, exists, resolveEssay, ESSAY_ROOTS } from "./lib/fs-util.mjs";
 
-const MANIFEST = "data/images-optimized.json";
-const MAX_WIDTH = 1376; // 2× the 688px body column; ≥ the cover's 1160 need
+const MAX_WIDTH = 1376;
+const COLUMN_WIDTH = 688;
 const JPEG_QUALITY = 80;
-const COLUMN_WIDTH = 688; // the reading column — body images below this look soft
-// GIFs and SVGs are deliberately absent — they're served as-is (Astro emits
-// animated WebP for GIFs; see rehype-image-format.mjs) and exempt from all this.
 const IMAGE_RE = /\.(jpe?g|png|webp|avif|tiff?|bmp)$/i;
 const RATIO_16_9 = 16 / 9;
 const RATIO_TOLERANCE = 0.02;
 
-async function main() {
-  const args = process.argv.slice(2).filter((a) => !a.startsWith("-"));
-  // The pre-commit hook passes explicit staged file paths.
-  const fileMode = args.length > 0 && args.every((a) => IMAGE_RE.test(a));
-  const manifest = await loadManifest();
-  const files = fileMode
-    ? args
-    : args.length
-      ? await filesForArg(args[0])
-      : await allFiles();
+export async function optimizeEssayImages({
+  directory,
+  sourcePath,
+  log = console.log,
+}) {
+  return optimizeEssays({
+    essays: [{ dir: directory, file: sourcePath }],
+    log,
+  });
+}
+
+export async function optimizeEssays({ essays, log = console.log }) {
+  const batches = [];
+  for (const essay of essays) {
+    batches.push(await prepareEssayImages(essay));
+  }
+
+  const totals = { optimized: 0, converted: 0, skipped: 0, savedBytes: 0 };
+  for (const batch of batches) {
+    const result = await optimizePreparedImages(batch, log);
+    for (const key of Object.keys(totals)) totals[key] += result[key];
+  }
+  return totals;
+}
+
+async function prepareEssayImages({ dir, file }) {
+  const files = await collectImages(dir);
   if (!files.length) {
-    if (fileMode) return; // nothing to do (e.g. hook with no staged images)
-    die("No optimizable images found (GIF/SVG are exempt by design).");
+    throw new Error("No optimizable images found (GIF/SVG are exempt).");
   }
 
-  let optimized = 0,
-    converted = 0,
-    skipped = 0,
-    savedBytes = 0;
-  const flagged = [];
-  const narrow = [];
+  const coverPath = readEssayCoverPath(file);
+  const prepared = [];
+  const outputSources = new Map();
 
-  for (const abs of files) {
-    const rel = path.relative(".", abs);
-    const r = await processFile(abs, rel, manifest);
-    if (r.flagged) {
-      flagged.push(`${rel} (${r.dims})`);
+  for (const inputPath of files) {
+    const input = await readFile(inputPath);
+    const metadata = await sharp(input).metadata();
+    const dimensions = metadata.autoOrient ?? metadata;
+    const width = dimensions.width ?? 0;
+    const height = dimensions.height ?? 0;
+    if (!width || !height) {
+      throw new Error(`${displayPath(inputPath)} has unreadable dimensions.`);
+    }
+
+    const isCover = path.resolve(inputPath) === coverPath;
+    if (isCover && Math.abs(width / height - RATIO_16_9) > RATIO_TOLERANCE) {
+      throw new Error(
+        `${displayPath(inputPath)} is ${width}×${height}; covers must be 16:9.`,
+      );
+    }
+
+    if ((metadata.pages ?? 1) > 1) {
+      prepared.push({ inputPath, input, width, skipped: true });
       continue;
     }
-    if (r.narrow) narrow.push(`${rel} (${r.width}px wide)`);
-    if (r.skipped) {
-      skipped++;
-      continue;
+
+    const transparent =
+      metadata.hasAlpha && (await imageHasTransparency(input));
+    const extension = path.extname(inputPath).toLowerCase();
+    const isJpeg = extension === ".jpg" || extension === ".jpeg";
+    const targetExtension = transparent ? ".png" : ".jpg";
+    const converting = transparent
+      ? extension !== ".png"
+      : !isJpeg || extension === ".jpeg";
+    const outputPath = converting
+      ? inputPath.replace(/\.[^.]+$/, targetExtension)
+      : inputPath;
+    const resolvedOutputPath = path.resolve(outputPath);
+    const previousSource = outputSources.get(resolvedOutputPath);
+
+    if (previousSource && previousSource !== inputPath) {
+      throw new Error(
+        `Cannot convert ${displayPath(inputPath)} because it shares ${displayPath(outputPath)} with ${displayPath(previousSource)}.`,
+      );
     }
-    if (r.converted) converted++;
-    else optimized++;
-    savedBytes += r.saved;
-    console.log(
-      `${r.converted ? `→${r.to}`.padEnd(6) : "opt   "}${rel}` +
-        `${r.converted ? ` (from ${r.from})` : ""}` +
-        `${r.resized ? ` (resized to ${MAX_WIDTH}px)` : ""}` +
-        `  ${kb(r.before)} → ${kb(r.after)}`,
-    );
+    outputSources.set(resolvedOutputPath, inputPath);
+
+    if (outputPath !== inputPath && (await exists(outputPath))) {
+      throw new Error(
+        `Cannot convert ${displayPath(inputPath)} because ${displayPath(outputPath)} already exists.`,
+      );
+    }
+
+    prepared.push({
+      inputPath,
+      outputPath,
+      input,
+      width,
+      transparent,
+      converting,
+      resizing: width > MAX_WIDTH,
+      narrow: !isCover && width < COLUMN_WIDTH,
+    });
   }
 
-  await writeFile(MANIFEST, JSON.stringify(manifest, null, 2) + "\n");
+  return prepared;
+}
+
+async function optimizePreparedImages(prepared, log) {
+  let optimized = 0;
+  let converted = 0;
+  let skipped = 0;
+  let savedBytes = 0;
+  const narrow = prepared.filter((image) => image.narrow);
+
+  for (const image of prepared) {
+    if (image.skipped || (!image.converting && !image.resizing)) {
+      skipped += 1;
+      continue;
+    }
+
+    let pipeline = sharp(image.input, { failOn: "none" }).rotate();
+    if (image.resizing) {
+      pipeline = pipeline.resize({ width: MAX_WIDTH });
+    }
+    pipeline = image.transparent
+      ? pipeline.png({ compressionLevel: 9 })
+      : pipeline.jpeg({ quality: JPEG_QUALITY, mozjpeg: true });
+
+    const output = await pipeline.toBuffer();
+    await writeFile(image.outputPath, output);
+    if (image.converting) {
+      await unlink(image.inputPath);
+      converted += 1;
+      log(
+        `${displayPath(image.inputPath)} -> ${displayPath(image.outputPath)}  ${kilobytes(image.input.length)} -> ${kilobytes(output.length)}`,
+      );
+    } else {
+      optimized += 1;
+      log(
+        `${displayPath(image.inputPath)}${image.resizing ? ` (resized to ${MAX_WIDTH}px)` : ""}  ${kilobytes(image.input.length)} -> ${kilobytes(output.length)}`,
+      );
+    }
+    savedBytes += image.input.length - output.length;
+  }
+
   if (narrow.length) {
-    console.log(
-      `\nNote: ${narrow.length} body image(s) narrower than the ${COLUMN_WIDTH}px reading column —` +
-        ` they'll look soft. Not blocking:`,
+    log(
+      `\nNote: ${narrow.length} body image(s) narrower than the ${COLUMN_WIDTH}px reading column:`,
     );
-    for (const n of narrow) console.log(`  ${n}`);
+    for (const image of narrow) {
+      log(`  ${displayPath(image.inputPath)} (${image.width}px wide)`);
+    }
   }
-  if (flagged.length) {
-    console.log(
-      `\n⚠ Skipped ${flagged.length} cover(s) that aren't 16:9 — fix these:`,
-    );
-    for (const f of flagged) console.log(`  ${f}`);
+
+  return { optimized, converted, skipped, savedBytes };
+}
+
+async function main() {
+  const args = process.argv
+    .slice(2)
+    .filter((argument) => !argument.startsWith("-"));
+  const essays = args.length
+    ? [await resolveEssay(args[0])]
+    : await findEssaysWithImages();
+
+  if (!essays.length) {
+    throw new Error("No optimizable images found (GIF/SVG are exempt).");
   }
+
+  const totals = await optimizeEssays({ essays });
   console.log(
-    `\nDone: ${optimized} optimized, ${converted} converted, ${skipped} unchanged. ` +
-      `Saved ${kb(savedBytes)}.`,
+    `\nDone: ${totals.optimized} optimized, ${totals.converted} converted, ${totals.skipped} unchanged. Saved ${kilobytes(totals.savedBytes)}.`,
   );
-  if (flagged.length) process.exitCode = 1; // non-zero so the pre-commit blocks
 }
 
-// The essay's `cover:` filename, so only that image is held to the 16:9 rule.
-const coverCache = new Map();
-async function coverBasename(dir) {
-  if (coverCache.has(dir)) return coverCache.get(dir);
-  let name = null;
-  try {
-    const text = await readFile(
-      path.join(dir, `${path.basename(dir)}.md`),
-      "utf8",
-    );
-    const fm = text.match(/^---\r?\n([\s\S]*?)\r?\n---/);
-    const m = fm?.[1].match(/^cover:\s*(.+?)\s*$/m);
-    if (m) name = path.basename(m[1].replace(/^["']|["']$/g, ""));
-  } catch {
-    // No essay markdown beside the image — treat everything as a body image.
-  }
-  coverCache.set(dir, name);
-  return name;
+async function imageHasTransparency(input) {
+  const { channels } = await sharp(input).stats();
+  return channels.at(-1).min < 255;
 }
 
-async function processFile(abs, rel, manifest) {
-  const buf = await readFile(abs);
-  const inputHash = sha256(buf);
-
-  const meta = await sharp(buf).metadata();
-  const { width = 0, height = 0 } = meta;
-  if (!width || !height) return { flagged: true, dims: "unreadable" };
-
-  // Animated sources (animated WebP, multi-page TIFF) would lose their frames
-  // in a still re-encode — leave them exactly as they are.
-  if ((meta.pages ?? 1) > 1) {
-    manifest[rel] = inputHash;
-    return { skipped: true };
-  }
-
-  // Only the cover must be 16:9 — that's the shape the cover layout renders.
-  const isCover =
-    path.basename(abs) === (await coverBasename(path.dirname(abs)));
-  if (isCover && Math.abs(width / height - RATIO_16_9) > RATIO_TOLERANCE) {
-    return { flagged: true, dims: `${width}×${height}` };
-  }
-
-  const alpha = meta.hasAlpha && (await hasTransparency(buf));
-  const curExt = path.extname(abs).toLowerCase();
-  const curIsJpeg = curExt === ".jpg" || curExt === ".jpeg";
-
-  // Only transparency keeps a file as PNG — JPEG has no alpha, so converting
-  // one would flatten it onto a black background.
-  const targetExt = alpha ? ".png" : ".jpg";
-
-  const toJpeg = targetExt === ".jpg";
-  const renaming = toJpeg ? !curIsJpeg : curExt !== targetExt;
-  const resized = width > MAX_WIDTH;
-
-  // Deliberately AFTER the format decision: a file recorded under older rules
-  // still needs converting, and skipping on the hash alone would silently
-  // report it "unchanged" forever.
-  if (!renaming && manifest[rel] === inputHash) {
-    return { skipped: true, narrow: !isCover && width < COLUMN_WIDTH, width };
-  }
-
-  let pipeline = sharp(buf, { failOn: "none" }).rotate();
-  if (resized) pipeline = pipeline.resize({ width: MAX_WIDTH });
-  pipeline = toJpeg
-    ? pipeline.jpeg({ quality: JPEG_QUALITY, mozjpeg: true })
-    : pipeline.png({ compressionLevel: 9 });
-  const out = await pipeline.toBuffer();
-
-  // Recompression didn't help: record the hash so the next run skips it.
-  if (!renaming && !resized && out.length >= buf.length) {
-    manifest[rel] = inputHash;
-    return { skipped: true, narrow: !isCover && width < COLUMN_WIDTH, width };
-  }
-
-  const outAbs = renaming ? abs.replace(/\.[^.]+$/, targetExt) : abs;
-  const outRel = renaming ? rel.replace(/\.[^.]+$/, targetExt) : rel;
-  await writeFile(outAbs, out);
-  if (renaming) {
-    await unlink(abs);
-    delete manifest[rel];
-    await updateMarkdownRefs(
-      path.dirname(abs),
-      path.basename(abs),
-      path.basename(outAbs),
-    );
-  }
-  manifest[outRel] = sha256(out);
-
-  return {
-    converted: renaming,
-    from: renaming ? curExt.slice(1) : null,
-    to: renaming ? targetExt.slice(1) : null,
-    resized,
-    narrow: !isCover && width < COLUMN_WIDTH,
-    width,
-    before: buf.length,
-    after: out.length,
-    saved: buf.length - out.length,
-  };
+async function collectImages(directory) {
+  const images = [];
+  await collect(directory, images);
+  return images.sort();
 }
 
-// `hasAlpha` only reports an alpha channel; a pixel below fully-opaque is what
-// proves the channel is actually used.
-async function hasTransparency(buf) {
-  const { channels } = await sharp(buf).stats();
-  return channels[channels.length - 1].min < 255;
-}
-
-async function updateMarkdownRefs(dir, oldName, newName) {
-  for (const md of (await readdir(dir)).filter((f) => f.endsWith(".md"))) {
-    const file = path.join(dir, md);
-    const text = await readFile(file, "utf8");
-    if (!text.includes(oldName)) continue;
-    await writeFile(file, text.split(oldName).join(newName));
-    console.log(
-      `  updated ${path.relative(".", file)} (${oldName} → ${newName})`,
-    );
+async function collect(directory, images) {
+  for (const entry of await readdir(directory, { withFileTypes: true })) {
+    const entryPath = path.join(directory, entry.name);
+    if (entry.isDirectory()) await collect(entryPath, images);
+    else if (IMAGE_RE.test(entry.name)) images.push(entryPath);
   }
 }
 
-async function allFiles() {
-  const out = [];
+async function findEssaysWithImages() {
+  const essays = [];
   for (const root of ESSAY_ROOTS) {
-    if (await exists(root)) await collect(root, out);
+    if (!(await exists(root))) continue;
+    for (const entry of await readdir(root, { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue;
+      const dir = path.join(root, entry.name);
+      const extensions = root.endsWith("/drafts") ? [".mdx", ".md"] : [".mdx"];
+      const file = (
+        await Promise.all(
+          extensions.map(async (extension) => {
+            const candidate = path.join(dir, `${entry.name}${extension}`);
+            return (await exists(candidate)) ? candidate : null;
+          }),
+        )
+      ).find(Boolean);
+      if (file && (await collectImages(dir)).length) {
+        essays.push({ dir, file });
+      }
+    }
   }
-  return out;
+  return essays;
 }
 
-async function filesForArg(arg) {
-  const { dir } = await resolveEssay(arg);
-  const out = [];
-  await collect(dir, out);
-  return out;
+const displayPath = (filePath) => path.relative(process.cwd(), filePath);
+const kilobytes = (bytes) => `${(bytes / 1024).toFixed(0)}KB`;
+
+const invokedPath = process.argv[1];
+if (invokedPath && import.meta.url === pathToFileURL(invokedPath).href) {
+  main().catch((error) => die(error.message));
 }
-
-async function collect(dir, out) {
-  for (const entry of await readdir(dir, { withFileTypes: true })) {
-    const p = path.join(dir, entry.name);
-    if (entry.isDirectory()) await collect(p, out);
-    else if (IMAGE_RE.test(entry.name)) out.push(p);
-  }
-}
-
-async function loadManifest() {
-  try {
-    return JSON.parse(await readFile(MANIFEST, "utf8"));
-  } catch {
-    return {};
-  }
-}
-
-const sha256 = (buf) => createHash("sha256").update(buf).digest("hex");
-const kb = (bytes) => `${(bytes / 1024).toFixed(0)}KB`;
-
-main().catch((e) => die(e.message));
