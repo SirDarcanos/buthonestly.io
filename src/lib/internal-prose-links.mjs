@@ -1,32 +1,115 @@
-const withoutFencedCode = (body) => {
-  const lines = body.replace(/<!--[\s\S]*?-->/g, "").split("\n");
-  let fence;
-  return lines
-    .map((line) => {
-      const opening = line.match(/^ {0,3}(`{3,}|~{3,})/);
-      if (!fence && opening) {
-        fence = { marker: opening[1][0], length: opening[1].length };
-        return "";
-      }
-      if (fence) {
-        const closing = line.match(/^ {0,3}(`+|~+)[ \t]*$/)?.[1];
-        if (closing?.[0] === fence.marker && closing.length >= fence.length) {
-          fence = undefined;
-        }
-        return "";
-      }
-      return line;
-    })
-    .join("\n");
+const blank = (value) => value.replace(/[^\n]/g, " ");
+
+const isEscaped = (source, index) => {
+  let backslashes = 0;
+  while (source[index - backslashes - 1] === "\\") backslashes++;
+  return backslashes % 2 === 1;
 };
 
-const withoutInlineCode = (body) => {
+const listPrefixPattern = /^ {0,3}(?:[-+*]|\d{1,9}[.)])[ \t]+/;
+
+const containersBeforeFence = (line) => {
+  let content = line;
+  const containers = [];
+  while (content.length) {
+    const blockquote = content.match(/^ {0,3}>[ \t]?/)?.[0];
+    if (blockquote) {
+      containers.push({ type: "blockquote" });
+      content = content.slice(blockquote.length);
+      continue;
+    }
+    const list = content.match(listPrefixPattern)?.[0];
+    if (!list) break;
+    containers.push({ type: "list", indent: list.length });
+    content = content.slice(list.length);
+  }
+  return { content, containers };
+};
+
+const openingFence = (line) => {
+  const source = line.endsWith("\r") ? line.slice(0, -1) : line;
+  const { content, containers } = containersBeforeFence(source);
+  const opening = content.match(/^( {0,3})(`{3,}|~{3,})(.*)$/);
+  if (!opening) return;
+  const marker = opening[2];
+  return {
+    marker: marker[0],
+    length: marker.length,
+    containers,
+    invalid: marker[0] === "`" && opening[3].includes("`"),
+    literalLength:
+      source.length - content.length + opening[1].length + marker.length,
+  };
+};
+
+const closingFence = (line, fence) => {
+  let content = line;
+  for (const container of fence.containers) {
+    if (container.type === "blockquote") {
+      const prefix = content.match(/^ {0,3}>[ \t]?/)?.[0];
+      if (!prefix) return;
+      content = content.slice(prefix.length);
+      continue;
+    }
+    const indentation = content.match(/^[ \t]+/)?.[0];
+    if (!indentation) return;
+    content = content.slice(Math.min(indentation.length, container.indent));
+  }
+  if (content.endsWith("\r")) content = content.slice(0, -1);
+  const closing = content.match(/^ {0,3}(`+|~+)[ \t]*$/)?.[1];
+  return closing?.[0] === fence.marker && closing.length >= fence.length;
+};
+
+export const contentWithoutMarkdownCode = (body) => {
   let output = "";
-  for (let index = 0; index < body.length;) {
-    if (body[index] !== "`") {
+  let index = 0;
+  let fence;
+
+  while (index < body.length) {
+    if (fence) {
+      const lineEnd = body.indexOf("\n", index);
+      const end = lineEnd === -1 ? body.length : lineEnd;
+      const line = body.slice(index, end);
+      if (closingFence(line, fence)) fence = undefined;
+      output += blank(line);
+      if (lineEnd !== -1) output += "\n";
+      index = lineEnd === -1 ? body.length : lineEnd + 1;
+      continue;
+    }
+
+    const atLineStart = index === 0 || body[index - 1] === "\n";
+    if (atLineStart) {
+      const lineEnd = body.indexOf("\n", index);
+      const end = lineEnd === -1 ? body.length : lineEnd;
+      const line = body.slice(index, end);
+      const opening = openingFence(line);
+      if (opening?.invalid) {
+        output += body.slice(index, index + opening.literalLength);
+        index += opening.literalLength;
+        continue;
+      }
+      if (opening) {
+        fence = opening;
+        output += blank(line);
+        if (lineEnd !== -1) output += "\n";
+        index = lineEnd === -1 ? body.length : lineEnd + 1;
+        continue;
+      }
+    }
+
+    if (body.startsWith("<!--", index) && !isEscaped(body, index)) {
+      const closing = body.indexOf("-->", index + 4);
+      const commentEnd = closing === -1 ? body.length : closing + 3;
+      output += blank(body.slice(index, commentEnd));
+      index = commentEnd;
+      continue;
+    }
+
+    if (body[index] !== "`" || isEscaped(body, index)) {
       output += body[index++];
       continue;
     }
+
     let endOfOpening = index;
     while (body[endOfOpening] === "`") endOfOpening++;
     const length = endOfOpening - index;
@@ -46,14 +129,12 @@ const withoutInlineCode = (body) => {
       index = endOfOpening;
       continue;
     }
-    output += " ".repeat(closing + length - index);
+    output += blank(body.slice(index, closing + length));
     index = closing + length;
   }
+
   return output;
 };
-
-export const contentWithoutMarkdownCode = (body) =>
-  withoutInlineCode(withoutFencedCode(body));
 
 const closingBracket = (source, opening) => {
   let depth = 1;
@@ -115,7 +196,9 @@ export function extractInternalMarkdownLinks(body) {
 
 export function extractInternalProseLinks(body) {
   return extractInternalMarkdownLinks(
-    body.replace(/<QuickSummary\b[^>]*>[\s\S]*?<\/QuickSummary>/gi, ""),
+    body.replace(/<QuickSummary\b[^>]*>[\s\S]*?<\/QuickSummary>/gi, (summary) =>
+      blank(summary),
+    ),
   );
 }
 

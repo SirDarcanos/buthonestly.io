@@ -14,6 +14,7 @@ import test from "node:test";
 
 import {
   buildInternalLinkGraph,
+  contentWithoutMarkdownCode,
   extractInternalProseLinks,
 } from "../src/lib/internal-prose-links.mjs";
 
@@ -56,6 +57,124 @@ test("internal prose links exclude code, images, and summary furniture", () => {
 `;
 
   assert.deepEqual(extractInternalProseLinks(body), ["/target/", "/nested/"]);
+});
+
+test("comment sanitization does not form new delimiters", () => {
+  const body = `<!<!-- decoy -->--
+[Link](/target/)
+-->`;
+  const sanitized = contentWithoutMarkdownCode(body);
+
+  assert.doesNotMatch(sanitized, /<!--/);
+  assert.match(sanitized, /\[Link\]\(\/target\/\)/);
+});
+
+test("comment sanitization preserves multiline boundaries", () => {
+  const body = `Before
+<!-- first
+second -->
+After`;
+  const sanitized = contentWithoutMarkdownCode(body);
+
+  assert.equal(sanitized.length, body.length);
+  assert.equal(sanitized.split("\n").length, body.split("\n").length);
+  assert.match(sanitized, /^Before\n/);
+  assert.match(sanitized, /\nAfter$/);
+});
+
+test("internal prose links distinguish comments from comment markers in code", () => {
+  const body = `
+[Before](/before/)
+
+<!--
+[Inside unterminated comment](/ignored-comment/)
+`;
+  assert.deepEqual(extractInternalProseLinks(body), ["/before/"]);
+
+  const codeBody = `
+\`<!--\`
+
+\`\`\`md
+<!--
+\`\`\`
+
+[After code](/after-code/)
+`;
+  assert.deepEqual(extractInternalProseLinks(codeBody), ["/after-code/"]);
+});
+
+test("comment contents cannot open Markdown code contexts", () => {
+  const body = `
+<!-- \`\`\`md -->
+
+[After comment](/after-comment/)
+`;
+
+  assert.deepEqual(extractInternalProseLinks(body), ["/after-comment/"]);
+});
+
+test("escaped comment and inline-code delimiters remain prose", () => {
+  const body = `
+\\<!-- [Escaped comment](/escaped-comment/) -->
+
+\\\` [Escaped inline code](/escaped-inline/) \\\`
+`;
+
+  assert.deepEqual(extractInternalProseLinks(body), [
+    "/escaped-comment/",
+    "/escaped-inline/",
+  ]);
+});
+
+test("fenced code handles containers, CRLF, and longer closers", () => {
+  const body = [
+    "> \`\`\`md",
+    "> [Quoted code](/ignored-quote/)",
+    "> \`\`\`\`",
+    "",
+    "- \`\`\`md",
+    "  [Listed code](/ignored-list/)",
+    "  \`\`\`\`",
+    "",
+    "\`\`\`md",
+    "[CRLF code](/ignored-crlf/)",
+    "\`\`\`",
+    "[After code](/after-code/)",
+  ].join("\r\n");
+
+  assert.deepEqual(extractInternalProseLinks(body), ["/after-code/"]);
+});
+
+test("fenced code handles composed containers", () => {
+  const body = `
+- > ~~~md
+  > [Nested code](/ignored-nested/)
+  > ~~~
+
+[After nested code](/after-nested/)
+`;
+
+  assert.deepEqual(extractInternalProseLinks(body), ["/after-nested/"]);
+});
+
+test("invalid backtick fence info remains prose", () => {
+  const body = `
+\`\`\`md\`invalid
+[Visible link](/visible/)
+\`\`\`
+`;
+
+  assert.deepEqual(extractInternalProseLinks(body), ["/visible/"]);
+});
+
+test("summary removal does not join Markdown delimiters", () => {
+  const body = `
+\`<QuickSummary>[Summary](/ignored-summary/)</QuickSummary>\`\`
+
+[Visible link](/visible/)
+`;
+
+  assert.deepEqual(extractInternalProseLinks(body), ["/visible/"]);
 });
 
 const frontmatter = (slug, date, downloads = "") => `---
