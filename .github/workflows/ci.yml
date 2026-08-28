@@ -22,6 +22,14 @@ jobs:
 
       - run: npm ci
 
+      - name: Restore Astro image cache
+        uses: actions/cache@v5
+        with:
+          path: node_modules/.astro
+          key: ${{ runner.os }}-astro-images-${{ hashFiles('package-lock.json', 'astro.config.mjs', 'src/**/*.astro', 'src/**/*.avif', 'src/**/*.gif', 'src/**/*.jpeg', 'src/**/*.jpg', 'src/**/*.png', 'src/**/*.webp') }}
+          restore-keys: |
+            ${{ runner.os }}-astro-images-
+
       - name: Test failure detection
         run: npm test
 
