@@ -11,6 +11,7 @@
     "related": "node scripts/build-related.mjs",
     "links": "node scripts/build-link-graph.mjs",
     "images": "node scripts/optimize-images.mjs",
+    "narration": "node scripts/narration.mjs",
     "postbuild": "node scripts/build-markdown-alternatives.mjs",
     "preview": "astro preview",
     "astro": "astro",
@@ -29,12 +30,17 @@
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.2.9",
     "astro-icon": "^1.2.0",
+    "remark-gfm": "^4.0.1",
+    "remark-mdx": "^3.1.1",
+    "remark-parse": "^11.0.0",
     "tailwind-merge": "^3.6.0",
-    "tailwindcss": "^4.3.3"
+    "tailwindcss": "^4.3.3",
+    "unified": "^11.0.5"
   },
   "devDependencies": {
     "@iconify-json/simple-icons": "^1.2.93",
     "@mixmark-io/domino": "^2.2.0",
+    "google-auth-library": "^11.0.2",
     "gray-matter": "^4.0.3",
     "prettier": "^3.9.6",
     "prettier-plugin-astro": "^0.14.1",
@@ -42,6 +48,7 @@
     "sharp": "^0.35.4",
     "turndown": "^7.2.4",
     "turndown-plugin-gfm": "^1.0.2",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "wrangler": "4.127.0"
   }
 }

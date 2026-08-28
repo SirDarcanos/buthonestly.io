@@ -3,8 +3,20 @@ import Gallery from "../../../../../src/components/content/Gallery.astro";
 import QuickSummary from "../../../../../src/components/content/QuickSummary.astro";
 import Callout from "../../../../../src/components/content/Callout.astro";
 import Blockquote from "../../../../../src/components/content/Blockquote.astro";
+import WrittenOnly from "../../../../../src/components/content/WrittenOnly.astro";
+import NarrationOnly from "../../../../../src/components/content/NarrationOnly.astro";
 import CoverPicture from "../../../../../src/components/Picture.astro";
 import sample from "../sample.jpg";
+
+<link rel="canonical" href="https://buthonestly.io/rich/" />
+
+<main
+  data-agent-document
+  data-agent-metadata={JSON.stringify({
+    title: "Rich fixture",
+    description: "Semantic MDX fixture.",
+  })}
+>
 
 <QuickSummary>
 
@@ -41,3 +53,25 @@ import sample from "../sample.jpg";
 <Blockquote author="Ada Example" source="https://example.com/source">
   Useful words.
 </Blockquote>
+
+<WrittenOnly>
+
+## Written edition heading
+
+This **written-only passage** keeps an [edition link](https://example.com/written).
+
+- Written edition list item
+
+</WrittenOnly>
+
+<NarrationOnly>
+
+## Narration edition heading
+
+This _narration-only passage_ keeps a [spoken link](https://example.com/narration).
+
+- Narration edition list item
+
+</NarrationOnly>
+
+</main>

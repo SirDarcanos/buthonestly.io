@@ -8,6 +8,10 @@ But Honestly is a single-author publication whose essays are prepared in advance
 The authored publication unit, including its prose, metadata, and colocated media.
 _Avoid_: Post, article
 
+**Work-in-progress essay**:
+An Essay still being authored and not yet part of publication. Loose notes toward a possible essay are not Essays.
+_Avoid_: Draft, note
+
 **Scheduled essay**:
 An essay whose publication time is in the future. It may be previewed before publication.
 _Avoid_: Draft, queued post
@@ -47,3 +51,15 @@ _Avoid_: Newsletter excerpt, email excerpt
 **Narration**:
 An audio edition of an essay produced and uploaded independently of the site’s publishing automation.
 _Avoid_: Audio embed, text-to-speech output
+
+**Narration tool**:
+The manual tool that prepares, synthesizes, reviews, and uploads an essay’s narration outside the site’s publishing automation.
+_Avoid_: Audio file generator, publishing automation
+
+**Written-only passage**:
+Essay prose included in written editions and omitted from the narration.
+_Avoid_: Read-only passage, screen-only passage
+
+**Narration-only passage**:
+Essay prose included in the narration and omitted from written editions.
+_Avoid_: Audio-only passage

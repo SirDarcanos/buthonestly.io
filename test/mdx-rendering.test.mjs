@@ -61,4 +61,35 @@ test("MDX renders ordinary Markdown and the semantic content modules", (context)
     rich,
     /href="https:\/\/example\.com\/source"[^>]*target="_blank"[^>]*rel="noopener noreferrer"/,
   );
+  assert.match(rich, /<h2[^>]*>Written edition heading<\/h2>/);
+  assert.match(rich, /<strong>written-only passage<\/strong>/);
+  assert.match(rich, /<li>Written edition list item<\/li>/);
+  assert.doesNotMatch(
+    rich,
+    /Narration edition heading|narration-only passage|Narration edition list item/,
+  );
+
+  const projection = spawnSync(
+    "node",
+    [
+      "scripts/build-markdown-alternatives.mjs",
+      "--site",
+      path.join(fixtureRoot, "dist"),
+    ],
+    { cwd: repositoryRoot, encoding: "utf8" },
+  );
+  assert.equal(projection.status, 0, projection.stdout + projection.stderr);
+
+  const markdown = readFileSync(
+    path.join(fixtureRoot, "dist", "rich.md"),
+    "utf8",
+  );
+  assert.match(markdown, /## Written edition heading/);
+  assert.match(markdown, /\*\*written-only passage\*\*/);
+  assert.match(markdown, /\[edition link\]\(https:\/\/example\.com\/written\)/);
+  assert.match(markdown, /- Written edition list item/);
+  assert.doesNotMatch(
+    markdown,
+    /Narration edition heading|narration-only passage|Narration edition list item/,
+  );
 });
