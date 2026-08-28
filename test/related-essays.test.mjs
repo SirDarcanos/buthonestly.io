@@ -199,6 +199,15 @@ test("semantic workflow runs for essay changes and manually without a schedule",
   assert.doesNotMatch(workflow, /^\s*schedule:/m);
   assert.match(workflow, /npm install --no-save @huggingface\/transformers/);
   assert.match(workflow, /git diff --staged --quiet/);
+  assert.match(workflow, /contents: read/);
+  assert.match(workflow, /persist-credentials: false/);
+  assert.match(
+    workflow,
+    /REPOSITORY_DEPLOY_KEY: \$\{\{ secrets\.REPOSITORY_DEPLOY_KEY \}\}/,
+  );
+  assert.match(workflow, /GIT_SSH_COMMAND/);
+  assert.match(workflow, /trap 'rm -f "\$KEY_PATH"' EXIT/);
+  assert.doesNotMatch(workflow, /ssh-key:/);
   assert.match(workflow, /cancel-in-progress: true/);
   assert.match(workflow, /for attempt in 1 2 3/);
   assert.match(workflow, /git pull --rebase origin main/);
