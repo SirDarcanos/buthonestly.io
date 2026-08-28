@@ -45,6 +45,7 @@ const NARRATION_COMMANDS = new Set([
   "synthesize",
   "synth",
   "upload",
+  "clean",
 ]);
 const SYNTHESIS_SETTING_HEADERS = Object.freeze({
   voice: "voice",
@@ -944,6 +945,38 @@ const uploadNarration = async ({
   };
 };
 
+const cleanNarration = async ({
+  target,
+  repositoryRoot,
+  essaysDirectory,
+  workInProgressDirectory,
+  log,
+}) => {
+  const sourcePath = resolveTarget({
+    target,
+    repositoryRoot,
+    essaysDirectory,
+    workInProgressDirectory,
+  });
+  const paths = synthesisPaths({ repositoryRoot, sourcePath });
+  const removed = {
+    mp3: existsSync(paths.outputPath),
+    checkpoints: existsSync(paths.workDirectory),
+  };
+
+  await rm(paths.outputPath, { force: true });
+  await rm(paths.workDirectory, { recursive: true, force: true });
+
+  log(`Cleaned local Narration artifacts for ${paths.slug}.`);
+  log(`Preserved reviewed narration script ${paths.transcriptPath}.`);
+  return {
+    command: "clean",
+    sourcePath,
+    ...paths,
+    removed,
+  };
+};
+
 const synthesizeNarration = async ({
   target,
   repositoryRoot,
@@ -1143,7 +1176,7 @@ export async function runNarrationCommand({
 } = {}) {
   if (!NARRATION_COMMANDS.has(command)) {
     throw new Error(
-      `Unknown Narration command "${command}". Use prepare, prep, synthesize, synth, or upload.`,
+      `Unknown Narration command "${command}". Use prepare, prep, synthesize, synth, upload, or clean.`,
     );
   }
   if (["prepare", "prep"].includes(command)) {
@@ -1168,6 +1201,15 @@ export async function runNarrationCommand({
       yes,
       remote,
       confirm,
+      log,
+    });
+  }
+  if (command === "clean") {
+    return cleanNarration({
+      target,
+      repositoryRoot,
+      essaysDirectory,
+      workInProgressDirectory,
       log,
     });
   }

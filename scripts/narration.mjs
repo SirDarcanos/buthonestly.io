@@ -17,16 +17,20 @@ import {
 
 const usage = `Usage: npm run narration -- <command> <Essay slug|path> [options]
 
-Commands:
-  prepare, prep       Write an editable narration script without network calls
-  synthesize, synth   Generate a verified MP3 from the reviewed script
-  upload              Upload, purge, verify, then update Essay metadata
+Run stages in order: prepare -> review script -> synthesize -> listen -> upload.
+Clean is local-only and may run after synthesis or upload.
 
-Preparation:
+Commands:
+  prepare, prep       Write or preserve an editable narration script; no network
+  synthesize, synth   Resume synthesis and generate a verified local MP3
+  upload              Upload to R2, purge the exact URL, verify, update metadata
+  clean               Remove the local MP3 and checkpoint state; preserve script
+
+Preparation options:
   --refresh           Replace an existing script and discard its narration edits
 
-Synthesis and upload:
-  --yes               Skip paid-operation or replacement confirmation
+Synthesis options:
+  --yes               Skip the paid-synthesis prompt
   --voice <name>      Voice (default: ${NARRATION_DEFAULTS.voice})
   --style <preset>    ${narrationStyles.join(", ")} (default: ${NARRATION_DEFAULTS.style})
   --pace <preset>     ${narrationPaces.join(", ")} (default: ${NARRATION_DEFAULTS.pace})
@@ -35,13 +39,17 @@ Synthesis and upload:
   --chunk-words <n>   Script chunk budget (default: ${NARRATION_DEFAULTS.chunkWords})
   --join-silence-ms <n>  Silence between chunks (default: ${NARRATION_DEFAULTS.joinSilenceMs})
 
-Synthesis requires ffmpeg and Google Application Default Credentials. Run
-'gcloud auth application-default login' for local ADC, or set
-GOOGLE_APPLICATION_CREDENTIALS to a supported credential file.
+Upload options:
+  --yes               Skip the prompt when replacing a different audio filename
+
+Prompts require typing "yes". Synthesis requires ffmpeg and Google Application
+Default Credentials. Run 'gcloud auth application-default login' for local ADC,
+or set GOOGLE_APPLICATION_CREDENTIALS to a supported credential file. Set
+GOOGLE_CLOUD_PROJECT when ADC does not identify its billing project.
 
 Upload requires CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID,
 CLOUDFLARE_ZONE_ID, and NARRATION_R2_BUCKET. The token needs R2 write and
-Zone Cache Purge permissions.`;
+Zone Cache Purge permissions. Upload and clean never delete remote audio.`;
 
 const valueOptions = new Map([
   ["--voice", "voice"],

@@ -22,6 +22,25 @@ test("publication automation has exactly three workflows", () => {
   ]);
 });
 
+test("Narration artifacts stay excluded from source control", () => {
+  const artifacts = [
+    "src/content/essays/example/example.mp3",
+    "src/content/essays/example/example.audio.txt",
+    "local/narration/example/provenance.json",
+    "local/narration/example/synthesis-report.json",
+    "local/narration/example/chunks/checkpoint.pcm",
+  ];
+  const ignored = execFileSync(
+    "git",
+    ["check-ignore", "--no-index", ...artifacts],
+    { cwd: repositoryRoot, encoding: "utf8" },
+  )
+    .trim()
+    .split("\n");
+
+  assert.deepEqual(ignored, artifacts);
+});
+
 test("the repository contains no transitional publishing machinery", () => {
   const obsoletePaths = [
     ".github/workflows/lint-essays.yml",
