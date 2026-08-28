@@ -21,16 +21,14 @@ const postDate = new Date(post.date).toLocaleString("default", {
   id="highlight"
   class="border-line mx-auto my-10 grid max-w-6xl grid-cols-1 items-center gap-16 border-y px-6 pt-8 pb-16 min-[820px]:grid-cols-[1.35fr_1fr] md:px-10"
 >
-  <a href={post.url} data-track="Homepage lead essay click" tabindex="-1">
-    <Picture
-      src={post.cover!}
-      alt={post.featuredImageAlt ?? ""}
-      widths={[580, 768, 960, 1160, 1376]}
-      sizes="(max-width: 820px) 100vw, 580px"
-      class="w-full"
-      priority
-    />
-  </a>
+  <Picture
+    src={post.cover!}
+    alt={post.featuredImageAlt ?? ""}
+    widths={[580, 768, 960, 1160, 1376]}
+    sizes="(max-width: 820px) 100vw, 580px"
+    class="w-full"
+    priority
+  />
   <div class="flex-col space-y-6">
     <div class="flex items-center gap-3">
       <span class="label">
@@ -39,22 +37,10 @@ const postDate = new Date(post.date).toLocaleString("default", {
       <Divider width={20} />
       <span class="meta">Lead essay</span>
     </div>
-    <h2>
-      <a href={post.url} data-track="Homepage lead essay click">
-        {post.title}
-      </a>
-    </h2>
+    <h2><a href={post.url}>{post.title}</a></h2>
     <p class="lead">{post.excerpt}</p>
     <p class="meta">
       {postDate} &middot; <ReadTime content={post.body} />
     </p>
-    <a
-      href={post.url}
-      data-track="Homepage lead essay click"
-      class="label inline-block"
-      aria-label={`Read ${post.title}`}
-    >
-      Read the latest essay →
-    </a>
   </div>
 </section>
