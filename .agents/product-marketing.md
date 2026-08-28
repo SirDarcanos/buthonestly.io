@@ -1,7 +1,7 @@
 # Marketing Context — BUT. Honestly
 
-**Document version:** v1
-**Last updated:** 2026-08-13
+**Document version:** v2
+**Last updated:** 2026-08-28
 
 > Context for skills that write or plan content for buthonestly.io. This is a personal
 > essay site, not a product: there is nothing to sell, no buying committee, and no sales
@@ -62,22 +62,17 @@ Never bend the *substance* to chase a term. Do sharpen the title, headings and e
 
 ## Who it's for
 
-**There is more than one reader, and they barely overlap.** The WooCommerce developer looking up an attribute filter and the lead reading about caring without feeling it are different people who arrive by different routes and rarely read each other's essays. Treat them as separate audiences rather than one blended persona.
+**The primary audience is people navigating leadership, work, and technology.** They come for honest accounts of what happened, what it cost, and what can be learned from it. They have usually shipped something, led people, or worked inside technical organisations; the writing is not expert-only, but it does not assume a first-timer.
 
-- **Practitioners** — people leading small technical teams or building for the web, who want the honest version with the tradeoffs named. The Leadership and Observations essays are for them.
-- **Searchers with a specific problem** — mostly WordPress and WooCommerce, arriving from Google for one answer. The Programming and Web archive serves them.
+WordPress and WooCommerce do not define this audience. Their 2015–2018 posts are a legacy archive that still attracts search traffic, not a meaningful influence on the site's direction. New essays may mention or focus on them from time to time when there is something worth saying, but they are no longer a primary editorial focus.
 
-**What follows:** an excerpt or title should be written for whichever audience that essay actually serves, not for a blended average. Cross-linking between the two groups is worth less than linking inside them, so do not force it.
+**Who arrives through the archive.** Search still finds pages such as `woocommerce_min_password_strength` (position 7.0) and `woocommerce attributes and variations` (14.5). Those visitors often need one specific answer. Their presence in analytics should not turn them into the assumed reader for new work.
 
-**Assumed level differs by audience.** For practitioners: you have shipped something. Not expert-only, but not a first-timer's guide. For searchers: they arrive knowing only their problem, and the older WooCommerce tutorials are written accordingly — genuinely beginner-level, which is a legacy of when they were written rather than a change in target.
-
-**Who arrives instead.** Search overwhelmingly finds the 2015–2018 WooCommerce archive: `woocommerce_min_password_strength` (position 7.0), `woocommerce attributes and variations` (14.5), plus software-licensing queries (9–12).
-
-**Leave it correct and leave it alone.** In his words: *"I don't want traffic from WooCommerce posts. They are there and they can stay, but I don't want to be known for that only. I want to be known for the new content."*
+**Leave the archive correct without letting it set the agenda.**
 
 - **Do** keep it accurate — snippets that work, dates that are honest, links that resolve. It helps whoever lands there.
-- **Do not** spend optimisation effort on it. Every winnable ranking the site has sits in this archive, and winning more of them grows an audience that will not read anything else.
-- **Rarely extend it.** WordPress and WooCommerce essays will appear occasionally, not consistently.
+- **Do not** spend optimisation effort on it merely because it holds the site's easiest rankings.
+- **Do** write about WordPress or WooCommerce occasionally when the subject genuinely fits; do not treat either as a required content stream.
 
 **This is a deliberate refusal of the easiest traffic available, and it should be respected rather than re-litigated.** A future session will notice those positions and want to chase them. Don't.
 
@@ -128,7 +123,7 @@ Where search work does belong: the newer essays that are genuinely searchable, `
 | Topic | The tags. 14 in use. |
 | Cornerstone | An evergreen hub essay others link to. Six named. |
 | Evergreen / decaying / trend-pinned | Durability tiers applied when drafting. |
-| Legacy tail | The 2015–2018 WooCommerce archive: maintained, not extended. |
+| Legacy tail | The 2015–2018 WordPress and WooCommerce archive: maintained, but no longer a meaningful influence on the site's direction. |
 
 ## Where things stand
 
@@ -183,4 +178,5 @@ Worth revisiting around **October 2026**, when URL consolidation finishes and th
 
 *Newest first. One line per revision: what changed and why.*
 
+- v2 (2026-08-28) — Reframed the audience around leadership, work, and technology; clarified that WordPress and WooCommerce are a legacy archive, not the site's primary direction.
 - v1 (2026-08-13) — Initial context, built with the author from repo copy, the Style Guide, all 49 essays and 28 days of Search Console data.
