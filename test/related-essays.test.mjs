@@ -200,7 +200,8 @@ test("semantic workflow runs for essay changes and manually without a schedule",
   assert.match(workflow, /npm install --no-save @huggingface\/transformers/);
   assert.match(workflow, /git diff --staged --quiet/);
   assert.match(workflow, /cancel-in-progress: true/);
-  assert.doesNotMatch(workflow, /git pull --rebase/);
+  assert.match(workflow, /for attempt in 1 2 3/);
+  assert.match(workflow, /git pull --rebase origin main/);
 });
 
 test("generated files remain untouched when semantic state is unchanged", async (testContext) => {

@@ -85,11 +85,20 @@ test("public hashes track reader-facing changes and ignore workflow metadata ord
     directory,
     "hash-example",
     "mdx",
-    frontmatter({ cornerstone: false }).replace(
-      "tags:",
-      "downloads:\n  - file: guide.pdf\n    label: Guide\ntags:",
-    ),
+    frontmatter({ cornerstone: false })
+      .replace(
+        "tags:",
+        "downloads:\n  - file: guide.pdf\n    label: Guide\ntags:",
+      )
+      .replace(
+        "Fixture prose.",
+        'import figure from "./figure.jpg";\n\n<Figure src={figure} alt="Fixture" />',
+      ),
   );
+  const essayDirectory = path.join(directory, "hash-example");
+  writeFileSync(path.join(essayDirectory, "cover.jpg"), "first cover");
+  writeFileSync(path.join(essayDirectory, "figure.jpg"), "first figure");
+  writeFileSync(path.join(essayDirectory, "guide.pdf"), "first download");
   const first = loadEssayInventory({ essaysDirectory: directory }).get(
     "hash-example",
   );
@@ -111,7 +120,9 @@ title: Fixture essay
 cornerstone: true
 ---
 
-Fixture prose.
+import figure from "./figure.jpg";
+
+<Figure src={figure} alt="Fixture" />
 `;
   writeEssay(directory, "hash-example", "mdx", reordered);
   const equivalent = loadEssayInventory({ essaysDirectory: directory }).get(
@@ -135,11 +146,37 @@ Fixture prose.
     "published",
   );
 
+  for (const [filename, contents] of [
+    ["cover.jpg", "changed cover"],
+    ["figure.jpg", "changed figure"],
+    ["guide.pdf", "changed download"],
+  ]) {
+    writeFileSync(path.join(essayDirectory, filename), contents);
+    const changedAsset = loadEssayInventory({
+      essaysDirectory: directory,
+    }).get("hash-example");
+    assert.notEqual(
+      changedAsset.publicContentHash,
+      equivalent.publicContentHash,
+    );
+    writeFileSync(
+      path.join(essayDirectory, filename),
+      filename === "cover.jpg"
+        ? "first cover"
+        : filename === "figure.jpg"
+          ? "first figure"
+          : "first download",
+    );
+  }
+
   writeEssay(
     directory,
     "hash-example",
     "mdx",
-    reordered.replace("Fixture prose.", "Changed public prose."),
+    reordered.replace(
+      '<Figure src={figure} alt="Fixture" />',
+      '<Figure src={figure} alt="Changed fixture" />',
+    ),
   );
   const changed = loadEssayInventory({ essaysDirectory: directory }).get(
     "hash-example",
@@ -190,6 +227,34 @@ test("inventory normalizes metadata, freshness, taxonomy, and narration", (testC
   assert.equal(
     essay.narrationUrl,
     "https://static.buthonestly.io/audio/fixture%20narration.mp3",
+  );
+});
+
+test("inventory rejects taxonomy slugs shared by different names", (testContext) => {
+  const directory = fixtureDirectory(testContext);
+  writeEssay(
+    directory,
+    "cplusplus",
+    "mdx",
+    frontmatter({ categories: ["Programming"], tags: ["C++"] }),
+  );
+  writeEssay(
+    directory,
+    "csharp",
+    "mdx",
+    frontmatter({ categories: ["Programming"], tags: ["C#"] }),
+  );
+
+  assert.throws(
+    () => loadEssayInventory({ essaysDirectory: directory }),
+    (error) =>
+      error instanceof EssayInventoryError &&
+      error.diagnostics.some(
+        ({ code, message }) =>
+          code === "taxonomy-collision" &&
+          message.includes("C++") &&
+          message.includes("C#"),
+      ),
   );
 });
 

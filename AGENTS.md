@@ -48,7 +48,8 @@ accumulate and go out as a batch. Do not push on every change.
   manual dispatch for recovery rather than running it casually. The IndexNow key
   is public by protocol and lives at `public/<key>.txt`. Durable per-essay Kit
   broadcast identities, delivery status, and IndexNow hashes share
-  `data/publication-state.json`; completed actions are never repeated.
+  `data/publication-state.json`; durably checkpointed actions are never repeated.
+  An accepted IndexNow request can be retried when its checkpoint fails.
 - `scripts/kit-newsletter-template.html` is the maintained full HTML document
   for Account → Email templates, which wraps publication broadcasts.
 - The committed newsletter PNGs and `public/og-default.png` are permanent

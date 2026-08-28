@@ -109,15 +109,17 @@ const jsonLd = [
 
     {
       post.cover && (
-        <Picture
-          src={post.cover}
-          alt={post.featuredImageAlt ?? ""}
-          caption={post.featuredImageCaption ?? ""}
-          widths={[580, 768, 960, 1160, 1376]}
-          sizes="(max-width: 820px) 100vw, 580px"
-          class="w-full"
-          priority
-        />
+        <div data-agent-cover>
+          <Picture
+            src={post.cover}
+            alt={post.featuredImageAlt ?? ""}
+            caption={post.featuredImageCaption ?? ""}
+            widths={[580, 768, 960, 1160, 1376]}
+            sizes="(max-width: 820px) 100vw, 580px"
+            class="w-full"
+            priority
+          />
+        </div>
       )
     }
 

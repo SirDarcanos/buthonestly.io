@@ -35,6 +35,7 @@ const readDocument = (file) => {
     file,
     document,
     content,
+    cover: document.querySelector("[data-agent-cover]"),
     canonical,
     metadata: JSON.parse(encodedMetadata),
   };
@@ -185,7 +186,9 @@ const metadataLines = (metadata, canonical) => {
     .map(([name, value]) => `${name}: ${JSON.stringify(value)}`);
 };
 
-const prepareContent = ({ content, canonical }, alternatives) => {
+const prepareContent = ({ content, cover, canonical }, alternatives) => {
+  if (cover) content.insertBefore(cover.cloneNode(true), content.firstChild);
+
   Array.from(content.querySelectorAll("[data-agent-card]")).forEach((card) => {
     const heading = card.querySelector("h1, h2, h3, h4, h5, h6");
     const href = card.getAttribute("href");

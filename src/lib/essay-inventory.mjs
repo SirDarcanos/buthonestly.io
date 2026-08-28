@@ -112,7 +112,15 @@ export const taxonomySlug = (name) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
 
-const normalizeTaxonomy = (value, kind, siteBase, file, field, diagnostics) => {
+const normalizeTaxonomy = (
+  value,
+  kind,
+  siteBase,
+  file,
+  field,
+  diagnostics,
+  namesByInventorySlug,
+) => {
   if (!Array.isArray(value) || value.length === 0) {
     diagnostics.push(
       diagnostic(
@@ -158,6 +166,19 @@ const normalizeTaxonomy = (value, kind, siteBase, file, field, diagnostics) => {
       continue;
     }
     namesBySlug.set(slug, name);
+    const inventoryTerm = namesByInventorySlug.get(slug);
+    if (inventoryTerm && inventoryTerm.name !== name) {
+      diagnostics.push(
+        diagnostic(
+          "taxonomy-collision",
+          file,
+          `${field} term "${name}" shares URL slug "${slug}" with "${inventoryTerm.name}" in ${inventoryTerm.file}`,
+          field,
+        ),
+      );
+      continue;
+    }
+    namesByInventorySlug.set(slug, { name, file });
     const pathname = `/${kind}/${slug}/`;
     terms.push({
       name,
@@ -230,6 +251,30 @@ const normalizeBaseUrl = (value, name) => {
   return url;
 };
 
+const readerAssetDigests = (essay) => {
+  const essayDirectory = path.dirname(essay.sourcePath);
+  const referencedPaths = new Set([
+    essay.coverPath,
+    ...essay.downloads.map(({ file }) => path.resolve(essayDirectory, file)),
+  ]);
+  for (const match of essay.body.matchAll(
+    /^\s*import\s+[^;\n]+?\s+from\s+["']([^"']+)["']/gm,
+  )) {
+    const importedPath = path.resolve(essayDirectory, match[1]);
+    if (importedPath.startsWith(`${essayDirectory}${path.sep}`)) {
+      referencedPaths.add(importedPath);
+    }
+  }
+
+  return [...referencedPaths]
+    .filter((assetPath) => assetPath && existsSync(assetPath))
+    .sort((a, b) => a.localeCompare(b))
+    .map((assetPath) => ({
+      path: path.relative(essayDirectory, assetPath),
+      hash: createHash("sha256").update(readFileSync(assetPath)).digest("hex"),
+    }));
+};
+
 const publicContentHash = (essay) =>
   createHash("sha256")
     .update(
@@ -249,6 +294,7 @@ const publicContentHash = (essay) =>
         coverCaption: essay.coverCaption ?? null,
         downloads: essay.downloads,
         sticky: essay.sticky,
+        assets: readerAssetDigests(essay),
       }),
     )
     .digest("hex");
@@ -325,6 +371,8 @@ export function loadEssayInventory({
   const siteBase = normalizeBaseUrl(siteUrl, "siteUrl");
   const staticBaseUrl = normalizeBaseUrl(staticBase, "staticBase");
   const essays = [];
+  const categoryNamesBySlug = new Map();
+  const tagNamesBySlug = new Map();
   for (const source of sources) {
     const sourceContent = readFileSync(source.sourcePath, "utf8");
     const parsed = matter(sourceContent);
@@ -395,6 +443,7 @@ export function loadEssayInventory({
       source.sourcePath,
       "categories",
       diagnostics,
+      categoryNamesBySlug,
     );
     const tags = normalizeTaxonomy(
       parsed.data.tags,
@@ -403,6 +452,7 @@ export function loadEssayInventory({
       source.sourcePath,
       "tags",
       diagnostics,
+      tagNamesBySlug,
     );
     const downloads = normalizeDownloads(
       parsed.data.downloads,

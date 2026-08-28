@@ -139,7 +139,7 @@ audio: what-is-a-gpu.mp3
 | `excerpt`                             | Used for listings, metadata, feeds, and the on-page lead.          |
 | `newsletterIntro`                     | Required plain-text email introduction.                            |
 | `categories` / `tags`                 | Sections and topics. At least one of each.                         |
-| `sticky` / `cornerstone`              | Editorial flags — featured on its section, weighted in SEO.        |
+| `sticky` / `cornerstone`              | Feature an essay in its section / mark an evergreen link hub.      |
 | `downloads`                           | Files served from R2, rendered as a download block.                |
 | `audio`                               | Optional filename served from `static.buthonestly.io/audio/`.      |
 

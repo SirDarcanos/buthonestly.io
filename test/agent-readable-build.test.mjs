@@ -25,6 +25,8 @@ const fileForUrl = (url) =>
 const withoutFencedCode = (markdown) =>
   markdown.replace(/^(`{3,}|~{3,}).*?^\1\s*$/gms, "");
 
+const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 test("the production agent index leads to every editorial Markdown alternative", () => {
   const build = spawnSync("npm", ["run", "build"], {
     cwd: repositoryRoot,
@@ -85,6 +87,22 @@ test("the production agent index leads to every editorial Markdown alternative",
       /data-agent-|data-pagefind|newsletterIntro|contentHash|<script|<form/i,
     );
   }
+
+  const coverEssay = inventory.get("vibe-writing-line-between-human-machine");
+  const coverMarkdown = readFileSync(
+    fileForUrl(markdownUrl(coverEssay.pathname)),
+    "utf8",
+  );
+  assert.match(
+    coverMarkdown,
+    new RegExp(
+      `!\\[${escapeRegExp(coverEssay.coverAlt)}\\]\\(https://buthonestly\\.io/_astro/`,
+    ),
+  );
+  assert.match(
+    coverMarkdown,
+    /\[Suzy Hazelwood\]\(https:\/\/www\.pexels\.com\/@suzyhazelwood\/\)/,
+  );
 
   for (const url of scheduledUrls) {
     assert.equal(advertisedUrls.has(url), false);

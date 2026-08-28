@@ -48,5 +48,11 @@ jobs:
             echo "Related map unchanged."
           else
             git commit -m "chore: rebuild related essays"
-            git push
+            for attempt in 1 2 3; do
+              git pull --rebase origin main
+              if git push; then
+                exit 0
+              fi
+            done
+            exit 1
           fi
