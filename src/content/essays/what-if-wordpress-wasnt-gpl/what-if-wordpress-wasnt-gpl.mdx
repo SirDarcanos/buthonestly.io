@@ -23,6 +23,7 @@ audio: what-if-wordpress-wasnt-gpl.mp3
 
 import QuickSummary from "../../../components/content/QuickSummary.astro";
 import Callout from "../../../components/content/Callout.astro";
+import Blockquote from "../../../components/content/Blockquote.astro";
 
 <QuickSummary>
 
@@ -61,7 +62,9 @@ In a closed-source world, that's where the story ends. The author leaves, the co
 
 The license wasn't an afterthought, even then. Weighing his options in a [January 2003 post](https://ma.tt/2003/01/the-blogging-software-dilemma/), Matt ruled out TextPattern over its license and settled on b2 for one reason:
 
-> “Fortunately, b2/cafelog is GPL, which means that I could use the existing codebase to create a fork, integrating all the cool stuff that Michel would be working on right now if only he was around.”
+<Blockquote author="Matt Mullenweg" source="https://ma.tt/2003/01/the-blogging-software-dilemma/">
+“Fortunately, b2/cafelog is GPL, which means that I could use the existing codebase to create a fork, integrating all the cool stuff that Michel would be working on right now if only he was around.”
+</Blockquote>
 
 Iterative Wonders tells that origin story better than I could, so I'll point you there rather than retell it: [It Was Just a Blog Fix… Until It Was WordPress](https://iterativewonders.com/2025/11/21/it-was-just-a-blog-fix-until-it-was-wordpress/).
 
@@ -117,8 +120,9 @@ Here's why it's not hypothetical. Gutenberg is built on React, and React is MIT.
 
 And the seam between those two worlds has drawn blood before. Back in 2017, React didn't carry a clean MIT license. It shipped under a BSD license plus a separate patents grant that made a lot of people nervous. The Apache Foundation had already barred it from its projects. Then Matt Mullenweg [announced](https://ma.tt/2017/09/on-react-and-wordpress/) that WordPress would move off React and rewrite Gutenberg on something else. His reason was scale:
 
-> “Core WordPress updates go out to over a quarter of all websites, having them all inherit the patents clause isn't something I'm comfortable with.”
-
+<Blockquote author="Matt Mullenweg" source="https://ma.tt/2017/09/on-react-and-wordpress/">
+“Core WordPress updates go out to over a quarter of all websites, having them all inherit the patents clause isn't something I'm comfortable with.”
+</Blockquote>
 About a week later, Facebook relicensed React — along with Jest, Flow, and Immutable.js — under plain MIT.
 
 I want to be careful with that story. Facebook didn't credit WordPress. Its [stated reason](https://engineering.fb.com/web/relicensing-react-jest-flow-and-immutable-js/) was the broad ecosystem and a community it had "failed to decisively convince." WordPress was one voice in a louder chorus — Apache, and a wave of teams already dropping React. But it was a loud voice, and the timing is hard to ignore. The platform behind a quarter of the web said no, and a week later the clause was gone. Draw the causal arrow as lightly as you want. The point stands: the mix isn't a diagram, it's a negotiation, and the copyleft side was in the room.
