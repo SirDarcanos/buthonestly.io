@@ -265,9 +265,10 @@ weekly full scan.
 
 A repository ruleset protects `main` with pull requests, the `verify` check,
 resolved review threads, linear history, and squash-only merges. Administrators
-can bypass the ruleset. The related and publication workflows use the
-repository-scoped `REPOSITORY_DEPLOY_KEY` secret for their generated-state
-commits.
+can bypass the ruleset. The related and publication workflows use the repository-scoped
+`REPOSITORY_DEPLOY_KEY` secret for their generated-state commits. One checkpoint
+command restricts each workflow to its named generated files, pins GitHub's SSH
+host keys, and removes its temporary private-key file after every push attempt.
 
 Cloudflare Pages builds `dist/` from `main`. The publication orchestrator reads
 each pending essay's `data-content-version`, requests the Pages deploy hook when

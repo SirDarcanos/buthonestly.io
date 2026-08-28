@@ -990,9 +990,12 @@ test("the publication workflow owns hourly, essay-change, and manual orchestrati
     workflow,
     /REPOSITORY_DEPLOY_KEY: \$\{\{ secrets\.REPOSITORY_DEPLOY_KEY \}\}/,
   );
-  assert.match(workflow, /GIT_SSH_COMMAND/);
-  assert.match(workflow, /trap 'rm -f "\$KEY_PATH"' EXIT/);
-  assert.doesNotMatch(workflow, /ssh-key:/);
+  assert.equal(
+    workflow.match(/node scripts\/checkpoint-generated-state\.mjs publication/g)
+      ?.length,
+    2,
+  );
+  assert.doesNotMatch(workflow, /GIT_SSH_COMMAND|ssh-key:/);
   assert.match(workflow, /group: publication/);
   assert.match(workflow, /cancel-in-progress: false/);
   assert.equal(workflow.match(/run: npm run publication/g)?.length, 2);
@@ -1001,7 +1004,7 @@ test("the publication workflow owns hourly, essay-change, and manual orchestrati
   assert.match(workflow, /steps\.publication_checkpoint\.outcome == 'success'/);
   assert.match(workflow, /Resume recorded Kit broadcasts/);
   assert.match(workflow, /if: always\(\)/);
-  assert.match(workflow, /git add data\/publication-state\.json/);
+  assert.doesNotMatch(workflow, /git add data\/publication-state\.json/);
   assert.doesNotMatch(
     workflow,
     /^\s*- ["']data\/publication-state\.json["']\s*$/m,
