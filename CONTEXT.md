@@ -41,7 +41,7 @@ The authoritative interface for essay source discovery, metadata, publication st
 _Avoid_: Content parser, post loader
 
 **Newsletter introduction**:
-The longer plain-text introduction used in an essay’s publication email, distinct from the shorter excerpt used for search metadata.
+The plain-text introduction used in an essay’s publication email, distinct in purpose from the excerpt used for search metadata and the on-page lead.
 _Avoid_: Newsletter excerpt, email excerpt
 
 **Narration**:

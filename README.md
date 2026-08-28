@@ -32,19 +32,19 @@ is a commit.
 
 **What the build gives you beyond the pages:**
 
-- **Date-driven publishing.** A future `date` schedules an essay; an hourly
-  Action deploys a missing or stale public version, waits for its content hash,
+- **Date-driven publishing.** A future publication day schedules an essay; an
+  hourly Action deploys a missing or stale public version, waits for its content hash,
   then independently notifies IndexNow and delivers its Kit broadcast. Drafts
   live outside the built collection.
 - **Local-first images.** Covers and body images are committed, then optimized
   in place (16:9 covers, opaque sources to JPEG) and re-encoded to AVIF/WebP.
 - **Audio narration.** An optional audio filename adds an in-page player for a
   narration hosted on the fixed media domain.
-- **Semantic related posts**, precomputed from sentence embeddings rather than
-  tag overlap.
+- **Semantic related essays**, precomputed from sentence embeddings with
+  taxonomy as an additional signal.
 - **Feeds and machine-readable indexes** — a site feed plus one per section and
-  per topic, `sitemap.xml` with real `lastmod` dates, `llms.txt`, portable
-  Markdown alternatives, and IndexNow submissions on publish.
+  per topic, a sitemap index with real `lastmod` dates, `llms.txt`, portable
+  Markdown alternatives, and IndexNow updates.
 - **Static redirects** for legacy WordPress URLs — old post paths, feeds,
   paginated archives and downloads — so old links keep working.
 
@@ -134,7 +134,7 @@ audio: what-is-a-gpu.mp3
 | ------------------------------------- | ------------------------------------------------------------------ |
 | `title`                               | Required.                                                          |
 | `date`                                | Required `YYYY-MM-DD`; every essay publishes at 13:00 UTC.         |
-| `updated`                             | Optional `YYYY-MM-DD`; feeds the sitemap's `lastmod`.              |
+| `updated`                             | Optional later `YYYY-MM-DD`; feeds the sitemap's `lastmod`.        |
 | `cover` / `coverAlt` / `coverCaption` | Local path. **Covers must be 16:9**; alt text describes the image. |
 | `excerpt`                             | Used for listings, metadata, feeds, and the on-page lead.          |
 | `newsletterIntro`                     | Required plain-text email introduction.                            |
@@ -158,7 +158,7 @@ Import `Figure`, `Gallery`, `QuickSummary`, `Callout`, and `Blockquote` from
 | `npm run check:links`        | Verifies canonical internal links, publication safety, and local assets.                                      |
 | `npm run links`              | Prints advisory prose-link analysis; pass `-- --json <path>` for local JSON.                                  |
 | `npm run images [-- <slug>]` | Manually resizes and compresses oversized sources and converts opaque images to JPEG, printing renamed paths. |
-| `npm run related`            | Rebuilds the semantic related-posts map.                                                                      |
+| `npm run related`            | Rebuilds the semantic related-essays map.                                                                     |
 | `npm run publication`        | Verifies live content, deploys stale versions, resumes Kit delivery, and submits changed content to IndexNow. |
 
 ## Automation
@@ -191,7 +191,7 @@ broadcasts, and unsubscribes. The workflow requires `KIT_API_KEY`; the optional
 `KIT_EMAIL_TEMPLATE_ID` repository variable pins the maintained account template.
 A failed provider action remains pending while an independent success is
 preserved; rerun `publication.yml` manually to recover without repeating
-completed work.
+durably checkpointed work.
 
 > [!IMPORTANT]
 > `wrangler.toml` is git-ignored so the bucket names stay out of the public
@@ -200,9 +200,13 @@ completed work.
 
 Environment variables (see `.env.example`):
 
-| Variable         | Used for                                         |
-| ---------------- | ------------------------------------------------ |
-| `FATHOM_SITE_ID` | Analytics, `main`-branch production builds only. |
+| Variable                | Used for                                                    |
+| ----------------------- | ----------------------------------------------------------- |
+| `FATHOM_SITE_ID`        | Analytics, `main`-branch production builds only.            |
+| `CF_DEPLOY_HOOK_URL`    | Cloudflare Pages deployment requests.                       |
+| `KIT_API_KEY`           | Kit broadcast lookup, draft creation, and delivery.         |
+| `KIT_EMAIL_TEMPLATE_ID` | Optional maintained Kit account template.                   |
+| `SITE_URL`              | Optional production-origin override for publication checks. |
 
 The Fathom script is skipped when `CF_PAGES_BRANCH` is set to anything but
 `main`, so preview deploys never pollute the stats even if the variable is set

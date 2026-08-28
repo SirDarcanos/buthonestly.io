@@ -34,7 +34,7 @@ accumulate and go out as a batch. Do not push on every change.
   place: resize oversized files to max 1376px, recompress them, and convert
   opaque images to JPEG. A conversion prints both paths; update authored MDX
   references yourself. Invalid cover proportions block the command.
-- `npm run related` — rebuild the semantic related-posts map (normally left
+- `npm run related` — rebuild the semantic related-essays map (normally left
   to the `related.yml` Action).
 - `npm run links` — print advisory analysis of the editorial internal-link
   graph. Counts only links written into prose: summaries, related essays,
@@ -76,7 +76,7 @@ opposite: git-ignored, uploaded to R2.
   alpha). Animated sources are skipped rather than flattened. GIFs and SVGs are
   exempt entirely — the
   optimizer ignores them and they need not be 16:9.
-- Covers: `cover: ./file.jpg` in frontmatter, required once an essay is live.
+- Covers: `cover: ./file.jpg` in frontmatter, required for every essay.
   Rendered by `Picture.astro` as AVIF → WebP → JPEG.
 - Body images use imported image metadata and `Figure`. Externally licensed
   photography keeps its linked credit in the caption children; original media
@@ -122,11 +122,11 @@ links` reports how many essays in each cluster reach theirs. Only durable
   characters against Bluesky's 300-character limit. The newsletter has clean
   numbers only because Kit tags it.
 - **`date` and `updated` are calendar dates.** Author them only as `YYYY-MM-DD`;
-  timestamps are invalid. The essay inventory resolves every publication date
+  timestamps are invalid. The essay inventory resolves every publication day
   to 13:00 UTC through `src/lib/publish-time.mjs`.
 - `newsletterIntro` is required plain text. Use one to three paragraphs with
   enough context for the publication email; it is not rendered as MDX.
-- Publishing is date-driven (a future `date` schedules the essay); WIP lives
+- Publishing is date-driven (a future publication day schedules the essay); WIP lives
   in `src/content/drafts/`, which is not a built collection. A scheduled essay
   still renders on the dev server, so it can be proofread before it lands.
 - Essays are MDX. Prose, headings, lists, code, and links stay standard Markdown;
