@@ -18,6 +18,7 @@ import { unified } from "unified";
 
 import { chunkText } from "./chunk-text.mjs";
 import { blankMarkdownComments } from "./markdown-comments.mjs";
+import { narrationUrl } from "./narration.mjs";
 import {
   DIRECTOR_PROMPT_FORMAT,
   NARRATION_BITRATE,
@@ -38,7 +39,13 @@ export const NARRATION_DEFAULTS = Object.freeze({
   joinSilenceMs: 200,
 });
 
-const NARRATION_COMMANDS = new Set(["prepare", "prep", "synthesize", "synth"]);
+const NARRATION_COMMANDS = new Set([
+  "prepare",
+  "prep",
+  "synthesize",
+  "synth",
+  "upload",
+]);
 const SYNTHESIS_SETTING_HEADERS = Object.freeze({
   voice: "voice",
   style: "style",
@@ -766,7 +773,175 @@ export const validateNarrationProvenance = async ({
       `Narration MP3 at ${paths.outputPath} failed provenance validation`,
     );
   }
-  return { ...paths, sourcePath, settings: manifest.settings };
+  return {
+    ...paths,
+    sourcePath,
+    settings: manifest.settings,
+    outputHash: manifest.outputHash,
+  };
+};
+
+const narrationMetadataChange = (source, filename, sourcePath) => {
+  const frontmatter = source.match(
+    /^(---\r?\n)([\s\S]*?)(\r?\n---(?:\r?\n|$))/u,
+  );
+  if (!frontmatter) {
+    throw new Error(`${sourcePath} does not have valid YAML frontmatter`);
+  }
+  const audioLines = [...frontmatter[2].matchAll(/^audio:[^\r\n]*$/gmu)];
+  if (audioLines.length > 1) {
+    throw new Error(`${sourcePath} contains more than one audio field`);
+  }
+  const existing = matter(source).data.audio;
+  if (existing !== undefined && typeof existing !== "string") {
+    throw new Error(`${sourcePath} audio metadata must be a filename`);
+  }
+  if (
+    typeof existing === "string" &&
+    (audioLines.length !== 1 || audioLines[0][0] !== `audio: ${existing}`)
+  ) {
+    throw new Error(
+      `${sourcePath} audio metadata must use the canonical \`audio: filename.mp3\` form before upload`,
+    );
+  }
+
+  let body;
+  if (audioLines.length === 1) {
+    body = `${frontmatter[2].slice(0, audioLines[0].index)}audio: ${filename}${frontmatter[2].slice(audioLines[0].index + audioLines[0][0].length)}`;
+  } else {
+    const newline = frontmatter[1].includes("\r\n") ? "\r\n" : "\n";
+    body = `${frontmatter[2]}${newline}audio: ${filename}`;
+  }
+  return {
+    existing: typeof existing === "string" ? existing.trim() : undefined,
+    content: `${frontmatter[1]}${body}${frontmatter[3]}${source.slice(frontmatter[0].length)}`,
+  };
+};
+
+const uploadNarration = async ({
+  target,
+  repositoryRoot,
+  essaysDirectory,
+  workInProgressDirectory,
+  yes,
+  remote,
+  confirm,
+  log,
+}) => {
+  if (!remote)
+    throw new Error("Narration upload requires a Cloudflare adapter");
+  const recovery = `npm run narration -- upload ${target}`;
+  let approved;
+  let metadata;
+  let originalSource;
+  let publicUrl;
+
+  try {
+    approved = await validateNarrationProvenance({
+      target,
+      repositoryRoot,
+      essaysDirectory,
+      workInProgressDirectory,
+    });
+    const filename = `${approved.slug}.mp3`;
+    publicUrl = narrationUrl(filename);
+    originalSource = await readFile(approved.sourcePath, "utf8");
+    metadata = narrationMetadataChange(
+      originalSource,
+      filename,
+      approved.sourcePath,
+    );
+    await access(path.dirname(approved.sourcePath), constants.W_OK);
+    await remote.preflight({ publicUrl });
+  } catch (error) {
+    throw stageError(
+      "upload preflight",
+      new Error(`${error.message}\nRecovery: ${recovery}`),
+    );
+  }
+
+  if (
+    metadata.existing &&
+    metadata.existing !== `${approved.slug}.mp3` &&
+    !yes
+  ) {
+    if (typeof confirm !== "function") {
+      throw new Error(
+        `Replacing narration metadata requires confirmation or --yes. Recovery: ${recovery} --yes`,
+      );
+    }
+    const accepted = await confirm(
+      `Replace narration ${metadata.existing} with ${approved.slug}.mp3?`,
+    );
+    if (!accepted) throw new Error("Narration upload cancelled");
+  }
+
+  try {
+    await remote.upload({
+      filePath: approved.outputPath,
+      key: `audio/${approved.slug}.mp3`,
+    });
+  } catch (error) {
+    throw stageError(
+      "R2 upload",
+      new Error(`${error.message}\nRecovery: ${recovery}`),
+    );
+  }
+  try {
+    await remote.purge({ publicUrl });
+  } catch (error) {
+    throw stageError(
+      "exact-URL cache purge",
+      new Error(`${error.message}\nRecovery: ${recovery}`),
+    );
+  }
+  try {
+    await remote.verify({
+      publicUrl,
+      expectedHash: approved.outputHash,
+    });
+  } catch (error) {
+    throw stageError(
+      "public verification",
+      new Error(`${error.message}\nRecovery: ${recovery}`),
+    );
+  }
+
+  const temporarySourcePath = `${approved.sourcePath}.${process.pid}.tmp`;
+  try {
+    const currentSource = await readFile(approved.sourcePath, "utf8");
+    if (currentSource !== originalSource) {
+      throw new Error(
+        `${approved.sourcePath} changed during upload; the verified audio remains remote but no metadata was changed`,
+      );
+    }
+    const sourceStats = await stat(approved.sourcePath);
+    await writeFile(temporarySourcePath, metadata.content, {
+      encoding: "utf8",
+      mode: sourceStats.mode,
+    });
+    await rename(temporarySourcePath, approved.sourcePath);
+  } catch (error) {
+    await rm(temporarySourcePath, { force: true }).catch(() => {});
+    throw stageError(
+      "Essay metadata update",
+      new Error(
+        `${error.message}\nRecovery: add audio: ${approved.slug}.mp3 to ${approved.sourcePath}`,
+      ),
+    );
+  }
+
+  log(`Verified public narration ${publicUrl}`);
+  log(`Updated ${approved.sourcePath}`);
+  log(
+    `Next: review the change, then git add ${approved.sourcePath} and commit it normally.`,
+  );
+  return {
+    command: "upload",
+    sourcePath: approved.sourcePath,
+    outputPath: approved.outputPath,
+    publicUrl,
+  };
 };
 
 const synthesizeNarration = async ({
@@ -962,12 +1137,13 @@ export async function runNarrationCommand({
   yes = false,
   provider,
   audio,
+  remote,
   confirm,
   log = console.log,
 } = {}) {
   if (!NARRATION_COMMANDS.has(command)) {
     throw new Error(
-      `Unknown Narration command "${command}". Use prepare, prep, synthesize, or synth.`,
+      `Unknown Narration command "${command}". Use prepare, prep, synthesize, synth, or upload.`,
     );
   }
   if (["prepare", "prep"].includes(command)) {
@@ -983,6 +1159,18 @@ export async function runNarrationCommand({
   }
   if (refresh)
     throw new Error("--refresh is only available with prepare or prep");
+  if (command === "upload") {
+    return uploadNarration({
+      target,
+      repositoryRoot,
+      essaysDirectory,
+      workInProgressDirectory,
+      yes,
+      remote,
+      confirm,
+      log,
+    });
+  }
   return synthesizeNarration({
     target,
     repositoryRoot,

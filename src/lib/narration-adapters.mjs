@@ -1,9 +1,13 @@
 import { spawn } from "node:child_process";
+import { createHash } from "node:crypto";
+import path from "node:path";
 
 export const NARRATION_SAMPLE_RATE = 24000;
 export const NARRATION_CHANNELS = 1;
 export const NARRATION_BITRATE = "96k";
 export const DIRECTOR_PROMPT_FORMAT = "nico-director-notes-v1";
+export const NARRATION_CACHE_CONTROL =
+  "public, max-age=0, must-revalidate, s-maxage=31536000";
 
 const STYLE_PRESETS = Object.freeze({
   reflective: {
@@ -254,6 +258,211 @@ const runProcess = ({ spawnProcess, args, input }) =>
       child.stdin?.end();
     }
   });
+
+const runCommand = ({ spawnProcess, command, args, env }) =>
+  new Promise((resolve, reject) => {
+    const child = spawnProcess(command, args, {
+      env,
+      stdio: ["ignore", "pipe", "pipe"],
+    });
+    let stdout = "";
+    let stderr = "";
+    child.stdout?.on("data", (data) => {
+      stdout += data.toString();
+    });
+    child.stderr?.on("data", (data) => {
+      stderr += data.toString();
+    });
+    child.on("error", reject);
+    child.on("close", (code) => {
+      if (code === 0) resolve({ stdout, stderr });
+      else reject(new Error(stderr.trim() || `command exited ${code}`));
+    });
+    child.stdin?.end();
+  });
+
+const cloudflareResult = async (response, operation) => {
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok || body.success !== true) {
+    const details = body.errors
+      ?.map((error) => error.message)
+      .filter(Boolean)
+      .join("; ");
+    throw new Error(
+      `${operation} failed${details ? `: ${details}` : ` with HTTP ${response.status}`}`,
+    );
+  }
+  return body.result;
+};
+
+export const createCloudflareNarrationAdapter = ({
+  repositoryRoot = process.cwd(),
+  env = process.env,
+  spawnProcess = spawn,
+  fetch: fetchRequest = globalThis.fetch,
+} = {}) => {
+  const configuration = () => {
+    const values = {
+      token: env.CLOUDFLARE_API_TOKEN,
+      accountId: env.CLOUDFLARE_ACCOUNT_ID,
+      zoneId: env.CLOUDFLARE_ZONE_ID,
+      bucket: env.NARRATION_R2_BUCKET,
+    };
+    const missing = Object.entries(values)
+      .filter(([, value]) => !value?.trim())
+      .map(([name]) => name);
+    if (missing.length > 0) {
+      throw new Error(
+        `Cloudflare narration configuration is missing ${missing.join(", ")}. Set CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID, CLOUDFLARE_ZONE_ID, and NARRATION_R2_BUCKET in the local environment. The token needs R2 write and Zone Cache Purge permissions.`,
+      );
+    }
+    return values;
+  };
+  const wranglerPath = path.join(
+    repositoryRoot,
+    "node_modules/wrangler/bin/wrangler.js",
+  );
+  const wrangler = (args) =>
+    runCommand({
+      spawnProcess,
+      command: process.execPath,
+      args: [wranglerPath, ...args],
+      env,
+    });
+  const cloudflareFetch = (url, options = {}) => {
+    const { token } = configuration();
+    return fetchRequest(url, {
+      ...options,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        ...options.headers,
+      },
+    });
+  };
+
+  return {
+    async preflight({ publicUrl }) {
+      const { bucket } = configuration();
+      const parsedUrl = new URL(publicUrl);
+      if (parsedUrl.protocol !== "https:") {
+        throw new Error("The narration public URL must use HTTPS");
+      }
+      await wrangler(["--version"]);
+      await wrangler(["r2", "bucket", "info", bucket, "--json"]);
+      const tokenResponse = await cloudflareFetch(
+        "https://api.cloudflare.com/client/v4/user/tokens/verify",
+      );
+      const token = await cloudflareResult(
+        tokenResponse,
+        "Cloudflare credential verification",
+      );
+      if (token?.status !== "active") {
+        throw new Error(
+          `Cloudflare API token is ${token?.status ?? "not active"}`,
+        );
+      }
+      const { zoneId } = configuration();
+      // An invalid file exercises zone authorization without purging a cache entry.
+      const purgeProbe = await cloudflareFetch(
+        `https://api.cloudflare.com/client/v4/zones/${encodeURIComponent(zoneId)}/purge_cache`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            files: ["narration-upload-permission-probe"],
+          }),
+        },
+      );
+      const purgeProbeBody = await purgeProbe.json().catch(() => ({}));
+      const purgeProbeErrors = purgeProbeBody.errors
+        ?.map((error) => error.message)
+        .filter(Boolean);
+      const rejectedInvalidUrl =
+        purgeProbe.status === 400 &&
+        purgeProbeBody.success === false &&
+        purgeProbeErrors?.some((message) => /invalid url/iu.test(message));
+      if (!rejectedInvalidUrl) {
+        const details = purgeProbeErrors?.join("; ");
+        throw new Error(
+          `Cloudflare zone and Cache Purge authorization verification failed${details ? `: ${details}` : ` with HTTP ${purgeProbe.status}`}`,
+        );
+      }
+      const target = await fetchRequest(publicUrl, {
+        method: "HEAD",
+        redirect: "manual",
+      });
+      if (target.status !== 404 && !target.ok) {
+        throw new Error(
+          `The narration public URL preflight returned HTTP ${target.status}. Check the R2 custom domain in the Cloudflare dashboard.`,
+        );
+      }
+    },
+
+    async upload({ filePath, key }) {
+      const { bucket } = configuration();
+      await wrangler([
+        "r2",
+        "object",
+        "put",
+        `${bucket}/${key}`,
+        "--file",
+        filePath,
+        "--content-type",
+        "audio/mpeg",
+        "--cache-control",
+        NARRATION_CACHE_CONTROL,
+        "--remote",
+      ]);
+    },
+
+    async purge({ publicUrl }) {
+      const { zoneId } = configuration();
+      const response = await cloudflareFetch(
+        `https://api.cloudflare.com/client/v4/zones/${encodeURIComponent(zoneId)}/purge_cache`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ files: [publicUrl] }),
+        },
+      );
+      await cloudflareResult(response, "Cloudflare exact-URL cache purge");
+    },
+
+    async verify({ publicUrl, expectedHash }) {
+      const response = await fetchRequest(publicUrl, {
+        cache: "no-store",
+        redirect: "error",
+      });
+      if (!response.ok) {
+        throw new Error(`Public narration returned HTTP ${response.status}`);
+      }
+      const contentType = response.headers.get("content-type") ?? "";
+      if (!contentType.toLowerCase().startsWith("audio/")) {
+        throw new Error(
+          `Public narration returned ${contentType || "no Content-Type"} instead of audio`,
+        );
+      }
+      const cacheControl = response.headers.get("cache-control") ?? "";
+      for (const directive of [
+        "max-age=0",
+        "must-revalidate",
+        "s-maxage=31536000",
+      ]) {
+        if (!cacheControl.toLowerCase().includes(directive)) {
+          throw new Error(
+            `Public narration Cache-Control is missing ${directive}`,
+          );
+        }
+      }
+      const publicHash = createHash("sha256")
+        .update(Buffer.from(await response.arrayBuffer()))
+        .digest("hex");
+      if (publicHash !== expectedHash) {
+        throw new Error("Public bytes do not match the approved MP3");
+      }
+    },
+  };
+};
 
 export const createFfmpegAdapter = ({ spawnProcess = spawn } = {}) => ({
   async preflight() {

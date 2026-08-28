@@ -3,6 +3,7 @@
 import { createInterface } from "node:readline/promises";
 
 import {
+  createCloudflareNarrationAdapter,
   createFfmpegAdapter,
   createVertexTtsAdapter,
   narrationPaces,
@@ -19,12 +20,13 @@ const usage = `Usage: npm run narration -- <command> <Essay slug|path> [options]
 Commands:
   prepare, prep       Write an editable narration script without network calls
   synthesize, synth   Generate a verified MP3 from the reviewed script
+  upload              Upload, purge, verify, then update Essay metadata
 
 Preparation:
   --refresh           Replace an existing script and discard its narration edits
 
-Synthesis:
-  --yes               Skip the paid-operation confirmation
+Synthesis and upload:
+  --yes               Skip paid-operation or replacement confirmation
   --voice <name>      Voice (default: ${NARRATION_DEFAULTS.voice})
   --style <preset>    ${narrationStyles.join(", ")} (default: ${NARRATION_DEFAULTS.style})
   --pace <preset>     ${narrationPaces.join(", ")} (default: ${NARRATION_DEFAULTS.pace})
@@ -35,7 +37,11 @@ Synthesis:
 
 Synthesis requires ffmpeg and Google Application Default Credentials. Run
 'gcloud auth application-default login' for local ADC, or set
-GOOGLE_APPLICATION_CREDENTIALS to a supported credential file.`;
+GOOGLE_APPLICATION_CREDENTIALS to a supported credential file.
+
+Upload requires CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID,
+CLOUDFLARE_ZONE_ID, and NARRATION_R2_BUCKET. The token needs R2 write and
+Zone Cache Purge permissions.`;
 
 const valueOptions = new Map([
   ["--voice", "voice"],
@@ -103,6 +109,9 @@ try {
       auth: createGoogleAuthenticationAdapter(),
     });
     options.audio = createFfmpegAdapter();
+    options.confirm = confirmPaidOperation;
+  } else if (options.command === "upload") {
+    options.remote = createCloudflareNarrationAdapter();
     options.confirm = confirmPaidOperation;
   }
   await runNarrationCommand(options);
