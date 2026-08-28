@@ -352,7 +352,6 @@
     transform: rotate(-135deg);
   }
 
-  /* Emitted from Obsidian [!type] blocks. */
   .post-content .callout {
     @apply border-line bg-surface my-6 border p-5 text-base leading-relaxed;
   }

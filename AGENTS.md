@@ -49,31 +49,13 @@ accumulate and go out as a batch. Do not push on every change.
   is public by protocol and lives at `public/<key>.txt`. Durable per-essay Kit
   broadcast identities, delivery status, and IndexNow hashes share
   `data/publication-state.json`; completed actions are never repeated.
-- Two Kit email files, for two different editors:
-  `scripts/kit-newsletter-template.html` is a full HTML document for
-  Account → Email templates, which wraps broadcasts.
-  `scripts/kit-confirmation-email.html` is a fragment for the form's
-  confirmation email — that editor sanitises HTML into blocks, so a full
-  document leaks its comments and `<style>` into the body as visible text.
-  Never paste the template into the confirmation editor.
-- `npm run email-assets` — regenerate `public/email/*.png`, the masthead logo
-  and social icons for the Kit newsletter. PNG because Gmail strips inline SVG
-  and Outlook won't render it. Run by hand after a logo or brand-colour change;
-  committed output.
-- `npm run og` — regenerate `public/og-default.png`, the Open Graph card for
-  pages with no cover of their own (home, archives, about, resources).
-  Composed from the logo's vector paths and flat brand colour, so it needs
-  no fonts installed. Run it by hand after a logo or brand-colour change;
-  the output is committed rather than built, to keep a binary out of every
-  build's diff.
-- `npm run lint:essay -- <slug>` — style-guide lint, advisory. Suppress a
-  finding from inside the essay with an HTML comment, which is invisible both on
-  the site and in Obsidian: `<!-- lint-ignore -->` covers that line and the next,
-  `<!-- lint-ignore sentence -->` narrows it to rules containing "sentence", and
-  `<!-- lint-ignore-file em dash -->` applies to the whole essay. The report
-  prints how many it suppressed, so nothing disappears silently.
+- `scripts/kit-newsletter-template.html` is the maintained full HTML document
+  for Account → Email templates, which wraps publication broadcasts.
+- The committed newsletter PNGs and `public/og-default.png` are permanent
+  branding assets. Their one-off generators are intentionally not part of this
+  repository.
 - Prettier deliberately ignores `data/` (generated) and `src/content`
-  (authored prose and Templater files); don't format those.
+  (authored prose); don't format those.
 
 ## Images
 
@@ -139,8 +121,8 @@ links` reports how many essays in each cluster reach theirs. Only durable
   characters against Bluesky's 300-character limit. The newsletter has clean
   numbers only because Kit tags it.
 - **`date` and `updated` are calendar dates.** Author them only as `YYYY-MM-DD`;
-  timestamps are invalid. Every publication date resolves to 13:00 UTC through
-  `src/lib/publish-time.mjs`, shared by the schema and publishing tools.
+  timestamps are invalid. The essay inventory resolves every publication date
+  to 13:00 UTC through `src/lib/publish-time.mjs`.
 - `newsletterIntro` is required plain text. Use one to three paragraphs with
   enough context for the publication email; it is not rendered as MDX.
 - Publishing is date-driven (a future `date` schedules the essay); WIP lives

@@ -1,9 +1,9 @@
 import { readFile, readdir, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import matter from "gray-matter";
 import sharp from "sharp";
 
+import { readEssayCoverPath } from "../src/lib/essay-inventory.mjs";
 import { die, exists, resolveEssay, ESSAY_ROOTS } from "./lib/fs-util.mjs";
 
 const MAX_WIDTH = 1376;
@@ -44,7 +44,7 @@ async function prepareEssayImages({ dir, file }) {
     throw new Error("No optimizable images found (GIF/SVG are exempt).");
   }
 
-  const coverPath = await readCoverPath(file);
+  const coverPath = readEssayCoverPath(file);
   const prepared = [];
   const outputSources = new Map();
 
@@ -178,14 +178,6 @@ async function main() {
   console.log(
     `\nDone: ${totals.optimized} optimized, ${totals.converted} converted, ${totals.skipped} unchanged. Saved ${kilobytes(totals.savedBytes)}.`,
   );
-}
-
-async function readCoverPath(sourcePath) {
-  const source = await readFile(sourcePath, "utf8");
-  const cover = matter(source).data.cover;
-  return typeof cover === "string"
-    ? path.resolve(path.dirname(sourcePath), cover)
-    : null;
 }
 
 async function imageHasTransparency(input) {

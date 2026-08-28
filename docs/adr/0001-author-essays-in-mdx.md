@@ -1,3 +1,5 @@
 # Author essays in MDX
 
-Essays use MDX with ordinary Markdown for prose and links, plus a small set of explicitly imported semantic modules for figures, galleries, summaries, callouts, and attributed quotations. This replaces Obsidian-specific syntax and custom parsing with author-visible structure while avoiding a general-purpose page-builder interface.
+Published essays use MDX as their sole source format. Ordinary prose and links remain standard Markdown; explicitly imported Figure, Gallery, QuickSummary, Callout, and Blockquote components provide the limited semantic module vocabulary. The repository contains no Obsidian-specific parsing, templates, Bases files, wikilinks, or callout syntax.
+
+The shared essay inventory is authoritative for source discovery, metadata validation and normalization, publication state, public URLs, freshness, and reader-facing hashes. Astro's content collection is limited to MDX rendering and local-image metadata, preventing a second publication-semantics implementation.

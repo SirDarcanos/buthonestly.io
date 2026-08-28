@@ -25,7 +25,10 @@ The front-end source of [buthonestly.io](https://buthonestly.io) — a static
 Essays live in `src/content/essays`, one folder per essay, holding an MDX source
 and its images side by side. Ordinary prose uses standard Markdown; figures,
 galleries, summaries, callouts, and attributed quotations use a small set of
-Astro components. There is no CMS and no database — a new essay is a commit.
+Astro components. The shared essay inventory owns source discovery, metadata,
+publication state, URLs, and reader-facing hashes. Astro's content collection
+adds rendering and image metadata. There is no CMS and no database — a new essay
+is a commit.
 
 **What the build gives you beyond the pages:**
 
@@ -42,7 +45,7 @@ Astro components. There is no CMS and no database — a new essay is a commit.
 - **Feeds and machine-readable indexes** — a site feed plus one per section and
   per topic, `sitemap.xml` with real `lastmod` dates, `llms.txt`, portable
   Markdown alternatives, and IndexNow submissions on publish.
-- **Generated redirects** for the legacy WordPress URLs — old post paths, feeds,
+- **Static redirects** for legacy WordPress URLs — old post paths, feeds,
   paginated archives and downloads — so old links keep working.
 
 ## Getting started
@@ -91,9 +94,7 @@ npm run preview
 │  ├─ components/        # Astro components
 │  ├─ content/
 │  │  ├─ essays/<slug>/  # one folder per essay: <slug>.mdx plus its images
-│  │  ├─ drafts/         # work in progress, not a built collection
-│  │  ├─ templates/      # Templater snippets for new essays, images, galleries
-│  │  └─ Style Guide.md  # how the essays are meant to read
+│  │  └─ drafts/         # work in progress, not a built collection
 │  ├─ layouts/
 │  ├─ lib/               # content inventory, SEO/schema, and rendering helpers
 │  ├─ pages/             # routes, RSS feeds, llms.txt
@@ -102,7 +103,7 @@ npm run preview
 │  └─ taxonomies.ts      # section and topic descriptions
 ├─ scripts/              # build and maintenance CLIs — see Tooling
 ├─ data/                 # generated but committed: semantic and publication state
-├─ public/               # static assets, _headers, generated _redirects
+├─ public/               # static assets, _headers, and legacy _redirects
 └─ .github/workflows/    # correctness, publication, and related essays
 ```
 
@@ -152,16 +153,13 @@ Import `Figure`, `Gallery`, `QuickSummary`, `Callout`, and `Blockquote` from
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | `npm run dev`                | Dev server on port 4321.                                                                                      |
 | `npm test`                   | Runs the automated test suite, including deliberate CI-stage failure fixtures.                                |
-| `npm run build`              | Generates redirects, builds to `dist/`, then projects editorial Markdown alternatives.                        |
+| `npm run build`              | Builds to `dist/`, then projects editorial Markdown alternatives.                                             |
 | `npm run lint`               | Prettier check plus link check.                                                                               |
 | `npm run check:links`        | Verifies canonical internal links, publication safety, and local assets.                                      |
 | `npm run links`              | Prints advisory prose-link analysis; pass `-- --json <path>` for local JSON.                                  |
-| `npm run lint:essay`         | Advisory style-guide lint for a single essay.                                                                 |
 | `npm run images [-- <slug>]` | Manually resizes and compresses oversized sources and converts opaque images to JPEG, printing renamed paths. |
 | `npm run related`            | Rebuilds the semantic related-posts map.                                                                      |
 | `npm run publication`        | Verifies live content, deploys stale versions, resumes Kit delivery, and submits changed content to IndexNow. |
-| `npm run og`                 | Regenerates `public/og-default.png`.                                                                          |
-| `npm run email-assets`       | Regenerates the newsletter's masthead and social icons.                                                       |
 
 ## Automation
 
@@ -170,7 +168,6 @@ Import `Figure`, `Gallery`, `QuickSummary`, `Callout`, and `Blockquote` from
 | `ci.yml`          | Pull requests, main pushes   | Tests failure detection, formatting, content, and production build.                      |
 | `publication.yml` | Hourly, essay pushes, manual | Deploys expected versions, resumes Kit broadcasts, and submits changed URLs to IndexNow. |
 | `related.yml`     | Essay pushes, manual         | Regenerates and commits the semantic related-essay map.                                  |
-| `lint-essays.yml` | Essay pushes                 | Advisory style lint. Never blocks — style is the author's call.                          |
 
 Scheduled runs matter because a date passing is not a push. The publication
 orchestrator makes an essay live within the hourly window. It records a Kit draft

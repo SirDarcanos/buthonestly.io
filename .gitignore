@@ -2,9 +2,7 @@ dist/
 .astro/
 node_modules/
 local/
-public/_redirects
 data/link-graph.json
-.obsidian/
 
 *.log*
 .env

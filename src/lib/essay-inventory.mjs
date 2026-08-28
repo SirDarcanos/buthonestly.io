@@ -94,6 +94,17 @@ const requiredString = (data, field, file, diagnostics) => {
   return "";
 };
 
+export const resolveEssayCoverPath = (sourcePath, cover) =>
+  typeof cover === "string" && cover.trim()
+    ? path.resolve(path.dirname(sourcePath), cover.trim())
+    : null;
+
+export const readEssayCoverPath = (sourcePath) =>
+  resolveEssayCoverPath(
+    sourcePath,
+    matter(readFileSync(sourcePath, "utf8")).data.cover,
+  );
+
 export const taxonomySlug = (name) =>
   name
     .toLowerCase()
@@ -448,6 +459,7 @@ export function loadEssayInventory({
           ? narrationUrl(narrationFile, staticBaseUrl.toString())
           : undefined,
       cover,
+      coverPath: resolveEssayCoverPath(source.sourcePath, cover),
       coverAlt,
       coverCaption:
         typeof parsed.data.coverCaption === "string"

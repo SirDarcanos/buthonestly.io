@@ -21,7 +21,7 @@ An essay whose publication day has reached 13:00 UTC, whether or not the latest 
 _Avoid_: Due essay, released essay
 
 **Live essay**:
-A published essay whose production URL is reachable. Publication follow-up actions wait for the essay to become live.
+A published essay whose production URL exposes its expected reader-facing content hash. Publication follow-up actions wait for that version to become live.
 _Avoid_: Published essay, deployed essay
 
 **Semantic related essays**:
@@ -35,6 +35,10 @@ _Avoid_: Internal link
 **Internal link graph**:
 The editorial model formed exclusively from internal prose links, used to identify isolated essays and assess connections between subjects.
 _Avoid_: Link graph, site graph
+
+**Essay inventory**:
+The authoritative interface for essay source discovery, metadata, publication state, public URLs, freshness, and reader-facing hashes.
+_Avoid_: Content parser, post loader
 
 **Newsletter introduction**:
 The longer plain-text introduction used in an essay’s publication email, distinct from the shorter excerpt used for search metadata.
