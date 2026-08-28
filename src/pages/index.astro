@@ -8,9 +8,27 @@ import ReadTime from "../components/ReadTime.astro";
 import TaxLinks from "../components/TaxLinks.astro";
 import { getAllPosts } from "../lib/essays";
 
+const bestReadSlugs = [
+  "gaming-made-me-better-leader",
+  "psychological-safety-in-teams-people-first-leadership",
+  "how-to-choose-a-software-license-for-your-next-project",
+  "write-in-markdown",
+  "do-you-trust-your-instincts-making-smart-wordpress-choices",
+  "woocommerce-attributes-vs-variations",
+];
+
 const posts = await getAllPosts();
 const [lead, ...rest] = posts;
 const recent = rest.slice(0, 6);
+const postsBySlug = new Map(posts.map((post) => [post.slug, post]));
+const bestReads = bestReadSlugs.map((slug) => {
+  const post = postsBySlug.get(slug);
+  if (!post) throw new Error(`Best Reads essay not found: ${slug}`);
+  if (!post.cornerstone) {
+    throw new Error(`Best Reads essay is not a cornerstone: ${slug}`);
+  }
+  return post;
+});
 ---
 
 <Home
@@ -71,6 +89,40 @@ const recent = rest.slice(0, 6);
       <Button href="/essays/" data-track="Homepage essay archive click">
         Browse all essays →
       </Button>
+    </div>
+  </section>
+
+  <section class="border-line border-t py-16" aria-labelledby="best-reads">
+    <header class="max-w-2xl">
+      <h2 id="best-reads">Best reads</h2>
+      <p class="text-muted mt-3 text-base">
+        Enduring essays and practical guides worth starting with.
+      </p>
+    </header>
+    <div class="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      {
+        bestReads.map((post) => (
+          <article class="border-line bg-surface flex flex-col border p-6">
+            <p class="label text-left">
+              <TaxLinks names={post.categories} base="section" />
+            </p>
+            <h3 class="mt-3 text-xl">
+              <a href={post.url} data-track="Homepage best read click">
+                {post.title}
+              </a>
+            </h3>
+            <p class="excerpt text-muted mt-3 flex-1">{post.excerpt}</p>
+            <a
+              href={post.url}
+              data-track="Homepage best read click"
+              class="label mt-5 inline-block"
+              aria-label={`Read ${post.title}`}
+            >
+              Read essay →
+            </a>
+          </article>
+        ))
+      }
     </div>
   </section>
 
