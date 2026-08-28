@@ -11,6 +11,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 
+import { blankMarkdownComments } from "../src/lib/markdown-comments.mjs";
 import { runNarrationCommand } from "../src/lib/narration-tool.mjs";
 
 const createRepository = async (context) => {
@@ -31,6 +32,18 @@ const createEssay = async (root, collection, slug, body) => {
   );
   return sourcePath;
 };
+
+test("comment removal cannot form a new HTML comment delimiter", () => {
+  const source = `<!<!-- decoy 🔒 -->--
+Visible prose.
+-->`;
+  const sanitized = blankMarkdownComments(source);
+
+  assert.doesNotMatch(sanitized, /<!--/);
+  assert.equal(sanitized.length, source.length);
+  assert.equal(sanitized.split("\n").length, source.split("\n").length);
+  assert.match(sanitized, /Visible prose\./);
+});
 
 test("prepare writes the reviewed narration script from the MDX structure", async (context) => {
   const root = await createRepository(context);

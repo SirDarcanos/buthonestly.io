@@ -9,6 +9,7 @@ import remarkParse from "remark-parse";
 import { unified } from "unified";
 
 import { chunkText } from "./chunk-text.mjs";
+import { blankMarkdownComments } from "./markdown-comments.mjs";
 import {
   DIRECTOR_PROMPT_FORMAT,
   NARRATION_BITRATE,
@@ -264,10 +265,7 @@ const narrationText = (sourceContent, sourcePath) => {
 
   let tree;
   try {
-    const withoutMarkdownComments = parsed.content.replace(
-      /<!--[\s\S]*?-->/gu,
-      "",
-    );
+    const withoutMarkdownComments = blankMarkdownComments(parsed.content);
     tree = unified()
       .use(remarkParse)
       .use(remarkGfm)
