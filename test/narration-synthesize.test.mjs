@@ -1,10 +1,18 @@
 import assert from "node:assert/strict";
 import { EventEmitter } from "node:events";
-import { mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import {
+  mkdtemp,
+  mkdir,
+  readFile,
+  readdir,
+  rm,
+  writeFile,
+} from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 
+import { createGoogleAuthenticationAdapter } from "../src/lib/google-authentication.mjs";
 import {
   runNarrationCommand,
   validateNarrationProvenance,
@@ -242,6 +250,231 @@ test("synthesis rejects invalid settings, malformed transcripts, declined confir
   );
 });
 
+test("synthesis checkpoints chunks, resumes failures, and selectively invalidates edited prose", async (context) => {
+  const { root, transcriptPath } = await createRepository(context);
+  const transcript = await readFile(transcriptPath, "utf8");
+  await writeFile(
+    transcriptPath,
+    transcript.replace(
+      "\nSecond paragraph.",
+      "\n\n--- chunk 2 ---\nSecond paragraph.",
+    ),
+  );
+
+  const firstRequests = [];
+  await assert.rejects(
+    runNarrationCommand({
+      command: "synthesize",
+      target: "fixture",
+      repositoryRoot: root,
+      yes: true,
+      provider: {
+        preflight: async () => {},
+        synthesize: async (text) => {
+          firstRequests.push(text);
+          if (firstRequests.length === 2) throw new Error("connection reset");
+          return Buffer.from([1, 0]);
+        },
+      },
+      audio: { preflight: async () => {}, encode: async () => {} },
+      log: () => {},
+    }),
+    /chunk 2.*connection reset/i,
+  );
+
+  const workDirectory = path.join(
+    root,
+    "local/narration",
+    (await readdir(path.join(root, "local/narration")))[0],
+  );
+  assert.equal(
+    (await readdir(path.join(workDirectory, "chunks"))).filter((name) =>
+      name.endsWith(".pcm"),
+    ).length,
+    1,
+  );
+
+  const resumedRequests = [];
+  const adapters = createSynthesisAdapters([]);
+  adapters.provider.synthesize = async (text) => {
+    resumedRequests.push(text);
+    return Buffer.from([2, 0]);
+  };
+  await runNarrationCommand({
+    command: "synthesize",
+    target: "fixture",
+    repositoryRoot: root,
+    yes: true,
+    provider: adapters.provider,
+    audio: adapters.audio,
+    log: () => {},
+  });
+  assert.equal(resumedRequests.length, 1);
+  assert.match(resumedRequests[0], /^Second paragraph\./);
+
+  const reviewed = await readFile(transcriptPath, "utf8");
+  await writeFile(
+    transcriptPath,
+    reviewed.replace("Second paragraph.", "A revised second paragraph."),
+  );
+  const editedRequests = [];
+  adapters.provider.synthesize = async (text) => {
+    editedRequests.push(text);
+    return Buffer.from([3, 0]);
+  };
+  await runNarrationCommand({
+    command: "synthesize",
+    target: "fixture",
+    repositoryRoot: root,
+    yes: true,
+    provider: adapters.provider,
+    audio: adapters.audio,
+    log: () => {},
+  });
+  assert.equal(editedRequests.length, 1);
+  assert.match(editedRequests[0], /^A revised second paragraph\./);
+
+  const changedSettingRequests = [];
+  adapters.provider.synthesize = async (text) => {
+    changedSettingRequests.push(text);
+    return Buffer.from([4, 0]);
+  };
+  await runNarrationCommand({
+    command: "synthesize",
+    target: "fixture",
+    repositoryRoot: root,
+    settings: { region: "global" },
+    yes: true,
+    provider: adapters.provider,
+    audio: adapters.audio,
+    log: () => {},
+  });
+  assert.equal(changedSettingRequests.length, 2);
+});
+
+test("synthesis warns on narratable source drift and reports advisory pace outliers", async (context) => {
+  const { root, sourcePath, transcriptPath } = await createRepository(context);
+  const transcript = await readFile(transcriptPath, "utf8");
+  const firstWords = Array.from({ length: 12 }, (_, index) => `first${index}`);
+  const secondWords = Array.from(
+    { length: 24 },
+    (_, index) => `second${index}`,
+  );
+  await writeFile(
+    transcriptPath,
+    `${transcript.slice(0, transcript.indexOf("--- chunk 1 ---"))}--- chunk 1 ---\n${firstWords.join(" ")}\n\n--- chunk 2 ---\n${secondWords.join(" ")}\n`,
+  );
+  await writeFile(
+    sourcePath,
+    "---\ntitle: A Reviewed Essay\n---\n\nChanged narratable prose.",
+  );
+
+  const messages = [];
+  const adapter = createSynthesisAdapters([]);
+  adapter.provider.synthesize = async () => Buffer.alloc(24000 * 2 * 6);
+  const result = await runNarrationCommand({
+    command: "synthesize",
+    target: "fixture",
+    repositoryRoot: root,
+    yes: true,
+    provider: adapter.provider,
+    audio: adapter.audio,
+    log: (message) => messages.push(message),
+  });
+
+  assert.match(
+    messages.join("\n"),
+    /warning.*Essay source.*reviewed narration script/i,
+  );
+  assert.equal(result.diagnostics.totalDurationSeconds, 12.2);
+  assert.equal(result.diagnostics.medianWordsPerMinute, 180);
+  assert.deepEqual(
+    result.diagnostics.outliers.map(({ chunk, timestamp, wordsPerMinute }) => ({
+      chunk,
+      timestamp,
+      wordsPerMinute,
+    })),
+    [
+      { chunk: 1, timestamp: "00:00.000", wordsPerMinute: 120 },
+      { chunk: 2, timestamp: "00:06.200", wordsPerMinute: 240 },
+    ],
+  );
+  assert.match(messages.join("\n"), /pace outlier.*chunk 1.*00:00\.000/i);
+  assert.equal(
+    JSON.parse(await readFile(result.reportPath, "utf8")).structuralStatus,
+    "passed",
+  );
+});
+
+test("structurally invalid PCM blocks assembly and identifies the failed stage", async (context) => {
+  const { root } = await createRepository(context);
+  let encoded = false;
+
+  await assert.rejects(
+    runNarrationCommand({
+      command: "synthesize",
+      target: "fixture",
+      repositoryRoot: root,
+      yes: true,
+      provider: {
+        preflight: async () => {},
+        synthesize: async () => Buffer.from([1]),
+      },
+      audio: {
+        preflight: async () => {},
+        encode: async () => {
+          encoded = true;
+        },
+      },
+      log: () => {},
+    }),
+    /chunk 1.*16-bit PCM/i,
+  );
+  assert.equal(encoded, false);
+});
+
+test("failed MP3 encoding preserves the previously verified narration", async (context) => {
+  const { root } = await createRepository(context);
+  const firstAdapters = createSynthesisAdapters([]);
+  const first = await runNarrationCommand({
+    command: "synthesize",
+    target: "fixture",
+    repositoryRoot: root,
+    yes: true,
+    provider: firstAdapters.provider,
+    audio: firstAdapters.audio,
+    log: () => {},
+  });
+  const verifiedMp3 = await readFile(first.outputPath);
+  const verifiedManifest = await readFile(first.manifestPath);
+
+  await assert.rejects(
+    runNarrationCommand({
+      command: "synthesize",
+      target: "fixture",
+      repositoryRoot: root,
+      yes: true,
+      provider: firstAdapters.provider,
+      audio: {
+        preflight: async () => {},
+        encode: async ({ outputPath }) => {
+          await writeFile(outputPath, "damaged partial output");
+          throw new Error("encoder crashed");
+        },
+      },
+      log: () => {},
+    }),
+    /MP3 encoding.*encoder crashed/i,
+  );
+
+  assert.deepEqual(await readFile(first.outputPath), verifiedMp3);
+  assert.deepEqual(await readFile(first.manifestPath), verifiedManifest);
+  await validateNarrationProvenance({
+    target: "fixture",
+    repositoryRoot: root,
+  });
+});
+
 test("built and work-in-progress Essays with the same slug keep distinct provenance", async (context) => {
   const { root, sourcePath } = await createRepository(context, "shared");
   const draftDirectory = path.join(root, "src/content/drafts/shared");
@@ -372,6 +605,187 @@ test("the Vertex adapter authenticates with the supported client and requests PC
     malformed.synthesize("Prose.", settings),
     /24 kHz mono 16-bit PCM/i,
   );
+});
+
+test("the Google authentication adapter forces token refresh for ADC clients without refreshAccessToken", async () => {
+  const credentials = {
+    access_token: "stale-token",
+    refresh_token: "refresh-token",
+    expiry_date: Date.now() + 60_000,
+  };
+  const setCredentialsCalls = [];
+  const client = {
+    credentials,
+    setCredentials(updated) {
+      setCredentialsCalls.push(updated);
+      this.credentials = updated;
+    },
+    async getRequestHeaders() {
+      return new Headers({
+        Authorization:
+          this.credentials.expiry_date === 0
+            ? "Bearer fresh-token"
+            : "Bearer stale-token",
+      });
+    },
+  };
+  const adapter = createGoogleAuthenticationAdapter({
+    createGoogleAuth: () => ({
+      getClient: async () => client,
+      getProjectId: async () => "project",
+    }),
+  });
+
+  assert.equal(
+    (
+      await adapter.getRequestHeaders("https://vertex", { forceRefresh: false })
+    ).get("authorization"),
+    "Bearer stale-token",
+  );
+  assert.equal(
+    (
+      await adapter.getRequestHeaders("https://vertex", { forceRefresh: true })
+    ).get("authorization"),
+    "Bearer fresh-token",
+  );
+  assert.deepEqual(setCredentialsCalls, [{ ...credentials, expiry_date: 0 }]);
+});
+
+test("the Vertex adapter retries transient failures, refreshes authorization once, and rejects permanent failures", async () => {
+  const settings = {
+    voice: "Enceladus",
+    style: "reflective",
+    pace: "conversational",
+    model: "gemini-2.5-flash-tts",
+    region: "us-central1",
+  };
+  const pcmResponse = () =>
+    Response.json({
+      candidates: [
+        {
+          content: {
+            parts: [
+              {
+                inlineData: {
+                  mimeType: "audio/L16;codec=pcm;rate=24000",
+                  data: Buffer.from([1, 0]).toString("base64"),
+                },
+              },
+            ],
+          },
+        },
+      ],
+    });
+
+  const transientStatuses = [new TypeError("network down"), 429, 503];
+  for (const transient of transientStatuses) {
+    const sleeps = [];
+    let attempts = 0;
+    const adapter = createVertexTtsAdapter({
+      auth: {
+        getProjectId: async () => "project",
+        getRequestHeaders: async () => ({}),
+      },
+      fetch: async () => {
+        attempts += 1;
+        if (attempts < 3) {
+          if (transient instanceof Error) throw transient;
+          return Response.json(
+            { error: { message: "transient" } },
+            { status: transient },
+          );
+        }
+        return pcmResponse();
+      },
+      sleep: async (milliseconds) => sleeps.push(milliseconds),
+    });
+    await adapter.preflight(settings);
+    assert.deepEqual(
+      await adapter.synthesize("Text.", settings),
+      Buffer.from([1, 0]),
+    );
+    assert.equal(attempts, 3);
+    assert.deepEqual(sleeps, [1500, 3000]);
+  }
+
+  const refreshes = [];
+  let authAttempts = 0;
+  const authAdapter = createVertexTtsAdapter({
+    auth: {
+      getProjectId: async () => "project",
+      getRequestHeaders: async (_url, options) => {
+        refreshes.push(options.forceRefresh);
+        return {};
+      },
+    },
+    fetch: async () => {
+      authAttempts += 1;
+      return authAttempts === 1
+        ? Response.json({ error: { message: "expired" } }, { status: 401 })
+        : pcmResponse();
+    },
+    sleep: async () => {},
+  });
+  await authAdapter.preflight(settings);
+  await authAdapter.synthesize("Text.", settings);
+  assert.deepEqual(refreshes, [false, false, true]);
+
+  for (const status of [400, 404]) {
+    let attempts = 0;
+    const adapter = createVertexTtsAdapter({
+      auth: {
+        getProjectId: async () => "project",
+        getRequestHeaders: async () => ({}),
+      },
+      fetch: async () => {
+        attempts += 1;
+        return Response.json({ error: { message: "permanent" } }, { status });
+      },
+      sleep: async () => {},
+    });
+    await adapter.preflight(settings);
+    await assert.rejects(adapter.synthesize("Text.", settings), /permanent/);
+    assert.equal(attempts, 1);
+  }
+
+  let refreshAttempts = 0;
+  const failedRefreshAdapter = createVertexTtsAdapter({
+    auth: {
+      getProjectId: async () => "project",
+      getRequestHeaders: async (_url, { forceRefresh }) => {
+        if (forceRefresh) {
+          refreshAttempts += 1;
+          throw new Error("refresh failed");
+        }
+        return {};
+      },
+    },
+    fetch: async () =>
+      Response.json({ error: { message: "expired" } }, { status: 401 }),
+    sleep: async () => {},
+  });
+  await failedRefreshAdapter.preflight(settings);
+  await assert.rejects(
+    failedRefreshAdapter.synthesize("Text.", settings),
+    /refresh failed/,
+  );
+  assert.equal(refreshAttempts, 1);
+
+  let deniedAttempts = 0;
+  const deniedAdapter = createVertexTtsAdapter({
+    auth: {
+      getProjectId: async () => "project",
+      getRequestHeaders: async () => ({}),
+    },
+    fetch: async () => {
+      deniedAttempts += 1;
+      return Response.json({ error: { message: "denied" } }, { status: 403 });
+    },
+    sleep: async () => {},
+  });
+  await deniedAdapter.preflight(settings);
+  await assert.rejects(deniedAdapter.synthesize("Text.", settings), /denied/);
+  assert.equal(deniedAttempts, 2);
 });
 
 test("the ffmpeg adapter checks the MP3 encoder and encodes 24 kHz mono PCM at 96 kbps", async () => {

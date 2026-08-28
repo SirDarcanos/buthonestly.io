@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-import { GoogleAuth } from "google-auth-library";
 import { createInterface } from "node:readline/promises";
 
 import {
@@ -9,6 +8,7 @@ import {
   narrationPaces,
   narrationStyles,
 } from "../src/lib/narration-adapters.mjs";
+import { createGoogleAuthenticationAdapter } from "../src/lib/google-authentication.mjs";
 import {
   NARRATION_DEFAULTS,
   runNarrationCommand,
@@ -77,24 +77,6 @@ const parseArguments = (args) => {
   };
 };
 
-const createAuthenticationAdapter = () => {
-  const googleAuth = new GoogleAuth({
-    scopes: ["https://www.googleapis.com/auth/cloud-platform"],
-  });
-  let client;
-
-  return {
-    getProjectId: () => googleAuth.getProjectId(),
-    async getRequestHeaders(url, { forceRefresh = false } = {}) {
-      client ??= await googleAuth.getClient();
-      if (forceRefresh && typeof client.refreshAccessToken === "function") {
-        await client.refreshAccessToken();
-      }
-      return client.getRequestHeaders(url);
-    },
-  };
-};
-
 const confirmPaidOperation = async (message) => {
   const prompt = createInterface({
     input: process.stdin,
@@ -118,7 +100,7 @@ try {
   const options = parseArguments(args);
   if (["synthesize", "synth"].includes(options.command)) {
     options.provider = createVertexTtsAdapter({
-      auth: createAuthenticationAdapter(),
+      auth: createGoogleAuthenticationAdapter(),
     });
     options.audio = createFfmpegAdapter();
     options.confirm = confirmPaidOperation;

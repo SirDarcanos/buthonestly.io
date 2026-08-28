@@ -151,14 +151,21 @@ export const createVertexTtsAdapter = ({
         },
       };
       let lastError;
+      let refreshAuthorization = false;
+      let authorizationWasRefreshed = false;
 
       for (let attempt = 0; attempt < 3; attempt += 1) {
-        if (attempt > 0) await sleep(1500 * attempt);
+        if (attempt > 0 && !refreshAuthorization) {
+          await sleep(1500 * attempt);
+        }
         let response;
+        const forceRefresh = refreshAuthorization;
         try {
           const authenticationHeaders = await auth.getRequestHeaders(url, {
-            forceRefresh: attempt > 0,
+            forceRefresh,
           });
+          if (forceRefresh) authorizationWasRefreshed = true;
+          refreshAuthorization = false;
           const headers =
             authenticationHeaders instanceof Headers
               ? Object.fromEntries(authenticationHeaders.entries())
@@ -169,6 +176,7 @@ export const createVertexTtsAdapter = ({
             body: JSON.stringify(payload),
           });
         } catch (error) {
+          if (forceRefresh) throw error;
           lastError = error;
           continue;
         }
@@ -176,12 +184,12 @@ export const createVertexTtsAdapter = ({
         const { data, message } = await responseMessage(response);
         if (!response.ok) {
           lastError = new Error(message);
-          if (
-            [401, 403, 429].includes(response.status) ||
-            response.status >= 500
-          ) {
+          if ([401, 403].includes(response.status)) {
+            if (authorizationWasRefreshed) throw lastError;
+            refreshAuthorization = true;
             continue;
           }
+          if (response.status === 429 || response.status >= 500) continue;
           throw lastError;
         }
 

@@ -1,6 +1,14 @@
 import { createHash } from "node:crypto";
 import { constants, existsSync, realpathSync } from "node:fs";
-import { access, mkdir, readFile, rm, stat, writeFile } from "node:fs/promises";
+import {
+  access,
+  mkdir,
+  readFile,
+  rename,
+  rm,
+  stat,
+  writeFile,
+} from "node:fs/promises";
 import path from "node:path";
 import matter from "gray-matter";
 import remarkGfm from "remark-gfm";
@@ -571,6 +579,8 @@ const synthesisPaths = ({ repositoryRoot, sourcePath }) => {
     outputPath: path.join(path.dirname(sourcePath), `${slug}.mp3`),
     workDirectory,
     manifestPath: path.join(workDirectory, "provenance.json"),
+    reportPath: path.join(workDirectory, "synthesis-report.json"),
+    chunksDirectory: path.join(workDirectory, "chunks"),
   };
 };
 
@@ -579,6 +589,56 @@ const ensureWritableDirectory = async (directory) => {
   const probe = path.join(directory, `.write-test-${process.pid}`);
   await writeFile(probe, "ok", "utf8");
   await rm(probe);
+};
+
+const validatePcm = (pcm, chunkNumber) => {
+  if (!Buffer.isBuffer(pcm) || pcm.length === 0 || pcm.length % 2 !== 0) {
+    throw new Error(
+      `chunk ${chunkNumber} did not produce nonempty 24 kHz mono 16-bit PCM audio`,
+    );
+  }
+};
+
+const checkpointIdentity = (text, settings) => ({
+  version: 1,
+  text,
+  voice: settings.voice,
+  style: settings.style,
+  pace: settings.pace,
+  model: settings.model,
+  region: settings.region,
+  directorPromptFormat: DIRECTOR_PROMPT_FORMAT,
+  sampleRate: NARRATION_SAMPLE_RATE,
+  channels: NARRATION_CHANNELS,
+  sampleFormat: "s16le",
+});
+
+const loadOrSynthesizeChunk = async ({
+  text,
+  settings,
+  chunkNumber,
+  chunksDirectory,
+  provider,
+  log,
+}) => {
+  const identity = checkpointIdentity(text, settings);
+  const checkpointPath = path.join(
+    chunksDirectory,
+    `${sha256(JSON.stringify(identity))}.pcm`,
+  );
+  const checkpoint = await readFile(checkpointPath).catch(() => null);
+  if (checkpoint) {
+    validatePcm(checkpoint, chunkNumber);
+    log(`Reusing checkpoint for chunk ${chunkNumber}`);
+    return checkpoint;
+  }
+
+  const pcm = await provider.synthesize(text, settings);
+  validatePcm(pcm, chunkNumber);
+  const temporaryPath = `${checkpointPath}.${process.pid}.tmp`;
+  await writeFile(temporaryPath, pcm);
+  await rename(temporaryPath, checkpointPath);
+  return pcm;
 };
 
 const concatenatePcm = (buffers, silenceMs) => {
@@ -590,6 +650,65 @@ const concatenatePcm = (buffers, silenceMs) => {
       index === 0 || silenceBytes === 0 ? [buffer] : [silence, buffer],
     ),
   );
+};
+
+const round = (value, digits = 3) => Number(value.toFixed(digits));
+
+const median = (values) => {
+  const ordered = [...values].sort((left, right) => left - right);
+  const middle = Math.floor(ordered.length / 2);
+  return ordered.length % 2 === 0
+    ? (ordered[middle - 1] + ordered[middle]) / 2
+    : ordered[middle];
+};
+
+const formatTimestamp = (seconds) => {
+  const minutes = Math.floor(seconds / 60);
+  const remaining = seconds - minutes * 60;
+  return `${String(minutes).padStart(2, "0")}:${remaining
+    .toFixed(3)
+    .padStart(6, "0")}`;
+};
+
+const audioDiagnostics = (chunks, texts, joinSilenceMs) => {
+  const durations = chunks.map((pcm) => pcm.length / 2 / NARRATION_SAMPLE_RATE);
+  const wordsPerMinute = texts.map((text, index) =>
+    round((text.trim().split(/\s+/u).length * 60) / durations[index]),
+  );
+  const medianWordsPerMinute = round(median(wordsPerMinute));
+  let timestampSeconds = 0;
+  const outliers = wordsPerMinute
+    .map((pace, index) => {
+      const result = {
+        chunk: index + 1,
+        timestamp: formatTimestamp(timestampSeconds),
+        wordsPerMinute: pace,
+        durationSeconds: round(durations[index]),
+      };
+      timestampSeconds += durations[index];
+      if (index < chunks.length - 1) timestampSeconds += joinSilenceMs / 1000;
+      return result;
+    })
+    .filter(
+      ({ wordsPerMinute: pace }) =>
+        wordsPerMinute.length > 1 &&
+        Math.abs(pace - medianWordsPerMinute) / medianWordsPerMinute >= 0.25,
+    );
+
+  return {
+    structuralStatus: "passed",
+    totalDurationSeconds: round(timestampSeconds),
+    medianWordsPerMinute,
+    outliers,
+  };
+};
+
+const stageError = (stage, error) => {
+  const wrapped = new Error(
+    `Narration failed during ${stage}: ${error.message}`,
+  );
+  wrapped.cause = error;
+  return wrapped;
 };
 
 const provenancePayload = async ({
@@ -684,13 +803,38 @@ const synthesizeNarration = async ({
   const transcript = applySettingOverrides(originalTranscript, overrides);
   const parsed = parseTranscript(transcript);
 
-  await ensureWritableDirectory(paths.workDirectory);
-  await access(path.dirname(paths.outputPath), constants.W_OK);
-  await provider.preflight(parsed.settings);
-  await audio.preflight();
+  try {
+    await ensureWritableDirectory(paths.workDirectory);
+    await ensureWritableDirectory(paths.chunksDirectory);
+    await access(path.dirname(paths.outputPath), constants.W_OK);
+    await provider.preflight(parsed.settings);
+    await audio.preflight();
+  } catch (error) {
+    throw stageError("preflight", error);
+  }
 
   if (transcript !== originalTranscript) {
     await writeFile(paths.transcriptPath, transcript, "utf8");
+  }
+
+  try {
+    const sourceContent = await readFile(sourcePath, "utf8");
+    const currentSourceHash = sha256(
+      narrationText(sourceContent, sourcePath).text,
+    );
+    const reviewedSourceHash = headerValue(transcript, "source").replace(
+      /^sha256:/u,
+      "",
+    );
+    if (currentSourceHash !== reviewedSourceHash) {
+      log(
+        `Warning: Essay source has changed since preparation; continuing from the reviewed narration script as the input of record.`,
+      );
+    }
+  } catch (error) {
+    log(
+      `Warning: Essay source could not be compared with the reviewed narration script (${error.message}); continuing from the reviewed script as the input of record.`,
+    );
   }
 
   log(
@@ -709,48 +853,101 @@ const synthesizeNarration = async ({
   const chunks = [];
   for (let index = 0; index < parsed.chunks.length; index += 1) {
     log(`Synthesizing chunk ${index + 1}/${parsed.chunks.length}`);
-    chunks.push(
-      await provider.synthesize(parsed.chunks[index], parsed.settings),
-    );
+    try {
+      chunks.push(
+        await loadOrSynthesizeChunk({
+          text: parsed.chunks[index],
+          settings: parsed.settings,
+          chunkNumber: index + 1,
+          chunksDirectory: paths.chunksDirectory,
+          provider,
+          log,
+        }),
+      );
+    } catch (error) {
+      throw stageError(`synthesis chunk ${index + 1}`, error);
+    }
   }
-  const pcm = concatenatePcm(chunks, parsed.settings.joinSilenceMs);
-  if (pcm.length === 0) throw new Error("Synthesis produced no PCM audio");
-  await audio.encode({
-    pcm,
-    outputPath: paths.outputPath,
-    sampleRate: NARRATION_SAMPLE_RATE,
-    channels: NARRATION_CHANNELS,
-    bitrate: NARRATION_BITRATE,
-  });
-  const output = await stat(paths.outputPath).catch(() => null);
-  if (!output?.isFile() || output.size === 0) {
-    throw new Error(
-      `ffmpeg did not produce a nonempty MP3 at ${paths.outputPath}`,
+
+  let pcm;
+  let diagnostics;
+  try {
+    pcm = concatenatePcm(chunks, parsed.settings.joinSilenceMs);
+    if (pcm.length === 0) throw new Error("Synthesis produced no PCM audio");
+    diagnostics = audioDiagnostics(
+      chunks,
+      parsed.chunks,
+      parsed.settings.joinSilenceMs,
     );
+    await writeFile(
+      paths.reportPath,
+      `${JSON.stringify(diagnostics, null, 2)}\n`,
+      "utf8",
+    );
+  } catch (error) {
+    throw stageError("assembly", error);
   }
-  const manifest = await provenancePayload({
-    transcript,
-    settings: parsed.settings,
-    outputPath: paths.outputPath,
-    sourcePath,
-  });
-  await writeFile(
-    paths.manifestPath,
-    `${JSON.stringify(manifest, null, 2)}\n`,
-    "utf8",
+
+  log(
+    `Assembly: ${diagnostics.totalDurationSeconds.toFixed(3)} seconds; median speaking pace ${diagnostics.medianWordsPerMinute} words per minute.`,
   );
-  await validateNarrationProvenance({
-    target: sourcePath,
-    repositoryRoot,
-    essaysDirectory,
-    workInProgressDirectory,
-  });
+  for (const outlier of diagnostics.outliers) {
+    log(
+      `Advisory pace outlier: chunk ${outlier.chunk} at ${outlier.timestamp} (${outlier.wordsPerMinute} words per minute). Listen before accepting it.`,
+    );
+  }
+
+  const temporaryOutputPath = `${paths.outputPath}.${process.pid}.tmp.mp3`;
+  try {
+    await rm(temporaryOutputPath, { force: true });
+    await audio.encode({
+      pcm,
+      outputPath: temporaryOutputPath,
+      sampleRate: NARRATION_SAMPLE_RATE,
+      channels: NARRATION_CHANNELS,
+      bitrate: NARRATION_BITRATE,
+    });
+    const output = await stat(temporaryOutputPath).catch(() => null);
+    if (!output?.isFile() || output.size === 0) {
+      throw new Error(
+        `ffmpeg did not produce a nonempty MP3 at ${temporaryOutputPath}`,
+      );
+    }
+    await rename(temporaryOutputPath, paths.outputPath);
+  } catch (error) {
+    await rm(temporaryOutputPath, { force: true }).catch(() => {});
+    throw stageError("MP3 encoding", error);
+  }
+
+  try {
+    const manifest = await provenancePayload({
+      transcript,
+      settings: parsed.settings,
+      outputPath: paths.outputPath,
+      sourcePath,
+    });
+    await writeFile(
+      paths.manifestPath,
+      `${JSON.stringify(manifest, null, 2)}\n`,
+      "utf8",
+    );
+    await validateNarrationProvenance({
+      target: sourcePath,
+      repositoryRoot,
+      essaysDirectory,
+      workInProgressDirectory,
+    });
+  } catch (error) {
+    throw stageError("provenance validation", error);
+  }
+
   log(`Wrote verified narration ${paths.outputPath}`);
   return {
     command: "synthesize",
     sourcePath,
     ...paths,
     chunks: parsed.chunks.length,
+    diagnostics,
   };
 };
 
