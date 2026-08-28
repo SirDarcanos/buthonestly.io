@@ -1,4 +1,5 @@
 ---
+import Button from "../components/Button.astro";
 import Highlight from "../components/Highlight.astro";
 import Home from "../layouts/Home.astro";
 import Label from "../components/Label.astro";
@@ -10,11 +11,6 @@ import { getAllPosts } from "../lib/essays";
 const posts = await getAllPosts();
 const [lead, ...rest] = posts;
 const recent = rest.slice(0, 6);
-
-const currentMonth = new Date().toLocaleString("default", {
-  month: "long",
-  year: "numeric",
-});
 ---
 
 <Home
@@ -27,46 +23,55 @@ const currentMonth = new Date().toLocaleString("default", {
     class="flex flex-col items-start gap-6 pt-8 md:flex-row md:items-end md:justify-between md:gap-10"
   >
     <div class="space-y-4">
-      <p class="label max-w-lg text-left">{currentMonth}</p>
-      <h1 class="max-w-lg">New This Month</h1>
+      <p class="label max-w-lg text-left">Latest writing</p>
+      <h1 class="max-w-lg">Latest essays</h1>
     </div>
-    <p class="lead max-w-sm text-left text-lg md:text-right">
-      New essays each month on leadership, programming, and the messy overlap
-      between humans and tech.
+    <p class="lead max-w-md text-left text-lg md:text-right">
+      Honest writing on leadership, code, and the overlap between humans and
+      tech.
     </p>
   </div>
 
   {lead && <Highlight slot="highlight" post={lead} />}
 
-  <section class="grid gap-x-12 pb-16 md:grid-cols-2">
-    <h2 class="sr-only">More essays</h2>
-    {
-      recent.map((post) => {
-        const postDate = new Date(post.date).toLocaleString("default", {
-          day: "numeric",
-          month: "long",
-          year: "numeric",
-        });
+  <section class="pb-16" aria-labelledby="recent-essays">
+    <h2 id="recent-essays" class="pt-4 text-2xl">More recent essays</h2>
+    <div class="grid gap-x-12 md:grid-cols-2">
+      {
+        recent.map((post) => {
+          const postDate = new Date(post.date).toLocaleString("default", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          });
 
-        return (
-          <article class="border-line space-y-3 border-b py-6 nth-last-[-n+2]:border-0">
-            <div class="flex justify-between">
-              <p class="label text-left">
-                <TaxLinks names={post.categories} base="section" />
-              </p>
-              <div class="meta flex gap-2">
-                <p>{postDate}</p> &middot;
-                <ReadTime content={post.body} />
+          return (
+            <article class="border-line space-y-3 border-b py-6 last:border-0 md:nth-last-[-n+2]:border-0">
+              <div class="flex justify-between">
+                <p class="label text-left">
+                  <TaxLinks names={post.categories} base="section" />
+                </p>
+                <div class="meta flex gap-2">
+                  <p>{postDate}</p> &middot;
+                  <ReadTime content={post.body} />
+                </div>
               </div>
-            </div>
-            <h3>
-              <a href={post.url}>{post.title}</a>
-            </h3>
-            <p class="excerpt text-base">{post.excerpt}</p>
-          </article>
-        );
-      })
-    }
+              <h3>
+                <a href={post.url} data-track="Homepage recent essay click">
+                  {post.title}
+                </a>
+              </h3>
+              <p class="excerpt text-base">{post.excerpt}</p>
+            </article>
+          );
+        })
+      }
+    </div>
+    <div class="mt-8 flex justify-center">
+      <Button href="/essays/" data-track="Homepage essay archive click">
+        Browse all essays →
+      </Button>
+    </div>
   </section>
 
   <section class="border-line border-t py-16">
