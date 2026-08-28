@@ -4,6 +4,12 @@ const DEFAULT_POLL_INTERVAL_MS = 30_000;
 const completedHash = (publicationState, slug) =>
   publicationState.essays?.[slug]?.indexNow?.contentHash;
 
+const newsletterState = (publicationState, slug) =>
+  publicationState.essays?.[slug]?.newsletter;
+
+const newsletterDeliveryTime = (essay) =>
+  new Date(essay.publishedAt.getTime() + 15 * 60 * 1000);
+
 const discoveryUrls = (essay, isNew) => {
   const urls = [essay.canonicalUrl];
   if (!isNew) return urls;
@@ -27,10 +33,9 @@ const inspectExpectedVersion = async (production, essay) => {
     if (inspected.status === "unavailable") {
       return { status: "unavailable", detail: inspected.detail };
     }
-    return {
-      status:
-        inspected.contentHash === essay.publicContentHash ? "live" : "stale",
-    };
+    return inspected.contentHash === essay.publicContentHash
+      ? { status: "live", coverUrl: inspected.coverUrl }
+      : { status: "stale" };
   } catch (error) {
     return { status: "unavailable", detail: messageFrom(error) };
   }
@@ -54,6 +59,7 @@ export async function runPublication({
   deployment,
   production,
   indexNow,
+  kit,
   pollAttempts = DEFAULT_POLL_ATTEMPTS,
   pollIntervalMs = DEFAULT_POLL_INTERVAL_MS,
 }) {
@@ -63,6 +69,7 @@ export async function runPublication({
   if (published.length === 0) return emptyResult();
 
   const liveEssays = [];
+  const liveCoverUrls = new Map();
   const staleEssays = [];
   const unavailableEssays = [];
   const errors = [];
@@ -73,8 +80,10 @@ export async function runPublication({
     })),
   );
   for (const { essay, inspection } of inspections) {
-    if (inspection.status === "live") liveEssays.push(essay);
-    else if (inspection.status === "stale") staleEssays.push(essay);
+    if (inspection.status === "live") {
+      liveEssays.push(essay);
+      liveCoverUrls.set(essay.slug, inspection.coverUrl);
+    } else if (inspection.status === "stale") staleEssays.push(essay);
     else {
       unavailableEssays.push(essay);
       errors.push(
@@ -110,6 +119,10 @@ export async function runPublication({
         for (let index = polling.length - 1; index >= 0; index -= 1) {
           if (polling[index].inspection.status === "live") {
             liveEssays.push(polling[index].essay);
+            liveCoverUrls.set(
+              polling[index].essay.slug,
+              polling[index].inspection.coverUrl,
+            );
             staleEssays.splice(index, 1);
           }
         }
@@ -133,6 +146,135 @@ export async function runPublication({
   );
   const submitted = [];
   let stateChanged = false;
+
+  if (kit) {
+    for (const essay of liveEssays) {
+      const recorded = newsletterState(publicationState, essay.slug);
+      if (recorded?.status === "delivered") continue;
+
+      const coverUrl = liveCoverUrls.get(essay.slug);
+      if (!coverUrl) {
+        unfinished.add(essay.slug);
+        errors.push(`Live cover URL is missing: ${essay.slug}`);
+        continue;
+      }
+
+      if (!recorded?.broadcastId) {
+        let draft;
+        try {
+          draft = await kit.findDraft(essay);
+        } catch (error) {
+          unfinished.add(essay.slug);
+          errors.push(
+            `Kit draft reconciliation failed: ${essay.slug} (${messageFrom(error)})`,
+          );
+          continue;
+        }
+        if (!draft) {
+          try {
+            draft = await kit.createDraft(essay, coverUrl);
+          } catch (error) {
+            unfinished.add(essay.slug);
+            errors.push(
+              `Kit draft creation failed: ${essay.slug} (${messageFrom(error)})`,
+            );
+            continue;
+          }
+        }
+
+        publicationState.essays ??= {};
+        const previousEssayState = publicationState.essays[essay.slug];
+        publicationState.essays[essay.slug] = {
+          ...previousEssayState,
+          newsletter: { broadcastId: draft.id, status: "draft" },
+        };
+        try {
+          await state.save(publicationState);
+          stateChanged = true;
+          unfinished.add(essay.slug);
+        } catch (error) {
+          if (previousEssayState) {
+            publicationState.essays[essay.slug] = previousEssayState;
+          } else {
+            delete publicationState.essays[essay.slug];
+          }
+          unfinished.add(essay.slug);
+          errors.push(
+            `Kit draft state save failed: ${essay.slug} (${messageFrom(error)})`,
+          );
+        }
+        continue;
+      }
+
+      let broadcast;
+      try {
+        broadcast = await kit.inspect(recorded.broadcastId);
+      } catch (error) {
+        unfinished.add(essay.slug);
+        errors.push(
+          `Kit broadcast inspection failed: ${essay.slug} (${messageFrom(error)})`,
+        );
+        continue;
+      }
+
+      if (broadcast.status === "completed") {
+        publicationState.essays[essay.slug] = {
+          ...publicationState.essays[essay.slug],
+          newsletter: {
+            broadcastId: recorded.broadcastId,
+            status: "delivered",
+          },
+        };
+        try {
+          await state.save(publicationState);
+          stateChanged = true;
+        } catch (error) {
+          unfinished.add(essay.slug);
+          errors.push(
+            `Kit delivery state save failed: ${essay.slug} (${messageFrom(error)})`,
+          );
+        }
+        continue;
+      }
+
+      if (["scheduled", "sending", "active"].includes(broadcast.status)) {
+        unfinished.add(essay.slug);
+        continue;
+      }
+      if (broadcast.status !== "draft") {
+        unfinished.add(essay.slug);
+        errors.push(
+          `Kit broadcast cannot be resumed: ${essay.slug} (${broadcast.status})`,
+        );
+        continue;
+      }
+
+      const deliveryTime = clock.now();
+      if (deliveryTime < newsletterDeliveryTime(essay)) {
+        unfinished.add(essay.slug);
+        continue;
+      }
+
+      try {
+        await kit.deliver(recorded.broadcastId, essay, coverUrl, deliveryTime);
+        publicationState.essays[essay.slug] = {
+          ...publicationState.essays[essay.slug],
+          newsletter: {
+            broadcastId: recorded.broadcastId,
+            status: "delivery-requested",
+          },
+        };
+        await state.save(publicationState);
+        stateChanged = true;
+        unfinished.add(essay.slug);
+      } catch (error) {
+        unfinished.add(essay.slug);
+        errors.push(
+          `Kit delivery failed: ${essay.slug} (${messageFrom(error)})`,
+        );
+      }
+    }
+  }
 
   if (indexNowEssays.length > 0) {
     const urls = indexNowEssays.flatMap((essay) =>

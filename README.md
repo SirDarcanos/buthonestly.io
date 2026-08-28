@@ -31,7 +31,8 @@ Astro components. There is no CMS and no database — a new essay is a commit.
 
 - **Date-driven publishing.** A future `date` schedules an essay; an hourly
   Action deploys a missing or stale public version, waits for its content hash,
-  then notifies IndexNow. Drafts live outside the built collection.
+  then independently notifies IndexNow and delivers its Kit broadcast. Drafts
+  live outside the built collection.
 - **Local-first images.** Covers and body images are committed, then optimized
   in place (16:9 covers, opaque sources to JPEG) and re-encoded to AVIF/WebP.
 - **Audio narration.** An optional audio filename adds an in-page player for a
@@ -102,7 +103,7 @@ npm run preview
 ├─ scripts/              # build and maintenance CLIs — see Tooling
 ├─ data/                 # generated but committed: semantic and publication state
 ├─ public/               # static assets, _headers, generated _redirects
-└─ .github/workflows/    # correctness, publication, newsletter, related essays
+└─ .github/workflows/    # correctness, publication, and related essays
 ```
 
 ## Writing an essay
@@ -158,23 +159,23 @@ Import `Figure`, `Gallery`, `QuickSummary`, `Callout`, and `Blockquote` from
 | `npm run lint:essay`         | Advisory style-guide lint for a single essay.                                                                 |
 | `npm run images [-- <slug>]` | Manually resizes and compresses oversized sources and converts opaque images to JPEG, printing renamed paths. |
 | `npm run related`            | Rebuilds the semantic related-posts map.                                                                      |
-| `npm run publication`        | Verifies live content, deploys stale versions, and submits changed public content to IndexNow.                |
+| `npm run publication`        | Verifies live content, deploys stale versions, resumes Kit delivery, and submits changed content to IndexNow. |
 | `npm run og`                 | Regenerates `public/og-default.png`.                                                                          |
 | `npm run email-assets`       | Regenerates the newsletter's masthead and social icons.                                                       |
 
 ## Automation
 
-| Workflow          | Runs                              | Does                                                                           |
-| ----------------- | --------------------------------- | ------------------------------------------------------------------------------ |
-| `ci.yml`          | Pull requests, main pushes        | Tests failure detection, formatting, content, and production build.            |
-| `publication.yml` | Hourly, essay pushes, manual      | Deploys expected content versions and submits changed public URLs to IndexNow. |
-| `related.yml`     | Essay pushes, manual              | Regenerates and commits the semantic related-essay map.                        |
-| `newsletter.yml`  | Essay pushes, daily 13:30, manual | Emails subscribers once per essay, tracked by a committed ledger.              |
-| `lint-essays.yml` | Essay pushes                      | Advisory style lint. Never blocks — style is the author's call.                |
+| Workflow          | Runs                         | Does                                                                                     |
+| ----------------- | ---------------------------- | ---------------------------------------------------------------------------------------- |
+| `ci.yml`          | Pull requests, main pushes   | Tests failure detection, formatting, content, and production build.                      |
+| `publication.yml` | Hourly, essay pushes, manual | Deploys expected versions, resumes Kit broadcasts, and submits changed URLs to IndexNow. |
+| `related.yml`     | Essay pushes, manual         | Regenerates and commits the semantic related-essay map.                                  |
+| `lint-essays.yml` | Essay pushes                 | Advisory style lint. Never blocks — style is the author's call.                          |
 
 Scheduled runs matter because a date passing is not a push. The publication
-orchestrator makes an essay live within the hourly window and records successful
-IndexNow work independently; the newsletter workflow still follows separately.
+orchestrator makes an essay live within the hourly window. It records a Kit draft
+identity before delivery, waits until at least 13:15 UTC, and preserves Kit and
+IndexNow successes independently.
 
 ## Deployment
 
@@ -187,9 +188,12 @@ secret. Two R2 buckets are served directly over custom domains:
 `static.buthonestly.io` for audio narrations. See [DOWNLOADS.md](DOWNLOADS.md)
 for how to add a file.
 
-Successful IndexNow hashes are committed to `data/publication-state.json`. A
-failed deployment or submission remains pending, while an independent success
-is preserved; rerun `publication.yml` manually to recover without repeating
+Successful IndexNow hashes and Kit broadcast identities are committed to
+`data/publication-state.json`. Kit keeps ownership of forms, contacts, consent,
+broadcasts, and unsubscribes. The workflow requires `KIT_API_KEY`; the optional
+`KIT_EMAIL_TEMPLATE_ID` repository variable pins the maintained account template.
+A failed provider action remains pending while an independent success is
+preserved; rerun `publication.yml` manually to recover without repeating
 completed work.
 
 > [!IMPORTANT]

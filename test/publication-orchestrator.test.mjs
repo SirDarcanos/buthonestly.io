@@ -10,7 +10,9 @@ import {
   createDeploymentPort,
   createFileStatePort,
   createIndexNowPort,
+  createKitPort,
   createProductionPort,
+  renderNewsletterContent,
 } from "../scripts/orchestrate-publication.mjs";
 
 const repositoryRoot = path.resolve(import.meta.dirname, "..");
@@ -18,7 +20,7 @@ const repositoryRoot = path.resolve(import.meta.dirname, "..");
 test("the production port reads the exact public content version from successful HTML", async () => {
   const responses = [
     new Response(
-      '<article data-content-version="expected-hash">Current</article>',
+      '<meta content="https://buthonestly.io/cover.webp?a=1&amp;b=2" property="og:image"><article data-content-version="expected-hash">Current</article>',
       { status: 200 },
     ),
     new Response('<article data-content-version="old-hash">Old</article>', {
@@ -41,10 +43,12 @@ test("the production port reads the exact public content version from successful
   assert.deepEqual(await production.inspect(candidate), {
     status: "reachable",
     contentHash: "expected-hash",
+    coverUrl: "https://buthonestly.io/cover.webp?a=1&b=2",
   });
   assert.deepEqual(await production.inspect(candidate), {
     status: "reachable",
     contentHash: "old-hash",
+    coverUrl: null,
   });
   assert.deepEqual(await production.inspect(candidate), {
     status: "missing",
@@ -61,6 +65,76 @@ test("the production port reads the exact public content version from successful
     candidate.canonicalUrl,
     candidate.canonicalUrl,
   ]);
+});
+
+test("Kit drafts and delivers the exact recorded broadcast with structured safe content", async () => {
+  const requests = [];
+  const responses = [
+    { broadcasts: [], pagination: { has_next_page: false } },
+    { broadcast: { id: 47, status: "draft" } },
+    { broadcast: { id: 47, status: "draft" } },
+    { broadcast: { id: 47, status: "scheduled" } },
+  ];
+  const kit = createKitPort({
+    apiKey: "secret",
+    fetch: async (url, options) => {
+      requests.push({ url, options });
+      return Response.json(responses.shift());
+    },
+  });
+  const candidate = {
+    slug: "safe-content",
+    title: 'Plain <title> & "subject"',
+    newsletterIntro: "First <paragraph> & safe.\n\nSecond paragraph.",
+    body: "This MDX prose must never appear.",
+    canonicalUrl: "https://buthonestly.io/essay/?a=1&b=2",
+    coverAlt: 'Cover <alt> & "details"',
+    publishedAt: new Date("2026-09-15T13:00:00.000Z"),
+  };
+  const coverUrl = "https://buthonestly.io/cover.webp?a=1&b=2";
+
+  assert.equal(await kit.findDraft(candidate), null);
+  const draft = await kit.createDraft(candidate, coverUrl);
+  await kit.inspect(draft.id);
+  await kit.deliver(
+    draft.id,
+    candidate,
+    coverUrl,
+    new Date("2026-09-15T13:15:00.000Z"),
+  );
+
+  assert.deepEqual(
+    requests.map(({ url, options }) => [url, options.method]),
+    [
+      [
+        "https://api.kit.com/v4/broadcasts?status=draft&per_page=1000",
+        undefined,
+      ],
+      ["https://api.kit.com/v4/broadcasts", "POST"],
+      ["https://api.kit.com/v4/broadcasts/47", undefined],
+      ["https://api.kit.com/v4/broadcasts/47", "PUT"],
+    ],
+  );
+  const draftPayload = JSON.parse(requests[1].options.body);
+  const deliveryPayload = JSON.parse(requests[3].options.body);
+  assert.equal(draftPayload.subject, candidate.title);
+  assert.match(
+    draftPayload.description,
+    /buthonestly-publication:safe-content/,
+  );
+  assert.equal(draftPayload.send_at, null);
+  assert.equal(deliveryPayload.send_at, "2026-09-15T13:15:00.000Z");
+  assert.match(draftPayload.content, /First &lt;paragraph&gt; &amp; safe\./);
+  assert.match(draftPayload.content, /Second paragraph\./);
+  assert.match(
+    draftPayload.content,
+    /https:\/\/buthonestly\.io\/cover\.webp\?a=1&amp;b=2/,
+  );
+  assert.doesNotMatch(draftPayload.content, /MDX prose/);
+  assert.equal(
+    renderNewsletterContent(candidate, coverUrl),
+    draftPayload.content,
+  );
 });
 
 test("the deployment port rejects an unavailable hook response", async () => {
@@ -144,6 +218,10 @@ const createHarness = ({
   deploymentError,
   indexNowError,
   stateError,
+  kitStatuses,
+  kitDraftMatch,
+  kitCreateError,
+  kitDeliveryError,
 } = {}) => {
   const calls = {
     sleeps: [],
@@ -151,6 +229,10 @@ const createHarness = ({
     deployments: 0,
     submissions: [],
     saves: [],
+    kitSearches: [],
+    kitDrafts: [],
+    kitInspections: [],
+    kitDeliveries: [],
   };
   const queues = new Map(
     Object.entries(productionVersions).map(([slug, versions]) => [
@@ -208,6 +290,36 @@ const createHarness = ({
           if (indexNowError) throw indexNowError;
         },
       },
+      ...(kitStatuses
+        ? {
+            kit: {
+              findDraft: async (candidate) => {
+                calls.kitSearches.push(candidate.slug);
+                return kitDraftMatch ?? null;
+              },
+              createDraft: async (candidate, coverUrl) => {
+                calls.kitDrafts.push({ slug: candidate.slug, coverUrl });
+                if (kitCreateError) throw kitCreateError;
+                return { id: 700 + calls.kitDrafts.length, status: "draft" };
+              },
+              inspect: async (broadcastId) => {
+                calls.kitInspections.push(broadcastId);
+                const statuses = kitStatuses[broadcastId] ?? [];
+                return { id: broadcastId, status: statuses.shift() ?? "draft" };
+              },
+              deliver: async (broadcastId, candidate, coverUrl, sendAt) => {
+                calls.kitDeliveries.push({
+                  broadcastId,
+                  slug: candidate.slug,
+                  coverUrl,
+                  sendAt,
+                });
+                if (kitDeliveryError) throw kitDeliveryError;
+                return { id: broadcastId, status: "scheduled" };
+              },
+            },
+          }
+        : {}),
     },
   };
 };
@@ -230,6 +342,10 @@ test("a scheduled essay causes no publication action before 13:00 UTC", async ()
     deployments: 0,
     submissions: [],
     saves: [],
+    kitSearches: [],
+    kitDrafts: [],
+    kitInspections: [],
+    kitDeliveries: [],
   });
 });
 
@@ -509,7 +625,323 @@ test("a missing production version stays pending when deployment polling times o
   });
 });
 
-test("the publication state retains every successful legacy IndexNow submission", () => {
+test("an unrecorded Kit draft is reconciled and persisted instead of duplicated", async () => {
+  const candidate = essay("reconciled", {
+    newsletterIntro: "A newsletter introduction.",
+  });
+  const { ports, calls } = createHarness({
+    now: new Date("2026-09-15T13:15:00.000Z"),
+    essays: [candidate],
+    productionVersions: {
+      reconciled: [
+        {
+          status: "reachable",
+          contentHash: candidate.publicContentHash,
+          coverUrl: "https://buthonestly.io/cover.webp",
+        },
+      ],
+    },
+    kitStatuses: {},
+    kitDraftMatch: { id: 611, status: "draft" },
+  });
+
+  await runPublication(ports);
+
+  assert.deepEqual(calls.kitSearches, ["reconciled"]);
+  assert.deepEqual(calls.kitDrafts, []);
+  assert.deepEqual(calls.kitDeliveries, []);
+  assert.deepEqual(calls.saves.at(-1).essays.reconciled.newsletter, {
+    broadcastId: 611,
+    status: "draft",
+  });
+});
+
+test("a live essay creates and persists one Kit draft without delivering it in the same phase", async () => {
+  const candidate = essay("newsletter", {
+    title: "A title <with markup>",
+    newsletterIntro: "First & safest.\n\nSecond <paragraph>.",
+    coverAlt: "A descriptive cover",
+  });
+  const { ports, calls } = createHarness({
+    now: new Date("2026-09-15T13:15:00.000Z"),
+    essays: [candidate],
+    productionVersions: {
+      newsletter: [
+        {
+          status: "reachable",
+          contentHash: candidate.publicContentHash,
+          coverUrl: "https://buthonestly.io/_astro/cover.webp",
+        },
+      ],
+    },
+    kitStatuses: {},
+  });
+
+  await runPublication(ports);
+
+  assert.deepEqual(calls.kitDrafts, [
+    {
+      slug: "newsletter",
+      coverUrl: "https://buthonestly.io/_astro/cover.webp",
+    },
+  ]);
+  assert.deepEqual(calls.kitDeliveries, []);
+  assert.deepEqual(calls.saves.at(-1).essays.newsletter.newsletter, {
+    broadcastId: 701,
+    status: "draft",
+  });
+});
+
+test("a recorded Kit draft is inspected and delivered only from 13:15 UTC", async () => {
+  const candidate = essay("timed", {
+    newsletterIntro: "A plain-text introduction.",
+  });
+  const initialState = {
+    version: 1,
+    essays: {
+      timed: {
+        indexNow: { contentHash: candidate.publicContentHash },
+        newsletter: { broadcastId: 81, status: "draft" },
+      },
+    },
+  };
+  const before = createHarness({
+    now: new Date("2026-09-15T13:14:59.999Z"),
+    essays: [candidate],
+    initialState,
+    productionVersions: {
+      timed: [
+        {
+          status: "reachable",
+          contentHash: candidate.publicContentHash,
+          coverUrl: "https://buthonestly.io/cover.webp",
+        },
+      ],
+    },
+    kitStatuses: { 81: ["draft"] },
+  });
+
+  await runPublication(before.ports);
+
+  assert.deepEqual(before.calls.kitInspections, [81]);
+  assert.deepEqual(before.calls.kitDeliveries, []);
+
+  const ready = createHarness({
+    now: new Date("2026-09-15T13:15:00.000Z"),
+    essays: [candidate],
+    initialState,
+    productionVersions: {
+      timed: [
+        {
+          status: "reachable",
+          contentHash: candidate.publicContentHash,
+          coverUrl: "https://buthonestly.io/cover.webp",
+        },
+      ],
+    },
+    kitStatuses: { 81: ["draft"] },
+  });
+
+  await runPublication(ready.ports);
+
+  assert.deepEqual(ready.calls.kitDrafts, []);
+  assert.deepEqual(ready.calls.kitInspections, [81]);
+  assert.deepEqual(ready.calls.kitDeliveries, [
+    {
+      broadcastId: 81,
+      slug: "timed",
+      coverUrl: "https://buthonestly.io/cover.webp",
+      sendAt: new Date("2026-09-15T13:15:00.000Z"),
+    },
+  ]);
+  assert.deepEqual(ready.calls.saves.at(-1).essays.timed.newsletter, {
+    broadcastId: 81,
+    status: "delivery-requested",
+  });
+});
+
+test("a completed recorded broadcast is saved as delivered and never repeated for updates", async () => {
+  const candidate = essay("delivered");
+  const initialState = {
+    version: 1,
+    essays: {
+      delivered: {
+        indexNow: { contentHash: "previous-version" },
+        newsletter: { broadcastId: 93, status: "draft" },
+      },
+    },
+  };
+  const completed = createHarness({
+    now: new Date("2026-09-16T00:00:00.000Z"),
+    essays: [candidate],
+    initialState,
+    productionVersions: {
+      delivered: [
+        {
+          status: "reachable",
+          contentHash: candidate.publicContentHash,
+          coverUrl: "https://buthonestly.io/cover.webp",
+        },
+      ],
+    },
+    kitStatuses: { 93: ["completed"] },
+  });
+
+  await runPublication(completed.ports);
+
+  assert.deepEqual(completed.calls.kitDeliveries, []);
+  assert.deepEqual(completed.calls.saves.at(-1).essays.delivered.newsletter, {
+    broadcastId: 93,
+    status: "delivered",
+  });
+
+  const updated = essay("delivered", { publicContentHash: "later-update" });
+  const suppressed = createHarness({
+    now: new Date("2026-09-17T00:00:00.000Z"),
+    essays: [updated],
+    initialState: completed.calls.saves.at(-1),
+    productionVersions: { delivered: [updated.publicContentHash] },
+    kitStatuses: {},
+  });
+
+  await runPublication(suppressed.ports);
+
+  assert.deepEqual(suppressed.calls.kitDrafts, []);
+  assert.deepEqual(suppressed.calls.kitInspections, []);
+  assert.deepEqual(suppressed.calls.kitDeliveries, []);
+});
+
+test("a crash after Kit accepts delivery recovers by inspecting the recorded broadcast", async () => {
+  const candidate = essay("recovered");
+  const initialState = {
+    version: 1,
+    essays: {
+      recovered: {
+        indexNow: { contentHash: candidate.publicContentHash },
+        newsletter: { broadcastId: 115, status: "draft" },
+      },
+    },
+  };
+  const failed = createHarness({
+    now: new Date("2026-09-16T00:00:00.000Z"),
+    essays: [candidate],
+    initialState,
+    productionVersions: {
+      recovered: [
+        {
+          status: "reachable",
+          contentHash: candidate.publicContentHash,
+          coverUrl: "https://buthonestly.io/cover.webp",
+        },
+      ],
+    },
+    kitStatuses: { 115: ["draft"] },
+    stateError: new Error("process crashed before state persisted"),
+  });
+
+  await runPublication(failed.ports);
+
+  assert.equal(failed.calls.kitDeliveries.length, 1);
+
+  const retried = createHarness({
+    now: new Date("2026-09-16T00:05:00.000Z"),
+    essays: [candidate],
+    initialState,
+    productionVersions: {
+      recovered: [
+        {
+          status: "reachable",
+          contentHash: candidate.publicContentHash,
+          coverUrl: "https://buthonestly.io/cover.webp",
+        },
+      ],
+    },
+    kitStatuses: { 115: ["completed"] },
+  });
+
+  await runPublication(retried.ports);
+
+  assert.deepEqual(retried.calls.kitDrafts, []);
+  assert.deepEqual(retried.calls.kitDeliveries, []);
+  assert.deepEqual(retried.calls.saves.at(-1).essays.recovered.newsletter, {
+    broadcastId: 115,
+    status: "delivered",
+  });
+});
+
+test("newsletter failure does not discard an independent IndexNow success", async () => {
+  const candidate = essay("partial", {
+    newsletterIntro: "A newsletter introduction.",
+  });
+  const { ports, calls } = createHarness({
+    now: new Date("2026-09-16T00:00:00.000Z"),
+    essays: [candidate],
+    productionVersions: {
+      partial: [
+        {
+          status: "reachable",
+          contentHash: candidate.publicContentHash,
+          coverUrl: "https://buthonestly.io/cover.webp",
+        },
+      ],
+    },
+    kitStatuses: {},
+    kitCreateError: new Error("Kit unavailable"),
+  });
+
+  const result = await runPublication(ports);
+
+  assert.deepEqual(result.submitted, ["partial"]);
+  assert.equal(
+    calls.saves.at(-1).essays.partial.indexNow.contentHash,
+    candidate.publicContentHash,
+  );
+  assert.equal(calls.saves.at(-1).essays.partial.newsletter, undefined);
+  assert.match(result.errors.join("\n"), /Kit draft creation failed: partial/);
+});
+
+test("IndexNow failure does not discard an independent newsletter success", async () => {
+  const candidate = essay("newsletter-partial");
+  const initialState = {
+    version: 1,
+    essays: {
+      "newsletter-partial": {
+        indexNow: { contentHash: "previous" },
+        newsletter: { broadcastId: 121, status: "delivery-requested" },
+      },
+    },
+  };
+  const { ports, calls } = createHarness({
+    now: new Date("2026-09-16T00:00:00.000Z"),
+    essays: [candidate],
+    initialState,
+    productionVersions: {
+      "newsletter-partial": [
+        {
+          status: "reachable",
+          contentHash: candidate.publicContentHash,
+          coverUrl: "https://buthonestly.io/cover.webp",
+        },
+      ],
+    },
+    kitStatuses: { 121: ["completed"] },
+    indexNowError: new Error("IndexNow unavailable"),
+  });
+
+  const result = await runPublication(ports);
+
+  assert.deepEqual(calls.saves.at(-1).essays["newsletter-partial"].newsletter, {
+    broadcastId: 121,
+    status: "delivered",
+  });
+  assert.equal(
+    calls.saves.at(-1).essays["newsletter-partial"].indexNow.contentHash,
+    "previous",
+  );
+  assert.match(result.errors.join("\n"), /IndexNow submission failed/);
+});
+
+test("the publication state retains legacy IndexNow and newsletter successes", () => {
   const state = JSON.parse(
     readFileSync(
       path.join(repositoryRoot, "data/publication-state.json"),
@@ -529,9 +961,14 @@ test("the publication state retains every successful legacy IndexNow submission"
   assert.equal(migratedSlugs.length, 44);
   for (const slug of migratedSlugs) {
     assert.match(state.essays[slug].indexNow.contentHash, /^[a-f0-9]{64}$/);
+    assert.deepEqual(state.essays[slug].newsletter, { status: "delivered" });
   }
   assert.equal(
     existsSync(path.join(repositoryRoot, "data/indexnow-pinged.json")),
+    false,
+  );
+  assert.equal(
+    existsSync(path.join(repositoryRoot, "data/newsletter-sent.json")),
     false,
   );
 });
@@ -543,13 +980,18 @@ test("the publication workflow owns hourly, essay-change, and manual orchestrati
   );
 
   assert.match(workflow, /cron: ["']5 \* \* \* \*["']/);
+  assert.match(workflow, /cron: ["']15 13 \* \* \*["']/);
   assert.match(workflow, /workflow_dispatch:/);
   assert.match(workflow, /push:/);
   assert.match(workflow, /src\/content\/essays\/\*\*/);
   assert.match(workflow, /contents: write/);
   assert.match(workflow, /group: publication/);
   assert.match(workflow, /cancel-in-progress: false/);
-  assert.match(workflow, /npm run publication/);
+  assert.equal(workflow.match(/run: npm run publication/g)?.length, 2);
+  assert.match(workflow, /KIT_API_KEY/);
+  assert.match(workflow, /Record draft identities and partial successes/);
+  assert.match(workflow, /steps\.publication_checkpoint\.outcome == 'success'/);
+  assert.match(workflow, /Resume recorded Kit broadcasts/);
   assert.match(workflow, /if: always\(\)/);
   assert.match(workflow, /git add data\/publication-state\.json/);
   assert.doesNotMatch(
@@ -564,6 +1006,14 @@ test("the publication workflow owns hourly, essay-change, and manual orchestrati
     existsSync(
       path.join(repositoryRoot, ".github/workflows/scheduled-rebuild.yml"),
     ),
+    false,
+  );
+  assert.equal(
+    existsSync(path.join(repositoryRoot, ".github/workflows/newsletter.yml")),
+    false,
+  );
+  assert.equal(
+    existsSync(path.join(repositoryRoot, "scripts/notify-subscribers.mjs")),
     false,
   );
 });

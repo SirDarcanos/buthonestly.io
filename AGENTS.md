@@ -42,12 +42,13 @@ accumulate and go out as a batch. Do not push on every change.
   cluster density, and cornerstone reach, with scheduled essays counted
   separately. Pass `-- --json <path>` to write local JSON analysis explicitly;
   no graph artifact is tracked or written by default.
-- `npm run publication` — run deployment verification and IndexNow follow-up.
-  Normally left to `publication.yml`, which runs hourly, on essay changes, and
-  by manual dispatch. It can call live providers: use manual dispatch for
-  recovery rather than running it casually. The IndexNow key is public by
-  protocol and lives at `public/<key>.txt`. Durable per-essay hashes live in
-  `data/publication-state.json`; unchanged public content is never resubmitted.
+- `npm run publication` — run deployment verification, resumable Kit delivery,
+  and IndexNow follow-up. Normally left to `publication.yml`, which runs hourly,
+  on essay changes, and by manual dispatch. It can call live providers: use
+  manual dispatch for recovery rather than running it casually. The IndexNow key
+  is public by protocol and lives at `public/<key>.txt`. Durable per-essay Kit
+  broadcast identities, delivery status, and IndexNow hashes share
+  `data/publication-state.json`; completed actions are never repeated.
 - Two Kit email files, for two different editors:
   `scripts/kit-newsletter-template.html` is a full HTML document for
   Account → Email templates, which wraps broadcasts.
