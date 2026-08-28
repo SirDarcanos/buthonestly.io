@@ -172,9 +172,18 @@ Import `Figure`, `Gallery`, `QuickSummary`, `Callout`, and `Blockquote` from
 Scheduled runs matter because a date passing is not a push. The publication
 orchestrator makes an essay live within the hourly window. It records a Kit draft
 identity before delivery, waits until at least 13:15 UTC, and preserves Kit and
-IndexNow successes independently.
+IndexNow successes independently. Dependabot groups weekly npm and GitHub Actions
+updates, while GitHub security updates open separately when needed. GitHub's
+managed CodeQL setup scans Actions, JavaScript, and TypeScript changes and runs a
+weekly full scan.
 
 ## Deployment
+
+A repository ruleset protects `main` with pull requests, the `verify` check,
+resolved review threads, linear history, and squash-only merges. Administrators
+can bypass the ruleset. The related and publication workflows use the
+repository-scoped `REPOSITORY_DEPLOY_KEY` secret for their generated-state
+commits.
 
 Cloudflare Pages builds `dist/` from `main`. The publication orchestrator reads
 each pending essay's `data-content-version`, requests the Pages deploy hook when

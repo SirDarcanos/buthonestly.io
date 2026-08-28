@@ -984,7 +984,15 @@ test("the publication workflow owns hourly, essay-change, and manual orchestrati
   assert.match(workflow, /workflow_dispatch:/);
   assert.match(workflow, /push:/);
   assert.match(workflow, /src\/content\/essays\/\*\*/);
-  assert.match(workflow, /contents: write/);
+  assert.match(workflow, /contents: read/);
+  assert.match(workflow, /persist-credentials: false/);
+  assert.match(
+    workflow,
+    /REPOSITORY_DEPLOY_KEY: \$\{\{ secrets\.REPOSITORY_DEPLOY_KEY \}\}/,
+  );
+  assert.match(workflow, /GIT_SSH_COMMAND/);
+  assert.match(workflow, /trap 'rm -f "\$KEY_PATH"' EXIT/);
+  assert.doesNotMatch(workflow, /ssh-key:/);
   assert.match(workflow, /group: publication/);
   assert.match(workflow, /cancel-in-progress: false/);
   assert.equal(workflow.match(/run: npm run publication/g)?.length, 2);
