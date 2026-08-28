@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
-import { existsSync, realpathSync } from "node:fs";
-import { readFile, writeFile } from "node:fs/promises";
+import { constants, existsSync, realpathSync } from "node:fs";
+import { access, mkdir, readFile, rm, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import matter from "gray-matter";
 import remarkGfm from "remark-gfm";
@@ -9,19 +9,36 @@ import remarkParse from "remark-parse";
 import { unified } from "unified";
 
 import { chunkText } from "./chunk-text.mjs";
+import {
+  DIRECTOR_PROMPT_FORMAT,
+  NARRATION_BITRATE,
+  NARRATION_CHANNELS,
+  NARRATION_SAMPLE_RATE,
+  narrationPaces,
+  narrationStyles,
+} from "./narration-adapters.mjs";
 
 export const NARRATION_SCRIPT_FORMAT = 1;
 export const NARRATION_DEFAULTS = Object.freeze({
   voice: "Enceladus",
   style: "reflective",
   pace: "conversational",
-  model: "gemini-2.5-flash-preview-tts",
+  model: "gemini-2.5-flash-tts",
   region: "us-central1",
   chunkWords: 200,
   joinSilenceMs: 200,
 });
 
-const NARRATION_COMMANDS = new Set(["prepare", "prep"]);
+const NARRATION_COMMANDS = new Set(["prepare", "prep", "synthesize", "synth"]);
+const SYNTHESIS_SETTING_HEADERS = Object.freeze({
+  voice: "voice",
+  style: "style",
+  pace: "pace",
+  model: "model",
+  region: "region",
+  chunkWords: "chunk-words",
+  joinSilenceMs: "join-silence-ms",
+});
 const OMITTED_COMPONENTS = new Set([
   "QuickSummary",
   "WrittenOnly",
@@ -366,7 +383,7 @@ const renderTranscript = ({ slug, title, sourceHash, chunks }) => {
   return `${header}\n${body}`;
 };
 
-export async function runNarrationCommand({
+const prepareNarration = async ({
   command,
   target,
   refresh = false,
@@ -374,7 +391,7 @@ export async function runNarrationCommand({
   essaysDirectory = "src/content/essays",
   workInProgressDirectory = "src/content/drafts",
   log = console.log,
-} = {}) {
+} = {}) => {
   if (!NARRATION_COMMANDS.has(command)) {
     throw new Error(
       `Unknown Narration command "${command}". Use prepare or prep.`,
@@ -423,4 +440,364 @@ export async function runNarrationCommand({
     `Wrote ${transcriptPath} (${chunks.length} chunk${chunks.length === 1 ? "" : "s"}). Read and edit it before synthesis.`,
   );
   return { sourcePath, transcriptPath, created: true, chunks: chunks.length };
+};
+
+const sha256 = (value) => createHash("sha256").update(value).digest("hex");
+
+const headerValue = (transcript, name) => {
+  const match = transcript.match(new RegExp(`^# ${name}: (.+)$`, "m"));
+  if (!match) throw new Error(`Narration script is missing # ${name}`);
+  return match[1].trim();
+};
+
+const parsePositiveInteger = (value, name, { allowZero = false } = {}) => {
+  const parsed = Number(value);
+  const minimum = allowZero ? 0 : 1;
+  if (!Number.isInteger(parsed) || parsed < minimum) {
+    throw new Error(
+      `Narration setting ${name} must be an integer of at least ${minimum}`,
+    );
+  }
+  return parsed;
+};
+
+const validateSettings = (settings) => {
+  if (!narrationStyles.includes(settings.style)) {
+    throw new Error(
+      `Unknown style "${settings.style}". Use one of: ${narrationStyles.join(", ")}`,
+    );
+  }
+  if (!narrationPaces.includes(settings.pace)) {
+    throw new Error(
+      `Unknown pace "${settings.pace}". Use one of: ${narrationPaces.join(", ")}`,
+    );
+  }
+  for (const name of ["voice", "model", "region"]) {
+    if (typeof settings[name] !== "string" || !settings[name].trim()) {
+      throw new Error(`Narration setting ${name} must not be empty`);
+    }
+  }
+  if (!Number.isInteger(settings.chunkWords) || settings.chunkWords < 10) {
+    throw new Error(
+      "Narration setting chunk-words must be an integer of at least 10",
+    );
+  }
+  if (!Number.isInteger(settings.joinSilenceMs) || settings.joinSilenceMs < 0) {
+    throw new Error(
+      "Narration setting join-silence-ms must be a non-negative integer",
+    );
+  }
+};
+
+const parseTranscript = (transcript) => {
+  const format = Number(headerValue(transcript, "format"));
+  if (format !== NARRATION_SCRIPT_FORMAT) {
+    throw new Error(
+      `Narration script uses unsupported format ${format}; run prepare with --refresh to replace it`,
+    );
+  }
+  const settings = {
+    voice: headerValue(transcript, "voice"),
+    style: headerValue(transcript, "style"),
+    pace: headerValue(transcript, "pace"),
+    model: headerValue(transcript, "model"),
+    region: headerValue(transcript, "region"),
+    chunkWords: parsePositiveInteger(
+      headerValue(transcript, "chunk-words"),
+      "chunk-words",
+    ),
+    joinSilenceMs: parsePositiveInteger(
+      headerValue(transcript, "join-silence-ms"),
+      "join-silence-ms",
+      { allowZero: true },
+    ),
+  };
+  validateSettings(settings);
+
+  const firstChunkOffset = transcript.search(/^--- chunk 1 ---$/mu);
+  const textOutsideChunks = transcript
+    .slice(0, firstChunkOffset < 0 ? transcript.length : firstChunkOffset)
+    .split("\n")
+    .find((line) => line.trim() && !line.startsWith("#"));
+  if (textOutsideChunks) {
+    throw new Error("Narration script contains prose outside numbered chunks");
+  }
+
+  const chunks = [];
+  const pattern =
+    /^--- chunk (\d+) ---\n([\s\S]*?)(?=^--- chunk \d+ ---\n|(?![\s\S]))/gmu;
+  for (const match of transcript.matchAll(pattern)) {
+    const expected = chunks.length + 1;
+    if (Number(match[1]) !== expected) {
+      throw new Error(`Narration chunks must be numbered consecutively from 1`);
+    }
+    const text = match[2].trim();
+    if (!text) throw new Error(`Narration chunk ${expected} is empty`);
+    chunks.push(text);
+  }
+  if (chunks.length === 0) {
+    throw new Error("Narration script contains no numbered chunks");
+  }
+  return { settings, chunks };
+};
+
+const applySettingOverrides = (transcript, overrides = {}) => {
+  let updated = transcript;
+  for (const [name, header] of Object.entries(SYNTHESIS_SETTING_HEADERS)) {
+    if (overrides[name] === undefined) continue;
+    const value = String(overrides[name]).trim();
+    if (!value)
+      throw new Error(`Narration setting ${header} must not be empty`);
+    const pattern = new RegExp(`^# ${header}: .+$`, "m");
+    if (!pattern.test(updated)) {
+      throw new Error(`Narration script is missing # ${header}`);
+    }
+    updated = updated.replace(pattern, `# ${header}: ${value}`);
+  }
+  return updated;
+};
+
+const synthesisPaths = ({ repositoryRoot, sourcePath }) => {
+  const slug = path.basename(sourcePath, ".mdx");
+  const sourceIdentity = sha256(
+    path.relative(repositoryRoot, sourcePath),
+  ).slice(0, 12);
+  const workDirectory = path.join(
+    repositoryRoot,
+    "local/narration",
+    `${slug}-${sourceIdentity}`,
+  );
+  return {
+    slug,
+    transcriptPath: path.join(path.dirname(sourcePath), `${slug}.audio.txt`),
+    outputPath: path.join(path.dirname(sourcePath), `${slug}.mp3`),
+    workDirectory,
+    manifestPath: path.join(workDirectory, "provenance.json"),
+  };
+};
+
+const ensureWritableDirectory = async (directory) => {
+  await mkdir(directory, { recursive: true });
+  const probe = path.join(directory, `.write-test-${process.pid}`);
+  await writeFile(probe, "ok", "utf8");
+  await rm(probe);
+};
+
+const concatenatePcm = (buffers, silenceMs) => {
+  const silenceBytes =
+    Math.round((NARRATION_SAMPLE_RATE * silenceMs) / 1000) * 2;
+  const silence = Buffer.alloc(silenceBytes);
+  return Buffer.concat(
+    buffers.flatMap((buffer, index) =>
+      index === 0 || silenceBytes === 0 ? [buffer] : [silence, buffer],
+    ),
+  );
+};
+
+const provenancePayload = async ({
+  transcript,
+  settings,
+  outputPath,
+  sourcePath,
+}) => ({
+  version: 1,
+  sourcePath,
+  outputPath,
+  transcriptHash: sha256(transcript),
+  outputHash: sha256(await readFile(outputPath)),
+  settings,
+  directorPromptFormat: DIRECTOR_PROMPT_FORMAT,
+});
+
+export const validateNarrationProvenance = async ({
+  target,
+  repositoryRoot = process.cwd(),
+  essaysDirectory = "src/content/essays",
+  workInProgressDirectory = "src/content/drafts",
+} = {}) => {
+  const sourcePath = resolveTarget({
+    target,
+    repositoryRoot,
+    essaysDirectory,
+    workInProgressDirectory,
+  });
+  const paths = synthesisPaths({ repositoryRoot, sourcePath });
+  const [transcript, manifestText] = await Promise.all([
+    readFile(paths.transcriptPath, "utf8"),
+    readFile(paths.manifestPath, "utf8").catch(() => {
+      throw new Error(
+        `No provenance manifest found for ${paths.outputPath}; synthesize it before upload`,
+      );
+    }),
+  ]);
+  const manifest = JSON.parse(manifestText);
+  if (manifest.transcriptHash !== sha256(transcript)) {
+    throw new Error(
+      `The MP3 provenance does not match the reviewed narration script at ${paths.transcriptPath}`,
+    );
+  }
+  if (manifest.directorPromptFormat !== DIRECTOR_PROMPT_FORMAT) {
+    throw new Error(
+      "The MP3 provenance uses an obsolete director prompt format",
+    );
+  }
+  const output = await readFile(paths.outputPath).catch(() => {
+    throw new Error(`Narration MP3 is missing at ${paths.outputPath}`);
+  });
+  if (output.length === 0 || manifest.outputHash !== sha256(output)) {
+    throw new Error(
+      `Narration MP3 at ${paths.outputPath} failed provenance validation`,
+    );
+  }
+  return { ...paths, sourcePath, settings: manifest.settings };
+};
+
+const synthesizeNarration = async ({
+  target,
+  repositoryRoot,
+  essaysDirectory,
+  workInProgressDirectory,
+  settings: overrides,
+  yes,
+  provider,
+  audio,
+  confirm,
+  log,
+}) => {
+  if (!provider || !audio) {
+    throw new Error(
+      "Narration synthesis requires provider and ffmpeg adapters",
+    );
+  }
+  const sourcePath = resolveTarget({
+    target,
+    repositoryRoot,
+    essaysDirectory,
+    workInProgressDirectory,
+  });
+  const paths = synthesisPaths({ repositoryRoot, sourcePath });
+  const originalTranscript = await readFile(paths.transcriptPath, "utf8").catch(
+    () => {
+      throw new Error(
+        `Reviewed narration script not found at ${paths.transcriptPath}; run prepare first`,
+      );
+    },
+  );
+  const transcript = applySettingOverrides(originalTranscript, overrides);
+  const parsed = parseTranscript(transcript);
+
+  await ensureWritableDirectory(paths.workDirectory);
+  await access(path.dirname(paths.outputPath), constants.W_OK);
+  await provider.preflight(parsed.settings);
+  await audio.preflight();
+
+  if (transcript !== originalTranscript) {
+    await writeFile(paths.transcriptPath, transcript, "utf8");
+  }
+
+  log(
+    `${paths.slug}: ${parsed.chunks.length} chunk${parsed.chunks.length === 1 ? "" : "s"}; voice ${parsed.settings.voice}; model ${parsed.settings.model}; style ${parsed.settings.style}; pace ${parsed.settings.pace}.`,
+  );
+  if (!yes) {
+    if (typeof confirm !== "function") {
+      throw new Error("Paid synthesis requires confirmation or --yes");
+    }
+    const accepted = await confirm(
+      `Start paid synthesis for ${parsed.chunks.length} chunk${parsed.chunks.length === 1 ? "" : "s"}?`,
+    );
+    if (!accepted) throw new Error("Narration synthesis cancelled");
+  }
+
+  const chunks = [];
+  for (let index = 0; index < parsed.chunks.length; index += 1) {
+    log(`Synthesizing chunk ${index + 1}/${parsed.chunks.length}`);
+    chunks.push(
+      await provider.synthesize(parsed.chunks[index], parsed.settings),
+    );
+  }
+  const pcm = concatenatePcm(chunks, parsed.settings.joinSilenceMs);
+  if (pcm.length === 0) throw new Error("Synthesis produced no PCM audio");
+  await audio.encode({
+    pcm,
+    outputPath: paths.outputPath,
+    sampleRate: NARRATION_SAMPLE_RATE,
+    channels: NARRATION_CHANNELS,
+    bitrate: NARRATION_BITRATE,
+  });
+  const output = await stat(paths.outputPath).catch(() => null);
+  if (!output?.isFile() || output.size === 0) {
+    throw new Error(
+      `ffmpeg did not produce a nonempty MP3 at ${paths.outputPath}`,
+    );
+  }
+  const manifest = await provenancePayload({
+    transcript,
+    settings: parsed.settings,
+    outputPath: paths.outputPath,
+    sourcePath,
+  });
+  await writeFile(
+    paths.manifestPath,
+    `${JSON.stringify(manifest, null, 2)}\n`,
+    "utf8",
+  );
+  await validateNarrationProvenance({
+    target: sourcePath,
+    repositoryRoot,
+    essaysDirectory,
+    workInProgressDirectory,
+  });
+  log(`Wrote verified narration ${paths.outputPath}`);
+  return {
+    command: "synthesize",
+    sourcePath,
+    ...paths,
+    chunks: parsed.chunks.length,
+  };
+};
+
+export async function runNarrationCommand({
+  command,
+  target,
+  refresh = false,
+  repositoryRoot = process.cwd(),
+  essaysDirectory = "src/content/essays",
+  workInProgressDirectory = "src/content/drafts",
+  settings,
+  yes = false,
+  provider,
+  audio,
+  confirm,
+  log = console.log,
+} = {}) {
+  if (!NARRATION_COMMANDS.has(command)) {
+    throw new Error(
+      `Unknown Narration command "${command}". Use prepare, prep, synthesize, or synth.`,
+    );
+  }
+  if (["prepare", "prep"].includes(command)) {
+    return prepareNarration({
+      command,
+      target,
+      refresh,
+      repositoryRoot,
+      essaysDirectory,
+      workInProgressDirectory,
+      log,
+    });
+  }
+  if (refresh)
+    throw new Error("--refresh is only available with prepare or prep");
+  return synthesizeNarration({
+    target,
+    repositoryRoot,
+    essaysDirectory,
+    workInProgressDirectory,
+    settings,
+    yes,
+    provider,
+    audio,
+    confirm,
+    log,
+  });
 }

@@ -111,7 +111,7 @@ Closing prose.
   assert.match(transcript, /^# voice: Enceladus$/m);
   assert.match(transcript, /^# style: reflective$/m);
   assert.match(transcript, /^# pace: conversational$/m);
-  assert.match(transcript, /^# model: gemini-2\.5-flash-preview-tts$/m);
+  assert.match(transcript, /^# model: gemini-2\.5-flash-tts$/m);
   assert.match(transcript, /^# region: us-central1$/m);
   assert.match(transcript, /^# chunk-words: 200$/m);
   assert.match(transcript, /^# join-silence-ms: 200$/m);
