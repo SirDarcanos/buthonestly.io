@@ -40,6 +40,10 @@ _Avoid_: Internal link
 The editorial model formed exclusively from internal prose links, used to identify isolated essays and assess connections between subjects.
 _Avoid_: Link graph, site graph
 
+**Search Console snapshot**:
+A local, read-only capture of Google Search Console source data for one exact date interval, together with a generated summary derived from that data.
+_Avoid_: SEO report, analytics export
+
 **Essay inventory**:
 The authoritative interface for essay source discovery, metadata, publication state, public URLs, freshness, and reader-facing hashes.
 _Avoid_: Content parser, post loader
