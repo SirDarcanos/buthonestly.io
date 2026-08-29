@@ -47,8 +47,8 @@ Default Credentials. Run 'gcloud auth application-default login' for local ADC,
 or set GOOGLE_APPLICATION_CREDENTIALS to a supported credential file. Set
 GOOGLE_CLOUD_PROJECT when ADC does not identify its billing project.
 
-Upload requires CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID,
-CLOUDFLARE_ZONE_ID, and NARRATION_R2_BUCKET. The token needs R2 write and
+Upload requires CLOUDFLARE_API_TOKEN, CLOUDFLARE_ZONE_ID, and
+NARRATION_R2_BUCKET. The token needs R2 write and
 Zone Cache Purge permissions. Upload and clean never delete remote audio.`;
 
 const valueOptions = new Map([

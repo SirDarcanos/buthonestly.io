@@ -178,8 +178,8 @@ Prerequisites:
   used for synthesis needs permission to call Vertex AI, normally the Vertex AI
   User role.
 - For upload, a Cloudflare API token with **Workers R2 Storage: Edit** on the
-  account and **Cache Purge: Purge** on the site zone, plus the account ID, zone
-  ID, and the R2 bucket behind `static.buthonestly.io`.
+  account and **Cache Purge: Purge** on the site zone, plus the zone ID and the
+  R2 bucket behind `static.buthonestly.io`.
 
 Google authentication uses Application Default Credentials (ADC). For an
 interactive local identity, install the Google Cloud CLI and run:
@@ -304,7 +304,6 @@ Environment variables (see `.env.example`):
 | `GOOGLE_APPLICATION_CREDENTIALS` | Optional ADC-compatible credential file for Narration synthesis.         |
 | `GOOGLE_CLOUD_PROJECT`           | Optional Google project override when ADC does not identify one.         |
 | `CLOUDFLARE_API_TOKEN`           | Required for Narration upload; R2 edit and zone cache-purge permissions. |
-| `CLOUDFLARE_ACCOUNT_ID`          | Required account containing the Narration R2 bucket.                     |
 | `CLOUDFLARE_ZONE_ID`             | Required zone for exact-URL Narration cache purges.                      |
 | `NARRATION_R2_BUCKET`            | Required R2 bucket name for Narration upload.                            |
 

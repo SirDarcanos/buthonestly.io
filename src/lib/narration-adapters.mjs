@@ -304,7 +304,6 @@ export const createCloudflareNarrationAdapter = ({
   const configuration = () => {
     const values = {
       token: env.CLOUDFLARE_API_TOKEN,
-      accountId: env.CLOUDFLARE_ACCOUNT_ID,
       zoneId: env.CLOUDFLARE_ZONE_ID,
       bucket: env.NARRATION_R2_BUCKET,
     };
@@ -313,7 +312,7 @@ export const createCloudflareNarrationAdapter = ({
       .map(([name]) => name);
     if (missing.length > 0) {
       throw new Error(
-        `Cloudflare narration configuration is missing ${missing.join(", ")}. Set CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID, CLOUDFLARE_ZONE_ID, and NARRATION_R2_BUCKET in the local environment. The token needs R2 write and Zone Cache Purge permissions.`,
+        `Cloudflare narration configuration is missing ${missing.join(", ")}. Set CLOUDFLARE_API_TOKEN, CLOUDFLARE_ZONE_ID, and NARRATION_R2_BUCKET in the local environment. The token needs R2 write and Zone Cache Purge permissions.`,
       );
     }
     return values;

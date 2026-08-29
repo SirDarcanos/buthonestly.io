@@ -269,7 +269,6 @@ test("the Cloudflare adapter uses pinned Wrangler upload metadata, purges the ex
     repositoryRoot: "/repo",
     env: {
       CLOUDFLARE_API_TOKEN: "secret-token",
-      CLOUDFLARE_ACCOUNT_ID: "account-id",
       CLOUDFLARE_ZONE_ID: "zone-id",
       NARRATION_R2_BUCKET: "static-bucket",
     },
