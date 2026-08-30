@@ -44,6 +44,38 @@ _Avoid_: Link graph, site graph
 A local, read-only capture of Google Search Console source data for one exact date interval, together with a generated summary derived from that data.
 _Avoid_: SEO report, analytics export
 
+**Search Console aggregate report**:
+A local comparison derived from final monthly Search Console snapshots, with page cohorts and disclosed query classifications applied consistently.
+_Avoid_: SEO dashboard, audience scorecard
+
+**Editorial-focus essay**:
+An essay that belongs to the site's current editorial direction, regardless of whether readers are likely to search for it.
+_Avoid_: Non-archive essay, current essay
+
+**Legacy-tail essay**:
+An older WordPress or WooCommerce essay kept accurate for existing readers but excluded from the site's current editorial direction.
+_Avoid_: Archive essay, old essay
+
+**Peripheral essay**:
+An essay outside the site's current editorial direction that does not belong to the historical Legacy tail.
+_Avoid_: Off-topic essay, non-focus essay
+
+**Brand query**:
+A disclosed Search Console query whose normalized text matches a reviewed rule identifying the site, its author, or a distinctive essay.
+_Avoid_: Branded keyword, navigational query
+
+**Search review candidate**:
+An eligible page or disclosed generic query whose Search Console measurements meet a reviewed threshold and warrant human assessment.
+_Avoid_: SEO recommendation, optimization target
+
+**Final reporting month**:
+An exact calendar month represented by a Search Console snapshot whose source manifest marks the data final.
+_Avoid_: Complete-looking month, latest month
+
+**Page cohort**:
+The reviewed classification assigned to each reportable canonical URL: Editorial-focus essay, Legacy-tail essay, Peripheral essay, Resource, Archive, or Site page.
+_Avoid_: URL type, content bucket
+
 **Essay inventory**:
 The authoritative interface for essay source discovery, metadata, publication state, public URLs, freshness, and reader-facing hashes.
 _Avoid_: Content parser, post loader
