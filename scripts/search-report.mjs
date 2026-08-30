@@ -36,6 +36,10 @@ const SITE_PATHS = new Set([
   "/privacy/",
   "/terms-conditions/",
 ]);
+const RESOURCE_PATHS = new Set([
+  "/resources/",
+  "/resources/free-ai-voice-generator/",
+]);
 
 export class SearchReportError extends Error {
   constructor(message) {
@@ -181,25 +185,37 @@ const loadSnapshot = (snapshotsDirectory, month) => {
   return { month, interval, directory, manifest, datasets };
 };
 
-const normalizePath = (value) => {
+const parsePath = (value) => {
   let pathname = value;
   try {
+    const absolute = value.match(/^[a-z][a-z\d+.-]*:\/\/[^/?#]*([^?#]*)/i);
+    const rawPathname = absolute ? absolute[1] || "/" : value.split(/[?#]/)[0];
     const url = new URL(value, "https://buthonestly.io");
-    if (url.hostname.toLowerCase() !== "buthonestly.io") {
+    if (url.hostname !== "buthonestly.io") {
       fail(`Unfamiliar page host: ${url.hostname}`);
     }
     if (url.protocol !== "http:" && url.protocol !== "https:") {
       fail(`Unsupported page protocol: ${url.protocol}`);
     }
-    if (url.search) fail(`Unresolved first-party page URL: ${value}`);
+    if (url.port || url.username || url.password) {
+      fail(`Unresolved first-party page URL: ${value}`);
+    }
+    if (url.search || url.pathname !== rawPathname) {
+      fail(`Unresolved first-party page URL: ${value}`);
+    }
     pathname = url.pathname;
   } catch (error) {
     if (error instanceof SearchReportError) throw error;
     fail(`Malformed page URL: ${value}`);
   }
-  pathname = pathname.replace(/\/{2,}/g, "/");
-  if (!pathname.endsWith("/") && !path.extname(pathname)) pathname += "/";
   return pathname;
+};
+
+const normalizeConfiguredPath = (value) => {
+  const pathname = parsePath(value);
+  return !pathname.endsWith("/") && !path.extname(pathname)
+    ? `${pathname}/`
+    : pathname;
 };
 
 const redirectLines = (filename) => {
@@ -211,7 +227,7 @@ const redirectLines = (filename) => {
       const target = new URL(to, "https://buthonestly.io");
       if (target.hostname !== "buthonestly.io") continue;
       redirects.add(
-        `${normalizePath(from)}\t${normalizePath(target.toString())}`,
+        `${normalizeConfiguredPath(from)}\t${normalizeConfiguredPath(target.toString())}`,
       );
     } catch {}
   }
@@ -227,6 +243,50 @@ const normalizeQuery = (query) =>
     .replace(/[\p{P}\p{S}]+/gu, " ")
     .replace(/\s+/g, " ")
     .trim();
+
+const addPaginatedRoutes = (routes, base, itemCount, pageSize) => {
+  routes.set(base, "Archive");
+  for (
+    let pageNumber = 2;
+    pageNumber <= Math.ceil(itemCount / pageSize);
+    pageNumber++
+  ) {
+    routes.set(`${base}${pageNumber}/`, "Archive");
+  }
+};
+
+const buildCanonicalRoutes = (inventory, essayCohorts) => {
+  const routes = new Map();
+  for (const pathname of SITE_PATHS) routes.set(pathname, "Site page");
+  for (const pathname of RESOURCE_PATHS) routes.set(pathname, "Resource");
+  for (const essay of inventory.essays) {
+    routes.set(essay.pathname, essayCohorts[essay.slug]);
+  }
+
+  addPaginatedRoutes(routes, "/essays/", inventory.essays.length, 12);
+  routes.set("/section/", "Archive");
+  routes.set("/topic/", "Archive");
+
+  const categories = new Map();
+  const tags = new Map();
+  for (const essay of inventory.essays) {
+    for (const category of essay.categories) {
+      if (!categories.has(category.slug)) categories.set(category.slug, []);
+      if (!essay.sticky) categories.get(category.slug).push(essay);
+    }
+    for (const tag of essay.tags) {
+      if (!tags.has(tag.slug)) tags.set(tag.slug, []);
+      tags.get(tag.slug).push(essay);
+    }
+  }
+  for (const [slug, essays] of categories) {
+    addPaginatedRoutes(routes, `/section/${slug}/`, essays.length, 8);
+  }
+  for (const [slug, essays] of tags) {
+    addPaginatedRoutes(routes, `/topic/${slug}/`, essays.length, 8);
+  }
+  return routes;
+};
 
 const validateConfiguration = (configuration, inventory, redirectsPath) => {
   if (!Number.isInteger(configuration.version) || configuration.version < 1) {
@@ -272,20 +332,19 @@ const validateConfiguration = (configuration, inventory, redirectsPath) => {
   if (!Array.isArray(configuration.redirects)) {
     fail("Reporting configuration requires explicit redirect mappings");
   }
+  const canonicalRoutes = buildCanonicalRoutes(
+    inventory,
+    configuration.essayCohorts,
+  );
   const redirects = new Map();
-  const targets = new Set(inventory.essays.map(({ pathname }) => pathname));
   const deployedRedirects = redirectLines(redirectsPath);
   for (const redirect of configuration.redirects) {
-    const from = normalizePath(redirect.from);
-    const to = normalizePath(redirect.to);
-    if (from === to || redirects.has(from)) {
+    const from = normalizeConfiguredPath(redirect.from);
+    const to = normalizeConfiguredPath(redirect.to);
+    if (from === to || redirects.has(from) || canonicalRoutes.has(from)) {
       fail(`Invalid or ambiguous redirect mapping from ${from}`);
     }
-    if (
-      !targets.has(to) &&
-      !SITE_PATHS.has(to) &&
-      !/^\/(section|topic)\//.test(to)
-    ) {
+    if (!canonicalRoutes.has(to)) {
       fail(`Redirect target is not a known canonical route: ${to}`);
     }
     if (!deployedRedirects.has(`${from}\t${to}`)) {
@@ -295,7 +354,12 @@ const validateConfiguration = (configuration, inventory, redirectsPath) => {
     }
     redirects.set(from, to);
   }
-  return { aliases, redirects };
+  for (const [from, to] of redirects) {
+    if (redirects.has(to)) {
+      fail(`Invalid redirect chain from ${from} through ${to}`);
+    }
+  }
+  return { aliases, redirects, canonicalRoutes };
 };
 
 const emptyAggregate = () => ({
@@ -328,23 +392,25 @@ const finishAggregate = (aggregate) => ({
     : {}),
 });
 
-const classifyPath = (pathname, essayByPath) => {
-  const essay = essayByPath.get(pathname);
-  if (essay) return { cohort: essay.cohort, essay };
-  if (pathname === "/resources/" || pathname.startsWith("/resources/")) {
-    return { cohort: "Resource" };
+const sourcePath = (value, canonicalRoutes, redirects) => {
+  const pathname = parsePath(value);
+  if (canonicalRoutes.has(pathname) || redirects.has(pathname)) return pathname;
+  if (!pathname.endsWith("/") && !path.extname(pathname)) {
+    const trailingSlashVariant = `${pathname}/`;
+    if (
+      canonicalRoutes.has(trailingSlashVariant) ||
+      redirects.has(trailingSlashVariant)
+    ) {
+      return trailingSlashVariant;
+    }
   }
-  if (
-    pathname === "/essays/" ||
-    pathname === "/section/" ||
-    pathname.startsWith("/section/") ||
-    pathname === "/topic/" ||
-    pathname.startsWith("/topic/")
-  ) {
-    return { cohort: "Archive" };
-  }
-  if (SITE_PATHS.has(pathname)) return { cohort: "Site page" };
-  fail(`Unresolved first-party page URL: ${pathname}`);
+  return pathname;
+};
+
+const classifyPath = (pathname, essayByPath, canonicalRoutes) => {
+  const cohort = canonicalRoutes.get(pathname);
+  if (!cohort) fail(`Unresolved first-party page URL: ${pathname}`);
+  return { cohort, essay: essayByPath.get(pathname) };
 };
 
 const aggregateSnapshot = (
@@ -361,13 +427,23 @@ const aggregateSnapshot = (
     ]),
   );
   const pages = new Map();
+  const pageCohorts = new Map();
   const cohorts = new Map(COHORTS.map((cohort) => [cohort, emptyAggregate()]));
   const anomalies = [];
   for (const row of snapshot.datasets.pages) {
-    const sourcePath = normalizePath(row.page);
+    const resolvedSourcePath = sourcePath(
+      row.page,
+      validatedConfiguration.canonicalRoutes,
+      validatedConfiguration.redirects,
+    );
     const canonicalPath =
-      validatedConfiguration.redirects.get(sourcePath) ?? sourcePath;
-    const classification = classifyPath(canonicalPath, essayByPath);
+      validatedConfiguration.redirects.get(resolvedSourcePath) ??
+      resolvedSourcePath;
+    const classification = classifyPath(
+      canonicalPath,
+      essayByPath,
+      validatedConfiguration.canonicalRoutes,
+    );
     if (classification.essay?.publishedAt > monthEnd) {
       anomalies.push({
         type: "early-exposure",
@@ -381,6 +457,7 @@ const aggregateSnapshot = (
       continue;
     }
     if (!pages.has(canonicalPath)) pages.set(canonicalPath, emptyAggregate());
+    pageCohorts.set(canonicalPath, classification.cohort);
     addMetrics(pages.get(canonicalPath), row, row.page);
     addMetrics(cohorts.get(classification.cohort), row);
   }
@@ -389,10 +466,19 @@ const aggregateSnapshot = (
   const generic = emptyAggregate();
   const brand = emptyAggregate();
   for (const row of snapshot.datasets.pageQuery) {
-    const sourcePath = normalizePath(row.page);
+    const resolvedSourcePath = sourcePath(
+      row.page,
+      validatedConfiguration.canonicalRoutes,
+      validatedConfiguration.redirects,
+    );
     const canonicalPath =
-      validatedConfiguration.redirects.get(sourcePath) ?? sourcePath;
-    const classification = classifyPath(canonicalPath, essayByPath);
+      validatedConfiguration.redirects.get(resolvedSourcePath) ??
+      resolvedSourcePath;
+    const classification = classifyPath(
+      canonicalPath,
+      essayByPath,
+      validatedConfiguration.canonicalRoutes,
+    );
     if (classification.essay?.publishedAt > monthEnd) {
       anomalies.push({
         type: "early-exposure",
@@ -437,7 +523,13 @@ const aggregateSnapshot = (
     pages: Object.fromEntries(
       [...pages.entries()]
         .sort(([a], [b]) => a.localeCompare(b))
-        .map(([pathname, aggregate]) => [pathname, finishAggregate(aggregate)]),
+        .map(([pathname, aggregate]) => [
+          pathname,
+          {
+            cohort: pageCohorts.get(pathname),
+            ...finishAggregate(aggregate),
+          },
+        ]),
     ),
     cohorts: Object.fromEntries(
       [...cohorts.entries()].map(([cohort, aggregate]) => [
@@ -484,6 +576,39 @@ const compareMetrics = (current, previous) => ({
   ctr: compareCtr(current.ctr, previous.ctr),
 });
 
+const comparePosition = (current, previous) => ({
+  current,
+  previous,
+  absoluteChange:
+    current === null || previous === null ? null : current - previous,
+});
+
+const comparePages = (currentPages, previousPages) => {
+  const empty = finishAggregate(emptyAggregate());
+  const paths = new Set([
+    ...Object.keys(currentPages),
+    ...Object.keys(previousPages),
+  ]);
+  return Object.fromEntries(
+    [...paths].sort().map((pathname) => {
+      const current = currentPages[pathname] ?? empty;
+      const previous = previousPages[pathname] ?? empty;
+      return [
+        pathname,
+        {
+          cohort: current.cohort ?? previous.cohort,
+          ...compareMetrics(current, previous),
+          position: comparePosition(current.position, previous.position),
+          sourceUrls: {
+            current: current.sourceUrls ?? [],
+            previous: previous.sourceUrls ?? [],
+          },
+        },
+      ];
+    }),
+  );
+};
+
 const inputProvenance = (snapshot, root) => ({
   path: path.relative(root, snapshot.directory),
   interval: snapshot.interval,
@@ -516,6 +641,7 @@ const fmtNumber = (value) => value.toLocaleString("en-US");
 const fmtPercent = (value) =>
   value === null ? "n/a" : `${(value * 100).toFixed(2)}%`;
 const fmtChange = (value) => `${value >= 0 ? "+" : ""}${fmtNumber(value)}`;
+const fmtDecimal = (value) => (value === null ? "n/a" : value.toFixed(2));
 
 const renderMarkdown = (model) => {
   const property = model.propertyContext;
@@ -537,20 +663,33 @@ const renderMarkdown = (model) => {
     "## Property context and page reconciliation",
     "",
     `Property totals: ${fmtNumber(property.clicks.current)} clicks, previously ${fmtNumber(property.clicks.previous)} (${fmtChange(property.clicks.absoluteChange)}); ${fmtNumber(property.impressions.current)} impressions, previously ${fmtNumber(property.impressions.previous)} (${fmtChange(property.impressions.absoluteChange)}). CTR is ${fmtPercent(property.ctr.current)} (${property.ctr.percentagePointChange === null ? "n/a" : `${(property.ctr.percentagePointChange * 100).toFixed(2)} percentage points`}).`,
-    `Page-only gap: ${fmtNumber(property.pageReconciliation.clicks.current.absolute)} clicks and ${fmtNumber(property.pageReconciliation.impressions.current.absolute)} impressions.`,
+    `Page-only totals: ${fmtNumber(property.pageOnlyTotals.clicks.current)} clicks, previously ${fmtNumber(property.pageOnlyTotals.clicks.previous)}; ${fmtNumber(property.pageOnlyTotals.impressions.current)} impressions, previously ${fmtNumber(property.pageOnlyTotals.impressions.previous)}.`,
+    `Current page-only gap: ${fmtNumber(property.pageReconciliation.clicks.current.absolute)} clicks (${fmtPercent(property.pageReconciliation.clicks.current.percentage)}) and ${fmtNumber(property.pageReconciliation.impressions.current.absolute)} impressions (${fmtPercent(property.pageReconciliation.impressions.current.percentage)}).`,
+    `Previous page-only gap: ${fmtNumber(property.pageReconciliation.clicks.previous.absolute)} clicks (${fmtPercent(property.pageReconciliation.clicks.previous.percentage)}) and ${fmtNumber(property.pageReconciliation.impressions.previous.absolute)} impressions (${fmtPercent(property.pageReconciliation.impressions.previous.percentage)}).`,
     "",
     "## Page-cohort comparison",
     "",
-    "| Page cohort | Clicks | Previous | Impressions | Previous | CTR |",
-    "| --- | ---: | ---: | ---: | ---: | ---: |",
+    "| Page cohort | Clicks | Previous | Click share | Previous | Impressions | Previous | Impression share | Previous | CTR |",
+    "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
   ];
   for (const cohort of COHORTS) {
     const value = model.cohorts[cohort];
     lines.push(
-      `| ${cohort} | ${fmtNumber(value.clicks.current)} | ${fmtNumber(value.clicks.previous)} | ${fmtNumber(value.impressions.current)} | ${fmtNumber(value.impressions.previous)} | ${fmtPercent(value.ctr.current)} |`,
+      `| ${cohort} | ${fmtNumber(value.clicks.current)} | ${fmtNumber(value.clicks.previous)} | ${fmtPercent(value.shares.clicks.current)} | ${fmtPercent(value.shares.clicks.previous)} | ${fmtNumber(value.impressions.current)} | ${fmtNumber(value.impressions.previous)} | ${fmtPercent(value.shares.impressions.current)} | ${fmtPercent(value.shares.impressions.previous)} | ${fmtPercent(value.ctr.current)} |`,
     );
   }
   lines.push(
+    "",
+    `Page-only share denominators: ${fmtNumber(property.pageOnlyTotals.clicks.current)} current and ${fmtNumber(property.pageOnlyTotals.clicks.previous)} previous clicks; ${fmtNumber(property.pageOnlyTotals.impressions.current)} current and ${fmtNumber(property.pageOnlyTotals.impressions.previous)} previous impressions.`,
+    "",
+    "### Canonical-page comparison",
+    "",
+    "| Canonical page | Page cohort | Clicks | Previous | Impressions | Previous | CTR | Previous | Position | Previous |",
+    "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
+    ...Object.entries(model.pages.comparisons).map(
+      ([pathname, page]) =>
+        `| ${pathname} | ${page.cohort} | ${fmtNumber(page.clicks.current)} | ${fmtNumber(page.clicks.previous)} | ${fmtNumber(page.impressions.current)} | ${fmtNumber(page.impressions.previous)} | ${fmtPercent(page.ctr.current)} | ${fmtPercent(page.ctr.previous)} | ${fmtDecimal(page.position.current)} | ${fmtDecimal(page.position.previous)} |`,
+    ),
     "",
     "## Migration consolidation",
     "",
@@ -567,8 +706,12 @@ const renderMarkdown = (model) => {
     "## Anomalies and methodological notes",
     "",
     ...(model.anomalies.length
-      ? model.anomalies.map((anomaly) => `- ${anomaly.type}: ${anomaly.page}`)
-      : ["- No early-exposure anomalies."]),
+      ? model.anomalies.map((anomaly) =>
+          anomaly.type === "early-exposure"
+            ? `- Early exposure in ${anomaly.reportingMonth}: ${anomaly.page} (${anomaly.dataset}).`
+            : `- Property/page reconciliation in ${anomaly.reportingMonth}: ${fmtNumber(anomaly.clicks.absolute)} clicks (${fmtPercent(anomaly.clicks.percentage)}) and ${fmtNumber(anomaly.impressions.absolute)} impressions (${fmtPercent(anomaly.impressions.percentage)}).`,
+        )
+      : ["- No data-quality anomalies."]),
     "- Query measurements describe only the disclosed page-query subset.",
     "- Relative changes are null when the previous value is zero.",
     "",
@@ -738,6 +881,21 @@ export function generateSearchReport({
 
   const propertyContext = {
     ...compareMetrics(currentData.property, previousData.property),
+    pageOnlyTotals: {
+      clicks: compare(currentPageTotals.clicks, previousPageTotals.clicks),
+      impressions: compare(
+        currentPageTotals.impressions,
+        previousPageTotals.impressions,
+      ),
+      ctr: compareCtr(
+        currentPageTotals.impressions === 0
+          ? null
+          : currentPageTotals.clicks / currentPageTotals.impressions,
+        previousPageTotals.impressions === 0
+          ? null
+          : previousPageTotals.clicks / previousPageTotals.impressions,
+      ),
+    },
     pageReconciliation: {
       clicks: {
         current: reconciliation(
@@ -795,6 +953,7 @@ export function generateSearchReport({
     pages: {
       current: currentData.pages,
       previous: previousData.pages,
+      comparisons: comparePages(currentData.pages, previousData.pages),
     },
     migration: {
       configuredRedirectCount: configuration.redirects.length,
@@ -811,7 +970,33 @@ export function generateSearchReport({
       ),
     },
     candidates: [],
-    anomalies: [...previousData.anomalies, ...currentData.anomalies],
+    anomalies: [
+      ...previousData.anomalies,
+      ...currentData.anomalies,
+      ...[
+        [
+          previousMonth,
+          propertyContext.pageReconciliation.clicks.previous,
+          propertyContext.pageReconciliation.impressions.previous,
+        ],
+        [
+          month,
+          propertyContext.pageReconciliation.clicks.current,
+          propertyContext.pageReconciliation.impressions.current,
+        ],
+      ].flatMap(([reportingMonth, clicks, impressions]) =>
+        clicks.absolute === 0 && impressions.absolute === 0
+          ? []
+          : [
+              {
+                type: "property-page-reconciliation",
+                reportingMonth,
+                clicks,
+                impressions,
+              },
+            ],
+      ),
+    ],
   };
   const markdown = renderMarkdown(model);
   model.renderedMarkdown = markdown;

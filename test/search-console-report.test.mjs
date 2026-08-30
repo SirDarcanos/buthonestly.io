@@ -158,6 +158,16 @@ const generate = (workspace, overrides = {}) =>
     ...overrides,
   });
 
+const updateConfiguration = (workspace, update) => {
+  const configuration = JSON.parse(
+    readFileSync(workspace.configurationPath, "utf8"),
+  );
+  writeFileSync(
+    workspace.configurationPath,
+    JSON.stringify(update(configuration)),
+  );
+};
+
 test("committed reporting configuration reviews every Essay, Brand rule, and redirect", () => {
   const configuration = JSON.parse(
     readFileSync("config/search-console-reporting.json", "utf8"),
@@ -267,6 +277,199 @@ test("generates one canonical model and atomically publishes JSON and Markdown",
     existsSync(path.join(workspace.reportsDirectory, firstVersion)),
     false,
   );
+});
+
+test("attributes safe URL variants and redirects to canonical Page cohorts", (testContext) => {
+  const workspace = makeWorkspace(testContext);
+  writeSnapshot(workspace, "2026-01", { pages: [], pageQuery: [] });
+  writeSnapshot(workspace, "2026-02", {
+    totals: metrics(12, 120, 4),
+    pages: [
+      {
+        page: "HTTPS://BUTHONESTLY.IO:443/fixture-essay#read",
+        ...metrics(2, 20, 4),
+      },
+      {
+        page: "http://buthonestly.io:80/old-fixture/",
+        ...metrics(3, 30, 8),
+      },
+      {
+        page: "https://buthonestly.io/resources/free-ai-voice-generator/",
+        ...metrics(1, 10, 6),
+      },
+      {
+        page: "https://buthonestly.io/section/testing/",
+        ...metrics(1, 10, 5),
+      },
+      { page: "https://buthonestly.io/essays/", ...metrics(1, 10, 5) },
+      { page: "https://buthonestly.io/about/", ...metrics(1, 10, 2) },
+    ],
+    pageQuery: [
+      {
+        page: "https://buthonestly.io/old-fixture/",
+        query: "but honestly",
+        ...metrics(2, 20, 7),
+      },
+    ],
+  });
+
+  const { model } = generate(workspace);
+  const page = model.pages.comparisons["/fixture-essay/"];
+
+  assert.equal(page.cohort, "Editorial-focus essay");
+  assert.equal(page.clicks.current, 5);
+  assert.equal(page.impressions.current, 50);
+  assert.equal(page.position.current, 6.4);
+  assert.deepEqual(page.sourceUrls.current, [
+    "HTTPS://BUTHONESTLY.IO:443/fixture-essay#read",
+    "http://buthonestly.io:80/old-fixture/",
+  ]);
+  assert.equal(model.cohorts.Resource.clicks.current, 1);
+  assert.equal(model.cohorts.Archive.clicks.current, 2);
+  assert.equal(model.cohorts["Site page"].clicks.current, 1);
+  assert.equal(model.queries.brand.clicks.current, 2);
+});
+
+test("keeps page-only denominators separate from property totals", (testContext) => {
+  const workspace = makeWorkspace(testContext);
+  writeSnapshot(workspace, "2026-01", {
+    totals: metrics(10, 100, 4),
+    pages: [
+      { page: "https://buthonestly.io/fixture-essay/", ...metrics(4, 40, 5) },
+      { page: "https://buthonestly.io/", ...metrics(1, 10, 2) },
+    ],
+    pageQuery: [],
+  });
+  writeSnapshot(workspace, "2026-02", {
+    totals: metrics(20, 200, 3),
+    pages: [
+      { page: "https://buthonestly.io/fixture-essay/", ...metrics(6, 60, 4) },
+      { page: "https://buthonestly.io/", ...metrics(2, 20, 1) },
+    ],
+    pageQuery: [],
+  });
+
+  const { model } = generate(workspace);
+
+  assert.deepEqual(model.propertyContext.pageOnlyTotals.clicks, {
+    current: 8,
+    previous: 5,
+    absoluteChange: 3,
+    relativeChange: 0.6,
+  });
+  assert.deepEqual(model.cohorts["Editorial-focus essay"].shares.clicks, {
+    current: 0.75,
+    previous: 0.8,
+    currentDenominator: 8,
+    previousDenominator: 5,
+  });
+  assert.deepEqual(model.propertyContext.pageReconciliation.clicks.current, {
+    absolute: 12,
+    percentage: 0.6,
+  });
+  assert.match(model.renderedMarkdown, /Page-only totals: 8 clicks.*5/s);
+  assert.match(
+    model.renderedMarkdown,
+    /Editorial-focus essay.*75\.00%.*80\.00%/s,
+  );
+  assert.match(model.renderedMarkdown, /\/fixture-essay\/.*6.*4.*60.*40/s);
+  assert.match(model.renderedMarkdown, /60\.00%.*50\.00%/s);
+});
+
+test("rejects unsafe or unresolved page URLs without heuristic repair", async (testContext) => {
+  const pages = [
+    "https://buthonestly.io/fixture-essay/?source=test",
+    "https://www.buthonestly.io/fixture-essay/",
+    "https://buthonestly.io:8443/fixture-essay/",
+    "https://buthonestly.io/missing/",
+    "https://buthonestly.io//fixture-essay/",
+    "https://buthonestly.io/missing/../fixture-essay/",
+    "https://buthonestly.io/resources/not-a-route/",
+    "https://buthonestly.io/essays/99/",
+    "https://buthonestly.io/section/not-a-section/",
+  ];
+
+  for (const page of pages) {
+    await testContext.test(page, () => {
+      const workspace = makeWorkspace(testContext);
+      writeSnapshot(workspace, "2026-01", { pages: [], pageQuery: [] });
+      writeSnapshot(workspace, "2026-02", {
+        pages: [{ page, ...metrics(1, 10, 2) }],
+        pageQuery: [],
+      });
+
+      assert.throws(() => generate(workspace), SearchReportError);
+      assert.equal(existsSync(workspace.reportsDirectory), false);
+    });
+  }
+});
+
+test("rejects unclassified Published Essays and ambiguous redirects", async (testContext) => {
+  const cases = [
+    [
+      "unclassified Published Essay",
+      (workspace) =>
+        updateConfiguration(workspace, (configuration) => ({
+          ...configuration,
+          essayCohorts: {},
+        })),
+    ],
+    [
+      "ambiguous redirects",
+      (workspace) =>
+        updateConfiguration(workspace, (configuration) => ({
+          ...configuration,
+          redirects: [
+            ...configuration.redirects,
+            { from: "/old-fixture", to: "/fixture-essay/" },
+          ],
+        })),
+    ],
+    [
+      "canonical redirect source",
+      (workspace) => {
+        writeFileSync(
+          workspace.redirectsPath,
+          `${readFileSync(workspace.redirectsPath, "utf8")}/fixture-essay/ /about/ 301\n`,
+        );
+        updateConfiguration(workspace, (configuration) => ({
+          ...configuration,
+          redirects: [
+            ...configuration.redirects,
+            { from: "/fixture-essay/", to: "/about/" },
+          ],
+        }));
+      },
+    ],
+    [
+      "redirect chain",
+      (workspace) => {
+        writeFileSync(
+          workspace.redirectsPath,
+          `${readFileSync(workspace.redirectsPath, "utf8")}/older-fixture/ /old-fixture/ 301\n`,
+        );
+        updateConfiguration(workspace, (configuration) => ({
+          ...configuration,
+          redirects: [
+            ...configuration.redirects,
+            { from: "/older-fixture/", to: "/old-fixture/" },
+          ],
+        }));
+      },
+    ],
+  ];
+
+  for (const [name, arrange] of cases) {
+    await testContext.test(name, () => {
+      const workspace = makeWorkspace(testContext);
+      arrange(workspace);
+      writeSnapshot(workspace, "2026-01");
+      writeSnapshot(workspace, "2026-02");
+
+      assert.throws(() => generate(workspace), SearchReportError);
+      assert.equal(existsSync(workspace.reportsDirectory), false);
+    });
+  }
 });
 
 test("uses null relative changes and CTR values for zero denominators", (testContext) => {
