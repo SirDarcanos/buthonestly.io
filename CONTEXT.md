@@ -4,6 +4,10 @@ But Honestly is a single-author publication whose essays are prepared in advance
 
 ## Language
 
+**Author**:
+Nicola Mustone, the sole human author of every Essay. Nico is his familiar public name.
+_Avoid_: Contributor, writer
+
 **Essay**:
 The authored publication unit, including its prose, metadata, and colocated media.
 _Avoid_: Post, article

@@ -1,6 +1,10 @@
 ---
 import type { Post } from "../types.ts";
 import {
+  AUTHOR_ALTERNATE_NAME,
+  AUTHOR_ID,
+  AUTHOR_NAME,
+  AUTHOR_PROFILE_PATH,
   SITE_URL,
   SITE_TITLE,
   SITE_DESCRIPTION,
@@ -9,8 +13,7 @@ import {
 import { countWords } from "../lib/reading-time.ts";
 
 const SITE_NAME = SITE_TITLE;
-const AUTHOR_NAME = "Nicola Mustone";
-const AUTHOR_URL = "https://nicolamustone.com";
+const AUTHOR_PROFILE = new URL(AUTHOR_PROFILE_PATH, SITE_URL).href;
 const TWITTER_HANDLE = "@nicolamustone";
 
 interface Props {
@@ -60,11 +63,15 @@ const ogImageAlt = essayImage
   ? (article?.featuredImageAlt ?? `${article?.title ?? title} — ${SITE_NAME}`)
   : `${SITE_NAME} — ${SITE_DESCRIPTION}`;
 
+const PERSON_REFERENCE = { "@id": AUTHOR_ID };
 const PERSON = {
+  "@id": AUTHOR_ID,
   "@type": "Person",
   name: AUTHOR_NAME,
-  url: AUTHOR_URL,
+  alternateName: AUTHOR_ALTERNATE_NAME,
+  url: AUTHOR_PROFILE,
   sameAs: [
+    "https://nicolamustone.com",
     "https://bsky.app/profile/nicolamustone.bsky.social",
     "https://github.com/SirDarcanos",
     "https://indieweb.social/@nicolamustone",
@@ -74,9 +81,7 @@ const PERSON = {
   ],
 };
 
-const jsonLd: Record<string, unknown>[] = [
-  { "@context": "https://schema.org", ...PERSON },
-];
+const jsonLd: Record<string, unknown>[] = [];
 
 // Homepage only — this node describes the whole site. Archives use
 // CollectionPage with an isPartOf reference instead.
@@ -91,13 +96,16 @@ if (Astro.url.pathname === "/") {
 }
 
 if (type === "profile") {
-  jsonLd.push({
-    "@context": "https://schema.org",
-    "@type": "ProfilePage",
-    name: fullTitle,
-    url: resolvedCanonical,
-    mainEntity: PERSON,
-  });
+  jsonLd.push(
+    { "@context": "https://schema.org", ...PERSON },
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfilePage",
+      name: fullTitle,
+      url: resolvedCanonical,
+      mainEntity: PERSON_REFERENCE,
+    },
+  );
 }
 
 if (article) {
@@ -119,8 +127,8 @@ if (article) {
           },
         }
       : {}),
-    author: PERSON,
-    publisher: PERSON,
+    author: PERSON_REFERENCE,
+    publisher: PERSON_REFERENCE,
     inLanguage: SITE_LANG,
     wordCount: countWords(article.body),
     ...(article.categories.length
@@ -163,7 +171,7 @@ jsonLd.push(...extraJsonLd);
     <>
       <meta property="article:published_time" content={article.date} />
       <meta property="article:modified_time" content={article.modified} />
-      <meta property="article:author" content={SITE_NAME} />
+      <meta property="article:author" content={AUTHOR_PROFILE} />
     </>
   )
 }

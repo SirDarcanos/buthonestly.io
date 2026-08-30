@@ -7,6 +7,9 @@ import { createWindow } from "@mixmark-io/domino";
 import { loadEssayInventory } from "../src/lib/essay-inventory.mjs";
 
 const SITE_URL = "https://buthonestly.io";
+const AUTHOR_PROFILE = `${SITE_URL}/about/`;
+const AUTHOR_ID = `${AUTHOR_PROFILE}#person`;
+const AUTHOR_REFERENCE = { "@id": AUTHOR_ID };
 
 const htmlFiles = (directory) =>
   readdirSync(directory, { recursive: true, withFileTypes: true })
@@ -129,6 +132,40 @@ export function checkRenderedSeo({
     );
   }
 
+  const aboutPage = pagesByCanonical.get(AUTHOR_PROFILE);
+  assert.ok(aboutPage, "/about/ must render the author profile");
+  const personSchemas = pages.flatMap((page) =>
+    schemas(page.document).filter((schema) => schema["@type"] === "Person"),
+  );
+  assert.equal(
+    personSchemas.length,
+    1,
+    "the site must render one complete Person identity",
+  );
+  const person = personSchemas[0];
+  assert.equal(person["@id"], AUTHOR_ID);
+  assert.equal(person.name, "Nicola Mustone");
+  assert.equal(person.alternateName, "Nico Mustone");
+  assert.equal(person.url, AUTHOR_PROFILE);
+  assert.ok(person.sameAs.includes("https://nicolamustone.com"));
+
+  const profilePage = schemas(aboutPage.document).find(
+    (schema) => schema["@type"] === "ProfilePage",
+  );
+  assert.ok(profilePage, "/about/ must render ProfilePage schema");
+  assert.deepEqual(profilePage.mainEntity, AUTHOR_REFERENCE);
+  assert.equal(
+    aboutPage.document.querySelector("#person")?.id,
+    "person",
+    "/about/#person must identify the visible author profile",
+  );
+  assert.equal(
+    aboutPage.document.querySelector('a[href="https://nicolamustone.com"]')
+      ?.textContent,
+    "nicolamustone.com",
+    "/about/ must visibly link the author's external identity",
+  );
+
   for (const essay of inventory.published) {
     const page = pagesByCanonical.get(essay.canonicalUrl);
     assert.ok(page, `${essay.pathname} must be rendered when Published`);
@@ -166,6 +203,20 @@ export function checkRenderedSeo({
     assert.equal(article.mainEntityOfPage, essay.canonicalUrl);
     assert.equal(article.datePublished, essay.publishedAt.toISOString());
     assert.equal(article.dateModified, essay.freshnessAt.toISOString());
+    assert.deepEqual(article.author, AUTHOR_REFERENCE);
+    assert.deepEqual(article.publisher, AUTHOR_REFERENCE);
+
+    const visibleAuthor = page.document.querySelector('a[rel~="author"]');
+    assert.ok(visibleAuthor, `${essay.pathname} must link its visible author`);
+    assert.equal(visibleAuthor.textContent.trim(), "— Nico");
+    assert.equal(visibleAuthor.getAttribute("href"), "/about/");
+    assert.equal(
+      page.document
+        .querySelector('meta[property="article:author"]')
+        ?.getAttribute("content"),
+      AUTHOR_PROFILE,
+    );
+
     assert.ok(
       visibleDates.has(article.datePublished),
       `${essay.pathname} must display its schema publication date`,
