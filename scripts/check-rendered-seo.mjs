@@ -10,6 +10,8 @@ const SITE_URL = "https://buthonestly.io";
 const AUTHOR_PROFILE = `${SITE_URL}/about/`;
 const AUTHOR_ID = `${AUTHOR_PROFILE}#person`;
 const AUTHOR_REFERENCE = { "@id": AUTHOR_ID };
+const VOICE_GENERATOR_URL = `${SITE_URL}/resources/free-ai-voice-generator/`;
+const VOICE_GENERATOR_ID = `${VOICE_GENERATOR_URL}#application`;
 
 const htmlFiles = (directory) =>
   readdirSync(directory, { recursive: true, withFileTypes: true })
@@ -202,14 +204,52 @@ export function checkRenderedSeo({
     resourcesPage.document.querySelector("h1").textContent,
     "Resources",
   );
-  const voiceGeneratorPage = pagesByCanonical.get(
-    `${SITE_URL}/resources/free-ai-voice-generator/`,
-  );
+  const voiceGeneratorPage = pagesByCanonical.get(VOICE_GENERATOR_URL);
   assert.equal(
     voiceGeneratorPage.document.querySelector('a[href="/resources/"]')
       ?.textContent,
     "Resources",
     "the voice generator must visibly link to its parent Resource catalogue",
+  );
+
+  const webApplications = schemas(voiceGeneratorPage.document).filter(
+    (schema) => schema["@type"] === "WebApplication",
+  );
+  assert.equal(
+    webApplications.length,
+    1,
+    "the voice generator must render one WebApplication schema node",
+  );
+  assert.deepEqual(webApplications[0], {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "@id": VOICE_GENERATOR_ID,
+    name: "Free AI Voice Generator",
+    description:
+      "Turn any text into natural speech, right in your browser. Powered by Kokoro — nothing you type is ever sent to a server. Free, no sign-up.",
+    url: VOICE_GENERATOR_URL,
+    applicationCategory: "MultimediaApplication",
+    applicationSubCategory: "Text-to-Speech",
+    operatingSystem: "Any",
+    browserRequirements:
+      "Requires a browser with WebAssembly; WebGPU is recommended for faster generation.",
+    isAccessibleForFree: true,
+    offers: { "@type": "Offer", price: 0 },
+    inLanguage: "en",
+    featureList: [
+      "Local text-to-speech generation",
+      "28 American and British English voices",
+      "Voice blending",
+      "Timed pauses",
+      "MP3 and WAV downloads",
+    ],
+    creator: AUTHOR_REFERENCE,
+  });
+  assert.match(
+    voiceGeneratorPage.document.querySelector(".post-content")?.textContent ??
+      "",
+    /I built this small text-to-speech tool/,
+    "the voice generator must visibly support its creator schema",
   );
 
   for (const essay of inventory.published) {

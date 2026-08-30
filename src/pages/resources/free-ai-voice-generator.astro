@@ -4,6 +4,7 @@ import Container from "../../components/Container.astro";
 import Label from "../../components/Label.astro";
 import AudioPlayer from "../../components/AudioPlayer.astro";
 import Button from "../../components/Button.astro";
+import { AUTHOR_ID, SITE_URL } from "../../consts.ts";
 import { STATIC_BASE } from "../../lib/cdn.mjs";
 import { breadcrumbList } from "../../lib/schema.ts";
 
@@ -55,17 +56,44 @@ const blendSample = {
   label: "Onyx + Heart (50/50 blend)",
   file: "blend_am_onyx_af_heart_50-50-sample.mp3",
 };
+const description =
+  "Turn any text into natural speech, right in your browser. Powered by Kokoro — nothing you type is ever sent to a server. Free, no sign-up.";
+const applicationUrl = `${SITE_URL}/resources/free-ai-voice-generator/`;
 const jsonLd = [
   breadcrumbList([
     { name: "Resources", path: "/resources/" },
     { name: "Free AI Voice Generator" },
   ]),
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "@id": `${applicationUrl}#application`,
+    name: "Free AI Voice Generator",
+    description,
+    url: applicationUrl,
+    applicationCategory: "MultimediaApplication",
+    applicationSubCategory: "Text-to-Speech",
+    operatingSystem: "Any",
+    browserRequirements:
+      "Requires a browser with WebAssembly; WebGPU is recommended for faster generation.",
+    isAccessibleForFree: true,
+    offers: { "@type": "Offer", price: 0 },
+    inLanguage: "en",
+    featureList: [
+      "Local text-to-speech generation",
+      "28 American and British English voices",
+      "Voice blending",
+      "Timed pauses",
+      "MP3 and WAV downloads",
+    ],
+    creator: { "@id": AUTHOR_ID },
+  },
 ];
 ---
 
 <Layout
   title="Free AI Voice Generator"
-  description="Turn any text into natural speech, right in your browser. Powered by Kokoro — nothing you type is ever sent to a server. Free, no sign-up."
+  description={description}
   jsonLd={jsonLd}
   markdown
 >
@@ -75,9 +103,9 @@ const jsonLd = [
 
     <div class="post-content mt-7">
       <p>
-        A small text-to-speech tool you can use for anything, entirely free of
-        charge. Paste your text, pick a voice, and click Generate — your browser
-        turns it into audio <strong>entirely on your device</strong>.
+        I built this small text-to-speech tool for anyone to use, entirely free
+        of charge. Paste your text, pick a voice, and click Generate — your
+        browser turns it into audio <strong>entirely on your device</strong>.
       </p>
       <p>
         It runs the open-source <a
