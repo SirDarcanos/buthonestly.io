@@ -6,6 +6,7 @@ import test from "node:test";
 
 import { createWindow } from "@mixmark-io/domino";
 import { loadEssayInventory } from "../src/lib/essay-inventory.mjs";
+import { checkRenderedSeo } from "../scripts/check-rendered-seo.mjs";
 
 const repositoryRoot = path.resolve(import.meta.dirname, "..");
 const siteUrl = "https://buthonestly.io";
@@ -28,7 +29,7 @@ const withoutFencedCode = (markdown) =>
 
 const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-test("the production build exposes homepage and agent-readable navigation", () => {
+test("the production build exposes homepage and agent-readable navigation", async (context) => {
   const build = spawnSync("npm", ["run", "build"], {
     cwd: repositoryRoot,
     encoding: "utf8",
@@ -37,6 +38,16 @@ test("the production build exposes homepage and agent-readable navigation", () =
   assert.equal(build.status, 0, build.stdout + build.stderr);
 
   const inventory = loadEssayInventory();
+  await context.test(
+    "rendered SEO remains internally consistent",
+    (seoContext) => {
+      const result = checkRenderedSeo({
+        siteDirectory: path.join(repositoryRoot, "dist"),
+        inventory,
+      });
+      for (const warning of result.warnings) seoContext.diagnostic(warning);
+    },
+  );
   const publishedEssays = [...inventory.published].sort(
     (a, b) =>
       b.publishedAt.valueOf() - a.publishedAt.valueOf() ||
