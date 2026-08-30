@@ -12,6 +12,7 @@
     "links": "node scripts/build-link-graph.mjs",
     "images": "node scripts/optimize-images.mjs",
     "narration": "node scripts/narration.mjs",
+    "search-report": "node scripts/search-report.mjs",
     "postbuild": "node scripts/build-markdown-alternatives.mjs",
     "preview": "astro preview",
     "astro": "astro",

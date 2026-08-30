@@ -1,0 +1,420 @@
+{
+  "version": 1,
+  "property": "sc-domain:buthonestly.io",
+  "searchType": "web",
+  "essayCohorts": {
+    "10-types-of-websites": "Peripheral essay",
+    "adhd-planner": "Editorial-focus essay",
+    "ai-slop-midas-touch-modern-internet": "Editorial-focus essay",
+    "automated-x-account-cleanup": "Editorial-focus essay",
+    "building-convolutional-neural-network-python-tensorflow": "Editorial-focus essay",
+    "buildings-never-were": "Editorial-focus essay",
+    "bulk-edit-woocommerce-products-without-plugins": "Legacy-tail essay",
+    "choosing-what-to-play": "Editorial-focus essay",
+    "creating-a-custom-add-to-cart-link-woocommerce": "Legacy-tail essay",
+    "delete-expired-coupons-automatically-woocommerce": "Legacy-tail essay",
+    "disable-gtin-requirements-non-eligible-woocommerce-products": "Peripheral essay",
+    "distilroberta-emotion-analysis-nlp-case-study": "Editorial-focus essay",
+    "do-you-trust-your-instincts-making-smart-wordpress-choices": "Editorial-focus essay",
+    "edit-orders-woocommerce": "Legacy-tail essay",
+    "enhancing-wordpress-content-protection-beyond-right-click-blocks": "Editorial-focus essay",
+    "gaming-made-me-better-leader": "Editorial-focus essay",
+    "how-to-build-a-github-profile-readme-that-feels-like-you": "Editorial-focus essay",
+    "how-to-choose-a-software-license-for-your-next-project": "Editorial-focus essay",
+    "improve-woocommerce-related-products-recommendations": "Peripheral essay",
+    "javascript-dice-roller": "Editorial-focus essay",
+    "leading-through-inquiry": "Editorial-focus essay",
+    "learning-care-without-feeling": "Editorial-focus essay",
+    "limits-of-machine-learning": "Editorial-focus essay",
+    "make-product-attributes-linkable-woocommerce": "Legacy-tail essay",
+    "mastering-effective-feedback-facts-feelings-curiosity": "Editorial-focus essay",
+    "neural-network-predict-resin-usage-3d-printed-miniatures": "Editorial-focus essay",
+    "psychological-safety-in-teams-people-first-leadership": "Editorial-focus essay",
+    "set-up-tensorflow-docker-jupyter-notebook": "Editorial-focus essay",
+    "shotlist-automatic-annotated-screenshots": "Editorial-focus essay",
+    "sql-vs-nosql-choosing-the-right-database": "Editorial-focus essay",
+    "team-building-activities-for-work": "Editorial-focus essay",
+    "time-off-for-leaders": "Editorial-focus essay",
+    "tools-for-adhd-leadership": "Editorial-focus essay",
+    "top-5-essential-wordpress-plugins-i-always-install-and-why": "Peripheral essay",
+    "uncensored-library-minecraft": "Editorial-focus essay",
+    "vibe-writing-line-between-human-machine": "Editorial-focus essay",
+    "what-if-wordpress-wasnt-gpl": "Editorial-focus essay",
+    "what-is-a-gpu": "Editorial-focus essay",
+    "what-is-a-web-developer": "Editorial-focus essay",
+    "what-is-vibe-coding-how-to-do-it": "Editorial-focus essay",
+    "when-ai-stops-being-a-tool": "Editorial-focus essay",
+    "woocommerce-attributes-vs-variations": "Legacy-tail essay",
+    "woocommerce-cli-product-management": "Legacy-tail essay",
+    "woocommerce-eu-vat-number-setup": "Peripheral essay",
+    "woocommerce-password-strength-meter-checkout": "Legacy-tail essay",
+    "wordpress-blocks-telex": "Editorial-focus essay",
+    "wordpress-site-performance-vs-desig": "Editorial-focus essay",
+    "wordpress-to-astro": "Editorial-focus essay",
+    "write-in-markdown": "Editorial-focus essay"
+  },
+  "brandQueries": [
+    {
+      "rule": "site-name",
+      "values": ["but honestly", "but. honestly", "buthonestly"]
+    },
+    {
+      "rule": "domain",
+      "values": [
+        "buthonestly.io",
+        "www.buthonestly.io",
+        "https://buthonestly.io/",
+        "https://www.buthonestly.io/"
+      ]
+    },
+    {
+      "rule": "author",
+      "values": ["nicola mustone", "nico mustone", "mustone", "nico"]
+    },
+    {
+      "rule": "essay-title-and-slug",
+      "values": [
+        "10-types-of-websites",
+        "10 Types of Websites and What I’d Use to Build Them",
+        "adhd-planner",
+        "My Mental ADHD Planner: How I Blog Without Burning Out",
+        "ai-slop-midas-touch-modern-internet",
+        "Touched by AI, Treated Like Slop: The Midas Touch of The Modern Internet",
+        "automated-x-account-cleanup",
+        "How I Automated My X Account Cleanup",
+        "building-convolutional-neural-network-python-tensorflow",
+        "Building a Convolutional Neural Network in Python with TensorFlow",
+        "buildings-never-were",
+        "The Buildings That Never Were",
+        "bulk-edit-woocommerce-products-without-plugins",
+        "How To Bulk Edit WooCommerce Products Without Plugins",
+        "choosing-what-to-play",
+        "Using AI To Choose What To Play With ADHD",
+        "creating-a-custom-add-to-cart-link-woocommerce",
+        "Creating a Custom Add to Cart Link with WooCommerce",
+        "delete-expired-coupons-automatically-woocommerce",
+        "Automatically Delete Expired Coupons in WooCommerce",
+        "disable-gtin-requirements-non-eligible-woocommerce-products",
+        "How to Disable GTIN for Non-Eligible WooCommerce Products",
+        "distilroberta-emotion-analysis-nlp-case-study",
+        "DistilRoBERTa Emotion Analysis: NLP Case Study on Steam Reviews",
+        "do-you-trust-your-instincts-making-smart-wordpress-choices",
+        "Do You Trust Your Instincts? Making Smart WordPress Choices",
+        "edit-orders-woocommerce",
+        "How to Edit Orders in WooCommerce",
+        "enhancing-wordpress-content-protection-beyond-right-click-blocks",
+        "Enhancing WordPress Content Protection: Beyond Blocking Right-Clicks",
+        "gaming-made-me-better-leader",
+        "How Gaming Made Me a Better Leader",
+        "how-to-build-a-github-profile-readme-that-feels-like-you",
+        "How to Build a GitHub Profile README That Feels Like You",
+        "how-to-choose-a-software-license-for-your-next-project",
+        "How to Choose a Software License for Your Next Project",
+        "improve-woocommerce-related-products-recommendations",
+        "WooCommerce Related Products: What and How to Improve Them",
+        "javascript-dice-roller",
+        "A JavaScript Dice Roller That Shows Its Work",
+        "leading-through-inquiry",
+        "Leading Through Inquiry",
+        "learning-care-without-feeling",
+        "Learning to Care Without Feeling It",
+        "limits-of-machine-learning",
+        "AI Is Not an Oracle: The Limits of Machine Learning",
+        "make-product-attributes-linkable-woocommerce",
+        "Make Product Attributes Linkable in WooCommerce",
+        "mastering-effective-feedback-facts-feelings-curiosity",
+        "Mastering Effective Feedback: Facts, Feelings, and Curiosity",
+        "neural-network-predict-resin-usage-3d-printed-miniatures",
+        "How I Built a 3D Print Cost Calculator with a Neural Network",
+        "psychological-safety-in-teams-people-first-leadership",
+        "Building Psychological Safety in Teams Through People-First Leadership",
+        "set-up-tensorflow-docker-jupyter-notebook",
+        "Set Up TensorFlow with Docker and Jupyter Notebook",
+        "shotlist-automatic-annotated-screenshots",
+        "shotlist: Annotated Screenshots, Described as Data",
+        "sql-vs-nosql-choosing-the-right-database",
+        "SQL vs NoSQL: Choosing the Right Database for Your Data",
+        "team-building-activities-for-work",
+        "Team Building Activities That Upskill Without Forced Fun",
+        "time-off-for-leaders",
+        "Time Off for Leaders: Can You Really Step Away?",
+        "tools-for-adhd-leadership",
+        "Tools for ADHD: Systems That Work When You’re Leading a Team",
+        "top-5-essential-wordpress-plugins-i-always-install-and-why",
+        "Top 5 Essential WordPress Plugins I Always Install (and Why)",
+        "uncensored-library-minecraft",
+        "The Uncensored Library: A Minecraft World About Free Speech",
+        "vibe-writing-line-between-human-machine",
+        "Vibe Writing and the Line Between Human and Machine",
+        "what-if-wordpress-wasnt-gpl",
+        "What If WordPress Hadn't Been GPL?",
+        "what-is-a-gpu",
+        "What is a GPU and Why Does AI Need Them?",
+        "what-is-a-web-developer",
+        "What Is a Web Developer? How I Became One Before AI",
+        "what-is-vibe-coding-how-to-do-it",
+        "What is Vibe Coding and How to Do It",
+        "when-ai-stops-being-a-tool",
+        "When AI Stops Being a Tool",
+        "woocommerce-attributes-vs-variations",
+        "WooCommerce Attributes vs Variations: the Real Difference",
+        "woocommerce-cli-product-management",
+        "WooCommerce CLI Product Management: A Practical Guide",
+        "woocommerce-eu-vat-number-setup",
+        "WooCommerce EU VAT Number: Set Up VAT for Your Store",
+        "woocommerce-password-strength-meter-checkout",
+        "WooCommerce Password Strength Meter: Keep It or Remove It",
+        "wordpress-blocks-telex",
+        "Vibe Coding WordPress Blocks with Telex",
+        "wordpress-site-performance-vs-desig",
+        "Design vs. Performance: Balance for Your WordPress Site",
+        "wordpress-to-astro",
+        "The Block That Almost Did What I Wanted: WordPress to Astro",
+        "write-in-markdown",
+        "Why I Write in Markdown for Most of My Work"
+      ]
+    },
+    {
+      "rule": "reviewed-distinctive-essay-alias",
+      "values": ["team building essay", "the automation of joy essay"]
+    }
+  ],
+  "redirects": [
+    {
+      "from": "/2015/04/21/bulk-edit-products/",
+      "to": "/bulk-edit-woocommerce-products-without-plugins/"
+    },
+    {
+      "from": "/2015/09/18/creating-custom-add-to-cart-url/",
+      "to": "/creating-a-custom-add-to-cart-link-woocommerce/"
+    },
+    {
+      "from": "/2016/01/27/remove-the-password-strength-meter-on-the-checkout-page/",
+      "to": "/woocommerce-password-strength-meter-checkout/"
+    },
+    {
+      "from": "/leadership/",
+      "to": "/section/leadership/"
+    },
+    {
+      "from": "/leadership/gaming-made-me-better-leader/",
+      "to": "/gaming-made-me-better-leader/"
+    },
+    {
+      "from": "/leadership/learning-care-without-feeling/",
+      "to": "/learning-care-without-feeling/"
+    },
+    {
+      "from": "/leadership/mastering-effective-feedback-facts-feelings-curiosity/",
+      "to": "/mastering-effective-feedback-facts-feelings-curiosity/"
+    },
+    {
+      "from": "/leadership/psychological-safety-in-teams-people-first-leadership/",
+      "to": "/psychological-safety-in-teams-people-first-leadership/"
+    },
+    {
+      "from": "/leadership/team-building-activities-for-work/",
+      "to": "/team-building-activities-for-work/"
+    },
+    {
+      "from": "/leadership/time-off-for-leaders/",
+      "to": "/time-off-for-leaders/"
+    },
+    {
+      "from": "/leadership/tools-for-adhd-leadership/",
+      "to": "/tools-for-adhd-leadership/"
+    },
+    {
+      "from": "/leadership/woocommerce-password-strength-meter/",
+      "to": "/woocommerce-password-strength-meter-checkout/"
+    },
+    {
+      "from": "/observations/",
+      "to": "/section/observations/"
+    },
+    {
+      "from": "/observations/adhd-planner/",
+      "to": "/adhd-planner/"
+    },
+    {
+      "from": "/observations/ai-slop-midas-touch-modern-internet/",
+      "to": "/ai-slop-midas-touch-modern-internet/"
+    },
+    {
+      "from": "/observations/buildings-never-were/",
+      "to": "/buildings-never-were/"
+    },
+    {
+      "from": "/observations/choosing-what-to-play/",
+      "to": "/choosing-what-to-play/"
+    },
+    {
+      "from": "/observations/vibe-writing-line-between-human-machine/",
+      "to": "/vibe-writing-line-between-human-machine/"
+    },
+    {
+      "from": "/observations/what-is-a-web-developer/",
+      "to": "/what-is-a-web-developer/"
+    },
+    {
+      "from": "/observations/when-ai-stops-being-a-tool/",
+      "to": "/when-ai-stops-being-a-tool/"
+    },
+    {
+      "from": "/observations/woocommerce-password-strength-meter/",
+      "to": "/woocommerce-password-strength-meter-checkout/"
+    },
+    {
+      "from": "/observations/write-in-markdown/",
+      "to": "/write-in-markdown/"
+    },
+    {
+      "from": "/programming/",
+      "to": "/section/programming/"
+    },
+    {
+      "from": "/programming/automated-x-account-cleanup/",
+      "to": "/automated-x-account-cleanup/"
+    },
+    {
+      "from": "/programming/building-convolutional-neural-network-python-tensorflow/",
+      "to": "/building-convolutional-neural-network-python-tensorflow/"
+    },
+    {
+      "from": "/programming/delete-expired-coupons-automatically-woocommerce/",
+      "to": "/delete-expired-coupons-automatically-woocommerce/"
+    },
+    {
+      "from": "/programming/disable-gtin-requirements-non-eligible-woocommerce-products/",
+      "to": "/disable-gtin-requirements-non-eligible-woocommerce-products/"
+    },
+    {
+      "from": "/programming/distilroberta-emotion-analysis-nlp-case-study/",
+      "to": "/distilroberta-emotion-analysis-nlp-case-study/"
+    },
+    {
+      "from": "/programming/how-to-choose-a-software-license-for-your-next-project/",
+      "to": "/how-to-choose-a-software-license-for-your-next-project/"
+    },
+    {
+      "from": "/programming/improve-woocommerce-related-products-recommendations/",
+      "to": "/improve-woocommerce-related-products-recommendations/"
+    },
+    {
+      "from": "/programming/limits-of-machine-learning/",
+      "to": "/limits-of-machine-learning/"
+    },
+    {
+      "from": "/programming/make-product-attributes-linkable-woocommerce/",
+      "to": "/make-product-attributes-linkable-woocommerce/"
+    },
+    {
+      "from": "/programming/neural-network-predict-resin-usage-3d-printed-miniatures/",
+      "to": "/neural-network-predict-resin-usage-3d-printed-miniatures/"
+    },
+    {
+      "from": "/programming/what-is-vibe-coding-how-to-do-it/",
+      "to": "/what-is-vibe-coding-how-to-do-it/"
+    },
+    {
+      "from": "/programming/woocommerce-eu-vat-number-setup/",
+      "to": "/woocommerce-eu-vat-number-setup/"
+    },
+    {
+      "from": "/programming/woocommerce-password-strength-meter-checkout/",
+      "to": "/woocommerce-password-strength-meter-checkout/"
+    },
+    {
+      "from": "/programming/woocommerce-password-strength-meter/",
+      "to": "/woocommerce-password-strength-meter-checkout/"
+    },
+    {
+      "from": "/web/",
+      "to": "/section/web/"
+    },
+    {
+      "from": "/web/10-types-of-websites/",
+      "to": "/10-types-of-websites/"
+    },
+    {
+      "from": "/web/adhd-planner/",
+      "to": "/adhd-planner/"
+    },
+    {
+      "from": "/web/ai-slop-midas-touch-modern-internet/",
+      "to": "/ai-slop-midas-touch-modern-internet/"
+    },
+    {
+      "from": "/web/bulk-edit-woocommerce-products-without-plugins/",
+      "to": "/bulk-edit-woocommerce-products-without-plugins/"
+    },
+    {
+      "from": "/web/choosing-what-to-play/",
+      "to": "/choosing-what-to-play/"
+    },
+    {
+      "from": "/web/creating-a-custom-add-to-cart-link-woocommerce/",
+      "to": "/creating-a-custom-add-to-cart-link-woocommerce/"
+    },
+    {
+      "from": "/web/do-you-trust-your-instincts-making-smart-wordpress-choices/",
+      "to": "/do-you-trust-your-instincts-making-smart-wordpress-choices/"
+    },
+    {
+      "from": "/web/edit-orders-woocommerce/",
+      "to": "/edit-orders-woocommerce/"
+    },
+    {
+      "from": "/web/enhancing-wordpress-content-protection-beyond-right-click-blocks/",
+      "to": "/enhancing-wordpress-content-protection-beyond-right-click-blocks/"
+    },
+    {
+      "from": "/web/how-to-build-a-github-profile-readme-that-feels-like-you/",
+      "to": "/how-to-build-a-github-profile-readme-that-feels-like-you/"
+    },
+    {
+      "from": "/web/set-up-tensorflow-docker-jupyter-notebook/",
+      "to": "/set-up-tensorflow-docker-jupyter-notebook/"
+    },
+    {
+      "from": "/web/top-5-essential-wordpress-plugins-i-always-install-and-why/",
+      "to": "/top-5-essential-wordpress-plugins-i-always-install-and-why/"
+    },
+    {
+      "from": "/web/vibe-writing-line-between-human-machine/",
+      "to": "/vibe-writing-line-between-human-machine/"
+    },
+    {
+      "from": "/web/what-is-a-web-developer/",
+      "to": "/what-is-a-web-developer/"
+    },
+    {
+      "from": "/web/woocommerce-attributes-vs-variations/",
+      "to": "/woocommerce-attributes-vs-variations/"
+    },
+    {
+      "from": "/web/woocommerce-cli-product-management/",
+      "to": "/woocommerce-cli-product-management/"
+    },
+    {
+      "from": "/web/woocommerce-password-strength-meter/",
+      "to": "/woocommerce-password-strength-meter-checkout/"
+    },
+    {
+      "from": "/web/wordpress-blocks-telex/",
+      "to": "/wordpress-blocks-telex/"
+    },
+    {
+      "from": "/web/wordpress-site-performance-vs-desig/",
+      "to": "/wordpress-site-performance-vs-desig/"
+    },
+    {
+      "from": "/web/write-in-markdown/",
+      "to": "/write-in-markdown/"
+    },
+    {
+      "from": "/woocommerce-password-strength-meter/",
+      "to": "/woocommerce-password-strength-meter-checkout/"
+    }
+  ]
+}
