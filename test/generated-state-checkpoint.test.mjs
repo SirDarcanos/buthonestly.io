@@ -65,6 +65,10 @@ test("workflows delegate every generated-state push to the checkpoint command", 
     path.join(repositoryRoot, ".github/workflows/related.yml"),
     "utf8",
   );
+  const lighthouse = readFileSync(
+    path.join(repositoryRoot, ".github/workflows/lighthouse.yml"),
+    "utf8",
+  );
 
   assert.equal(
     publication.match(
@@ -77,8 +81,14 @@ test("workflows delegate every generated-state push to the checkpoint command", 
       ?.length,
     1,
   );
+  assert.equal(
+    lighthouse.match(
+      /node scripts\/checkpoint-generated-state\.mjs lighthouse/gu,
+    )?.length,
+    1,
+  );
   assert.match(related, /src\/lib\/essay-inventory\.mjs/);
-  for (const workflow of [publication, related]) {
+  for (const workflow of [publication, related, lighthouse]) {
     assert.doesNotMatch(
       workflow,
       /GIT_SSH_COMMAND|git push|git pull --rebase/u,
@@ -572,4 +582,28 @@ test("a publication checkpoint commits and pushes only its generated state", asy
     "chore: record publication state [skip ci]",
   );
   assert.equal(git(root, "status", "--short"), "?? unrelated.txt");
+});
+
+test("the Lighthouse checkpoint profile permits only its deterministic state document", async (testContext) => {
+  const root = createRepository(testContext);
+  commitFile(root, "data/lighthouse-state.json", '{"version":1}\n');
+  const remote = createRemote(testContext, root);
+  writeFileSync(
+    root + "/data/lighthouse-state.json",
+    '{"version":1,"changed":true}\n',
+  );
+
+  const result = await checkpointGeneratedState({
+    profileName: "lighthouse",
+    repositoryRoot: root,
+    openRemote: localRemote(remote),
+    log: () => {},
+  });
+
+  assert.equal(result.changed, true);
+  assert.deepEqual(result.paths, ["data/lighthouse-state.json"]);
+  assert.equal(
+    git(root, "show", "--format=", "--name-only", "HEAD"),
+    "data/lighthouse-state.json",
+  );
 });

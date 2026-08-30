@@ -1,0 +1,139 @@
+name: Lighthouse monitoring
+
+on:
+  pull_request:
+    paths:
+      - "src/**"
+      - "!src/lib/crux-field-data.mjs"
+      - "!src/lib/lighthouse-monitoring.mjs"
+      - "public/**"
+      - "astro.config.mjs"
+      - "package.json"
+      - "package-lock.json"
+  schedule:
+    - cron: "0 6 * * 1"
+    - cron: "0 7 * * 1"
+  workflow_dispatch:
+    inputs:
+      route:
+        description: Reader-facing route
+        required: true
+        default: "/"
+        type: string
+      device:
+        description: Device profile
+        required: true
+        default: mobile
+        type: choice
+        options: [mobile, desktop]
+  workflow_run:
+    workflows: [Publication]
+    types: [completed]
+
+concurrency:
+  group: lighthouse-state
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.event != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Select scheduled device set
+        id: schedule_selection
+        if: github.event_name == 'schedule'
+        env:
+          LIGHTHOUSE_SCHEDULE: ${{ github.event.schedule }}
+        run: |
+          devices=$(node --input-type=module -e 'import { scheduledDevices } from "./src/lib/lighthouse-monitoring.mjs"; process.stdout.write(scheduledDevices(new Date(), process.env.LIGHTHOUSE_SCHEDULE).join(","))')
+          if [[ -n "$devices" ]]; then echo "selected=true" >> "$GITHUB_OUTPUT"; else echo "selected=false" >> "$GITHUB_OUTPUT"; fi
+
+      - if: github.event_name != 'schedule' || steps.schedule_selection.outputs.selected == 'true'
+        run: npm ci
+
+      - name: Check out pull-request base
+        if: github.event_name == 'pull_request'
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: .lighthouse-base
+          persist-credentials: false
+
+      - name: Build pull-request revisions
+        if: github.event_name == 'pull_request'
+        env:
+          LIGHTHOUSE_INCLUDE_SCHEDULED: "true"
+        run: |
+          npm run build
+          (npm run preview -- --host 127.0.0.1 --port 4321 > "$RUNNER_TEMP/lighthouse-head.log" 2>&1 &)
+          cd .lighthouse-base
+          npm ci
+          npm run build
+          (npm run preview -- --host 127.0.0.1 --port 4322 > "$RUNNER_TEMP/lighthouse-base.log" 2>&1 &)
+          for url in http://127.0.0.1:4321 http://127.0.0.1:4322; do
+            for attempt in {1..30}; do curl --fail --silent "$url" >/dev/null && break; sleep 1; done
+            curl --fail --silent "$url" >/dev/null
+          done
+
+      - name: Audit pull request on one runner
+        if: github.event_name == 'pull_request'
+        env:
+          LIGHTHOUSE_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          LIGHTHOUSE_BASE_URL: http://127.0.0.1:4322
+          LIGHTHOUSE_HEAD_URL: http://127.0.0.1:4321
+          LIGHTHOUSE_ARTIFACT_DIR: artifacts/lighthouse
+        run: npm run lighthouse -- --trigger pull-request
+
+      - name: Audit scheduled production matrix
+        if: github.event_name == 'schedule' && steps.schedule_selection.outputs.selected == 'true'
+        env:
+          SITE_URL: https://buthonestly.io
+          LIGHTHOUSE_ARTIFACT_DIR: artifacts/lighthouse
+          LIGHTHOUSE_SCHEDULE: ${{ github.event.schedule }}
+        run: npm run lighthouse -- --trigger scheduled
+
+      - name: Audit manual route
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          SITE_URL: https://buthonestly.io
+          LIGHTHOUSE_ARTIFACT_DIR: artifacts/lighthouse
+        run: npm run lighthouse -- --trigger manual --route "${{ inputs.route }}" --device "${{ inputs.device }}"
+
+      - name: Audit newly Live Essays independently of publication
+        if: github.event_name == 'workflow_run'
+        env:
+          SITE_URL: https://buthonestly.io
+          LIGHTHOUSE_ARTIFACT_DIR: artifacts/lighthouse
+          PUBLICATION_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          PUBLICATION_RUN_STARTED_AT: ${{ github.event.workflow_run.run_started_at }}
+        run: npm run lighthouse -- --trigger post-publication
+
+      - name: Retain diagnostic reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: lighthouse-${{ github.run_id }}
+          path: artifacts/lighthouse
+          if-no-files-found: ignore
+          retention-days: 90
+
+      - name: Checkpoint advisory monitoring state
+        if: ${{ success() && github.event_name != 'pull_request' && (github.event_name != 'schedule' || steps.schedule_selection.outputs.selected == 'true') }}
+        env:
+          REPOSITORY_DEPLOY_KEY: ${{ secrets.REPOSITORY_DEPLOY_KEY }}
+        run: node scripts/checkpoint-generated-state.mjs lighthouse

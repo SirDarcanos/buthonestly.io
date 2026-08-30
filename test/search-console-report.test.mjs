@@ -300,6 +300,15 @@ test("generates one canonical model and atomically publishes JSON and Markdown",
     percentagePointChange: 0,
   });
   assert.equal(json.cohorts["Editorial-focus essay"].clicks.current, 8);
+  assert.equal(
+    json.fieldData.source,
+    "Chrome UX Report (CrUX), separate from Search Console",
+  );
+  assert.match(json.fieldData.origin.status, /field data unavailable/);
+  assert.match(
+    markdown,
+    /Source: \*\*Chrome UX Report \(CrUX\), separate from Search Console\*\*/,
+  );
   assert.equal(json.queries.brand.clicks.current, 2);
   assert.equal(json.queries.brand.normalizedQueries[0].query, "but honestly");
   assert.match(markdown, /10 clicks.*5.*\+5/s);

@@ -4,6 +4,8 @@ node_modules/
 local/
 data/link-graph.json
 docs/research/
+artifacts/lighthouse/
+artifacts/lighthouse-smoke/
 
 *.log*
 .env

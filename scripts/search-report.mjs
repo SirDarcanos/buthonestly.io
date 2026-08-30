@@ -14,6 +14,10 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { loadEssayInventory } from "../src/lib/essay-inventory.mjs";
+import {
+  collectCruxFieldData,
+  createCruxPort,
+} from "../src/lib/crux-field-data.mjs";
 
 const REQUIRED_DATASETS = ["totals", "pages", "pageQuery"];
 const DATASET_FILENAMES = {
@@ -948,6 +952,24 @@ const renderCandidateCohort = (model, cohort) => {
   ];
 };
 
+const renderFieldData = (fieldData) => {
+  const measurement = ({ scope, status, metrics }) =>
+    metrics
+      ? `| ${scope} | available | ${Math.round(metrics.lcpMs)} | ${metrics.cls.toFixed(3)} | ${Math.round(metrics.inpMs)} |`
+      : `| ${scope} | ${status} | — | — | — |`;
+  return [
+    "## Field-data monitoring",
+    "",
+    `Source: **${fieldData.source}**. These mobile real-reader measurements are not Lighthouse lab results.`,
+    "",
+    "| Scope | Coverage | LCP p75 ms | CLS p75 | INP p75 ms |",
+    "| --- | --- | ---: | ---: | ---: |",
+    measurement(fieldData.origin),
+    ...fieldData.urls.map(measurement),
+    "",
+  ];
+};
+
 const renderMarkdown = (model) => {
   const property = model.propertyContext;
   const editorial = model.primaryMeasurements.editorialFocus;
@@ -960,6 +982,7 @@ const renderMarkdown = (model) => {
     `Generated ${model.generatedAt} from Final reporting months ${model.reportingMonth.previous} and ${model.reportingMonth.current}.`,
     `Configuration v${model.configuration.version}: \`${model.configuration.hash}\``,
     "",
+    ...renderFieldData(model.fieldData),
     "## Primary measurements",
     "",
     `- Editorial-focus essays: ${fmtNumber(editorial.clicks.current)} clicks (${fmtChange(editorial.clicks.absoluteChange)}), ${fmtNumber(editorial.impressions.current)} impressions (${fmtChange(editorial.impressions.absoluteChange)}), ${fmtPercent(editorial.ctr.current)} CTR.`,
@@ -1116,6 +1139,16 @@ export function generateSearchReport({
   essaysDirectory = "src/content/essays",
   redirectsPath = "public/_redirects",
   root = process.cwd(),
+  fieldData = {
+    source: "Chrome UX Report (CrUX), separate from Search Console",
+    formFactor: "PHONE",
+    origin: {
+      scope: "https://buthonestly.io",
+      status: "field data unavailable: not collected",
+      metrics: null,
+    },
+    urls: [],
+  },
 } = {}) {
   monthInterval(month);
   const previousMonth = precedingMonth(month);
@@ -1328,6 +1361,7 @@ export function generateSearchReport({
       previousStatus: previous.manifest.status,
       queryRowsAreDisclosedSubset: true,
     },
+    fieldData,
     primaryMeasurements: {
       editorialFocus: cohorts["Editorial-focus essay"],
       disclosedBrandQueries: brandComparison,
@@ -1429,7 +1463,10 @@ const isMain =
 if (isMain) {
   try {
     const month = parseArguments(process.argv.slice(2));
-    const result = generateSearchReport({ month });
+    const fieldData = await collectCruxFieldData({
+      port: createCruxPort({ apiKey: process.env.CRUX_API_KEY }),
+    });
+    const result = generateSearchReport({ month, fieldData });
     process.stdout.write(
       `Wrote ${result.jsonPath} and ${result.markdownPath}\n`,
     );

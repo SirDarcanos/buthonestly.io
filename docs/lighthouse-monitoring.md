@@ -1,6 +1,6 @@
 # Lighthouse and field-data monitoring
 
-This specification records the approved monitoring contract. It has not been implemented.
+This specification records the approved monitoring contract. Advisory monitoring is implemented; numeric budgets, regression issues, and blocking enforcement remain disabled until the baseline and maintainer approval are complete.
 
 ## Vocabulary
 
@@ -26,7 +26,7 @@ Each result is the median of three runs for the same route and device.
 Scheduled production checks run:
 
 - mobile on Monday at 06:00 UTC during even ISO weeks
-- desktop on the first Monday of each month at 07:00 UTC
+- desktop on the first Monday of each month at 07:00 UTC, except when the mobile schedule coincides; that combined invocation runs at 06:00 UTC
 
 A qualifying pull request compares its head with its base commit on the same runner. Both revisions use the same selected routes:
 
@@ -67,6 +67,8 @@ There is one issue per route and device combination. Issues use `performance` an
 `data/lighthouse-state.json` owns checked content hashes, consecutive outcomes, issue identities, and recovery state. It uses the repository's generated-state checkpoint pattern.
 
 Each workflow writes concise metrics and deltas to its GitHub Actions summary. Lighthouse HTML and JSON reports remain workflow artifacts for 90 days. Raw reports are not committed.
+
+Run `npm run lighthouse:smoke` to build the production site, serve it locally, and perform one bounded real-browser mobile navigation audit. The opt-in smoke writes HTML and JSON reports under `artifacts/lighthouse-smoke/`; it is not part of the network-independent unit-test suite.
 
 ## Field data
 

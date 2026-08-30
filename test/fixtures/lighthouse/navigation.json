@@ -1,0 +1,22 @@
+{
+  "lighthouseVersion": "13.4.1",
+  "categories": {
+    "accessibility": { "score": 0.98 },
+    "best-practices": { "score": 1 },
+    "seo": { "score": 0.92 }
+  },
+  "audits": {
+    "largest-contentful-paint": { "numericValue": 1234.5 },
+    "cumulative-layout-shift": { "numericValue": 0.04 },
+    "mainthread-work-breakdown": { "numericValue": 456.7 },
+    "network-requests": {
+      "details": {
+        "items": [
+          { "url": "https://buthonestly.io/app.js", "resourceType": "Script", "transferSize": 1000 },
+          { "url": "https://buthonestly.io/cover.avif", "resourceType": "Image", "transferSize": 2000 },
+          { "url": "https://cdn.example/analytics.js", "resourceType": "Script", "transferSize": 300 }
+        ]
+      }
+    }
+  }
+}

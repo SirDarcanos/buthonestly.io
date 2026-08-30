@@ -1,0 +1,17 @@
+{
+  "advisory": {
+    "baseline": [],
+    "budgetProposal": null,
+    "budgetsApproved": false,
+    "scheduledObservations": {
+      "desktop": 0,
+      "mobile": 0
+    },
+    "startedAt": "2026-08-30T00:00:00.000Z"
+  },
+  "checkedContentHashes": {},
+  "issues": {},
+  "outcomes": {},
+  "postPublicationBootstrapped": false,
+  "version": 1
+}

@@ -6,6 +6,11 @@ import { promisify } from "node:util";
 const execFileAsync = promisify(execFile);
 
 const PROFILES = Object.freeze({
+  lighthouse: {
+    paths: ["data/lighthouse-state.json"],
+    commitMessage: "chore: record Lighthouse monitoring state [skip ci]",
+    invalidatingPaths: [],
+  },
   publication: {
     paths: ["data/publication-state.json"],
     commitMessage: "chore: record publication state [skip ci]",
@@ -195,7 +200,7 @@ export async function checkpointGeneratedState({
   const profile = PROFILES[profileName];
   if (!profile) {
     throw new Error(
-      `Unknown generated-state checkpoint profile "${profileName}". Use publication or related.`,
+      `Unknown generated-state checkpoint profile "${profileName}". Use lighthouse, publication, or related.`,
     );
   }
 

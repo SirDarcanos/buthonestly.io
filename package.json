@@ -21,7 +21,9 @@
     "format:check": "prettier --check .",
     "check:links": "node scripts/check-links.mjs",
     "lint": "prettier --check . && node scripts/check-links.mjs",
-    "publication": "node scripts/orchestrate-publication.mjs"
+    "publication": "node scripts/orchestrate-publication.mjs",
+    "lighthouse": "node scripts/run-lighthouse-monitoring.mjs",
+    "lighthouse:smoke": "node scripts/smoke-lighthouse.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.2.4",
@@ -41,9 +43,12 @@
   "devDependencies": {
     "@iconify-json/simple-icons": "^1.2.93",
     "@mixmark-io/domino": "^2.2.0",
+    "chrome-launcher": "^1.0.0",
+    "chrome-remote-interface": "^0.33.3",
     "google-auth-library": "^11.0.2",
     "gray-matter": "^4.0.3",
     "gsc-snapshot": "0.2.0",
+    "lighthouse": "^13.4.1",
     "prettier": "^3.9.6",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.8.1",
