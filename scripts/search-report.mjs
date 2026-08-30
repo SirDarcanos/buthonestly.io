@@ -40,6 +40,11 @@ const RESOURCE_PATHS = new Set([
   "/resources/",
   "/resources/free-ai-voice-generator/",
 ]);
+const MIGRATION_THRESHOLDS = {
+  overallOldUrlShareMaximumExclusive: 0.05,
+  essayOutlierOldUrlShareMinimumInclusive: 0.25,
+  essayOutlierPairedImpressionsMinimumInclusive: 20,
+};
 
 export class SearchReportError extends Error {
   constructor(message) {
@@ -219,17 +224,23 @@ const normalizeConfiguredPath = (value) => {
 };
 
 const redirectLines = (filename) => {
-  const redirects = new Set();
+  const redirects = new Map();
   for (const line of readFileSync(filename, "utf8").split(/\r?\n/)) {
     const [from, to, status] = line.trim().split(/\s+/);
     if (!from || from.startsWith("#") || !to || status !== "301") continue;
     try {
       const target = new URL(to, "https://buthonestly.io");
       if (target.hostname !== "buthonestly.io") continue;
-      redirects.add(
-        `${normalizeConfiguredPath(from)}\t${normalizeConfiguredPath(target.toString())}`,
-      );
-    } catch {}
+      const sourcePath = normalizeConfiguredPath(from);
+      const targetPath = normalizeConfiguredPath(target.toString());
+      const existingTarget = redirects.get(sourcePath);
+      if (existingTarget && existingTarget !== targetPath) {
+        fail(`Conflicting deployed redirect mapping from ${sourcePath}`);
+      }
+      redirects.set(sourcePath, targetPath);
+    } catch (error) {
+      if (error instanceof SearchReportError) throw error;
+    }
   }
   return redirects;
 };
@@ -347,7 +358,7 @@ const validateConfiguration = (configuration, inventory, redirectsPath) => {
     if (!canonicalRoutes.has(to)) {
       fail(`Redirect target is not a known canonical route: ${to}`);
     }
-    if (!deployedRedirects.has(`${from}\t${to}`)) {
+    if (deployedRedirects.get(from) !== to) {
       fail(
         `Configured redirect is absent from ${redirectsPath}: ${redirect.from}`,
       );
@@ -429,6 +440,12 @@ const aggregateSnapshot = (
   const pages = new Map();
   const pageCohorts = new Map();
   const cohorts = new Map(COHORTS.map((cohort) => [cohort, emptyAggregate()]));
+  const migrationSources = new Map(
+    [
+      ...validatedConfiguration.redirects.keys(),
+      ...validatedConfiguration.redirects.values(),
+    ].map((pathname) => [pathname, emptyAggregate()]),
+  );
   const anomalies = [];
   for (const row of snapshot.datasets.pages) {
     const resolvedSourcePath = sourcePath(
@@ -460,6 +477,9 @@ const aggregateSnapshot = (
     pageCohorts.set(canonicalPath, classification.cohort);
     addMetrics(pages.get(canonicalPath), row, row.page);
     addMetrics(cohorts.get(classification.cohort), row);
+    if (migrationSources.has(resolvedSourcePath)) {
+      addMetrics(migrationSources.get(resolvedSourcePath), row, row.page);
+    }
   }
 
   const brandQueries = new Map();
@@ -537,6 +557,12 @@ const aggregateSnapshot = (
         finishAggregate(aggregate),
       ]),
     ),
+    migrationSources: Object.fromEntries(
+      [...migrationSources.entries()].map(([pathname, aggregate]) => [
+        pathname,
+        finishAggregate(aggregate),
+      ]),
+    ),
     queries: {
       brand: finishAggregate(brand),
       generic: finishAggregate(generic),
@@ -582,6 +608,96 @@ const comparePosition = (current, previous) => ({
   absoluteChange:
     current === null || previous === null ? null : current - previous,
 });
+
+const combineAggregates = (...aggregates) => {
+  const combined = emptyAggregate();
+  for (const aggregate of aggregates) {
+    combined.clicks += aggregate.clicks;
+    combined.impressions += aggregate.impressions;
+    combined.positionNumerator +=
+      (aggregate.position ?? 0) * aggregate.impressions;
+    for (const sourceUrl of aggregate.sourceUrls ?? []) {
+      combined.sourceUrls.add(sourceUrl);
+    }
+  }
+  return finishAggregate(combined);
+};
+
+const redirectPairMeasurement = (old, canonical) => {
+  const combined = combineAggregates(old, canonical);
+  return {
+    old,
+    canonical,
+    combined,
+    oldUrlShare:
+      combined.impressions === 0
+        ? null
+        : old.impressions / combined.impressions,
+  };
+};
+
+const migrationPeriod = (data, redirects, canonicalRoutes) => {
+  const oldPaths = [...redirects.keys()];
+  const canonicalPaths = [...new Set(redirects.values())];
+  const old = combineAggregates(
+    ...oldPaths.map((pathname) => data.migrationSources[pathname]),
+  );
+  const canonical = combineAggregates(
+    ...canonicalPaths.map((pathname) => data.migrationSources[pathname]),
+  );
+  const overall = redirectPairMeasurement(old, canonical);
+  const oldPathsByCanonical = new Map();
+  for (const [oldPath, canonicalPath] of redirects) {
+    const paths = oldPathsByCanonical.get(canonicalPath) ?? [];
+    paths.push(oldPath);
+    oldPathsByCanonical.set(canonicalPath, paths);
+  }
+  const essayOutliers = [];
+  for (const [canonicalPath, pairedOldPaths] of oldPathsByCanonical) {
+    const cohort = canonicalRoutes.get(canonicalPath);
+    if (!COHORTS.slice(0, 3).includes(cohort)) continue;
+    const measurement = redirectPairMeasurement(
+      combineAggregates(
+        ...pairedOldPaths.map((pathname) => data.migrationSources[pathname]),
+      ),
+      data.migrationSources[canonicalPath],
+    );
+    if (
+      measurement.combined.impressions >=
+        MIGRATION_THRESHOLDS.essayOutlierPairedImpressionsMinimumInclusive &&
+      measurement.oldUrlShare >=
+        MIGRATION_THRESHOLDS.essayOutlierOldUrlShareMinimumInclusive
+    ) {
+      essayOutliers.push({
+        canonicalPath,
+        cohort,
+        oldPaths: pairedOldPaths,
+        oldImpressions: measurement.old.impressions,
+        canonicalImpressions: measurement.canonical.impressions,
+        pairedImpressions: measurement.combined.impressions,
+        oldUrlShare: measurement.oldUrlShare,
+      });
+    }
+  }
+  return { overall, essayOutliers };
+};
+
+const migrationMonthDecision = (reportingMonth, period) => {
+  const overallShareQualifies =
+    period.overall.oldUrlShare !== null &&
+    period.overall.oldUrlShare <
+      MIGRATION_THRESHOLDS.overallOldUrlShareMaximumExclusive;
+  const noQualifyingEssayOutlier = period.essayOutliers.length === 0;
+  return {
+    reportingMonth,
+    oldUrlShare: period.overall.oldUrlShare,
+    pairedImpressions: period.overall.combined.impressions,
+    overallShareQualifies,
+    qualifyingEssayOutlierCount: period.essayOutliers.length,
+    noQualifyingEssayOutlier,
+    qualifies: overallShareQualifies && noQualifyingEssayOutlier,
+  };
+};
 
 const comparePages = (currentPages, previousPages) => {
   const empty = finishAggregate(emptyAggregate());
@@ -694,6 +810,29 @@ const renderMarkdown = (model) => {
     "## Migration consolidation",
     "",
     `${model.migration.configuredRedirectCount} explicit redirect mappings were applied.`,
+    "",
+    "| Old URL | Canonical URL | Old impressions | Canonical impressions | Old-URL share | Previous old impressions | Previous canonical impressions | Previous old-URL share |",
+    "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |",
+    ...model.migration.pairs.map(
+      (pair) =>
+        `| ${pair.oldPath} | ${pair.canonicalPath} | ${fmtNumber(pair.current.old.impressions)} | ${fmtNumber(pair.current.canonical.impressions)} | ${fmtPercent(pair.current.oldUrlShare)} | ${fmtNumber(pair.previous.old.impressions)} | ${fmtNumber(pair.previous.canonical.impressions)} | ${fmtPercent(pair.previous.oldUrlShare)} |`,
+    ),
+    "",
+    `Overall old-URL share is ${fmtPercent(model.migration.overall.current.oldUrlShare)} from ${fmtNumber(model.migration.overall.current.old.impressions)} old-URL impressions and ${fmtNumber(model.migration.overall.current.combined.impressions)} paired impressions; previously ${fmtPercent(model.migration.overall.previous.oldUrlShare)} from ${fmtNumber(model.migration.overall.previous.old.impressions)} old-URL impressions and ${fmtNumber(model.migration.overall.previous.combined.impressions)} paired impressions.`,
+    `Closure thresholds require less than ${fmtPercent(model.migration.thresholds.overallOldUrlShareMaximumExclusive)} overall old-URL share and no Essay with at least ${fmtPercent(model.migration.thresholds.essayOutlierOldUrlShareMinimumInclusive)} old-URL share among at least ${fmtNumber(model.migration.thresholds.essayOutlierPairedImpressionsMinimumInclusive)} paired impressions.`,
+    ...(model.migration.essayOutliers.current.length
+      ? model.migration.essayOutliers.current.map(
+          (outlier) =>
+            `- Current Essay outlier: ${outlier.canonicalPath} has ${fmtPercent(outlier.oldUrlShare)} old-URL share across ${fmtNumber(outlier.pairedImpressions)} paired impressions.`,
+        )
+      : ["- Current month has no qualifying Essay migration outlier."]),
+    ...(model.migration.essayOutliers.previous.length
+      ? model.migration.essayOutliers.previous.map(
+          (outlier) =>
+            `- Previous Essay outlier: ${outlier.canonicalPath} has ${fmtPercent(outlier.oldUrlShare)} old-URL share across ${fmtNumber(outlier.pairedImpressions)} paired impressions.`,
+        )
+      : ["- Previous month has no qualifying Essay migration outlier."]),
+    `The compared Final reporting months are ${model.migration.manualClosure.eligible ? "eligible" : "not eligible"} for manual closure. This report does not close migration tracking automatically. Search Performance cannot identify Google's selected canonical; URL Inspection is still required.`,
     "",
     "## Search review candidates",
     "",
@@ -923,6 +1062,34 @@ export function generateSearchReport({
     currentData.queries.brand,
     previousData.queries.brand,
   );
+  const migrationPairs = [...validatedConfiguration.redirects].map(
+    ([oldPath, canonicalPath]) => ({
+      oldPath,
+      canonicalPath,
+      current: redirectPairMeasurement(
+        currentData.migrationSources[oldPath],
+        currentData.migrationSources[canonicalPath],
+      ),
+      previous: redirectPairMeasurement(
+        previousData.migrationSources[oldPath],
+        previousData.migrationSources[canonicalPath],
+      ),
+    }),
+  );
+  const currentMigration = migrationPeriod(
+    currentData,
+    validatedConfiguration.redirects,
+    validatedConfiguration.canonicalRoutes,
+  );
+  const previousMigration = migrationPeriod(
+    previousData,
+    validatedConfiguration.redirects,
+    validatedConfiguration.canonicalRoutes,
+  );
+  const migrationMonths = [
+    migrationMonthDecision(month, currentMigration),
+    migrationMonthDecision(previousMonth, previousMigration),
+  ];
   const model = {
     schemaVersion: 1,
     generatedAt: generatedAt.toISOString(),
@@ -957,6 +1124,22 @@ export function generateSearchReport({
     },
     migration: {
       configuredRedirectCount: configuration.redirects.length,
+      thresholds: MIGRATION_THRESHOLDS,
+      pairs: migrationPairs,
+      overall: {
+        current: currentMigration.overall,
+        previous: previousMigration.overall,
+      },
+      essayOutliers: {
+        current: currentMigration.essayOutliers,
+        previous: previousMigration.essayOutliers,
+      },
+      manualClosure: {
+        eligible: migrationMonths.every(({ qualifies }) => qualifies),
+        closesTrackingAutomatically: false,
+        urlInspectionRequired: true,
+        months: migrationMonths,
+      },
     },
     queries: {
       brand: {

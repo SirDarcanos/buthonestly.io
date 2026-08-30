@@ -150,6 +150,44 @@ const writeSnapshot = (
   return directory;
 };
 
+const addRedirectedEssay = (
+  workspace,
+  { slug = "second-essay", oldPath = "/old-second/" } = {},
+) => {
+  const essayDirectory = path.join(workspace.essaysDirectory, slug);
+  mkdirSync(essayDirectory, { recursive: true });
+  writeFileSync(
+    path.join(essayDirectory, `${slug}.mdx`),
+    `---
+title: Second Essay
+date: 2025-01-01
+excerpt: Second fixture excerpt.
+newsletterIntro: Second fixture newsletter introduction.
+cover: cover.jpg
+coverAlt: Second fixture cover.
+categories:
+  - Testing
+tags:
+  - Search
+---
+
+Second fixture prose.
+`,
+  );
+  updateConfiguration(workspace, (configuration) => ({
+    ...configuration,
+    essayCohorts: {
+      ...configuration.essayCohorts,
+      [slug]: "Editorial-focus essay",
+    },
+    redirects: [...configuration.redirects, { from: oldPath, to: `/${slug}/` }],
+  }));
+  writeFileSync(
+    workspace.redirectsPath,
+    `${readFileSync(workspace.redirectsPath, "utf8")}${oldPath} /${slug}/ 301\n`,
+  );
+};
+
 const generate = (workspace, overrides = {}) =>
   generateSearchReport({
     month: "2026-02",
@@ -330,6 +368,244 @@ test("attributes safe URL variants and redirects to canonical Page cohorts", (te
   assert.equal(model.queries.brand.clicks.current, 2);
 });
 
+test("reports old and canonical redirect-pair measurements without changing canonical totals", (testContext) => {
+  const workspace = makeWorkspace(testContext);
+  updateConfiguration(workspace, (configuration) => ({
+    ...configuration,
+    redirects: [
+      ...configuration.redirects,
+      { from: "/older-fixture/", to: "/fixture-essay/" },
+    ],
+  }));
+  writeFileSync(
+    workspace.redirectsPath,
+    `${readFileSync(workspace.redirectsPath, "utf8")}/older-fixture/ /fixture-essay/ 301\n`,
+  );
+  writeSnapshot(workspace, "2026-01", {
+    pages: [
+      { page: "https://buthonestly.io/fixture-essay/", ...metrics(3, 30, 4) },
+      { page: "https://buthonestly.io/old-fixture/", ...metrics(1, 10, 10) },
+    ],
+    pageQuery: [],
+  });
+  writeSnapshot(workspace, "2026-02", {
+    pages: [
+      { page: "https://buthonestly.io/fixture-essay/", ...metrics(6, 60, 3) },
+      { page: "https://buthonestly.io/old-fixture/", ...metrics(2, 20, 9) },
+      { page: "https://buthonestly.io/older-fixture/", ...metrics(1, 10, 6) },
+    ],
+    pageQuery: [],
+  });
+
+  const { model } = generate(workspace);
+  const [pair] = model.migration.pairs;
+
+  assert.equal(
+    model.pages.comparisons["/fixture-essay/"].impressions.current,
+    90,
+  );
+  assert.equal(pair.oldPath, "/old-fixture/");
+  assert.equal(pair.canonicalPath, "/fixture-essay/");
+  assert.deepEqual(pair.current.old, {
+    clicks: 2,
+    impressions: 20,
+    ctr: 0.1,
+    position: 9,
+    sourceUrls: ["https://buthonestly.io/old-fixture/"],
+  });
+  assert.equal(pair.current.canonical.impressions, 60);
+  assert.equal(pair.current.combined.impressions, 80);
+  assert.equal(pair.current.oldUrlShare, 0.25);
+  assert.equal(pair.previous.old.impressions, 10);
+  assert.equal(model.migration.pairs[1].current.canonical.impressions, 60);
+  assert.equal(model.migration.overall.current.old.impressions, 30);
+  assert.equal(model.migration.overall.current.canonical.impressions, 60);
+  assert.equal(model.migration.overall.current.combined.impressions, 90);
+  assert.deepEqual(model.migration.essayOutliers.current[0].oldPaths, [
+    "/old-fixture/",
+    "/older-fixture/",
+  ]);
+  assert.equal(model.migration.essayOutliers.current[0].oldImpressions, 30);
+  assert.match(
+    model.renderedMarkdown,
+    /\/old-fixture\/.*\/fixture-essay\/.*20.*60.*25\.00%/s,
+  );
+});
+
+test("keeps zero-impression redirect pairs and applies Essay outlier boundaries", async (testContext) => {
+  await testContext.test("zero-impression pair", () => {
+    const workspace = makeWorkspace(testContext);
+    writeSnapshot(workspace, "2026-01", { pages: [], pageQuery: [] });
+    writeSnapshot(workspace, "2026-02", { pages: [], pageQuery: [] });
+
+    const { model } = generate(workspace);
+
+    assert.equal(model.migration.pairs[0].current.oldUrlShare, null);
+    assert.equal(model.migration.pairs[0].current.combined.position, null);
+    assert.deepEqual(model.migration.essayOutliers.current, []);
+    assert.equal(model.migration.manualClosure.eligible, false);
+  });
+
+  await testContext.test("inclusive outlier boundaries", () => {
+    const workspace = makeWorkspace(testContext);
+    writeSnapshot(workspace, "2026-01", { pages: [], pageQuery: [] });
+    writeSnapshot(workspace, "2026-02", {
+      pages: [
+        { page: "https://buthonestly.io/fixture-essay/", ...metrics(1, 15, 4) },
+        { page: "https://buthonestly.io/old-fixture/", ...metrics(1, 5, 8) },
+      ],
+      pageQuery: [],
+    });
+
+    const { model } = generate(workspace);
+    const [outlier] = model.migration.essayOutliers.current;
+
+    assert.equal(outlier.canonicalPath, "/fixture-essay/");
+    assert.equal(outlier.pairedImpressions, 20);
+    assert.equal(outlier.oldUrlShare, 0.25);
+    assert.equal(
+      model.migration.thresholds.essayOutlierOldUrlShareMinimumInclusive,
+      0.25,
+    );
+    assert.equal(
+      model.migration.thresholds.essayOutlierPairedImpressionsMinimumInclusive,
+      20,
+    );
+  });
+
+  await testContext.test("values below either outlier boundary", () => {
+    const workspace = makeWorkspace(testContext);
+    writeSnapshot(workspace, "2026-01", { pages: [], pageQuery: [] });
+    writeSnapshot(workspace, "2026-02", {
+      pages: [
+        { page: "https://buthonestly.io/fixture-essay/", ...metrics(1, 15, 4) },
+        { page: "https://buthonestly.io/old-fixture/", ...metrics(1, 4, 8) },
+      ],
+      pageQuery: [],
+    });
+    assert.deepEqual(
+      generate(workspace).model.migration.essayOutliers.current,
+      [],
+    );
+
+    writeSnapshot(workspace, "2026-02", {
+      pages: [
+        { page: "https://buthonestly.io/fixture-essay/", ...metrics(1, 19, 4) },
+        { page: "https://buthonestly.io/old-fixture/", ...metrics(1, 6, 8) },
+      ],
+      pageQuery: [],
+    });
+    assert.deepEqual(
+      generate(workspace).model.migration.essayOutliers.current,
+      [],
+    );
+  });
+});
+
+test("requires both Final reporting months to qualify for manual migration closure", async (testContext) => {
+  await testContext.test("both months qualify", () => {
+    const workspace = makeWorkspace(testContext);
+    for (const month of ["2026-01", "2026-02"]) {
+      writeSnapshot(workspace, month, {
+        pages: [
+          {
+            page: "https://buthonestly.io/fixture-essay/",
+            ...metrics(5, 96, 4),
+          },
+          { page: "https://buthonestly.io/old-fixture/", ...metrics(1, 4, 8) },
+        ],
+        pageQuery: [],
+      });
+    }
+
+    const { model } = generate(workspace);
+
+    assert.equal(model.migration.overall.current.oldUrlShare, 0.04);
+    assert.equal(model.migration.overall.previous.oldUrlShare, 0.04);
+    assert.equal(model.migration.manualClosure.eligible, true);
+    assert.equal(
+      model.migration.manualClosure.closesTrackingAutomatically,
+      false,
+    );
+    assert.equal(model.migration.manualClosure.urlInspectionRequired, true);
+    assert.match(
+      model.renderedMarkdown,
+      /eligible for manual closure.*does not close migration tracking automatically.*URL Inspection is still required/s,
+    );
+  });
+
+  await testContext.test(
+    "an Essay outlier blocks an otherwise qualifying month",
+    () => {
+      const workspace = makeWorkspace(testContext);
+      addRedirectedEssay(workspace);
+      writeSnapshot(workspace, "2026-01", {
+        pages: [
+          {
+            page: "https://buthonestly.io/fixture-essay/",
+            ...metrics(1, 100, 4),
+          },
+          {
+            page: "https://buthonestly.io/second-essay/",
+            ...metrics(1, 100, 4),
+          },
+        ],
+        pageQuery: [],
+      });
+      writeSnapshot(workspace, "2026-02", {
+        pages: [
+          {
+            page: "https://buthonestly.io/fixture-essay/",
+            ...metrics(1, 15, 4),
+          },
+          { page: "https://buthonestly.io/old-fixture/", ...metrics(1, 5, 8) },
+          {
+            page: "https://buthonestly.io/second-essay/",
+            ...metrics(1, 100, 4),
+          },
+        ],
+        pageQuery: [],
+      });
+
+      const { model } = generate(workspace);
+      const [current] = model.migration.manualClosure.months;
+
+      assert.equal(current.oldUrlShare < 0.05, true);
+      assert.equal(current.overallShareQualifies, true);
+      assert.equal(current.noQualifyingEssayOutlier, false);
+      assert.equal(current.qualifies, false);
+      assert.equal(model.migration.manualClosure.eligible, false);
+    },
+  );
+
+  await testContext.test("only one month qualifies", () => {
+    const workspace = makeWorkspace(testContext);
+    writeSnapshot(workspace, "2026-01", {
+      pages: [
+        { page: "https://buthonestly.io/fixture-essay/", ...metrics(5, 96, 4) },
+        { page: "https://buthonestly.io/old-fixture/", ...metrics(1, 4, 8) },
+      ],
+      pageQuery: [],
+    });
+    writeSnapshot(workspace, "2026-02", {
+      pages: [
+        { page: "https://buthonestly.io/fixture-essay/", ...metrics(5, 95, 4) },
+        { page: "https://buthonestly.io/old-fixture/", ...metrics(1, 5, 8) },
+      ],
+      pageQuery: [],
+    });
+
+    const { model } = generate(workspace);
+
+    assert.deepEqual(
+      model.migration.manualClosure.months.map(({ qualifies }) => qualifies),
+      [false, true],
+    );
+    assert.equal(model.migration.manualClosure.eligible, false);
+    assert.match(model.renderedMarkdown, /not eligible for manual closure/);
+  });
+});
+
 test("keeps page-only denominators separate from property totals", (testContext) => {
   const workspace = makeWorkspace(testContext);
   writeSnapshot(workspace, "2026-01", {
@@ -439,6 +715,15 @@ test("rejects unclassified Published Essays and ambiguous redirects", async (tes
             { from: "/fixture-essay/", to: "/about/" },
           ],
         }));
+      },
+    ],
+    [
+      "conflicting deployed redirect",
+      (workspace) => {
+        writeFileSync(
+          workspace.redirectsPath,
+          `${readFileSync(workspace.redirectsPath, "utf8")}/old-fixture/ /about/ 301\n`,
+        );
       },
     ],
     [
