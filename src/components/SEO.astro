@@ -40,12 +40,15 @@ const {
 // only when the title leaves room. Long titles ship unbranded, not truncated.
 const TITLE_MAX = 60;
 const suffix = ` — ${SITE_NAME}`;
-const fullTitle =
-  title === SITE_NAME
+const withSiteName = (value: string) =>
+  value === SITE_NAME
     ? SITE_NAME
-    : title.length + suffix.length <= TITLE_MAX
-      ? `${title}${suffix}`
-      : title;
+    : value.length + suffix.length <= TITLE_MAX
+      ? `${value}${suffix}`
+      : value;
+const fullTitle = withSiteName(title);
+const socialTitle = withSiteName(article?.title ?? title);
+const socialDescription = article?.excerpt ?? description;
 const resolvedCanonical = article?.seo.canonical ?? canonical;
 
 // og:image is required by Open Graph; without it scrapers grab any image on the
@@ -54,7 +57,7 @@ const OG_FALLBACK = { src: "/og-default.png", width: 1200, height: 630 };
 const essayImage = article?.seo.ogImage ?? ogImage;
 const resolvedOgImage = essayImage ?? new URL(OG_FALLBACK.src, SITE_URL).href;
 const ogImageAlt = essayImage
-  ? (article?.featuredImageAlt ?? `${title} — ${SITE_NAME}`)
+  ? (article?.featuredImageAlt ?? `${article?.title ?? title} — ${SITE_NAME}`)
   : `${SITE_NAME} — ${SITE_DESCRIPTION}`;
 
 const PERSON = {
@@ -103,7 +106,7 @@ if (article) {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: article.title,
-    description: article.seo.description,
+    description: article.excerpt,
     url: article.seo.canonical,
     datePublished: article.date,
     dateModified: article.modified,
@@ -138,8 +141,8 @@ jsonLd.push(...extraJsonLd);
 
 {/* Open Graph */}
 <meta property="og:type" content={type} />
-<meta property="og:title" content={fullTitle} />
-<meta property="og:description" content={description} />
+<meta property="og:title" content={socialTitle} />
+<meta property="og:description" content={socialDescription} />
 <meta property="og:url" content={resolvedCanonical} />
 <meta property="og:site_name" content={SITE_NAME} />
 <meta property="og:image" content={resolvedOgImage} />
@@ -167,8 +170,8 @@ jsonLd.push(...extraJsonLd);
 
 {/* Twitter Card */}
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content={fullTitle} />
-<meta name="twitter:description" content={description} />
+<meta name="twitter:title" content={socialTitle} />
+<meta name="twitter:description" content={socialDescription} />
 <meta name="twitter:image" content={resolvedOgImage} />
 <meta name="twitter:image:alt" content={ogImageAlt} />
 <meta name="twitter:site" content={TWITTER_HANDLE} />

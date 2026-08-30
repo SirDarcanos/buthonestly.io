@@ -10,6 +10,8 @@ import { publishDate } from "./publish-time.mjs";
 const ESSAY_EXTENSION = ".mdx";
 const METADATA_FIELDS = new Set([
   "title",
+  "seoTitle",
+  "seoDescription",
   "date",
   "updated",
   "sticky",
@@ -92,6 +94,21 @@ const requiredString = (data, field, file, diagnostics) => {
     ),
   );
   return "";
+};
+
+const optionalString = (data, field, file, diagnostics) => {
+  if (!Object.hasOwn(data, field)) return undefined;
+  const value = typeof data[field] === "string" ? data[field].trim() : "";
+  if (value) return value;
+  diagnostics.push(
+    diagnostic(
+      "invalid-metadata",
+      file,
+      `${field} must be a non-empty string when provided`,
+      field,
+    ),
+  );
+  return undefined;
 };
 
 export const resolveEssayCoverPath = (sourcePath, cover) =>
@@ -281,6 +298,8 @@ const publicContentHash = (essay) =>
       JSON.stringify({
         slug: essay.slug,
         title: essay.title,
+        seoTitle: essay.seoTitle ?? null,
+        seoDescription: essay.seoDescription ?? null,
         excerpt: essay.excerpt,
         body: essay.body,
         publishedAt: essay.publishedAt.toISOString(),
@@ -412,6 +431,18 @@ export function loadEssayInventory({
       source.sourcePath,
       diagnostics,
     );
+    const seoTitle = optionalString(
+      parsed.data,
+      "seoTitle",
+      source.sourcePath,
+      diagnostics,
+    );
+    const seoDescription = optionalString(
+      parsed.data,
+      "seoDescription",
+      source.sourcePath,
+      diagnostics,
+    );
     const excerpt = requiredString(
       parsed.data,
       "excerpt",
@@ -493,6 +524,8 @@ export function loadEssayInventory({
       sourceContent,
       body: parsed.content.replace(/\r\n?/g, "\n"),
       title,
+      seoTitle,
+      seoDescription,
       excerpt,
       newsletterIntro,
       publishedAt,

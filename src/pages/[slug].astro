@@ -130,7 +130,7 @@ const jsonLd = [
       data-agent-document
       data-agent-metadata={JSON.stringify({
         title: post.title,
-        description: post.seo.description,
+        description: post.excerpt,
         published: post.date.slice(0, 10),
         updated: updatedDate ? post.modified.slice(0, 10) : undefined,
         sections: post.categories,

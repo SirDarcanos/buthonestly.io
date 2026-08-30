@@ -146,6 +146,21 @@ import figure from "./figure.jpg";
     "published",
   );
 
+  writeEssay(
+    directory,
+    "hash-example",
+    "mdx",
+    reordered.replace(
+      "title: Fixture essay",
+      "title: Fixture essay\nseoTitle: Search title",
+    ),
+  );
+  const changedSeo = loadEssayInventory({
+    essaysDirectory: directory,
+  }).get("hash-example");
+  assert.notEqual(changedSeo.publicContentHash, equivalent.publicContentHash);
+  writeEssay(directory, "hash-example", "mdx", reordered);
+
   for (const [filename, contents] of [
     ["cover.jpg", "changed cover"],
     ["figure.jpg", "changed figure"],
@@ -188,6 +203,8 @@ test("inventory normalizes metadata, freshness, taxonomy, and narration", (testC
   const directory = fixtureDirectory(testContext);
   const source = frontmatter({
     title: "  Normalized title  ",
+    seoTitle: "  Search title  ",
+    seoDescription: "  Search description.  ",
     updated: "2026-09-20",
     categories: ["Programming", " Leadership "],
     tags: ["Testing", "Testing"],
@@ -204,6 +221,8 @@ test("inventory normalizes metadata, freshness, taxonomy, and narration", (testC
   );
 
   assert.equal(essay.title, "Normalized title");
+  assert.equal(essay.seoTitle, "Search title");
+  assert.equal(essay.seoDescription, "Search description.");
   assert.equal(essay.newsletterIntro, "A fixture newsletter introduction.");
   assert.equal(essay.freshnessAt.toISOString(), "2026-09-20T13:00:00.000Z");
   assert.equal(essay.pathname, "/normalized/");
@@ -266,6 +285,8 @@ test("inventory rejects missing reader-facing metadata", (testContext) => {
     "mdx",
     frontmatter({
       title: "",
+      seoTitle: "",
+      seoDescription: 42,
       newsletterIntro: "",
       coverAlt: "",
       categories: [],
@@ -281,6 +302,8 @@ test("inventory rejects missing reader-facing metadata", (testContext) => {
       error instanceof EssayInventoryError &&
       [
         "title",
+        "seoTitle",
+        "seoDescription",
         "newsletterIntro",
         "coverAlt",
         "categories",

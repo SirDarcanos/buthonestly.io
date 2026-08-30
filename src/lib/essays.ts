@@ -2,6 +2,7 @@ import { getCollection, type CollectionEntry } from "astro:content";
 import { SITE_URL } from "../consts.ts";
 import { loadEssayInventory } from "./essay-inventory.mjs";
 import { selectRelatedEssays } from "./related-essays.mjs";
+import { essaySeoMetadata } from "./seo-metadata.mjs";
 import { taxDescription, taxSlug } from "../taxonomies.ts";
 import { type Post, type Tax } from "../types.ts";
 import relatedMap from "../../data/related.json";
@@ -16,14 +17,6 @@ export type RenderableEssay = {
 const INVENTORY = loadEssayInventory({ siteUrl: SITE_URL });
 const PUBLISHED_SLUGS = new Set(INVENTORY.published.map(({ slug }) => slug));
 const RELATED = relatedMap as Record<string, string[]>;
-
-/** Clamp to ~160 chars at a word boundary for a meta description. */
-function truncate(text: string, max = 160): string {
-  if (text.length <= max) return text;
-  const slice = text.slice(0, max);
-  const lastSpace = slice.lastIndexOf(" ");
-  return `${slice.slice(0, lastSpace > 0 ? lastSpace : max).trimEnd()}…`;
-}
 
 export function toPost({ entry, record }: RenderableEssay): Post {
   const cover = entry.data.cover;
@@ -53,8 +46,7 @@ export function toPost({ entry, record }: RenderableEssay): Post {
     narrationUrl: record.narrationUrl,
     downloads: record.downloads,
     seo: {
-      title: record.title,
-      description: truncate(record.excerpt),
+      ...essaySeoMetadata(record),
       ogImage: featuredImage,
       canonical: record.canonicalUrl,
     },
