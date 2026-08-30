@@ -45,6 +45,30 @@ const MIGRATION_THRESHOLDS = {
   essayOutlierOldUrlShareMinimumInclusive: 0.25,
   essayOutlierPairedImpressionsMinimumInclusive: 20,
 };
+const CANDIDATE_COHORTS = [
+  "Editorial-focus essay",
+  "Resource",
+  "Archive",
+  "Site page",
+];
+const CANDIDATE_THRESHOLDS = {
+  visibility: {
+    minimumImpressions: 50,
+    minimumPositionInclusive: 8,
+    maximumPositionInclusive: 30,
+  },
+  clickThrough: {
+    minimumImpressions: 50,
+    minimumPositionInclusive: 1,
+    maximumPositionInclusive: 10,
+    clicks: 0,
+  },
+  disclosedQuery: {
+    minimumImpressions: 10,
+    minimumPositionInclusive: 4,
+    maximumPositionInclusive: 30,
+  },
+};
 
 export class SearchReportError extends Error {
   constructor(message) {
@@ -247,11 +271,10 @@ const redirectLines = (filename) => {
 
 const normalizeQuery = (query) =>
   query
-    .normalize("NFKC")
     .toLowerCase()
     .replace(/https?:\/\//g, "")
     .replace(/\bwww\./g, "")
-    .replace(/[\p{P}\p{S}]+/gu, " ")
+    .replace(/[\p{P}]+/gu, " ")
     .replace(/\s+/g, " ")
     .trim();
 
@@ -483,8 +506,22 @@ const aggregateSnapshot = (
   }
 
   const brandQueries = new Map();
+  const genericQueries = new Map();
+  const genericPageQueries = new Map();
   const generic = emptyAggregate();
   const brand = emptyAggregate();
+  const addQuery = (queries, normalized, row, rule) => {
+    if (!queries.has(normalized)) {
+      queries.set(normalized, {
+        aggregate: emptyAggregate(),
+        rawVariants: new Set(),
+        ...(rule ? { rule } : {}),
+      });
+    }
+    const query = queries.get(normalized);
+    addMetrics(query.aggregate, row);
+    query.rawVariants.add(row.query);
+  };
   for (const row of snapshot.datasets.pageQuery) {
     const resolvedSourcePath = sourcePath(
       row.page,
@@ -516,19 +553,24 @@ const aggregateSnapshot = (
     const rule = validatedConfiguration.aliases.get(normalized);
     if (!rule) {
       addMetrics(generic, row);
+      addQuery(genericQueries, normalized, row);
+      const pageQueryKey = `${canonicalPath}\0${normalized}`;
+      if (!genericPageQueries.has(pageQueryKey)) {
+        genericPageQueries.set(pageQueryKey, {
+          page: canonicalPath,
+          cohort: classification.cohort,
+          query: normalized,
+          rawVariants: new Set(),
+          aggregate: emptyAggregate(),
+        });
+      }
+      const pageQuery = genericPageQueries.get(pageQueryKey);
+      addMetrics(pageQuery.aggregate, row);
+      pageQuery.rawVariants.add(row.query);
       continue;
     }
     addMetrics(brand, row);
-    if (!brandQueries.has(normalized)) {
-      brandQueries.set(normalized, {
-        aggregate: emptyAggregate(),
-        rawVariants: new Set(),
-        rule,
-      });
-    }
-    const query = brandQueries.get(normalized);
-    addMetrics(query.aggregate, row);
-    query.rawVariants.add(row.query);
+    addQuery(brandQueries, normalized, row, rule);
   }
 
   return {
@@ -566,12 +608,29 @@ const aggregateSnapshot = (
     queries: {
       brand: finishAggregate(brand),
       generic: finishAggregate(generic),
-      normalizedQueries: [...brandQueries.entries()]
+      brandNormalizedQueries: [...brandQueries.entries()]
         .sort(([a], [b]) => a.localeCompare(b))
         .map(([query, value]) => ({
           query,
           rawVariants: [...value.rawVariants].sort(),
           matchedRule: value.rule,
+          ...finishAggregate(value.aggregate),
+        })),
+      genericNormalizedQueries: [...genericQueries.entries()]
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([query, value]) => ({
+          query,
+          rawVariants: [...value.rawVariants].sort(),
+          ...finishAggregate(value.aggregate),
+        })),
+      genericPageQueries: [...genericPageQueries.entries()]
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([key, value]) => ({
+          key,
+          page: value.page,
+          cohort: value.cohort,
+          query: value.query,
+          rawVariants: [...value.rawVariants].sort(),
           ...finishAggregate(value.aggregate),
         })),
     },
@@ -607,6 +666,25 @@ const comparePosition = (current, previous) => ({
   previous,
   absoluteChange:
     current === null || previous === null ? null : current - previous,
+});
+
+const compareQueryMetrics = (current, previous) => ({
+  ...compareMetrics(current, previous),
+  position: comparePosition(current.position, previous.position),
+});
+
+const queryCoverage = (
+  current,
+  previous,
+  currentDenominator,
+  previousDenominator,
+) => ({
+  current: currentDenominator === 0 ? null : current / currentDenominator,
+  previous: previousDenominator === 0 ? null : previous / previousDenominator,
+  currentNumerator: current,
+  currentDenominator,
+  previousNumerator: previous,
+  previousDenominator,
 });
 
 const combineAggregates = (...aggregates) => {
@@ -699,6 +777,86 @@ const migrationMonthDecision = (reportingMonth, period) => {
   };
 };
 
+const pageCandidateEvidence = (page) => {
+  const evidence = [];
+  const visibility = CANDIDATE_THRESHOLDS.visibility;
+  if (
+    page.impressions >= visibility.minimumImpressions &&
+    page.position >= visibility.minimumPositionInclusive &&
+    page.position <= visibility.maximumPositionInclusive
+  ) {
+    evidence.push({ label: "Visibility candidate", ...visibility });
+  }
+  const clickThrough = CANDIDATE_THRESHOLDS.clickThrough;
+  if (
+    page.impressions >= clickThrough.minimumImpressions &&
+    page.position >= clickThrough.minimumPositionInclusive &&
+    page.position <= clickThrough.maximumPositionInclusive &&
+    page.clicks === clickThrough.clicks
+  ) {
+    evidence.push({ label: "Click-through candidate", ...clickThrough });
+  }
+  return evidence;
+};
+
+const buildCandidates = (currentData, previousData) => {
+  const empty = finishAggregate(emptyAggregate());
+  const candidates = [];
+  for (const [page, current] of Object.entries(currentData.pages)) {
+    if (!CANDIDATE_COHORTS.includes(current.cohort)) continue;
+    const evidence = pageCandidateEvidence(current);
+    if (!evidence.length) continue;
+    candidates.push({
+      type: "page",
+      page,
+      cohort: current.cohort,
+      current,
+      previous: previousData.pages[page] ?? empty,
+      evidence,
+    });
+  }
+
+  const previousQueries = new Map(
+    previousData.queries.genericPageQueries.map((query) => [query.key, query]),
+  );
+  const threshold = CANDIDATE_THRESHOLDS.disclosedQuery;
+  for (const current of currentData.queries.genericPageQueries) {
+    if (!CANDIDATE_COHORTS.includes(current.cohort)) continue;
+    if (
+      current.impressions < threshold.minimumImpressions ||
+      current.position < threshold.minimumPositionInclusive ||
+      current.position > threshold.maximumPositionInclusive
+    ) {
+      continue;
+    }
+    const previous = previousQueries.get(current.key);
+    candidates.push({
+      type: "query",
+      page: current.page,
+      cohort: current.cohort,
+      normalizedQuery: current.query,
+      rawVariants: current.rawVariants,
+      previousRawVariants: previous?.rawVariants ?? [],
+      current: {
+        clicks: current.clicks,
+        impressions: current.impressions,
+        ctr: current.ctr,
+        position: current.position,
+      },
+      previous: previous
+        ? {
+            clicks: previous.clicks,
+            impressions: previous.impressions,
+            ctr: previous.ctr,
+            position: previous.position,
+          }
+        : empty,
+      evidence: [{ label: "Disclosed-query candidate", ...threshold }],
+    });
+  }
+  return candidates;
+};
+
 const comparePages = (currentPages, previousPages) => {
   const empty = finishAggregate(emptyAggregate());
   const paths = new Set([
@@ -758,6 +916,37 @@ const fmtPercent = (value) =>
   value === null ? "n/a" : `${(value * 100).toFixed(2)}%`;
 const fmtChange = (value) => `${value >= 0 ? "+" : ""}${fmtNumber(value)}`;
 const fmtDecimal = (value) => (value === null ? "n/a" : value.toFixed(2));
+
+const candidateSubject = (candidate) =>
+  candidate.type === "page"
+    ? candidate.page
+    : `${candidate.page} — ${candidate.normalizedQuery}`;
+
+const renderCandidateCohort = (model, cohort) => {
+  const candidates = model.candidates
+    .filter((candidate) => candidate.cohort === cohort)
+    .sort(
+      (a, b) =>
+        b.current.impressions - a.current.impressions ||
+        candidateSubject(a).localeCompare(candidateSubject(b)),
+    )
+    .slice(0, 20);
+  return [
+    `### ${cohort}`,
+    "",
+    ...(candidates.length
+      ? [
+          "| Page or disclosed generic query | Evidence labels | Clicks | Impressions | Position | Previous clicks | Previous impressions | Previous position |",
+          "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |",
+          ...candidates.map(
+            (candidate) =>
+              `| ${candidateSubject(candidate)} | ${candidate.evidence.map(({ label }) => label).join(", ")} | ${fmtNumber(candidate.current.clicks)} | ${fmtNumber(candidate.current.impressions)} | ${fmtDecimal(candidate.current.position)} | ${fmtNumber(candidate.previous.clicks)} | ${fmtNumber(candidate.previous.impressions)} | ${fmtDecimal(candidate.previous.position)} |`,
+          ),
+        ]
+      : ["No Search review candidates."]),
+    "",
+  ];
+};
 
 const renderMarkdown = (model) => {
   const property = model.propertyContext;
@@ -836,11 +1025,19 @@ const renderMarkdown = (model) => {
     "",
     "## Search review candidates",
     "",
-    "Search review candidates are outside schema version 1's first runnable slice.",
+    "Search review candidates are prompts for human review, not automatic editing recommendations. Markdown displays at most 20 candidates per Page cohort; JSON retains every qualifying candidate.",
     "",
+    ...CANDIDATE_COHORTS.flatMap((cohort) =>
+      renderCandidateCohort(model, cohort),
+    ),
     "## Disclosed Brand and generic query analysis",
     "",
-    `Brand: ${fmtNumber(brand.clicks.current)} clicks from ${model.queries.brand.normalizedQueries.length} normalized queries. Generic disclosed subset: ${fmtNumber(model.queries.generic.clicks.current)} clicks and ${fmtNumber(model.queries.generic.impressions.current)} impressions.`,
+    "| Disclosed-query class | Clicks | Previous | Impressions | Previous | CTR | Previous | Position | Previous | Normalized queries |",
+    "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
+    `| Brand | ${fmtNumber(brand.clicks.current)} | ${fmtNumber(brand.clicks.previous)} | ${fmtNumber(brand.impressions.current)} | ${fmtNumber(brand.impressions.previous)} | ${fmtPercent(brand.ctr.current)} | ${fmtPercent(brand.ctr.previous)} | ${fmtDecimal(brand.position.current)} | ${fmtDecimal(brand.position.previous)} | ${model.queries.brand.normalizedQueries.length} |`,
+    `| Generic | ${fmtNumber(model.queries.generic.clicks.current)} | ${fmtNumber(model.queries.generic.clicks.previous)} | ${fmtNumber(model.queries.generic.impressions.current)} | ${fmtNumber(model.queries.generic.impressions.previous)} | ${fmtPercent(model.queries.generic.ctr.current)} | ${fmtPercent(model.queries.generic.ctr.previous)} | ${fmtDecimal(model.queries.generic.position.current)} | ${fmtDecimal(model.queries.generic.position.previous)} | ${model.queries.generic.normalizedQueries.length} |`,
+    "",
+    `The disclosed subset covers ${fmtPercent(model.queries.coverage.clicks.current)} of page-only clicks and ${fmtPercent(model.queries.coverage.impressions.current)} of page-only impressions; previously ${fmtPercent(model.queries.coverage.clicks.previous)} and ${fmtPercent(model.queries.coverage.impressions.previous)}.`,
     "",
     "## Anomalies and methodological notes",
     "",
@@ -1058,10 +1255,30 @@ export function generateSearchReport({
       },
     },
   };
-  const brandComparison = compareMetrics(
+  const brandComparison = compareQueryMetrics(
     currentData.queries.brand,
     previousData.queries.brand,
   );
+  const genericComparison = compareQueryMetrics(
+    currentData.queries.generic,
+    previousData.queries.generic,
+  );
+  const coverage = {
+    clicks: queryCoverage(
+      currentData.queries.brand.clicks + currentData.queries.generic.clicks,
+      previousData.queries.brand.clicks + previousData.queries.generic.clicks,
+      currentPageTotals.clicks,
+      previousPageTotals.clicks,
+    ),
+    impressions: queryCoverage(
+      currentData.queries.brand.impressions +
+        currentData.queries.generic.impressions,
+      previousData.queries.brand.impressions +
+        previousData.queries.generic.impressions,
+      currentPageTotals.impressions,
+      previousPageTotals.impressions,
+    ),
+  };
   const migrationPairs = [...validatedConfiguration.redirects].map(
     ([oldPath, canonicalPath]) => ({
       oldPath,
@@ -1142,17 +1359,20 @@ export function generateSearchReport({
       },
     },
     queries: {
+      coverage,
       brand: {
         ...brandComparison,
-        normalizedQueries: currentData.queries.normalizedQueries,
-        previousNormalizedQueries: previousData.queries.normalizedQueries,
+        normalizedQueries: currentData.queries.brandNormalizedQueries,
+        previousNormalizedQueries: previousData.queries.brandNormalizedQueries,
       },
-      generic: compareMetrics(
-        currentData.queries.generic,
-        previousData.queries.generic,
-      ),
+      generic: {
+        ...genericComparison,
+        normalizedQueries: currentData.queries.genericNormalizedQueries,
+        previousNormalizedQueries:
+          previousData.queries.genericNormalizedQueries,
+      },
     },
-    candidates: [],
+    candidates: buildCandidates(currentData, previousData),
     anomalies: [
       ...previousData.anomalies,
       ...currentData.anomalies,

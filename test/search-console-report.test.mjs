@@ -62,6 +62,14 @@ Fixture prose.
       essayCohorts: { "fixture-essay": "Editorial-focus essay" },
       brandQueries: [
         { rule: "site-name", values: ["but honestly"] },
+        {
+          rule: "domain",
+          values: ["buthonestly.io", "https://www.buthonestly.io/"],
+        },
+        {
+          rule: "author",
+          values: ["nicola mustone", "nico mustone", "mustone", "nico"],
+        },
         { rule: "essay-title-and-slug", essays: ["fixture-essay"] },
       ],
       redirects: [{ from: "/old-fixture/", to: "/fixture-essay/" }],
@@ -225,7 +233,9 @@ test("committed reporting configuration reviews every Essay, Brand rule, and red
     inventory.essays.map(({ slug }) => slug).sort(),
   );
   assert.equal(brandValues.includes("but honestly"), true);
-  assert.equal(brandValues.includes("nico mustone"), true);
+  for (const alias of ["nicola mustone", "nico mustone", "mustone", "nico"]) {
+    assert.equal(brandValues.includes(alias), true);
+  }
   assert.equal(
     inventory.essays.every(
       ({ slug, title }) =>
@@ -315,6 +325,373 @@ test("generates one canonical model and atomically publishes JSON and Markdown",
     existsSync(path.join(workspace.reportsDirectory, firstVersion)),
     false,
   );
+});
+
+test("classifies normalized disclosed queries by exact Brand rules and reports coverage", (testContext) => {
+  const workspace = makeWorkspace(testContext);
+  writeSnapshot(workspace, "2026-01", {
+    pages: [
+      { page: "https://buthonestly.io/fixture-essay/", ...metrics(4, 40, 4) },
+    ],
+    pageQuery: [
+      {
+        page: "https://buthonestly.io/fixture-essay/",
+        query: "but honestly",
+        ...metrics(1, 10, 3),
+      },
+    ],
+  });
+  writeSnapshot(workspace, "2026-02", {
+    pages: [
+      { page: "https://buthonestly.io/fixture-essay/", ...metrics(10, 100, 4) },
+    ],
+    pageQuery: [
+      {
+        page: "https://buthonestly.io/fixture-essay/",
+        query: "But, Honestly!",
+        ...metrics(2, 20, 2),
+      },
+      {
+        page: "https://buthonestly.io/fixture-essay/",
+        query: "BUT.  HONESTLY",
+        ...metrics(1, 10, 4),
+      },
+      {
+        page: "https://buthonestly.io/fixture-essay/",
+        query: "HTTPS://WWW.BUTHONESTLY.IO/",
+        ...metrics(1, 10, 3),
+      },
+      {
+        page: "https://buthonestly.io/fixture-essay/",
+        query: "nico",
+        ...metrics(1, 10, 5),
+      },
+      {
+        page: "https://buthonestly.io/fixture-essay/",
+        query: "Fixture Essay",
+        ...metrics(0, 0, 0),
+      },
+      {
+        page: "https://buthonestly.io/fixture-essay/",
+        query: "Fixture Essay guide",
+        ...metrics(0, 0, 0),
+      },
+      {
+        page: "https://buthonestly.io/fixture-essay/",
+        query: "nico mustone review",
+        ...metrics(1, 10, 6),
+      },
+      {
+        page: "https://buthonestly.io/fixture-essay/",
+        query: "nico™",
+        ...metrics(1, 10, 7),
+      },
+      {
+        page: "https://buthonestly.io/fixture-essay/",
+        query: "Best tools?",
+        ...metrics(1, 10, 8),
+      },
+      {
+        page: "https://buthonestly.io/fixture-essay/",
+        query: "BEST TOOLS!",
+        ...metrics(1, 10, 10),
+      },
+    ],
+  });
+
+  const { model } = generate(workspace);
+  const siteName = model.queries.brand.normalizedQueries.find(
+    ({ query }) => query === "but honestly",
+  );
+  const bestTools = model.queries.generic.normalizedQueries.find(
+    ({ query }) => query === "best tools",
+  );
+
+  assert.deepEqual(siteName.rawVariants, ["BUT.  HONESTLY", "But, Honestly!"]);
+  assert.equal(siteName.clicks, 3);
+  assert.equal(siteName.impressions, 30);
+  assert.equal(siteName.position, 8 / 3);
+  assert.deepEqual(bestTools.rawVariants, ["BEST TOOLS!", "Best tools?"]);
+  assert.equal(bestTools.impressions, 20);
+  assert.equal(bestTools.position, 9);
+  assert.deepEqual(model.queries.brand.position, {
+    current: 3.2,
+    previous: 3,
+    absoluteChange: 0.20000000000000018,
+  });
+  assert.equal(model.queries.generic.position.current, 7.75);
+  assert.equal(
+    model.queries.brand.normalizedQueries.some(({ query }) => query === "nico"),
+    true,
+  );
+  assert.equal(
+    model.queries.brand.normalizedQueries.some(
+      ({ query }) => query === "fixture essay",
+    ),
+    true,
+  );
+  assert.equal(
+    model.queries.generic.normalizedQueries.some(
+      ({ query }) => query === "fixture essay guide",
+    ),
+    true,
+  );
+  assert.equal(
+    model.queries.generic.normalizedQueries.some(
+      ({ query }) => query === "nico mustone review",
+    ),
+    true,
+  );
+  assert.equal(
+    model.queries.generic.normalizedQueries.some(
+      ({ query }) => query === "nico™",
+    ),
+    true,
+  );
+  assert.deepEqual(model.queries.coverage.clicks, {
+    current: 0.9,
+    previous: 0.25,
+    currentNumerator: 9,
+    currentDenominator: 10,
+    previousNumerator: 1,
+    previousDenominator: 4,
+  });
+  assert.deepEqual(model.queries.coverage.impressions, {
+    current: 0.9,
+    previous: 0.25,
+    currentNumerator: 90,
+    currentDenominator: 100,
+    previousNumerator: 10,
+    previousDenominator: 40,
+  });
+  assert.match(
+    model.renderedMarkdown,
+    /disclosed subset covers 90\.00%.*90\.00%/s,
+  );
+});
+
+test("generates bounded page and disclosed-query review candidates with previous context", (testContext) => {
+  const workspace = makeWorkspace(testContext);
+  writeSnapshot(workspace, "2026-01", {
+    pages: [
+      { page: "https://buthonestly.io/fixture-essay/", ...metrics(7, 70, 9) },
+    ],
+    pageQuery: [
+      {
+        page: "https://buthonestly.io/fixture-essay/",
+        query: "specific question",
+        ...metrics(2, 20, 12),
+      },
+    ],
+  });
+  writeSnapshot(workspace, "2026-02", {
+    pages: [
+      { page: "https://buthonestly.io/fixture-essay/", ...metrics(0, 50, 8) },
+      {
+        page: "https://buthonestly.io/resources/free-ai-voice-generator/",
+        ...metrics(1, 50, 30),
+      },
+      { page: "https://buthonestly.io/essays/", ...metrics(0, 50, 1) },
+      { page: "https://buthonestly.io/about/", ...metrics(0, 50, 10) },
+    ],
+    pageQuery: [
+      {
+        page: "https://buthonestly.io/fixture-essay/",
+        query: "Specific question!",
+        ...metrics(1, 10, 4),
+      },
+      {
+        page: "https://buthonestly.io/fixture-essay/",
+        query: "position thirty",
+        ...metrics(1, 10, 30),
+      },
+      {
+        page: "https://buthonestly.io/fixture-essay/",
+        query: "too few impressions",
+        ...metrics(1, 9, 10),
+      },
+      {
+        page: "https://buthonestly.io/fixture-essay/",
+        query: "position too low",
+        ...metrics(1, 10, 3.99),
+      },
+      {
+        page: "https://buthonestly.io/fixture-essay/",
+        query: "position too high",
+        ...metrics(1, 10, 30.01),
+      },
+    ],
+  });
+
+  const { model } = generate(workspace);
+  const pageCandidate = model.candidates.find(
+    ({ type, page }) => type === "page" && page === "/fixture-essay/",
+  );
+  const queryCandidate = model.candidates.find(
+    ({ type, normalizedQuery }) =>
+      type === "query" && normalizedQuery === "specific question",
+  );
+
+  assert.deepEqual(
+    pageCandidate.evidence.map(({ label }) => label),
+    ["Visibility candidate", "Click-through candidate"],
+  );
+  assert.equal(pageCandidate.current.impressions, 50);
+  assert.equal(pageCandidate.current.position, 8);
+  assert.equal(pageCandidate.previous.impressions, 70);
+  assert.equal(pageCandidate.previous.position, 9);
+  assert.equal(queryCandidate.current.impressions, 10);
+  assert.equal(queryCandidate.current.position, 4);
+  assert.equal(queryCandidate.previous.impressions, 20);
+  assert.deepEqual(queryCandidate.rawVariants, ["Specific question!"]);
+  assert.deepEqual(queryCandidate.previousRawVariants, ["specific question"]);
+  assert.equal(
+    model.candidates.some(
+      ({ normalizedQuery }) => normalizedQuery === "position thirty",
+    ),
+    true,
+  );
+  for (const excluded of [
+    "too few impressions",
+    "position too low",
+    "position too high",
+  ]) {
+    assert.equal(
+      model.candidates.some(
+        ({ normalizedQuery }) => normalizedQuery === excluded,
+      ),
+      false,
+    );
+  }
+  assert.equal(
+    model.candidates.some(
+      ({ type, page, evidence }) =>
+        type === "page" &&
+        page === "/resources/free-ai-voice-generator/" &&
+        evidence.length === 1 &&
+        evidence[0].label === "Visibility candidate",
+    ),
+    true,
+  );
+  assert.equal(
+    model.candidates.some(
+      ({ type, page, evidence }) =>
+        type === "page" &&
+        page === "/essays/" &&
+        evidence.length === 1 &&
+        evidence[0].label === "Click-through candidate",
+    ),
+    true,
+  );
+  assert.match(
+    model.renderedMarkdown,
+    /prompts for human review.*Editorial-focus essay.*Visibility candidate, Click-through candidate/s,
+  );
+});
+
+test("applies page candidate thresholds inclusively", async (testContext) => {
+  const cases = [
+    ["impressions below 50", metrics(0, 49, 8), []],
+    ["visibility position below 8", metrics(1, 50, 7.99), []],
+    ["visibility position above 30", metrics(1, 50, 30.01), []],
+    ["click-through position below 1", metrics(0, 50, 0.99), []],
+    [
+      "click-through position above 10",
+      metrics(0, 50, 10.01),
+      ["Visibility candidate"],
+    ],
+    ["click-through requires zero clicks", metrics(1, 50, 5), []],
+  ];
+
+  for (const [name, pageMetrics, expectedLabels] of cases) {
+    await testContext.test(name, () => {
+      const workspace = makeWorkspace(testContext);
+      writeSnapshot(workspace, "2026-01", { pages: [], pageQuery: [] });
+      writeSnapshot(workspace, "2026-02", {
+        pages: [
+          {
+            page: "https://buthonestly.io/fixture-essay/",
+            ...pageMetrics,
+          },
+        ],
+        pageQuery: [],
+      });
+
+      const candidate = generate(workspace).model.candidates.find(
+        ({ type }) => type === "page",
+      );
+      assert.deepEqual(
+        candidate?.evidence.map(({ label }) => label) ?? [],
+        expectedLabels,
+      );
+    });
+  }
+});
+
+test("excludes Legacy-tail and Peripheral essays from review candidates", async (testContext) => {
+  for (const cohort of ["Legacy-tail essay", "Peripheral essay"]) {
+    await testContext.test(cohort, () => {
+      const workspace = makeWorkspace(testContext);
+      updateConfiguration(workspace, (configuration) => ({
+        ...configuration,
+        essayCohorts: { "fixture-essay": cohort },
+      }));
+      writeSnapshot(workspace, "2026-01", { pages: [], pageQuery: [] });
+      writeSnapshot(workspace, "2026-02", {
+        pages: [
+          {
+            page: "https://buthonestly.io/fixture-essay/",
+            ...metrics(0, 50, 8),
+          },
+        ],
+        pageQuery: [
+          {
+            page: "https://buthonestly.io/fixture-essay/",
+            query: "generic candidate",
+            ...metrics(1, 10, 4),
+          },
+        ],
+      });
+
+      assert.deepEqual(generate(workspace).model.candidates, []);
+    });
+  }
+});
+
+test("retains all candidates in JSON while Markdown sorts and caps each cohort", (testContext) => {
+  const workspace = makeWorkspace(testContext);
+  writeSnapshot(workspace, "2026-01", { pages: [], pageQuery: [] });
+  const pageQuery = Array.from({ length: 21 }, (_, index) => ({
+    page: "https://buthonestly.io/fixture-essay/",
+    query: `generic query ${String(index + 1).padStart(2, "0")}`,
+    ...metrics(1, index + 10, 10),
+  }));
+  writeSnapshot(workspace, "2026-02", {
+    pages: [
+      {
+        page: "https://buthonestly.io/fixture-essay/",
+        ...metrics(1, 1_000, 1),
+      },
+    ],
+    pageQuery,
+  });
+
+  const { model } = generate(workspace);
+  const candidateSection = model.renderedMarkdown
+    .split("### Editorial-focus essay\n\n")[1]
+    .split("\n### Resource")[0];
+
+  assert.equal(model.candidates.length, 21);
+  assert.equal(
+    (candidateSection.match(/^\| \/fixture-essay\//gm) ?? []).length,
+    20,
+  );
+  assert.equal(
+    candidateSection.indexOf("generic query 21") <
+      candidateSection.indexOf("generic query 20"),
+    true,
+  );
+  assert.equal(candidateSection.includes("generic query 01"), false);
 });
 
 test("attributes safe URL variants and redirects to canonical Page cohorts", (testContext) => {
