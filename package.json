@@ -42,7 +42,7 @@
     "@mixmark-io/domino": "^2.2.0",
     "google-auth-library": "^11.0.2",
     "gray-matter": "^4.0.3",
-    "gsc-snapshot": "0.1.0",
+    "gsc-snapshot": "0.2.0",
     "prettier": "^3.9.6",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.8.1",
