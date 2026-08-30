@@ -56,6 +56,14 @@ _Avoid_: SEO report, analytics export
 A local comparison derived from final monthly Search Console snapshots, with page cohorts and disclosed query classifications applied consistently.
 _Avoid_: SEO dashboard, audience scorecard
 
+**Lighthouse regression check**:
+A controlled lab measurement used to detect material performance regressions before or after deployment. It does not represent actual reader experience.
+_Avoid_: Core Web Vitals monitoring, performance score
+
+**Field-data monitoring**:
+Observation of real-reader Core Web Vitals through CrUX or Search Console. It is evidence of reader experience, not a deployment regression test.
+_Avoid_: Lighthouse monitoring, lab test
+
 **Editorial-focus essay**:
 An essay that belongs to the site's current editorial direction, regardless of whether readers are likely to search for it.
 _Avoid_: Non-archive essay, current essay
