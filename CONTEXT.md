@@ -12,6 +12,10 @@ _Avoid_: Contributor, writer
 The authored publication unit, including its prose, metadata, and colocated media.
 _Avoid_: Post, article
 
+**Resource**:
+A template, dataset, tool, or externally hosted project shared for readers to use.
+_Avoid_: Asset
+
 **Work-in-progress essay**:
 An Essay still being authored and not yet part of publication. Loose notes toward a possible essay are not Essays.
 _Avoid_: Draft, note

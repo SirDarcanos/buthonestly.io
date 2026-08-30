@@ -5,6 +5,7 @@ import Label from "../../components/Label.astro";
 import AudioPlayer from "../../components/AudioPlayer.astro";
 import Button from "../../components/Button.astro";
 import { STATIC_BASE } from "../../lib/cdn.mjs";
+import { breadcrumbList } from "../../lib/schema.ts";
 
 const voiceGroups = [
   {
@@ -54,15 +55,22 @@ const blendSample = {
   label: "Onyx + Heart (50/50 blend)",
   file: "blend_am_onyx_af_heart_50-50-sample.mp3",
 };
+const jsonLd = [
+  breadcrumbList([
+    { name: "Resources", path: "/resources/" },
+    { name: "Free AI Voice Generator" },
+  ]),
+];
 ---
 
 <Layout
   title="Free AI Voice Generator"
   description="Turn any text into natural speech, right in your browser. Powered by Kokoro — nothing you type is ever sent to a server. Free, no sign-up."
+  jsonLd={jsonLd}
   markdown
 >
   <Container section id="voice-generator" className="md:max-w-2xl">
-    <Label>Resources</Label>
+    <Label><a href="/resources/">Resources</a></Label>
     <h1 class="mt-6">Free AI Voice Generator</h1>
 
     <div class="post-content mt-7">

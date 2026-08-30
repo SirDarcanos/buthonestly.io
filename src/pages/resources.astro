@@ -6,6 +6,7 @@ import Resource, {
   type Props as ResourceData,
 } from "../components/Resource.astro";
 import { DOWNLOADS_BASE } from "../lib/cdn.mjs";
+import { breadcrumbList } from "../lib/schema.ts";
 
 interface Section {
   title: string;
@@ -218,16 +219,19 @@ const sections: Section[] = [
     ],
   },
 ];
+
+const jsonLd = [breadcrumbList([{ name: "Resources" }])];
 ---
 
 <Layout
-  title="Resources & Assets"
+  title="Resources"
   description="Free templates, notebooks, datasets, and tools I make and use myself. No email gates, no funnels, no paywalls."
+  jsonLd={jsonLd}
   markdown
 >
   <Container section id="resources" className="md:max-w-2xl">
     <Label>Resources</Label>
-    <h1 class="mt-6">Resources & Assets</h1>
+    <h1 class="mt-6">Resources</h1>
 
     <div class="post-content mt-7">
       <p>
@@ -240,8 +244,8 @@ const sections: Section[] = [
         happy to share with you.
       </p>
       <p>
-        This page is regularly updated with new resources and assets as they are
-        created. Bookmark it for easy access.
+        This page is regularly updated with new resources as they are created.
+        Bookmark it for easy access.
       </p>
     </div>
 

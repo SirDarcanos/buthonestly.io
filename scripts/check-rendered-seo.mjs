@@ -166,6 +166,52 @@ export function checkRenderedSeo({
     "/about/ must visibly link the author's external identity",
   );
 
+  const assertBreadcrumb = (pathname, expectedItems) => {
+    const page = pagesByCanonical.get(new URL(pathname, SITE_URL).href);
+    assert.ok(page, `${pathname} must render for breadcrumb validation`);
+    const breadcrumbSchemas = schemas(page.document).filter(
+      (schema) => schema["@type"] === "BreadcrumbList",
+    );
+    assert.equal(
+      breadcrumbSchemas.length,
+      1,
+      `${pathname} must render one BreadcrumbList schema node`,
+    );
+    assert.deepEqual(
+      breadcrumbSchemas[0].itemListElement,
+      expectedItems.map((item, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        ...item,
+      })),
+    );
+  };
+
+  assertBreadcrumb("/resources/", [
+    { name: "BUT. Honestly", item: `${SITE_URL}/` },
+    { name: "Resources" },
+  ]);
+  assertBreadcrumb("/resources/free-ai-voice-generator/", [
+    { name: "BUT. Honestly", item: `${SITE_URL}/` },
+    { name: "Resources", item: `${SITE_URL}/resources/` },
+    { name: "Free AI Voice Generator" },
+  ]);
+
+  const resourcesPage = pagesByCanonical.get(`${SITE_URL}/resources/`);
+  assert.equal(
+    resourcesPage.document.querySelector("h1").textContent,
+    "Resources",
+  );
+  const voiceGeneratorPage = pagesByCanonical.get(
+    `${SITE_URL}/resources/free-ai-voice-generator/`,
+  );
+  assert.equal(
+    voiceGeneratorPage.document.querySelector('a[href="/resources/"]')
+      ?.textContent,
+    "Resources",
+    "the voice generator must visibly link to its parent Resource catalogue",
+  );
+
   for (const essay of inventory.published) {
     const page = pagesByCanonical.get(essay.canonicalUrl);
     assert.ok(page, `${essay.pathname} must be rendered when Published`);
