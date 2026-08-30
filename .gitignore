@@ -3,6 +3,7 @@ dist/
 node_modules/
 local/
 data/link-graph.json
+docs/research/
 
 *.log*
 .env
