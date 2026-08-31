@@ -953,17 +953,21 @@ const renderCandidateCohort = (model, cohort) => {
 };
 
 const renderFieldData = (fieldData) => {
-  const measurement = ({ scope, status, metrics }) =>
-    metrics
-      ? `| ${scope} | available | ${Math.round(metrics.lcpMs)} | ${metrics.cls.toFixed(3)} | ${Math.round(metrics.inpMs)} |`
-      : `| ${scope} | ${status} | — | — | — |`;
+  const measurement = ({ scope, status, collectionPeriod, metrics }) => {
+    const window = collectionPeriod
+      ? `${collectionPeriod.start}–${collectionPeriod.end}`
+      : "—";
+    return metrics
+      ? `| ${scope} | available | ${window} | ${Math.round(metrics.lcpMs)} | ${metrics.cls.toFixed(3)} | ${Math.round(metrics.inpMs)} |`
+      : `| ${scope} | ${status} | ${window} | — | — | — |`;
+  };
   return [
     "## Field-data monitoring",
     "",
-    `Source: **${fieldData.source}**. These mobile real-reader measurements are not Lighthouse lab results.`,
+    `Source: **${fieldData.source}**. Form factor: **${fieldData.formFactor}**. These real-reader measurements are not Lighthouse lab results or Search Console measurements.`,
     "",
-    "| Scope | Coverage | LCP p75 ms | CLS p75 | INP p75 ms |",
-    "| --- | --- | ---: | ---: | ---: |",
+    "| Scope | Coverage | Rolling window | LCP p75 ms | CLS p75 | INP p75 ms |",
+    "| --- | --- | --- | ---: | ---: | ---: |",
     measurement(fieldData.origin),
     ...fieldData.urls.map(measurement),
     "",
@@ -1145,6 +1149,7 @@ export function generateSearchReport({
     origin: {
       scope: "https://buthonestly.io",
       status: "field data unavailable: not collected",
+      collectionPeriod: null,
       metrics: null,
     },
     urls: [],

@@ -6,11 +6,48 @@ const METRICS = Object.freeze({
   interaction_to_next_paint: "inpMs",
 });
 
+const formatCruxDate = (value) => {
+  if (
+    !value ||
+    !Number.isInteger(value.year) ||
+    !Number.isInteger(value.month) ||
+    !Number.isInteger(value.day)
+  ) {
+    throw new Error("CrUX response has a malformed collection period.");
+  }
+  const date = new Date(Date.UTC(value.year, value.month - 1, value.day));
+  if (
+    date.getUTCFullYear() !== value.year ||
+    date.getUTCMonth() !== value.month - 1 ||
+    date.getUTCDate() !== value.day
+  ) {
+    throw new Error("CrUX response has a malformed collection period.");
+  }
+  return date.toISOString().slice(0, 10);
+};
+
+const normalizeCollectionPeriod = (value) => {
+  const collectionPeriod = {
+    start: formatCruxDate(value?.firstDate),
+    end: formatCruxDate(value?.lastDate),
+  };
+  if (collectionPeriod.start > collectionPeriod.end) {
+    throw new Error("CrUX response has a malformed collection period.");
+  }
+  return collectionPeriod;
+};
+
+const unavailable = (scope, status) => ({
+  scope,
+  status,
+  collectionPeriod: null,
+  metrics: null,
+});
+
 export const normalizeCruxRecord = (payload, scope) => {
   if (!payload || typeof payload !== "object")
     throw new Error("CrUX response is malformed.");
-  if (!payload.record)
-    return { scope, status: "insufficient field data", metrics: null };
+  if (!payload.record) return unavailable(scope, "insufficient field data");
   const source = payload.record.metrics;
   if (!source || typeof source !== "object" || Array.isArray(source))
     throw new Error("CrUX response has malformed metrics.");
@@ -18,8 +55,11 @@ export const normalizeCruxRecord = (payload, scope) => {
   if (
     providerMetrics.some((providerName) => !Object.hasOwn(source, providerName))
   ) {
-    return { scope, status: "insufficient field data", metrics: null };
+    return unavailable(scope, "insufficient field data");
   }
+  const collectionPeriod = normalizeCollectionPeriod(
+    payload.record.collectionPeriod,
+  );
   const metrics = {};
   for (const [providerName, name] of Object.entries(METRICS)) {
     const providerMetric = source[providerName];
@@ -39,7 +79,7 @@ export const normalizeCruxRecord = (payload, scope) => {
     }
     metrics[name] = value;
   }
-  return { scope, status: "available", metrics };
+  return { scope, status: "available", collectionPeriod, metrics };
 };
 
 export const createCruxPort = ({
@@ -49,12 +89,12 @@ export const createCruxPort = ({
   timeoutMs = 15_000,
 } = {}) => {
   const query = async (body, scope) => {
-    if (!apiKey)
-      return {
+    if (!apiKey) {
+      return unavailable(
         scope,
-        status: "field data unavailable: CRUX_API_KEY is not set",
-        metrics: null,
-      };
+        "field data unavailable: CRUX_API_KEY is not set",
+      );
+    }
     try {
       const response = await request(
         `${endpoint}?key=${encodeURIComponent(apiKey)}`,
@@ -65,23 +105,21 @@ export const createCruxPort = ({
           signal: AbortSignal.timeout(timeoutMs),
         },
       );
-      if (response.status === 404)
-        return { scope, status: "insufficient field data", metrics: null };
-      if (!response.ok)
-        return {
+      if (response.status === 404) {
+        return unavailable(scope, "insufficient field data");
+      }
+      if (!response.ok) {
+        return unavailable(
           scope,
-          status: `field data provider error: HTTP ${response.status}`,
-          metrics: null,
-        };
+          `field data provider error: HTTP ${response.status}`,
+        );
+      }
       return normalizeCruxRecord(await response.json(), scope);
     } catch (error) {
-      if (/malformed|invalid|no metrics/u.test(error?.message ?? ""))
-        throw error;
-      return {
+      return unavailable(
         scope,
-        status: `field data provider error: ${error instanceof Error ? error.message : String(error)}`,
-        metrics: null,
-      };
+        `field data provider error: ${error instanceof Error ? error.message : String(error)}`,
+      );
     }
   };
   return {

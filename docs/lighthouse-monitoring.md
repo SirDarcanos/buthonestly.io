@@ -74,4 +74,4 @@ Run `npm run lighthouse:smoke` to build the production site, serve it locally, a
 
 Monthly reporting queries CrUX with a narrowly scoped `CRUX_API_KEY` and presents the result beside the Search Console aggregate report without treating it as Search Console data.
 
-The report includes origin-level mobile data and URL-level data for regression-matrix routes where CrUX has enough coverage. Missing coverage is reported as `insufficient field data`; it is neither a pass nor a failure.
+The report includes origin-level mobile data and URL-level data for every regression-matrix route where CrUX has enough coverage. Each measurement discloses its `PHONE` form factor and rolling collection window. Missing coverage is reported as `insufficient field data`; it is neither a pass nor a failure. Provider and schema failures remain field-data results and do not prevent the Search Console report from being generated.

@@ -336,6 +336,43 @@ test("generates one canonical model and atomically publishes JSON and Markdown",
   );
 });
 
+test("reports the CrUX rolling window and form factor separately from Search Console", (testContext) => {
+  const workspace = makeWorkspace(testContext);
+  writeSnapshot(workspace, "2026-01");
+  writeSnapshot(workspace, "2026-02");
+
+  const fieldData = {
+    source: "Chrome UX Report (CrUX), separate from Search Console",
+    formFactor: "PHONE",
+    origin: {
+      scope: "https://buthonestly.io",
+      status: "available",
+      collectionPeriod: { start: "2026-02-20", end: "2026-03-19" },
+      metrics: { lcpMs: 1800, cls: 0.08, inpMs: 175 },
+    },
+    urls: [
+      {
+        scope: "/when-ai-stops-being-a-tool/",
+        status: "insufficient field data",
+        collectionPeriod: null,
+        metrics: null,
+      },
+    ],
+  };
+  const result = generate(workspace, { fieldData });
+  const json = JSON.parse(readFileSync(result.jsonPath, "utf8"));
+  const markdown = readFileSync(result.markdownPath, "utf8");
+
+  assert.deepEqual(json.fieldData, fieldData);
+  assert.match(markdown, /Form factor: \*\*PHONE\*\*/);
+  assert.match(markdown, /2026-02-20–2026-03-19/);
+  assert.match(markdown, /insufficient field data \| — \|/);
+  assert.match(
+    markdown,
+    /not Lighthouse lab results or Search Console measurements/,
+  );
+});
+
 test("classifies normalized disclosed queries by exact Brand rules and reports coverage", (testContext) => {
   const workspace = makeWorkspace(testContext);
   writeSnapshot(workspace, "2026-01", {
