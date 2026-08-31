@@ -8,6 +8,10 @@ const workflow = readFileSync(
   path.join(root, ".github/workflows/lighthouse.yml"),
   "utf8",
 );
+const pullRequestWorkflow = readFileSync(
+  path.join(root, ".github/workflows/lighthouse-pull-request.yml"),
+  "utf8",
+);
 const publication = readFileSync(
   path.join(root, ".github/workflows/publication.yml"),
   "utf8",
@@ -35,41 +39,54 @@ test("the advisory workflow has the approved schedules, manual inputs, and seria
   assert.doesNotMatch(workflow, /--route "\$\{\{ inputs\.route \}\}"/);
 });
 
-test("pull-request revisions are built and measured on one unprivileged runner", () => {
-  assert.match(workflow, /pull_request:\s*$/m);
-  assert.doesNotMatch(workflow, /pull_request:\n\s+paths:/);
-  assert.match(
+test("pull-request revisions are isolated and measured on one unprivileged runner", () => {
+  assert.doesNotMatch(workflow, /pull_request:/);
+  assert.doesNotMatch(
     workflow,
-    /audit_pull_request:\n\s+if: github\.event_name == 'pull_request'/,
+    /github\.event\.pull_request|--trigger pull-request/,
+  );
+  assert.match(pullRequestWorkflow, /pull_request:\s*$/m);
+  assert.doesNotMatch(
+    pullRequestWorkflow,
+    /schedule:|workflow_dispatch:|workflow_run:/,
   );
   assert.match(
-    workflow,
+    pullRequestWorkflow,
     /ref: \$\{\{ github\.event\.pull_request\.head\.sha \}\}/,
   );
-  assert.match(workflow, /Plan pull-request routes/);
+  assert.match(pullRequestWorkflow, /Plan pull-request routes/);
   assert.match(
-    workflow,
+    pullRequestWorkflow,
     /steps\.pull_request_plan\.outputs\.selected == 'true'/,
   );
   assert.match(
-    workflow,
+    pullRequestWorkflow,
     /ref: \$\{\{ github\.event\.pull_request\.base\.sha \}\}/,
   );
-  assert.match(workflow, /LIGHTHOUSE_BASE_URL: http:\/\/127\.0\.0\.1:4322/);
-  assert.match(workflow, /LIGHTHOUSE_HEAD_URL: http:\/\/127\.0\.0\.1:4321/);
   assert.match(
-    workflow,
+    pullRequestWorkflow,
+    /LIGHTHOUSE_BASE_URL: http:\/\/127\.0\.0\.1:4322/,
+  );
+  assert.match(
+    pullRequestWorkflow,
+    /LIGHTHOUSE_HEAD_URL: http:\/\/127\.0\.0\.1:4321/,
+  );
+  assert.match(
+    pullRequestWorkflow,
     /LIGHTHOUSE_PREVIEW_SLUGS: \$\{\{ steps\.pull_request_plan\.outputs\.preview_slugs \}\}/,
   );
   assert.match(
-    workflow,
+    pullRequestWorkflow,
     /grep -q LIGHTHOUSE_PREVIEW_SLUGS src\/lib\/essays\.ts[\s\S]*LIGHTHOUSE_INCLUDE_SCHEDULED=true npm run build/,
   );
   assert.match(
-    workflow,
+    pullRequestWorkflow,
     /LIGHTHOUSE_PULL_REQUEST_ROUTES: \$\{\{ steps\.pull_request_plan\.outputs\.routes \}\}/,
   );
-  assert.match(workflow, /npm run lighthouse -- --trigger pull-request/);
+  assert.match(
+    pullRequestWorkflow,
+    /npm run lighthouse -- --trigger pull-request/,
+  );
 });
 
 test("scheduled reruns retain one durable observation identity", () => {
@@ -91,10 +108,6 @@ test("raw evidence is retained for 90 days and state uses the checkpoint boundar
 
 test("post-publication monitoring receives an exact asynchronous handoff", () => {
   assert.match(workflow, /workflow_run:\n\s+workflows: \[Publication\]/);
-  assert.match(
-    workflow,
-    /audit_trusted:\n\s+if: github\.event_name != 'pull_request' && \(github\.event_name != 'workflow_run' \|\| github\.event\.workflow_run\.event != 'pull_request'\)/,
-  );
   assert.doesNotMatch(
     workflow,
     /ref: \$\{\{ github\.event\.workflow_run\.head_sha/,
@@ -103,7 +116,11 @@ test("post-publication monitoring receives an exact asynchronous handoff", () =>
   assert.match(workflow, /run-id: \$\{\{ github\.event\.workflow_run\.id \}\}/);
   assert.match(
     workflow,
-    /PUBLICATION_MONITORING_HANDOFF_FILE: artifacts\/publication-monitoring-handoff\.json/,
+    /path: \$\{\{ runner\.temp \}\}\/publication-monitoring-handoff/,
+  );
+  assert.match(
+    workflow,
+    /PUBLICATION_MONITORING_HANDOFF_FILE: \$\{\{ runner\.temp \}\}\/publication-monitoring-handoff\/publication-monitoring-handoff\.json/,
   );
   assert.match(workflow, /--trigger post-publication/);
   assert.match(

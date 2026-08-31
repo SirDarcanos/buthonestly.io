@@ -1,7 +1,6 @@
 name: Lighthouse monitoring
 
 on:
-  pull_request:
   schedule:
     - cron: "0 6 * * 1"
     - cron: "0 7 * * 1"
@@ -31,78 +30,8 @@ permissions:
   contents: read
 
 jobs:
-  audit_pull_request:
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    timeout-minutes: 45
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-          fetch-depth: 0
-          persist-credentials: false
-
-      - uses: actions/setup-node@v7
-        with:
-          node-version: 24
-          cache: npm
-
-      - run: npm ci
-
-      - name: Check out pull-request base
-        uses: actions/checkout@v7
-        with:
-          ref: ${{ github.event.pull_request.base.sha }}
-          path: .lighthouse-base
-          persist-credentials: false
-
-      - name: Plan pull-request routes
-        id: pull_request_plan
-        env:
-          LIGHTHOUSE_BASE_SHA: ${{ github.event.pull_request.base.sha }}
-        run: node scripts/plan-lighthouse-pull-request.mjs
-
-      - name: Build pull-request revisions
-        if: steps.pull_request_plan.outputs.selected == 'true'
-        env:
-          LIGHTHOUSE_PREVIEW_SLUGS: ${{ steps.pull_request_plan.outputs.preview_slugs }}
-        run: |
-          npm run build
-          (npm run preview -- --host 127.0.0.1 --port 4321 > "$RUNNER_TEMP/lighthouse-head.log" 2>&1 &)
-          cd .lighthouse-base
-          npm ci
-          if grep -q LIGHTHOUSE_PREVIEW_SLUGS src/lib/essays.ts; then
-            npm run build
-          else
-            LIGHTHOUSE_INCLUDE_SCHEDULED=true npm run build
-          fi
-          (npm run preview -- --host 127.0.0.1 --port 4322 > "$RUNNER_TEMP/lighthouse-base.log" 2>&1 &)
-          for url in http://127.0.0.1:4321 http://127.0.0.1:4322; do
-            for attempt in {1..30}; do curl --fail --silent "$url" >/dev/null && break; sleep 1; done
-            curl --fail --silent "$url" >/dev/null
-          done
-
-      - name: Audit pull request on one runner
-        if: steps.pull_request_plan.outputs.selected == 'true'
-        env:
-          LIGHTHOUSE_BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          LIGHTHOUSE_BASE_URL: http://127.0.0.1:4322
-          LIGHTHOUSE_HEAD_URL: http://127.0.0.1:4321
-          LIGHTHOUSE_ARTIFACT_DIR: artifacts/lighthouse
-          LIGHTHOUSE_PULL_REQUEST_ROUTES: ${{ steps.pull_request_plan.outputs.routes }}
-        run: npm run lighthouse -- --trigger pull-request
-
-      - name: Retain diagnostic reports
-        if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: lighthouse-${{ github.run_id }}
-          path: artifacts/lighthouse
-          if-no-files-found: ignore
-          retention-days: 90
-
-  audit_trusted:
-    if: github.event_name != 'pull_request' && (github.event_name != 'workflow_run' || github.event.workflow_run.event != 'pull_request')
+  audit:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.event != 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
@@ -152,7 +81,7 @@ jobs:
         uses: actions/download-artifact@v7
         with:
           name: publication-monitoring-handoff
-          path: artifacts
+          path: ${{ runner.temp }}/publication-monitoring-handoff
           run-id: ${{ github.event.workflow_run.id }}
           github-token: ${{ github.token }}
 
@@ -161,7 +90,7 @@ jobs:
         env:
           SITE_URL: https://buthonestly.io
           LIGHTHOUSE_ARTIFACT_DIR: artifacts/lighthouse
-          PUBLICATION_MONITORING_HANDOFF_FILE: artifacts/publication-monitoring-handoff.json
+          PUBLICATION_MONITORING_HANDOFF_FILE: ${{ runner.temp }}/publication-monitoring-handoff/publication-monitoring-handoff.json
           PUBLICATION_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
           PUBLICATION_RUN_STARTED_AT: ${{ github.event.workflow_run.run_started_at }}
         run: npm run lighthouse -- --trigger post-publication
