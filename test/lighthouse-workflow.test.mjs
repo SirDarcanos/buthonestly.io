@@ -35,9 +35,17 @@ test("the advisory workflow has the approved schedules, manual inputs, and seria
   assert.doesNotMatch(workflow, /--route "\$\{\{ inputs\.route \}\}"/);
 });
 
-test("pull-request revisions are built and measured on one runner", () => {
+test("pull-request revisions are built and measured on one unprivileged runner", () => {
   assert.match(workflow, /pull_request:\s*$/m);
   assert.doesNotMatch(workflow, /pull_request:\n\s+paths:/);
+  assert.match(
+    workflow,
+    /audit_pull_request:\n\s+if: github\.event_name == 'pull_request'/,
+  );
+  assert.match(
+    workflow,
+    /ref: \$\{\{ github\.event\.pull_request\.head\.sha \}\}/,
+  );
   assert.match(workflow, /Plan pull-request routes/);
   assert.match(
     workflow,
@@ -76,7 +84,7 @@ test("raw evidence is retained for 90 days and state uses the checkpoint boundar
   assert.match(workflow, /checkpoint-generated-state\.mjs lighthouse/);
   assert.match(
     workflow,
-    /if: \$\{\{ !cancelled\(\) && github\.event_name != 'pull_request'/,
+    /if: \$\{\{ !cancelled\(\) && \(github\.event_name != 'schedule'/,
   );
   assert.doesNotMatch(workflow, /git push|GIT_SSH_COMMAND/);
 });
@@ -85,7 +93,11 @@ test("post-publication monitoring receives an exact asynchronous handoff", () =>
   assert.match(workflow, /workflow_run:\n\s+workflows: \[Publication\]/);
   assert.match(
     workflow,
-    /ref: \$\{\{ github\.event\.pull_request\.head\.sha \|\| github\.event\.workflow_run\.head_sha \|\| github\.sha \}\}/,
+    /audit_trusted:\n\s+if: github\.event_name != 'pull_request' && \(github\.event_name != 'workflow_run' \|\| github\.event\.workflow_run\.event != 'pull_request'\)/,
+  );
+  assert.doesNotMatch(
+    workflow,
+    /ref: \$\{\{ github\.event\.workflow_run\.head_sha/,
   );
   assert.match(workflow, /name: publication-monitoring-handoff/);
   assert.match(workflow, /run-id: \$\{\{ github\.event\.workflow_run\.id \}\}/);

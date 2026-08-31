@@ -149,7 +149,8 @@ export function checkRenderedSeo({
   assert.equal(person.name, "Nicola Mustone");
   assert.equal(person.alternateName, "Nico Mustone");
   assert.equal(person.url, AUTHOR_PROFILE);
-  assert.ok(person.sameAs.includes("https://nicolamustone.com"));
+  assert.ok(Array.isArray(person.sameAs));
+  assert.ok(new Set(person.sameAs).has("https://nicolamustone.com"));
 
   const profilePage = schemas(aboutPage.document).find(
     (schema) => schema["@type"] === "ProfilePage",

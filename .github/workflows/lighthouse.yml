@@ -31,14 +31,14 @@ permissions:
   contents: read
 
 jobs:
-  audit:
-    if: github.event_name != 'workflow_run' || github.event.workflow_run.event != 'pull_request'
+  audit_pull_request:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: ${{ github.event.pull_request.head.sha || github.event.workflow_run.head_sha || github.sha }}
+          ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
           persist-credentials: false
 
@@ -47,20 +47,9 @@ jobs:
           node-version: 24
           cache: npm
 
-      - name: Select scheduled device set
-        id: schedule_selection
-        if: github.event_name == 'schedule'
-        env:
-          LIGHTHOUSE_SCHEDULE: ${{ github.event.schedule }}
-        run: |
-          devices=$(node --input-type=module -e 'import { scheduledDevices } from "./src/lib/lighthouse-monitoring.mjs"; process.stdout.write(scheduledDevices(new Date(), process.env.LIGHTHOUSE_SCHEDULE).join(","))')
-          if [[ -n "$devices" ]]; then echo "selected=true" >> "$GITHUB_OUTPUT"; else echo "selected=false" >> "$GITHUB_OUTPUT"; fi
-
-      - if: github.event_name != 'schedule' || steps.schedule_selection.outputs.selected == 'true'
-        run: npm ci
+      - run: npm ci
 
       - name: Check out pull-request base
-        if: github.event_name == 'pull_request'
         uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.base.sha }}
@@ -69,13 +58,12 @@ jobs:
 
       - name: Plan pull-request routes
         id: pull_request_plan
-        if: github.event_name == 'pull_request'
         env:
           LIGHTHOUSE_BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: node scripts/plan-lighthouse-pull-request.mjs
 
       - name: Build pull-request revisions
-        if: github.event_name == 'pull_request' && steps.pull_request_plan.outputs.selected == 'true'
+        if: steps.pull_request_plan.outputs.selected == 'true'
         env:
           LIGHTHOUSE_PREVIEW_SLUGS: ${{ steps.pull_request_plan.outputs.preview_slugs }}
         run: |
@@ -95,7 +83,7 @@ jobs:
           done
 
       - name: Audit pull request on one runner
-        if: github.event_name == 'pull_request' && steps.pull_request_plan.outputs.selected == 'true'
+        if: steps.pull_request_plan.outputs.selected == 'true'
         env:
           LIGHTHOUSE_BASE_SHA: ${{ github.event.pull_request.base.sha }}
           LIGHTHOUSE_BASE_URL: http://127.0.0.1:4322
@@ -103,6 +91,42 @@ jobs:
           LIGHTHOUSE_ARTIFACT_DIR: artifacts/lighthouse
           LIGHTHOUSE_PULL_REQUEST_ROUTES: ${{ steps.pull_request_plan.outputs.routes }}
         run: npm run lighthouse -- --trigger pull-request
+
+      - name: Retain diagnostic reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: lighthouse-${{ github.run_id }}
+          path: artifacts/lighthouse
+          if-no-files-found: ignore
+          retention-days: 90
+
+  audit_trusted:
+    if: github.event_name != 'pull_request' && (github.event_name != 'workflow_run' || github.event.workflow_run.event != 'pull_request')
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Select scheduled device set
+        id: schedule_selection
+        if: github.event_name == 'schedule'
+        env:
+          LIGHTHOUSE_SCHEDULE: ${{ github.event.schedule }}
+        run: |
+          devices=$(node --input-type=module -e 'import { scheduledDevices } from "./src/lib/lighthouse-monitoring.mjs"; process.stdout.write(scheduledDevices(new Date(), process.env.LIGHTHOUSE_SCHEDULE).join(","))')
+          if [[ -n "$devices" ]]; then echo "selected=true" >> "$GITHUB_OUTPUT"; else echo "selected=false" >> "$GITHUB_OUTPUT"; fi
+
+      - if: github.event_name != 'schedule' || steps.schedule_selection.outputs.selected == 'true'
+        run: npm ci
 
       - name: Audit scheduled production matrix
         if: github.event_name == 'schedule' && steps.schedule_selection.outputs.selected == 'true'
@@ -152,7 +176,7 @@ jobs:
           retention-days: 90
 
       - name: Checkpoint advisory monitoring state
-        if: ${{ !cancelled() && github.event_name != 'pull_request' && (github.event_name != 'schedule' || steps.schedule_selection.outputs.selected == 'true') }}
+        if: ${{ !cancelled() && (github.event_name != 'schedule' || steps.schedule_selection.outputs.selected == 'true') }}
         env:
           REPOSITORY_DEPLOY_KEY: ${{ secrets.REPOSITORY_DEPLOY_KEY }}
         run: node scripts/checkpoint-generated-state.mjs lighthouse
