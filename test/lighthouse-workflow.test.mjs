@@ -89,6 +89,32 @@ test("pull-request revisions are isolated and measured on one unprivileged runne
   );
 });
 
+test("pull-request builds restore Astro image caches after dependency installation", () => {
+  const headInstallIndex = pullRequestWorkflow.indexOf("- run: npm ci");
+  const baseInstallIndex = pullRequestWorkflow.indexOf(
+    "working-directory: .lighthouse-base",
+  );
+  const imageCacheIndex = pullRequestWorkflow.indexOf(
+    "name: Restore Astro image caches",
+  );
+  const buildIndex = pullRequestWorkflow.indexOf(
+    "name: Build pull-request revisions",
+  );
+
+  assert.notEqual(headInstallIndex, -1, "the head revision must be installed");
+  assert.notEqual(baseInstallIndex, -1, "the base revision must be installed");
+  assert.notEqual(imageCacheIndex, -1, "Astro image caches must be restored");
+  assert.notEqual(buildIndex, -1, "the revisions must be built");
+  assert.match(pullRequestWorkflow, /path: \|\n\s+node_modules\/\.astro/);
+  assert.match(pullRequestWorkflow, /\.lighthouse-base\/node_modules\/\.astro/);
+  assert.ok(
+    headInstallIndex < imageCacheIndex &&
+      baseInstallIndex < imageCacheIndex &&
+      imageCacheIndex < buildIndex,
+    "both Astro image caches must be restored after npm ci and before the builds",
+  );
+});
+
 test("scheduled reruns retain one durable observation identity", () => {
   assert.match(
     workflow,
