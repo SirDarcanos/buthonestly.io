@@ -109,6 +109,7 @@ jobs:
           SITE_URL: https://buthonestly.io
           LIGHTHOUSE_ARTIFACT_DIR: artifacts/lighthouse
           LIGHTHOUSE_SCHEDULE: ${{ github.event.schedule }}
+          LIGHTHOUSE_SCHEDULED_RUN_ID: ${{ github.run_id }}
         run: npm run lighthouse -- --trigger scheduled
 
       - name: Audit manual route

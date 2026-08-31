@@ -8,6 +8,11 @@ export const LIGHTHOUSE_MATRIX = Object.freeze([
 export const GPU_ROUTE = "/what-is-a-gpu/";
 export const DEVICES = Object.freeze(["mobile", "desktop"]);
 
+const ADVISORY_BASELINE_REQUIREMENTS = Object.freeze({
+  mobile: 4,
+  desktop: 2,
+});
+
 const median = (values) => {
   if (
     values.some((value) => typeof value !== "number" || !Number.isFinite(value))
@@ -312,6 +317,7 @@ export async function runLighthouseMonitoring({
   handoff,
   pullRequestRoutes,
   schedule,
+  scheduledRunId,
   revisions = { head: "production" },
 }) {
   const now = clock.now();
@@ -387,6 +393,10 @@ export async function runLighthouseMonitoring({
     }));
   }
 
+  const scheduledObservation =
+    trigger === "scheduled"
+      ? (scheduledRunId ?? scheduledOccurrence(now, schedule).toISOString())
+      : null;
   const outcomes = new Map();
   for (const result of results) {
     const key = outcomeKey(result.route, result.device);
@@ -404,34 +414,68 @@ export async function runLighthouseMonitoring({
       consecutivePasses: 0,
       openIssueNumber: null,
     };
+    const observationId =
+      trigger === "scheduled"
+        ? `${scheduledObservation}:${routeDeviceResults[0].device}`
+        : null;
+    let consecutivePasses = 0;
+    if (status === "passed") {
+      const duplicatePass =
+        previous.status === "passed" &&
+        previous.observationId === observationId;
+      consecutivePasses = duplicatePass
+        ? previous.consecutivePasses
+        : previous.consecutivePasses + 1;
+    }
     durableState.outcomes[key] = {
       status,
       checkedAt: now.toISOString(),
-      consecutivePasses:
-        status === "passed" ? previous.consecutivePasses + 1 : 0,
+      consecutivePasses,
       openIssueNumber: previous.openIssueNumber ?? null,
+      ...(observationId ? { observationId } : {}),
     };
   }
+  const baselineProgress = [];
   if (trigger === "scheduled") {
     for (const device of selection.devices) {
+      const required = ADVISORY_BASELINE_REQUIREMENTS[device];
       const deviceResults = results.filter(
         (result) => result.device === device,
       );
-      if (deviceResults.every(({ status }) => status === "passed")) {
-        durableState.advisory.scheduledObservations[device] += 1;
+      const observationId = `${scheduledObservation}:${device}`;
+      const alreadyRecorded = durableState.advisory.baseline.some(
+        (entry) => entry.observationId === observationId,
+      );
+      const completed = durableState.advisory.scheduledObservations[device];
+      let status = "invalid";
+      if (completed >= required) {
+        status = "complete";
+      } else if (alreadyRecorded) {
+        status = "duplicate";
+      } else if (deviceResults.every((result) => result.status === "passed")) {
+        const observation = completed + 1;
+        durableState.advisory.scheduledObservations[device] = observation;
+        durableState.advisory.baseline.push(
+          ...deviceResults.map(({ route, result }) => ({
+            checkedAt: now.toISOString(),
+            observationId,
+            observation,
+            requiredObservations: required,
+            route,
+            device,
+            workload: result.workload,
+            metrics: result.metrics,
+          })),
+        );
+        status = "recorded";
       }
+      baselineProgress.push({
+        device,
+        completed: durableState.advisory.scheduledObservations[device],
+        required,
+        status,
+      });
     }
-    durableState.advisory.baseline.push(
-      ...results
-        .filter(({ status }) => status === "passed")
-        .map(({ route, device, result }) => ({
-          checkedAt: now.toISOString(),
-          route,
-          device,
-          workload: result.workload,
-          metrics: result.metrics,
-        })),
-    );
   }
   if (
     trigger === "post-publication" &&
@@ -452,6 +496,7 @@ export async function runLighthouseMonitoring({
     routes: selection.routes,
     devices: selection.devices,
     results,
+    ...(trigger === "scheduled" ? { baselineProgress } : {}),
   };
   await reporter.write(report);
   const failedResults = completedAudits.filter(

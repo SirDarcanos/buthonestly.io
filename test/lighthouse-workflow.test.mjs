@@ -64,6 +64,13 @@ test("pull-request revisions are built and measured on one runner", () => {
   assert.match(workflow, /npm run lighthouse -- --trigger pull-request/);
 });
 
+test("scheduled reruns retain one durable observation identity", () => {
+  assert.match(
+    workflow,
+    /LIGHTHOUSE_SCHEDULED_RUN_ID: \$\{\{ github\.run_id \}\}/,
+  );
+});
+
 test("raw evidence is retained for 90 days and state uses the checkpoint boundary", () => {
   assert.match(workflow, /retention-days: 90/);
   assert.match(workflow, /checkpoint-generated-state\.mjs lighthouse/);

@@ -59,6 +59,25 @@ test("the workflow summary identifies the target, device, medians, and retained 
   );
 });
 
+test("the workflow summary identifies advisory baseline evidence", () => {
+  const markdown = reportMarkdown({
+    advisory: true,
+    skipped: false,
+    routes: ["/"],
+    devices: ["mobile", "desktop"],
+    baselineProgress: [
+      { device: "mobile", completed: 4, required: 4, status: "recorded" },
+      { device: "desktop", completed: 1, required: 2, status: "duplicate" },
+    ],
+    results: [],
+  });
+
+  assert.match(
+    markdown,
+    /Advisory baseline evidence: `mobile` 4 of 4 \(recorded\); `desktop` 1 of 2 \(duplicate\)/,
+  );
+});
+
 test("the workflow summary shows base and head absolute metrics with their delta", () => {
   const markdown = reportMarkdown({
     advisory: true,

@@ -32,15 +32,19 @@ const harness = ({
   now = new Date("2026-08-03T06:00:00.000Z"),
   audit,
 } = {}) => {
+  let currentTime = now;
   let durable = createEmptyLighthouseState("2026-08-01T00:00:00.000Z");
   const calls = [];
   const reports = [];
   return {
     calls,
     reports,
+    setNow: (value) => {
+      currentTime = value;
+    },
     state: () => durable,
     ports: {
-      clock: { now: () => now },
+      clock: { now: () => currentTime },
       state: {
         load: async () => structuredClone(durable),
         save: async (value) => {
@@ -250,15 +254,109 @@ test("scheduled monitoring uses three-run medians and keeps navigation separate 
           !Object.hasOwn(result.metrics, "lcpMs"),
       ),
   );
+  assert.deepEqual(report.baselineProgress, [
+    { device: "mobile", completed: 1, required: 4, status: "recorded" },
+    { device: "desktop", completed: 1, required: 2, status: "recorded" },
+  ]);
   assert.deepEqual(context.state().advisory.scheduledObservations, {
     mobile: 1,
     desktop: 1,
   });
   assert.equal(context.state().advisory.baseline.length, 10);
-  assert.equal(context.state().advisory.baseline[0].metrics.lcpMs, 2);
+  assert.deepEqual(
+    {
+      observationId: context.state().advisory.baseline[0].observationId,
+      observation: context.state().advisory.baseline[0].observation,
+      requiredObservations:
+        context.state().advisory.baseline[0].requiredObservations,
+      lcpMs: context.state().advisory.baseline[0].metrics.lcpMs,
+    },
+    {
+      observationId: "2026-08-03T06:00:00.000Z:mobile",
+      observation: 1,
+      requiredObservations: 4,
+      lcpMs: 2,
+    },
+  );
   assert.equal(
     context.state().outcomes["mobile:/what-is-a-gpu/"].consecutivePasses,
     1,
+  );
+});
+
+test("a scheduled workflow retry does not duplicate advisory baseline evidence", async () => {
+  const context = harness();
+  await runLighthouseMonitoring({ trigger: "scheduled", ...context.ports });
+  const retry = await runLighthouseMonitoring({
+    trigger: "scheduled",
+    ...context.ports,
+  });
+
+  assert.deepEqual(retry.baselineProgress, [
+    { device: "mobile", completed: 1, required: 4, status: "duplicate" },
+    { device: "desktop", completed: 1, required: 2, status: "duplicate" },
+  ]);
+  assert.deepEqual(context.state().advisory.scheduledObservations, {
+    mobile: 1,
+    desktop: 1,
+  });
+  assert.equal(context.state().advisory.baseline.length, 10);
+  assert.equal(context.state().outcomes["mobile:/"].consecutivePasses, 1);
+});
+
+test("a delayed scheduled rerun uses its stable run identity", async () => {
+  const context = harness();
+  await runLighthouseMonitoring({
+    trigger: "scheduled",
+    scheduledRunId: "run-123",
+    ...context.ports,
+  });
+  context.setNow(new Date("2026-08-17T06:00:00.000Z"));
+  const retry = await runLighthouseMonitoring({
+    trigger: "scheduled",
+    scheduledRunId: "run-123",
+    ...context.ports,
+  });
+
+  assert.deepEqual(retry.baselineProgress, [
+    { device: "mobile", completed: 1, required: 4, status: "duplicate" },
+  ]);
+  assert.equal(context.state().advisory.baseline.length, 10);
+  assert.equal(context.state().outcomes["mobile:/"].consecutivePasses, 1);
+});
+
+test("an incomplete device matrix is excluded from advisory baseline evidence", async () => {
+  const context = harness({
+    audit: ({ device, route, workload, run }) => {
+      if (device === "mobile" && route === "/") {
+        throw new Error("route unavailable");
+      }
+      return {
+        workload,
+        metrics: workloadMetrics(workload, run),
+        evidence: `${device}-${route}-${run}`,
+      };
+    },
+  });
+
+  await assert.rejects(
+    runLighthouseMonitoring({ trigger: "scheduled", ...context.ports }),
+    /route unavailable/,
+  );
+
+  assert.deepEqual(context.reports[0].baselineProgress, [
+    { device: "mobile", completed: 0, required: 4, status: "invalid" },
+    { device: "desktop", completed: 1, required: 2, status: "recorded" },
+  ]);
+  assert.deepEqual(context.state().advisory.scheduledObservations, {
+    mobile: 0,
+    desktop: 1,
+  });
+  assert.equal(context.state().advisory.baseline.length, 5);
+  assert.ok(
+    context
+      .state()
+      .advisory.baseline.every(({ device }) => device === "desktop"),
   );
 });
 

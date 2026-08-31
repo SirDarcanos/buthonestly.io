@@ -108,6 +108,17 @@ export const reportMarkdown = (report, { evidenceUrl } = {}) => {
     `${report.devices.length === 1 ? "Device" : "Devices"}: ${report.devices.map((device) => `\`${device}\``).join(", ")}`,
     "",
   );
+  if (report.baselineProgress?.length) {
+    lines.push(
+      `Advisory baseline evidence: ${report.baselineProgress
+        .map(
+          ({ device, completed, required, status }) =>
+            `\`${device}\` ${completed} of ${required} (${status})`,
+        )
+        .join("; ")}`,
+      "",
+    );
+  }
   if (evidenceUrl) {
     lines.push(
       `[Download individual HTML and JSON reports](${evidenceUrl})`,
@@ -283,6 +294,7 @@ export async function runCommand(options, environment = process.env) {
     routes: options.routes,
     devices: options.devices,
     schedule: environment.LIGHTHOUSE_SCHEDULE,
+    scheduledRunId: environment.LIGHTHOUSE_SCHEDULED_RUN_ID,
   };
   if (options.trigger === "pull-request") {
     const files = changedFiles(environment.LIGHTHOUSE_BASE_SHA);
