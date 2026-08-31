@@ -3,7 +3,7 @@
   "essays": {
     "10-types-of-websites": {
       "indexNow": {
-        "contentHash": "59f267a570c1d33bc46060bfead3b5040dab45e822133de2d4a0f704bf7a0db3"
+        "contentHash": "1e83f9a74adf23afc407954c4b6342e3c45724394f2a24d392125fde617c509a"
       },
       "newsletter": {
         "status": "delivered"
@@ -11,7 +11,7 @@
     },
     "adhd-planner": {
       "indexNow": {
-        "contentHash": "7309177181bca888e96b820b79b506f398dd122f04fc8b0c91d0c1d19a4d65be"
+        "contentHash": "80bc68d563587471cc73e761dfb93751875b932564fc80f1a3cd1b34c5bee67b"
       },
       "newsletter": {
         "status": "delivered"
@@ -19,7 +19,7 @@
     },
     "ai-slop-midas-touch-modern-internet": {
       "indexNow": {
-        "contentHash": "1a25131d5f54a877bb095900c8e74efd13a77dc0f0f1ba5c6a7e060f4e62066f"
+        "contentHash": "62f6c5a25e91a12ffc63fd9bd0fefc505c4e5f68c73f92b1661147c3ae157a55"
       },
       "newsletter": {
         "status": "delivered"
@@ -27,7 +27,7 @@
     },
     "automated-x-account-cleanup": {
       "indexNow": {
-        "contentHash": "fe0857a866f2adfd12545df7f12286aa2620fdf2f508febf07a5636eac99781e"
+        "contentHash": "5729085b9e3edcee3c17296b8dd0f93e838f9cbdf8c3360c153bcf5597ea3e0b"
       },
       "newsletter": {
         "status": "delivered"
@@ -35,7 +35,7 @@
     },
     "building-convolutional-neural-network-python-tensorflow": {
       "indexNow": {
-        "contentHash": "892fe5424d03c8d296dcb866298ec3e9f0426978413696c7a683fe1c44e105a3"
+        "contentHash": "b97d7a623aa6f9fba1f64ae70d45b44d02708d06d15acae1e12f050707e09b3e"
       },
       "newsletter": {
         "status": "delivered"
@@ -43,7 +43,7 @@
     },
     "buildings-never-were": {
       "indexNow": {
-        "contentHash": "f99b02bee4c2c0db0ef9980f39f49f0456865bc24b2d35ac2ee92d546a36ce0a"
+        "contentHash": "7e724c49ee787b2019d2ec9cc614c1594f97111d46efa5449daf161b9198f1b0"
       },
       "newsletter": {
         "status": "delivered"
@@ -51,7 +51,7 @@
     },
     "bulk-edit-woocommerce-products-without-plugins": {
       "indexNow": {
-        "contentHash": "e411debff48ad6951ad052cf9e1e3a42e5a98c08258b8ff79bbdf29f0ca25d04"
+        "contentHash": "f5e10aa863a88c1913ce560805833f915e4a8fa7439c3f7514dbbbde8fe60311"
       },
       "newsletter": {
         "status": "delivered"
@@ -59,7 +59,7 @@
     },
     "choosing-what-to-play": {
       "indexNow": {
-        "contentHash": "54111e3ef6b5c131c7030cc80a9f24d34cf9929aa9ffc4b8a4a45c3e58c38e0b"
+        "contentHash": "37d909c1a423c5118afd9fd1c67d5926f2f3741d45f759df8fbef62212f5e8c6"
       },
       "newsletter": {
         "status": "delivered"
@@ -67,7 +67,7 @@
     },
     "creating-a-custom-add-to-cart-link-woocommerce": {
       "indexNow": {
-        "contentHash": "f57d1a93945365d91a30b825acb2cf2c1dfbfff52bfa422c79564c337c3101b4"
+        "contentHash": "c5e85c07695a207ce15e3533525c77a43064cd2c2b108f720220312472e3e00b"
       },
       "newsletter": {
         "status": "delivered"
@@ -75,7 +75,7 @@
     },
     "delete-expired-coupons-automatically-woocommerce": {
       "indexNow": {
-        "contentHash": "5d7fd78f9960a95307e7874f8e5e62febcd620b425f0ae8c71999889e4cdd30f"
+        "contentHash": "8ccc38e9fc5a6f1c29c6631d785f35dbfde49d006cf446ce089ab86e7c78f03d"
       },
       "newsletter": {
         "status": "delivered"
@@ -83,7 +83,7 @@
     },
     "disable-gtin-requirements-non-eligible-woocommerce-products": {
       "indexNow": {
-        "contentHash": "f1bf876c8ff8471add8295f03d70bdbd7d8a322f56d9a464f322d0e66e754c71"
+        "contentHash": "8cb23cfa325735ec8baf765ac63d4e1d90c6e5e16f7da3f625e2edfceedd7d2b"
       },
       "newsletter": {
         "status": "delivered"
@@ -91,7 +91,7 @@
     },
     "distilroberta-emotion-analysis-nlp-case-study": {
       "indexNow": {
-        "contentHash": "09cd4737d0c5b7525d4f19399ac73adae0afd7454deba9f33da2c946dbff0702"
+        "contentHash": "28712300f631221516e5e11701eca289ffa8b0e3bd7ac3f3a310b7da062d2000"
       },
       "newsletter": {
         "status": "delivered"
@@ -99,7 +99,7 @@
     },
     "do-you-trust-your-instincts-making-smart-wordpress-choices": {
       "indexNow": {
-        "contentHash": "b49953a5f6ea2a562a1fbee73696ddcd2e7b11e4dbacdb87c4521c8e979656dd"
+        "contentHash": "db213ed62198c6f798005d4ff4a14e4c9b7bc101f48363aee2517391f6059e70"
       },
       "newsletter": {
         "status": "delivered"
@@ -107,7 +107,7 @@
     },
     "edit-orders-woocommerce": {
       "indexNow": {
-        "contentHash": "582267d1382be0cd6d67645043460c19354ffef75f12739b1a4e4e2b9704e8e1"
+        "contentHash": "22ae57af5f68327f0cc0724536d48e941739ff305be5514a5f7e2dcac3136be0"
       },
       "newsletter": {
         "status": "delivered"
@@ -115,7 +115,7 @@
     },
     "enhancing-wordpress-content-protection-beyond-right-click-blocks": {
       "indexNow": {
-        "contentHash": "ff2badd82071bb442a963d1f56289b85966b0904323b0bef8e1d3cd50bf75255"
+        "contentHash": "cbe2fc861497fb406939ae10e17bf2636ffe6cfbf38a07173819c965cb620c19"
       },
       "newsletter": {
         "status": "delivered"
@@ -123,7 +123,7 @@
     },
     "gaming-made-me-better-leader": {
       "indexNow": {
-        "contentHash": "f71254fbf20809214c61ea7e600cb9d2d2d474b47d63736dbb4b0fe55af47140"
+        "contentHash": "074b28598cf808575e8e27109617e9f47aa10a318b0c150f60de98e5fffa43c8"
       },
       "newsletter": {
         "status": "delivered"
@@ -131,7 +131,7 @@
     },
     "how-to-build-a-github-profile-readme-that-feels-like-you": {
       "indexNow": {
-        "contentHash": "795e5e40c3ffb983e6a6fe0d11f65eab595eb88f37b01348002fa9b9f6ba3b4d"
+        "contentHash": "a027837a30c1d81b601280b285258a2b881cf56451a10a420fce01f140282e3b"
       },
       "newsletter": {
         "status": "delivered"
@@ -139,7 +139,7 @@
     },
     "how-to-choose-a-software-license-for-your-next-project": {
       "indexNow": {
-        "contentHash": "447bae2b5f5fe79f3172defc875b678294f0890a864eee08bd9d6ccacf8b193d"
+        "contentHash": "8281e34a921729a2d85406f757b8786781142f695b209492d870f04585a6b4f4"
       },
       "newsletter": {
         "status": "delivered"
@@ -147,7 +147,7 @@
     },
     "improve-woocommerce-related-products-recommendations": {
       "indexNow": {
-        "contentHash": "1201d931cdc9d3f5d92f4bec03375cca6991d4170101c41e3bea9542e5f7fc03"
+        "contentHash": "f97734c7ba8a04bab136e44bef1041c112aaf9e6736b3c9e13ee2c098a949f6f"
       },
       "newsletter": {
         "status": "delivered"
@@ -155,7 +155,7 @@
     },
     "learning-care-without-feeling": {
       "indexNow": {
-        "contentHash": "126f1fc825948ec381015cd071b717fbd85f51099eb06fd6ce981c6cc332631e"
+        "contentHash": "f40d4b3c25b84a511f9b24a5bf6fcf8a0532bbe6fe3815e2bd2f0963f6fa9c45"
       },
       "newsletter": {
         "status": "delivered"
@@ -163,7 +163,7 @@
     },
     "limits-of-machine-learning": {
       "indexNow": {
-        "contentHash": "2554795823438562819dd5ead32481054c884e052f3179736858842b72835f6b"
+        "contentHash": "210c8eda4d192294eed3e197b1cdc1a9daa38653b3308f8f91b00e446ced64f1"
       },
       "newsletter": {
         "status": "delivered"
@@ -171,7 +171,7 @@
     },
     "make-product-attributes-linkable-woocommerce": {
       "indexNow": {
-        "contentHash": "f01e31b4bc616240accb0fc43cd95fc4a39ad3bb9b48e20594b640b0518cc716"
+        "contentHash": "b01a559dd3da230c8eafaffcfeef4a03969364fccb922f7601aca6f84b6706f3"
       },
       "newsletter": {
         "status": "delivered"
@@ -179,7 +179,7 @@
     },
     "mastering-effective-feedback-facts-feelings-curiosity": {
       "indexNow": {
-        "contentHash": "d1caf92dec7748eeb32761c08cc78cae490c1aea2b8c5fcdacf8817ddbb6737d"
+        "contentHash": "456c5e49dd49510f4edee63427df61ca96f773b3a5ee4e69b3565fbe55ee78ec"
       },
       "newsletter": {
         "status": "delivered"
@@ -187,7 +187,7 @@
     },
     "neural-network-predict-resin-usage-3d-printed-miniatures": {
       "indexNow": {
-        "contentHash": "4a78d13bfd60054169cf1343feb0b55dc339279933f5697b5b669a9287836b02"
+        "contentHash": "6f0a6fa0a4ea6ef2fbb4e37c3834c3c4acf4a98ca03c0b1c6775ced4f3903bb5"
       },
       "newsletter": {
         "status": "delivered"
@@ -195,7 +195,7 @@
     },
     "psychological-safety-in-teams-people-first-leadership": {
       "indexNow": {
-        "contentHash": "7d24353e0f3f27883b0e205f76be31062622f46008e6d5ada422c4949bf58aa7"
+        "contentHash": "1d671c6e988229e9d4437a79ed75141a46c6ec44484499b72832fb8a8e85aff5"
       },
       "newsletter": {
         "status": "delivered"
@@ -203,7 +203,7 @@
     },
     "set-up-tensorflow-docker-jupyter-notebook": {
       "indexNow": {
-        "contentHash": "60f37ed1349afd37370e2578a427f39af0d37ab9079ff881b8b9ff68883923f4"
+        "contentHash": "a87786a22bce400f64958577dead2042b31f42a64202128d533185ac8a9ee0fe"
       },
       "newsletter": {
         "status": "delivered"
@@ -211,7 +211,7 @@
     },
     "shotlist-automatic-annotated-screenshots": {
       "indexNow": {
-        "contentHash": "9bbe8ab8bacda6ed3bf43a8c0996ea83d20de67f8b784954fe8c28834fe0a241"
+        "contentHash": "606e93aac1a6e0bf47b2a8736e3b0c72362bae552132983df630d345b92dd1ff"
       },
       "newsletter": {
         "status": "delivered"
@@ -219,7 +219,7 @@
     },
     "team-building-activities-for-work": {
       "indexNow": {
-        "contentHash": "c8e61c515ba40b93b13577504bbb1c524d02ec2837f93c78424aad933c68c947"
+        "contentHash": "99b9d70429b813bb24d59cb894b872f2c5d5488304316bf23e0b811234bb4ee9"
       },
       "newsletter": {
         "status": "delivered"
@@ -227,7 +227,7 @@
     },
     "time-off-for-leaders": {
       "indexNow": {
-        "contentHash": "a0910ecf1d03fffc59c6072964ab08fc3ce9fb9f927d4423fba3c92dafe36b30"
+        "contentHash": "37fed997e51d1e6d535514429dddb7ce6ac34b5bf1e73b91cf73e6d782f31b55"
       },
       "newsletter": {
         "status": "delivered"
@@ -235,7 +235,7 @@
     },
     "tools-for-adhd-leadership": {
       "indexNow": {
-        "contentHash": "d9fc26e85691b7d669296f7eaec3509533046676f76874c272384e268547cb54"
+        "contentHash": "63e45ffb4364e799f38c95c38c31bb62c24270d09e581e18fad957500b40f553"
       },
       "newsletter": {
         "status": "delivered"
@@ -243,7 +243,7 @@
     },
     "top-5-essential-wordpress-plugins-i-always-install-and-why": {
       "indexNow": {
-        "contentHash": "f2483278b9610c62b6a64b52a6b54b1695eb0b6234fdc852ce488cdb00a0e56c"
+        "contentHash": "06c79188fb336785e5307534b7f141cfbdc814575290bf2ec2512133f7cb4969"
       },
       "newsletter": {
         "status": "delivered"
@@ -251,7 +251,7 @@
     },
     "vibe-writing-line-between-human-machine": {
       "indexNow": {
-        "contentHash": "61e98e71c42701e0a33aaacb86df548729d4da7c0a5ca14ded00f555846593c0"
+        "contentHash": "73b2b6258460cb0841ee074003f2c9ab0a7f8cf578cf3d574a04a1286eced7fc"
       },
       "newsletter": {
         "status": "delivered"
@@ -259,7 +259,7 @@
     },
     "what-is-a-gpu": {
       "indexNow": {
-        "contentHash": "b7fb30211a0608bf289d6b820a34e3834d98048bdbc90d0c80a84bf7e39bafdf"
+        "contentHash": "ac9bfa1bebc59d968e93e55d810d5ed9543dcb64019c003c622fb24d30373a36"
       },
       "newsletter": {
         "status": "delivered"
@@ -267,7 +267,7 @@
     },
     "what-is-a-web-developer": {
       "indexNow": {
-        "contentHash": "805eac7ac8b7712b2f773edd0e335900dfe4722fb9a57a0a86978752b957ab25"
+        "contentHash": "66d7dc38b2506a22f0551f03690a156f79beb81c034fa368ef77cb3d96574539"
       },
       "newsletter": {
         "status": "delivered"
@@ -275,7 +275,7 @@
     },
     "what-is-vibe-coding-how-to-do-it": {
       "indexNow": {
-        "contentHash": "5c785c3d5a6f8b9eae6bd7bcb695e606228967ac8d474b5dc96628d257bc7b7a"
+        "contentHash": "16ed821e59467ec64cf58337db69bd9247b18c55beb37188c54fe655bc51c4cd"
       },
       "newsletter": {
         "status": "delivered"
@@ -283,7 +283,7 @@
     },
     "when-ai-stops-being-a-tool": {
       "indexNow": {
-        "contentHash": "20bab361c89fb57f1ea6b644a9aa50e56c98e842345a8f15aa981137d401d5a3"
+        "contentHash": "b90685b01a4456bba4ce1c5fa50296f86da17ec480d5799662ca54c30b863b20"
       },
       "newsletter": {
         "status": "delivered"
@@ -291,7 +291,7 @@
     },
     "woocommerce-attributes-vs-variations": {
       "indexNow": {
-        "contentHash": "b16966aaa41866d62eb1488655dc855bd13b47b1e57d82db196f0d67b358481e"
+        "contentHash": "d0cb7d9b72cebfccdbd2baab69276873734cf5cef864a7a9a0824ad3404deaf0"
       },
       "newsletter": {
         "status": "delivered"
@@ -299,7 +299,7 @@
     },
     "woocommerce-cli-product-management": {
       "indexNow": {
-        "contentHash": "a756976b96cdfa83670de303e378c7260f1fd7fc4030bdf6b0cf08738e78baa0"
+        "contentHash": "b4c553a9a8a8c50a9ea9e0f2c2c92e5c9e6412e985237682797e7a932ff74d07"
       },
       "newsletter": {
         "status": "delivered"
@@ -307,7 +307,7 @@
     },
     "woocommerce-eu-vat-number-setup": {
       "indexNow": {
-        "contentHash": "fc2944e140eef0a47e1d446c94bedd1a815b03555984aee49a76a282ed0e0744"
+        "contentHash": "999701197c0808301c6abb25840347f192becd17ce9186b80719c8313ef4ff4c"
       },
       "newsletter": {
         "status": "delivered"
@@ -315,7 +315,7 @@
     },
     "woocommerce-password-strength-meter-checkout": {
       "indexNow": {
-        "contentHash": "ba3c23910a1a784a26b8ae8937dcbf5e5f05986b4f45775f5b07cdf76ae949dc"
+        "contentHash": "171219cc8e0ac4efce43f52e8b83b2720b06da71ef5f08ba92dd499c81d44258"
       },
       "newsletter": {
         "status": "delivered"
@@ -323,7 +323,7 @@
     },
     "wordpress-blocks-telex": {
       "indexNow": {
-        "contentHash": "8b32f69e4dfc3fabf686dc87ae5694de7ab1ea9c4a58caf1c828faf13eee6423"
+        "contentHash": "13a8516273974bd8c62ed99624d9979cca6b3c18c9711cf1c6fe50ea8d91682d"
       },
       "newsletter": {
         "status": "delivered"
@@ -331,7 +331,7 @@
     },
     "wordpress-site-performance-vs-desig": {
       "indexNow": {
-        "contentHash": "0ff6a011a8e2121f61f7a6f22ec13e2d64635de46730a3c159beaca089e7bcb7"
+        "contentHash": "e7200db8ecf4d08044688e142ddad4deb45261b06e3a89f917f22df88eef2035"
       },
       "newsletter": {
         "status": "delivered"
@@ -339,7 +339,7 @@
     },
     "wordpress-to-astro": {
       "indexNow": {
-        "contentHash": "c068c3dc01143846d0e1571ddc582fb975f2a95860dc93b8890a67cff4ea4f77"
+        "contentHash": "b1a2c35063bbaf0a20e58e7c38ab285a1e004e84c74eef761b3541bc9f942133"
       },
       "newsletter": {
         "status": "delivered"
@@ -347,7 +347,7 @@
     },
     "write-in-markdown": {
       "indexNow": {
-        "contentHash": "de4bef623704c2fd8e00f115e11a24b9bd071f76c7e25c1951464f9c46c3d373"
+        "contentHash": "1cb244df62c475df8299e7a15af0394bffe1a394c0880f122464285bff7c60f2"
       },
       "newsletter": {
         "status": "delivered"
