@@ -9,9 +9,142 @@
     },
     "startedAt": "2026-08-30T00:00:00.000Z"
   },
-  "checkedContentHashes": {},
+  "checkedContentHashes": {
+    "10-types-of-websites": [
+      "1e83f9a74adf23afc407954c4b6342e3c45724394f2a24d392125fde617c509a"
+    ],
+    "adhd-planner": [
+      "80bc68d563587471cc73e761dfb93751875b932564fc80f1a3cd1b34c5bee67b"
+    ],
+    "ai-slop-midas-touch-modern-internet": [
+      "62f6c5a25e91a12ffc63fd9bd0fefc505c4e5f68c73f92b1661147c3ae157a55"
+    ],
+    "automated-x-account-cleanup": [
+      "5729085b9e3edcee3c17296b8dd0f93e838f9cbdf8c3360c153bcf5597ea3e0b"
+    ],
+    "building-convolutional-neural-network-python-tensorflow": [
+      "b97d7a623aa6f9fba1f64ae70d45b44d02708d06d15acae1e12f050707e09b3e"
+    ],
+    "buildings-never-were": [
+      "7e724c49ee787b2019d2ec9cc614c1594f97111d46efa5449daf161b9198f1b0"
+    ],
+    "bulk-edit-woocommerce-products-without-plugins": [
+      "f5e10aa863a88c1913ce560805833f915e4a8fa7439c3f7514dbbbde8fe60311"
+    ],
+    "choosing-what-to-play": [
+      "37d909c1a423c5118afd9fd1c67d5926f2f3741d45f759df8fbef62212f5e8c6"
+    ],
+    "creating-a-custom-add-to-cart-link-woocommerce": [
+      "c5e85c07695a207ce15e3533525c77a43064cd2c2b108f720220312472e3e00b"
+    ],
+    "delete-expired-coupons-automatically-woocommerce": [
+      "8ccc38e9fc5a6f1c29c6631d785f35dbfde49d006cf446ce089ab86e7c78f03d"
+    ],
+    "disable-gtin-requirements-non-eligible-woocommerce-products": [
+      "8cb23cfa325735ec8baf765ac63d4e1d90c6e5e16f7da3f625e2edfceedd7d2b"
+    ],
+    "distilroberta-emotion-analysis-nlp-case-study": [
+      "28712300f631221516e5e11701eca289ffa8b0e3bd7ac3f3a310b7da062d2000"
+    ],
+    "do-you-trust-your-instincts-making-smart-wordpress-choices": [
+      "db213ed62198c6f798005d4ff4a14e4c9b7bc101f48363aee2517391f6059e70"
+    ],
+    "edit-orders-woocommerce": [
+      "22ae57af5f68327f0cc0724536d48e941739ff305be5514a5f7e2dcac3136be0"
+    ],
+    "enhancing-wordpress-content-protection-beyond-right-click-blocks": [
+      "cbe2fc861497fb406939ae10e17bf2636ffe6cfbf38a07173819c965cb620c19"
+    ],
+    "gaming-made-me-better-leader": [
+      "074b28598cf808575e8e27109617e9f47aa10a318b0c150f60de98e5fffa43c8"
+    ],
+    "how-to-build-a-github-profile-readme-that-feels-like-you": [
+      "a027837a30c1d81b601280b285258a2b881cf56451a10a420fce01f140282e3b"
+    ],
+    "how-to-choose-a-software-license-for-your-next-project": [
+      "8281e34a921729a2d85406f757b8786781142f695b209492d870f04585a6b4f4"
+    ],
+    "improve-woocommerce-related-products-recommendations": [
+      "f97734c7ba8a04bab136e44bef1041c112aaf9e6736b3c9e13ee2c098a949f6f"
+    ],
+    "learning-care-without-feeling": [
+      "f40d4b3c25b84a511f9b24a5bf6fcf8a0532bbe6fe3815e2bd2f0963f6fa9c45"
+    ],
+    "limits-of-machine-learning": [
+      "210c8eda4d192294eed3e197b1cdc1a9daa38653b3308f8f91b00e446ced64f1"
+    ],
+    "make-product-attributes-linkable-woocommerce": [
+      "b01a559dd3da230c8eafaffcfeef4a03969364fccb922f7601aca6f84b6706f3"
+    ],
+    "mastering-effective-feedback-facts-feelings-curiosity": [
+      "456c5e49dd49510f4edee63427df61ca96f773b3a5ee4e69b3565fbe55ee78ec"
+    ],
+    "neural-network-predict-resin-usage-3d-printed-miniatures": [
+      "6f0a6fa0a4ea6ef2fbb4e37c3834c3c4acf4a98ca03c0b1c6775ced4f3903bb5"
+    ],
+    "psychological-safety-in-teams-people-first-leadership": [
+      "1d671c6e988229e9d4437a79ed75141a46c6ec44484499b72832fb8a8e85aff5"
+    ],
+    "set-up-tensorflow-docker-jupyter-notebook": [
+      "a87786a22bce400f64958577dead2042b31f42a64202128d533185ac8a9ee0fe"
+    ],
+    "shotlist-automatic-annotated-screenshots": [
+      "606e93aac1a6e0bf47b2a8736e3b0c72362bae552132983df630d345b92dd1ff"
+    ],
+    "team-building-activities-for-work": [
+      "99b9d70429b813bb24d59cb894b872f2c5d5488304316bf23e0b811234bb4ee9"
+    ],
+    "time-off-for-leaders": [
+      "37fed997e51d1e6d535514429dddb7ce6ac34b5bf1e73b91cf73e6d782f31b55"
+    ],
+    "tools-for-adhd-leadership": [
+      "63e45ffb4364e799f38c95c38c31bb62c24270d09e581e18fad957500b40f553"
+    ],
+    "top-5-essential-wordpress-plugins-i-always-install-and-why": [
+      "06c79188fb336785e5307534b7f141cfbdc814575290bf2ec2512133f7cb4969"
+    ],
+    "vibe-writing-line-between-human-machine": [
+      "73b2b6258460cb0841ee074003f2c9ab0a7f8cf578cf3d574a04a1286eced7fc"
+    ],
+    "what-is-a-gpu": [
+      "ac9bfa1bebc59d968e93e55d810d5ed9543dcb64019c003c622fb24d30373a36"
+    ],
+    "what-is-a-web-developer": [
+      "66d7dc38b2506a22f0551f03690a156f79beb81c034fa368ef77cb3d96574539"
+    ],
+    "what-is-vibe-coding-how-to-do-it": [
+      "16ed821e59467ec64cf58337db69bd9247b18c55beb37188c54fe655bc51c4cd"
+    ],
+    "when-ai-stops-being-a-tool": [
+      "b90685b01a4456bba4ce1c5fa50296f86da17ec480d5799662ca54c30b863b20"
+    ],
+    "woocommerce-attributes-vs-variations": [
+      "d0cb7d9b72cebfccdbd2baab69276873734cf5cef864a7a9a0824ad3404deaf0"
+    ],
+    "woocommerce-cli-product-management": [
+      "b4c553a9a8a8c50a9ea9e0f2c2c92e5c9e6412e985237682797e7a932ff74d07"
+    ],
+    "woocommerce-eu-vat-number-setup": [
+      "999701197c0808301c6abb25840347f192becd17ce9186b80719c8313ef4ff4c"
+    ],
+    "woocommerce-password-strength-meter-checkout": [
+      "171219cc8e0ac4efce43f52e8b83b2720b06da71ef5f08ba92dd499c81d44258"
+    ],
+    "wordpress-blocks-telex": [
+      "13a8516273974bd8c62ed99624d9979cca6b3c18c9711cf1c6fe50ea8d91682d"
+    ],
+    "wordpress-site-performance-vs-desig": [
+      "e7200db8ecf4d08044688e142ddad4deb45261b06e3a89f917f22df88eef2035"
+    ],
+    "wordpress-to-astro": [
+      "b1a2c35063bbaf0a20e58e7c38ab285a1e004e84c74eef761b3541bc9f942133"
+    ],
+    "write-in-markdown": [
+      "1cb244df62c475df8299e7a15af0394bffe1a394c0880f122464285bff7c60f2"
+    ]
+  },
   "issues": {},
   "outcomes": {},
-  "postPublicationBootstrapped": false,
+  "postPublicationBootstrapped": true,
   "version": 1
 }
