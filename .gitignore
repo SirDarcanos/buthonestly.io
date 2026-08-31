@@ -20,8 +20,8 @@ wrangler.toml
 src/content/**/*.mp3
 src/content/**/*.audio.txt
 
-# Local agent tooling config (launch.json, per-machine permissions). The shared
-# context in .agents/ IS committed.
+# Local agent tooling config, per-machine permissions, and private context.
+.agents/product-marketing.md
 .claude/
 .pi/
 
