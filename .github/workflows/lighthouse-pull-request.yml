@@ -36,6 +36,22 @@ jobs:
           LIGHTHOUSE_BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: node scripts/plan-lighthouse-pull-request.mjs
 
+      - name: Install base revision dependencies
+        if: steps.pull_request_plan.outputs.selected == 'true'
+        working-directory: .lighthouse-base
+        run: npm ci
+
+      - name: Restore Astro image caches
+        if: steps.pull_request_plan.outputs.selected == 'true'
+        uses: actions/cache@v5
+        with:
+          path: |
+            node_modules/.astro
+            .lighthouse-base/node_modules/.astro
+          key: ${{ runner.os }}-astro-images-${{ hashFiles('package-lock.json', 'astro.config.mjs', 'src/**/*.astro', 'src/**/*.avif', 'src/**/*.gif', 'src/**/*.jpeg', 'src/**/*.jpg', 'src/**/*.png', 'src/**/*.webp', '.lighthouse-base/package-lock.json', '.lighthouse-base/astro.config.mjs', '.lighthouse-base/src/**/*.astro', '.lighthouse-base/src/**/*.avif', '.lighthouse-base/src/**/*.gif', '.lighthouse-base/src/**/*.jpeg', '.lighthouse-base/src/**/*.jpg', '.lighthouse-base/src/**/*.png', '.lighthouse-base/src/**/*.webp') }}
+          restore-keys: |
+            ${{ runner.os }}-astro-images-
+
       - name: Build pull-request revisions
         if: steps.pull_request_plan.outputs.selected == 'true'
         env:
@@ -44,7 +60,6 @@ jobs:
           npm run build
           (npm run preview -- --host 127.0.0.1 --port 4321 > "$RUNNER_TEMP/lighthouse-head.log" 2>&1 &)
           cd .lighthouse-base
-          npm ci
           if grep -q LIGHTHOUSE_PREVIEW_SLUGS src/lib/essays.ts; then
             npm run build
           else
