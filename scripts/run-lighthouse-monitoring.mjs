@@ -16,6 +16,8 @@ import {
 import { createLighthouseAuditor } from "./lib/lighthouse-adapter.mjs";
 
 const STATE_FILE = "data/lighthouse-state.json";
+const PUBLICATION_HANDOFF_FILE =
+  "artifacts/publication-monitoring-handoff.json";
 
 const stable = (value) => {
   if (Array.isArray(value)) return value.map(stable);
@@ -185,15 +187,26 @@ const essaySlugsFromFiles = (files) =>
 
 export const planPostPublicationChecks = ({
   published,
+  handoffs = published.map(({ slug, publicContentHash }) => ({
+    slug,
+    contentHash: publicContentHash,
+  })),
   monitoringState,
   changedFiles: publicationChangedFiles = [],
   runStartedAt,
   now,
 }) => {
+  const handedOffHashes = new Map(
+    handoffs.map(({ slug, contentHash }) => [slug, contentHash]),
+  );
+  const handedOffEssays = published.filter(
+    ({ slug, publicContentHash }) =>
+      handedOffHashes.get(slug) === publicContentHash,
+  );
   if (monitoringState.postPublicationBootstrapped) {
     return {
       bootstrapCandidates: [],
-      candidates: published.filter(
+      candidates: handedOffEssays.filter(
         (essay) =>
           !(monitoringState.checkedContentHashes[essay.slug] ?? []).includes(
             essay.publicContentHash,
@@ -206,22 +219,49 @@ export const planPostPublicationChecks = ({
   const startedAt = runStartedAt ? new Date(runStartedAt) : null;
   if (startedAt && !Number.isNaN(startedAt.valueOf())) {
     const recentBoundary = new Date(startedAt.getTime() - 2 * 60 * 60 * 1000);
-    for (const essay of published) {
+    for (const essay of handedOffEssays) {
       if (essay.publishedAt > recentBoundary && essay.publishedAt <= now) {
         preciseSlugs.add(essay.slug);
       }
     }
   }
   return {
-    bootstrapCandidates: published.filter(
+    bootstrapCandidates: handedOffEssays.filter(
       ({ slug }) => !preciseSlugs.has(slug),
     ),
-    candidates: published.filter(({ slug }) => preciseSlugs.has(slug)),
+    candidates: handedOffEssays.filter(({ slug }) => preciseSlugs.has(slug)),
   };
 };
 
-const inspectExpectedProductionVersion = async (essay) => {
-  const production = await fetch(essay.canonicalUrl, {
+export const readPublicationMonitoringHandoffs = async (
+  filePath = PUBLICATION_HANDOFF_FILE,
+) => {
+  try {
+    const handoff = JSON.parse(await readFile(filePath, "utf8"));
+    if (
+      handoff?.version !== 1 ||
+      !Array.isArray(handoff.essays) ||
+      handoff.essays.some(
+        ({ slug, contentHash }) =>
+          typeof slug !== "string" || typeof contentHash !== "string",
+      )
+    ) {
+      throw new Error(
+        `${filePath} does not contain a publication monitoring handoff v1.`,
+      );
+    }
+    return handoff.essays;
+  } catch (error) {
+    if (error?.code === "ENOENT") return [];
+    throw error;
+  }
+};
+
+export const isExpectedProductionVersionLive = async (
+  essay,
+  { fetch: fetchProduction = fetch } = {},
+) => {
+  const production = await fetchProduction(essay.canonicalUrl, {
     headers: { Accept: "text/html" },
     redirect: "follow",
     signal: AbortSignal.timeout(15_000),
@@ -338,8 +378,18 @@ export async function runCommand(options, environment = process.env) {
   if (options.trigger === "post-publication" && !options.slug) {
     const inventory = loadEssayInventory({ now });
     const durableState = await state.load();
+    const handoffs = await readPublicationMonitoringHandoffs(
+      environment.PUBLICATION_MONITORING_HANDOFF_FILE ??
+        PUBLICATION_HANDOFF_FILE,
+    );
+    if (handoffs.length === 0) {
+      const skipped = { advisory: true, skipped: true, results: [] };
+      await reporter.write(skipped);
+      return [skipped];
+    }
     const plan = planPostPublicationChecks({
       published: inventory.published,
+      handoffs,
       monitoringState: durableState,
       changedFiles: commitFiles(environment.PUBLICATION_HEAD_SHA),
       runStartedAt: environment.PUBLICATION_RUN_STARTED_AT,
@@ -355,7 +405,7 @@ export async function runCommand(options, environment = process.env) {
     }
     const reports = [];
     for (const essay of plan.candidates) {
-      if (!(await inspectExpectedProductionVersion(essay))) continue;
+      if (!(await isExpectedProductionVersionLive(essay))) continue;
       reports.push(
         await runLighthouseMonitoring({
           ...common,

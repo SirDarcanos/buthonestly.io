@@ -27,6 +27,7 @@ concurrency:
   cancel-in-progress: false
 
 permissions:
+  actions: read
   contents: read
 
 jobs:
@@ -37,7 +38,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          ref: ${{ github.event.pull_request.head.sha || github.event.workflow_run.head_sha || github.sha }}
           fetch-depth: 0
           persist-credentials: false
 
@@ -121,11 +122,22 @@ jobs:
           LIGHTHOUSE_DEVICE: ${{ inputs.device }}
         run: npm run lighthouse -- --trigger manual --route "$LIGHTHOUSE_ROUTE" --device "$LIGHTHOUSE_DEVICE"
 
+      - name: Receive Live Essay handoffs
+        if: github.event_name == 'workflow_run'
+        continue-on-error: true
+        uses: actions/download-artifact@v7
+        with:
+          name: publication-monitoring-handoff
+          path: artifacts
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+
       - name: Audit newly Live Essays independently of publication
         if: github.event_name == 'workflow_run'
         env:
           SITE_URL: https://buthonestly.io
           LIGHTHOUSE_ARTIFACT_DIR: artifacts/lighthouse
+          PUBLICATION_MONITORING_HANDOFF_FILE: artifacts/publication-monitoring-handoff.json
           PUBLICATION_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
           PUBLICATION_RUN_STARTED_AT: ${{ github.event.workflow_run.run_started_at }}
         run: npm run lighthouse -- --trigger post-publication

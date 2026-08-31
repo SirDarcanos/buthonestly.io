@@ -60,6 +60,7 @@ export async function runPublication({
   production,
   indexNow,
   kit,
+  monitoring,
   pollAttempts = DEFAULT_POLL_ATTEMPTS,
   pollIntervalMs = DEFAULT_POLL_INTERVAL_MS,
 }) {
@@ -134,6 +135,17 @@ export async function runPublication({
             .join(", ")}`,
         );
       }
+    }
+  }
+
+  if (monitoring) {
+    for (const essay of liveEssays) {
+      await Promise.allSettled([
+        monitoring.handoff({
+          slug: essay.slug,
+          contentHash: essay.publicContentHash,
+        }),
+      ]);
     }
   }
 

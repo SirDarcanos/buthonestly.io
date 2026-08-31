@@ -42,6 +42,7 @@ jobs:
           KIT_API_KEY: ${{ secrets.KIT_API_KEY }}
           KIT_EMAIL_TEMPLATE_ID: ${{ vars.KIT_EMAIL_TEMPLATE_ID }}
           SITE_URL: ${{ vars.NEWSLETTER_SITE_URL || 'https://buthonestly.io' }}
+          PUBLICATION_MONITORING_HANDOFF_FILE: artifacts/publication-monitoring-handoff.json
         run: npm run publication
 
       - name: Record draft identities and partial successes
@@ -60,6 +61,7 @@ jobs:
           KIT_API_KEY: ${{ secrets.KIT_API_KEY }}
           KIT_EMAIL_TEMPLATE_ID: ${{ vars.KIT_EMAIL_TEMPLATE_ID }}
           SITE_URL: ${{ vars.NEWSLETTER_SITE_URL || 'https://buthonestly.io' }}
+          PUBLICATION_MONITORING_HANDOFF_FILE: artifacts/publication-monitoring-handoff.json
         run: npm run publication
 
       - name: Record delivery and remaining partial successes
@@ -68,6 +70,16 @@ jobs:
         env:
           REPOSITORY_DEPLOY_KEY: ${{ secrets.REPOSITORY_DEPLOY_KEY }}
         run: node scripts/checkpoint-generated-state.mjs publication
+
+      - name: Hand Live Essays to monitoring
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@v7
+        with:
+          name: publication-monitoring-handoff
+          path: artifacts/publication-monitoring-handoff.json
+          if-no-files-found: ignore
+          retention-days: 1
 
       - name: Report provider failures
         if: always()

@@ -28,7 +28,7 @@ test("the advisory workflow has the approved schedules, manual inputs, and seria
   assert.match(workflow, /options: \[mobile, desktop\]/);
   assert.match(workflow, /group: lighthouse-state/);
   assert.match(workflow, /cancel-in-progress: false/);
-  assert.match(workflow, /permissions:\n\s+contents: read/);
+  assert.match(workflow, /permissions:\n\s+actions: read\n\s+contents: read/);
   assert.doesNotMatch(workflow, /issues: write/);
   assert.match(workflow, /LIGHTHOUSE_ROUTE: \$\{\{ inputs\.route \}\}/);
   assert.match(workflow, /--route "\$LIGHTHOUSE_ROUTE"/);
@@ -81,8 +81,18 @@ test("raw evidence is retained for 90 days and state uses the checkpoint boundar
   assert.doesNotMatch(workflow, /git push|GIT_SSH_COMMAND/);
 });
 
-test("post-publication monitoring is downstream and cannot alter publication success", () => {
+test("post-publication monitoring receives an exact asynchronous handoff", () => {
   assert.match(workflow, /workflow_run:\n\s+workflows: \[Publication\]/);
+  assert.match(
+    workflow,
+    /ref: \$\{\{ github\.event\.pull_request\.head\.sha \|\| github\.event\.workflow_run\.head_sha \|\| github\.sha \}\}/,
+  );
+  assert.match(workflow, /name: publication-monitoring-handoff/);
+  assert.match(workflow, /run-id: \$\{\{ github\.event\.workflow_run\.id \}\}/);
+  assert.match(
+    workflow,
+    /PUBLICATION_MONITORING_HANDOFF_FILE: artifacts\/publication-monitoring-handoff\.json/,
+  );
   assert.match(workflow, /--trigger post-publication/);
   assert.match(
     workflow,
@@ -92,5 +102,21 @@ test("post-publication monitoring is downstream and cannot alter publication suc
     workflow,
     /PUBLICATION_RUN_STARTED_AT: \$\{\{ github\.event\.workflow_run\.run_started_at \}\}/,
   );
-  assert.doesNotMatch(publication, /lighthouse|performance monitoring/iu);
+  assert.match(
+    publication,
+    /PUBLICATION_MONITORING_HANDOFF_FILE: artifacts\/publication-monitoring-handoff\.json/g,
+  );
+  assert.match(
+    publication,
+    /if: always\(\)\n\s+continue-on-error: true\n\s+uses: actions\/upload-artifact@v7[\s\S]*name: publication-monitoring-handoff/,
+  );
+});
+
+test("every monitoring terminal outcome remains outside the publication boundary", () => {
+  assert.match(workflow, /types: \[completed\]/);
+  assert.doesNotMatch(workflow, /workflow_run\.conclusion/);
+  assert.match(workflow, /timeout-minutes: 45/);
+  assert.match(workflow, /checkpoint-generated-state\.mjs lighthouse/);
+  assert.doesNotMatch(publication, /run-lighthouse|--trigger post-publication/);
+  assert.doesNotMatch(publication, /workflow_run|lighthouse-state/);
 });

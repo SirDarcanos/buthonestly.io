@@ -11,6 +11,7 @@ import {
   createFileStatePort,
   createIndexNowPort,
   createKitPort,
+  createMonitoringHandoffPort,
   createProductionPort,
   renderNewsletterContent,
 } from "../scripts/orchestrate-publication.mjs";
@@ -222,6 +223,7 @@ const createHarness = ({
   kitDraftMatch,
   kitCreateError,
   kitDeliveryError,
+  monitoringHandoffError,
 } = {}) => {
   const calls = {
     sleeps: [],
@@ -233,6 +235,7 @@ const createHarness = ({
     kitDrafts: [],
     kitInspections: [],
     kitDeliveries: [],
+    monitoringHandoffs: [],
   };
   const queues = new Map(
     Object.entries(productionVersions).map(([slug, versions]) => [
@@ -288,6 +291,12 @@ const createHarness = ({
         submit: async (urls) => {
           calls.submissions.push([...urls]);
           if (indexNowError) throw indexNowError;
+        },
+      },
+      monitoring: {
+        handoff: async (handoff) => {
+          calls.monitoringHandoffs.push(structuredClone(handoff));
+          if (monitoringHandoffError) throw monitoringHandoffError;
         },
       },
       ...(kitStatuses
@@ -346,7 +355,58 @@ test("a scheduled essay causes no publication action before 13:00 UTC", async ()
     kitDrafts: [],
     kitInspections: [],
     kitDeliveries: [],
+    monitoringHandoffs: [],
   });
+});
+
+test("the monitoring handoff port preserves canonical Essay identity and exact hashes", async (context) => {
+  const directory = await mkdtemp(path.join(tmpdir(), "publication-handoff-"));
+  context.after(() => rm(directory, { recursive: true, force: true }));
+  const filePath = path.join(directory, "handoff.json");
+  const monitoring = createMonitoringHandoffPort({ filePath });
+
+  await monitoring.handoff({ slug: "zebra", contentHash: "zebra-hash" });
+  await monitoring.handoff({ slug: "alpha", contentHash: "alpha-hash" });
+  await monitoring.handoff({ slug: "zebra", contentHash: "zebra-hash-two" });
+
+  assert.deepEqual(JSON.parse(await readFile(filePath, "utf8")), {
+    version: 1,
+    essays: [
+      { slug: "alpha", contentHash: "alpha-hash" },
+      { slug: "zebra", contentHash: "zebra-hash-two" },
+    ],
+  });
+});
+
+test("a Live Essay hands monitoring its exact reader-facing content hash", async () => {
+  const live = essay("live-handoff");
+  const { ports, calls } = createHarness({
+    now: new Date("2026-09-16T00:00:00.000Z"),
+    essays: [live],
+    productionVersions: { "live-handoff": [live.publicContentHash] },
+  });
+
+  await runPublication(ports);
+
+  assert.deepEqual(calls.monitoringHandoffs, [
+    { slug: live.slug, contentHash: live.publicContentHash },
+  ]);
+});
+
+test("a monitoring handoff failure cannot change Kit or IndexNow outcomes", async () => {
+  const live = essay("isolated-monitoring");
+  const { ports, calls } = createHarness({
+    now: new Date("2026-09-16T00:00:00.000Z"),
+    essays: [live],
+    productionVersions: { "isolated-monitoring": [live.publicContentHash] },
+    monitoringHandoffError: new Error("monitoring unavailable"),
+  });
+
+  const result = await runPublication(ports);
+
+  assert.deepEqual(result.submitted, [live.slug]);
+  assert.deepEqual(result.errors, []);
+  assert.equal(calls.submissions.length, 1);
 });
 
 test("a live reader-facing update submits only its canonical URL", async () => {

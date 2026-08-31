@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
@@ -7,7 +7,9 @@ import test from "node:test";
 import {
   createLighthouseStatePort,
   historicalContentHashes,
+  isExpectedProductionVersionLive,
   planPostPublicationChecks,
+  readPublicationMonitoringHandoffs,
   reportMarkdown,
 } from "../scripts/run-lighthouse-monitoring.mjs";
 
@@ -162,6 +164,79 @@ test("Lighthouse state initializes and is written deterministically", async (con
     authored.indexOf('"desktop:/a/"') < authored.indexOf('"mobile:/z/"'),
   );
   assert.deepEqual(await state.load(), JSON.parse(authored));
+});
+
+test("the publication artifact carries exact monitoring handoffs", async (context) => {
+  const directory = await mkdtemp(
+    path.join(tmpdir(), "publication-handoff-read-"),
+  );
+  context.after(() => rm(directory, { recursive: true, force: true }));
+  const filePath = path.join(directory, "handoff.json");
+  await writeFile(
+    filePath,
+    JSON.stringify({
+      version: 1,
+      essays: [{ slug: "exact-essay", contentHash: "exact-hash" }],
+    }),
+  );
+
+  assert.deepEqual(await readPublicationMonitoringHandoffs(filePath), [
+    { slug: "exact-essay", contentHash: "exact-hash" },
+  ]);
+  assert.deepEqual(
+    await readPublicationMonitoringHandoffs(
+      path.join(directory, "missing.json"),
+    ),
+    [],
+  );
+});
+
+test("stale production content cannot become a monitoring candidate", async () => {
+  const essay = {
+    slug: "exact-essay",
+    canonicalUrl: "https://buthonestly.io/exact-essay/",
+    publicContentHash: "expected-hash",
+  };
+  const responses = ["stale-hash", "expected-hash"];
+  const fetch = async () =>
+    new Response(
+      `<article data-content-version="${responses.shift()}">Essay</article>`,
+    );
+
+  assert.equal(await isExpectedProductionVersionLive(essay, { fetch }), false);
+  assert.equal(await isExpectedProductionVersionLive(essay, { fetch }), true);
+});
+
+test("post-publication planning accepts only the exact handed-off Essay hash", () => {
+  const published = [
+    {
+      slug: "exact",
+      publicContentHash: "exact-hash",
+      publishedAt: new Date("2026-08-30T13:00:00.000Z"),
+    },
+    {
+      slug: "not-handed-off",
+      publicContentHash: "other-hash",
+      publishedAt: new Date("2026-08-30T13:00:00.000Z"),
+    },
+  ];
+  const plan = planPostPublicationChecks({
+    published,
+    handoffs: [
+      { slug: "exact", contentHash: "exact-hash" },
+      { slug: "not-handed-off", contentHash: "stale-hash" },
+    ],
+    monitoringState: {
+      postPublicationBootstrapped: true,
+      checkedContentHashes: {},
+    },
+    now: new Date("2026-08-30T13:20:00.000Z"),
+  });
+
+  assert.deepEqual(
+    plan.candidates.map(({ slug }) => slug),
+    ["exact"],
+  );
 });
 
 test("the first publication handoff bootstraps historical hashes without auditing them", () => {

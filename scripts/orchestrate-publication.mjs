@@ -1,11 +1,19 @@
 import { randomUUID } from "node:crypto";
-import { readdir, readFile, rename, rm, writeFile } from "node:fs/promises";
+import {
+  mkdir,
+  readdir,
+  readFile,
+  rename,
+  rm,
+  writeFile,
+} from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { loadEssayInventory } from "../src/lib/essay-inventory.mjs";
 import { runPublication } from "../src/lib/publication-orchestrator.mjs";
 
 const STATE_FILE = "data/publication-state.json";
+const MONITORING_HANDOFF_FILE = "artifacts/publication-monitoring-handoff.json";
 const INDEXNOW_ENDPOINT = "https://api.indexnow.org/indexnow";
 const KIT_ENDPOINT = "https://api.kit.com/v4/broadcasts";
 
@@ -295,6 +303,40 @@ export const createFileStatePort = ({ filePath = STATE_FILE } = {}) => ({
   },
 });
 
+export const createMonitoringHandoffPort = ({
+  filePath = MONITORING_HANDOFF_FILE,
+} = {}) => ({
+  handoff: async (handoff) => {
+    let handoffs = [];
+    try {
+      const existing = JSON.parse(await readFile(filePath, "utf8"));
+      if (existing?.version !== 1 || !Array.isArray(existing.essays)) {
+        throw new Error(
+          `${filePath} does not contain a publication monitoring handoff v1.`,
+        );
+      }
+      handoffs = existing.essays;
+    } catch (error) {
+      if (error?.code !== "ENOENT") throw error;
+    }
+    const essays = [
+      ...handoffs.filter(({ slug }) => slug !== handoff.slug),
+      handoff,
+    ].sort((left, right) => left.slug.localeCompare(right.slug));
+    const temporaryPath = `${filePath}.${randomUUID()}.tmp`;
+    try {
+      await mkdir(path.dirname(filePath), { recursive: true });
+      await writeFile(
+        temporaryPath,
+        `${JSON.stringify({ version: 1, essays }, null, 2)}\n`,
+      );
+      await rename(temporaryPath, filePath);
+    } finally {
+      await rm(temporaryPath, { force: true });
+    }
+  },
+});
+
 export async function readIndexNowKey(publicDirectory = "public") {
   const candidates = (await readdir(publicDirectory))
     .filter((file) => /^[A-Za-z0-9-]{8,128}\.txt$/.test(file))
@@ -340,6 +382,11 @@ async function main() {
     kit: createKitPort({
       apiKey: process.env.KIT_API_KEY,
       emailTemplateId: process.env.KIT_EMAIL_TEMPLATE_ID,
+    }),
+    monitoring: createMonitoringHandoffPort({
+      filePath:
+        process.env.PUBLICATION_MONITORING_HANDOFF_FILE ??
+        MONITORING_HANDOFF_FILE,
     }),
   });
 

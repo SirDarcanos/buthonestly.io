@@ -6,6 +6,7 @@ data/link-graph.json
 docs/research/
 artifacts/lighthouse/
 artifacts/lighthouse-smoke/
+artifacts/publication-monitoring-handoff.json
 
 *.log*
 .env
