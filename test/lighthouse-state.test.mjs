@@ -59,6 +59,37 @@ test("the workflow summary identifies the target, device, medians, and retained 
   );
 });
 
+test("the workflow summary shows base and head absolute metrics with their delta", () => {
+  const markdown = reportMarkdown({
+    advisory: true,
+    skipped: false,
+    routes: ["/example/"],
+    devices: ["mobile"],
+    results: [
+      {
+        route: "/example/",
+        device: "mobile",
+        status: "passed",
+        result: {
+          workload: "navigation",
+          metrics: { lcpMs: 1500, performance: 0.9 },
+        },
+        base: {
+          status: "passed",
+          result: {
+            workload: "navigation",
+            metrics: { lcpMs: 1200, performance: 0.95 },
+          },
+        },
+        delta: { lcpMs: 300, performance: -0.05 },
+      },
+    ],
+  });
+
+  assert.match(markdown, /↳ base.*1,200.*0\.950/);
+  assert.match(markdown, /↳ head − base.*300.*-0\.050/);
+});
+
 test("the workflow summary exposes a failed comparison baseline", () => {
   const markdown = reportMarkdown({
     advisory: true,

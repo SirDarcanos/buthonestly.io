@@ -26,8 +26,6 @@ test("the advisory workflow has the approved schedules, manual inputs, and seria
   );
   assert.match(workflow, /route:\n\s+description: Reader-facing route/);
   assert.match(workflow, /options: \[mobile, desktop\]/);
-  assert.match(workflow, /!src\/lib\/crux-field-data\.mjs/);
-  assert.match(workflow, /!src\/lib\/lighthouse-monitoring\.mjs/);
   assert.match(workflow, /group: lighthouse-state/);
   assert.match(workflow, /cancel-in-progress: false/);
   assert.match(workflow, /permissions:\n\s+contents: read/);
@@ -38,13 +36,31 @@ test("the advisory workflow has the approved schedules, manual inputs, and seria
 });
 
 test("pull-request revisions are built and measured on one runner", () => {
+  assert.match(workflow, /pull_request:\s*$/m);
+  assert.doesNotMatch(workflow, /pull_request:\n\s+paths:/);
+  assert.match(workflow, /Plan pull-request routes/);
+  assert.match(
+    workflow,
+    /steps\.pull_request_plan\.outputs\.selected == 'true'/,
+  );
   assert.match(
     workflow,
     /ref: \$\{\{ github\.event\.pull_request\.base\.sha \}\}/,
   );
   assert.match(workflow, /LIGHTHOUSE_BASE_URL: http:\/\/127\.0\.0\.1:4322/);
   assert.match(workflow, /LIGHTHOUSE_HEAD_URL: http:\/\/127\.0\.0\.1:4321/);
-  assert.match(workflow, /LIGHTHOUSE_INCLUDE_SCHEDULED: "true"/);
+  assert.match(
+    workflow,
+    /LIGHTHOUSE_PREVIEW_SLUGS: \$\{\{ steps\.pull_request_plan\.outputs\.preview_slugs \}\}/,
+  );
+  assert.match(
+    workflow,
+    /grep -q LIGHTHOUSE_PREVIEW_SLUGS src\/lib\/essays\.ts[\s\S]*LIGHTHOUSE_INCLUDE_SCHEDULED=true npm run build/,
+  );
+  assert.match(
+    workflow,
+    /LIGHTHOUSE_PULL_REQUEST_ROUTES: \$\{\{ steps\.pull_request_plan\.outputs\.routes \}\}/,
+  );
   assert.match(workflow, /npm run lighthouse -- --trigger pull-request/);
 });
 

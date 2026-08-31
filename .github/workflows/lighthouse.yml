@@ -2,14 +2,6 @@ name: Lighthouse monitoring
 
 on:
   pull_request:
-    paths:
-      - "src/**"
-      - "!src/lib/crux-field-data.mjs"
-      - "!src/lib/lighthouse-monitoring.mjs"
-      - "public/**"
-      - "astro.config.mjs"
-      - "package.json"
-      - "package-lock.json"
   schedule:
     - cron: "0 6 * * 1"
     - cron: "0 7 * * 1"
@@ -74,16 +66,27 @@ jobs:
           path: .lighthouse-base
           persist-credentials: false
 
-      - name: Build pull-request revisions
+      - name: Plan pull-request routes
+        id: pull_request_plan
         if: github.event_name == 'pull_request'
         env:
-          LIGHTHOUSE_INCLUDE_SCHEDULED: "true"
+          LIGHTHOUSE_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: node scripts/plan-lighthouse-pull-request.mjs
+
+      - name: Build pull-request revisions
+        if: github.event_name == 'pull_request' && steps.pull_request_plan.outputs.selected == 'true'
+        env:
+          LIGHTHOUSE_PREVIEW_SLUGS: ${{ steps.pull_request_plan.outputs.preview_slugs }}
         run: |
           npm run build
           (npm run preview -- --host 127.0.0.1 --port 4321 > "$RUNNER_TEMP/lighthouse-head.log" 2>&1 &)
           cd .lighthouse-base
           npm ci
-          npm run build
+          if grep -q LIGHTHOUSE_PREVIEW_SLUGS src/lib/essays.ts; then
+            npm run build
+          else
+            LIGHTHOUSE_INCLUDE_SCHEDULED=true npm run build
+          fi
           (npm run preview -- --host 127.0.0.1 --port 4322 > "$RUNNER_TEMP/lighthouse-base.log" 2>&1 &)
           for url in http://127.0.0.1:4321 http://127.0.0.1:4322; do
             for attempt in {1..30}; do curl --fail --silent "$url" >/dev/null && break; sleep 1; done
@@ -91,12 +94,13 @@ jobs:
           done
 
       - name: Audit pull request on one runner
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && steps.pull_request_plan.outputs.selected == 'true'
         env:
           LIGHTHOUSE_BASE_SHA: ${{ github.event.pull_request.base.sha }}
           LIGHTHOUSE_BASE_URL: http://127.0.0.1:4322
           LIGHTHOUSE_HEAD_URL: http://127.0.0.1:4321
           LIGHTHOUSE_ARTIFACT_DIR: artifacts/lighthouse
+          LIGHTHOUSE_PULL_REQUEST_ROUTES: ${{ steps.pull_request_plan.outputs.routes }}
         run: npm run lighthouse -- --trigger pull-request
 
       - name: Audit scheduled production matrix

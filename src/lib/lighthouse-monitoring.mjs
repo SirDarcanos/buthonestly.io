@@ -107,30 +107,36 @@ const normalizedRoute = (route) => {
   return candidate;
 };
 
-const monitoringOnlyChange = (filename) =>
+const nonRenderedChange = (filename) =>
   ["src/lib/crux-field-data.mjs", "src/lib/lighthouse-monitoring.mjs"].includes(
     filename,
-  );
+  ) || /^src\/content\/drafts\//u.test(filename);
 
 const fullMatrixChange = (filename) =>
   filename === "astro.config.mjs" ||
   filename === "package.json" ||
   filename === "package-lock.json" ||
+  filename === "data/related.json" ||
   /^(src\/(components|layouts|styles|lib)\/|src\/content\.config\.ts|src\/consts\.ts)/u.test(
     filename,
   );
 
 const outputChange = (filename) =>
-  /^(src\/|public\/|astro\.config\.mjs$|package(-lock)?\.json$)/u.test(
+  /^(src\/|public\/|astro\.config\.mjs$|package(-lock)?\.json$|data\/related\.json$)/u.test(
     filename,
   );
+
+const essaySlugsFromFiles = (files) =>
+  files
+    .map((filename) => filename.match(/^src\/content\/essays\/([^/]+)\//u)?.[1])
+    .filter(Boolean);
 
 export const selectPullRequestRoutes = (
   changedFiles,
   { homepageChanges = true } = {},
 ) => {
   const outputFiles = changedFiles.filter(
-    (filename) => !monitoringOnlyChange(filename),
+    (filename) => !nonRenderedChange(filename),
   );
   if (outputFiles.some(fullMatrixChange)) return [...LIGHTHOUSE_MATRIX];
   const routes = new Set();
@@ -151,6 +157,28 @@ export const selectPullRequestRoutes = (
     if (outputChange(filename)) return [...LIGHTHOUSE_MATRIX];
   }
   return [...routes];
+};
+
+export const createPullRequestPlan = ({
+  files,
+  headPublishedSlugs,
+  basePublishedSlugs,
+  headScheduledSlugs,
+  baseScheduledSlugs,
+}) => {
+  const changedEssaySlugs = essaySlugsFromFiles(files);
+  const headPublished = new Set(headPublishedSlugs);
+  const basePublished = new Set(basePublishedSlugs);
+  const scheduled = new Set([...headScheduledSlugs, ...baseScheduledSlugs]);
+  const homepageChanges =
+    changedEssaySlugs.length === 0 ||
+    changedEssaySlugs.some(
+      (slug) => headPublished.has(slug) || basePublished.has(slug),
+    );
+  return {
+    routes: selectPullRequestRoutes(files, { homepageChanges }),
+    previewSlugs: changedEssaySlugs.filter((slug) => scheduled.has(slug)),
+  };
 };
 
 export const createEmptyLighthouseState = (startedAt) => ({

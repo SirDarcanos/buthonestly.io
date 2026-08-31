@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   createEmptyLighthouseState,
+  createPullRequestPlan,
   LIGHTHOUSE_MATRIX,
   runLighthouseMonitoring,
   scheduledDevices,
@@ -96,6 +97,10 @@ test("scheduled device selection combines coincident checks without duplicating 
 test("pull-request selection is change-aware and conservative", () => {
   assert.deepEqual(selectPullRequestRoutes(["docs/readme.md"]), []);
   assert.deepEqual(
+    selectPullRequestRoutes(["src/content/drafts/work-in-progress.mdx"]),
+    [],
+  );
+  assert.deepEqual(
     selectPullRequestRoutes([
       "src/lib/lighthouse-monitoring.mjs",
       "src/lib/crux-field-data.mjs",
@@ -134,9 +139,84 @@ test("pull-request selection is change-aware and conservative", () => {
     LIGHTHOUSE_MATRIX,
   );
   assert.deepEqual(
+    selectPullRequestRoutes(["data/related.json"]),
+    LIGHTHOUSE_MATRIX,
+  );
+  assert.deepEqual(
     selectPullRequestRoutes(["public/unknown.js"]),
     LIGHTHOUSE_MATRIX,
   );
+});
+
+test("a changed Scheduled Essay gets a bounded preview without changing the homepage selection", () => {
+  assert.deepEqual(
+    createPullRequestPlan({
+      files: ["src/content/essays/future/future.mdx"],
+      headPublishedSlugs: [],
+      basePublishedSlugs: [],
+      headScheduledSlugs: ["future", "another-future-essay"],
+      baseScheduledSlugs: ["future", "another-future-essay"],
+    }),
+    { routes: ["/future/"], previewSlugs: ["future"] },
+  );
+  assert.deepEqual(
+    createPullRequestPlan({
+      files: ["src/content/essays/live/live.mdx"],
+      headPublishedSlugs: ["live"],
+      basePublishedSlugs: ["live"],
+      headScheduledSlugs: ["future"],
+      baseScheduledSlugs: ["future"],
+    }),
+    { routes: ["/live/", "/"], previewSlugs: [] },
+  );
+  assert.deepEqual(
+    createPullRequestPlan({
+      files: ["src/content/essays/rescheduled/rescheduled.mdx"],
+      headPublishedSlugs: [],
+      basePublishedSlugs: ["rescheduled"],
+      headScheduledSlugs: ["rescheduled"],
+      baseScheduledSlugs: [],
+    }),
+    {
+      routes: ["/rescheduled/", "/"],
+      previewSlugs: ["rescheduled"],
+    },
+  );
+});
+
+test("pull-request selection classes are visible through the orchestration report", async () => {
+  const cases = [
+    { files: ["docs/readme.md"], routes: [], skipped: true },
+    {
+      files: ["src/content/essays/example/example.mdx"],
+      routes: ["/example/", "/"],
+      skipped: false,
+    },
+    {
+      files: ["src/pages/resources/free-ai-voice-generator.astro"],
+      routes: ["/resources/free-ai-voice-generator/", "/"],
+      skipped: false,
+    },
+    {
+      files: ["src/pages/unknown.astro"],
+      routes: LIGHTHOUSE_MATRIX,
+      skipped: false,
+    },
+  ];
+
+  for (const scenario of cases) {
+    const context = harness();
+    const report = await runLighthouseMonitoring({
+      trigger: "pull-request",
+      changedFiles: scenario.files,
+      devices: ["mobile"],
+      revisions: { head: "head" },
+      ...context.ports,
+    });
+    assert.deepEqual(report.routes, scenario.routes);
+    assert.equal(report.skipped, scenario.skipped);
+    assert.equal(context.reports[0], report);
+  }
 });
 
 test("scheduled monitoring uses three-run medians and keeps navigation separate from cold scroll", async () => {

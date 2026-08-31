@@ -70,11 +70,15 @@ export async function getRenderableEssays(): Promise<RenderableEssay[]> {
     );
   }
 
-  const records =
-    import.meta.env.PROD &&
-    import.meta.env.LIGHTHOUSE_INCLUDE_SCHEDULED !== "true"
-      ? INVENTORY.published
-      : INVENTORY.essays;
+  const previewSlugs = new Set(
+    (import.meta.env.LIGHTHOUSE_PREVIEW_SLUGS ?? "").split(",").filter(Boolean),
+  );
+  const records = import.meta.env.PROD
+    ? INVENTORY.essays.filter(
+        (essay) =>
+          PUBLISHED_SLUGS.has(essay.slug) || previewSlugs.has(essay.slug),
+      )
+    : INVENTORY.essays;
   return records
     .map((record) => ({ record, entry: entriesBySlug.get(record.slug)! }))
     .sort(

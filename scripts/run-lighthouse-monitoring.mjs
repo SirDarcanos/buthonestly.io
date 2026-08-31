@@ -9,9 +9,9 @@ import { fileURLToPath } from "node:url";
 import { loadEssayInventory } from "../src/lib/essay-inventory.mjs";
 import {
   createEmptyLighthouseState,
+  createPullRequestPlan,
   LIGHTHOUSE_MATRIX,
   runLighthouseMonitoring,
-  selectPullRequestRoutes,
 } from "../src/lib/lighthouse-monitoring.mjs";
 import { createLighthouseAuditor } from "./lib/lighthouse-adapter.mjs";
 
@@ -135,8 +135,11 @@ export const reportMarkdown = (report, { evidenceUrl } = {}) => {
       lines.push(
         `| ↳ base | | | audit-failed: ${entry.base.error} | ${REPORT_COLUMNS.map(() => "—").join(" | ")} |`,
       );
-    } else if (entry.delta) {
-      lines.push(`| ↳ head − base | | | | ${cells(entry.delta)} |`);
+    } else if (entry.base?.result && entry.delta) {
+      lines.push(
+        `| ↳ base | | | passed | ${cells(entry.base.result.metrics)} |`,
+        `| ↳ head − base | | | | ${cells(entry.delta)} |`,
+      );
     }
   }
   return lines.join("\n");
@@ -283,16 +286,18 @@ export async function runCommand(options, environment = process.env) {
   };
   if (options.trigger === "pull-request") {
     const files = changedFiles(environment.LIGHTHOUSE_BASE_SHA);
-    const changedEssaySlugs = essaySlugsFromFiles(files);
-    const scheduledSlugs = new Set(
-      loadEssayInventory({ now }).scheduled.map(({ slug }) => slug),
-    );
-    const homepageChanges =
-      changedEssaySlugs.length === 0 ||
-      changedEssaySlugs.some((slug) => !scheduledSlugs.has(slug));
-    const pullRequestRoutes = selectPullRequestRoutes(files, {
-      homepageChanges,
-    });
+    const selectedRoutes =
+      environment.LIGHTHOUSE_PULL_REQUEST_ROUTES?.split(",").filter(Boolean);
+    const inventory = loadEssayInventory({ now });
+    const pullRequestRoutes =
+      selectedRoutes ??
+      createPullRequestPlan({
+        files,
+        headPublishedSlugs: inventory.published.map(({ slug }) => slug),
+        basePublishedSlugs: inventory.published.map(({ slug }) => slug),
+        headScheduledSlugs: inventory.scheduled.map(({ slug }) => slug),
+        baseScheduledSlugs: inventory.scheduled.map(({ slug }) => slug),
+      }).routes;
     let baseRoutes;
     if (targets.base) {
       baseRoutes =
