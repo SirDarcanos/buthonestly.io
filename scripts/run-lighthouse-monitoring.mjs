@@ -187,10 +187,7 @@ const essaySlugsFromFiles = (files) =>
 
 export const planPostPublicationChecks = ({
   published,
-  handoffs = published.map(({ slug, publicContentHash }) => ({
-    slug,
-    contentHash: publicContentHash,
-  })),
+  handoffs,
   monitoringState,
   changedFiles: publicationChangedFiles = [],
   runStartedAt,
@@ -277,6 +274,25 @@ export const historicalContentHashes = (essays) =>
   Object.fromEntries(
     essays.map(({ slug, publicContentHash }) => [slug, [publicContentHash]]),
   );
+
+export const runPostPublicationChecks = async ({ candidates, isLive, run }) => {
+  const reports = [];
+  const failures = [];
+  for (const essay of candidates) {
+    try {
+      if (!(await isLive(essay))) continue;
+      reports.push(await run(essay));
+    } catch (error) {
+      failures.push(
+        `${essay.slug}: ${error instanceof Error ? error.message : String(error)}`,
+      );
+    }
+  }
+  if (failures.length > 0) {
+    throw new Error(`Post-publication checks failed: ${failures.join("; ")}`);
+  }
+  return reports;
+};
 
 const parseArguments = (arguments_) => {
   const options = { trigger: "scheduled", routes: [], devices: [] };
@@ -403,16 +419,15 @@ export async function runCommand(options, environment = process.env) {
       durableState.postPublicationBootstrapped = true;
       await state.save(durableState);
     }
-    const reports = [];
-    for (const essay of plan.candidates) {
-      if (!(await isExpectedProductionVersionLive(essay))) continue;
-      reports.push(
-        await runLighthouseMonitoring({
+    const reports = await runPostPublicationChecks({
+      candidates: plan.candidates,
+      isLive: isExpectedProductionVersionLive,
+      run: (essay) =>
+        runLighthouseMonitoring({
           ...common,
           handoff: { slug: essay.slug, contentHash: essay.publicContentHash },
         }),
-      );
-    }
+    });
     if (reports.length === 0)
       await reporter.write({ advisory: true, skipped: true, results: [] });
     return reports;

@@ -11,6 +11,7 @@ import {
   planPostPublicationChecks,
   readPublicationMonitoringHandoffs,
   reportMarkdown,
+  runPostPublicationChecks,
 } from "../scripts/run-lighthouse-monitoring.mjs";
 
 test("the workflow summary identifies the target, device, medians, and retained evidence", () => {
@@ -239,6 +240,29 @@ test("post-publication planning accepts only the exact handed-off Essay hash", (
   );
 });
 
+test("one failed Live Essay check cannot interrupt later handoffs", async () => {
+  const checked = [];
+  const candidates = [
+    { slug: "first", publicContentHash: "first-hash" },
+    { slug: "second", publicContentHash: "second-hash" },
+  ];
+
+  await assert.rejects(
+    runPostPublicationChecks({
+      candidates,
+      isLive: async () => true,
+      run: async (essay) => {
+        checked.push(essay.slug);
+        if (essay.slug === "first") throw new Error("first audit failed");
+        return { slug: essay.slug };
+      },
+    }),
+    /first audit failed/,
+  );
+
+  assert.deepEqual(checked, ["first", "second"]);
+});
+
 test("the first publication handoff bootstraps historical hashes without auditing them", () => {
   const published = [
     {
@@ -259,6 +283,10 @@ test("the first publication handoff bootstraps historical hashes without auditin
   ];
   const plan = planPostPublicationChecks({
     published,
+    handoffs: published.map(({ slug, publicContentHash }) => ({
+      slug,
+      contentHash: publicContentHash,
+    })),
     monitoringState: {
       postPublicationBootstrapped: false,
       checkedContentHashes: {},
@@ -296,6 +324,10 @@ test("after bootstrap every unseen Live Essay hash remains eligible", () => {
   ];
   const plan = planPostPublicationChecks({
     published,
+    handoffs: published.map(({ slug, publicContentHash }) => ({
+      slug,
+      contentHash: publicContentHash,
+    })),
     monitoringState: {
       postPublicationBootstrapped: true,
       checkedContentHashes: { historical: ["historical-hash"] },

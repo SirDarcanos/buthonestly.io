@@ -140,12 +140,14 @@ export async function runPublication({
 
   if (monitoring) {
     for (const essay of liveEssays) {
-      await Promise.allSettled([
-        monitoring.handoff({
+      try {
+        await monitoring.handoff({
           slug: essay.slug,
           contentHash: essay.publicContentHash,
-        }),
-      ]);
+        });
+      } catch {
+        continue;
+      }
     }
   }
 
