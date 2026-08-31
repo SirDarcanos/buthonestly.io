@@ -26,6 +26,7 @@ const workloadMetricKeys = Object.freeze({
     "mainThreadWorkMs",
     "firstPartyTransferBytes",
     "thirdPartyTransferBytes",
+    "performance",
     "accessibility",
     "bestPractices",
     "seo",
@@ -213,6 +214,7 @@ const auditRevision = async ({ auditor, routes, devices, revision }) => {
           route,
           device,
           revision,
+          workload,
           ...(await auditWorkload({
             auditor,
             route,
@@ -329,6 +331,7 @@ export async function runLighthouseMonitoring({
     revision: revisions.head,
   });
   let results = headResults;
+  let completedAudits = headResults;
   if (trigger === "pull-request" && revisions.base) {
     const baseRoutes = new Set(revisions.baseRoutes ?? selection.routes);
     const baseResults = await auditRevision({
@@ -337,22 +340,20 @@ export async function runLighthouseMonitoring({
       devices: selection.devices,
       revision: revisions.base,
     });
+    completedAudits = [...headResults, ...baseResults];
     const baseByWorkload = new Map(
       baseResults.map((result) => [
-        `${result.route}:${result.device}:${result.result?.workload}`,
+        `${result.route}:${result.device}:${result.workload}`,
         result,
       ]),
     );
     results = headResults.map((head) => ({
       ...head,
       base:
-        baseByWorkload.get(
-          `${head.route}:${head.device}:${head.result?.workload}`,
-        ) ?? null,
+        baseByWorkload.get(`${head.route}:${head.device}:${head.workload}`) ??
+        null,
       delta: comparison(
-        baseByWorkload.get(
-          `${head.route}:${head.device}:${head.result?.workload}`,
-        ),
+        baseByWorkload.get(`${head.route}:${head.device}:${head.workload}`),
         head,
       ),
     }));
@@ -425,5 +426,17 @@ export async function runLighthouseMonitoring({
     results,
   };
   await reporter.write(report);
+  const failedResults = completedAudits.filter(
+    ({ status }) => status === "audit-failed",
+  );
+  if (failedResults.length > 0) {
+    const failures = failedResults
+      .map(
+        ({ route, device, revision, error }) =>
+          `${revision === revisions.base ? "base " : ""}${device}:${route}: ${error}`,
+      )
+      .join("; ");
+    throw new Error(`Lighthouse audit failed for ${failures}`);
+  }
   return report;
 }

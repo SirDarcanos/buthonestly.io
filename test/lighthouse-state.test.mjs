@@ -8,7 +8,82 @@ import {
   createLighthouseStatePort,
   historicalContentHashes,
   planPostPublicationChecks,
+  reportMarkdown,
 } from "../scripts/run-lighthouse-monitoring.mjs";
+
+test("the workflow summary identifies the target, device, medians, and retained evidence", () => {
+  const markdown = reportMarkdown(
+    {
+      advisory: true,
+      skipped: false,
+      routes: ["/example/"],
+      devices: ["mobile"],
+      results: [
+        {
+          route: "/example/",
+          device: "mobile",
+          status: "passed",
+          result: {
+            workload: "navigation",
+            metrics: {
+              lcpMs: 1200,
+              cls: 0.04,
+              scriptTransferBytes: 1000,
+              mainThreadWorkMs: 300,
+              firstPartyTransferBytes: 2200,
+              thirdPartyTransferBytes: 400,
+              performance: 0.91,
+              accessibility: 0.98,
+              bestPractices: 1,
+              seo: 0.92,
+            },
+            runs: [
+              { json: "one.json", html: "one.html" },
+              { json: "two.json", html: "two.html" },
+              { json: "three.json", html: "three.html" },
+            ],
+          },
+        },
+      ],
+    },
+    { evidenceUrl: "https://github.com/example/actions/runs/123#artifacts" },
+  );
+
+  assert.match(markdown, /Target: `\/example\/`/);
+  assert.match(markdown, /Device: `mobile`/);
+  assert.match(markdown, /Performance .* A11y \| BP \| SEO/);
+  assert.match(markdown, /0\.910 .* 0\.980 \| 1\.000 \| 0\.920/);
+  assert.match(
+    markdown,
+    /\[Download individual HTML and JSON reports\]\(https:\/\/github\.com\/example\/actions\/runs\/123#artifacts\)/,
+  );
+});
+
+test("the workflow summary exposes a failed comparison baseline", () => {
+  const markdown = reportMarkdown({
+    advisory: true,
+    skipped: false,
+    routes: ["/example/"],
+    devices: ["mobile"],
+    results: [
+      {
+        route: "/example/",
+        device: "mobile",
+        status: "passed",
+        result: { workload: "navigation", metrics: {} },
+        base: {
+          route: "/example/",
+          device: "mobile",
+          revision: "base",
+          status: "audit-failed",
+          error: "base route unavailable",
+        },
+      },
+    ],
+  });
+
+  assert.match(markdown, /↳ base.*audit-failed: base route unavailable/);
+});
 
 test("Lighthouse state initializes and is written deterministically", async (context) => {
   const directory = await mkdtemp(path.join(tmpdir(), "lighthouse-state-"));

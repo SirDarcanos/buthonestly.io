@@ -14,9 +14,10 @@ const trackedFiles = (...patterns) =>
     .split("\n")
     .filter(Boolean);
 
-test("publication automation has exactly three workflows", () => {
+test("repository automation has exactly the approved workflows", () => {
   assert.deepEqual(trackedFiles(".github/workflows/*"), [
     ".github/workflows/ci.yml",
+    ".github/workflows/lighthouse.yml",
     ".github/workflows/publication.yml",
     ".github/workflows/related.yml",
   ]);

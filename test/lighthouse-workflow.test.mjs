@@ -32,6 +32,9 @@ test("the advisory workflow has the approved schedules, manual inputs, and seria
   assert.match(workflow, /cancel-in-progress: false/);
   assert.match(workflow, /permissions:\n\s+contents: read/);
   assert.doesNotMatch(workflow, /issues: write/);
+  assert.match(workflow, /LIGHTHOUSE_ROUTE: \$\{\{ inputs\.route \}\}/);
+  assert.match(workflow, /--route "\$LIGHTHOUSE_ROUTE"/);
+  assert.doesNotMatch(workflow, /--route "\$\{\{ inputs\.route \}\}"/);
 });
 
 test("pull-request revisions are built and measured on one runner", () => {
@@ -48,6 +51,10 @@ test("pull-request revisions are built and measured on one runner", () => {
 test("raw evidence is retained for 90 days and state uses the checkpoint boundary", () => {
   assert.match(workflow, /retention-days: 90/);
   assert.match(workflow, /checkpoint-generated-state\.mjs lighthouse/);
+  assert.match(
+    workflow,
+    /if: \$\{\{ !cancelled\(\) && github\.event_name != 'pull_request'/,
+  );
   assert.doesNotMatch(workflow, /git push|GIT_SSH_COMMAND/);
 });
 

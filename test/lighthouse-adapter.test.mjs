@@ -31,6 +31,7 @@ test("representative Lighthouse JSON is normalized into attributable metrics", (
         mainThreadWorkMs: 456.7,
         firstPartyTransferBytes: 3000,
         thirdPartyTransferBytes: 300,
+        performance: 0.91,
         accessibility: 0.98,
         bestPractices: 1,
         seo: 0.92,
@@ -39,11 +40,41 @@ test("representative Lighthouse JSON is normalized into attributable metrics", (
   );
 });
 
+test("a failed route fails at the Lighthouse adapter boundary", () => {
+  const failedRoute = structuredClone(fixture);
+  failedRoute.audits["http-status-code"] = { score: 0, displayValue: "404" };
+
+  assert.throws(
+    () =>
+      normalizeLighthouseResult(failedRoute, {
+        siteOrigin: "https://buthonestly.io",
+      }),
+    /route failed with HTTP status 404/,
+  );
+});
+
+test("category scores outside the Lighthouse range are malformed", () => {
+  const malformed = structuredClone(fixture);
+  malformed.categories.performance.score = 2;
+
+  assert.throws(
+    () =>
+      normalizeLighthouseResult(malformed, {
+        siteOrigin: "https://buthonestly.io",
+      }),
+    /invalid performance score/,
+  );
+});
+
 test("provider schema drift fails at the Lighthouse adapter boundary", () => {
   assert.throws(
     () =>
       normalizeLighthouseResult(
-        { lighthouseVersion: "13", audits: {}, categories: {} },
+        {
+          lighthouseVersion: "13",
+          audits: { "http-status-code": { score: 1 } },
+          categories: {},
+        },
         { siteOrigin: "https://buthonestly.io" },
       ),
     /network request details/,
@@ -89,6 +120,47 @@ test("cold-scroll rejects an incomplete metric when a transfer never finishes", 
       },
     }),
     /did not become idle within 300ms/,
+  );
+});
+
+test("the adapter retains raw reports when normalization rejects malformed output", async (context) => {
+  const directory = await mkdtemp(path.join(tmpdir(), "lighthouse-artifacts-"));
+  context.after(() => rm(directory, { recursive: true, force: true }));
+  const malformed = structuredClone(fixture);
+  malformed.categories.performance.score = 2;
+  const auditor = createLighthouseAuditor({
+    targets: { head: "https://buthonestly.io" },
+    artifactDirectory: directory,
+    navigationRunner: async () => ({
+      lhr: malformed,
+      json: JSON.stringify(malformed),
+      html: "<html>diagnostic report</html>",
+    }),
+  });
+
+  await assert.rejects(
+    auditor.audit({
+      route: "/",
+      device: "mobile",
+      revision: "head",
+      workload: "navigation",
+      run: 1,
+    }),
+    /invalid performance score/,
+  );
+  assert.equal(
+    await readFile(
+      path.join(directory, "head-mobile-home-navigation-1.html"),
+      "utf8",
+    ),
+    "<html>diagnostic report</html>",
+  );
+  assert.match(
+    await readFile(
+      path.join(directory, "head-mobile-home-navigation-1.json"),
+      "utf8",
+    ),
+    /lighthouseVersion/,
   );
 });
 

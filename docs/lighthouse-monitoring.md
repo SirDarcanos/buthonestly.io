@@ -19,7 +19,7 @@ Regular checks cover:
 
 The `what-is-a-gpu` check also performs a controlled full-page scroll with a cold browser cache. It records first-party transferred image bytes and layout shifts separately from the normal navigation audit.
 
-Each result is the median of three runs for the same route and device.
+Each result is the median of three runs for the same route and device. The workflow summary reports the aggregate Lighthouse performance score for context, but that score is not an enforcement input.
 
 ## Triggers
 

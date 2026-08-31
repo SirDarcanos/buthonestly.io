@@ -11,12 +11,26 @@ const numeric = (value, name) => {
   return value;
 };
 
-const categoryScore = (lhr, key) =>
-  numeric(lhr.categories?.[key]?.score, `${key} score`);
+const categoryScore = (lhr, key) => {
+  const score = numeric(lhr.categories?.[key]?.score, `${key} score`);
+  if (score > 1) throw new Error(`Lighthouse output has invalid ${key} score.`);
+  return score;
+};
 
 export const normalizeLighthouseResult = (lhr, { siteOrigin }) => {
   if (lhr?.lighthouseVersion == null || !lhr.audits || !lhr.categories) {
     throw new Error("Lighthouse output is malformed.");
+  }
+  if (lhr.runtimeError) {
+    throw new Error(
+      `Lighthouse route failed: ${lhr.runtimeError.message ?? lhr.runtimeError.code ?? "unknown navigation error"}.`,
+    );
+  }
+  const status = lhr.audits["http-status-code"];
+  if (!status || status.score !== 1) {
+    throw new Error(
+      `Lighthouse route failed with HTTP status ${status?.numericValue ?? status?.displayValue ?? "unknown"}.`,
+    );
   }
   const networkRequests = lhr.audits["network-requests"]?.details?.items;
   if (!Array.isArray(networkRequests))
@@ -55,6 +69,7 @@ export const normalizeLighthouseResult = (lhr, { siteOrigin }) => {
       ),
       firstPartyTransferBytes,
       thirdPartyTransferBytes,
+      performance: categoryScore(lhr, "performance"),
       accessibility: categoryScore(lhr, "accessibility"),
       bestPractices: categoryScore(lhr, "best-practices"),
       seo: categoryScore(lhr, "seo"),
@@ -257,15 +272,15 @@ export const createLighthouseAuditor = ({
       return { ...output.normalized, evidence: evidencePath };
     }
     const output = await navigationRunner({ url, device, chromePath });
-    const normalized = normalizeLighthouseResult(output.lhr, {
-      siteOrigin: target,
-    });
     const jsonPath = path.join(artifactDirectory, `${basename}.json`);
     const htmlPath = path.join(artifactDirectory, `${basename}.html`);
     await Promise.all([
       writeFile(jsonPath, output.json),
       writeFile(htmlPath, output.html),
     ]);
+    const normalized = normalizeLighthouseResult(output.lhr, {
+      siteOrigin: target,
+    });
     return { ...normalized, evidence: { json: jsonPath, html: htmlPath } };
   },
 });

@@ -63,12 +63,37 @@ export const createLighthouseStatePort = ({
   },
 });
 
-const formatMetric = (key, value) =>
-  ["cls", "layoutShift", "accessibility", "bestPractices", "seo"].includes(key)
-    ? value.toFixed(3)
-    : Math.round(value).toLocaleString("en-US");
+const REPORT_COLUMNS = Object.freeze([
+  { key: "lcpMs", label: "LCP ms", decimals: false },
+  { key: "cls", label: "CLS", decimals: true },
+  { key: "scriptTransferBytes", label: "Script bytes", decimals: false },
+  { key: "mainThreadWorkMs", label: "Main-thread ms", decimals: false },
+  {
+    key: "firstPartyTransferBytes",
+    label: "First-party bytes",
+    decimals: false,
+  },
+  {
+    key: "thirdPartyTransferBytes",
+    label: "Third-party bytes",
+    decimals: false,
+  },
+  { key: "performance", label: "Performance", decimals: true },
+  {
+    key: "firstPartyImageTransferBytes",
+    label: "Scroll image bytes",
+    decimals: false,
+  },
+  { key: "layoutShift", label: "Scroll layout shift", decimals: true },
+  { key: "accessibility", label: "A11y", decimals: true },
+  { key: "bestPractices", label: "BP", decimals: true },
+  { key: "seo", label: "SEO", decimals: true },
+]);
 
-export const reportMarkdown = (report) => {
+const formatMetric = ({ decimals }, value) =>
+  decimals ? value.toFixed(3) : Math.round(value).toLocaleString("en-US");
+
+export const reportMarkdown = (report, { evidenceUrl } = {}) => {
   const lines = [
     "## Lighthouse regression check",
     "",
@@ -77,38 +102,42 @@ export const reportMarkdown = (report) => {
   ];
   if (report.skipped)
     return [...lines, "No reader-facing routes selected."].join("\n");
-  const columns = [
-    "lcpMs",
-    "cls",
-    "scriptTransferBytes",
-    "mainThreadWorkMs",
-    "firstPartyTransferBytes",
-    "thirdPartyTransferBytes",
-    "firstPartyImageTransferBytes",
-    "layoutShift",
-    "accessibility",
-    "bestPractices",
-    "seo",
-  ];
-  const cells = (metrics) =>
-    columns
-      .map((key) =>
-        Object.hasOwn(metrics, key) ? formatMetric(key, metrics[key]) : "—",
-      )
-      .join(" | ");
   lines.push(
-    "| Route | Device | Workload | Status | LCP ms | CLS | Script bytes | Main-thread ms | First-party bytes | Third-party bytes | Scroll image bytes | Scroll layout shift | A11y | BP | SEO |",
-    "| --- | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
+    `${report.routes.length === 1 ? "Target" : "Targets"}: ${report.routes.map((route) => `\`${route}\``).join(", ")}`,
+    "",
+    `${report.devices.length === 1 ? "Device" : "Devices"}: ${report.devices.map((device) => `\`${device}\``).join(", ")}`,
+    "",
+  );
+  if (evidenceUrl) {
+    lines.push(
+      `[Download individual HTML and JSON reports](${evidenceUrl})`,
+      "",
+    );
+  }
+  const cells = (metrics) =>
+    REPORT_COLUMNS.map((column) =>
+      Object.hasOwn(metrics, column.key)
+        ? formatMetric(column, metrics[column.key])
+        : "—",
+    ).join(" | ");
+  lines.push(
+    `| Route | Device | Workload | Status | ${REPORT_COLUMNS.map(({ label }) => label).join(" | ")} |`,
+    `| --- | --- | --- | --- | ${REPORT_COLUMNS.map(() => "---:").join(" | ")} |`,
   );
   for (const entry of report.results) {
     const metrics = entry.result?.metrics;
     lines.push(
       metrics
         ? `| ${entry.route} | ${entry.device} | ${entry.result.workload} | ${entry.status}${entry.retried ? " (retried)" : ""} | ${cells(metrics)} |`
-        : `| ${entry.route} | ${entry.device} | unknown | ${entry.status}: ${entry.error} | ${columns.map(() => "—").join(" | ")} |`,
+        : `| ${entry.route} | ${entry.device} | unknown | ${entry.status}: ${entry.error} | ${REPORT_COLUMNS.map(() => "—").join(" | ")} |`,
     );
-    if (entry.delta)
+    if (entry.base?.status === "audit-failed") {
+      lines.push(
+        `| ↳ base | | | audit-failed: ${entry.base.error} | ${REPORT_COLUMNS.map(() => "—").join(" | ")} |`,
+      );
+    } else if (entry.delta) {
       lines.push(`| ↳ head − base | | | | ${cells(entry.delta)} |`);
+    }
   }
   return lines.join("\n");
 };
@@ -222,9 +251,15 @@ export async function runCommand(options, environment = process.env) {
   };
   if (environment.LIGHTHOUSE_BASE_URL)
     targets.base = environment.LIGHTHOUSE_BASE_URL;
+  const evidenceUrl =
+    environment.GITHUB_SERVER_URL &&
+    environment.GITHUB_REPOSITORY &&
+    environment.GITHUB_RUN_ID
+      ? `${environment.GITHUB_SERVER_URL}/${environment.GITHUB_REPOSITORY}/actions/runs/${environment.GITHUB_RUN_ID}#artifacts`
+      : undefined;
   const reporter = {
     write: async (report) => {
-      const markdown = reportMarkdown(report);
+      const markdown = reportMarkdown(report, { evidenceUrl });
       console.log(markdown);
       if (environment.GITHUB_STEP_SUMMARY)
         await writeFile(environment.GITHUB_STEP_SUMMARY, `${markdown}\n`, {

@@ -112,7 +112,9 @@ jobs:
         env:
           SITE_URL: https://buthonestly.io
           LIGHTHOUSE_ARTIFACT_DIR: artifacts/lighthouse
-        run: npm run lighthouse -- --trigger manual --route "${{ inputs.route }}" --device "${{ inputs.device }}"
+          LIGHTHOUSE_ROUTE: ${{ inputs.route }}
+          LIGHTHOUSE_DEVICE: ${{ inputs.device }}
+        run: npm run lighthouse -- --trigger manual --route "$LIGHTHOUSE_ROUTE" --device "$LIGHTHOUSE_DEVICE"
 
       - name: Audit newly Live Essays independently of publication
         if: github.event_name == 'workflow_run'
@@ -133,7 +135,7 @@ jobs:
           retention-days: 90
 
       - name: Checkpoint advisory monitoring state
-        if: ${{ success() && github.event_name != 'pull_request' && (github.event_name != 'schedule' || steps.schedule_selection.outputs.selected == 'true') }}
+        if: ${{ !cancelled() && github.event_name != 'pull_request' && (github.event_name != 'schedule' || steps.schedule_selection.outputs.selected == 'true') }}
         env:
           REPOSITORY_DEPLOY_KEY: ${{ secrets.REPOSITORY_DEPLOY_KEY }}
         run: node scripts/checkpoint-generated-state.mjs lighthouse

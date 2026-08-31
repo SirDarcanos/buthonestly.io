@@ -1,11 +1,13 @@
 {
   "lighthouseVersion": "13.4.1",
   "categories": {
+    "performance": { "score": 0.91 },
     "accessibility": { "score": 0.98 },
     "best-practices": { "score": 1 },
     "seo": { "score": 0.92 }
   },
   "audits": {
+    "http-status-code": { "score": 1, "displayValue": "200" },
     "largest-contentful-paint": { "numericValue": 1234.5 },
     "cumulative-layout-shift": { "numericValue": 0.04 },
     "mainthread-work-breakdown": { "numericValue": 456.7 },

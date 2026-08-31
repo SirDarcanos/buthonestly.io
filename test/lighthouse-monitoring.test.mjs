@@ -16,6 +16,7 @@ const navigationMetrics = (value) => ({
   mainThreadWorkMs: value,
   firstPartyTransferBytes: value,
   thirdPartyTransferBytes: value,
+  performance: value / 100,
   accessibility: value / 100,
   bestPractices: value / 100,
   seo: value / 100,
@@ -181,6 +182,44 @@ test("scheduled monitoring uses three-run medians and keeps navigation separate 
   );
 });
 
+test("a manual check exercises the complete audit, reporting, state, and clock boundary", async () => {
+  const checkedAt = new Date("2026-08-04T11:12:13.000Z");
+  const context = harness({ now: checkedAt });
+  const report = await runLighthouseMonitoring({
+    trigger: "manual",
+    routes: ["/when-ai-stops-being-a-tool"],
+    devices: ["desktop"],
+    ...context.ports,
+  });
+
+  assert.deepEqual(
+    context.calls,
+    [1, 2, 3].map((run) => ({
+      route: "/when-ai-stops-being-a-tool/",
+      device: "desktop",
+      revision: "production",
+      workload: "navigation",
+      run,
+    })),
+  );
+  assert.equal(report.results[0].result.metrics.performance, 0.02);
+  assert.deepEqual(report.results[0].result.runs, [
+    "production-1",
+    "production-2",
+    "production-3",
+  ]);
+  assert.equal(context.reports[0], report);
+  assert.deepEqual(
+    context.state().outcomes["desktop:/when-ai-stops-being-a-tool/"],
+    {
+      status: "passed",
+      checkedAt: checkedAt.toISOString(),
+      consecutivePasses: 1,
+      openIssueNumber: null,
+    },
+  );
+});
+
 test("manual monitoring rejects routes outside the first-party path boundary", async () => {
   const context = harness();
   await assert.rejects(
@@ -251,19 +290,51 @@ test("pull requests compare matching routes while a new route has absolute evide
   );
 });
 
-test("failed post-publication audits remain eligible for recovery", async () => {
+test("a confirmed base-revision failure is reported and fails the comparison", async () => {
+  const context = harness({
+    audit: (request) => {
+      if (request.revision === "base")
+        throw new Error("base route unavailable");
+      return {
+        workload: request.workload,
+        metrics: workloadMetrics(request.workload, request.run),
+        evidence: request.run,
+      };
+    },
+  });
+
+  await assert.rejects(
+    runLighthouseMonitoring({
+      trigger: "pull-request",
+      pullRequestRoutes: ["/"],
+      devices: ["mobile"],
+      revisions: { head: "head", base: "base" },
+      ...context.ports,
+    }),
+    /base mobile:\/.*base route unavailable/,
+  );
+  assert.equal(context.reports[0].results[0].base.status, "audit-failed");
+});
+
+test("confirmed route failures report their evidence and fail the monitoring run", async () => {
   const context = harness({
     audit: () => {
       throw new Error("route unavailable");
     },
   });
-  const report = await runLighthouseMonitoring({
-    trigger: "post-publication",
-    handoff: { slug: "essay", contentHash: "one" },
-    ...context.ports,
-  });
 
-  assert.ok(report.results.every(({ status }) => status === "audit-failed"));
+  await assert.rejects(
+    runLighthouseMonitoring({
+      trigger: "post-publication",
+      handoff: { slug: "essay", contentHash: "one" },
+      ...context.ports,
+    }),
+    /Lighthouse audit failed for mobile:\/.*route unavailable; mobile:\/essay\/.*route unavailable/,
+  );
+
+  assert.ok(
+    context.reports[0].results.every(({ status }) => status === "audit-failed"),
+  );
   assert.deepEqual(context.state().checkedContentHashes, {});
 });
 
