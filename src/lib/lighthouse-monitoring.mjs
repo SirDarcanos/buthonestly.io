@@ -460,8 +460,8 @@ export async function runLighthouseMonitoring({
   if (failedResults.length > 0) {
     const failures = failedResults
       .map(
-        ({ route, device, revision, error }) =>
-          `${revision === revisions.base ? "base " : ""}${device}:${route}: ${error}`,
+        ({ route, device, revision, workload, error }) =>
+          `${revision === revisions.base ? "base " : ""}${device}:${route}:${workload}: ${error}`,
       )
       .join("; ");
     throw new Error(`Lighthouse audit failed for ${failures}`);

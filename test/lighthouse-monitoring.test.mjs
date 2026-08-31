@@ -409,7 +409,7 @@ test("confirmed route failures report their evidence and fail the monitoring run
       handoff: { slug: "essay", contentHash: "one" },
       ...context.ports,
     }),
-    /Lighthouse audit failed for mobile:\/.*route unavailable; mobile:\/essay\/.*route unavailable/,
+    /Lighthouse audit failed for mobile:\/:navigation:.*route unavailable; mobile:\/essay\/:navigation:.*route unavailable/,
   );
 
   assert.ok(

@@ -106,6 +106,7 @@ test("the workflow summary exposes a failed comparison baseline", () => {
           route: "/example/",
           device: "mobile",
           revision: "base",
+          workload: "navigation",
           status: "audit-failed",
           error: "base route unavailable",
         },
@@ -113,7 +114,10 @@ test("the workflow summary exposes a failed comparison baseline", () => {
     ],
   });
 
-  assert.match(markdown, /↳ base.*audit-failed: base route unavailable/);
+  assert.match(
+    markdown,
+    /↳ base.*navigation.*audit-failed: base route unavailable/,
+  );
 });
 
 test("Lighthouse state initializes and is written deterministically", async (context) => {

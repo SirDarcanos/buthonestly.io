@@ -129,11 +129,11 @@ export const reportMarkdown = (report, { evidenceUrl } = {}) => {
     lines.push(
       metrics
         ? `| ${entry.route} | ${entry.device} | ${entry.result.workload} | ${entry.status}${entry.retried ? " (retried)" : ""} | ${cells(metrics)} |`
-        : `| ${entry.route} | ${entry.device} | unknown | ${entry.status}: ${entry.error} | ${REPORT_COLUMNS.map(() => "—").join(" | ")} |`,
+        : `| ${entry.route} | ${entry.device} | ${entry.workload} | ${entry.status}: ${entry.error} | ${REPORT_COLUMNS.map(() => "—").join(" | ")} |`,
     );
     if (entry.base?.status === "audit-failed") {
       lines.push(
-        `| ↳ base | | | audit-failed: ${entry.base.error} | ${REPORT_COLUMNS.map(() => "—").join(" | ")} |`,
+        `| ↳ base | | ${entry.base.workload} | audit-failed: ${entry.base.error} | ${REPORT_COLUMNS.map(() => "—").join(" | ")} |`,
       );
     } else if (entry.base?.result && entry.delta) {
       lines.push(
