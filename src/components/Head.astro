@@ -10,6 +10,8 @@ import { type Feed, type Post } from "../types.ts";
 interface Props {
   title: string;
   description?: string;
+  ogImage?: string;
+  ogImageAlt?: string;
   type?: "website" | "article" | "profile";
   article?: Post;
   noindex?: boolean;
@@ -17,8 +19,17 @@ interface Props {
   feed?: Feed;
 }
 
-const { title, description, type, article, noindex, jsonLd, feed } =
-  Astro.props;
+const {
+  title,
+  description,
+  ogImage,
+  ogImageAlt,
+  type,
+  article,
+  noindex,
+  jsonLd,
+  feed,
+} = Astro.props;
 
 // Preview deploys are PROD builds too, so the branch — set by Cloudflare Pages
 // CI, absent locally — is what separates production from previews.
@@ -54,6 +65,8 @@ const feeds = [feed, { title: SITE_TITLE, href: "/feed.xml" }].filter(
   <SEO
     title={title}
     description={description}
+    ogImage={ogImage}
+    ogImageAlt={ogImageAlt}
     type={type}
     article={article}
     noindex={noindex}

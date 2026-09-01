@@ -10,6 +10,8 @@ import { SITE_LANG } from "../consts.ts";
 interface Props {
   title: string;
   description?: string;
+  ogImage?: string;
+  ogImageAlt?: string;
   type?: "website" | "article" | "profile";
   article?: Post;
   noindex?: boolean;
@@ -21,6 +23,8 @@ interface Props {
 const {
   title,
   description,
+  ogImage,
+  ogImageAlt,
   type,
   article,
   noindex,
@@ -41,6 +45,8 @@ const agentAttributes = markdown
   <Head
     title={title}
     description={description}
+    ogImage={ogImage}
+    ogImageAlt={ogImageAlt}
     type={type}
     article={article}
     noindex={noindex}
