@@ -3,7 +3,6 @@ import Layout from "../../layouts/Layout.astro";
 import Container from "../../components/Container.astro";
 import Label from "../../components/Label.astro";
 import AudioPlayer from "../../components/AudioPlayer.astro";
-import Button from "../../components/Button.astro";
 import { AUTHOR_ID, SITE_URL } from "../../consts.ts";
 import { STATIC_BASE } from "../../lib/cdn.mjs";
 import { breadcrumbList } from "../../lib/schema.ts";
@@ -52,12 +51,11 @@ const voiceGroups = [
 const sampleSentence =
   "Some mornings, the coffee tastes better than usual — and I never quite know why.";
 const sampleBase = `${STATIC_BASE}/kokoro-voice-samples`;
-const blendSample = {
-  label: "Onyx + Heart (50/50 blend)",
-  file: "blend_am_onyx_af_heart_50-50-sample.mp3",
-};
 const description =
-  "Turn any text into natural speech, right in your browser. Powered by Kokoro — nothing you type is ever sent to a server. Free, no sign-up.";
+  "Free AI voice generator with 28 English Kokoro voices. Generate MP3 or WAV speech on your device, with no signup required.";
+const ogImage = `${SITE_URL}/og/free-ai-voice-generator.png`;
+const ogImageAlt =
+  "Free AI Voice Generator social preview showing text becoming an audio waveform.";
 const applicationUrl = `${SITE_URL}/resources/free-ai-voice-generator/`;
 const jsonLd = [
   breadcrumbList([
@@ -82,7 +80,7 @@ const jsonLd = [
     featureList: [
       "Local text-to-speech generation",
       "28 American and British English voices",
-      "Voice blending",
+      "On-device synthesis",
       "Timed pauses",
       "MP3 and WAV downloads",
     ],
@@ -95,6 +93,8 @@ const jsonLd = [
   title="Free AI Voice Generator"
   description={description}
   jsonLd={jsonLd}
+  ogImage={ogImage}
+  ogImageAlt={ogImageAlt}
   markdown
 >
   <Container section id="voice-generator" className="md:max-w-2xl">
@@ -103,19 +103,17 @@ const jsonLd = [
 
     <div class="post-content mt-7">
       <p>
-        I built this small text-to-speech tool for anyone to use, entirely free
-        of charge. Paste your text, pick a voice, and click Generate — your
-        browser turns it into audio <strong>entirely on your device</strong>.
+        I built this free AI voice generator to turn text into speech without an
+        account. Paste your text, choose one of 28 American or British English
+        voices, and the audio is generated on your device.
       </p>
       <p>
         It runs the open-source <a
           href="https://huggingface.co/hexgrad/Kokoro-82M"
           target="_blank"
           rel="noopener">Kokoro</a
-        > model directly in your browser, using WebGPU when it's available. Despite
-        its lightweight architecture, it delivers quality comparable to larger (and
-        premium) models while being significantly faster — and free. Kokoro is distributed
-        under the Apache-2.0 license.
+        > model in your browser. It tries WebGPU when available and falls back to
+        slower WebAssembly when needed.
       </p>
     </div>
 
@@ -135,12 +133,12 @@ const jsonLd = [
           data-bhktw="text"
           rows="6"
           class="border-line bg-background text-ink min-h-32 w-full resize-y border px-3 py-2.5 font-sans text-base leading-normal disabled:opacity-50"
-          placeholder="Paste any text here — an essay, a paragraph, anything you'd like to hear read aloud..."
+          placeholder="Paste an essay, paragraph, or other text you'd like to hear read aloud..."
         ></textarea>
       </div>
 
       <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-        <div class="flex flex-col gap-1.5">
+        <div class="flex flex-col gap-1.5 sm:col-span-1">
           <label
             for="bhktw-voice"
             class="text-muted font-sans text-[0.7rem] font-semibold tracking-[0.12em] uppercase"
@@ -162,50 +160,9 @@ const jsonLd = [
             }
           </select>
         </div>
-        <div class="flex flex-col gap-1.5">
-          <label
-            for="bhktw-blend"
-            class="text-muted font-sans text-[0.7rem] font-semibold tracking-[0.12em] uppercase"
-            >Blend with</label
-          >
-          <select
-            id="bhktw-blend"
-            data-bhktw="blend"
-            class="border-line bg-background text-ink w-full border px-3 py-2.5 font-sans text-base disabled:opacity-50"
-          >
-            <option value="">None (single voice)</option>
-            {
-              voiceGroups.map((group) => (
-                <optgroup label={group.label}>
-                  {group.voices.map(([value, name]) => (
-                    <option value={value}>{name}</option>
-                  ))}
-                </optgroup>
-              ))
-            }
-          </select>
-        </div>
       </div>
 
       <div class="flex flex-wrap items-end gap-4">
-        <div class="flex w-[calc(50%-0.5rem)] flex-col gap-1.5 sm:w-24">
-          <label
-            for="bhktw-blend-weight"
-            class="text-muted font-sans text-[0.7rem] font-semibold tracking-[0.12em] uppercase"
-            >Primary %</label
-          >
-          <input
-            type="number"
-            id="bhktw-blend-weight"
-            data-bhktw="blend-weight"
-            min="10"
-            max="90"
-            step="5"
-            value="100"
-            class="border-line bg-background text-ink w-full border px-3 py-2.5 font-sans text-base disabled:opacity-50"
-            disabled
-          />
-        </div>
         <div class="flex w-[calc(50%-0.5rem)] flex-col gap-1.5 sm:w-24">
           <label
             for="bhktw-speed"
@@ -259,22 +216,24 @@ const jsonLd = [
           data-audio-label=""
           controls></audio>
         <div class="flex flex-wrap gap-3">
-          <Button
-            download
+          <button
+            type="button"
             data-bhktw="download-mp3"
             data-track="Voice download: mp3"
-            class="bg-background flex-none"
+            class="border-line bg-background text-ink hover:border-accent hover:text-accent flex flex-none items-center gap-3 border px-4 py-3 font-sans text-base transition-colors disabled:cursor-default disabled:opacity-50"
+            disabled
           >
             Download MP3
-          </Button>
-          <Button
-            download
+          </button>
+          <button
+            type="button"
             data-bhktw="download-wav"
             data-track="Voice download: wav"
-            class="bg-background flex-none"
+            class="border-line bg-background text-ink hover:border-accent hover:text-accent flex flex-none items-center gap-3 border px-4 py-3 font-sans text-base transition-colors disabled:cursor-default disabled:opacity-50"
+            disabled
           >
             Download WAV
-          </Button>
+          </button>
         </div>
       </div>
     </div>
@@ -284,23 +243,16 @@ const jsonLd = [
       <div class="post-content mt-4">
         <ul>
           <li>
-            Paste your text, then pick a primary <strong>Voice</strong> from the dropdown
-            — there are twenty-eight. For a hybrid, pick a second one under <strong
-              >Blend with</strong
-            > and adjust the mix.
+            Paste your text, then choose one of the 28 American and British
+            English voices.
           </li>
           <li>
             Add a pause anywhere by writing <code>[0.5s]</code> in the text — change
             the number to whatever you prefer.
           </li>
           <li>
-            The first time, your browser downloads the Kokoro model
-            (~300&nbsp;MB), so the first run can take a minute or two. After
-            that it's cached and fast — a couple of minutes of audio takes about
-            as many seconds on a modern machine.
-          </li>
-          <li>
-            When it finishes, play it back, download the MP3, or grab the WAV.
+            Click <strong>Generate</strong>. When it finishes, play the audio or
+            download it as an MP3 or WAV file.
           </li>
         </ul>
       </div>
@@ -314,7 +266,7 @@ const jsonLd = [
         </p>
 
         {
-          voiceGroups.map((group, gi) => (
+          voiceGroups.map((group) => (
             <>
               <h3 class="mt-8">{group.label}</h3>
               <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -327,15 +279,6 @@ const jsonLd = [
                     controls
                   />
                 ))}
-                {gi === 0 && (
-                  <audio
-                    class="audio-enhance w-full"
-                    preload="none"
-                    data-audio-label={blendSample.label}
-                    src={`${sampleBase}/${blendSample.file}`}
-                    controls
-                  />
-                )}
               </div>
             </>
           ))
@@ -344,32 +287,104 @@ const jsonLd = [
     </section>
 
     <section class="mt-14">
-      <h2>Good to know</h2>
+      <h2>Limitations</h2>
       <div class="post-content mt-4">
         <p>
-          <strong>Browser.</strong> Chrome, Edge, and Brave support WebGPU, which
-          is what makes this quick. Safari and Firefox fall back to a slower WASM
-          mode — it still works, just be patient.
+          Voice quality varies. Training duration matters, but so do the source
+          audio and how well it aligns with the text. Heart has the highest
+          official overall grade.
         </p>
         <p>
-          <strong>Privacy.</strong> Everything runs locally. No telemetry, no server
-          calls, no third parties, no cookies. Your text and the generated audio stay
-          in your browser and never reach a server.
+          WAV is uncompressed PCM (24&nbsp;kHz, 16-bit mono, about 2.9&nbsp;MB
+          per minute). MP3 uses 128&nbsp;kbps CBR and is about 960&nbsp;KB per
+          minute. Kokoro produces 24&nbsp;kHz speech, so neither download is
+          studio-quality audio.
         </p>
-        <p>
-          <strong>Quality.</strong> Some voices are better than others, depending
-          on how long they were trained. Blending two voices within the same language
-          usually produces a more interesting result than a single one. I recommend&nbsp;<strong
-            >Heart</strong
-          > (Female, American) — it's the most trained of all.
-        </p>
-        <p>
-          <strong>Audio files.</strong> WAV is uncompressed PCM (24&nbsp;kHz, 16-bit,
-          mono, ~2.9&nbsp;MB per minute). MP3 is encoded with lamejs (24&nbsp;kHz,
-          mono, 128&nbsp;kbps CBR, ~960&nbsp;KB per minute). The model itself only
-          produces 24&nbsp;kHz, so the WAV is speech-quality without lossy compression
-          on top — not studio-quality.
-        </p>
+      </div>
+    </section>
+
+    <section class="mt-14">
+      <h2>Frequently Asked Questions</h2>
+      <div class="mt-4 flex flex-col gap-3">
+        <details class="disclosure border-line border p-5">
+          <summary class="callout-title">Can I generate long text?</summary>
+          <div class="post-content mt-3">
+            <p>
+              Yes, but smaller sections are more practical. The 50,000-character
+              limit prevents unusually large jobs; it does not guarantee that a
+              single job of that size will finish on every device.
+            </p>
+          </div>
+        </details>
+        <details class="disclosure border-line border p-5">
+          <summary class="callout-title"
+            >Which languages and voices are supported?</summary
+          >
+          <div class="post-content mt-3">
+            <p>
+              The generator offers 20 American English and 8 British English
+              voices. Kokoro voices for other languages are not included.
+            </p>
+          </div>
+        </details>
+        <details class="disclosure border-line border p-5">
+          <summary class="callout-title">Which browsers work?</summary>
+          <div class="post-content mt-3">
+            <p>
+              A browser with WebAssembly is required. The generator uses WebGPU
+              when the browser and device expose it. Otherwise, it starts with
+              the slower WASM fallback.
+            </p>
+          </div>
+        </details>
+        <details class="disclosure border-line border p-5">
+          <summary class="callout-title"
+            >What gets downloaded and cached?</summary
+          >
+          <div class="post-content mt-3">
+            <p>
+              The first generation downloads Kokoro's scripts, tokenizer, model,
+              and selected voice. The WebGPU model is roughly 326&nbsp;MB. The
+              WASM model is roughly 92&nbsp;MB, plus its runtime and other
+              assets. A failed WebGPU attempt may download both models. Your
+              browser can cache these files, but it may evict or revalidate
+              them. Clear this site's stored data in your browser settings to
+              remove them.
+            </p>
+          </div>
+        </details>
+        <details class="disclosure border-line border p-5">
+          <summary class="callout-title">Does my text leave my device?</summary>
+          <div class="post-content mt-3">
+            <p>
+              Speech synthesis runs on your device. The generator does not
+              upload the text you enter or the audio it creates. It still
+              downloads scripts, model files, and voices from jsDelivr and
+              Hugging Face. Those providers receive ordinary request metadata,
+              including your IP address, browser, requested URL, and the time of
+              the request. In production, Fathom records page views and the
+              fixed
+              <code>Voice generated</code> event. It does not receive your text or
+              audio from this generator.
+            </p>
+          </div>
+        </details>
+        <details class="disclosure border-line border p-5">
+          <summary class="callout-title"
+            >Can I use the generated audio commercially?</summary
+          >
+          <div class="post-content mt-3">
+            <p>
+              The license labels alone do not provide blanket commercial
+              clearance. The reviewed Kokoro model, ONNX conversion, JavaScript
+              code, and repository-distributed voice tensors are labeled
+              Apache-2.0. That does not settle ownership of generated audio or
+              any other rights that may apply. You are responsible for the text
+              you supply and for checking whether your intended use is
+              permitted.
+            </p>
+          </div>
+        </details>
       </div>
     </section>
 
@@ -377,12 +392,17 @@ const jsonLd = [
   </Container>
 </Layout>
 
-{/* Exposes window.lamejs, probed lazily by the module below. */}
-<script is:inline src="https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js"
-></script>
-
 <script>
   import { chunkText } from "../../lib/chunk-text.mjs";
+  import {
+    KOKORO_MODEL_ID,
+    KOKORO_MODULE_URL,
+    LAMEJS_URL,
+    createPinnedModelFetch,
+    loadScriptOnce,
+    modelLoadOptions,
+    modelLoadSequence,
+  } from "../../lib/voice-generator.mjs";
 
   // Kokoro silently truncates input past its ~512 phoneme-token context
   // (≈100 words); stay well under it. The chunker may still merge up to 1.2×.
@@ -492,17 +512,6 @@ const jsonLd = [
     return new Blob(chunks, { type: "audio/mpeg" });
   }
 
-  function buildVoiceParam(primary, blendWith, primaryPct) {
-    if (!blendWith) return primary;
-    const w1 = Math.max(0.1, Math.min(0.9, primaryPct / 100));
-    return `${primary}(${w1.toFixed(2)}),${blendWith}(${(1 - w1).toFixed(2)})`;
-  }
-
-  function buildVoiceParamFallback(primary, blendWith) {
-    if (!blendWith) return primary;
-    return `${primary},${blendWith}`;
-  }
-
   function fmtTime(seconds) {
     const s = Math.max(0, Math.round(seconds));
     if (s < 60) return `${s}s`;
@@ -533,11 +542,10 @@ const jsonLd = [
   async function getTts(setStatus, setProgress) {
     if (!ttsPromise) {
       ttsPromise = (async () => {
-        const MODEL = "onnx-community/Kokoro-82M-v1.0-ONNX";
-        setStatus("Loading text-to-speech model (~300 MB)…", "busy");
+        setStatus("Loading the text-to-speech model…", "busy");
         setProgress(0);
-        const { KokoroTTS } =
-          await import("https://cdn.jsdelivr.net/npm/kokoro-js@1.2.1/dist/kokoro.web.js");
+        window.fetch = createPinnedModelFetch(window.fetch.bind(window));
+        const { KokoroTTS } = await import(KOKORO_MODULE_URL);
 
         // Each load attempt gets its own byte accounting, so a WebGPU→WASM
         // fallback (different files) starts the bar cleanly.
@@ -574,22 +582,28 @@ const jsonLd = [
               "busy",
             );
           };
-          return KokoroTTS.from_pretrained(MODEL, {
+          return KokoroTTS.from_pretrained(KOKORO_MODEL_ID, {
             ...opts,
             progress_callback: onProgress,
           });
         };
 
-        try {
-          return await load({ dtype: "fp32", device: "webgpu" });
-        } catch (e) {
-          setStatus(
-            "WebGPU unavailable — downloading the CPU model instead…",
-            "busy",
-          );
-          setProgress(0);
-          return await load({ dtype: "q8", device: "wasm" });
+        let lastError;
+        for (const runtime of modelLoadSequence(Boolean(navigator.gpu))) {
+          if (runtime === "wasm" && lastError) {
+            setStatus(
+              "WebGPU unavailable — downloading the CPU model instead…",
+              "busy",
+            );
+            setProgress(0);
+          }
+          try {
+            return await load(modelLoadOptions(runtime));
+          } catch (error) {
+            lastError = error;
+          }
         }
+        throw lastError;
       })();
     }
     return ttsPromise;
@@ -599,8 +613,6 @@ const jsonLd = [
     const pick = (name) => root.querySelector(`[data-bhktw="${name}"]`);
     const textInput = pick("text");
     const voiceSelect = pick("voice");
-    const blendSelect = pick("blend");
-    const blendWeightInput = pick("blend-weight");
     const speedInput = pick("speed");
     const generateBtn = pick("generate");
     const statusMsgEl = pick("status-msg");
@@ -614,7 +626,8 @@ const jsonLd = [
     const downloadWavBtn = pick("download-wav");
 
     let lastSampleRate = 24000;
-    const objectUrls = []; // blob URLs to revoke on the next generation
+    const objectUrls = [];
+    const downloads = new Map();
 
     const DOT_CLASS = {
       idle: "bg-muted",
@@ -649,16 +662,26 @@ const jsonLd = [
       return new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
     }
     function setDownload(btn, blob, filename) {
-      const url = URL.createObjectURL(blob);
-      objectUrls.push(url);
-      btn.href = url;
-      btn.setAttribute("download", filename);
-      return url;
+      downloads.set(btn, { blob, filename });
+      btn.disabled = false;
+    }
+    function downloadBlob(btn) {
+      const download = downloads.get(btn);
+      if (!download) return;
+      const url = URL.createObjectURL(download.blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = download.filename;
+      anchor.click();
+      URL.revokeObjectURL(url);
     }
 
-    blendSelect.addEventListener("change", () => {
-      blendWeightInput.disabled = !blendSelect.value;
-    });
+    downloadMp3Btn.addEventListener("click", () =>
+      downloadBlob(downloadMp3Btn),
+    );
+    downloadWavBtn.addEventListener("click", () =>
+      downloadBlob(downloadWavBtn),
+    );
 
     async function generateChunk(tts, text, voice, speed) {
       const result = await tts.generate(text, { voice, speed });
@@ -683,11 +706,7 @@ const jsonLd = [
         );
         return;
       }
-      const primary = voiceSelect.value;
-      const blendWith = blendSelect.value;
-      const primaryPct = parseInt(blendWeightInput.value, 10) || 60;
-      let voice = buildVoiceParam(primary, blendWith, primaryPct);
-      let blendFallback = false;
+      const voice = voiceSelect.value;
       const speed = parseFloat(speedInput.value) || 1;
 
       generateBtn.disabled = true;
@@ -710,24 +729,8 @@ const jsonLd = [
           chunkIdx++;
           setStatus(`Generating chunk ${chunkIdx} of ${totalChunks}…`, "busy");
           setProgress(((chunkIdx - 1) / Math.max(1, totalChunks)) * 100);
-          let buf;
-          try {
-            buf = await generateChunk(tts, part.text, voice, speed);
-          } catch (e) {
-            if (chunkIdx === 1 && blendWith && !blendFallback) {
-              voice = buildVoiceParamFallback(primary, blendWith);
-              blendFallback = true;
-              try {
-                buf = await generateChunk(tts, part.text, voice, speed);
-              } catch (e2) {
-                voice = primary;
-                buf = await generateChunk(tts, part.text, voice, speed);
-              }
-            } else {
-              throw e;
-            }
-          }
-          audioParts.push(buf);
+          const buffer = await generateChunk(tts, part.text, voice, speed);
+          audioParts.push(buffer);
         }
 
         setStatus("Encoding…", "busy");
@@ -738,19 +741,24 @@ const jsonLd = [
         objectUrls.length = 0;
         const stamp = timestamp();
 
+        downloads.clear();
+        downloadMp3Btn.disabled = true;
+        downloadWavBtn.disabled = true;
         const wavBlob = encodeWav(merged, lastSampleRate);
-        audioEl.src = setDownload(
-          downloadWavBtn,
-          wavBlob,
-          `audio-${stamp}.wav`,
-        );
+        const audioUrl = URL.createObjectURL(wavBlob);
+        objectUrls.push(audioUrl);
+        audioEl.src = audioUrl;
+        setDownload(downloadWavBtn, wavBlob, `audio-${stamp}.wav`);
 
         try {
+          await loadScriptOnce(LAMEJS_URL, {
+            isReady: () => getLamejs() !== null,
+          });
           const mp3Blob = encodeMp3(merged, lastSampleRate);
           setDownload(downloadMp3Btn, mp3Blob, `audio-${stamp}.mp3`);
           downloadMp3Btn.classList.remove("hidden");
         } catch (e) {
-          downloadMp3Btn.classList.add("hidden");
+          downloadMp3Btn.disabled = true;
         }
 
         outputEl.classList.remove("hidden");
@@ -761,7 +769,7 @@ const jsonLd = [
         setTimeout(() => setProgress(null), 800);
       } catch (e) {
         console.error("[bh-kokoro-tts-web]", e);
-        setStatus("Something went wrong — see the note below.", "err");
+        setStatus("Generation failed. Details are below.", "err");
         showError(e && e.message ? e.message : String(e));
         setProgress(null);
       } finally {

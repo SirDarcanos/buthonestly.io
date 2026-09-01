@@ -227,7 +227,7 @@ export function checkRenderedSeo({
     "@id": VOICE_GENERATOR_ID,
     name: "Free AI Voice Generator",
     description:
-      "Turn any text into natural speech, right in your browser. Powered by Kokoro — nothing you type is ever sent to a server. Free, no sign-up.",
+      "Free AI voice generator with 28 English Kokoro voices. Generate MP3 or WAV speech on your device, with no signup required.",
     url: VOICE_GENERATOR_URL,
     applicationCategory: "MultimediaApplication",
     applicationSubCategory: "Text-to-Speech",
@@ -240,7 +240,7 @@ export function checkRenderedSeo({
     featureList: [
       "Local text-to-speech generation",
       "28 American and British English voices",
-      "Voice blending",
+      "On-device synthesis",
       "Timed pauses",
       "MP3 and WAV downloads",
     ],
@@ -249,8 +249,35 @@ export function checkRenderedSeo({
   assert.match(
     voiceGeneratorPage.document.querySelector(".post-content")?.textContent ??
       "",
-    /I built this small text-to-speech tool/,
+    /I built this free AI voice generator/,
     "the voice generator must visibly support its creator schema",
+  );
+  assert.equal(
+    voiceGeneratorPage.document
+      .querySelector('meta[property="og:image"]')
+      ?.getAttribute("content"),
+    `${SITE_URL}/og/free-ai-voice-generator.png`,
+  );
+  assert.ok(
+    !voiceGeneratorPage.document.querySelector('script[src*="lamejs"]'),
+    "the MP3 encoder must not load before generation",
+  );
+  assert.equal(
+    voiceGeneratorPage.document.querySelectorAll('a[data-bhktw^="download-"]')
+      .length,
+    0,
+    "generated downloads must not render anchors without destinations",
+  );
+  assert.equal(
+    voiceGeneratorPage.document.querySelectorAll(
+      'button[data-bhktw^="download-"]',
+    ).length,
+    2,
+    "generated downloads must remain buttons until audio exists",
+  );
+  assert.ok(
+    !voiceGeneratorPage.document.querySelector('[data-bhktw="blend"]'),
+    "the unsupported voice blending control must not render",
   );
 
   for (const essay of inventory.published) {
