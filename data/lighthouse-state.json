@@ -67,6 +67,9 @@
     "improve-woocommerce-related-products-recommendations": [
       "f97734c7ba8a04bab136e44bef1041c112aaf9e6736b3c9e13ee2c098a949f6f"
     ],
+    "javascript-dice-roller": [
+      "dac6a5c8cf15852b87f19575f66e62d39c81fe6e4ddef35d4d793a368e5b4932"
+    ],
     "learning-care-without-feeling": [
       "f40d4b3c25b84a511f9b24a5bf6fcf8a0532bbe6fe3815e2bd2f0963f6fa9c45"
     ],
@@ -147,7 +150,13 @@
   "issues": {},
   "outcomes": {
     "mobile:/": {
-      "checkedAt": "2026-08-31T19:30:50.881Z",
+      "checkedAt": "2026-09-01T14:52:49.105Z",
+      "consecutivePasses": 2,
+      "openIssueNumber": null,
+      "status": "passed"
+    },
+    "mobile:/javascript-dice-roller/": {
+      "checkedAt": "2026-09-01T14:52:49.105Z",
       "consecutivePasses": 1,
       "openIssueNumber": null,
       "status": "passed"
