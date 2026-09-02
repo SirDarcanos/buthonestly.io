@@ -1,4 +1,4 @@
-const DEFAULT_POLL_ATTEMPTS = 10;
+const DEFAULT_POLL_ATTEMPTS = 24;
 const DEFAULT_POLL_INTERVAL_MS = 30_000;
 
 const completedHash = (publicationState, slug) =>
