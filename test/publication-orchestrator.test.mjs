@@ -124,6 +124,8 @@ test("Kit drafts and delivers the exact recorded broadcast with structured safe 
     /buthonestly-publication:safe-content/,
   );
   assert.equal(draftPayload.send_at, null);
+  assert.equal(draftPayload.subscriber_filter, undefined);
+  assert.equal(deliveryPayload.subscriber_filter, undefined);
   assert.equal(deliveryPayload.send_at, "2026-09-15T13:15:00.000Z");
   assert.match(draftPayload.content, /First &lt;paragraph&gt; &amp; safe\./);
   assert.match(draftPayload.content, /Second paragraph\./);
@@ -685,6 +687,24 @@ test("a missing production version stays pending when deployment polling times o
   });
 });
 
+test("the default deployment wait covers 12 minutes", async () => {
+  const slow = essay("slow");
+  const { ports, calls } = createHarness({
+    now: new Date("2026-09-16T00:00:00.000Z"),
+    essays: [slow],
+    productionVersions: {
+      slow: [...Array(24).fill("old-production"), slow.publicContentHash],
+    },
+  });
+
+  const result = await runPublication(ports);
+
+  assert.equal(calls.deployments, 1);
+  assert.equal(calls.sleeps.length, 24);
+  assert.deepEqual(result.errors, []);
+  assert.deepEqual(result.submitted, [slow.slug]);
+});
+
 test("an unrecorded Kit draft is reconciled and persisted instead of duplicated", async () => {
   const candidate = essay("reconciled", {
     newsletterIntro: "A newsletter introduction.",
@@ -1058,6 +1078,7 @@ test("the publication workflow owns hourly, essay-change, and manual orchestrati
   assert.doesNotMatch(workflow, /GIT_SSH_COMMAND|ssh-key:/);
   assert.match(workflow, /group: publication/);
   assert.match(workflow, /cancel-in-progress: false/);
+  assert.match(workflow, /timeout-minutes: 30/);
   assert.equal(workflow.match(/run: npm run publication/g)?.length, 2);
   assert.match(workflow, /KIT_API_KEY/);
   assert.match(workflow, /Record draft identities and partial successes/);

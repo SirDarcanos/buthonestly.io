@@ -148,7 +148,6 @@ const kitPayload = (essay, coverUrl, sendAt, emailTemplateId) => ({
   published_at: essay.publishedAt.toISOString(),
   send_at: sendAt?.toISOString() ?? null,
   preview_text: newsletterParagraphs(essay.newsletterIntro)[0].slice(0, 150),
-  subscriber_filter: [{ all: [{ type: "all_subscribers" }] }],
   thumbnail_alt: essay.coverAlt,
   thumbnail_url: coverUrl,
   ...(emailTemplateId ? { email_template_id: emailTemplateId } : {}),
