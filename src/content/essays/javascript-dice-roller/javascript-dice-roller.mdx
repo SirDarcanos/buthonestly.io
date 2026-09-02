@@ -26,10 +26,10 @@ import rollLog from "./roll-log.jpg";
 <QuickSummary>
 
 - A fight that felt rigged left me unable to honestly tell my players they had only been unlucky, because I had no way of knowing whether that was true.
-- A tool that shows its work is still asking you to believe the work it shows is the work it did.
+- A tool can show every die and still leave you trusting that those were the dice it rolled.
 - `opendice` is an open source JS library that takes a formula like `2d6+3` and returns the total plus the evidence: every die rolled, which ones counted, and each modifier listed separately rather than summed.
-- Fairness is not a setting. It uses `crypto.getRandomValues` rather than `Math.random`, removes modulo bias by rejection, draws once per die, and never nudges a result.
-- Much of the design is refusals — no division, no rules of its own, no line breaks inside a formula — each one handing a decision back to whoever should be making it.
+- By default, it uses `crypto.getRandomValues` rather than `Math.random`, removes modulo bias by rejection, draws once per die, and never nudges a result.
+- I designed much of the library around what it refuses to do: no division, no game rules, and no line breaks inside a formula.
 
 </QuickSummary>
 
@@ -43,23 +43,23 @@ High rolls on my attacks, low rolls on theirs. High rolls too on undead fortitud
 
 It felt rigged.
 
-And when we packed up, I could not tell my players otherwise. "You just got unlucky with the rolls" is the right thing to say only when it happens to be true, and I did not know whether it was. I had watched the same numbers they had. That was all either of us had.
+And when we packed up, I could not tell my players otherwise. I could say, "You just got unlucky with the rolls," only if I knew it was true, and I did not. I had watched the same numbers they had. That was all either of us had.
 
 That session was the last drop.
 
 ## Showing The Work Is Not The Same As Knowing
 
-It was not the whole story. The app I used for rolling had been wearing on me for a while, in smaller ways that mostly had nothing to do with dice. Those belong in a post of their own. What that night added was distrust, and distrust was the one item on the list I could not fix by moving to a different app.
+That fight was not the whole story. The app I used for rolling had been wearing on me for a while, in smaller ways that mostly had nothing to do with dice. Those belong in a post of their own. What that night added was distrust, and distrust was the one item on the list I could not fix by moving to a different app.
 
-Not because I had found anything wrong. I had not looked.
+I had not found anything wrong with it. I had not looked.
 
-That needs explaining, and the honest explanation is about me rather than the app. Investigating and building were both on the table. Building was the more interesting of the two, and with ADHD that is not a fair fight. [Novelty beats repetition](/tools-for-adhd-leadership/) and it wins before the deliberation is finished.
+I could have investigated the app or built my own. Building was more interesting, and with ADHD that is not a fair fight. [Novelty beats repetition](/tools-for-adhd-leadership/), and it wins before I have finished thinking it through.
 
-Reading somebody else's random number generator is repetition. Writing my own is novelty. So I wrote my own and left the question of whether I needed to for much later.
+Reading somebody else's random number generator felt repetitive. Writing my own was new. So I wrote my own and left the question of whether I needed to for much later.
 
-The app was not hiding anything, for what it is worth. It showed me its dice. Every roll broken out, every die listed, the arithmetic on screen. That was never the problem.
+The app did show me its dice: every roll broken out, every die listed, and the arithmetic on screen.
 
-A tool that shows you its work is still asking you to believe that the work it shows is the work it did.
+But I still had to trust that the dice on screen were the dice it had rolled.
 
 And even if I had satisfied myself about the tracker, I would have covered half the table. My rolls came out of it. My players' rolls did not. They roll in D&D Beyond, which I have no way of reading at all.
 
@@ -69,7 +69,7 @@ Two sources, then, and I could account for neither.
 
 So I wrote my own dice roller library.
 
-It was meant to be its own library from the first commit rather than something I carved out later, and they went up on npm as [`opendice`](https://www.npmjs.com/package/opendice). Anybody can use it to roll dice in JavaScript or TypeScript, regardless if they are using it for D&D or something unrelated to games. Install it with:
+It was its own library from the first commit rather than something I carved out later, and I published it on npm as [`opendice`](https://www.npmjs.com/package/opendice). Anybody can use it to roll dice in JavaScript or TypeScript, whether for D&D or something unrelated to games. Install it with:
 
 ```bash
 npm install opendice
@@ -93,7 +93,7 @@ result.modifier        // 3       — the +3
 result.formula         // '2d6+3' — what you asked for
 ```
 
-Five, plus three, plus three. Eleven. Not a total with a shrug behind it — the arithmetic, laid out, ready to show someone.
+Five, plus three, plus three. Eleven. I can show somebody the arithmetic instead of shrugging at a total.
 
 ### What You Can Roll
 
@@ -164,27 +164,27 @@ It is MIT licensed, has no dependencies, and runs in a browser or in Node 20 and
 
 [OpenFray](https://openfray.app) is a combat console and initiative tracker for Dungeons & Dragons 5e. It holds initiative, creature resources and conditions on one screen, so a GM runs the encounter instead of remembering it. It works in a browser, needs no account, and every line of it is public.
 
-Which makes it, unavoidably, the same kind of tool as the one that annoyed me into writing it.
+That also makes OpenFray the same kind of tool as the one that annoyed me into writing it.
 
 The dice are what it rolls on. Every roll in the app goes through that one function, and getting there was the reason for writing them separately to begin with.
 
-If randomness lives in one place, there is one place to check it. Scatter `Math.random()` across a codebase and you have as many sources of truth as you have call sites, each one a chance to do it slightly differently. Keep it behind a single `roll()` and the answer to "how does this app roll dice" is a file somebody can point at.
+Keeping randomness in one place gave me one place to check it. If I had scattered `Math.random()` across the codebase, every call site could have done things a little differently. Behind a single `roll()`, the answer to "how does this app roll dice" is a file somebody can point at.
 
-That was a scoping decision, not a rescue operation. OpenFray uses it the same way anyone else would.
+I made that choice from the start. OpenFray uses the package the same way anyone else would.
 
-Publishing the library made the whole thing stricter rather than looser. A package has a version, a README, a test suite, and an API that cannot quietly change shape because it suited me that week. Those constraints are there for whoever comes along later, and they happen to be the same constraints that make a thing checkable.
+Publishing it as a package made me add a version, a README, a test suite, and an API that could not quietly change shape because it suited me that week. Those constraints help whoever comes along later, and they make the library easier to check.
 
 ### MIT, While OpenFray Is AGPL
 
 OpenFray is licensed AGPL-3.0. The dice are MIT.
 
-The split is deliberate. The dice are not the product. They are plumbing, and plumbing is more use to people when there is nothing to weigh up before reusing it. Someone building a different tabletop tool, or a game, or a teaching example, should be able to take them without reading a license twice.
+I chose MIT for the dice so people could reuse them without having much to weigh up. Someone building another tabletop tool, a game, or a teaching example should be able to take them without reading the license twice.
 
 The app is a different matter and gets a different answer. I went through that choice at length in [a previous essay](/how-to-choose-a-software-license-for-your-next-project/). It looks like a legal maze from outside, and mostly comes down to what you want to happen next.
 
 ## Showing The Work
 
-The result object is built around one idea. A total should be reconstructable by somebody who does not trust the person who rolled it.
+I built the result object so my players could reconstruct a total without having to trust me.
 
 ### The Die You Threw Away
 
@@ -197,7 +197,7 @@ r.dice[0].results // [4, 17]  — both dice
 r.dice[0].kept    // [17]     — the one that counted
 ```
 
-The 4 is still there. It has to be, because "taking the higher" only means anything if you can see what was not taken. A 17 on its own is a number. A 4 and a 17 with the 17 circled is a decision you can check.
+I keep the 4 because "taking the higher" only means anything if you can see what was not taken. A 17 on its own tells you the result. A 4 and a 17, with the 17 kept, shows you how the library chose it.
 
 `keptFlags()` lines those up for display, so the dropped die can be greyed out rather than hidden:
 
@@ -211,7 +211,7 @@ keptFlags(r.dice[0]) // [false, true]
 
 That looks like a redundancy until the numbers disagree. One effect adds 1, another takes away 6, and the sum is −5 — which tells you nothing about where either came from. The list lets you print `+1 −6` and let the reader do the arithmetic themselves.
 
-A sum is an assertion. A list is evidence.
+Showing both numbers lets my players check the −5 instead of taking it on trust.
 
 <Figure src={rollLog} alt={"OpenFray's game log filtered to rolls. A disadvantage check shows both d20s, 8 and 3, resolving to 3. An advantage attack shows 1 and 18, resolving to 18. A strength check lists its modifiers as +1 and -6 rather than as a single -5."}>
   Both of the rules above, running in OpenFray. The die that lost is still printed next to the one that won, and the exhaustion penalty sits beside the bonus instead of being folded into it.
@@ -230,7 +230,7 @@ Both are `false` unless the group kept exactly one die, because a 6 among four d
 
 That is all they report — what the die showed. Whether a natural 20 is special, and what happens if it is, the library has no opinion about.
 
-None of this makes the dice fairer. It makes them answerable, which is a different property and the one I was missing.
+This does not make the dice fairer, but it does let me account for each roll. That was what I had been missing.
 
 ## The Rest Of The Surface
 
@@ -247,7 +247,7 @@ None of this makes the dice fairer. It makes them answerable, which is a differe
 
 ### Checking A Formula Without Rolling It
 
-`parseFormula()` reads a formula and tells you what it means, without throwing any dice. The usual job is validating something a person typed, so a bad formula fails where it was written rather than three screens later.
+`parseFormula()` reads a formula and tells you what it means, without throwing any dice. I use it to validate something a person typed, so a bad formula fails where it was written rather than three screens later.
 
 ```ts
 function isValid(text: string): boolean {
@@ -329,13 +329,13 @@ A character it will not accept is named by its code point rather than repeated b
 
 ## The Randomness Underneath
 
-All of this arrives without being switched on. There are no options for fairness, because fairness is not a setting.
+The default random source and bias removal need no options. They apply to every roll unless you supply your own source through `rand`.
 
 ### Why Not Math.random
 
 `Math.random()` is not required to be good. The JavaScript standard leaves the algorithm to the implementation and makes no promises about quality. So the answer to "how random is it" depends on which engine you happen to be running in.
 
-`opendice` use `crypto.getRandomValues` instead. It is in every browser and in Node, it costs nothing at the scale a dice roller works at, and it does not vary underneath you.
+`opendice` uses `crypto.getRandomValues` instead. It is available in browsers and Node, and it costs nothing at the scale a dice roller works at.
 
 ### The Bias Nobody Would Notice
 
@@ -343,7 +343,7 @@ Turning a random 32-bit number into a d6 by taking a remainder is the obvious ap
 
 Fractionally is the right word. The gap is around one part in seven hundred million, and no table would ever see it. It is exactly the kind of flaw I found in the tracker later: real, and never once decisive.
 
-The library throws away the draws that would cause it and draws again, so every face is exactly as likely as every other. The fix costs a few lines and a rejection every few billion rolls. There is no reason to leave it in.
+The library throws away the draws that would cause it and draws again, so every face is exactly as likely as every other. The fix costs a few lines and a rejection every few billion rolls, so I included it.
 
 Every die also gets its own draw. Several dice are never squeezed out of one number. That is why a die can have at most 4,294,967,296 sides. One draw covers exactly that many faces, and the fairness rests on one draw each.
 
@@ -353,7 +353,7 @@ There is no logic in here that notices you have rolled badly and quietly makes i
 
 > Real dice come up 1 three times in a row sometimes. So do these.
 
-That is not a limitation to apologize for. It is the entire point. Any code that smoothed out a bad streak would turn every log of every roll into a lie. A log I could hand to somebody was the whole reason I wrote this.
+I leave bad streaks alone. Any code that smoothed one out would turn the log into a lie, and I wrote this so I could hand that log to somebody.
 
 The one place the guarantee stops is the `rand` option, which lets you supply your own randomness for tests:
 
@@ -361,13 +361,13 @@ The one place the guarantee stops is the `rand` option, which lets you supply yo
 roll('1d20', { rand: () => 0 }) // always 1
 ```
 
-That is genuinely useful and genuinely dangerous. A result records what the dice showed, never where the numbers came from, so a rigged source produces a result indistinguishable from a fair one. If someone using your program can choose the source, they can choose the roll.
+That option is useful for tests and dangerous anywhere a player can reach it. A result records what the dice showed, never where the numbers came from, so a rigged source looks like a fair one. If someone using your program can choose the source, they can choose the roll.
 
-Which is why `cryptoRandom()` is exported at all. You can call the raw source directly, inspect it, wrap it, or test it. Nobody has to take my word for how the dice work. After that night, taking somebody's word was what I had run out of patience for.
+I exported `cryptoRandom()` so you can call the raw source directly, inspect it, wrap it, or test it. Nobody has to take my word for how the dice work. After that night, taking somebody's word was what I had run out of patience for.
 
 ## What It Won't Do
 
-Most of the work was not in what the library does. It was in deciding what to refuse, and every refusal is a decision handed back to the person who should be making it.
+I spent more time deciding what the library would refuse than what it would do. Each refusal leaves the choice to the code using it.
 
 **There is no division.** Halving a total needs a rounding rule — down, to nearest, in whose favour — and there is no neutral choice. Picking one would be the library deciding what your roll means. `Math.floor(total / 3)` is yours to write and says exactly what you chose.
 
@@ -398,7 +398,7 @@ One roll, two lines, and a log nobody can trust — which is the precise opposit
 
 All of them sit far above ordinary use. Reaching one means something is generating formulas rather than a person writing them.
 
-And the largest refusal of all: **the library has no rules.** It rolls dice and reports what happened. Whether a 20 is good, whether a label means fire damage, whether a total passes or fails — none of that is its business.
+Finally, **the library has no game rules.** It rolls dice and reports what happened. Whether a 20 is good, a label means fire damage, or a total passes or fails is up to the code using it.
 
 ## I Went Back And Read The Code
 
@@ -426,6 +426,6 @@ What changed is smaller. When an encounter goes sideways now, there is a log I c
 
 My table still rolls in D&D Beyond, and I have no intention of asking them to stop. That gap is theirs to care about or not, and mostly they do not. Which is a perfectly reasonable way to play a game about pretending to be creatures who get to sleep eight hours every night.
 
-Games have taught me more about running things than most of my working life has, which I have [written about before](/gaming-made-me-better-leader/). This one taught me that trust is not a feeling you can talk somebody into. It is a property of what you can show.
+Games have taught me more about running things than most of my working life has, which I have [written about before](/gaming-made-me-better-leader/). This one taught me that showing the work earns more trust than reassurance does.
 
 Writing the dice took a few weekends, in the [bursts I have learned to expect](/adhd-planner/). Deciding what they would refuse to do took considerably longer, and that is the part I would keep.
