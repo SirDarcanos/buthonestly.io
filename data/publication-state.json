@@ -155,7 +155,11 @@
     },
     "javascript-dice-roller": {
       "indexNow": {
-        "contentHash": "dac6a5c8cf15852b87f19575f66e62d39c81fe6e4ddef35d4d793a368e5b4932"
+        "contentHash": "598615664932295622961c5743261421c2298ac88bf9d82506dc381b2c91548a"
+      },
+      "newsletter": {
+        "broadcastId": 25720032,
+        "status": "draft"
       }
     },
     "learning-care-without-feeling": {
