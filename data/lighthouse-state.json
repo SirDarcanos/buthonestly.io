@@ -1,10 +1,108 @@
 {
   "advisory": {
-    "baseline": [],
+    "baseline": [
+      {
+        "checkedAt": "2026-09-07T13:22:04.416Z",
+        "device": "desktop",
+        "metrics": {
+          "accessibility": 1,
+          "bestPractices": 1,
+          "cls": 0,
+          "firstPartyTransferBytes": 245955,
+          "lcpMs": 2768.9819999999995,
+          "mainThreadWorkMs": 492.97200000000055,
+          "performance": 0.75,
+          "scriptTransferBytes": 3058,
+          "seo": 1,
+          "thirdPartyTransferBytes": 13527
+        },
+        "observation": 1,
+        "observationId": "34126973256:desktop",
+        "requiredObservations": 2,
+        "route": "/",
+        "workload": "navigation"
+      },
+      {
+        "checkedAt": "2026-09-07T13:22:04.416Z",
+        "device": "desktop",
+        "metrics": {
+          "accessibility": 1,
+          "bestPractices": 1,
+          "cls": 0,
+          "firstPartyTransferBytes": 264738,
+          "lcpMs": 3112.1780000000003,
+          "mainThreadWorkMs": 556.4880000000003,
+          "performance": 0.72,
+          "scriptTransferBytes": 5381,
+          "seo": 0.92,
+          "thirdPartyTransferBytes": 14069
+        },
+        "observation": 1,
+        "observationId": "34126973256:desktop",
+        "requiredObservations": 2,
+        "route": "/when-ai-stops-being-a-tool/",
+        "workload": "navigation"
+      },
+      {
+        "checkedAt": "2026-09-07T13:22:04.416Z",
+        "device": "desktop",
+        "metrics": {
+          "accessibility": 1,
+          "bestPractices": 1,
+          "cls": 0,
+          "firstPartyTransferBytes": 271030,
+          "lcpMs": 3121.9829999999993,
+          "mainThreadWorkMs": 580.6640000000006,
+          "performance": 0.72,
+          "scriptTransferBytes": 5381,
+          "seo": 0.92,
+          "thirdPartyTransferBytes": 63258
+        },
+        "observation": 1,
+        "observationId": "34126973256:desktop",
+        "requiredObservations": 2,
+        "route": "/what-is-a-gpu/",
+        "workload": "navigation"
+      },
+      {
+        "checkedAt": "2026-09-07T13:22:04.416Z",
+        "device": "desktop",
+        "metrics": {
+          "firstPartyImageTransferBytes": 145710,
+          "layoutShift": 0.020673985392989817
+        },
+        "observation": 1,
+        "observationId": "34126973256:desktop",
+        "requiredObservations": 2,
+        "route": "/what-is-a-gpu/",
+        "workload": "cold-scroll"
+      },
+      {
+        "checkedAt": "2026-09-07T13:22:04.416Z",
+        "device": "desktop",
+        "metrics": {
+          "accessibility": 1,
+          "bestPractices": 1,
+          "cls": 0,
+          "firstPartyTransferBytes": 246507,
+          "lcpMs": 2796.054,
+          "mainThreadWorkMs": 599.3280000000005,
+          "performance": 0.76,
+          "scriptTransferBytes": 9991,
+          "seo": 1,
+          "thirdPartyTransferBytes": 13529
+        },
+        "observation": 1,
+        "observationId": "34126973256:desktop",
+        "requiredObservations": 2,
+        "route": "/resources/free-ai-voice-generator/",
+        "workload": "navigation"
+      }
+    ],
     "budgetProposal": null,
     "budgetsApproved": false,
     "scheduledObservations": {
-      "desktop": 0,
+      "desktop": 1,
       "mobile": 0
     },
     "startedAt": "2026-08-30T00:00:00.000Z"
@@ -150,6 +248,34 @@
   },
   "issues": {},
   "outcomes": {
+    "desktop:/": {
+      "checkedAt": "2026-09-07T13:22:04.416Z",
+      "consecutivePasses": 1,
+      "observationId": "34126973256:desktop",
+      "openIssueNumber": null,
+      "status": "passed"
+    },
+    "desktop:/resources/free-ai-voice-generator/": {
+      "checkedAt": "2026-09-07T13:22:04.416Z",
+      "consecutivePasses": 1,
+      "observationId": "34126973256:desktop",
+      "openIssueNumber": null,
+      "status": "passed"
+    },
+    "desktop:/what-is-a-gpu/": {
+      "checkedAt": "2026-09-07T13:22:04.416Z",
+      "consecutivePasses": 1,
+      "observationId": "34126973256:desktop",
+      "openIssueNumber": null,
+      "status": "passed"
+    },
+    "desktop:/when-ai-stops-being-a-tool/": {
+      "checkedAt": "2026-09-07T13:22:04.416Z",
+      "consecutivePasses": 1,
+      "observationId": "34126973256:desktop",
+      "openIssueNumber": null,
+      "status": "passed"
+    },
     "mobile:/": {
       "checkedAt": "2026-09-02T04:18:44.417Z",
       "consecutivePasses": 3,
