@@ -121,9 +121,12 @@ const sections: Section[] = [
         title: "opendice — Dice Roller for JavaScript",
         description:
           "A dependency-free dice roller for JavaScript and TypeScript. Write a formula like <code>2d6+3</code> and get back the total <strong>plus every die that produced it</strong>, including the ones that were dropped. Supports keep-highest, advantage, exploding dice, and group multipliers. Rolls over <code>crypto.getRandomValues</code> with modulo bias removed by rejection sampling. MIT licensed, runs in the browser and in Node 20+.",
-        // TODO: add the "Read the Essay" action once
-        // /javascript-dice-roller/ is live (scheduled 2026-09-01).
         actions: [
+          {
+            label: "Read the Essay",
+            href: "/javascript-dice-roller/",
+            kind: "internal",
+          },
           {
             label: "Install from npm",
             href: "https://www.npmjs.com/package/opendice",
@@ -145,8 +148,12 @@ const sections: Section[] = [
         title: "shotlist — Annotated UI Screenshots",
         description:
           "Take repeatable, annotated UI screenshots from declarative recipes. No code per shot: each one is a YAML file, and shotlist opens your running site, drives it to the state you describe, clips a region, and <strong>draws the callouts on the image</strong>. A <code>--check</code> run re-shoots against the committed images, so a stale screenshot turns up in CI instead of in the docs. MIT licensed, a CLI for Node 20+, with <code>playwright</code> as an optional peer dependency.",
-        // TODO: add the "Read the Essay" action
         actions: [
+          {
+            label: "Read the Essay",
+            href: "/shotlist-automatic-annotated-screenshots/",
+            kind: "internal",
+          },
           {
             label: "Install from npm",
             href: "https://www.npmjs.com/package/shotlist",
@@ -160,6 +167,42 @@ const sections: Section[] = [
           {
             label: "Explore on GitHub",
             href: "https://github.com/SirDarcanos/shotlist",
+            kind: "external",
+          },
+        ],
+      },
+      {
+        title: "Reddit CSV Scraper",
+        description:
+          "A Python command-line tool that exports public subreddit posts and complete comment trees to CSV. It saves after every submission and can resume interrupted scrapes without duplicating completed submissions.",
+        actions: [
+          {
+            label: "Explore on GitHub",
+            href: "https://github.com/SirDarcanos/reddit-csv-scraper",
+            kind: "external",
+          },
+        ],
+      },
+      {
+        title: "GSC Snapshot",
+        description:
+          "Create a local, read-only Google Search Console snapshot for a date range, including source rows, provenance, completeness metadata, and a deterministic Markdown summary.",
+        actions: [
+          {
+            label: "Explore on GitHub",
+            href: "https://github.com/SirDarcanos/gsc-snapshot",
+            kind: "external",
+          },
+        ],
+      },
+      {
+        title: "Agent Skills",
+        description:
+          "A collection of reusable skills for coding agents, covering software workflows, human-facing prose, and Dungeons & Dragons tools.",
+        actions: [
+          {
+            label: "Explore on GitHub",
+            href: "https://github.com/SirDarcanos/agentskills",
             kind: "external",
           },
         ],
