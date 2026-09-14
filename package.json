@@ -56,6 +56,6 @@
     "turndown": "^7.2.4",
     "turndown-plugin-gfm": "^1.0.2",
     "typescript": "^6.0.3",
-    "wrangler": "4.127.0"
+    "wrangler": "4.131.0"
   }
 }
