@@ -191,17 +191,25 @@ gcloud auth application-default login
 For a service account or Workload Identity Federation configuration, set
 `GOOGLE_APPLICATION_CREDENTIALS` to the absolute path of its ADC-compatible
 credential file. Set `GOOGLE_CLOUD_PROJECT` when the credential does not supply
-the project. Never commit credential files. `.env.example` lists the local
-settings with placeholders; export the values into the shell before running the
-Narration tool (for example, `set -a; source .env; set +a`).
+the project. Never commit credential files.
 
-Run the stages in order:
+Project settings and secrets live in a 1Password Environment instead of a
+plaintext `.env`. Install the latest beta 1Password CLI, enable its desktop-app
+integration, copy the Environment ID from **Developer → Environments → Manage
+environment**, and export that non-secret identifier:
 
 ```bash
-npm run narration -- prepare <Essay>
-npm run narration -- synthesize <Essay>
-npm run narration -- upload <Essay>
-npm run narration -- clean <Essay>
+export OP_ENVIRONMENT_ID=<environment-id>
+```
+
+Run the stages through 1Password so each subprocess receives the Environment
+without persisting its values to disk:
+
+```bash
+op run --environment "$OP_ENVIRONMENT_ID" -- npm run narration -- prepare <Essay>
+op run --environment "$OP_ENVIRONMENT_ID" -- npm run narration -- synthesize <Essay>
+op run --environment "$OP_ENVIRONMENT_ID" -- npm run narration -- upload <Essay>
+op run --environment "$OP_ENVIRONMENT_ID" -- npm run narration -- clean <Essay>
 ```
 
 Between preparation and synthesis, read and edit `<slug>.audio.txt`. Use
@@ -265,25 +273,33 @@ weekly full scan.
 
 A repository ruleset protects `main` with pull requests, the `verify` check,
 resolved review threads, linear history, and squash-only merges. Administrators
-can bypass the ruleset. The related and publication workflows use the repository-scoped
-`REPOSITORY_DEPLOY_KEY` secret for their generated-state commits. One checkpoint
-command restricts each workflow to its named generated files, pins GitHub's SSH
-host keys, and removes its temporary private-key file after every push attempt.
+can bypass the ruleset. The related, publication, and Lighthouse workflows read
+`REPOSITORY_DEPLOY_KEY` from the repository's 1Password Environment for
+generated-state commits. One checkpoint command restricts each workflow to its
+named generated files, pins GitHub's SSH host keys, and removes its temporary
+private-key file after every push attempt.
+
+GitHub Actions installs the latest beta 1Password CLI and authenticates with the
+`OP_SERVICE_ACCOUNT_TOKEN` repository secret. The non-secret
+`OP_ENVIRONMENT_ID` repository variable selects the Environment. Provider
+credentials are available only to commands wrapped by `op run`; the wrapper
+removes the service-account token before starting the project command. Keep the
+service account read-only and scoped to that Environment.
 
 Cloudflare Pages builds `dist/` from `main`. The publication orchestrator reads
 each pending essay's `data-content-version`, requests the Pages deploy hook when
 the expected hash is missing or stale, and waits for that exact version before
-IndexNow follow-up. The hook is held as the `CF_DEPLOY_HOOK_URL` repository
-secret. Two R2 buckets are served directly over custom domains:
+IndexNow follow-up. The hook is held as `CF_DEPLOY_HOOK_URL` in the 1Password
+Environment. Two R2 buckets are served directly over custom domains:
 `downloads.buthonestly.io` for essay downloads and
 `static.buthonestly.io` for Narrations. See [DOWNLOADS.md](DOWNLOADS.md)
 for how to add a file.
 
 Successful IndexNow hashes and Kit broadcast identities are committed to
 `data/publication-state.json`. Kit keeps ownership of forms, contacts, consent,
-broadcasts, and unsubscribes. The workflow requires `KIT_API_KEY`; the optional
-`KIT_EMAIL_TEMPLATE_ID` repository variable pins the maintained account template.
-A failed provider action remains pending while an independent success is
+broadcasts, and unsubscribes. The 1Password Environment requires `KIT_API_KEY`;
+the optional `KIT_EMAIL_TEMPLATE_ID` pins the maintained account template. A
+failed provider action remains pending while an independent success is
 preserved; rerun `publication.yml` manually to recover without repeating
 durably checkpointed work.
 
@@ -292,7 +308,7 @@ durably checkpointed work.
 > repo. Deploying from a clone means recreating it, or setting the same R2
 > bindings in the Cloudflare dashboard.
 
-Environment variables (see `.env.example`):
+Project environment variables:
 
 | Variable                         | Used for                                                                 |
 | -------------------------------- | ------------------------------------------------------------------------ |
@@ -306,6 +322,10 @@ Environment variables (see `.env.example`):
 | `CLOUDFLARE_API_TOKEN`           | Required for Narration upload; R2 edit and zone cache-purge permissions. |
 | `CLOUDFLARE_ZONE_ID`             | Required zone for exact-URL Narration cache purges.                      |
 | `NARRATION_R2_BUCKET`            | Required R2 bucket name for Narration upload.                            |
+
+Local commands receive these values from a 1Password Environment. GitHub
+Actions uses the CI Environment for publication and generated-state secrets;
+Cloudflare Pages keeps its build-time variables in the Cloudflare dashboard.
 
 The Fathom script is skipped when `CF_PAGES_BRANCH` is set to anything but
 `main`, so preview deploys never pollute the stats even if the variable is set

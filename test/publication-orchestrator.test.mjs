@@ -1066,9 +1066,19 @@ test("the publication workflow owns hourly, essay-change, and manual orchestrati
   assert.match(workflow, /src\/content\/essays\/\*\*/);
   assert.match(workflow, /contents: read/);
   assert.match(workflow, /persist-credentials: false/);
+  assert.match(workflow, /uses: 1password\/install-cli-action@v4/);
+  assert.match(workflow, /version: latest-beta/);
   assert.match(
     workflow,
-    /REPOSITORY_DEPLOY_KEY: \$\{\{ secrets\.REPOSITORY_DEPLOY_KEY \}\}/,
+    /OP_SERVICE_ACCOUNT_TOKEN: \$\{\{ secrets\.OP_SERVICE_ACCOUNT_TOKEN \}\}/,
+  );
+  assert.match(
+    workflow,
+    /op run --environment "\$\{\{ vars\.OP_ENVIRONMENT_ID \}\}"/,
+  );
+  assert.doesNotMatch(
+    workflow,
+    /secrets\.(?:CF_DEPLOY_HOOK_URL|KIT_API_KEY|REPOSITORY_DEPLOY_KEY)/,
   );
   assert.equal(
     workflow.match(/node scripts\/checkpoint-generated-state\.mjs publication/g)
@@ -1079,8 +1089,7 @@ test("the publication workflow owns hourly, essay-change, and manual orchestrati
   assert.match(workflow, /group: publication/);
   assert.match(workflow, /cancel-in-progress: false/);
   assert.match(workflow, /timeout-minutes: 30/);
-  assert.equal(workflow.match(/run: npm run publication/g)?.length, 2);
-  assert.match(workflow, /KIT_API_KEY/);
+  assert.equal(workflow.match(/npm run publication/g)?.length, 2);
   assert.match(workflow, /Record draft identities and partial successes/);
   assert.match(workflow, /steps\.publication_checkpoint\.outcome == 'success'/);
   assert.match(workflow, /Resume recorded Kit broadcasts/);

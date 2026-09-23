@@ -203,10 +203,17 @@ test("semantic workflow runs for essay changes and manually without a schedule",
   assert.match(workflow, /src\/lib\/essay-inventory\.mjs/);
   assert.match(workflow, /contents: read/);
   assert.match(workflow, /persist-credentials: false/);
+  assert.match(workflow, /uses: 1password\/install-cli-action@v4/);
+  assert.match(workflow, /version: latest-beta/);
   assert.match(
     workflow,
-    /REPOSITORY_DEPLOY_KEY: \$\{\{ secrets\.REPOSITORY_DEPLOY_KEY \}\}/,
+    /OP_SERVICE_ACCOUNT_TOKEN: \$\{\{ secrets\.OP_SERVICE_ACCOUNT_TOKEN \}\}/,
   );
+  assert.match(
+    workflow,
+    /op run --environment "\$\{\{ vars\.OP_ENVIRONMENT_ID \}\}"/,
+  );
+  assert.doesNotMatch(workflow, /secrets\.REPOSITORY_DEPLOY_KEY/);
   assert.match(
     workflow,
     /node scripts\/checkpoint-generated-state\.mjs related/,
