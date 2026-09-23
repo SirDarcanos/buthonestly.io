@@ -45,6 +45,10 @@ jobs:
           node-version: 24
           cache: npm
 
+      - uses: 1password/install-cli-action@v4
+        with:
+          version: latest-beta
+
       - name: Select scheduled device set
         id: schedule_selection
         if: github.event_name == 'schedule'
@@ -107,5 +111,5 @@ jobs:
       - name: Checkpoint advisory monitoring state
         if: ${{ !cancelled() && (github.event_name != 'schedule' || steps.schedule_selection.outputs.selected == 'true') }}
         env:
-          REPOSITORY_DEPLOY_KEY: ${{ secrets.REPOSITORY_DEPLOY_KEY }}
-        run: node scripts/checkpoint-generated-state.mjs lighthouse
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+        run: op run --environment "${{ vars.OP_ENVIRONMENT_ID }}" -- env -u OP_SERVICE_ACCOUNT_TOKEN node scripts/checkpoint-generated-state.mjs lighthouse

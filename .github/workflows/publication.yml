@@ -32,44 +32,42 @@ jobs:
           node-version: 24
           cache: npm
 
+      - uses: 1password/install-cli-action@v4
+        with:
+          version: latest-beta
+
       - run: npm ci
 
       - name: Prepare publication actions
         id: publication_prepare
         continue-on-error: true
         env:
-          CF_DEPLOY_HOOK_URL: ${{ secrets.CF_DEPLOY_HOOK_URL }}
-          KIT_API_KEY: ${{ secrets.KIT_API_KEY }}
-          KIT_EMAIL_TEMPLATE_ID: ${{ vars.KIT_EMAIL_TEMPLATE_ID }}
-          SITE_URL: ${{ vars.NEWSLETTER_SITE_URL || 'https://buthonestly.io' }}
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           PUBLICATION_MONITORING_HANDOFF_FILE: artifacts/publication-monitoring-handoff.json
-        run: npm run publication
+        run: op run --environment "${{ vars.OP_ENVIRONMENT_ID }}" -- env -u OP_SERVICE_ACCOUNT_TOKEN npm run publication
 
       - name: Record draft identities and partial successes
         id: publication_checkpoint
         if: always()
         env:
-          REPOSITORY_DEPLOY_KEY: ${{ secrets.REPOSITORY_DEPLOY_KEY }}
-        run: node scripts/checkpoint-generated-state.mjs publication
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+        run: op run --environment "${{ vars.OP_ENVIRONMENT_ID }}" -- env -u OP_SERVICE_ACCOUNT_TOKEN node scripts/checkpoint-generated-state.mjs publication
 
       - name: Resume recorded Kit broadcasts
         id: publication_resume
         if: ${{ always() && steps.publication_checkpoint.outcome == 'success' }}
         continue-on-error: true
         env:
-          CF_DEPLOY_HOOK_URL: ${{ secrets.CF_DEPLOY_HOOK_URL }}
-          KIT_API_KEY: ${{ secrets.KIT_API_KEY }}
-          KIT_EMAIL_TEMPLATE_ID: ${{ vars.KIT_EMAIL_TEMPLATE_ID }}
-          SITE_URL: ${{ vars.NEWSLETTER_SITE_URL || 'https://buthonestly.io' }}
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           PUBLICATION_MONITORING_HANDOFF_FILE: artifacts/publication-monitoring-handoff.json
-        run: npm run publication
+        run: op run --environment "${{ vars.OP_ENVIRONMENT_ID }}" -- env -u OP_SERVICE_ACCOUNT_TOKEN npm run publication
 
       - name: Record delivery and remaining partial successes
         id: publication_final_checkpoint
         if: always()
         env:
-          REPOSITORY_DEPLOY_KEY: ${{ secrets.REPOSITORY_DEPLOY_KEY }}
-        run: node scripts/checkpoint-generated-state.mjs publication
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+        run: op run --environment "${{ vars.OP_ENVIRONMENT_ID }}" -- env -u OP_SERVICE_ACCOUNT_TOKEN node scripts/checkpoint-generated-state.mjs publication
 
       - name: Hand Live Essays to monitoring
         if: always()

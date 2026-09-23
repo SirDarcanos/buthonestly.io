@@ -89,9 +89,18 @@ test("workflows delegate every generated-state push to the checkpoint command", 
   );
   assert.match(related, /src\/lib\/essay-inventory\.mjs/);
   for (const workflow of [publication, related, lighthouse]) {
+    assert.match(workflow, /uses: 1password\/install-cli-action@v4/u);
+    assert.match(
+      workflow,
+      /OP_SERVICE_ACCOUNT_TOKEN: \$\{\{ secrets\.OP_SERVICE_ACCOUNT_TOKEN \}\}/u,
+    );
+    assert.match(
+      workflow,
+      /op run --environment "\$\{\{ vars\.OP_ENVIRONMENT_ID \}\}" -- env -u OP_SERVICE_ACCOUNT_TOKEN node scripts\/checkpoint-generated-state\.mjs/u,
+    );
     assert.doesNotMatch(
       workflow,
-      /GIT_SSH_COMMAND|git push|git pull --rebase/u,
+      /secrets\.REPOSITORY_DEPLOY_KEY|GIT_SSH_COMMAND|git push|git pull --rebase/u,
     );
   }
 });

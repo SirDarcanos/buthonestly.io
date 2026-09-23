@@ -38,6 +38,10 @@ jobs:
           node-version: 24
           cache: npm
 
+      - uses: 1password/install-cli-action@v4
+        with:
+          version: latest-beta
+
       - run: npm ci
 
       - run: npm install --no-save @huggingface/transformers@4.2.0
@@ -46,5 +50,5 @@ jobs:
 
       - name: Commit refreshed map
         env:
-          REPOSITORY_DEPLOY_KEY: ${{ secrets.REPOSITORY_DEPLOY_KEY }}
-        run: node scripts/checkpoint-generated-state.mjs related
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+        run: op run --environment "${{ vars.OP_ENVIRONMENT_ID }}" -- env -u OP_SERVICE_ACCOUNT_TOKEN node scripts/checkpoint-generated-state.mjs related
