@@ -42,7 +42,7 @@ import cardCatalog from "./tool-output-archive-card-catalog.jpg";
 
 </QuickSummary>
 
-I started hearing about Jev and went to see what I could use it for. While I was reading about it, an email from Ollama introduced me to Bespoke Nimble, a decision model I could run locally for free. I hadn't tested Jev yet, but Nimble gave me a reason to start experimenting.
+I started hearing about [Jev](https://docs.typesafe.ai/primitives) and went to see what I could use it for. While I was reading about it, an email from Ollama introduced me to [Bespoke Nimble](https://github.com/bespokelabsai/nimble), a decision model I could run locally for free. I hadn't tested Jev yet, but Nimble gave me a reason to start experimenting.
 
 The published benchmarks put it close to Jev on the tasks they measured. It ran smoothly on my MacBook M3 Pro, and the data I sent to the local model stayed on my machine. That was enough for me to start playing with it.
 
@@ -54,7 +54,7 @@ When I ask Claude or ChatGPT a question, I usually want an explanation, some cod
 
 For a support interaction, those answers might be “billing,” “technical problem,” and “something else.” I supply the criteria for each category so the model has a defined standard to apply.
 
-[Nimble](https://github.com/bespokelabsai/nimble) and [Jev](https://docs.typesafe.ai/primitives) are designed for these focused questions. They can choose from a list, assess a yes/no condition, or rate something against a defined scale. The answer comes back in a form code can use directly, along with probabilities.
+Nimble and Jev are designed for these focused questions. They can choose from a list, assess a yes/no condition, or rate something against a defined scale. The answer comes back in a form code can use directly, along with probabilities.
 
 Nimble is still built from a language model, a fine-tuned Qwen3.5-9B. Its serving code scores the allowed answers directly instead of generating an explanation token by token. That narrower job makes it useful alongside a general-purpose coding agent.
 
