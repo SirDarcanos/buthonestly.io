@@ -74,7 +74,7 @@ ollama pull nimble
 
 [Nimble requires Ollama 0.35 or later](https://ollama.com/library/nimble). Once downloaded, applications call its local `/v1/systemone` decision endpoint, rather than using `ollama run nimble` as a chat interface.
 
-For me, running locally also matters because of what I might send it. Game mechanics, unpublished project details, and playtest observations can stay on my machine. The local Nimble request doesn't send that evidence to Bespoke Labs or another inference provider.
+For me, running locally also matters because of what I might send it. Unpublished project details and internal documents can stay on my machine. The local Nimble request doesn't send that evidence to Bespoke Labs or another inference provider.
 
 If a cloud-hosted coding agent gathers the evidence first, that agent may already have received it. Keeping the whole workflow local means running both the agent's model and Nimble locally.
 
