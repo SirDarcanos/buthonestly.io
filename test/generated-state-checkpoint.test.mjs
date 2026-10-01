@@ -131,7 +131,8 @@ test("the GitHub remote pins host identity and removes its deploy key", async (t
 
   const remote = await createGitHubCheckpointRemote({
     repository: "owner/repository",
-    deployKey: "private-key-material",
+    deployKey:
+      "-----BEGIN OPENSSH PRIVATE KEY-----\nprivate-key-material\n-----END OPENSSH PRIVATE KEY-----",
     runnerTemp,
     knownHostsPath,
   });
@@ -144,12 +145,76 @@ test("the GitHub remote pins host identity and removes its deploy key", async (t
   assert.equal(statSync(identityMatch[1]).mode & 0o777, 0o600);
   assert.equal(
     readFileSync(identityMatch[1], "utf8"),
-    "private-key-material\n",
+    "-----BEGIN OPENSSH PRIVATE KEY-----\nprivate-key-material\n-----END OPENSSH PRIVATE KEY-----\n",
   );
   assert.doesNotMatch(remote.env.GIT_SSH_COMMAND, /private-key-material/);
 
   await remote.close();
   assert.equal(existsSync(identityMatch[1]), false);
+});
+
+test("a base64 deploy key produces a usable SSH identity and is removed afterward", async (testContext) => {
+  const runnerTemp = mkdtempSync(path.join(tmpdir(), "checkpoint-base64-"));
+  testContext.after(() => rmSync(runnerTemp, { recursive: true, force: true }));
+  const originalKeyPath = path.join(runnerTemp, "original-key");
+  execFileSync("ssh-keygen", [
+    "-t",
+    "ed25519",
+    "-N",
+    "",
+    "-f",
+    originalKeyPath,
+  ]);
+  const privateKey = readFileSync(originalKeyPath, "utf8");
+  const encodedKey = Buffer.from(privateKey).toString("base64");
+
+  const remote = await createGitHubCheckpointRemote({
+    repository: "owner/repository",
+    deployKey: encodedKey,
+    runnerTemp,
+    knownHostsPath: path.join(repositoryRoot, ".github/github-known-hosts"),
+  });
+  testContext.after(() => remote.close());
+  const identityPath = remote.env.GIT_SSH_COMMAND.match(/-i '([^']+)'/u)[1];
+
+  assert.equal(readFileSync(identityPath, "utf8"), privateKey);
+  assert.equal(statSync(identityPath).mode & 0o777, 0o600);
+  assert.equal(
+    execFileSync("ssh-keygen", ["-y", "-f", identityPath], {
+      encoding: "utf8",
+    }),
+    execFileSync("ssh-keygen", ["-y", "-f", originalKeyPath], {
+      encoding: "utf8",
+    }),
+  );
+  assert.ok(!remote.env.GIT_SSH_COMMAND.includes(encodedKey));
+  await remote.close();
+  assert.equal(existsSync(identityPath), false);
+});
+
+test("invalid encoded deploy keys fail without exposing their value", async (testContext) => {
+  const runnerTemp = mkdtempSync(
+    path.join(tmpdir(), "checkpoint-invalid-key-"),
+  );
+  testContext.after(() => rmSync(runnerTemp, { recursive: true, force: true }));
+  for (const deployKey of [
+    "not-a-base64-key!",
+    Buffer.from("not a private key").toString("base64"),
+  ]) {
+    await assert.rejects(
+      createGitHubCheckpointRemote({
+        repository: "owner/repository",
+        deployKey,
+        runnerTemp,
+        knownHostsPath: path.join(repositoryRoot, ".github/github-known-hosts"),
+      }),
+      (error) => {
+        assert.match(error.message, /REPOSITORY_DEPLOY_KEY must contain/u);
+        assert.ok(!error.message.includes(deployKey));
+        return true;
+      },
+    );
+  }
 });
 
 test("a no-op checkpoint does not open the privileged remote", async (testContext) => {
