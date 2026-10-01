@@ -24,12 +24,12 @@ import QuickSummary from "../../../components/content/QuickSummary.astro";
 
 <QuickSummary>
 
-- Nimble makes bounded judgments from supplied evidence and defined answer criteria.
+- Nimble chooses from defined answers using the evidence and criteria you supply.
 - It runs locally through Ollama, so evidence submitted to the local model doesn't go to a hosted inference provider.
 - Published benchmarks put Nimble close to Jev on the evaluated tasks; I haven't tested Jev myself yet.
 - The ask-nimble skill gathers evidence through an agent, submits a structured request, and helps interpret the result.
 - pi-nimble-compact removes or shortens eligible older tool outputs while preserving originals for retrieval.
-- Neither model probabilities nor a smaller context guarantee correct decisions or lower costs.
+- Decisions need checking against your own data; context pruning can add retrieval and caching costs.
 
 </QuickSummary>
 
@@ -37,27 +37,25 @@ I started hearing about Jev and went to see what I could use it for. While I was
 
 The published benchmarks put it close to Jev on the tasks they measured. It ran smoothly on my MacBook M3 Pro, and the data I sent to the local model stayed on my machine. That was enough for me to start playing with it.
 
-One use came from an incremental game I'm developing. Balancing its economy has been much harder than I expected as a first-time game developer. I can calculate prices and rewards, but deciding whether they make for a good experience is another question. I wanted to give Nimble virtual player profiles, observations from my own play sessions, and feedback from testers, then ask it to assess specific parts of the economy.
-
-I also saw other developers using Jev to decide which older tool outputs an agent still needed in its context. Nour Helmi had built a Pi extension for it. Why not do the same with Nimble? I adapted his work, along with tamaratran's fast-jev-compaction, into pi-nimble-compact, using local Nimble to make those judgments.
+I built two tools around it: `ask-nimble`, a skill for asking evidence-backed questions through an agent, and `pi-nimble-compact`, an extension for removing stale tool output from Pi's context.
 
 ## What Does a Decision Model Do?
 
 When I ask Claude or ChatGPT a question, I usually want an explanation, some code, or help thinking through a problem. With Nimble, I give it the evidence, define the question, and tell it which answers are allowed.
 
-For a support interaction, those answers might be “billing,” “technical problem,” and “something else.” For my game, I might ask whether an upgrade looks underpriced, reasonably priced, or overpriced against a specific target. That target matters: “balanced” needs a definition before the model can assess it.
+For a support interaction, those answers might be “billing,” “technical problem,” and “something else.” For my game, I might ask whether an upgrade looks underpriced, reasonably priced, or overpriced against a specific target. I'd need to define what “balanced” means for that part of the game.
 
-[Nimble](https://github.com/bespokelabsai/nimble) and [Jev](https://docs.typesafe.ai/primitives) are designed for these bounded judgments. They can choose from a list, assess a yes/no condition, or rate something against a defined scale. They return typed results that code can use directly, along with probabilities.
+[Nimble](https://github.com/bespokelabsai/nimble) and [Jev](https://docs.typesafe.ai/primitives) are designed for these focused questions. They can choose from a list, assess a yes/no condition, or rate something against a defined scale. The answer comes back in a form code can use directly, along with probabilities.
 
 Nimble is still built from a language model, a fine-tuned Qwen3.5-9B. Its serving code scores the allowed answers directly instead of generating an explanation token by token. That narrower job makes it useful alongside a general-purpose coding agent.
 
-The division of work is what interested me. My agent can gather the relevant files, research, and calculations, then send Nimble a focused question. Nimble only sees what it receives; it doesn't inspect my project by itself.
+My agent can gather the relevant files, research, and calculations, then send Nimble a focused question. Nimble sees only what the agent sends.
 
-And its probabilities need care. A high score for an answer doesn't establish that the answer is correct. If I leave out an important game mechanic, Nimble is judging an incomplete picture.
+I still have to check the answer. A high probability doesn't establish that it is correct, especially if I've left out an important game mechanic.
 
 ## Free to Run, With the Data Staying Local
 
-The part that made me try Nimble immediately was that I could download it and run it on my own machine. Bespoke Labs released it under Apache 2.0, so local inference doesn't require a paid subscription or a bill for each request. It still needs hardware and electricity, but my MacBook M3 Pro runs it smoothly.
+Bespoke Labs released Nimble under Apache 2.0. Running it locally costs hardware and electricity, but there's no subscription or bill for each request.
 
 Ollama made getting started straightforward:
 
@@ -69,19 +67,17 @@ ollama pull nimble
 
 For me, running locally also matters because of what I might send it. Game mechanics, unpublished project details, and playtest observations can stay on my machine. The local Nimble request doesn't send that evidence to Bespoke Labs or another inference provider.
 
-That privacy claim applies to Nimble's part of the workflow. If a cloud-hosted coding agent gathers the evidence first, that agent may already have received it. Adding a local decision model doesn't make the whole setup local.
+If a cloud-hosted coding agent gathers the evidence first, that agent may already have received it. Keeping the whole workflow local means running both the agent's model and Nimble locally.
 
-Then there are the results. In [Bespoke's published evaluation across 13 public subsets](https://github.com/bespokelabsai/nimble/blob/main/docs/PUBLIC_BENCHMARKS.md), Nimble matched **74.8% of the human labels as a macro average**, compared with **76.0% for Jev 1.13.0**. Macro averaging gives each subset equal weight. These are the reported original-release results checked on October 1, 2026, not a measurement of every subsequent Nimble checkpoint.
+In [Bespoke's published evaluation across 13 public subsets](https://github.com/bespokelabsai/nimble/blob/main/docs/PUBLIC_BENCHMARKS.md), Nimble matched **74.8% of the human labels as a macro average**, compared with **76.0% for Jev 1.13.0**. Macro averaging gives each subset equal weight. The table reports results for Nimble's original release; I checked it on October 1, 2026.
 
-Those results were close enough to make me curious. They don't establish that the two models perform equally on my game or on support interactions. I've only tested Nimble so far; I still plan to test Jev and share what I find here or on my socials.
-
-But with a free local model already running well on my laptop, I had somewhere to start.
+That gap was small enough for me to try the free option first. I'll need to test it on my own tasks to see whether those results carry over.
 
 ## Asking Nimble Through a Skill
 
 I'm building an incremental game that I'll share here once it's ready. I've reached the economy-balancing stage, which has turned out to be much harder than I expected as a first-time game developer.
 
-There's plenty I can calculate: how long an upgrade takes to afford, how much it increases production, and when it pays for itself. Those calculations help, but I also want to assess how the mechanics fit together for different players.
+There's plenty I can calculate: how long an upgrade takes to afford, how much it increases production, and when it pays for itself. I also want to assess how the mechanics fit together for different players.
 
 That's where I want to use Nimble. I can prepare virtual player profiles, combine them with observations from my own sessions and my testers, and ask focused questions about the economy.
 
@@ -93,11 +89,11 @@ To make that easier, I built [the ask-nimble skill](https://github.com/SirDarcan
 
 The skill gives the coding agent a procedure to follow. It first checks whether the question suits Nimble. Arithmetic stays with code, factual questions need sources, and open-ended requests stay with the main agent.
 
-For a suitable judgment, the agent establishes the criteria and gathers relevant evidence. It then sends that evidence to local Nimble with defined outcomes, including an insufficient-data option when needed. Nimble has no automatic access to the repository; the agent has to supply what matters.
+For a suitable judgment, the agent establishes the criteria and gathers relevant evidence. It then sends that evidence to local Nimble with defined outcomes, including an insufficient-data option when needed. The agent has to supply the project details that matter.
 
 For my game, “Is this upgrade balanced?” needs more detail. Balanced against which upgrades, for which player profile, and at what stage of progression? The skill asks for clarification when it can't resolve those questions from the project.
 
-After the call, the agent presents Nimble's answer alongside the evidence and uncertainty. Any explanation comes from the agent interpreting the result, because Nimble doesn't return a reasoning trace.
+After the call, the agent presents Nimble's answer alongside the evidence and any gaps. The explanation is the agent's interpretation; Nimble returns the decision and probabilities.
 
 ### Classifying a Support Interaction
 
@@ -160,7 +156,7 @@ With Ollama running locally, I can send the following JSON to `http://localhost:
 
 Each question is assessed independently against the same evidence. Nimble returns a selected option and a probability distribution for each one.
 
-What happens next belongs to the application's policy. It could flag a conditional leaving signal for human review and route an urgent export problem to technical support. An inquiry about refund availability can prompt an explanation of the policy. None of those classifications establishes refund eligibility or authorizes a payment.
+The application can use those classifications to follow its support policy: flag a conditional intention to leave for human review, route an urgent export problem to technical support, or explain refund conditions. Refund eligibility and payment authorization remain separate checks.
 
 ### Asking Through the Skill
 
@@ -198,21 +194,17 @@ and relevant account history, then suggest the next step
 for human review.
 ```
 
-The agent does the preparation. It reads the conversation, gathers relevant account facts, and finds the applicable policy. It then crafts the structured request and sends it to local Nimble.
+With authorized access, the agent reads the conversation, gathers relevant account facts, and finds the applicable policy. It might include earlier attempts to resolve the issue, the customer's subscription terms, and whether support has offered a workaround. It then constructs the JSON request and sends it to local Nimble.
 
-For example, the evidence might include earlier attempts to resolve the issue, the customer's subscription terms, and whether support has already offered a workaround. That gives Nimble more to assess than a single message.
+If the agent can't find the policy or a deciding fact, the skill asks for clarification or reports the gap. Nimble receives the gathered evidence rather than connecting to the support system itself.
 
-The shorter prompt works because the agent can resolve the ticket and criteria from its available context and authorized access. If it can't find the policy or lacks access to a deciding fact, the skill asks for clarification or preserves that gap. It doesn't fill in missing account details.
-
-Nimble itself never connects to the support system. It receives only the evidence the agent includes in the request. The agent then presents Nimble's classifications, explains them against the gathered evidence, and suggests what a human could do next.
-
-That distinction also matters for privacy: the Nimble assessment runs locally, but a cloud-hosted agent gathering the evidence may still receive customer data. The privacy of the whole workflow depends on both parts.
+As with project files, customer data may still reach the main agent's provider if that model runs in the cloud.
 
 ### Trying It With a D&D Monster
 
-I can see the same workflow helping with a homebrew D&D monster. Supply comparable monsters, the abilities I've added, and my research and calculations, then ask for an assessment against explicit criteria. That would give me something to examine before playtesting, rather than a claim that the encounter will work.
+I can see the same workflow helping with a homebrew D&D monster. I could supply comparable monsters, the abilities I've added, and my research and calculations, then ask for an assessment against explicit criteria. I'd have an assessment to examine before playtesting the encounter.
 
-The skill is advisory. Asking the question doesn't authorize changes to the game, and I still have to decide what to do with the answer.
+In both games and support work, the skill offers advice. Acting on it requires a separate decision.
 
 ## Using Nimble to Prune Pi's Context
 
@@ -226,7 +218,7 @@ During a coding session, tool outputs accumulate: file reads, searches, test res
 
 The extension waits until context reaches its configured threshold, then considers eligible older outputs. It asks local Nimble whether uncertain results need to remain verbatim. Recent material and several protected kinds of output are excluded.
 
-An output selected for removal becomes a retrieval marker. Some retained long outputs can instead become excerpts containing their beginning and end. That shortening is mechanical; Nimble isn't writing a summary of the missing middle.
+An output selected for removal becomes a retrieval marker. Some retained long outputs can instead become excerpts containing their beginning and end. The excerpt keeps the beginning and end exactly as written; it contains no summary of the missing middle.
 
 The complete originals remain in Pi's saved session history. If the agent needs something that was omitted, it can retrieve it with `nimble_read`, rather than rerunning a command. That matters when the underlying file has changed—or when repeating the command could have side effects.
 
@@ -234,7 +226,7 @@ My main coding model stays the same. Nimble handles these smaller judgments loca
 
 The aim is to reduce stale context, but fewer visible tokens don't automatically mean a cheaper session. Changing context can affect prompt caching, and retrieving omitted evidence adds work. The extension includes a cache-payback check, though its estimates aren't billing guarantees.
 
-There's also a quality tradeoff. Nimble can misjudge relevance, and an important detail might sit in the middle of a shortened output. Preserving the original gives the agent a way to recover it; it doesn't make the initial judgment infallible.
+Nimble can misjudge relevance, and an important detail might sit in the middle of a shortened output. The agent can retrieve the original when it needs that evidence.
 
 With Ollama running and Nimble downloaded, installation is:
 
@@ -246,14 +238,8 @@ Inside Pi, `/nimble-status` shows pruning activity, while `/nimble-reset` restor
 
 ## Where I Want to Take It
 
-The game economy is where I want to spend more time with Nimble. Virtual player profiles can help me examine different paths through the game, while actual play sessions give me evidence of what people do. I want to use both to assess specific mechanics, then check the suggested changes through more testing.
-
-I'm also interested in the support use cases I've discussed with a few people at work. Classifying interactions for human analysis seems like a useful place to start: the outcomes are defined, the results can be checked, and a mistaken classification doesn't have to trigger an irreversible action.
-
-For either use, I'll need examples whose answers I've reviewed. The published benchmarks persuaded me to try Nimble, but they don't tell me how well it handles my game mechanics or a particular support policy. That's something I have to measure with the data I intend to use.
+For the game economy and support classifications, I'll need examples whose answers I've reviewed. I can compare Nimble's judgments with those answers, inspect where they differ, and decide which tasks I trust it with. Changes to the game will still need playtesting.
 
 I still plan to test Jev. I haven't done that comparison myself, and I'll share my findings here or on my socials when I do. There may be tasks where paying for it makes sense.
-
-For now, Nimble runs smoothly on my laptop, and I can submit evidence to it without sending that evidence to another inference provider. With ask-nimble and pi-nimble-compact, I've given myself two ways to put it to work.
 
 Next, I want to see how far I can push it!
