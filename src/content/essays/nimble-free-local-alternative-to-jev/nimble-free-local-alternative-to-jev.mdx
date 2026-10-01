@@ -307,7 +307,15 @@ With Ollama running and Nimble downloaded, installation is:
 pi install npm:pi-nimble-compact
 ```
 
-Inside Pi, `/nimble-status` shows pruning activity, while `/nimble-reset` restores the outputs hidden or shortened by the extension on the active branch.
+Inside Pi, I can run a pruning pass on demand:
+
+```text
+/nimble-compact
+```
+
+It waits for the agent to become idle, then runs the same pruning process without waiting for the automatic context threshold or cooldown. The protections and cache-payback check still apply, so a pass may remove nothing. Changes affect the next model request; this doesn't invoke Pi's `/compact` or generate a summary.
+
+`/nimble-status` shows pruning activity, while `/nimble-reset` restores the outputs hidden or shortened by the extension on the active branch.
 
 ## Where I Want to Take It
 
