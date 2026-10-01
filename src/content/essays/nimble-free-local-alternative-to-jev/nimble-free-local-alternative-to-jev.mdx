@@ -182,6 +182,53 @@ With Ollama running locally, I can send the following JSON to `http://localhost:
 
 Each question is assessed independently against the same evidence. Nimble returns a selected option and a probability distribution for each one.
 
+Here's an illustrative, shortened response, with other fields omitted. These probabilities are example values, not results from an actual Nimble run:
+
+```json
+{
+  "answers": {
+    "refund_intent": {
+      "type": "choice",
+      "choice": "inquiry",
+      "probabilities": {
+        "request": 0.08,
+        "inquiry": 0.88,
+        "neither": 0.01,
+        "unclear": 0.03
+      }
+    },
+    "leaving_signal": {
+      "type": "choice",
+      "choice": "conditional",
+      "probabilities": {
+        "definite": 0.03,
+        "conditional": 0.94,
+        "not_expressed": 0.01,
+        "unclear": 0.02
+      }
+    },
+    "urgency": {
+      "type": "choice",
+      "choice": "priority",
+      "probabilities": {
+        "routine": 0.04,
+        "priority": 0.91,
+        "critical": 0.02,
+        "insufficient_data": 0.03
+      }
+    }
+  }
+}
+```
+
+The agent could interpret those classifications as:
+
+- **Refund inquiry:** the customer asks whether a refund is possible.
+- **Conditional intention to leave:** they mention finding another service if failures continue.
+- **Priority:** the export problem affects tomorrow's meeting.
+
+Those explanations come from the agent, not Nimble. A probability of `0.88` doesn't establish an 88% chance that the classification is correct.
+
 The application can use those classifications to follow its support policy: flag a conditional intention to leave for human review, route an urgent export problem to technical support, or explain refund conditions. Refund eligibility and payment authorization remain separate checks.
 
 ### Asking Through the Skill
