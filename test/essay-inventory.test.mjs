@@ -249,6 +249,65 @@ test("inventory normalizes metadata, freshness, taxonomy, and narration", (testC
   );
 });
 
+test("downloads retain R2 files and external links in reader-facing hashes", (testContext) => {
+  const directory = fixtureDirectory(testContext);
+  const downloads = [
+    { file: "guide.pdf", label: "Guide" },
+    { href: " https://github.com/example/project ", label: " Project " },
+  ];
+  const source = frontmatter().replace(
+    "tags:",
+    `downloads: ${JSON.stringify(downloads)}\ntags:`,
+  );
+  writeEssay(directory, "external-download", "mdx", source);
+  const first = loadEssayInventory({ essaysDirectory: directory }).get(
+    "external-download",
+  );
+  assert.deepEqual(first.downloads, [
+    { file: "guide.pdf", label: "Guide" },
+    { href: "https://github.com/example/project", label: "Project" },
+  ]);
+
+  writeEssay(
+    directory,
+    "external-download",
+    "mdx",
+    source.replace("example/project", "example/other"),
+  );
+  const changed = loadEssayInventory({ essaysDirectory: directory }).get(
+    "external-download",
+  );
+  assert.notEqual(changed.publicContentHash, first.publicContentHash);
+});
+
+test("downloads reject unsafe, unlabeled, or ambiguous external links", (testContext) => {
+  const directory = fixtureDirectory(testContext);
+  for (const download of [
+    { href: "javascript:alert(1)", label: "Project" },
+    { href: "http://example.com", label: "Project" },
+    { href: "not a URL", label: "Project" },
+    { href: "https://user:password@example.com", label: "Project" },
+    { href: "https://example.com" },
+    { href: "https://example.com", label: "Project", file: "guide.pdf" },
+  ]) {
+    writeEssay(
+      directory,
+      "invalid-download",
+      "mdx",
+      frontmatter().replace(
+        "tags:",
+        `downloads: ${JSON.stringify([download])}\ntags:`,
+      ),
+    );
+    assert.throws(
+      () => loadEssayInventory({ essaysDirectory: directory }),
+      (error) =>
+        error instanceof EssayInventoryError &&
+        error.diagnostics.some(({ field }) => field === "downloads"),
+    );
+  }
+});
+
 test("inventory rejects taxonomy slugs shared by different names", (testContext) => {
   const directory = fixtureDirectory(testContext);
   writeEssay(

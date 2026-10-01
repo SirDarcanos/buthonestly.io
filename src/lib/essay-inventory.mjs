@@ -242,6 +242,30 @@ const normalizeDownloads = (value, file, diagnostics) => {
       download && typeof download.label === "string"
         ? download.label.trim()
         : undefined;
+    const href =
+      download && typeof download.href === "string" ? download.href.trim() : "";
+    if (href) {
+      const url = URL.canParse(href) ? new URL(href) : null;
+      if (
+        filename ||
+        !label ||
+        !url ||
+        url.protocol !== "https:" ||
+        url.username ||
+        url.password
+      ) {
+        diagnostics.push(
+          diagnostic(
+            "invalid-metadata",
+            file,
+            "external downloads must have an HTTPS href and label, without credentials or a file",
+            "downloads",
+          ),
+        );
+        return [];
+      }
+      return [{ href, label }];
+    }
     if (!filename) {
       diagnostics.push(
         diagnostic(
@@ -272,7 +296,9 @@ const readerAssetDigests = (essay) => {
   const essayDirectory = path.dirname(essay.sourcePath);
   const referencedPaths = new Set([
     essay.coverPath,
-    ...essay.downloads.map(({ file }) => path.resolve(essayDirectory, file)),
+    ...essay.downloads
+      .filter(({ file }) => file)
+      .map(({ file }) => path.resolve(essayDirectory, file)),
   ]);
   for (const match of essay.body.matchAll(
     /^\s*import\s+[^;\n]+?\s+from\s+["']([^"']+)["']/gm,

@@ -130,18 +130,18 @@ audio: what-is-a-gpu.mp3
 ---
 ```
 
-| Field                                 | Notes                                                              |
-| ------------------------------------- | ------------------------------------------------------------------ |
-| `title`                               | Required.                                                          |
-| `date`                                | Required `YYYY-MM-DD`; every essay publishes at 13:00 UTC.         |
-| `updated`                             | Optional later `YYYY-MM-DD`; feeds the sitemap's `lastmod`.        |
-| `cover` / `coverAlt` / `coverCaption` | Local path. **Covers must be 16:9**; alt text describes the image. |
-| `excerpt`                             | Used for listings, metadata, feeds, and the on-page lead.          |
-| `newsletterIntro`                     | Required plain-text email introduction.                            |
-| `categories` / `tags`                 | Sections and topics. At least one of each.                         |
-| `sticky` / `cornerstone`              | Feature an essay in its section / mark an evergreen link hub.      |
-| `downloads`                           | Files served from R2, rendered as a download block.                |
-| `audio`                               | Optional filename served from `static.buthonestly.io/audio/`.      |
+| Field                                 | Notes                                                                                                                    |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `title`                               | Required.                                                                                                                |
+| `date`                                | Required `YYYY-MM-DD`; every essay publishes at 13:00 UTC.                                                               |
+| `updated`                             | Optional later `YYYY-MM-DD`; feeds the sitemap's `lastmod`.                                                              |
+| `cover` / `coverAlt` / `coverCaption` | Local path. **Covers must be 16:9**; alt text describes the image.                                                       |
+| `excerpt`                             | Used for listings, metadata, feeds, and the on-page lead.                                                                |
+| `newsletterIntro`                     | Required plain-text email introduction.                                                                                  |
+| `categories` / `tags`                 | Sections and topics. At least one of each.                                                                               |
+| `sticky` / `cornerstone`              | Feature an essay in its section / mark an evergreen link hub.                                                            |
+| `downloads`                           | R2 files (`file`, optional `label`) or external HTTPS links (`href`, required `label`), rendered in the Downloads block. |
+| `audio`                               | Optional filename served from `static.buthonestly.io/audio/`.                                                            |
 
 Use standard Markdown links, including root-relative links to other essays.
 Import `Figure`, `Gallery`, `QuickSummary`, `Callout`, and `Blockquote` from

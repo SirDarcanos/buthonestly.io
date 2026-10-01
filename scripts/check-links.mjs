@@ -60,7 +60,9 @@ for (const essay of inventory.essays) {
 
 const downloads = new Set(
   inventory.essays.flatMap((essay) =>
-    essay.downloads.map(({ file }) => `/downloads/${file}`),
+    essay.downloads
+      .filter(({ file }) => file)
+      .map(({ file }) => `/downloads/${file}`),
   ),
 );
 const publishedSlugs = new Set(inventory.published.map(({ slug }) => slug));
