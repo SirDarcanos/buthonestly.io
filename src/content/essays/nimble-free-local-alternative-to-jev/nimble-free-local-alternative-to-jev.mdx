@@ -15,13 +15,17 @@ tags:
   - AI
   - Workflow
   - Automation
+downloads:
+  - href: https://github.com/SirDarcanos/agentskills
+    label: Explore Agent Skills on GitHub
+  - href: https://github.com/SirDarcanos/pi-nimble-compact
+    label: Explore pi-nimble-compact on GitHub
 cover: ./nimble-local-ai-decision-model.jpg
 coverAlt: A person seen from above in a tall white room with small rectangular openings in the walls.
 coverCaption: Photo by <a href="https://unsplash.com/@jan_genge?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Jan Genge</a> on <a href="https://unsplash.com/photos/white-and-gray-floor-tiles-GvnIvq7LPkY?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
 ---
 
 import QuickSummary from "../../../components/content/QuickSummary.astro";
-import Button from "../../../components/Button.astro";
 
 <QuickSummary>
 
@@ -70,7 +74,14 @@ For me, running locally also matters because of what I might send it. Game mecha
 
 If a cloud-hosted coding agent gathers the evidence first, that agent may already have received it. Keeping the whole workflow local means running both the agent's model and Nimble locally.
 
-In [Bespoke's published evaluation across 13 public subsets](https://github.com/bespokelabsai/nimble/blob/main/docs/PUBLIC_BENCHMARKS.md), Nimble matched **74.8% of the human labels as a macro average**, compared with **76.0% for Jev 1.13.0**. Macro averaging gives each subset equal weight. The table reports results for Nimble's original release; I checked it on October 1, 2026.
+[Ollama reports the following mean accuracy](https://ollama.com/library/nimble) across Bespoke Labs' 13 public datasets with human labels, covering 3,880 decisions. Accuracy here means agreement with the human label.
+
+| Model | From | Mean Accuracy |
+| --- | --- | --- |
+| Nimble 9B | Bespoke Labs | 75.7% |
+| Jev 1.13 | TypeSafe | 76.0% |
+
+Nimble ran on Ollama. The Jev result comes from Bespoke Labs' run of the same decisions through TypeSafe's API. These are published results, not my own head-to-head test; I checked the source on October 1, 2026.
 
 That gap was small enough for me to try the free option first. I'll need to test it on my own tasks to see whether those results carry over.
 
@@ -207,10 +218,6 @@ I can see the same workflow helping with a homebrew D&D monster. I could supply 
 
 In both games and support work, the skill offers advice. Acting on it requires a separate decision.
 
-<Button href="https://github.com/SirDarcanos/agentskills" icon="external" external class="my-6">
-  Explore Agent Skills on GitHub
-</Button>
-
 ## Using Nimble to Prune Pi's Context
 
 Another use caught my attention while I was looking at what developers had built around Jev. [Nour Helmi's Pi extension](https://github.com/nourhelmi/pi-jev-compaction) used it to assess which older tool outputs still needed to stay in the agent's context.
@@ -240,10 +247,6 @@ pi install npm:pi-nimble-compact
 ```
 
 Inside Pi, `/nimble-status` shows pruning activity, while `/nimble-reset` restores the outputs hidden or shortened by the extension on the active branch.
-
-<Button href="https://github.com/SirDarcanos/pi-nimble-compact" icon="external" external class="my-6">
-  Explore pi-nimble-compact on GitHub
-</Button>
 
 ## Where I Want to Take It
 
