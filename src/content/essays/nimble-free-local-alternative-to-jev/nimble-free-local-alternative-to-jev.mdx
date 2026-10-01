@@ -21,6 +21,7 @@ coverCaption: Photo by <a href="https://unsplash.com/@jan_genge?utm_source=unspl
 ---
 
 import QuickSummary from "../../../components/content/QuickSummary.astro";
+import Button from "../../../components/Button.astro";
 
 <QuickSummary>
 
@@ -81,7 +82,7 @@ There's plenty I can calculate: how long an upgrade takes to afford, how much it
 
 That's where I want to use Nimble. I can prepare virtual player profiles, combine them with observations from my own sessions and my testers, and ask focused questions about the economy.
 
-To make that easier, I built [the ask-nimble skill](https://github.com/SirDarcanos/agentskills/tree/main/ask-nimble). I invoke it with a question:
+To make that easier, I built the `ask-nimble` skill as part of my Agent Skills collection. I invoke it with a question:
 
 ```text
 /ask-nimble Does this implementation satisfy the acceptance criteria?
@@ -206,6 +207,10 @@ I can see the same workflow helping with a homebrew D&D monster. I could supply 
 
 In both games and support work, the skill offers advice. Acting on it requires a separate decision.
 
+<Button href="https://github.com/SirDarcanos/agentskills" icon="external" external class="my-6">
+  Explore Agent Skills on GitHub
+</Button>
+
 ## Using Nimble to Prune Pi's Context
 
 Another use caught my attention while I was looking at what developers had built around Jev. [Nour Helmi's Pi extension](https://github.com/nourhelmi/pi-jev-compaction) used it to assess which older tool outputs still needed to stay in the agent's context.
@@ -235,6 +240,10 @@ pi install npm:pi-nimble-compact
 ```
 
 Inside Pi, `/nimble-status` shows pruning activity, while `/nimble-reset` restores the outputs hidden or shortened by the extension on the active branch.
+
+<Button href="https://github.com/SirDarcanos/pi-nimble-compact" icon="external" external class="my-6">
+  Explore pi-nimble-compact on GitHub
+</Button>
 
 ## Where I Want to Take It
 
