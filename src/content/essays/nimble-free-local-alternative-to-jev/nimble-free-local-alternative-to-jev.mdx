@@ -1,5 +1,6 @@
 ---
 title: "Nimble: A Free, Local Alternative to Jev"
+seoDescription: Run Bespoke Nimble locally with Ollama, a free alternative to Jev. Use ask-nimble for evidence checks and pi-nimble-compact for stale tool output.
 date: 2099-01-01
 updated:
 sticky: false
@@ -41,13 +42,13 @@ import cardCatalog from "./tool-output-archive-card-catalog.jpg";
 
 </QuickSummary>
 
-I started hearing about Jev and went to see what I could use it for. While I was reading about it, an email from Ollama introduced me to Nimble, a decision model I could run locally for free. I hadn't tested Jev yet, but Nimble gave me a reason to start experimenting.
+I started hearing about Jev and went to see what I could use it for. While I was reading about it, an email from Ollama introduced me to Bespoke Nimble, a decision model I could run locally for free. I hadn't tested Jev yet, but Nimble gave me a reason to start experimenting.
 
 The published benchmarks put it close to Jev on the tasks they measured. It ran smoothly on my MacBook M3 Pro, and the data I sent to the local model stayed on my machine. That was enough for me to start playing with it.
 
 I built two tools around it: `ask-nimble`, a skill for asking evidence-backed questions through an agent, and `pi-nimble-compact`, an extension for removing stale tool output from Pi's context.
 
-## What Does a Decision Model Do?
+## What Is Nimble, and How Does It Make Decisions?
 
 When I ask Claude or ChatGPT a question, I usually want an explanation, some code, or help thinking through a problem. With Nimble, I give it the evidence, define the question, and tell it which answers are allowed.
 
@@ -59,9 +60,9 @@ Nimble is still built from a language model, a fine-tuned Qwen3.5-9B. Its servin
 
 My agent can gather the relevant files, research, and calculations, then send Nimble a focused question. Nimble sees only what the agent sends.
 
-I still have to check the answer. A high probability doesn't establish that it is correct, especially if I've left out an important game mechanic.
+I still have to check the answer. A high probability doesn't establish that it is correct, especially if I've left out an important game mechanic. I've run into that gap between model output and what the data supports before, in [AI Is Not an Oracle](/limits-of-machine-learning/).
 
-## Free to Run, With the Data Staying Local
+## Running Nimble Locally With Ollama
 
 Bespoke Labs released Nimble under Apache 2.0. Running it locally costs hardware and electricity, but there's no subscription or bill for each request.
 
@@ -98,7 +99,15 @@ That's where I want to use Nimble. I can prepare virtual player profiles, combin
 
 <Figure src={balancingShapes} alt="Wood-textured geometric shapes and two spheres balanced in a stack against a pale background." />
 
-To make that easier, I built the `ask-nimble` skill as part of my Agent Skills collection. I invoke it with a question:
+To make that easier, I built the `ask-nimble` skill as part of my Agent Skills collection, also listed on the [Resources page](/resources/). To install just this skill with the skills CLI:
+
+```sh
+npx skills add SirDarcanos/agentskills --skill ask-nimble
+```
+
+Choose your agent during installation. The skill needs local Ollama 0.35 or later with Nimble downloaded, plus Python 3 and curl. The agent also needs access to the evidence it will gather.
+
+I invoke it with a question:
 
 ```text
 /ask-nimble Does this implementation satisfy the acceptance criteria?
