@@ -279,6 +279,23 @@ generated-state commits. One checkpoint command restricts each workflow to its
 named generated files, pins GitHub's SSH host keys, and removes its temporary
 private-key file after every push attempt.
 
+`REPOSITORY_DEPLOY_KEY` accepts a multiline private SSH key or the single-line
+base64 encoding of the complete private-key file, including its header and
+footer. Base64 fits the 1Password Environment text field; it is encoding, not
+encryption, so treat the encoded value as a secret. The matching public key must
+be registered as a GitHub repository deploy key with write access, and the
+private key must not require a passphrase. On macOS, copy the encoded value
+without printing it in the terminal:
+
+```sh
+base64 -i /path/to/private-key | tr -d '\n' | pbcopy
+```
+
+Paste the clipboard into `REPOSITORY_DEPLOY_KEY` in the CI Environment. Use the
+private-key file, not its `.pub` companion. Merge base64 support before changing
+an existing multiline value, then rerun the failed workflow to verify a real
+state checkpoint; an unchanged-state run does not exercise SSH authentication.
+
 GitHub Actions installs the latest beta 1Password CLI and authenticates with the
 `OP_SERVICE_ACCOUNT_TOKEN` repository secret. The non-secret
 `OP_ENVIRONMENT_ID` repository variable selects the Environment. Provider
