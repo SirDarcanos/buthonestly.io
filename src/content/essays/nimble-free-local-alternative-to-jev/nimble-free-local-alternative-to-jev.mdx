@@ -26,6 +26,9 @@ coverCaption: Photo by <a href="https://unsplash.com/@jan_genge?utm_source=unspl
 ---
 
 import QuickSummary from "../../../components/content/QuickSummary.astro";
+import Figure from "../../../components/content/Figure.astro";
+import balancingShapes from "./game-economy-balancing-shapes.jpg";
+import cardCatalog from "./tool-output-archive-card-catalog.jpg";
 
 <QuickSummary>
 
@@ -92,6 +95,8 @@ I'm building an incremental game that I'll share here once it's ready. I've reac
 There's plenty I can calculate: how long an upgrade takes to afford, how much it increases production, and when it pays for itself. I also want to assess how the mechanics fit together for different players.
 
 That's where I want to use Nimble. I can prepare virtual player profiles, combine them with observations from my own sessions and my testers, and ask focused questions about the economy.
+
+<Figure src={balancingShapes} alt="Wood-textured geometric shapes and two spheres balanced in a stack against a pale background." />
 
 To make that easier, I built the `ask-nimble` skill as part of my Agent Skills collection. I invoke it with a question:
 
@@ -233,6 +238,10 @@ The extension waits until context reaches its configured threshold, then conside
 An output selected for removal becomes a retrieval marker. Some retained long outputs can instead become excerpts containing their beginning and end. The excerpt keeps the beginning and end exactly as written; it contains no summary of the missing middle.
 
 The complete originals remain in Pi's saved session history. If the agent needs something that was omitted, it can retrieve it with `nimble_read`, rather than rerunning a command. That matters when the underlying file has changed—or when repeating the command could have side effects.
+
+<Figure src={cardCatalog} alt="Rows of wooden library card catalogue drawers with metal label holders and round handles.">
+  Photo by <a href="https://unsplash.com/@format_">Daniel</a> on <a href="https://unsplash.com/photos/vintage-wooden-card-catalog-drawers-with-labels-kAQo6CJCPN4">Unsplash</a>
+</Figure>
 
 My main coding model stays the same. Nimble handles these smaller judgments locally, and Pi's normal compaction remains available. If scoring fails, the extension applies no new pruning decisions.
 
