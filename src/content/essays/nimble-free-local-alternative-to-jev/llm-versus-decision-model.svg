@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1376" height="1056" viewBox="0 0 1376 1056">
+  <rect width="1376" height="1056" fill="#f4f0e7"/>
+  <g font-family="Arial, Helvetica, sans-serif" fill="#211d18">
+    <text x="52" y="92" font-size="48" font-weight="700">One requirement, two ways to answer</text>
+    <text x="52" y="158" font-size="34">Need: staffed support at all hours, including weekends.</text>
+    <text x="52" y="211" font-size="34">Proposal: critical incidents wait until the next business day.</text>
+    <path d="M52 260H1324" stroke="#c9c1b3" stroke-width="2"/>
+    <text x="52" y="335" font-size="42" font-weight="700">General-purpose LLM</text>
+    <text x="52" y="386" font-size="32" fill="#665e51">Generates an answer, token by token</text>
+    <g fill="none" stroke="#c9c1b3" stroke-width="2">
+      <rect x="52" y="422" width="214" height="100"/>
+      <rect x="280" y="422" width="166" height="100"/>
+      <rect x="460" y="422" width="138" height="100"/>
+      <rect x="612" y="422" width="184" height="100"/>
+      <rect x="810" y="422" width="136" height="100"/>
+      <rect x="960" y="422" width="364" height="100"/>
+    </g>
+    <g font-size="36" text-anchor="middle">
+      <text x="159" y="484">Support</text>
+      <text x="363" y="484">does</text>
+      <text x="529" y="484">not</text>
+      <text x="704" y="484">meet</text>
+      <text x="878" y="484">the</text>
+      <text x="1142" y="484">requirement.</text>
+    </g>
+    <path d="M52 586H1324" stroke="#c9c1b3" stroke-width="2"/>
+    <text x="52" y="660" font-size="42" font-weight="700">Nimble / Jev</text>
+    <text x="52" y="711" font-size="32" fill="#665e51">Scores the choices supplied in the request</text>
+    <rect x="52" y="748" width="410" height="164" fill="none" stroke="#c9c1b3" stroke-width="2"/>
+    <rect x="483" y="748" width="410" height="164" fill="#eee0d7" stroke="#7e2a1e" stroke-width="3"/>
+    <rect x="914" y="748" width="410" height="164" fill="none" stroke="#c9c1b3" stroke-width="2"/>
+    <g font-size="34">
+      <text x="80" y="802">Meets</text>
+      <text x="511" y="802" font-weight="700" fill="#7e2a1e">Conflicts</text>
+      <text x="942" y="802">Insufficient data</text>
+    </g>
+    <g font-size="52">
+      <text x="80" y="875">2%</text>
+      <text x="511" y="875" font-weight="700" fill="#7e2a1e">95%</text>
+      <text x="942" y="875">3%</text>
+    </g>
+    <g font-size="30" fill="#665e51">
+      <text x="52" y="980">Illustrative outputs, not a benchmark. LLMs can also generate JSON.</text>
+      <text x="52" y="1023">Word boxes show the sentence, not exact tokenizer boundaries.</text>
+    </g>
+  </g>
+</svg>

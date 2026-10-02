@@ -30,6 +30,7 @@ import QuickSummary from "../../../components/content/QuickSummary.astro";
 import Figure from "../../../components/content/Figure.astro";
 import balancingShapes from "./game-economy-balancing-shapes.jpg";
 import cardCatalog from "./tool-output-archive-card-catalog.jpg";
+import decisionModelComparison from "./llm-versus-decision-model.jpg";
 
 <QuickSummary>
 
@@ -60,6 +61,10 @@ For a vendor proposal, those answers might be “meets the requirement,” “co
 Nimble and Jev are designed for these focused questions. They can choose from a list, assess a yes/no condition, or rate something against a defined scale. The answer comes back in a form code can use directly, along with probabilities.
 
 Nimble is still built from a language model, a fine-tuned Qwen3.5-9B. Its serving code scores the allowed answers directly instead of generating an explanation token by token. I can use those results directly in code or pass them back to a general-purpose agent.
+
+<Figure src={decisionModelComparison} alt="Comparison using a vendor's limited support hours: a general-purpose LLM generates the sentence ‘Support does not meet the requirement.’ Nimble or Jev scores the supplied choices: meets 2%, conflicts 95%, insufficient data 3%. All outputs are illustrative.">
+  Both rows assess the same requirement. The probabilities are illustrative, not a measure of correctness. Original diagram inspired by <a href="https://parallel.ai/blog/testing-jev">Parallel's Jev explainer</a>.
+</Figure>
 
 My agent can gather the relevant files, research, and calculations, then send Nimble a focused question. Nimble sees only what the agent sends.
 
