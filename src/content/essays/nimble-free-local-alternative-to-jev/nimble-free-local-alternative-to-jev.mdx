@@ -7,7 +7,7 @@ sticky: false
 cornerstone: false
 excerpt: I can give Nimble new classification tasks without retraining it. Running it locally lets me experiment without sending the evidence to another provider.
 newsletterIntro: |-
-  I started reading about Jev, then an email from Ollama introduced me to Nimble, a free decision model I could run locally. I've been playing with it on my MacBook M3 Pro and built two tools around it: a skill for evidence-backed judgments and a Pi extension for pruning stale tool outputs.
+  I started reading about Jev, then an email from Ollama introduced me to Nimble, a free decision model I could run locally. I've been playing with it on my MacBook M3 Pro. I built a skill to make it easier to use through an agent and adapted a Pi extension to prune older tool outputs with it.
 
   This essay explains what these models do, how local inference changes the privacy tradeoff, and where I want to use Nimble next, including balancing the economy of an incremental game.
 categories:
@@ -37,7 +37,7 @@ import cardCatalog from "./tool-output-archive-card-catalog.jpg";
 - For stable tasks with plenty of labeled data, a dedicated classifier may be faster, cheaper, and more accurate.
 - It runs locally through Ollama, so evidence submitted to the local model doesn't go to a hosted inference provider.
 - Published benchmarks put Nimble close to Jev on the evaluated tasks; I haven't tested Jev myself yet.
-- The ask-nimble skill gathers evidence through an agent, submits a structured request, and helps interpret the result.
+- The ask-nimble skill lets me ask in plain language; the agent gathers evidence, prepares the request, and interprets the result.
 - pi-nimble-compact removes or shortens eligible older tool outputs while preserving originals for retrieval.
 - Decisions need checking against your own data; context pruning can add retrieval and caching costs.
 
@@ -49,7 +49,7 @@ That caught my attention, but once I saw what it did, I wondered: how is this be
 
 While I was looking into that, an email from Ollama introduced me to [Bespoke Nimble](https://github.com/bespokelabsai/nimble), which takes the same approach and runs locally. I hadn't tried Jev, but I could download Nimble and experiment locally without paying for each request.
 
-It ran smoothly, and the evidence I sent to the local model stayed on my machine. I built two tools to explore where it could help: `ask-nimble`, a skill for asking evidence-backed questions through an agent, and `pi-nimble-compact`, an extension for removing stale tool output from Pi's context.
+It ran smoothly, and the evidence I sent to the local model stayed on my machine. To make it easier to use, I built `ask-nimble`, a skill that lets me ask questions through an agent without constructing the API requests myself. I also adapted a Pi extension to use Nimble for pruning older tool outputs from the agent's context: `pi-nimble-compact`.
 
 ## What Is Nimble, and How Does It Make Decisions?
 
