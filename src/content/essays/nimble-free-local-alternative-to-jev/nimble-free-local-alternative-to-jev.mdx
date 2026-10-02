@@ -57,7 +57,7 @@ Nimble is a [System One model](https://docs.typesafe.ai/concepts/system-one) tha
 
 System One models return structured decisions and probabilities that software can use directly, rather than generating a written reply. I give Nimble the evidence, define the question, and tell it which answers are allowed.
 
-Zero-shot classification means I can ask it to apply those labels without first training it on examples for that task. Nimble has already been trained; I supply the label definitions in the request.
+Zero-shot classification means I supply label definitions without worked examples showing which label belongs to which input. Nimble has already been trained; I don't need to retrain it for each new task.
 
 For a vendor proposal, those answers might be “meets the requirement,” “conflicts with the requirement,” and “insufficient data.” I supply the criteria for each answer so the model has a defined standard to apply.
 
@@ -119,6 +119,8 @@ For me, running locally also matters because of what I might send it. Unpublishe
 
 If a cloud-hosted coding agent gathers the evidence first, that agent may already have received it. Keeping the whole workflow local means running both the agent's model and Nimble locally.
 
+### Published Benchmarks
+
 [Ollama reports the following mean accuracy](https://ollama.com/library/nimble) across Bespoke Labs' 13 public datasets with human labels, covering 3,880 decisions. Accuracy here means agreement with the human label.
 
 | Model | From | Mean Accuracy |
@@ -130,45 +132,13 @@ Nimble ran on Ollama. The Jev result comes from Bespoke Labs' run of the same de
 
 That gap was small enough for me to try the free option first. I'll need to test it on my own tasks to see whether those results carry over.
 
-## Asking Nimble Through a Skill
-
-I'm building an incremental game that I'll share here once it's ready. I've reached the economy-balancing stage, which has turned out to be much harder than I expected as a first-time game developer.
-
-There's plenty I can calculate: how long an upgrade takes to afford, how much it increases production, and when it pays for itself. I also want to assess how the mechanics fit together for different players.
-
-That's where I want to use Nimble. I can prepare virtual player profiles, combine them with observations from my own sessions and my testers, and ask focused questions about the economy.
-
-<Figure src={balancingShapes} alt="Wood-textured geometric shapes and two spheres balanced in a stack against a pale background." />
-
-To make that easier, I built the `ask-nimble` skill as part of my Agent Skills collection, also listed on the [Resources page](/resources/). To install just this skill with the skills CLI:
-
-```sh
-npx skills add SirDarcanos/agentskills --skill ask-nimble
-```
-
-Choose your agent during installation. The skill needs local Ollama 0.35 or later with Nimble downloaded, plus Python 3 and curl. The agent also needs access to the evidence it will gather.
-
-I invoke it with a question:
-
-```text
-/ask-nimble Does this implementation satisfy the acceptance criteria?
-```
-
-The skill gives the coding agent a procedure to follow. It first checks whether the question suits Nimble. Arithmetic stays with code, factual questions need sources, and open-ended requests stay with the main agent.
-
-For a suitable judgment, the agent establishes the criteria and gathers relevant evidence. It then sends that evidence to local Nimble with defined outcomes, including an insufficient-data option when needed. The agent has to supply the project details that matter.
-
-For my game, “Is this upgrade balanced?” needs more detail. Balanced against which upgrades, for which player profile, and at what stage of progression? The skill asks for clarification when it can't resolve those questions from the project.
-
-After the call, the agent presents Nimble's answer alongside the evidence and any gaps.
-
-### Reviewing a Vendor Proposal With Nimble
+## Reviewing a Vendor Proposal With Nimble
 
 For a business example, suppose I'm reviewing a vendor's proposal against the requirements for a new project. Each project might need different support coverage, data handling, or ways to leave the service. I wouldn't expect to have a large set of proposals already labeled against every new combination of requirements.
 
 Here's a fictional proposal, not a vendor I've assessed. I want to check two requirements: round-the-clock support for critical incidents, and an exit plan that lets us move both our data and our configuration elsewhere.
 
-The agent gathers the proposal and our requirements. I can then send a focused assessment to `http://localhost:11434/v1/systemone`:
+With Ollama running locally, I can send the proposal excerpts and requirements to `http://localhost:11434/v1/systemone`:
 
 ```json
 {
@@ -238,15 +208,45 @@ Here's an illustrative, shortened response, with other fields omitted. The answe
 
 The proposal explicitly limits support hours, but its silence about configuration exports doesn't establish that they're impossible. A probability of `0.95` doesn't establish a 95% chance that the classification is correct.
 
-That distinction gives me two different follow-ups: negotiate the support coverage and ask for the missing export details. Any explanation or suggested follow-up comes from the main agent; Nimble returns the decisions and probabilities.
+That distinction gives me two different follow-ups: negotiate the support coverage and ask for the missing export details. Nimble returns the decisions and probabilities, not those follow-up suggestions.
 
 For another project, business-hours support might be enough, while the data-handling requirements might be stricter. I can change the questions and criteria without retraining Nimble. I'd still need reviewed examples to check whether it applies those new requirements reliably.
 
 If all I need is to compare a quoted price with a budget, I'd use code. Here, I want help reading commitments written in different ways and separating an explicit mismatch from missing evidence. This would be an initial review, not approval to sign a contract.
 
-### Asking Through the Skill
+## Asking Nimble Through a Skill
 
-With the skill, I don't need to construct that JSON request myself. If my agent has authorized access to the proposal and requirements, I can ask:
+I'm building an incremental game that I'll share here once it's ready. I've reached the economy-balancing stage, which has turned out to be much harder than I expected as a first-time game developer.
+
+There's plenty I can calculate: how long an upgrade takes to afford, how much it increases production, and when it pays for itself. I also want to assess how the mechanics fit together for different players.
+
+That's where I want to use Nimble. I can prepare virtual player profiles, combine them with observations from my own sessions and my testers, and ask focused questions about the economy.
+
+<Figure src={balancingShapes} alt="Wood-textured geometric shapes and two spheres balanced in a stack against a pale background." />
+
+To make that easier, I built the `ask-nimble` skill as part of my Agent Skills collection, also listed on the [Resources page](/resources/). To install just this skill with the skills CLI:
+
+```sh
+npx skills add SirDarcanos/agentskills --skill ask-nimble
+```
+
+Choose your agent during installation. The skill needs local Ollama 0.35 or later with Nimble downloaded, plus Python 3 and curl. The agent also needs access to the evidence it will gather.
+
+I invoke it with a question:
+
+```text
+/ask-nimble Does this implementation satisfy the acceptance criteria?
+```
+
+The skill gives the coding agent a procedure to follow. It first checks whether the question suits Nimble. Arithmetic stays with code, factual questions need sources, and open-ended requests stay with the main agent.
+
+For a suitable judgment, the agent establishes the criteria and gathers relevant evidence. It then sends that evidence to local Nimble with defined outcomes, including an insufficient-data option when needed. The agent has to supply the project details that matter.
+
+For my game, “Is this upgrade balanced?” needs more detail. Balanced against which upgrades, for which player profile, and at what stage of progression? The skill asks for clarification when it can't resolve those questions from the project.
+
+After the call, the agent presents Nimble's answer alongside the evidence and any gaps.
+
+For the vendor example above, the skill saves me from constructing the JSON request myself. If my agent has authorized access to the proposal and requirements, I can ask:
 
 ```text
 /ask-nimble Review the vendor proposal against this project's
