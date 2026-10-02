@@ -202,6 +202,15 @@
         "status": "delivered"
       }
     },
+    "nimble-free-local-alternative-to-jev": {
+      "newsletter": {
+        "broadcastId": 26208566,
+        "status": "draft"
+      },
+      "indexNow": {
+        "contentHash": "9e21ca3d916ec53ee368080a36254d6f9a137d0ece1b986460fb5fadf5fbd691"
+      }
+    },
     "psychological-safety-in-teams-people-first-leadership": {
       "indexNow": {
         "contentHash": "1d671c6e988229e9d4437a79ed75141a46c6ec44484499b72832fb8a8e85aff5"
