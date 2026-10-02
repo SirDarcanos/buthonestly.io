@@ -245,7 +245,9 @@ npx skills add SirDarcanos/agentskills --skill ask-nimble
 
 Choose your agent during installation. The skill needs local Ollama 0.35 or later with Nimble downloaded, plus Python 3 and curl. The agent also needs access to the evidence it will gather.
 
-I invoke it with a question:
+I also made [`/ask-jev` available as a skill](https://github.com/SirDarcanos/agentskills/tree/main). I'd default to Nimble because it's free, and use Jev when I want a second opinion or the task calls for it. Agreement between the two still wouldn't replace checking the evidence.
+
+I invoke `ask-nimble` with a question:
 
 ```text
 /ask-nimble Review the base costs of my game's income sources.
