@@ -43,7 +43,7 @@ import cardCatalog from "./tool-output-archive-card-catalog.jpg";
 
 </QuickSummary>
 
-I started hearing about [Jev](https://docs.typesafe.ai/primitives) and went to see what I could use it for. While I was reading about it, an email from Ollama introduced me to [Bespoke Nimble](https://github.com/bespokelabsai/nimble), a decision model I could run locally for free. I hadn't tested Jev yet, but Nimble gave me a reason to start experimenting.
+The hype around [Jev](https://docs.typesafe.ai/primitives) caught my attention, so I went to see what it actually did. While I was reading about it, an email from Ollama introduced me to [Bespoke Nimble](https://github.com/bespokelabsai/nimble), a decision model I could run locally for free. I hadn't tested Jev yet, but Nimble gave me a reason to start experimenting.
 
 The published benchmarks put it close to Jev on the tasks they measured. It ran smoothly on my MacBook M3 Pro, and the data I sent to the local model stayed on my machine. That was enough for me to start playing with it.
 
@@ -65,17 +65,23 @@ I still have to check the answer. A high probability doesn't establish that it i
 
 ## Why Use It Instead of a Traditional Classifier?
 
-I've used a pretrained model to [classify emotions in Steam reviews](/distilroberta-emotion-analysis-nlp-case-study/). It had a fixed set of emotion labels. With Nimble, I can change the data and the labels in each request without retraining the model.
+Once I saw what it did, I wondered: how is this better than a regular classifier? Those have been around for years. Choosing a label and returning probabilities sounded familiar.
 
-A task-specific classifier is usually trained on examples labeled for the distinctions I want it to make. If I have plenty of labeled support tickets and the categories rarely change, I'd try that approach first. A smaller model trained for that job may be faster, cheaper to run, and more accurate than Nimble or Jev.
+I've used a pretrained model to [classify emotions in Steam reviews](/distilroberta-emotion-analysis-nlp-case-study/). I could give it new reviews without retraining it, but it would still choose from the emotion labels it had been trained to recognize. I couldn't turn it into a vendor-proposal reviewer by replacing “joy” and “anger” with “meets the requirement” and “conflicts with the requirement.” It hadn't learned those distinctions.
+
+With a traditional task-specific classifier, I usually define the labels, collect examples, and train the model to distinguish them. A new task or a meaningful change to those labels can mean relabeling data and retraining. Renaming a label doesn't teach the model what the new label means.
+
+With Nimble or Jev, I supply the question, labels, and their definitions in the request. I can ask about emotions in one request and whether a proposal meets a project's requirements in another. I can change the data and the labels in each request without retraining the model. The model uses the supplied criteria to assess the text, rather than always choosing from the same task-specific labels.
+
+That's what interests me: I can try a new classification task without first building a training set for it. This is often called zero-shot classification. The model has been trained, but I haven't trained it on labeled examples for my particular task. I still need reviewed examples to evaluate its answers, especially when I change the criteria.
+
+### When I'd Use a Dedicated Classifier
+
+If I already have plenty of labeled support tickets and the categories rarely change, I'd try a dedicated classifier first. A smaller model trained for that job may be faster, cheaper to run, and more accurate than Nimble or Jev. Their flexibility matters more to me when the questions change or I don't yet have labeled training data.
 
 [Parallel's tests of Jev](https://parallel.ai/blog/testing-jev) illustrate that tradeoff. Jev came close to one of their trained search rerankers without task-specific tuning, but their specialized models did better on topic and query-freshness classification. Those are Jev results, not evidence of how Nimble would perform on the same tasks.
 
-What interests me about Nimble is being able to try a new judgment by writing its criteria. If the criteria change, I can change the question in the request. I don't have to collect a training set for that exact question before trying it. This is often called zero-shot classification: the model has been trained, but I haven't trained it on labeled examples for my task.
-
-That saves preparation, but I still need reviewed examples to evaluate it. Changing the labels is easy; getting reliable answers under the new criteria isn't guaranteed.
-
-A general-purpose LLM can also classify against criteria supplied in a prompt. Nimble scores the allowed answers directly, which avoids generating a response token by token. That's the relevant comparison behind its appeal for focused decisions; it doesn't establish an advantage over a small, trained classifier.
+A general-purpose LLM also lets me supply new criteria in a prompt. Nimble scores the allowed answers directly, without generating an explanation or JSON token by token. That gives me a reason to try it for focused decisions I might otherwise send to a chat model, but it doesn't establish a speed or cost advantage over a small, trained classifier.
 
 | What I'm trying to do | What I'd start with |
 | --- | --- |
