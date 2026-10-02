@@ -28,7 +28,6 @@ coverCaption: Photo by <a href="https://unsplash.com/@jan_genge">Jan Genge</a> o
 
 import QuickSummary from "../../../components/content/QuickSummary.astro";
 import Figure from "../../../components/content/Figure.astro";
-import balancingShapes from "./game-economy-balancing-shapes.jpg";
 import cardCatalog from "./tool-output-archive-card-catalog.jpg";
 import nimbleStatus from "./pi-nimble-status.jpg";
 import nimbleAutomaticIndicator from "./pi-nimble-automatic-indicator.jpg";
@@ -190,54 +189,20 @@ curl --fail-with-body --show-error \
   --data-binary @request.json
 ```
 
-Nimble returns an answer and probabilities for each question. Each question is assessed independently against the same evidence.
+Nimble assesses each question independently against the same evidence and returns an answer with probabilities. My reading of this fictional proposal would be:
 
-Here's an illustrative, shortened response, with other fields omitted. The answers reflect my reading of the fictional proposal; the probabilities are example values, not results from an actual Nimble run:
+| Requirement | Illustrative Answer | Why |
+| --- | --- | --- |
+| Round-the-clock critical support | Conflicts with the requirement | Staffed support is limited to business hours. |
+| Export records, rules, and configuration | Insufficient data | Record exports are promised; the other exports aren't specified. |
 
-```json
-{
-  "answers": {
-    "critical_incident_support": {
-      "type": "choice",
-      "choice": "conflicts_with_requirement",
-      "probabilities": {
-        "meets_requirement": 0.02,
-        "conflicts_with_requirement": 0.95,
-        "insufficient_data": 0.03
-      }
-    },
-    "exit_plan": {
-      "type": "choice",
-      "choice": "insufficient_data",
-      "probabilities": {
-        "meets_requirement": 0.06,
-        "conflicts_with_requirement": 0.04,
-        "insufficient_data": 0.90
-      }
-    }
-  }
-}
-```
+These are illustrative answers, not results from a Nimble run. Silence about configuration exports doesn't establish that they're impossible. That distinction gives me two follow-ups: negotiate support coverage and ask for the missing export details. Nimble returns judgments, not those suggestions or approval to sign a contract.
 
-The proposal explicitly limits support hours, but its silence about configuration exports doesn't establish that they're impossible. A probability of `0.95` doesn't establish a 95% chance that the classification is correct.
-
-That distinction gives me two different follow-ups: negotiate the support coverage and ask for the missing export details. Nimble returns the decisions and probabilities, not those follow-up suggestions.
-
-For another project, business-hours support might be enough, while the data-handling requirements might be stricter. I can change the questions and criteria without retraining Nimble. I'd still need reviewed examples to check whether it applies those new requirements reliably.
-
-If all I need is to compare a quoted price with a budget, I'd use code. Here, I want help reading commitments written in different ways and separating an explicit mismatch from missing evidence. This would be an initial review, not approval to sign a contract.
+I can change the requirements without retraining the model, but I'd still need reviewed examples to check its answers. Comparing a quoted price with a budget would stay with code.
 
 ## Asking Nimble Through a Skill
 
-I'm building an incremental game, and I'm trying to decide the base cost of each income source. When a player unlocks one, can they afford it? Is it so cheap that buying it barely feels like a decision, or so expensive that progress stalls?
-
-I can calculate how long it takes to afford each source at the player's current income rate and compare prices across stages. The harder question is whether those waits make the game feel playable, too slow, or too fast.
-
-I want to use Nimble to assess those calculations alongside observations from my sessions and my testers, using the pace I want for that stage as the criteria. I can also try different player profiles, but whether the prices feel right still needs playtesting.
-
-<Figure src={balancingShapes} alt="Wood-textured geometric shapes and two spheres balanced in a stack against a pale background." />
-
-To make that easier, I built the `ask-nimble` skill as part of my Agent Skills collection, also listed on the [Resources page](/resources/). To install this skill, run in your terminal:
+I built `ask-nimble` as part of my Agent Skills collection, also listed on the [Resources page](/resources/). It lets me invoke `/ask-nimble` with a question while the agent gathers evidence and constructs the request. To install it:
 
 ```sh
 npx skills add SirDarcanos/agentskills --skill ask-nimble
@@ -245,45 +210,9 @@ npx skills add SirDarcanos/agentskills --skill ask-nimble
 
 Choose your agent during installation. The skill needs local Ollama 0.35 or later with Nimble downloaded, plus Python 3 and curl. The agent also needs access to the evidence it will gather.
 
-I also built [`/ask-jev` as a skill](https://github.com/SirDarcanos/agentskills/tree/main) and have tried Jev. The results I've seen so far are similar to Nimble's, but I haven't tested it enough to say the two are equivalent. I'd default to Nimble because it's free, and use Jev when I want a second opinion or the task calls for it. Agreement between the two still wouldn't replace checking the evidence.
+### Checking a Proposed Edit With Nimble and Jev
 
-I invoke `ask-nimble` with a question:
-
-```text
-/ask-nimble Review the base costs of my game's income sources.
-Use the unlock conditions, economy calculations, and playtest
-notes to assess whether the prices fit my pacing goals.
-Flag sources that seem too cheap or expensive at unlock,
-and report where there isn't enough evidence.
-```
-
-The skill gives the coding agent a procedure to follow. It first checks whether the question suits Nimble. Arithmetic stays with code, factual questions need sources, and open-ended requests stay with the main agent.
-
-For a suitable judgment, the agent establishes the criteria and gathers relevant evidence. It then sends that evidence to local Nimble with defined outcomes, including an insufficient-data option when needed. The agent has to supply the project details that matter.
-
-For that pricing review, the agent needs to establish what income and currency the player has at unlock, which player profile I'm assessing, and how long I intend them to wait. It also needs the playtest observations that support a judgment about pace. The skill asks for clarification when it can't find those details in the project.
-
-After the call, the agent presents Nimble's answer alongside the evidence and any gaps.
-
-For the vendor example above, the skill saves me from constructing the JSON request myself. If my agent has authorized access to the proposal and requirements, I can ask:
-
-```text
-/ask-nimble Review the vendor proposal against this project's
-support and exit-plan requirements. Use the proposal, its
-attachments, and our current requirements document.
-Flag conflicts and missing evidence for human review.
-Do not approve the vendor or send a response.
-```
-
-The agent finds the applicable requirements and gathers the relevant proposal passages, then constructs the request.
-
-If a deciding fact is missing, the skill asks for clarification or reports the gap. Business documents may still reach the main agent's provider if that model runs in the cloud, even though the Nimble request stays local.
-
-The skill offers advice, and acting on it requires a separate decision. That's a boundary I've written about in [When AI Stops Being a Tool](/when-ai-stops-being-a-tool/): I want help assessing the task I've chosen, without letting the next response choose the task for me.
-
-### Reviewing an Edit to an Essay
-
-I tried this on a smaller decision while reviewing September's Search Console data: whether to edit [my essay about GPUs and AI](/what-is-a-gpu/), even though its search performance was improving.
+I used it to assess a proposed edit to [my essay about GPUs and AI](/what-is-a-gpu/) while reviewing September's Search Console data. Its search performance was improving, so I wanted to check the scope of the changes.
 
 I pulled the data on October 2. September 30 was still provisional, so I compared finalized August 1–29 and September 1–29 data:
 
@@ -294,7 +223,7 @@ I pulled the data on October 2. September 30 was still provisional, so I compare
 | Click-through rate | 0.32% | 0.61% |
 | Average position | 20.65 | 15.74 |
 
-Those were encouraging numbers, though three clicks is still a small sample. The essay published on August 4, so the August window included days before it was available. Average position also changes with the mix of queries; this wasn't a controlled test of an earlier edit.
+Three clicks is still a small sample. The essay published on August 4, so the August window included days before it was available. Average position changes with the mix of queries, and Search Console discloses only some query rows, so I couldn't attribute the clicks to particular queries. This wasn't a controlled test of an earlier edit.
 
 The agent found a problem in the text. I described training models on consumer RTX 3090 cards, then called a gaming card “the wrong tool for training.” That broad statement didn't fit the experience I'd just described.
 
@@ -304,11 +233,13 @@ It proposed a limited edit:
 - Lead the existing AI section with its explanation of parallel matrix calculations, and make the existing answer about consumer GPUs easier to find.
 - Keep the title, URL, personal opening, and overall structure. No keyword padding or promises of better rankings.
 
-The search data gave the second change a reason beyond tidier prose. September's disclosed queries included “why does ai need gpu” and “are consumer gpus good enough for ai?” Those query rows are only a subset of the data; they don't tell me which queries produced the three clicks.
+September's disclosed queries included “why does ai need gpu” and “are consumer gpus good enough for ai?” The proposed second change would make those existing answers easier to find.
 
-I asked Nimble to assess that plan against the supplied essay passages and my writing rules: accuracy, plain language, first-person experience, and no hype. The choices were to support the limited edit, leave the essay unchanged, support a broader revision, or report insufficient data. The agent did the arithmetic; Nimble judged the proposed scope. I hadn't drafted replacement wording yet.
+The skill checks whether a question suits Nimble before calling it. Arithmetic stays with code, factual questions need sources, and open-ended requests stay with the main agent. Here, I asked for a judgment of the plan against my writing rules: accuracy, plain language, first-person experience, and no hype.
 
-Then I asked Jev through `/ask-jev`, using the same measurements, passages, plan, and criteria without including Nimble's answer. Nimble ran locally; Jev received the task-relevant evidence through its hosted API. Both selected the limited edit:
+The agent supplied the measurements, essay passages, and rules with four outcomes: support the limited edit, leave the essay unchanged, support a broader revision, or report insufficient data. Nimble judged the proposed scope, not replacement wording. If a deciding fact is missing, the skill asks for clarification or reports the gap.
+
+I also built [`/ask-jev` as a skill](https://github.com/SirDarcanos/agentskills/tree/main). I used it for the same measurements, passages, plan, and criteria without including Nimble's answer. Nimble ran locally; Jev received the task-relevant evidence through its hosted API. A cloud-hosted main agent may already have received that evidence while gathering it, even when the Nimble call stays local. Both selected the limited edit:
 
 | Outcome | Nimble | Jev |
 | --- | ---: | ---: |
@@ -317,9 +248,9 @@ Then I asked Jev through `/ask-jev`, using the same measurements, passages, plan
 | Broader revision supported | 6.7% | 1.0% |
 | Insufficient data | 1.0% | 0.0% |
 
-These are their returned outcome probabilities, rounded, not measured accuracy or chances of an SEO gain. Neither model returned an explanation. The agent's explanation came from reading the evidence alongside those results.
+These are rounded outcome probabilities, not measured accuracy or chances of an SEO gain. Neither model returned an explanation; the agent interpreted the evidence alongside the results. Their agreement on this scope doesn't establish equivalent performance or predict better rankings. Replacement wording and any later search change would still need checking.
 
-For this decision, they agreed on the scope. That doesn't establish that the models perform equally well, or that the edit will improve rankings. I still had to write and check the replacement, and any later search change would need its own assessment. The review didn't change the GPU essay.
+The review didn't change the GPU essay. Acting on the advice requires a separate decision, a boundary I've written about in [When AI Stops Being a Tool](/when-ai-stops-being-a-tool/). I'd default to Nimble because it's free and use Jev when I want a second opinion or the task calls for it.
 
 ## A Pi Coding Agent Extension for Context Pruning
 
@@ -377,6 +308,8 @@ It waits for the agent to become idle, then runs the same pruning process withou
 
 ## Where I Want to Take It
 
-For game-economy assessments or business reviews, I'll need examples whose answers I've reviewed. I can compare Nimble's judgments with those answers, inspect where they differ, and decide which tasks I trust it with. Changes to the game will still need playtesting.
+I'm building an incremental game, and I want to assess income-source prices against my pacing goals, using economy calculations and observations from my sessions and my testers. Whether those prices feel right will still need playtesting.
+
+For that and business reviews, I'll need examples whose answers I've checked. I can compare Nimble's judgments with those answers, inspect where they differ, and decide which tasks I trust it with.
 
 I want to test Jev more before deciding where paying for it makes sense. For now, Nimble lets me keep experimenting locally without a bill for each request.
