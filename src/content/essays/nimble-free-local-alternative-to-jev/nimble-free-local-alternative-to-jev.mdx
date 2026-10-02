@@ -65,7 +65,7 @@ I still have to check the answer. A high probability doesn't establish that it i
 
 ## Why Use It Instead of a Traditional Classifier?
 
-I've used a pretrained model to [classify emotions in Steam reviews](/distilroberta-emotion-analysis-nlp-case-study/). It had a fixed set of emotion labels. With Nimble, I can define the question and allowed answers in each request.
+I've used a pretrained model to [classify emotions in Steam reviews](/distilroberta-emotion-analysis-nlp-case-study/). It had a fixed set of emotion labels. With Nimble, I can change the data and the labels in each request without retraining the model.
 
 A task-specific classifier is usually trained on examples labeled for the distinctions I want it to make. If I have plenty of labeled support tickets and the categories rarely change, I'd try that approach first. A smaller model trained for that job may be faster, cheaper to run, and more accurate than Nimble or Jev.
 
