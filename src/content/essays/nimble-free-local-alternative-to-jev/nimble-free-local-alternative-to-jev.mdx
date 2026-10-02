@@ -30,7 +30,6 @@ import QuickSummary from "../../../components/content/QuickSummary.astro";
 import Figure from "../../../components/content/Figure.astro";
 import balancingShapes from "./game-economy-balancing-shapes.jpg";
 import cardCatalog from "./tool-output-archive-card-catalog.jpg";
-import decisionModelComparison from "./llm-versus-decision-model.jpg";
 
 <QuickSummary>
 
@@ -62,9 +61,14 @@ Nimble and Jev are designed for these focused questions. They can choose from a 
 
 Nimble is still built from a language model, a fine-tuned Qwen3.5-9B. Its serving code scores the allowed answers directly instead of generating an explanation token by token. I can use those results directly in code or pass them back to a general-purpose agent.
 
-<Figure src={decisionModelComparison} alt="Comparison using a vendor's limited support hours: a general-purpose LLM generates the sentence ‘Support does not meet the requirement.’ Nimble or Jev scores the supplied choices: meets 2%, conflicts 95%, insufficient data 3%. All outputs are illustrative.">
-  Both rows assess the same requirement. The probabilities are illustrative, not a measure of correctness. Original diagram inspired by <a href="https://parallel.ai/blog/testing-jev">Parallel's Jev explainer</a>.
-</Figure>
+Suppose I need round-the-clock support, but a vendor's proposal says critical incidents wait until the next business day. The two approaches could return:
+
+| Model | Illustrative Output |
+| --- | --- |
+| General-purpose LLM | “Support does not meet the requirement.” |
+| Nimble / Jev | Meets: 2% · Conflicts: 95% · Insufficient data: 3% |
+
+The LLM generates its response token by token; Nimble or Jev scores the choices I supply. LLMs can also generate JSON. These outputs are illustrative, not benchmark results. Comparison inspired by [Parallel's Jev explainer](https://parallel.ai/blog/testing-jev).
 
 My agent can gather the relevant files, research, and calculations, then send Nimble a focused question. Nimble sees only what the agent sends.
 
