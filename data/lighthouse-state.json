@@ -306,6 +306,7 @@
       "73b2b6258460cb0841ee074003f2c9ab0a7f8cf578cf3d574a04a1286eced7fc"
     ],
     "what-is-a-gpu": [
+      "31771ca9e51181fc52cc4c23eea8f0bf3436b3f4da2988537eb057cb5d9b34d8",
       "ac9bfa1bebc59d968e93e55d810d5ed9543dcb64019c003c622fb24d30373a36"
     ],
     "what-is-a-web-developer": [
@@ -374,8 +375,8 @@
       "status": "passed"
     },
     "mobile:/": {
-      "checkedAt": "2026-10-01T11:48:56.625Z",
-      "consecutivePasses": 5,
+      "checkedAt": "2026-10-02T08:04:40.907Z",
+      "consecutivePasses": 6,
       "openIssueNumber": null,
       "status": "passed"
     },
@@ -393,9 +394,8 @@
       "status": "passed"
     },
     "mobile:/what-is-a-gpu/": {
-      "checkedAt": "2026-09-14T12:02:19.990Z",
-      "consecutivePasses": 1,
-      "observationId": "34841217858:mobile",
+      "checkedAt": "2026-10-02T08:04:40.907Z",
+      "consecutivePasses": 2,
       "openIssueNumber": null,
       "status": "passed"
     },
