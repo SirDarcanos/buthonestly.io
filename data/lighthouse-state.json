@@ -281,6 +281,9 @@
     "neural-network-predict-resin-usage-3d-printed-miniatures": [
       "6f0a6fa0a4ea6ef2fbb4e37c3834c3c4acf4a98ca03c0b1c6775ced4f3903bb5"
     ],
+    "nimble-free-local-alternative-to-jev": [
+      "9e21ca3d916ec53ee368080a36254d6f9a137d0ece1b986460fb5fadf5fbd691"
+    ],
     "psychological-safety-in-teams-people-first-leadership": [
       "1d671c6e988229e9d4437a79ed75141a46c6ec44484499b72832fb8a8e85aff5"
     ],
@@ -306,6 +309,7 @@
       "73b2b6258460cb0841ee074003f2c9ab0a7f8cf578cf3d574a04a1286eced7fc"
     ],
     "what-is-a-gpu": [
+      "31771ca9e51181fc52cc4c23eea8f0bf3436b3f4da2988537eb057cb5d9b34d8",
       "ac9bfa1bebc59d968e93e55d810d5ed9543dcb64019c003c622fb24d30373a36"
     ],
     "what-is-a-web-developer": [
@@ -374,14 +378,20 @@
       "status": "passed"
     },
     "mobile:/": {
-      "checkedAt": "2026-10-01T11:48:56.625Z",
-      "consecutivePasses": 5,
+      "checkedAt": "2026-10-02T15:07:35.299Z",
+      "consecutivePasses": 7,
       "openIssueNumber": null,
       "status": "passed"
     },
     "mobile:/javascript-dice-roller/": {
       "checkedAt": "2026-09-02T04:18:44.417Z",
       "consecutivePasses": 2,
+      "openIssueNumber": null,
+      "status": "passed"
+    },
+    "mobile:/nimble-free-local-alternative-to-jev/": {
+      "checkedAt": "2026-10-02T15:07:35.299Z",
+      "consecutivePasses": 1,
       "openIssueNumber": null,
       "status": "passed"
     },
@@ -393,9 +403,8 @@
       "status": "passed"
     },
     "mobile:/what-is-a-gpu/": {
-      "checkedAt": "2026-09-14T12:02:19.990Z",
-      "consecutivePasses": 1,
-      "observationId": "34841217858:mobile",
+      "checkedAt": "2026-10-02T08:04:40.907Z",
+      "consecutivePasses": 2,
       "openIssueNumber": null,
       "status": "passed"
     },

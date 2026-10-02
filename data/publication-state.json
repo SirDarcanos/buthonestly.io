@@ -202,6 +202,15 @@
         "status": "delivered"
       }
     },
+    "nimble-free-local-alternative-to-jev": {
+      "newsletter": {
+        "broadcastId": 26208566,
+        "status": "draft"
+      },
+      "indexNow": {
+        "contentHash": "9e21ca3d916ec53ee368080a36254d6f9a137d0ece1b986460fb5fadf5fbd691"
+      }
+    },
     "psychological-safety-in-teams-people-first-leadership": {
       "indexNow": {
         "contentHash": "1d671c6e988229e9d4437a79ed75141a46c6ec44484499b72832fb8a8e85aff5"
@@ -268,7 +277,7 @@
     },
     "what-is-a-gpu": {
       "indexNow": {
-        "contentHash": "ac9bfa1bebc59d968e93e55d810d5ed9543dcb64019c003c622fb24d30373a36"
+        "contentHash": "31771ca9e51181fc52cc4c23eea8f0bf3436b3f4da2988537eb057cb5d9b34d8"
       },
       "newsletter": {
         "status": "delivered"

@@ -1,5 +1,9 @@
 import type { ImageMetadata } from "astro";
 
+export type DownloadItem =
+  | { file: string; label?: string; href?: never }
+  | { href: string; label: string; file?: never };
+
 export type PostLink = Pick<Post, "title" | "slug">;
 
 export type Post = {
@@ -22,7 +26,7 @@ export type Post = {
   cornerstone: boolean;
   contentHash: string;
   narrationUrl?: string;
-  downloads: { file: string; label?: string }[];
+  downloads: DownloadItem[];
   seo: {
     title: string;
     description: string;

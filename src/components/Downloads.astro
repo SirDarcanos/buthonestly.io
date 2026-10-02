@@ -1,12 +1,7 @@
 ---
 import Button from "./Button.astro";
 import { DOWNLOADS_BASE } from "../lib/cdn.mjs";
-
-// Files are served straight from R2 at <DOWNLOADS_BASE>/<file>.
-interface DownloadItem {
-  file: string;
-  label?: string;
-}
+import type { DownloadItem } from "../types";
 interface Props {
   downloads?: DownloadItem[];
 }
@@ -25,11 +20,12 @@ const ext = (file: string) => file.split(".").pop()?.toUpperCase() ?? "FILE";
         {downloads.map((d) => (
           <li>
             <Button
-              href={`${DOWNLOADS_BASE}/${d.file}`}
-              download
-              icon="download"
-              badges={[ext(d.file)]}
-              data-track={`Download: ${d.file}`}
+              href={d.href ?? `${DOWNLOADS_BASE}/${d.file}`}
+              download={!d.href}
+              external={Boolean(d.href)}
+              icon={d.href ? "external" : "download"}
+              badges={d.file ? [ext(d.file)] : undefined}
+              data-track={d.href ? undefined : `Download: ${d.file}`}
             >
               {d.label ?? d.file}
             </Button>
