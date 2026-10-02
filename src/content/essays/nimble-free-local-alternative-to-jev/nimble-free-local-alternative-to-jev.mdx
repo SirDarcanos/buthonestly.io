@@ -71,7 +71,7 @@ A task-specific classifier is usually trained on examples labeled for the distin
 
 [Parallel's tests of Jev](https://parallel.ai/blog/testing-jev) illustrate that tradeoff. Jev came close to one of their trained search rerankers without task-specific tuning, but their specialized models did better on topic and query-freshness classification. Those are Jev results, not evidence of how Nimble would perform on the same tasks.
 
-What interests me about Nimble is being able to try a new judgment by writing its criteria. If I change the design goal for my game, I can change the question in the request. I don't have to collect a training set for that exact question before trying it. This is often called zero-shot classification: the model has been trained, but I haven't trained it on labeled examples for my task.
+What interests me about Nimble is being able to try a new judgment by writing its criteria. If the criteria change, I can change the question in the request. I don't have to collect a training set for that exact question before trying it. This is often called zero-shot classification: the model has been trained, but I haven't trained it on labeled examples for my task.
 
 That saves preparation, but I still need reviewed examples to evaluate it. Changing the labels is easy; getting reliable answers under the new criteria isn't guaranteed.
 
