@@ -2,7 +2,7 @@
 title: What is a GPU and Why Does AI Need Them?
 seoDescription: Learn what a GPU is, how it differs from a graphics card, and why parallel processing, VRAM, and memory bandwidth matter so much for AI.
 date: 2026-08-04
-updated:
+updated: 2026-10-02
 sticky: false
 cornerstone: false
 excerpt: GPUs are crucial for AI due to their ability to perform parallel calculations, surpassing CPUs in matrix math efficiency.
@@ -125,9 +125,9 @@ Each type would do badly at what a CPU does. Running an operating system, juggli
 
 ## Why Are GPUs Good for AI?
 
-GPUs were built to figure out which pixels to turn on and what color to paint them. That work involves millions of small, independent calculations per frame. It happens to be a perfect rehearsal for something else entirely.
+A neural network does a lot of matrix math. Inputs go in, get multiplied by weights, summed, passed through a function, repeat. Training repeats that work across a dataset. GPUs are good for AI because they can run many of those calculations in parallel.
 
-A neural network is, at its core, a stack of matrix multiplications. Inputs go in, get multiplied by weights, summed, passed through a function, repeat. Training one means doing this trillions of times across a dataset. Each multiplication is small. The volume is gigantic. Sound familiar?
+GPUs were built to figure out which pixels to turn on and what color to paint them. That work also involves millions of small, independent calculations per frame. The same parallel processing that helps draw a scene helps train a neural network.
 
 The hinge moment was 2012. Alex Krizhevsky, Ilya Sutskever, and Geoffrey Hinton trained a network called AlexNet on a pair of GeForce GTX 580 cards. It demolished the ImageNet competition by a wide margin. Work that had taken weeks on CPUs now took days on consumer gaming hardware. It's not an overstatement to say that everything in modern AI traces back to that result.
 
@@ -147,7 +147,9 @@ These numbers exist because training large models means shoveling enormous amoun
 
 There's a distinction worth naming here: **training** versus **inference**. Training is what builds a model. It runs billions of examples through the network and adjusts the weights. That's the part that needs huge VRAM and brutal compute. Inference is what happens after training, when the model is used: an answer for one prompt, a label for one image. Inference is cheaper. It's why a model trained on thousands of H100s can run on a single laptop, just more slowly.
 
-This is roughly where adding a second 3090 to my desktop came in. The first card was enough for inference and for fine-tuning small models. The second one let me train on more data without spilling to disk every few seconds. Two consumer cards aren't an H100, but they're enough for hobby-scale work. Most of what I've published runs at that scale.
+### Are Consumer GPUs Good Enough for AI?
+
+For the hobby-scale work I do, yes. My first 3090 was enough for inference and for fine-tuning small models. Adding a second one let me train on more data without spilling to disk every few seconds. Two consumer cards aren't an H100. Most of what I've published runs at that smaller scale.
 
 ## The Real Moat Is Software
 
@@ -177,7 +179,7 @@ The software side narrows the field. As covered in the last section, NVIDIA's CU
 
 There's a third path I've used: Apple Silicon. The trick is unified memory. On a Mac with an M-series chip, the GPU and CPU share the same memory pool. There's no separate VRAM with its own ceiling. A Mac with enough system RAM can sometimes load models that won't fit on a desktop card with much faster compute. The trade-off is speed: a Mac will train slower than a dedicated GPU, and not every framework supports its Metal backend cleanly. But for inference and for fitting larger models locally, it's a real option. The [NLP analysis I ran on Steam reviews](/distilroberta-emotion-analysis-nlp-case-study/) is the kind of work where memory ceiling matters more than raw speed.
 
-The blunt summary: pick what serves the work. A gaming card built for frames per second is the wrong tool for training, and a card stripped of display outputs is the wrong tool for gaming. They're built for different problems. The price reflects that.
+The blunt summary: pick what serves the work. My 3090s are enough for the small models I train. Their limits are VRAM, memory bandwidth, and software support, not the fact that they're sold for gaming. Training a frontier language model needs clusters of data-center GPUs. A card stripped of display outputs still won't serve my gaming setup.
 
 ## Why Have Graphics Cards Gotten So Expensive?
 
