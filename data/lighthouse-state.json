@@ -239,7 +239,8 @@
       "8cb23cfa325735ec8baf765ac63d4e1d90c6e5e16f7da3f625e2edfceedd7d2b"
     ],
     "distilroberta-emotion-analysis-nlp-case-study": [
-      "28712300f631221516e5e11701eca289ffa8b0e3bd7ac3f3a310b7da062d2000"
+      "28712300f631221516e5e11701eca289ffa8b0e3bd7ac3f3a310b7da062d2000",
+      "f9571053cc1c9b401f0ad9d893da760407d5d8d4865af0db9c80931f58ff79f5"
     ],
     "do-you-trust-your-instincts-making-smart-wordpress-choices": [
       "db213ed62198c6f798005d4ff4a14e4c9b7bc101f48363aee2517391f6059e70"
@@ -319,6 +320,7 @@
       "16ed821e59467ec64cf58337db69bd9247b18c55beb37188c54fe655bc51c4cd"
     ],
     "when-ai-stops-being-a-tool": [
+      "6ab9afba28ee6fe554273492e3eee71e18326877058f34517d0098f847579311",
       "b90685b01a4456bba4ce1c5fa50296f86da17ec480d5799662ca54c30b863b20"
     ],
     "woocommerce-attributes-vs-variations": [
@@ -378,8 +380,14 @@
       "status": "passed"
     },
     "mobile:/": {
-      "checkedAt": "2026-10-02T15:07:35.299Z",
-      "consecutivePasses": 7,
+      "checkedAt": "2026-10-02T15:39:07.961Z",
+      "consecutivePasses": 9,
+      "openIssueNumber": null,
+      "status": "passed"
+    },
+    "mobile:/distilroberta-emotion-analysis-nlp-case-study/": {
+      "checkedAt": "2026-10-02T15:39:07.961Z",
+      "consecutivePasses": 1,
       "openIssueNumber": null,
       "status": "passed"
     },
@@ -409,9 +417,8 @@
       "status": "passed"
     },
     "mobile:/when-ai-stops-being-a-tool/": {
-      "checkedAt": "2026-09-14T12:02:19.990Z",
-      "consecutivePasses": 1,
-      "observationId": "34841217858:mobile",
+      "checkedAt": "2026-10-02T15:39:07.961Z",
+      "consecutivePasses": 2,
       "openIssueNumber": null,
       "status": "passed"
     },
