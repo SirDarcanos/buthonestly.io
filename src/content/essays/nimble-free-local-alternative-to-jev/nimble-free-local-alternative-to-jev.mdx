@@ -235,23 +235,29 @@ It proposed a limited edit:
 
 September's disclosed queries included “why does ai need gpu” and “are consumer gpus good enough for ai?” The proposed second change would make those existing answers easier to find.
 
-With the plan and search data already in the conversation, I ran:
+With the plan and search data already in the conversation, I asked for a review. Rephrased as a reusable command:
 
 ```text
-/ask-nimble about your plan to edit the GPU article,
-with reported data on how the article improved over time
+/ask-nimble Assess the proposed edits to my GPU essay against
+my writing rules, using the essay passages and its August and
+September Search Console data. Is the limited edit justified,
+should I leave it unchanged, or does it need a broader revision?
+Report any missing evidence. Do not edit the essay.
 ```
 
-That short prompt referred to the agent's proposed edit above. In a new conversation, I'd need to supply the plan and data or tell the agent where to find them.
+In a new conversation, I'd need to supply the plan and data or tell the agent where to find them.
 
 The skill checks whether a question suits Nimble before calling it. Arithmetic stays with code, factual questions need sources, and open-ended requests stay with the main agent. Here, I asked for a judgment of the plan against my writing rules: accuracy, plain language, first-person experience, and no hype.
 
 The agent supplied the measurements, essay passages, and rules with four outcomes: support the limited edit, leave the essay unchanged, support a broader revision, or report insufficient data. Nimble judged the proposed scope, not replacement wording. If a deciding fact is missing, the skill asks for clarification or reports the gap.
 
-I also built [`/ask-jev` as a skill](https://github.com/SirDarcanos/agentskills/tree/main). For a second assessment in the same conversation, I ran:
+I also built [`/ask-jev` as a skill](https://github.com/SirDarcanos/agentskills/tree/main). For a second assessment in the same conversation, the equivalent command is:
 
 ```text
-/ask-jev as well
+/ask-jev Assess the same proposed GPU essay edits using the
+same passages, search data, writing rules, and outcomes.
+Do not include Nimble's verdict in the evidence sent to Jev.
+Report any missing evidence. Do not edit the essay.
 ```
 
 The agent prepared the same measurements, passages, plan, and criteria without including Nimble's answer. Nimble ran locally; Jev received the task-relevant evidence through its hosted API. A cloud-hosted main agent may already have received that evidence while gathering it, even when the Nimble call stays local. Both selected the limited edit:
