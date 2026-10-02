@@ -216,11 +216,11 @@ If all I need is to compare a quoted price with a budget, I'd use code. Here, I 
 
 ## Asking Nimble Through a Skill
 
-I'm building an incremental game that I'll share here once it's ready. I've reached the economy-balancing stage, which has turned out to be much harder than I expected as a first-time game developer.
+I'm building an incremental game, and I'm trying to decide the base cost of each income source. When a player unlocks one, can they afford it? Is it so cheap that buying it barely feels like a decision, or so expensive that progress stalls?
 
-There's plenty I can calculate: how long an upgrade takes to afford, how much it increases production, and when it pays for itself. I also want to assess how the mechanics fit together for different players.
+I can calculate how long it takes to afford each source at the player's current income rate and compare prices across stages. The harder question is whether those waits make the game feel playable, too slow, or too fast.
 
-That's where I want to use Nimble. I can prepare virtual player profiles, combine them with observations from my own sessions and my testers, and ask focused questions about the economy.
+I want to use Nimble to assess those calculations alongside observations from my sessions and my testers, using the pace I want for that stage as the criteria. I can also try different player profiles, but whether the prices feel right still needs playtesting.
 
 <Figure src={balancingShapes} alt="Wood-textured geometric shapes and two spheres balanced in a stack against a pale background." />
 
@@ -235,14 +235,18 @@ Choose your agent during installation. The skill needs local Ollama 0.35 or late
 I invoke it with a question:
 
 ```text
-/ask-nimble Does this implementation satisfy the acceptance criteria?
+/ask-nimble Review the base costs of my game's income sources.
+Use the unlock conditions, economy calculations, and playtest
+notes to assess whether the prices fit my pacing goals.
+Flag sources that seem too cheap or expensive at unlock,
+and report where there isn't enough evidence.
 ```
 
 The skill gives the coding agent a procedure to follow. It first checks whether the question suits Nimble. Arithmetic stays with code, factual questions need sources, and open-ended requests stay with the main agent.
 
 For a suitable judgment, the agent establishes the criteria and gathers relevant evidence. It then sends that evidence to local Nimble with defined outcomes, including an insufficient-data option when needed. The agent has to supply the project details that matter.
 
-For my game, “Is this upgrade balanced?” needs more detail. Balanced against which upgrades, for which player profile, and at what stage of progression? The skill asks for clarification when it can't resolve those questions from the project.
+For that pricing review, the agent needs to establish what income and currency the player has at unlock, which player profile I'm assessing, and how long I intend them to wait. It also needs the playtest observations that support a judgment about pace. The skill asks for clarification when it can't find those details in the project.
 
 After the call, the agent presents Nimble's answer alongside the evidence and any gaps.
 
