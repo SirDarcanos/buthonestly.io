@@ -5,7 +5,7 @@ date: 2026-10-02
 updated:
 sticky: false
 cornerstone: false
-excerpt: Nimble runs AI decisions locally without a per-request bill. My /ask-nimble skill and Pi extension put it to work on evidence checks and stale tool output.
+excerpt: I can give Nimble new classification tasks without retraining it. Running it locally lets me experiment without sending the evidence to another provider.
 newsletterIntro: |-
   I started reading about Jev, then an email from Ollama introduced me to Nimble, a free decision model I could run locally. I've been playing with it on my MacBook M3 Pro and built two tools around it: a skill for evidence-backed judgments and a Pi extension for pruning stale tool outputs.
 
@@ -43,7 +43,9 @@ import cardCatalog from "./tool-output-archive-card-catalog.jpg";
 
 </QuickSummary>
 
-I went to see what the hype around [Jev](https://docs.typesafe.ai/primitives) was about. It takes evidence and a question, then picks from answers I define instead of writing a reply. My first thought was: how is this better than the classifiers we've had for years?
+[Jev](https://docs.typesafe.ai/primitives) has been getting attention for handling small AI tasks—classifying messages, checking requirements, or choosing where to route a request—without generating a written response. The appeal is faster, cheaper decisions for software that only needs an answer. Those comparisons are with generative language models, rather than dedicated classifiers.
+
+That caught my attention, but once I saw what it did, I wondered: how is this better than the classifiers we've had for years?
 
 While I was looking into that, an email from Ollama introduced me to [Bespoke Nimble](https://github.com/bespokelabsai/nimble), which takes the same approach and runs locally. I hadn't tried Jev, but I could download Nimble and experiment on my MacBook M3 Pro without paying for each request.
 
