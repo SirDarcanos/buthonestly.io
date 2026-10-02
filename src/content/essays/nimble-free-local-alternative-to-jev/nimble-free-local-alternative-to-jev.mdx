@@ -53,7 +53,11 @@ It ran smoothly, and the evidence I sent to the local model stayed on my machine
 
 ## What Is Nimble, and How Does It Make Decisions?
 
-When I ask Claude or ChatGPT a question, I usually want an explanation, some code, or help thinking through a problem. With Nimble (or Jev), I give it the evidence, define the question, and tell it which answers are allowed.
+Nimble is a [System One model](https://docs.typesafe.ai/concepts/system-one) that performs zero-shot classification tasks.
+
+System One models return structured decisions and probabilities that software can use directly, rather than generating a written reply. I give Nimble the evidence, define the question, and tell it which answers are allowed.
+
+Zero-shot classification means I can ask it to apply those labels without first training it on examples for that task. Nimble has already been trained; I supply the label definitions in the request.
 
 For a vendor proposal, those answers might be “meets the requirement,” “conflicts with the requirement,” and “insufficient data.” I supply the criteria for each answer so the model has a defined standard to apply.
 
@@ -82,7 +86,7 @@ With a traditional task-specific classifier, I usually define the labels, collec
 
 With Nimble or Jev, I supply the question, labels, and their definitions in the request. I can change the data and the labels in each request without retraining the model.
 
-This is often called zero-shot classification. The model has been trained, but I haven't trained it on labeled examples for my particular task. I still need reviewed examples to evaluate its answers, especially when I change the criteria.
+I still need reviewed examples to evaluate its answers, especially when I change the criteria.
 
 ### When I'd Use a Dedicated Classifier
 
