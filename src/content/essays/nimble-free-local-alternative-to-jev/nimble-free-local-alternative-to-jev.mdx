@@ -190,7 +190,34 @@ The agent gathers the proposal and our requirements. I can then send a focused a
 
 Nimble returns an answer and probabilities for each question. Each question is assessed independently against the same evidence.
 
-Here, I'd expect `conflicts_with_requirement` for support and `insufficient_data` for the exit plan. The proposal explicitly limits support hours, but its silence about configuration exports doesn't establish that they're impossible. That's my reading of the example, not a measured Nimble result.
+Here's an illustrative, shortened response, with other fields omitted. The answers reflect my reading of the fictional proposal; the probabilities are example values, not results from an actual Nimble run:
+
+```json
+{
+  "answers": {
+    "critical_incident_support": {
+      "type": "choice",
+      "choice": "conflicts_with_requirement",
+      "probabilities": {
+        "meets_requirement": 0.02,
+        "conflicts_with_requirement": 0.95,
+        "insufficient_data": 0.03
+      }
+    },
+    "exit_plan": {
+      "type": "choice",
+      "choice": "insufficient_data",
+      "probabilities": {
+        "meets_requirement": 0.06,
+        "conflicts_with_requirement": 0.04,
+        "insufficient_data": 0.90
+      }
+    }
+  }
+}
+```
+
+The proposal explicitly limits support hours, but its silence about configuration exports doesn't establish that they're impossible. A probability of `0.95` doesn't establish a 95% chance that the classification is correct.
 
 That distinction gives me two different follow-ups: negotiate the support coverage and ask for the missing export details. Any explanation or suggested follow-up comes from the main agent; Nimble returns the decisions and probabilities.
 
