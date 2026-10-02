@@ -59,7 +59,7 @@ For a vendor proposal, those answers might be “meets the requirement,” “co
 
 Nimble and Jev are designed for these focused questions. They can choose from a list, assess a yes/no condition, or rate something against a defined scale. The answer comes back in a form code can use directly, along with probabilities.
 
-Nimble is still built from a language model, a fine-tuned Qwen3.5-9B. Its serving code scores the allowed answers directly instead of generating an explanation token by token. That narrower job makes it useful alongside a general-purpose coding agent.
+Nimble is still built from a language model, a fine-tuned Qwen3.5-9B. Its serving code scores the allowed answers directly instead of generating an explanation token by token. I can use those results directly in code or pass them back to a general-purpose agent.
 
 My agent can gather the relevant files, research, and calculations, then send Nimble a focused question. Nimble sees only what the agent sends.
 
