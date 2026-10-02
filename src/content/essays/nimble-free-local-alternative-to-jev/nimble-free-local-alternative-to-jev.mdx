@@ -43,11 +43,11 @@ import cardCatalog from "./tool-output-archive-card-catalog.jpg";
 
 </QuickSummary>
 
-The hype around [Jev](https://docs.typesafe.ai/primitives) caught my attention, so I went to see what it actually did. While I was reading about it, an email from Ollama introduced me to [Bespoke Nimble](https://github.com/bespokelabsai/nimble), a decision model I could run locally for free. I hadn't tested Jev yet, but Nimble gave me a reason to start experimenting.
+I went to see what the hype around [Jev](https://docs.typesafe.ai/primitives) was about. It takes evidence and a question, then picks from answers I define instead of writing a reply. My first thought was: how is this better than the classifiers we've had for years?
 
-The published benchmarks put it close to Jev on the tasks they measured. It ran smoothly on my MacBook M3 Pro, and the data I sent to the local model stayed on my machine. That was enough for me to start playing with it.
+While I was looking into that, an email from Ollama introduced me to [Bespoke Nimble](https://github.com/bespokelabsai/nimble), which takes the same approach and runs locally. I hadn't tried Jev, but I could download Nimble and experiment on my MacBook M3 Pro without paying for each request.
 
-I built two tools around it: `ask-nimble`, a skill for asking evidence-backed questions through an agent, and `pi-nimble-compact`, an extension for removing stale tool output from Pi's context.
+It ran smoothly, and the evidence I sent to the local model stayed on my machine. I built two tools to explore where it could help: `ask-nimble`, a skill for asking evidence-backed questions through an agent, and `pi-nimble-compact`, an extension for removing stale tool output from Pi's context.
 
 ## What Is Nimble, and How Does It Make Decisions?
 
@@ -64,8 +64,6 @@ My agent can gather the relevant files, research, and calculations, then send Ni
 I still have to check the answer. A high probability doesn't establish that it is correct, especially if I've left out a detail that could change the decision. I've run into that gap between model output and what the data supports before, in [AI Is Not an Oracle](/limits-of-machine-learning/).
 
 ## Why Use It Instead of a Traditional Classifier?
-
-Once I saw what it did, I wondered: how is this better than a regular classifier? Those have been around for years. Choosing a label and returning probabilities sounded familiar.
 
 I've used a pretrained model to [classify emotions in Steam reviews](/distilroberta-emotion-analysis-nlp-case-study/). I could give it new reviews without retraining it, but it would still choose from the emotion labels it had been trained to recognize. I couldn't turn it into a vendor-proposal reviewer by replacing “joy” and “anger” with “meets the requirement” and “conflicts with the requirement.” It hadn't learned those distinctions.
 
