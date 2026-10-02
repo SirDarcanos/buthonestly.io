@@ -291,8 +291,8 @@ During a coding session, tool outputs accumulate: file reads, searches, test res
 
 The extension waits until context reaches its configured threshold, then considers eligible older outputs. It asks local Nimble whether uncertain results need to remain verbatim. Recent material and several protected kinds of output are excluded.
 
-<Figure src={nimbleAutomaticIndicator} alt="Pi's footer displaying ‘Nimble ready · ~33k saved’.">
-  This is what I normally see in Pi's footer while the extension works automatically, without me triggering a pass. The ~33k figure is an estimate of context tokens saved.
+<Figure src={nimbleAutomaticIndicator} alt="Pi's footer displaying ‘Nimble ready · ~33k tokens removed so far’.">
+  This is what I normally see in Pi's footer while the extension works automatically, without me triggering a pass. The ~33k figure estimates tokens removed from context so far, not billing savings.
 </Figure>
 
 An output selected for removal becomes a retrieval marker. Some retained long outputs can instead become excerpts containing their beginning and end. The excerpt keeps the beginning and end exactly as written; it contains no summary of the missing middle.
@@ -329,8 +329,8 @@ It waits for the agent to become idle, then runs the same pruning process withou
 
 `/nimble-status` shows pruning activity, while `/nimble-reset` restores the outputs hidden or shortened by the extension on the active branch.
 
-<Figure src={nimbleStatus} alt="Output from /nimble-status showing the automatic context threshold, local endpoint, active retrieval, seven truncated outputs, about 33k estimated context tokens saved, and a latest pass deferred until a larger batch repays the cache rewrite.">
-  My `/nimble-status` output shows seven shortened outputs and an estimated ~33k context tokens saved. The latest pass was deferred by the cache-payback check.
+<Figure src={nimbleStatus} alt="Output from /nimble-status showing the automatic context threshold, local endpoint, active retrieval, seven shortened outputs and none cleared on this branch, about 33k estimated tokens removed from context across the session, and no evaluation yet under latest activity.">
+  My `/nimble-status` output shows seven shortened outputs on this branch and an estimated ~33k tokens removed from context across the session. Those are context estimates, not billing savings.
 </Figure>
 
 ## Where I Want to Take It
