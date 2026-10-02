@@ -82,6 +82,35 @@ const isAncestor = async (repositoryRoot, ancestor, descendant) => {
 
 const shellQuote = (value) => `'${value.replaceAll("'", `'"'"'`)}'`;
 
+const decodeDeployKey = (value) => {
+  const trimmed = value.trim();
+  const invalidKey = () =>
+    new Error(
+      "REPOSITORY_DEPLOY_KEY must contain a multiline private key or its single-line base64 encoding",
+    );
+  let privateKey = trimmed;
+  if (!trimmed.startsWith("-----BEGIN ")) {
+    if (
+      !/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/u.test(
+        trimmed,
+      )
+    ) {
+      throw invalidKey();
+    }
+    const decoded = Buffer.from(trimmed, "base64");
+    if (decoded.toString("base64") !== trimmed) throw invalidKey();
+    privateKey = decoded.toString("utf8").trim();
+  }
+  if (
+    !/^-----BEGIN ((?:(?:OPENSSH|RSA|EC|DSA|ENCRYPTED) )?PRIVATE KEY)-----\r?\n[\s\S]+\r?\n-----END \1-----$/u.test(
+      privateKey,
+    )
+  ) {
+    throw invalidKey();
+  }
+  return `${privateKey}\n`;
+};
+
 export async function createGitHubCheckpointRemote({
   repository,
   deployKey,
@@ -99,6 +128,7 @@ export async function createGitHubCheckpointRemote({
   if (!runnerTemp) {
     throw new Error("RUNNER_TEMP is required when generated state changed");
   }
+  const privateKey = decodeDeployKey(deployKey);
   const knownHosts = await readFile(knownHostsPath, "utf8");
   if (!knownHosts.trim()) {
     throw new Error("GitHub known-hosts file must not be empty");
@@ -109,7 +139,7 @@ export async function createGitHubCheckpointRemote({
   );
   const identityPath = path.join(credentialsDirectory, "deploy-key");
   try {
-    await writeFile(identityPath, `${deployKey.trimEnd()}\n`, {
+    await writeFile(identityPath, privateKey, {
       encoding: "utf8",
       mode: 0o600,
       flag: "wx",

@@ -26,6 +26,22 @@ test("MDX renders ordinary Markdown and the semantic content modules", (context)
 
   assert.equal(result.status, 0, result.stdout + result.stderr);
 
+  const downloads = readBuiltPage("downloads");
+  assert.match(
+    downloads,
+    /href="https:\/\/downloads\.buthonestly\.io\/guide\.pdf"[^>]*download/,
+  );
+  assert.match(
+    downloads,
+    /href="https:\/\/github\.com\/example\/project"[^>]*target="_blank"[^>]*rel="noopener noreferrer"/,
+  );
+  assert.doesNotMatch(
+    downloads,
+    /<a[^>]*href="https:\/\/github\.com\/example\/project"[^>]*\sdownload/,
+  );
+  assert.match(downloads, /Download Guide/);
+  assert.match(downloads, /Explore Project/);
+
   const ordinary = readBuiltPage("ordinary");
   assert.match(ordinary, /Ordinary prose survives MDX/);
   assert.match(

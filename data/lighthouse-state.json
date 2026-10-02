@@ -374,9 +374,8 @@
       "status": "passed"
     },
     "mobile:/": {
-      "checkedAt": "2026-09-14T12:02:19.990Z",
-      "consecutivePasses": 4,
-      "observationId": "34841217858:mobile",
+      "checkedAt": "2026-10-01T11:48:56.625Z",
+      "consecutivePasses": 5,
       "openIssueNumber": null,
       "status": "passed"
     },
