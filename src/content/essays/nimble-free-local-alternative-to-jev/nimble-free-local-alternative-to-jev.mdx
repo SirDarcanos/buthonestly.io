@@ -294,6 +294,10 @@ The complete originals remain in Pi's saved session history. If the agent needs 
 
 My main coding model stays the same. Nimble handles these smaller judgments locally, and Pi's normal compaction remains available. If scoring fails, the extension applies no new pruning decisions.
 
+Related work from Meta and university researchers explores a different approach. In [Context Language Models](https://arxiv.org/abs/2609.37725), the model manages its own context by editing a file. On BrowseComp-Plus, the authors report 11.4% higher accuracy with 21.5% fewer floating-point operations than their context-management baseline.
+
+My extension uses a separate local model to assess older tool outputs, rather than letting the main model edit its own context. The CLM results give me a reason to investigate model-driven context management, but they don't validate this extension, and less computation doesn't necessarily mean a lower bill.
+
 The aim is to reduce stale context, but fewer visible tokens don't automatically mean a cheaper session. Changing context can affect prompt caching, and retrieving omitted evidence adds work. The extension includes a cache-payback check, though its estimates aren't billing guarantees.
 
 If Nimble misjudges relevance or a shortened output omits an important detail, the agent can retrieve the original.
