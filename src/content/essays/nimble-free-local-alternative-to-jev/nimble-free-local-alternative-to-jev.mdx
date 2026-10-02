@@ -9,7 +9,7 @@ excerpt: I can give Nimble new classification tasks without retraining it. I use
 newsletterIntro: |-
   I started reading about Jev, then an email from Ollama introduced me to Nimble, a free decision model I could run locally. I've been playing with it on my MacBook M3 Pro. I built a skill to make it easier to use through an agent and adapted a Pi extension to prune older tool outputs with it.
 
-  This essay explains what these models do, how local inference changes the privacy tradeoff, and where I want to use Nimble next, including balancing the economy of an incremental game.
+  This essay explains what these models do, how local inference changes the privacy tradeoff, and how I used Nimble and Jev to assess a proposed edit to an essay that was already gaining search traffic. I also cover where I want to use Nimble next, including balancing the economy of an incremental game.
 categories:
   - Programming
 tags:
@@ -280,6 +280,46 @@ The agent finds the applicable requirements and gathers the relevant proposal pa
 If a deciding fact is missing, the skill asks for clarification or reports the gap. Business documents may still reach the main agent's provider if that model runs in the cloud, even though the Nimble request stays local.
 
 The skill offers advice, and acting on it requires a separate decision. That's a boundary I've written about in [When AI Stops Being a Tool](/when-ai-stops-being-a-tool/): I want help assessing the task I've chosen, without letting the next response choose the task for me.
+
+### Reviewing an Edit to an Essay
+
+I tried this on a smaller decision while reviewing September's Search Console data: whether to edit [my essay about GPUs and AI](/what-is-a-gpu/), even though its search performance was improving.
+
+I pulled the data on October 2. September 30 was still provisional, so I compared finalized August 1–29 and September 1–29 data:
+
+| GPU Essay Metric | August 1–29 | September 1–29 |
+| --- | ---: | ---: |
+| Impressions | 315 | 493 |
+| Clicks | 1 | 3 |
+| Click-through rate | 0.32% | 0.61% |
+| Average position | 20.65 | 15.74 |
+
+Those were encouraging numbers, though three clicks is still a small sample. The essay published on August 4, so the August window included days before it was available. Average position also changes with the mix of queries; this wasn't a controlled test of an earlier edit.
+
+The agent found a problem in the text. I described training models on consumer RTX 3090 cards, then called a gaming card “the wrong tool for training.” That broad statement didn't fit the experience I'd just described.
+
+It proposed a limited edit:
+
+- Replace that statement with an explanation of workload, memory, and software limits, consistent with my own consumer-GPU training.
+- Lead the existing AI section with its explanation of parallel matrix calculations, and make the existing answer about consumer GPUs easier to find.
+- Keep the title, URL, personal opening, and overall structure. No keyword padding or promises of better rankings.
+
+The search data gave the second change a reason beyond tidier prose. September's disclosed queries included “why does ai need gpu” and “are consumer gpus good enough for ai?” Those query rows are only a subset of the data; they don't tell me which queries produced the three clicks.
+
+I asked Nimble to assess that plan against the supplied essay passages and my writing rules: accuracy, plain language, first-person experience, and no hype. The choices were to support the limited edit, leave the essay unchanged, support a broader revision, or report insufficient data. The agent did the arithmetic; Nimble judged the proposed scope. I hadn't drafted replacement wording yet.
+
+Then I asked Jev through `/ask-jev`, using the same measurements, passages, plan, and criteria without including Nimble's answer. Nimble ran locally; Jev received the task-relevant evidence through its hosted API. Both selected the limited edit:
+
+| Outcome | Nimble | Jev |
+| --- | ---: | ---: |
+| Limited edit supported | 84.8% | 89.0% |
+| Leave unchanged | 7.5% | 10.0% |
+| Broader revision supported | 6.7% | 1.0% |
+| Insufficient data | 1.0% | 0.0% |
+
+These are their returned outcome probabilities, rounded, not measured accuracy or chances of an SEO gain. Neither model returned an explanation. The agent's explanation came from reading the evidence alongside those results.
+
+For this decision, they agreed on the scope. That doesn't establish that the models perform equally well, or that the edit will improve rankings. I still had to write and check the replacement, and any later search change would need its own assessment. The review didn't change the GPU essay.
 
 ## A Pi Coding Agent Extension for Context Pruning
 
