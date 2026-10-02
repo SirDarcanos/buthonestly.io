@@ -1,6 +1,6 @@
 ---
-title: "Nimble: A Free, Local Alternative to Jev"
-seoDescription: Run Bespoke Nimble locally with Ollama, a free alternative to Jev. Use ask-nimble for evidence checks and pi-nimble-compact for stale tool output.
+title: "Bespoke Nimble: A Free, Local Alternative to Jev"
+seoDescription: Run Bespoke Nimble locally with Ollama. Compare it with Jev and trained classifiers, with API examples and automatic agent context pruning.
 date: 2026-10-02
 updated:
 sticky: false
@@ -87,6 +87,8 @@ I've used a pretrained model to [classify emotions in Steam reviews](/distilrobe
 With a traditional task-specific classifier, I usually define the labels, collect examples, and train the model to distinguish them. A new task or a meaningful change to those labels can mean relabeling data and retraining. Renaming a label doesn't teach the model what the new label means.
 
 With Nimble or Jev, I supply the question, labels, and their definitions in the request. I can change the data and the labels in each request without retraining the model.
+
+Zero-shot classification itself isn't new: [NLI-based classifiers](https://huggingface.co/MoritzLaurer/deberta-v3-large-zeroshot-v2.0) also accept label descriptions without task-specific retraining. What interests me about Nimble is its structured decision API and how easily I can use it through Ollama and my agent.
 
 I still need reviewed examples to evaluate its answers, especially when I change the criteria.
 
@@ -177,6 +179,15 @@ With Ollama running locally, I can send the proposal excerpts and requirements t
     }
   }
 }
+```
+
+Save that JSON as `request.json`, then run in your terminal:
+
+```sh
+curl --fail-with-body --show-error \
+  http://localhost:11434/v1/systemone \
+  -H 'Content-Type: application/json' \
+  --data-binary @request.json
 ```
 
 Nimble returns an answer and probabilities for each question. Each question is assessed independently against the same evidence.
@@ -296,7 +307,7 @@ My main coding model stays the same. Nimble handles these smaller judgments loca
 
 Related work from Meta and university researchers explores a different approach. In [Context Language Models](https://arxiv.org/abs/2609.37725), the model manages its own context by editing a file. On BrowseComp-Plus, the authors report 11.4% higher accuracy with 21.5% fewer floating-point operations than their context-management baseline.
 
-My extension uses a separate local model to assess older tool outputs, rather than letting the main model edit its own context. The CLM results give me a reason to investigate model-driven context management, but they don't validate this extension, and less computation doesn't necessarily mean a lower bill.
+My extension uses a separate local model to assess older tool outputs, rather than letting the main model edit its own context. The CLM results give me a reason to investigate model-driven context management, but they don't validate this extension.
 
 The aim is to reduce stale context, but fewer visible tokens don't automatically mean a cheaper session. Changing context can affect prompt caching, and retrieving omitted evidence adds work. The extension includes a cache-payback check, though its estimates aren't billing guarantees.
 
