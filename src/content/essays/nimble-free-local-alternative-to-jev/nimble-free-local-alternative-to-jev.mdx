@@ -235,11 +235,26 @@ It proposed a limited edit:
 
 September's disclosed queries included “why does ai need gpu” and “are consumer gpus good enough for ai?” The proposed second change would make those existing answers easier to find.
 
+With the plan and search data already in the conversation, I ran:
+
+```text
+/ask-nimble about your plan to edit the GPU article,
+with reported data on how the article improved over time
+```
+
+That short prompt referred to the agent's proposed edit above. In a new conversation, I'd need to supply the plan and data or tell the agent where to find them.
+
 The skill checks whether a question suits Nimble before calling it. Arithmetic stays with code, factual questions need sources, and open-ended requests stay with the main agent. Here, I asked for a judgment of the plan against my writing rules: accuracy, plain language, first-person experience, and no hype.
 
 The agent supplied the measurements, essay passages, and rules with four outcomes: support the limited edit, leave the essay unchanged, support a broader revision, or report insufficient data. Nimble judged the proposed scope, not replacement wording. If a deciding fact is missing, the skill asks for clarification or reports the gap.
 
-I also built [`/ask-jev` as a skill](https://github.com/SirDarcanos/agentskills/tree/main). I used it for the same measurements, passages, plan, and criteria without including Nimble's answer. Nimble ran locally; Jev received the task-relevant evidence through its hosted API. A cloud-hosted main agent may already have received that evidence while gathering it, even when the Nimble call stays local. Both selected the limited edit:
+I also built [`/ask-jev` as a skill](https://github.com/SirDarcanos/agentskills/tree/main). For a second assessment in the same conversation, I ran:
+
+```text
+/ask-jev as well
+```
+
+The agent prepared the same measurements, passages, plan, and criteria without including Nimble's answer. Nimble ran locally; Jev received the task-relevant evidence through its hosted API. A cloud-hosted main agent may already have received that evidence while gathering it, even when the Nimble call stays local. Both selected the limited edit:
 
 | Outcome | Nimble | Jev |
 | --- | ---: | ---: |
