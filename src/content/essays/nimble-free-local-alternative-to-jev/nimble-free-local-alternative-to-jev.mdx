@@ -38,7 +38,7 @@ import nimbleAutomaticIndicator from "./pi-nimble-automatic-indicator.jpg";
 - Nimble accepts questions and answer criteria at request time, without training a separate classifier for each task.
 - For stable tasks with plenty of labeled data, a dedicated classifier may be faster, cheaper, and more accurate.
 - It runs locally through Ollama, so evidence submitted to the local model doesn't go to a hosted inference provider.
-- Published benchmarks put Nimble close to Jev on the evaluated tasks; I haven't tested Jev myself yet.
+- Published benchmarks put Nimble close to Jev on the evaluated tasks. My early results look similar too, but I haven't tested Jev enough to call them equivalent.
 - The ask-nimble skill lets me ask in plain language; the agent gathers evidence, prepares the request, and interprets the result.
 - pi-nimble-compact removes or shortens eligible older tool outputs while preserving originals for retrieval.
 - Decisions need checking against your own data; context pruning can add retrieval and caching costs.
@@ -49,7 +49,7 @@ I started reading about [Jev](https://docs.typesafe.ai/primitives) after seeing 
 
 Once I saw what it did, I wondered: how is this better than the classifiers we've had for years?
 
-While I was looking into that, an email from Ollama introduced me to [Bespoke Nimble](https://github.com/bespokelabsai/nimble), which takes the same approach and runs locally. I hadn't tried Jev, but I could download Nimble and experiment locally without paying for each request.
+While I was looking into that, an email from Ollama introduced me to [Bespoke Nimble](https://github.com/bespokelabsai/nimble), which takes the same approach and runs locally. I could download Nimble and experiment locally without paying for each request.
 
 It ran smoothly, and the evidence I sent to the local model stayed on my machine. To make it easier to use, I built `ask-nimble`, a skill that lets me ask questions through an agent without constructing the API requests myself. I also adapted a Pi extension to use Nimble for pruning older tool outputs from the agent's context: `pi-nimble-compact`.
 
@@ -132,7 +132,7 @@ If a cloud-hosted coding agent gathers the evidence first, that agent may alread
 | Nimble 9B | Bespoke Labs | 75.7% |
 | Jev 1.13 | TypeSafe | 76.0% |
 
-Nimble ran on Ollama. The Jev result comes from Bespoke Labs' run of the same decisions through TypeSafe's API. These are published results, not my own head-to-head test; I checked the source on October 1, 2026.
+Nimble ran on Ollama. The Jev result comes from Bespoke Labs' run of the same decisions through TypeSafe's API. These figures come from the published benchmark, not my own testing; I checked the source on October 1, 2026.
 
 That gap was small enough for me to try the free option first. I'll need to test it on my own tasks to see whether those results carry over.
 
@@ -245,7 +245,7 @@ npx skills add SirDarcanos/agentskills --skill ask-nimble
 
 Choose your agent during installation. The skill needs local Ollama 0.35 or later with Nimble downloaded, plus Python 3 and curl. The agent also needs access to the evidence it will gather.
 
-I also made [`/ask-jev` available as a skill](https://github.com/SirDarcanos/agentskills/tree/main). I'd default to Nimble because it's free, and use Jev when I want a second opinion or the task calls for it. Agreement between the two still wouldn't replace checking the evidence.
+I also built [`/ask-jev` as a skill](https://github.com/SirDarcanos/agentskills/tree/main) and have tried Jev. The results I've seen so far are similar to Nimble's, but I haven't tested it enough to say the two are equivalent. I'd default to Nimble because it's free, and use Jev when I want a second opinion or the task calls for it. Agreement between the two still wouldn't replace checking the evidence.
 
 I invoke `ask-nimble` with a question:
 
@@ -339,4 +339,4 @@ It waits for the agent to become idle, then runs the same pruning process withou
 
 For game-economy assessments or business reviews, I'll need examples whose answers I've reviewed. I can compare Nimble's judgments with those answers, inspect where they differ, and decide which tasks I trust it with. Changes to the game will still need playtesting.
 
-I still plan to test Jev. I haven't done that comparison myself, and I'll share my findings here or on my socials when I do. There may be tasks where paying for it makes sense.
+I want to test Jev more before deciding where paying for it makes sense. For now, Nimble lets me keep experimenting locally without a bill for each request.
