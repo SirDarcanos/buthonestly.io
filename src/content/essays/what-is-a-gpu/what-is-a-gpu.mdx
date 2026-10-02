@@ -125,7 +125,7 @@ Each type would do badly at what a CPU does. Running an operating system, juggli
 
 ## Why Are GPUs Good for AI?
 
-GPUs are good for AI because they can run many of the calculations in a neural network's matrix math in parallel. Inputs go in, get multiplied by weights, summed, passed through a function, repeat. Training repeats that work across a dataset, and a GPU can do much of it at once.
+A neural network does a lot of matrix math. Inputs go in, get multiplied by weights, summed, passed through a function, repeat. Training repeats that work across a dataset. GPUs are good for AI because they can run many of those calculations in parallel.
 
 GPUs were built to figure out which pixels to turn on and what color to paint them. That work also involves millions of small, independent calculations per frame. The same parallel processing that helps draw a scene helps train a neural network.
 
@@ -149,7 +149,7 @@ There's a distinction worth naming here: **training** versus **inference**. Trai
 
 ### Are Consumer GPUs Good Enough for AI?
 
-This is roughly where adding a second 3090 to my desktop came in. The first card was enough for inference and for fine-tuning small models. The second one let me train on more data without spilling to disk every few seconds. Two consumer cards aren't an H100, but they're enough for hobby-scale work. Most of what I've published runs at that scale.
+For the hobby-scale work I do, yes. My first 3090 was enough for inference and for fine-tuning small models. Adding a second one let me train on more data without spilling to disk every few seconds. Two consumer cards aren't an H100. Most of what I've published runs at that smaller scale.
 
 ## The Real Moat Is Software
 
