@@ -30,6 +30,8 @@ import QuickSummary from "../../../components/content/QuickSummary.astro";
 import Figure from "../../../components/content/Figure.astro";
 import balancingShapes from "./game-economy-balancing-shapes.jpg";
 import cardCatalog from "./tool-output-archive-card-catalog.jpg";
+import nimbleStatus from "./pi-nimble-status.jpg";
+import nimbleAutomaticIndicator from "./pi-nimble-automatic-indicator.jpg";
 
 <QuickSummary>
 
@@ -278,6 +280,10 @@ During a coding session, tool outputs accumulate: file reads, searches, test res
 
 The extension waits until context reaches its configured threshold, then considers eligible older outputs. It asks local Nimble whether uncertain results need to remain verbatim. Recent material and several protected kinds of output are excluded.
 
+<Figure src={nimbleAutomaticIndicator} alt="Pi's footer displaying ‘Nimble ready · ~33k saved’.">
+  This is what I normally see in Pi's footer while the extension works automatically, without me triggering a pass. The ~33k figure is an estimate of context tokens saved.
+</Figure>
+
 An output selected for removal becomes a retrieval marker. Some retained long outputs can instead become excerpts containing their beginning and end. The excerpt keeps the beginning and end exactly as written; it contains no summary of the missing middle.
 
 The complete originals remain in Pi's saved session history. If the agent needs something that was omitted, it can retrieve it with `nimble_read`, rather than rerunning a command. That matters when the underlying file has changed—or when repeating the command could have side effects.
@@ -307,6 +313,10 @@ Inside Pi, I can run a pruning pass on demand:
 It waits for the agent to become idle, then runs the same pruning process without waiting for the automatic context threshold or cooldown. The protections and cache-payback check still apply, so a pass may remove nothing. Changes affect the next model request; this doesn't invoke Pi's `/compact` or generate a summary.
 
 `/nimble-status` shows pruning activity, while `/nimble-reset` restores the outputs hidden or shortened by the extension on the active branch.
+
+<Figure src={nimbleStatus} alt="Output from /nimble-status showing the automatic context threshold, local endpoint, active retrieval, seven truncated outputs, about 33k estimated context tokens saved, and a latest pass deferred until a larger batch repays the cache rewrite.">
+  My `/nimble-status` output shows seven shortened outputs and an estimated ~33k context tokens saved. The latest pass was deferred by the cache-payback check.
+</Figure>
 
 ## Where I Want to Take It
 
