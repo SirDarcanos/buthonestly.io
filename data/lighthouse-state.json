@@ -221,6 +221,7 @@
       "b97d7a623aa6f9fba1f64ae70d45b44d02708d06d15acae1e12f050707e09b3e"
     ],
     "buildings-never-were": [
+      "494d1c76ba559d8e577a2d2ea9d5b1c89f29535f14631121cf202d189b5dd477",
       "7e724c49ee787b2019d2ec9cc614c1594f97111d46efa5449daf161b9198f1b0"
     ],
     "bulk-edit-woocommerce-products-without-plugins": [
@@ -380,8 +381,14 @@
       "status": "passed"
     },
     "mobile:/": {
-      "checkedAt": "2026-10-02T15:39:07.961Z",
-      "consecutivePasses": 9,
+      "checkedAt": "2026-10-03T05:40:22.185Z",
+      "consecutivePasses": 10,
+      "openIssueNumber": null,
+      "status": "passed"
+    },
+    "mobile:/buildings-never-were/": {
+      "checkedAt": "2026-10-03T05:40:22.185Z",
+      "consecutivePasses": 1,
       "openIssueNumber": null,
       "status": "passed"
     },
