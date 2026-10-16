@@ -24,6 +24,8 @@ coverCaption:
 import Figure from "../../../components/content/Figure.astro";
 import QuickSummary from "../../../components/content/QuickSummary.astro";
 import Blockquote from "../../../components/content/Blockquote.astro";
+import WrittenOnly from "../../../components/content/WrittenOnly.astro";
+import NarrationOnly from "../../../components/content/NarrationOnly.astro";
 import piAgentWorkingOnSkills from "./pi-agent-working-on-skills.jpg";
 import piLogo from "./pi-logo.webp";
 import piChatBubbles from "./pi-chat-bubbles-and-tool-output.jpg";
@@ -46,6 +48,8 @@ Around it, I’ve put together a setup that suits how I want to work: discuss wh
 
 This is my setup as of October 2026:
 
+<WrittenOnly>
+
 | Purpose | What I Use | What It Does in My Workflow |
 | --- | --- | --- |
 | Coding environment | [Pi](https://pi.dev/) | Where I work with coding agents |
@@ -57,6 +61,18 @@ This is my setup as of October 2026:
 | Context pruning | [pi-nimble-compact](https://github.com/SirDarcanos/pi-nimble-compact) | Trim older tool output from the context sent to the model |
 | Local models | [Ollama](https://ollama.com/) | Run Nimble and Clef for focused questions, with occasional use of Gemma and Qwen |
 | Terminal and editor | [Ghostty](https://ghostty.org/), [VS Code](https://code.visualstudio.com/) | Run Pi in Ghostty; open VS Code when I write code manually |
+
+</WrittenOnly>
+
+<NarrationOnly>
+
+I use Pi as my coding environment, with OpenAI Astra on High for planning and Sol on Medium for implementation. My Agent Skills collection provides the workflow instructions, and I keep specifications and tickets in GitHub.
+
+Extensions give me subagents and background tasks, change how the interface looks, and prune older tool output from the model’s context.
+
+For local models, I use Ollama, most often with Nimble and Clef, and occasionally with Gemma and Qwen. I run Pi in Ghostty and open VS Code when I write code manually.
+
+</NarrationOnly>
 
 <Figure src={piAgentWorkingOnSkills} alt="Pi running in Ghostty, with loaded skills and extensions, a work-on request for issue 140, compact tool output, and an agent reply.">
   An agent working on my skills collection. The interface shows the loaded skills and extensions above the conversation.
