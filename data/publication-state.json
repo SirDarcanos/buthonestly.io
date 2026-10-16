@@ -275,6 +275,15 @@
         "status": "delivered"
       }
     },
+    "what-if-wordpress-wasnt-gpl": {
+      "newsletter": {
+        "broadcastId": 26444765,
+        "status": "draft"
+      },
+      "indexNow": {
+        "contentHash": "f7a73861f9b00ee8287245edb7398a0c05c0362042d604c637aa8efcde3ec3f5"
+      }
+    },
     "what-is-a-gpu": {
       "indexNow": {
         "contentHash": "31771ca9e51181fc52cc4c23eea8f0bf3436b3f4da2988537eb057cb5d9b34d8"
