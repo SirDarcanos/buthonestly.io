@@ -23,7 +23,9 @@ coverCaption:
 
 import Figure from "../../../components/content/Figure.astro";
 import QuickSummary from "../../../components/content/QuickSummary.astro";
+import Blockquote from "../../../components/content/Blockquote.astro";
 import piAgentWorkingOnSkills from "./pi-agent-working-on-skills.jpg";
+import piLogo from "./pi-logo.webp";
 
 <QuickSummary>
 
@@ -77,6 +79,15 @@ These changes started while I was still using Claude Code. Learning how to manag
 
 I came across [Pi](https://pi.dev/) and decided to try it. Its startup context was roughly 20,000–30,000 tokens smaller than the Claude Code setup I had been using. That was a comparison between my two configured environments, but the difference caught my attention.
 
+<Blockquote author="Pi" source="https://pi.dev/">
+  <div class="mb-6 w-24 [&_figure]:m-0 [&_img]:border-0 [&_img]:p-0">
+    <Figure src={piLogo} alt="Pi logo in coral, blue, and yellow." />
+  </div>
+
+There are many agent harnesses, but this one is yours.
+
+</Blockquote>
+
 I also liked how bare-bones Pi was. I could install only what I needed and leave the rest out. Being open source mattered too: I could inspect the code and extend or improve it myself. That fits with [Automattic’s commitment to open source](https://automattic.com/creed/), which I share.
 
 The move also changed which models I used. I couldn’t use my Claude subscription through Pi because [Anthropic doesn’t allow subscription authentication in third-party clients](https://code.claude.com/docs/en/legal-and-compliance#authentication-and-credential-use). I didn’t want to pay separately for Anthropic API usage, so I went back to OpenAI. I’ve been happy with Astra and Sol.
@@ -97,7 +108,9 @@ That preparation is why I’m comfortable using a lighter model at Medium for im
 
 I started with generic skills for individual tasks, then adopted Matt Pocock’s workflow skills. They helped me bring more structure to development, especially when an idea needed more thought before it was ready to build.
 
-Over time, though, I began dreading the long grilling sessions. I was also being asked to review complex code that I didn’t fully understand. I wanted to direct the work as a manager, while letting the agents handle more of the technical decisions.
+Over time, though, I began dreading the long grilling sessions. I was also being asked to review complex code that I didn’t fully understand.
+
+> I wanted to direct the work as a manager, while letting the agents handle more of the technical decisions.
 
 That led me to build [my own collection of agent skills](https://github.com/SirDarcanos/agentskills), keeping what worked for me in Matt’s approach and changing the parts that caused friction.
 
