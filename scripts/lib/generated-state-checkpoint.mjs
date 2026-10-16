@@ -4,6 +4,12 @@ import path from "node:path";
 import { promisify } from "node:util";
 
 const execFileAsync = promisify(execFile);
+const CHECKPOINT_IDENTITY = [
+  "-c",
+  "user.name=github-actions[bot]",
+  "-c",
+  "user.email=github-actions[bot]@users.noreply.github.com",
+];
 
 const PROFILES = Object.freeze({
   lighthouse: {
@@ -278,10 +284,7 @@ export async function checkpointGeneratedState({
   try {
     try {
       await runGit(repositoryRoot, [
-        "-c",
-        "user.name=github-actions[bot]",
-        "-c",
-        "user.email=github-actions[bot]@users.noreply.github.com",
+        ...CHECKPOINT_IDENTITY,
         "commit",
         "-m",
         profile.commitMessage,
@@ -344,7 +347,11 @@ export async function checkpointGeneratedState({
           }
         }
         try {
-          await runGit(repositoryRoot, ["rebase", "FETCH_HEAD"]);
+          await runGit(repositoryRoot, [
+            ...CHECKPOINT_IDENTITY,
+            "rebase",
+            "FETCH_HEAD",
+          ]);
         } catch (error) {
           await abortRebase(repositoryRoot);
           throw new Error(
