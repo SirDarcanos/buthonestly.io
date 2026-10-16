@@ -26,6 +26,7 @@ import QuickSummary from "../../../components/content/QuickSummary.astro";
 import Blockquote from "../../../components/content/Blockquote.astro";
 import piAgentWorkingOnSkills from "./pi-agent-working-on-skills.jpg";
 import piLogo from "./pi-logo.webp";
+import piChatBubbles from "./pi-chat-bubbles-and-tool-output.jpg";
 
 <QuickSummary>
 
@@ -157,7 +158,11 @@ I use three extensions for that:
 - **[pi-chat-bubbles](https://github.com/SirDarcanos/pi-chat-bubbles)** is an extension I built to make exchanges easier to follow. My messages appear on the right and the agent’s replies on the left.
 - **[pi-compact-tools](https://github.com/nedleeds/pi-compact-tools)** reduces the space taken up by tool activity, so file reads and commands don’t overwhelm the conversation.
 
-I use these with the `neutral-panels` color theme. The screenshot near the beginning shows them working together.
+I use these with the `neutral-panels` color theme.
+
+<Figure src={piChatBubbles} alt="Pi conversation with my requests aligned right, agent replies aligned left, and an expanded code edit between the messages.">
+  Editing this essay in Pi, with my requests on the right, the agent’s replies on the left, and tool output between them.
+</Figure>
 
 These changes affect what I see in the terminal. Collapsing a tool’s output on screen doesn’t remove it from the context sent to the model.
 
