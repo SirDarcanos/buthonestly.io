@@ -120,17 +120,14 @@ test("pull-request builds share image assets without reusing rendered pages", ()
   const baseBuildIndex = pullRequestWorkflow.indexOf(
     "name: Build base revision",
   );
-  const retainIndex = pullRequestWorkflow.indexOf(
-    "run: node scripts/share-lighthouse-images.mjs .lighthouse-base .",
-  );
   const serverIndex = pullRequestWorkflow.indexOf(
     "name: Start revision servers",
   );
   assert.ok(buildIndex < shareIndex && shareIndex < baseBuildIndex);
-  assert.ok(baseBuildIndex < retainIndex && retainIndex < serverIndex);
+  assert.ok(baseBuildIndex < serverIndex);
   assert.match(
     pullRequestWorkflow,
-    /key:.*runner\.arch.*hashFiles\('package-lock.json', 'astro.config.mjs'\).*head\.sha/,
+    /key:.*runner\.arch.*hashFiles\('package-lock.json', 'astro.config.mjs'\).*base\.sha/,
   );
   assert.match(
     pullRequestWorkflow,
@@ -142,7 +139,7 @@ test("pull-request builds share image assets without reusing rendered pages", ()
   );
   assert.match(
     pullRequestWorkflow,
-    /name: Build head revision[\s\S]*?run: npm run build/,
+    /name: Build head revision[\s\S]*?shell: bash\n\s+run: npm run build.*tee/,
   );
   assert.ok(
     headInstallIndex < imageCacheIndex &&

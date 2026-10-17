@@ -77,29 +77,65 @@ runs `npm ci`. This is not a cache of installed dependencies.
 
 The image cache contains only `node_modules/.astro/assets`. After building head,
 `scripts/share-lighthouse-images.mjs` copies those assets to base when their
-lockfiles and Astro configurations match. Base-only variants are merged back
-before the cache is saved. Astro selects transforms by its generated asset names;
-its content store and rendered pages are never copied. Different toolchains skip
-sharing, and a missing cache leaves Astro to generate the images normally.
+lockfiles and Astro configurations match. Astro selects transforms by its
+generated asset names; its content store and rendered pages are never copied.
+Different toolchains skip sharing, and a missing cache leaves Astro to generate
+the images normally.
 
-Persistent cache keys include OS, architecture, head lockfile/configuration and
-head revision. Prefix restores reuse image assets within that toolchain without
-coupling the cache to a particular head/base pair. A later head revision saves the
-expanded set; an exact-key hit is immutable and may need to regenerate variants
-introduced only by a different base or preview selection.
+CI and Lighthouse use the same `astro-assets-v2-node24-main` namespace, keyed by
+OS, architecture and the hash of `package-lock.json` plus `astro.config.mjs`.
+Successful push CI builds on `main` save image assets under their commit SHA;
+failed builds and PR workflows never save them. CI and qualifying Lighthouse PRs
+restore only within that exact toolchain prefix, with no broader fallback.
+Lighthouse first requests the base SHA using the head toolchain, then the latest
+compatible main cache. GitHub's default-branch cache visibility makes these
+entries available to separate PRs, including forks, without privileged triggers
+or credentials. Dependency, configuration, component, layout, styling and content
+changes keep their existing route-selection rules.
 
-`test/lighthouse-image-build.test.mjs` builds two small Astro fixtures through the
-installed CLI. It checks cross-checkout reuse, changed image bytes and transform
-options, regeneration after cache removal, and fresh preview/publication-boundary
-markup with warmed images. This protects the sharing mechanism; it is not a
-representative CI performance benchmark.
+The main cache is immutable. Missing or changed source images and transform
+options generate their own variants, as do scheduled-preview images absent from
+the production build. PR-only variants are not persisted; repeated PR runs may
+regenerate them. GitHub evicts caches after seven days without access, and can
+evict them earlier under storage pressure: month-long warmth is not guaranteed.
+No scheduled maintenance or retention/billing changes are introduced.
+
+`test/lighthouse-image-build.test.mjs` builds small Astro fixtures through the
+installed CLI. Two independent consumer checkouts receive assets directly from a
+production fixture. It also checks changed image bytes and transform options,
+regeneration after cache removal, and fresh preview/publication-boundary markup
+with warmed images. Workflow tests check matching toolchain prefixes and the
+main-only save condition. These protect local behavior; they do not demonstrate
+GitHub cache visibility or provide a representative CI performance benchmark.
 
 Both revisions always rebuild, including the Markdown alternatives. Selected
 scheduled-preview slugs (or the legacy base fallback) and current publication
 state are therefore evaluated on every run. Production `dist/` artifacts and
 browser measurements are not reused. The job exposes separate install, cache,
 head build, sharing, base build, server startup and audit timings, and reports
-exact cache-hit status; restore logs distinguish prefix hits from misses.
+the matched cache key, exact-hit status and per-revision generated/reused/
+revalidated transformation counts (partial if a build fails). Restore logs record
+transfer size and distinguish prefix hits from misses. Build logs and audit
+reports are retained together for 90 days.
+
+### Trusted-main rollout evidence (#80)
+
+Live cross-PR verification remains pending. After this workflow reaches `main`:
+
+1. Let a successful push CI build save the new cache. Record its run URL, commit,
+   key and cache ID/ref (`refs/heads/main`) from GitHub Actions cache metadata.
+2. Run two distinct qualifying PRs with that toolchain. For each, record its run
+   URL, matched key, transfer size, job phase timings and generated/reused/
+   revalidated counts for both revisions. Confirm the matched entry's cache
+   metadata points to `main`, not either PR's merge ref. A prefix restore is valid;
+   an exact hit is not required.
+3. Include changed image bytes/options and an incompatible toolchain or missing
+   cache. Confirm fresh variants or a cold build, with passing CI, production
+   verification and preview/publication-boundary regressions. A new toolchain
+   remains cold until a successful main build seeds its namespace.
+
+The historical measurements below cover PR #76's previous PR-scoped cache,
+not the trusted-main rollout; they do not satisfy the two-PR criterion in #80.
 
 ### Observed baseline and remaining measurements
 

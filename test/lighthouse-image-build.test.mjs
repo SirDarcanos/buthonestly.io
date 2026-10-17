@@ -65,9 +65,11 @@ test(
   async (t) => {
     const root = await mkdtemp(path.join(os.tmpdir(), "lighthouse-astro-"));
     t.after(() => rm(root, { recursive: true, force: true }));
+    const main = path.join(root, "main");
+    const otherPullRequest = path.join(root, "other-pull-request");
     const head = path.join(root, "head");
     const base = path.join(root, "base");
-    for (const directory of [head, base]) {
+    for (const directory of [main, otherPullRequest, head, base]) {
       await mkdir(path.join(directory, "src/pages"), { recursive: true });
       await mkdir(path.join(directory, "node_modules"));
       await symlink(
@@ -91,9 +93,16 @@ test(
       await writeImage(directory, "red");
     }
 
-    const cold = await build(head, "future");
+    const cold = await build(main);
     assert.doesNotMatch(cold.output, /reused cache entry/);
-    assert.match(cold.html, />preview</);
+    assert.match(cold.html, />withheld</);
+
+    for (const consumer of [head, otherPullRequest]) {
+      assert.equal(await shareLighthouseImages(main, consumer), "shared");
+      const restored = await build(consumer, "future");
+      assert.match(restored.output, /reused cache entry/);
+      assert.match(restored.html, />preview</);
+    }
     assert.equal(await shareLighthouseImages(head, base), "shared");
 
     const warm = await build(base);
