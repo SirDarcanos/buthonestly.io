@@ -49,18 +49,19 @@ jobs:
       - name: Restore shared Astro image assets
         id: image_cache
         if: steps.pull_request_plan.outputs.selected == 'true'
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
           path: node_modules/.astro/assets
-          key: ${{ runner.os }}-${{ runner.arch }}-astro-assets-v1-${{ hashFiles('package-lock.json', 'astro.config.mjs') }}-${{ github.event.pull_request.head.sha }}
+          key: ${{ runner.os }}-${{ runner.arch }}-astro-assets-v2-node24-main-${{ hashFiles('package-lock.json', 'astro.config.mjs') }}-${{ github.event.pull_request.base.sha }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.arch }}-astro-assets-v1-${{ hashFiles('package-lock.json', 'astro.config.mjs') }}-
+            ${{ runner.os }}-${{ runner.arch }}-astro-assets-v2-node24-main-${{ hashFiles('package-lock.json', 'astro.config.mjs') }}-
 
       - name: Build head revision
         if: steps.pull_request_plan.outputs.selected == 'true'
         env:
           LIGHTHOUSE_PREVIEW_SLUGS: ${{ steps.pull_request_plan.outputs.preview_slugs }}
-        run: npm run build
+        shell: bash
+        run: npm run build 2>&1 | tee "$RUNNER_TEMP/lighthouse-head-build.log"
 
       - name: Share head image assets with base
         if: steps.pull_request_plan.outputs.selected == 'true'
@@ -71,16 +72,13 @@ jobs:
         working-directory: .lighthouse-base
         env:
           LIGHTHOUSE_PREVIEW_SLUGS: ${{ steps.pull_request_plan.outputs.preview_slugs }}
+        shell: bash
         run: |
           if grep -q LIGHTHOUSE_PREVIEW_SLUGS src/lib/essays.ts; then
             npm run build
           else
             LIGHTHOUSE_INCLUDE_SCHEDULED=true npm run build
-          fi
-
-      - name: Retain base image assets for future runs
-        if: steps.pull_request_plan.outputs.selected == 'true'
-        run: node scripts/share-lighthouse-images.mjs .lighthouse-base .
+          fi 2>&1 | tee "$RUNNER_TEMP/lighthouse-base-build.log"
 
       - name: Start revision servers
         if: steps.pull_request_plan.outputs.selected == 'true'
@@ -106,14 +104,31 @@ jobs:
         if: always() && steps.pull_request_plan.outputs.selected == 'true'
         env:
           IMAGE_CACHE_HIT: ${{ steps.image_cache.outputs.cache-hit }}
+          IMAGE_CACHE_KEY: ${{ steps.image_cache.outputs.cache-matched-key }}
         run: |
-          printf '\n## Lighthouse build reuse\n\nImage assets exact cache hit: `%s` (false or empty means prefix restore or miss; see restore logs). Both revisions are configured to rebuild; no page or measurement reuse. Phase timings are in the job steps.\n' "$IMAGE_CACHE_HIT" >> "$GITHUB_STEP_SUMMARY"
+          {
+            printf '\n## Lighthouse build reuse\n\nTrusted main image-cache key: `%s` (empty means miss). Exact hit: `%s`. PRs restore only; successful main CI is the only producer.\n\n' "$IMAGE_CACHE_KEY" "$IMAGE_CACHE_HIT"
+            printf 'Transfer size and restore duration are in the cache restore logs; phase timings are in the job steps. Both revisions rebuild pages and run fresh audits.\n\n'
+            for revision in head base; do
+              log="$RUNNER_TEMP/lighthouse-$revision-build.log"
+              if [ -f "$log" ]; then
+                generated=$(grep -c '(before: .*kB, after: .*kB)' "$log" || true)
+                reused=$(grep -c '(reused cache entry)' "$log" || true)
+                revalidated=$(grep -c '(revalidated cache entry)' "$log" || true)
+                printf '%s image transforms: %s generated, %s reused, %s revalidated (partial if build failed).\n' "$revision" "$generated" "$reused" "$revalidated"
+              else
+                printf '%s build log unavailable.\n' "$revision"
+              fi
+            done
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Retain diagnostic reports
         if: always()
         uses: actions/upload-artifact@v7
         with:
           name: lighthouse-${{ github.run_id }}
-          path: artifacts/lighthouse
+          path: |
+            artifacts/lighthouse
+            ${{ runner.temp }}/lighthouse-*-build.log
           if-no-files-found: ignore
           retention-days: 90
