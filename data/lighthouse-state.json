@@ -478,6 +478,7 @@
       "6f0a6fa0a4ea6ef2fbb4e37c3834c3c4acf4a98ca03c0b1c6775ced4f3903bb5"
     ],
     "nimble-free-local-alternative-to-jev": [
+      "68b016e87648199ee6d4f5db08554fbfa54b9b82dd990d928b15e8c767542295",
       "9e21ca3d916ec53ee368080a36254d6f9a137d0ece1b986460fb5fadf5fbd691"
     ],
     "psychological-safety-in-teams-people-first-leadership": [
@@ -487,6 +488,7 @@
       "a87786a22bce400f64958577dead2042b31f42a64202128d533185ac8a9ee0fe"
     ],
     "shotlist-automatic-annotated-screenshots": [
+      "0fe526dcc57d0967ac851d6d52c7ec49a4fb70d522c45570609e3e031d91ecb5",
       "606e93aac1a6e0bf47b2a8736e3b0c72362bae552132983df630d345b92dd1ff"
     ],
     "team-building-activities-for-work": [
@@ -579,8 +581,8 @@
       "status": "passed"
     },
     "mobile:/": {
-      "checkedAt": "2026-10-16T14:22:13.242Z",
-      "consecutivePasses": 13,
+      "checkedAt": "2026-10-17T09:35:31.222Z",
+      "consecutivePasses": 15,
       "openIssueNumber": null,
       "status": "passed"
     },
@@ -603,8 +605,8 @@
       "status": "passed"
     },
     "mobile:/nimble-free-local-alternative-to-jev/": {
-      "checkedAt": "2026-10-02T15:07:35.299Z",
-      "consecutivePasses": 1,
+      "checkedAt": "2026-10-17T09:35:31.222Z",
+      "consecutivePasses": 2,
       "openIssueNumber": null,
       "status": "passed"
     },
@@ -612,6 +614,12 @@
       "checkedAt": "2026-10-12T14:39:11.782Z",
       "consecutivePasses": 2,
       "observationId": "38264430323:mobile",
+      "openIssueNumber": null,
+      "status": "passed"
+    },
+    "mobile:/shotlist-automatic-annotated-screenshots/": {
+      "checkedAt": "2026-10-17T09:35:31.222Z",
+      "consecutivePasses": 1,
       "openIssueNumber": null,
       "status": "passed"
     },
