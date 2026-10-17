@@ -1,14 +1,13 @@
-import { cp, mkdir, readFile } from "node:fs/promises";
+import { cp, mkdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { imageCacheKey } from "./image-cache-key.mjs";
 
 export async function shareLighthouseImages(source, destination) {
-  for (const file of ["package-lock.json", "astro.config.mjs"]) {
-    const [from, to] = await Promise.all(
-      [source, destination].map((root) => readFile(path.join(root, file))),
-    );
-    if (!from.equals(to)) return "incompatible";
-  }
+  const [from, to] = await Promise.all(
+    [source, destination].map(imageCacheKey),
+  );
+  if (!from || from !== to) return "incompatible";
   const assets = path.join("node_modules", ".astro", "assets");
   try {
     await mkdir(path.join(destination, assets), { recursive: true });

@@ -97,7 +97,7 @@ test("pull-request builds share image assets without reusing rendered pages", ()
     "working-directory: .lighthouse-base",
   );
   const imageCacheIndex = pullRequestWorkflow.indexOf(
-    "name: Restore shared Astro image assets",
+    "name: Restore head Astro image assets",
   );
   const buildIndex = pullRequestWorkflow.indexOf("name: Build head revision");
 
@@ -127,7 +127,7 @@ test("pull-request builds share image assets without reusing rendered pages", ()
   assert.ok(baseBuildIndex < serverIndex);
   assert.match(
     pullRequestWorkflow,
-    /key:.*runner\.arch.*hashFiles\('package-lock.json', 'astro.config.mjs'\).*base\.sha/,
+    /key:.*runner\.arch.*steps\.head_image_toolchain.outputs.key.*base\.sha/,
   );
   assert.match(
     pullRequestWorkflow,

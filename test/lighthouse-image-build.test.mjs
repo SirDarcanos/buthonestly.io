@@ -83,7 +83,7 @@ test(
       );
       await writeFile(
         path.join(directory, "package-lock.json"),
-        "same fixture lockfile",
+        await readFile(path.join(project, "package-lock.json"), "utf8"),
       );
       await writeFile(
         path.join(directory, "astro.config.mjs"),
@@ -96,6 +96,15 @@ test(
     const cold = await build(main);
     assert.doesNotMatch(cold.output, /reused cache entry/);
     assert.match(cold.html, />withheld</);
+
+    const unrelatedUpdate = JSON.parse(
+      await readFile(path.join(otherPullRequest, "package-lock.json"), "utf8"),
+    );
+    unrelatedUpdate.packages["node_modules/smol-toml"].version = "99.0.0";
+    await writeFile(
+      path.join(otherPullRequest, "package-lock.json"),
+      JSON.stringify(unrelatedUpdate),
+    );
 
     for (const consumer of [head, otherPullRequest]) {
       assert.equal(await shareLighthouseImages(main, consumer), "shared");

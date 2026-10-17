@@ -46,15 +46,43 @@ jobs:
         working-directory: .lighthouse-base
         run: npm ci
 
-      - name: Restore shared Astro image assets
-        id: image_cache
+      - name: Identify head image toolchain
+        id: head_image_toolchain
         if: steps.pull_request_plan.outputs.selected == 'true'
+        run: node scripts/image-cache-key.mjs .
+
+      - name: Identify base image toolchain
+        id: base_image_toolchain
+        if: steps.pull_request_plan.outputs.selected == 'true'
+        run: node scripts/image-cache-key.mjs .lighthouse-base
+
+      - name: Restore base Astro image assets
+        id: base_image_cache
+        if: steps.pull_request_plan.outputs.selected == 'true' && steps.base_image_toolchain.outputs.key != ''
         uses: actions/cache/restore@v5
         with:
           path: node_modules/.astro/assets
-          key: ${{ runner.os }}-${{ runner.arch }}-astro-assets-v2-node24-main-${{ hashFiles('package-lock.json', 'astro.config.mjs') }}-${{ github.event.pull_request.base.sha }}
+          key: ${{ runner.os }}-${{ runner.arch }}-astro-assets-v3-main-${{ steps.base_image_toolchain.outputs.key }}-${{ github.event.pull_request.base.sha }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.arch }}-astro-assets-v2-node24-main-${{ hashFiles('package-lock.json', 'astro.config.mjs') }}-
+            ${{ runner.os }}-${{ runner.arch }}-astro-assets-v3-main-${{ steps.base_image_toolchain.outputs.key }}-
+
+      - name: Stage base image cache before restoring head
+        if: steps.pull_request_plan.outputs.selected == 'true'
+        run: |
+          if [ -d node_modules/.astro/assets ]; then
+            mkdir -p .lighthouse-base/node_modules/.astro
+            mv node_modules/.astro/assets .lighthouse-base/node_modules/.astro/
+          fi
+
+      - name: Restore head Astro image assets
+        id: image_cache
+        if: steps.pull_request_plan.outputs.selected == 'true' && steps.head_image_toolchain.outputs.key != ''
+        uses: actions/cache/restore@v5
+        with:
+          path: node_modules/.astro/assets
+          key: ${{ runner.os }}-${{ runner.arch }}-astro-assets-v3-main-${{ steps.head_image_toolchain.outputs.key }}-${{ github.event.pull_request.base.sha }}
+          restore-keys: |
+            ${{ runner.os }}-${{ runner.arch }}-astro-assets-v3-main-${{ steps.head_image_toolchain.outputs.key }}-
 
       - name: Build head revision
         if: steps.pull_request_plan.outputs.selected == 'true'
@@ -103,11 +131,14 @@ jobs:
       - name: Report image cache outcome
         if: always() && steps.pull_request_plan.outputs.selected == 'true'
         env:
-          IMAGE_CACHE_HIT: ${{ steps.image_cache.outputs.cache-hit }}
-          IMAGE_CACHE_KEY: ${{ steps.image_cache.outputs.cache-matched-key }}
+          HEAD_IMAGE_CACHE_HIT: ${{ steps.image_cache.outputs.cache-hit }}
+          HEAD_IMAGE_CACHE_KEY: ${{ steps.image_cache.outputs.cache-matched-key }}
+          BASE_IMAGE_CACHE_HIT: ${{ steps.base_image_cache.outputs.cache-hit }}
+          BASE_IMAGE_CACHE_KEY: ${{ steps.base_image_cache.outputs.cache-matched-key }}
         run: |
           {
-            printf '\n## Lighthouse build reuse\n\nTrusted main image-cache key: `%s` (empty means miss). Exact hit: `%s`. PRs restore only; successful main CI is the only producer.\n\n' "$IMAGE_CACHE_KEY" "$IMAGE_CACHE_HIT"
+            printf '\n## Lighthouse build reuse\n\nHead trusted main image-cache key: `%s` (empty means miss or disabled). Exact hit: `%s`.\n\n' "$HEAD_IMAGE_CACHE_KEY" "$HEAD_IMAGE_CACHE_HIT"
+            printf 'Base trusted main image-cache key: `%s` (empty means miss or disabled). Exact hit: `%s`.\n\nPRs restore only; successful main CI is the only producer.\n\n' "$BASE_IMAGE_CACHE_KEY" "$BASE_IMAGE_CACHE_HIT"
             printf 'Transfer size and restore duration are in the cache restore logs; phase timings are in the job steps. Both revisions rebuild pages and run fresh audits.\n\n'
             for revision in head base; do
               log="$RUNNER_TEMP/lighthouse-$revision-build.log"
