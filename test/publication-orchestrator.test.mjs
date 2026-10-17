@@ -140,6 +140,24 @@ test("Kit drafts and delivers the exact recorded broadcast with structured safe 
   );
 });
 
+test("Kit inspection distinguishes a missing broadcast from provider failures", async () => {
+  const missing = createKitPort({
+    apiKey: "secret",
+    fetch: async () =>
+      Response.json({ errors: ["Not Found"] }, { status: 404 }),
+  });
+  assert.equal(await missing.inspect(47), null);
+  await assert.rejects(missing.findDraft(essay("missing")), /HTTP 404/);
+
+  for (const status of [401, 403, 429, 503]) {
+    const unavailable = createKitPort({
+      apiKey: "secret",
+      fetch: async () => new Response("Unavailable", { status }),
+    });
+    await assert.rejects(unavailable.inspect(47), new RegExp(`HTTP ${status}`));
+  }
+});
+
 test("the deployment port rejects an unavailable hook response", async () => {
   const deployment = createDeploymentPort({
     hookUrl: "https://api.cloudflare.com/deploy",
@@ -316,7 +334,9 @@ const createHarness = ({
               inspect: async (broadcastId) => {
                 calls.kitInspections.push(broadcastId);
                 const statuses = kitStatuses[broadcastId] ?? [];
-                return { id: broadcastId, status: statuses.shift() ?? "draft" };
+                const status = statuses.length ? statuses.shift() : "draft";
+                if (status instanceof Error) throw status;
+                return status === null ? null : { id: broadcastId, status };
               },
               deliver: async (broadcastId, candidate, coverUrl, sendAt) => {
                 calls.kitDeliveries.push({
@@ -770,6 +790,130 @@ test("a live essay creates and persists one Kit draft without delivering it in t
     broadcastId: 701,
     status: "draft",
   });
+});
+
+test("a deleted Kit draft is reconciled and checkpointed before its replacement can send", async (context) => {
+  for (const matchingDraft of [null, { id: 611, status: "draft" }]) {
+    await context.test(
+      matchingDraft ? "reuse an existing replacement" : "create a replacement",
+      async () => {
+        const candidate = essay("deleted");
+        const initialState = {
+          version: 1,
+          essays: {
+            deleted: {
+              indexNow: { contentHash: candidate.publicContentHash },
+              newsletter: { broadcastId: 81, status: "draft" },
+            },
+            other: { newsletter: { broadcastId: 99, status: "delivered" } },
+          },
+        };
+        const productionVersions = () => ({
+          deleted: [
+            {
+              status: "reachable",
+              contentHash: candidate.publicContentHash,
+              coverUrl: "https://buthonestly.io/cover.webp",
+            },
+          ],
+        });
+        const first = createHarness({
+          now: new Date("2026-09-15T13:15:00Z"),
+          essays: [candidate],
+          initialState,
+          productionVersions: productionVersions(),
+          kitStatuses: { 81: [null] },
+          kitDraftMatch: matchingDraft,
+        });
+        const result = await runPublication(first.ports);
+        const replacementId = matchingDraft?.id ?? 701;
+        assert.deepEqual(result.errors, []);
+        assert.deepEqual(first.calls.kitInspections, [81]);
+        assert.deepEqual(first.calls.kitSearches, ["deleted"]);
+        assert.equal(first.calls.kitDrafts.length, matchingDraft ? 0 : 1);
+        assert.deepEqual(first.calls.kitDeliveries, []);
+        const saved = first.calls.saves.at(-1);
+        assert.deepEqual(saved.essays.deleted.newsletter, {
+          broadcastId: replacementId,
+          status: "draft",
+        });
+        assert.deepEqual(
+          saved.essays.deleted.indexNow,
+          initialState.essays.deleted.indexNow,
+        );
+        assert.deepEqual(saved.essays.other, initialState.essays.other);
+
+        const resumed = createHarness({
+          now: new Date("2026-09-15T13:15:00Z"),
+          essays: [candidate],
+          initialState: saved,
+          productionVersions: productionVersions(),
+          kitStatuses: { [replacementId]: ["draft"] },
+        });
+        await runPublication(resumed.ports);
+        assert.deepEqual(resumed.calls.kitDrafts, []);
+        assert.equal(resumed.calls.kitDeliveries.length, 1);
+        assert.equal(resumed.calls.kitDeliveries[0].broadcastId, replacementId);
+      },
+    );
+  }
+});
+
+test("Kit recovery fails closed for uncertain delivery and inspection failures", async (context) => {
+  for (const scenario of [
+    {
+      name: "missing delivery-requested broadcast",
+      recorded: "delivery-requested",
+      inspected: null,
+    },
+    {
+      name: "provider failure",
+      recorded: "draft",
+      inspected: new Error("Kit unavailable"),
+    },
+    {
+      name: "replacement checkpoint failure",
+      recorded: "draft",
+      inspected: null,
+      stateError: new Error("disk full"),
+    },
+  ]) {
+    await context.test(scenario.name, async () => {
+      const candidate = essay("blocked");
+      const { ports, calls } = createHarness({
+        now: new Date("2026-09-15T13:15:00Z"),
+        essays: [candidate],
+        initialState: {
+          version: 1,
+          essays: {
+            blocked: {
+              indexNow: { contentHash: candidate.publicContentHash },
+              newsletter: { broadcastId: 81, status: scenario.recorded },
+            },
+          },
+        },
+        productionVersions: {
+          blocked: [
+            {
+              status: "reachable",
+              contentHash: candidate.publicContentHash,
+              coverUrl: "https://buthonestly.io/cover.webp",
+            },
+          ],
+        },
+        kitStatuses: { 81: [scenario.inspected] },
+        stateError: scenario.stateError,
+      });
+      const result = await runPublication(ports);
+      assert.equal(result.errors.length, 1);
+      assert.deepEqual(calls.kitDeliveries, []);
+      if (!scenario.stateError) {
+        assert.deepEqual(calls.kitSearches, []);
+        assert.deepEqual(calls.kitDrafts, []);
+        assert.deepEqual(calls.saves, []);
+      }
+    });
+  }
 });
 
 test("a recorded Kit draft is inspected and delivered only from 13:15 UTC", async () => {

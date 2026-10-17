@@ -320,6 +320,13 @@ failed provider action remains pending while an independent success is
 preserved; rerun `publication.yml` manually to recover without repeating
 durably checkpointed work.
 
+If Kit returns 404 for a recorded draft, publication looks for another draft
+with the essay's marker and creates one only when none exists. Its identity is
+checkpointed before a later phase can send it. Other API errors stop recovery;
+a missing broadcast already marked `delivery-requested` requires manual
+reconciliation. Out-of-band sends and deletions after sending must also be
+reconciled before rerunning publication.
+
 > [!IMPORTANT]
 > `wrangler.toml` is git-ignored so the bucket names stay out of the public
 > repo. Deploying from a clone means recreating it, or setting the same R2
