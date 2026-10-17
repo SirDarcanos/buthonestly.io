@@ -182,8 +182,11 @@ export const createKitPort = ({
     });
     if (!response.ok) {
       const body = await response.text().catch(() => "");
-      throw new Error(
-        `Kit returned HTTP ${response.status}${body ? `: ${body}` : ""}`,
+      throw Object.assign(
+        new Error(
+          `Kit returned HTTP ${response.status}${body ? `: ${body}` : ""}`,
+        ),
+        { status: response.status },
       );
     }
     return response.json();
@@ -220,7 +223,14 @@ export const createKitPort = ({
         method: "POST",
         body: JSON.stringify(kitPayload(essay, coverUrl, null, templateId)),
       }),
-    inspect: (broadcastId) => callBroadcast(`${endpoint}/${broadcastId}`),
+    inspect: async (broadcastId) => {
+      try {
+        return await callBroadcast(`${endpoint}/${broadcastId}`);
+      } catch (error) {
+        if (error.status === 404) return null;
+        throw error;
+      }
+    },
     deliver: (broadcastId, essay, coverUrl, sendAt) =>
       callBroadcast(`${endpoint}/${broadcastId}`, {
         method: "PUT",

@@ -173,7 +173,27 @@ export async function runPublication({
         continue;
       }
 
-      if (!recorded?.broadcastId) {
+      let broadcast;
+      if (recorded?.broadcastId) {
+        try {
+          broadcast = await kit.inspect(recorded.broadcastId);
+        } catch (error) {
+          unfinished.add(essay.slug);
+          errors.push(
+            `Kit broadcast inspection failed: ${essay.slug} (${messageFrom(error)})`,
+          );
+          continue;
+        }
+        if (!broadcast && recorded.status !== "draft") {
+          unfinished.add(essay.slug);
+          errors.push(
+            `Kit broadcast is missing after delivery may have been requested: ${essay.slug} (${recorded.broadcastId}); reconcile manually before retrying`,
+          );
+          continue;
+        }
+      }
+
+      if (!broadcast) {
         let draft;
         try {
           draft = await kit.findDraft(essay);
@@ -217,17 +237,6 @@ export async function runPublication({
             `Kit draft state save failed: ${essay.slug} (${messageFrom(error)})`,
           );
         }
-        continue;
-      }
-
-      let broadcast;
-      try {
-        broadcast = await kit.inspect(recorded.broadcastId);
-      } catch (error) {
-        unfinished.add(essay.slug);
-        errors.push(
-          `Kit broadcast inspection failed: ${essay.slug} (${messageFrom(error)})`,
-        );
         continue;
       }
 

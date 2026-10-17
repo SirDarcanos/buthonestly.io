@@ -378,44 +378,70 @@ test("a related checkpoint rejects stale output after inventory changes", async 
   );
 });
 
-test("a publication checkpoint rebases across unrelated upstream work", async (testContext) => {
-  const root = createRepository(testContext);
-  commitFile(root, "data/publication-state.json", "{}\n");
-  const remote = createRemote(testContext, root);
-  const updater = mkdtempSync(path.join(tmpdir(), "checkpoint-fast-forward-"));
-  testContext.after(() => rmSync(updater, { recursive: true, force: true }));
-  git(updater, "clone", remote, ".");
-  git(updater, "config", "user.name", "Concurrent Author");
-  git(updater, "config", "user.email", "concurrent@example.com");
-  commitFile(updater, "unrelated.txt", "concurrent change\n");
-  git(updater, "push", "origin", "main");
-  writeFileSync(
-    path.join(root, "data/publication-state.json"),
-    '{"local":true}\n',
-  );
+test("a publication checkpoint rebases across unrelated upstream work", async (context) => {
+  for (const missingIdentity of [false, true]) {
+    await context.test(
+      missingIdentity
+        ? "without configured Git identity"
+        : "with configured Git identity",
+      async (testContext) => {
+        const root = createRepository(testContext);
+        commitFile(root, "data/publication-state.json", "{}\n");
+        const remote = createRemote(testContext, root);
+        const updater = mkdtempSync(
+          path.join(tmpdir(), "checkpoint-fast-forward-"),
+        );
+        testContext.after(() =>
+          rmSync(updater, { recursive: true, force: true }),
+        );
+        git(updater, "clone", remote, ".");
+        git(updater, "config", "user.name", "Concurrent Author");
+        git(updater, "config", "user.email", "concurrent@example.com");
+        commitFile(updater, "unrelated.txt", "concurrent change\n");
+        git(updater, "push", "origin", "main");
+        writeFileSync(
+          path.join(root, "data/publication-state.json"),
+          '{"local":true}\n',
+        );
 
-  const result = await checkpointGeneratedState({
-    profileName: "publication",
-    repositoryRoot: root,
-    openRemote: localRemote(remote),
-    log: () => {},
-  });
+        if (missingIdentity) {
+          git(root, "config", "user.name", "");
+          git(root, "config", "user.email", "");
+        }
 
-  assert.equal(result.changed, true);
-  assert.equal(
-    git(remote, "--git-dir", remote, "show", "main:unrelated.txt"),
-    "concurrent change",
-  );
-  assert.equal(
-    git(
-      remote,
-      "--git-dir",
-      remote,
-      "show",
-      "main:data/publication-state.json",
-    ),
-    '{"local":true}',
-  );
+        const result = await checkpointGeneratedState({
+          profileName: "publication",
+          repositoryRoot: root,
+          openRemote: localRemote(remote),
+          log: () => {},
+        });
+
+        assert.equal(result.changed, true);
+        assert.equal(
+          git(remote, "--git-dir", remote, "show", "main:unrelated.txt"),
+          "concurrent change",
+        );
+        assert.equal(
+          git(
+            remote,
+            "--git-dir",
+            remote,
+            "show",
+            "main:data/publication-state.json",
+          ),
+          '{"local":true}',
+        );
+        assert.equal(
+          git(root, "config", "user.name"),
+          missingIdentity ? "" : "Test Author",
+        );
+        assert.equal(
+          git(remote, "--git-dir", remote, "log", "-1", "--format=%cn <%ce>"),
+          "github-actions[bot] <github-actions[bot]@users.noreply.github.com>",
+        );
+      },
+    );
+  }
 });
 
 test("a checkpoint rejects rewritten upstream history", async (testContext) => {
