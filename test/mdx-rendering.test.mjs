@@ -62,6 +62,10 @@ test("MDX renders ordinary Markdown and the semantic content modules", (context)
   );
   assert.match(rich, /<summary[^>]*>Quick Summary<\/summary>/);
   assert.match(rich, /AI-generated summary based on the text of the article/);
+  assert.match(
+    rich,
+    /<a[^>]*href="\/artificial-intelligence-tools\/"[^>]*>\s*Read about how BUT\. Honestly uses AI\s*<\/a>/,
+  );
   assert.match(rich, /class="callout callout-tip"/);
   assert.match(rich, /class="callout callout-information"/);
   assert.match(rich, /class="callout callout-disclaimer"/);
