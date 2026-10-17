@@ -425,7 +425,8 @@
       "37d909c1a423c5118afd9fd1c67d5926f2f3741d45f759df8fbef62212f5e8c6"
     ],
     "creating-a-custom-add-to-cart-link-woocommerce": [
-      "c5e85c07695a207ce15e3533525c77a43064cd2c2b108f720220312472e3e00b"
+      "c5e85c07695a207ce15e3533525c77a43064cd2c2b108f720220312472e3e00b",
+      "ceb075bcd8fb8a2f31c524bbabc79abe110b373a42caab8ed60809fbf712a6ac"
     ],
     "delete-expired-coupons-automatically-woocommerce": [
       "8ccc38e9fc5a6f1c29c6631d785f35dbfde49d006cf446ce089ab86e7c78f03d"
@@ -581,13 +582,19 @@
       "status": "passed"
     },
     "mobile:/": {
-      "checkedAt": "2026-10-17T09:35:31.222Z",
-      "consecutivePasses": 15,
+      "checkedAt": "2026-10-17T10:06:51.969Z",
+      "consecutivePasses": 16,
       "openIssueNumber": null,
       "status": "passed"
     },
     "mobile:/buildings-never-were/": {
       "checkedAt": "2026-10-03T05:40:22.185Z",
+      "consecutivePasses": 1,
+      "openIssueNumber": null,
+      "status": "passed"
+    },
+    "mobile:/creating-a-custom-add-to-cart-link-woocommerce/": {
+      "checkedAt": "2026-10-17T10:06:51.969Z",
       "consecutivePasses": 1,
       "openIssueNumber": null,
       "status": "passed"
