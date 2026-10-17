@@ -76,22 +76,41 @@ PR builds cache npm downloads using both revisions' lockfiles; each revision sti
 runs `npm ci`. This is not a cache of installed dependencies.
 
 The image cache contains only `node_modules/.astro/assets`. After building head,
-`scripts/share-lighthouse-images.mjs` copies those assets to base when their
-lockfiles and Astro configurations match. Astro selects transforms by its
-generated asset names; its content store and rendered pages are never copied.
-Different toolchains skip sharing, and a missing cache leaves Astro to generate
-the images normally.
+`scripts/share-lighthouse-images.mjs` copies those assets to base when their image
+toolchains match. Astro selects transforms by its generated asset names; its
+content store and rendered pages are never copied. Unrelated dependency updates
+can share images even when their lockfiles differ. Changed image toolchains skip
+sharing, and a missing cache leaves Astro to generate the images normally.
 
-CI and Lighthouse use the same `astro-assets-v2-node24-main` namespace, keyed by
-OS, architecture and the hash of `package-lock.json` plus `astro.config.mjs`.
-Successful push CI builds on `main` save image assets under their commit SHA;
-failed builds and PR workflows never save them. CI and qualifying Lighthouse PRs
-restore only within that exact toolchain prefix, with no broader fallback.
-Lighthouse first requests the base SHA using the head toolchain, then the latest
-compatible main cache. GitHub's default-branch cache visibility makes these
-entries available to separate PRs, including forks, without privileged triggers
-or credentials. Dependency, configuration, component, layout, styling and content
-changes keep their existing route-selection rules.
+`scripts/image-cache-key.mjs` fingerprints the locked Astro package, the Sharp
+package resolved from Astro, and Sharp's transitive runtime and optional native
+dependencies, including libvips. Package versions, integrity hashes and resolved
+dependency relationships matter; unrelated packages, lockfile ordering and npm
+hoisting paths do not. The runner's native binding and any separate libvips
+package must be identifiable; optional packages for other platforms may be absent.
+The fingerprint also includes Node's major version and `astro.config.mjs`.
+Configuration changes still
+invalidate conservatively. This targets the site's built-in Sharp service;
+adopting a custom image service requires extending the compatibility inputs.
+Unsupported or incomplete toolchains disable image-cache restore, saving and
+sharing without blocking a fresh build.
+
+CI and Lighthouse use the same `astro-assets-v3-main` namespace, keyed by OS,
+architecture and that fingerprint. Successful push CI builds on `main` save image
+assets under their commit SHA; failed builds and PR workflows never save them.
+CI and qualifying Lighthouse PRs restore only within that exact toolchain prefix,
+with no broader fallback. The v3 namespace starts cold until successful main CI
+seeds it; old whole-lockfile v2 entries are not restored.
+
+Lighthouse restores head and base independently, requesting the base SHA with
+each revision's own toolchain before trying the latest compatible main entry.
+A Sharp update can therefore regenerate head images while base stays warm.
+Both restores use the same literal path as CI because GitHub includes cache paths
+in its cache-version identity. Base assets are moved into its checkout before
+head's restore, so incompatible toolchains never mix. GitHub's default-branch
+cache visibility makes entries available to separate PRs, including forks, without
+privileged triggers or credentials. Dependency, configuration, component, layout,
+styling and content changes keep their existing route-selection rules.
 
 The main cache is immutable. Missing or changed source images and transform
 options generate their own variants, as do scheduled-preview images absent from
@@ -102,10 +121,13 @@ No scheduled maintenance or retention/billing changes are introduced.
 
 `test/lighthouse-image-build.test.mjs` builds small Astro fixtures through the
 installed CLI. Two independent consumer checkouts receive assets directly from a
-production fixture. It also checks changed image bytes and transform options,
-regeneration after cache removal, and fresh preview/publication-boundary markup
-with warmed images. Workflow tests check matching toolchain prefixes and the
-main-only save condition. These protect local behavior; they do not demonstrate
+production fixture, including one with an unrelated lockfile change. It also
+checks changed image bytes and transform options, regeneration after cache
+removal, and fresh preview/publication-boundary markup with warmed images.
+Fingerprint tests cover Astro, Sharp, native-library completeness, nested
+resolution, unchanged packages moving between hoisted/nested locations, and
+unsupported inputs. Workflow tests check matching toolchain
+prefixes, independent base staging and the main-only save condition. These protect local behavior; they do not demonstrate
 GitHub cache visibility or provide a representative CI performance benchmark.
 
 Both revisions always rebuild, including the Markdown alternatives. Selected
@@ -113,7 +135,7 @@ scheduled-preview slugs (or the legacy base fallback) and current publication
 state are therefore evaluated on every run. Production `dist/` artifacts and
 browser measurements are not reused. The job exposes separate install, cache,
 head build, sharing, base build, server startup and audit timings, and reports
-the matched cache key, exact-hit status and per-revision generated/reused/
+each revision's matched cache key, exact-hit status and generated/reused/
 revalidated transformation counts (partial if a build fails). Restore logs record
 transfer size and distinguish prefix hits from misses. Build logs and audit
 reports are retained together for 90 days.
@@ -129,10 +151,12 @@ Live cross-PR verification remains pending. After this workflow reaches `main`:
    revalidated counts for both revisions. Confirm the matched entry's cache
    metadata points to `main`, not either PR's merge ref. A prefix restore is valid;
    an exact hit is not required.
-3. Include changed image bytes/options and an incompatible toolchain or missing
-   cache. Confirm fresh variants or a cold build, with passing CI, production
-   verification and preview/publication-boundary regressions. A new toolchain
-   remains cold until a successful main build seeds its namespace.
+3. Include an unrelated dependency update and confirm image reuse. For changed
+   image bytes/options, confirm only the required variants regenerate. For an
+   image-toolchain change, confirm head builds cold but base can restore its own
+   compatible cache. A missing entry still falls back to generation. CI,
+   production verification and preview/publication-boundary regressions must pass.
+   A new image toolchain remains cold until successful main CI seeds its namespace.
 
 The historical measurements below cover PR #76's previous PR-scoped cache,
 not the trusted-main rollout; they do not satisfy the two-PR criterion in #80.
