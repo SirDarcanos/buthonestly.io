@@ -278,7 +278,7 @@
     "what-if-wordpress-wasnt-gpl": {
       "newsletter": {
         "broadcastId": 26457295,
-        "status": "draft"
+        "status": "delivery-requested"
       },
       "indexNow": {
         "contentHash": "4db70fa59a674723620b17bf369d74449f7f4b457c62c71856cfa331c60c315b"
