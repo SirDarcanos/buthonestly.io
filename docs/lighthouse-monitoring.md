@@ -70,6 +70,61 @@ Each workflow writes concise metrics and deltas to its GitHub Actions summary. L
 
 Run `npm run lighthouse:smoke` to build the production site, serve it locally, and perform one bounded real-browser mobile navigation audit. The opt-in smoke writes HTML and JSON reports under `artifacts/lighthouse-smoke/`; it is not part of the network-independent unit-test suite.
 
+## Pull-request build performance
+
+PR builds cache npm downloads using both revisions' lockfiles; each revision still
+runs `npm ci`. This is not a cache of installed dependencies.
+
+The image cache contains only `node_modules/.astro/assets`. After building head,
+`scripts/share-lighthouse-images.mjs` copies those assets to base when their
+lockfiles and Astro configurations match. Base-only variants are merged back
+before the cache is saved. Astro selects transforms by its generated asset names;
+its content store and rendered pages are never copied. Different toolchains skip
+sharing, and a missing cache leaves Astro to generate the images normally.
+
+Persistent cache keys include OS, architecture, head lockfile/configuration and
+head revision. Prefix restores reuse image assets within that toolchain without
+coupling the cache to a particular head/base pair. A later head revision saves the
+expanded set; an exact-key hit is immutable and may need to regenerate variants
+introduced only by a different base or preview selection.
+
+`test/lighthouse-image-build.test.mjs` builds two small Astro fixtures through the
+installed CLI. It checks cross-checkout reuse, changed image bytes and transform
+options, regeneration after cache removal, and fresh preview/publication-boundary
+markup with warmed images. This protects the sharing mechanism; it is not a
+representative CI performance benchmark.
+
+Both revisions always rebuild, including the Markdown alternatives. Selected
+scheduled-preview slugs (or the legacy base fallback) and current publication
+state are therefore evaluated on every run. Production `dist/` artifacts and
+browser measurements are not reused. The job exposes separate install, cache,
+head build, sharing, base build, server startup and audit timings, and reports
+exact cache-hit status; restore logs distinguish prefix hits from misses.
+
+### Observed baseline and remaining measurements
+
+Before this change, Actions run [38916845068](https://github.com/SirDarcanos/buthonestly.io/actions/runs/38916845068)
+(2026-10-16) missed the combined image cache: head/base installation took
+16s/11s, cache lookup 1s, builds plus server startup 17m49s, and audits 3m23s.
+The Astro build logs show 8m52s for head and 8m51s for base.
+
+Run [39009026530](https://github.com/SirDarcanos/buthonestly.io/actions/runs/39009026530)
+(2026-10-17) hit the exact combined image-cache key: head/base installation
+took 11s/6s, restoration 3s for about 200 MB, builds plus startup 15s, and audits
+2m34s. Astro reported 5.67s/5.80s builds. These are different PRs and route sets,
+not a controlled before/after comparison. Neither run separates startup from
+build time or uses npm download caching.
+
+Full-page artifact caching is not enabled: a warm pair of builds costs only 15s,
+and transfer/storage overhead has not been measured against that saving. Such
+reuse would also need exact source, toolchain, preview and effective publication
+state identity. Image sharing targets the duplicated cold transformation work
+without introducing those page-staleness risks.
+
+Issue #62 remains pending representative post-change cold/warm PR runs and exact
+reruns. Record step timings, cache keys/hit outcomes, transfer size, and generated
+content before claiming a CI speedup or deciding on full-build artifact reuse.
+
 ## Field data
 
 Monthly reporting queries CrUX with a narrowly scoped `CRUX_API_KEY` and presents the result beside the Search Console aggregate report without treating it as Search Console data.
