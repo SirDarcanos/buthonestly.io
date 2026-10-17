@@ -13,39 +13,82 @@ function resolveLockedPackage(packages, name, from = "") {
   }
 }
 
+function hasNativeSharp(packages, sharp) {
+  if (!["darwin", "linux", "win32"].includes(process.platform)) return false;
+  const platform =
+    process.platform === "linux" &&
+    !process.report.getReport().header.glibcVersionRuntime
+      ? "linuxmusl"
+      : process.platform;
+  const bindingName = `@img/sharp-${platform}-${process.arch}`;
+  const entry = packages[sharp];
+  if (
+    !(bindingName in { ...entry.dependencies, ...entry.optionalDependencies })
+  )
+    return false;
+  const binding = resolveLockedPackage(packages, bindingName, sharp);
+  if (!binding) return false;
+  const libraryName = `@img/sharp-libvips-${platform}-${process.arch}`;
+  const libraryDeclared =
+    libraryName in
+    {
+      ...packages[binding].dependencies,
+      ...packages[binding].optionalDependencies,
+    };
+  if (!libraryDeclared) return process.platform === "win32";
+  return Boolean(resolveLockedPackage(packages, libraryName, binding));
+}
+
 function imagePackages(lock) {
   if (lock?.lockfileVersion !== 3 || !lock.packages) return null;
   const packages = lock.packages;
   const astro = resolveLockedPackage(packages, "astro");
   if (!astro) return null;
   const sharp = resolveLockedPackage(packages, "sharp", astro);
-  if (!sharp) return null;
-  const selected = new Map();
+  if (!sharp || !hasNativeSharp(packages, sharp)) return null;
 
-  function collect(location, dependencies = true) {
-    if (selected.has(location)) return true;
+  function describe(
+    name,
+    location,
+    ancestors = new Set(),
+    includeDependencies = true,
+  ) {
+    if (ancestors.has(location)) return null;
     const entry = packages[location];
-    if (!entry?.version || !entry.integrity || entry.link) return false;
-    selected.set(location, {
+    if (!entry?.version || !entry.integrity || entry.link) return null;
+    const dependencies = [];
+    if (includeDependencies) {
+      const required = Object.keys(entry.dependencies ?? {});
+      const optional = Object.keys(entry.optionalDependencies ?? {});
+      const parents = new Set([...ancestors, location]);
+      for (const dependencyName of [
+        ...new Set([...required, ...optional]),
+      ].sort()) {
+        const dependency = resolveLockedPackage(
+          packages,
+          dependencyName,
+          location,
+        );
+        if (!dependency) {
+          if (optional.includes(dependencyName)) continue;
+          return null;
+        }
+        const identity = describe(dependencyName, dependency, parents);
+        if (!identity) return null;
+        dependencies.push(identity);
+      }
+    }
+    return {
+      name,
       version: entry.version,
       integrity: entry.integrity,
-    });
-    if (!dependencies) return true;
-    const required = Object.keys(entry.dependencies ?? {});
-    const optional = Object.keys(entry.optionalDependencies ?? {});
-    for (const name of new Set([...required, ...optional])) {
-      const dependency = resolveLockedPackage(packages, name, location);
-      if (!dependency) {
-        if (optional.includes(name)) continue;
-        return false;
-      }
-      if (!collect(dependency)) return false;
-    }
-    return true;
+      dependencies,
+    };
   }
 
-  if (!collect(astro, false) || !collect(sharp)) return null;
-  return [...selected].sort(([left], [right]) => left.localeCompare(right));
+  const astroIdentity = describe("astro", astro, new Set(), false);
+  const sharpIdentity = describe("sharp", sharp);
+  return astroIdentity && sharpIdentity ? [astroIdentity, sharpIdentity] : null;
 }
 
 export async function imageCacheKey(root) {

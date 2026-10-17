@@ -8,6 +8,13 @@ import { shareLighthouseImages } from "../scripts/share-lighthouse-images.mjs";
 import { imageCacheKey } from "../scripts/image-cache-key.mjs";
 
 const assets = "node_modules/.astro/assets";
+const platform =
+  process.platform === "linux" &&
+  !process.report.getReport().header.glibcVersionRuntime
+    ? "linuxmusl"
+    : process.platform;
+const nativeBinding = `@img/sharp-${platform}-${process.arch}`;
+const nativeLibrary = `@img/sharp-libvips-${platform}-${process.arch}`;
 const imageLock = () => ({
   lockfileVersion: 3,
   packages: {
@@ -20,15 +27,15 @@ const imageLock = () => ({
       version: "0.35.4",
       integrity: "sharp",
       dependencies: { "detect-libc": "^2.1.2" },
-      optionalDependencies: { "@img/sharp-linux-x64": "0.35.4" },
+      optionalDependencies: { [nativeBinding]: "0.35.4" },
     },
     "node_modules/detect-libc": { version: "2.1.2", integrity: "libc" },
-    "node_modules/@img/sharp-linux-x64": {
+    [`node_modules/${nativeBinding}`]: {
       version: "0.35.4",
       integrity: "binary",
-      optionalDependencies: { "@img/sharp-libvips-linux-x64": "1.3.3" },
+      optionalDependencies: { [nativeLibrary]: "1.3.3" },
     },
-    "node_modules/@img/sharp-libvips-linux-x64": {
+    [`node_modules/${nativeLibrary}`]: {
       version: "1.3.3",
       integrity: "libvips",
     },
@@ -120,8 +127,8 @@ for (const name of [
   "astro",
   "sharp",
   "detect-libc",
-  "@img/sharp-linux-x64",
-  "@img/sharp-libvips-linux-x64",
+  nativeBinding,
+  nativeLibrary,
 ]) {
   test(`changes to ${name} invalidate image sharing`, async (t) => {
     const [head, base] = await revisions(t);
@@ -164,6 +171,66 @@ for (const corrupt of [
     assert.equal(await shareLighthouseImages(head, base), "incompatible");
   });
 }
+
+for (const name of [nativeBinding, nativeLibrary]) {
+  test(`missing ${name} disables workflow caching and sharing`, async (t) => {
+    const [head, base] = await revisions(t);
+    const lock = imageLock();
+    delete lock.packages[`node_modules/${name}`];
+    await writeLock(head, lock);
+    await writeLock(base, lock);
+    assert.equal(await imageCacheKey(head), null);
+    assert.equal(await shareLighthouseImages(head, base), "incompatible");
+    const output = path.join(head, "github-output");
+    execFileSync(
+      process.execPath,
+      [
+        new URL("../scripts/image-cache-key.mjs", import.meta.url).pathname,
+        head,
+      ],
+      { env: { ...process.env, GITHUB_OUTPUT: output } },
+    );
+    assert.equal(await readFile(output, "utf8"), "key=\n");
+  });
+}
+
+for (const name of ["sharp", "detect-libc"]) {
+  test(`relocating identical ${name} leaves image compatibility unchanged`, async (t) => {
+    const [head, base] = await revisions(t);
+    const lock = imageLock();
+    const destination =
+      name === "sharp"
+        ? "node_modules/astro/node_modules/sharp"
+        : "node_modules/sharp/node_modules/detect-libc";
+    lock.packages[destination] = lock.packages[`node_modules/${name}`];
+    lock.packages[`node_modules/${name}`] = {
+      version: "99.0.0",
+      integrity: "unrelated-root",
+    };
+    await writeLock(head, lock);
+    assert.equal(await shareLighthouseImages(head, base), "shared");
+  });
+}
+
+test("optional packages for other platforms may be absent", async (t) => {
+  const [head, base] = await revisions(t);
+  const lock = imageLock();
+  lock.packages["node_modules/sharp"].optionalDependencies[
+    "@img/sharp-other-platform"
+  ] = "0.35.4";
+  await writeLock(head, lock);
+  assert.equal(await shareLighthouseImages(head, base), "shared");
+});
+
+test("cyclic runtime dependency graphs disable caching", async (t) => {
+  const [head, base] = await revisions(t);
+  const lock = imageLock();
+  lock.packages["node_modules/detect-libc"].dependencies = { sharp: "^0.35.4" };
+  await writeLock(head, lock);
+  await writeLock(base, lock);
+  assert.equal(await imageCacheKey(head), null);
+  assert.equal(await shareLighthouseImages(head, base), "incompatible");
+});
 
 test("cache keys ignore lockfile ordering and unrelated package metadata", async (t) => {
   const [head, base] = await revisions(t);

@@ -84,9 +84,12 @@ sharing, and a missing cache leaves Astro to generate the images normally.
 
 `scripts/image-cache-key.mjs` fingerprints the locked Astro package, the Sharp
 package resolved from Astro, and Sharp's transitive runtime and optional native
-dependencies, including libvips. Package versions and integrity hashes matter;
-unrelated dependencies and lockfile ordering do not. The fingerprint also
-includes Node's major version and `astro.config.mjs`. Configuration changes still
+dependencies, including libvips. Package versions, integrity hashes and resolved
+dependency relationships matter; unrelated packages, lockfile ordering and npm
+hoisting paths do not. The runner's native binding and any separate libvips
+package must be identifiable; optional packages for other platforms may be absent.
+The fingerprint also includes Node's major version and `astro.config.mjs`.
+Configuration changes still
 invalidate conservatively. This targets the site's built-in Sharp service;
 adopting a custom image service requires extending the compatibility inputs.
 Unsupported or incomplete toolchains disable image-cache restore, saving and
@@ -121,8 +124,9 @@ installed CLI. Two independent consumer checkouts receive assets directly from a
 production fixture, including one with an unrelated lockfile change. It also
 checks changed image bytes and transform options, regeneration after cache
 removal, and fresh preview/publication-boundary markup with warmed images.
-Fingerprint tests cover Astro, Sharp, native libraries, nested dependency
-resolution and unsupported inputs. Workflow tests check matching toolchain
+Fingerprint tests cover Astro, Sharp, native-library completeness, nested
+resolution, unchanged packages moving between hoisted/nested locations, and
+unsupported inputs. Workflow tests check matching toolchain
 prefixes, independent base staging and the main-only save condition. These protect local behavior; they do not demonstrate
 GitHub cache visibility or provide a representative CI performance benchmark.
 
