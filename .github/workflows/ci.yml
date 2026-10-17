@@ -22,14 +22,19 @@ jobs:
 
       - run: npm ci
 
+      - name: Identify image toolchain
+        id: image_toolchain
+        run: node scripts/image-cache-key.mjs .
+
       - name: Restore trusted main image assets
         id: image_cache
+        if: steps.image_toolchain.outputs.key != ''
         uses: actions/cache/restore@v5
         with:
           path: node_modules/.astro/assets
-          key: ${{ runner.os }}-${{ runner.arch }}-astro-assets-v2-node24-main-${{ hashFiles('package-lock.json', 'astro.config.mjs') }}-${{ github.sha }}
+          key: ${{ runner.os }}-${{ runner.arch }}-astro-assets-v3-main-${{ steps.image_toolchain.outputs.key }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.arch }}-astro-assets-v2-node24-main-${{ hashFiles('package-lock.json', 'astro.config.mjs') }}-
+            ${{ runner.os }}-${{ runner.arch }}-astro-assets-v3-main-${{ steps.image_toolchain.outputs.key }}-
 
       - name: Test failure detection
         run: npm test
@@ -44,7 +49,7 @@ jobs:
         run: npm run build
 
       - name: Save trusted main image assets
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.image_cache.outputs.cache-hit != 'true'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.image_toolchain.outputs.key != '' && steps.image_cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v5
         with:
           path: node_modules/.astro/assets
