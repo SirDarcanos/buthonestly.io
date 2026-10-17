@@ -70,6 +70,104 @@ Each workflow writes concise metrics and deltas to its GitHub Actions summary. L
 
 Run `npm run lighthouse:smoke` to build the production site, serve it locally, and perform one bounded real-browser mobile navigation audit. The opt-in smoke writes HTML and JSON reports under `artifacts/lighthouse-smoke/`; it is not part of the network-independent unit-test suite.
 
+## Pull-request build performance
+
+PR builds cache npm downloads using both revisions' lockfiles; each revision still
+runs `npm ci`. This is not a cache of installed dependencies.
+
+The image cache contains only `node_modules/.astro/assets`. After building head,
+`scripts/share-lighthouse-images.mjs` copies those assets to base when their
+lockfiles and Astro configurations match. Base-only variants are merged back
+before the cache is saved. Astro selects transforms by its generated asset names;
+its content store and rendered pages are never copied. Different toolchains skip
+sharing, and a missing cache leaves Astro to generate the images normally.
+
+Persistent cache keys include OS, architecture, head lockfile/configuration and
+head revision. Prefix restores reuse image assets within that toolchain without
+coupling the cache to a particular head/base pair. A later head revision saves the
+expanded set; an exact-key hit is immutable and may need to regenerate variants
+introduced only by a different base or preview selection.
+
+`test/lighthouse-image-build.test.mjs` builds two small Astro fixtures through the
+installed CLI. It checks cross-checkout reuse, changed image bytes and transform
+options, regeneration after cache removal, and fresh preview/publication-boundary
+markup with warmed images. This protects the sharing mechanism; it is not a
+representative CI performance benchmark.
+
+Both revisions always rebuild, including the Markdown alternatives. Selected
+scheduled-preview slugs (or the legacy base fallback) and current publication
+state are therefore evaluated on every run. Production `dist/` artifacts and
+browser measurements are not reused. The job exposes separate install, cache,
+head build, sharing, base build, server startup and audit timings, and reports
+exact cache-hit status; restore logs distinguish prefix hits from misses.
+
+### Observed baseline and remaining measurements
+
+Before this change, Actions run [38916845068](https://github.com/SirDarcanos/buthonestly.io/actions/runs/38916845068)
+(2026-10-16) missed the combined image cache: head/base installation took
+16s/11s, cache lookup 1s, builds plus server startup 17m49s, and audits 3m23s.
+The Astro build logs show 8m52s for head and 8m51s for base.
+
+Run [39009026530](https://github.com/SirDarcanos/buthonestly.io/actions/runs/39009026530)
+(2026-10-17) hit the exact combined image-cache key: head/base installation
+took 11s/6s, restoration 3s for about 200 MB, builds plus startup 15s, and audits
+2m34s. Astro reported 5.67s/5.80s builds. These are different PRs and route sets,
+not a controlled before/after comparison. Neither run separates startup from
+build time or uses npm download caching.
+
+Full-page artifact caching is not enabled: a warm pair of builds costs only 15s,
+and transfer/storage overhead has not been measured against that saving. Such
+reuse would also need exact source, toolchain, preview and effective publication
+state identity. Image sharing targets the duplicated cold transformation work
+without introducing those page-staleness risks.
+
+### Post-change cold run and exact rerun
+
+[PR #76](https://github.com/SirDarcanos/buthonestly.io/pull/76) measured commit
+`f1ce51731399bfde70477b9045246e8e0d0f96a6` on `ubuntu-latest` with Node 24.
+An unused temporary JSON fixture under `src/lib/` selected the existing full
+Lighthouse matrix without changing rendered output; it was removed after the
+measurement. Monitoring-only changes otherwise correctly skip the audits.
+
+[Attempt 1](https://github.com/SirDarcanos/buthonestly.io/actions/runs/39010629159/attempts/1)
+missed the new image cache.
+[Exact attempt 2](https://github.com/SirDarcanos/buthonestly.io/actions/runs/39010629159/attempts/2)
+restored its primary key. Both attempts passed, including the full audit matrix.
+
+| Phase (step wall time)                      | Cold images | Exact warm rerun |
+| ------------------------------------------- | ----------: | ---------------: |
+| Node setup / npm download-cache restoration |          3s |               8s |
+| Head dependency installation                |         12s |              12s |
+| Base dependency installation                |         12s |              11s |
+| Image-cache restoration                     |        miss |      3s / ~92 MB |
+| Head build, including postbuild             |        532s |              10s |
+| Head → base image sharing                   |          1s |               1s |
+| Base build, including postbuild             |         10s |              10s |
+| Base → head image merge                     |          2s |               1s |
+| Server startup                              |          7s |               8s |
+| Audits                                      |        208s |             207s |
+
+The cold head generated 2,557 image transforms; base reused all 2,557 and generated
+zero. The exact rerun reused all 2,557 in each revision and generated zero. Both
+sharing steps reported `shared`. Astro's own build timers (excluding npm and
+postbuild overhead) were 8m50s/8.19s cold and 8.08s/8.05s warm. Both attempts
+restored an existing ~142 MB npm download cache and still installed dependencies.
+
+Each revision built 94 pages and 53 Markdown alternatives in both attempts. The
+logged sets of 2,557 image asset names and 93 HTML route paths matched between
+attempts for each revision; these are inventory comparisons, not byte-level page
+comparisons. Regression tests separately protect image invalidation and
+preview/publication freshness.
+
+This is one cold run and one exact rerun, not a trend, a billing estimate, or a
+controlled old/new workflow benchmark. It directly demonstrates removal of the
+second cold image-transformation pass. Historical old-workflow timings above
+remain different PRs and route sets; no percentage pipeline-speedup claim is made.
+Further representative PRs, particularly differing toolchains and scheduled
+previews, can extend the evidence before issue acceptance. Full-page artifact
+transfer/storage overhead remains unmeasured; the warm pair still rebuilds in
+20s, so full-build caching remains disabled.
+
 ## Field data
 
 Monthly reporting queries CrUX with a narrowly scoped `CRUX_API_KEY` and presents the result beside the Search Console aggregate report without treating it as Search Console data.
