@@ -226,8 +226,8 @@ test("committed reporting configuration reviews every Essay, Brand rule, and red
   const redirects = readFileSync("public/_redirects", "utf8");
 
   assert.equal(configuration.version, 1);
-  assert.equal(configuredEssays.length, 50);
-  assert.equal(new Set(configuredEssays).size, 50);
+  assert.equal(configuredEssays.length, 51);
+  assert.equal(new Set(configuredEssays).size, 51);
   assert.deepEqual(
     configuredEssays.sort(),
     inventory.essays.map(({ slug }) => slug).sort(),

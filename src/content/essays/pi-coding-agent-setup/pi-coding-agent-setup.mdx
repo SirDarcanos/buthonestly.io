@@ -1,0 +1,212 @@
+---
+title: "My Pi Coding Agent Setup: Extensions, Skills, and Models"
+date: 2026-11-03
+updated:
+sticky: false
+cornerstone: false
+excerpt: I wanted to direct coding agents without reviewing every line. Here’s the Pi setup, workflow skills, and extensions I use to build my sites and apps.
+seoDescription: "My Pi coding agent setup: extensions, workflow skills, planning and coding models, Ollama, and the changes I made after leaving Claude Code."
+newsletterIntro: |-
+  I want to decide what an app should do, work through the plan, and let coding agents handle more of the implementation. That preference has shaped both the tools I use and the workflow skills I’ve built.
+
+  This essay walks through my Pi setup, from planning and coding models to extensions and local models through Ollama. I explain what changed before I left Claude Code, why Pi appealed to me, and what I still test myself before releasing anything.
+categories:
+  - Programming
+tags:
+  - AI
+  - Workflow
+  - Automation
+cover: ./pi-coding-agent-setup-cover.jpg
+coverAlt: Pi terminal showing a conversation about workflow skills, compact tool output, and a background subagent task list.
+coverCaption:
+audio: pi-coding-agent-setup.mp3
+---
+
+import Figure from "../../../components/content/Figure.astro";
+import QuickSummary from "../../../components/content/QuickSummary.astro";
+import Blockquote from "../../../components/content/Blockquote.astro";
+import WrittenOnly from "../../../components/content/WrittenOnly.astro";
+import NarrationOnly from "../../../components/content/NarrationOnly.astro";
+import piAgentWorkingOnSkills from "./pi-agent-working-on-skills.jpg";
+import piLogo from "./pi-logo.webp";
+import piChatBubbles from "./pi-chat-bubbles-and-tool-output.jpg";
+
+<QuickSummary>
+
+- I use Pi with Astra on High for planning and Sol on Medium for implementation.
+- Pi’s minimal, open-source setup lets me install only what I need and change it myself.
+- My workflow skills take work from an agreed idea through GitHub specifications and tickets to implementation.
+- Extensions provide subagents, background tasks, a clearer interface, and pruning of older tool output.
+- I use Ollama for local model consultations and Nimble integrations, and still test changes myself before release.
+
+</QuickSummary>
+
+I use [Pi](https://pi.dev/) for AI-assisted development. It runs in my terminal, where I can ask an agent to read a project, change code, and run checks.
+
+Around it, I’ve put together a setup that suits how I want to work: discuss what I’m trying to build, approve a plan, and let agents handle the implementation. I still test the result myself before releasing it.
+
+This is my setup as of October 2026:
+
+<WrittenOnly>
+
+| Purpose | What I Use | What It Does in My Workflow |
+| --- | --- | --- |
+| Coding environment | [Pi](https://pi.dev/) | Where I work with coding agents |
+| Planning | OpenAI Astra, High thinking effort | Work through ideas and prepare implementation plans |
+| Implementation | OpenAI Sol, Medium thinking effort | Carry out the agreed work |
+| Workflow | [My Agent Skills collection](https://github.com/SirDarcanos/agentskills), GitHub | Reusable agent instructions, specifications, and tickets |
+| Delegation and background work | [pi-subagents](https://github.com/nicobailon/pi-subagents), [pi-background-tasks](https://github.com/ismailsaleekh/pi-background-tasks) | Separate agents for reviews and parallel work; tasks that run in the background |
+| Interface | [pi-open-tui](https://github.com/OldSuns/pi-open-tui), neutral-panels theme, [pi-chat-bubbles](https://github.com/SirDarcanos/pi-chat-bubbles), [pi-compact-tools](https://github.com/nedleeds/pi-compact-tools) | Make conversations and tool output easier to follow |
+| Context pruning | [pi-nimble-compact](https://github.com/SirDarcanos/pi-nimble-compact) | Trim older tool output from the context sent to the model |
+| Local models | [Ollama](https://ollama.com/) | Run Nimble and Clef for focused questions, with occasional use of Gemma and Qwen |
+| Terminal and editor | [Ghostty](https://ghostty.org/), [VS Code](https://code.visualstudio.com/) | Run Pi in Ghostty; open VS Code when I write code manually |
+
+</WrittenOnly>
+
+<NarrationOnly>
+
+I use Pi as my coding environment, with OpenAI Astra on High for planning and Sol on Medium for implementation. My Agent Skills collection provides the workflow instructions, and I keep specifications and tickets in GitHub.
+
+Extensions give me subagents and background tasks, change how the interface looks, and prune older tool output from the model’s context.
+
+For local models, I use Ollama, most often with Nimble and Clef, and occasionally with Gemma and Qwen. I run Pi in Ghostty and open VS Code when I write code manually.
+
+</NarrationOnly>
+
+<Figure src={piAgentWorkingOnSkills} alt="Pi running in Ghostty, with loaded skills and extensions, a work-on request for issue 140, compact tool output, and an agent reply.">
+  An agent working on my skills collection. The interface shows the loaded skills and extensions above the conversation.
+</Figure>
+
+Some of these are community packages. Others, including my workflow skills and [pi-chat-bubbles](https://github.com/SirDarcanos/pi-chat-bubbles), are things I built around frustrations I kept running into.
+
+## What I Changed Before Leaving Claude Code
+
+When I started using Claude Code, I knew very little about context management. I regularly used High or higher thinking effort and kept going in the same session. When it filled up, I let the agent compact the conversation and carried on.
+
+Matt Pocock’s [AI Coding Crash Course](https://www.aihero.dev/workshops/ai-coding-crash-course) helped me understand what I was asking the agent to work with. His “smart zone / dumb zone” framing gave me a way to think about when a session had become too crowded to keep working well.
+
+I started looking through my setup. I had tools and MCP servers configured that I rarely used, or only needed for particular projects. I removed the unnecessary ones and began following a more structured workflow.
+
+I noticed that sessions lasted longer. I also began ending weeks with 50–60% of my allowance remaining on my $200 Claude plan. Later, I saw similar results on my $200 OpenAI plan. Those were the allowances reported by the services, not measurements of how many tokens I had saved.
+
+These changes started while I was still using Claude Code. Learning how to manage the session and organize the work had already helped before I tried Pi.
+
+## Why I Switched to Pi
+
+I came across [Pi](https://pi.dev/) and decided to try it. Its startup context was roughly 20,000–30,000 tokens smaller than the Claude Code setup I had been using. That was a comparison between my two configured environments, but the difference caught my attention.
+
+<div class="mx-auto my-8 w-24 [&_figure]:m-0 [&_img]:border-0 [&_img]:p-0">
+  <Figure src={piLogo} alt="Pi logo in coral, blue, and yellow." />
+</div>
+
+<Blockquote author="Pi" source="https://pi.dev/">
+
+There are many agent harnesses<br />
+but this one is yours.
+
+</Blockquote>
+
+I also liked how bare-bones Pi was. I could install only what I needed and leave the rest out. Being [open source](/how-to-choose-a-software-license-for-your-next-project/) mattered too: I could inspect the code and extend or improve it myself. That fits with [Automattic’s commitment to open source](https://automattic.com/creed/), which I share.
+
+The move also changed which models I used. I couldn’t use my Claude subscription through Pi because [Anthropic doesn’t allow subscription authentication in third-party clients](https://code.claude.com/docs/en/legal-and-compliance#authentication-and-credential-use). I didn’t want to pay separately for Anthropic API usage, so I went back to OpenAI. I’ve been happy with Astra and Sol.
+
+I also moved from macOS Terminal to [Ghostty](https://ghostty.org/), mainly because I preferred how it looked. I spend enough time in the terminal that its appearance matters to me.
+
+## The Models I Use for Planning and Development
+
+I use OpenAI Astra with High thinking effort to plan and prepare work, then Sol with Medium thinking effort to implement it.
+
+I give Astra the part where I’m still figuring out what I want. We discuss the goal, work through questions I may have missed, and check how the change fits the project. I want to settle those decisions before an agent starts changing code, while I can still review the proposed behavior without having to understand every implementation detail.
+
+For substantial work, that discussion becomes a specification and smaller tickets in GitHub. By the time Sol picks up a ticket, it has an agreed outcome and a defined piece of work. It still has technical decisions to make, but it has something more useful to work from than my initial idea.
+
+That preparation is why I’m comfortable using a lighter model at Medium for implementation. In my experience, Sol can execute the work well when the plan is solid. I don’t feel the need to use the stronger model at High for every part of the process.
+
+## The Skills Behind My Development Workflow
+
+I started with generic skills for individual tasks, then adopted Matt Pocock’s workflow skills. They helped me bring more structure to development, especially when an idea needed more thought before it was ready to build.
+
+Over time, though, I began dreading the long grilling sessions. I was also being asked to review complex code that I didn’t fully understand.
+
+> I wanted to direct the work as a manager, while letting the agents handle more of the technical decisions.
+
+That led me to build [my own collection of agent skills](https://github.com/SirDarcanos/agentskills), keeping what worked for me in Matt’s approach and changing the parts that caused friction.
+
+A skill is a set of reusable instructions the agent reads. I can open those files, understand the process they describe, and change it. Extensions add executable functionality to Pi; skills describe how I want the agent to approach the work.
+
+I use `/shape-work` and similar names as shorthand here. In Pi, the command is `/skill:shape-work`.
+
+### From an Idea to Implementation
+
+For a substantial change, my usual process looks like this:
+
+1. **Discuss the idea with `/shape-work`.** We explore the goal, questions I’ve missed, and possible conflicts with decisions already recorded in the project.
+2. **Approve what we intend to build.** I review the proposed behavior and scope before moving into implementation.
+3. **Write the specification with `/write-spec`.** This records the agreed requirements and how we’ll know the work meets them.
+4. **Break it into tickets with `/write-tickets`.** The specification and tickets live in GitHub, where another agent or a fresh session can pick them up.
+5. **Start implementation with `/work-on` or `/work-on-spec`.** The first handles one defined change; the second coordinates work across a specification’s tickets.
+6. **Test the result myself before release.**
+
+Smaller changes don’t need the whole sequence. I can go straight to a ticket when the request is already clear.
+
+For bugs, I use `/investigate-bug` to establish what is happening and why. Once there is enough evidence for a fix, the investigation can feed a ticket through `/write-tickets`. I then use `/work-on` to implement it. Asking an agent to investigate a problem doesn’t, by itself, give it permission to change the application.
+
+I still make the decisions about what I want to build. The skills are designed to keep routine engineering choices with the agents, while bringing questions about scope and intended behavior back to me.
+
+## The Pi Extensions I Use
+
+### Subagents and Background Tasks
+
+[pi-subagents](https://github.com/nicobailon/pi-subagents) is essential to my setup. I use separate agents for reviews, parallel research, and coding work that can be split between them. Usually, the main agent decides how to delegate within the workflow I’ve authorized. I don’t assign every task to every agent myself.
+
+[pi-background-tasks](https://github.com/ismailsaleekh/pi-background-tasks) is the other extension I consider essential. It lets work continue in the background while the main conversation remains available. I can ask a clarifying question without waiting for that work to finish.
+
+I don’t usually fill the wait by starting something else with the main agent. The agents also use background tasks when consulting other models for focused questions.
+
+### Making the Interface Easier to Follow
+
+I missed Claude Code’s clean terminal interface. Pi’s default interface frustrated me, so I changed the parts I spent the most time looking at.
+
+I use three extensions for that:
+
+- **[pi-open-tui](https://github.com/OldSuns/pi-open-tui)** changes the header, footer, and input area. It puts information such as the active model, Git state, and context usage around the conversation.
+- **[pi-chat-bubbles](https://github.com/SirDarcanos/pi-chat-bubbles)** is an extension I built to make exchanges easier to follow. My messages appear on the right and the agent’s replies on the left.
+- **[pi-compact-tools](https://github.com/nedleeds/pi-compact-tools)** reduces the space taken up by tool activity, so file reads and commands don’t overwhelm the conversation.
+
+I use these with the `neutral-panels` color theme.
+
+<Figure src={piChatBubbles} alt="Pi conversation with my requests aligned right, agent replies aligned left, and an expanded code edit between the messages.">
+  Editing this essay in Pi, with my requests on the right, the agent’s replies on the left, and tool output between them.
+</Figure>
+
+These changes affect what I see in the terminal. Collapsing a tool’s output on screen doesn’t remove it from the context sent to the model.
+
+### Keeping Older Tool Output out of the Way
+
+[pi-nimble-compact](https://github.com/SirDarcanos/pi-nimble-compact) works on the model’s context instead. It removes or shortens eligible older tool outputs from later requests, while preserving the originals for the agent to retrieve when needed.
+
+I adapted it from [Nour Helmi’s pi-jev-compaction](https://github.com/nourhelmi/pi-jev-compaction) and [tamaratran’s fast-jev-compaction](https://github.com/tamaratran/fast-jev-compaction), using Nimble locally through Ollama.
+
+I consider this one useful rather than essential. It works quietly, and I occasionally look at the reductions it reports. Those figures estimate how much context has been removed; they aren’t a measure of subscription or billing savings.
+
+I’ve covered the local setup and the comparison with Jev in [my essay about running Nimble locally with Ollama](/nimble-free-local-alternative-to-jev/).
+
+## Where Ollama and Local Models Fit
+
+I use [Ollama](https://ollama.com/) to run models locally. I sometimes use Gemma 4 and, less often, Qwen, but Nimble and Clef are the ones I reach for more regularly.
+
+Most of that use starts with an `/ask-*` skill when I want another opinion on a specific question. I can ask the agent to consult Nimble or Clef locally, as alternatives to the hosted Jev model. These consultations fit alongside the planning and implementation work I do with Astra and Sol.
+
+I also use Nimble inside software I build. My finance manager, for example, uses it to try to determine an expense’s category. That gives the model a narrow task within the application, rather than asking it to handle the whole process.
+
+My `/build-with-nimble` skill helps with those integrations. It covers how to turn a task such as classification or choosing between candidates into a model decision that the application can use.
+
+## What I Still Test Myself
+
+My practice has changed since [I wrote about vibe coding](/what-is-vibe-coding-how-to-do-it/). I don’t review every code change the agents make. I reviewed enough of their work to become comfortable with that, but I still test the implemented behavior myself before releasing it publicly.
+
+I’ve had changes pass automated checks and still turn out to be wrong for what I wanted. Trying the result myself caught those cases.
+
+The skills are another part I can review directly. I understand the instructions they contain, so I can look for pitfalls and change the process when it causes problems. Maintaining them takes time, but so far that has been manageable and worth the reduction in frustration.
+
+I’ve seen better results across my sites and apps as I’ve developed this workflow. I’m comfortable letting the agents make more of the implementation decisions. I still want to use what they’ve built before I put it in front of someone else.
