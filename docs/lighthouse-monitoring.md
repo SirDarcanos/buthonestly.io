@@ -121,9 +121,52 @@ reuse would also need exact source, toolchain, preview and effective publication
 state identity. Image sharing targets the duplicated cold transformation work
 without introducing those page-staleness risks.
 
-Issue #62 remains pending representative post-change cold/warm PR runs and exact
-reruns. Record step timings, cache keys/hit outcomes, transfer size, and generated
-content before claiming a CI speedup or deciding on full-build artifact reuse.
+### Post-change cold run and exact rerun
+
+[PR #76](https://github.com/SirDarcanos/buthonestly.io/pull/76) measured commit
+`f1ce51731399bfde70477b9045246e8e0d0f96a6` on `ubuntu-latest` with Node 24.
+An unused temporary JSON fixture under `src/lib/` selected the existing full
+Lighthouse matrix without changing rendered output; it was removed after the
+measurement. Monitoring-only changes otherwise correctly skip the audits.
+
+[Attempt 1](https://github.com/SirDarcanos/buthonestly.io/actions/runs/39010629159/attempts/1)
+missed the new image cache.
+[Exact attempt 2](https://github.com/SirDarcanos/buthonestly.io/actions/runs/39010629159/attempts/2)
+restored its primary key. Both attempts passed, including the full audit matrix.
+
+| Phase (step wall time)                      | Cold images | Exact warm rerun |
+| ------------------------------------------- | ----------: | ---------------: |
+| Node setup / npm download-cache restoration |          3s |               8s |
+| Head dependency installation                |         12s |              12s |
+| Base dependency installation                |         12s |              11s |
+| Image-cache restoration                     |        miss |      3s / ~92 MB |
+| Head build, including postbuild             |        532s |              10s |
+| Head → base image sharing                   |          1s |               1s |
+| Base build, including postbuild             |         10s |              10s |
+| Base → head image merge                     |          2s |               1s |
+| Server startup                              |          7s |               8s |
+| Audits                                      |        208s |             207s |
+
+The cold head generated 2,557 image transforms; base reused all 2,557 and generated
+zero. The exact rerun reused all 2,557 in each revision and generated zero. Both
+sharing steps reported `shared`. Astro's own build timers (excluding npm and
+postbuild overhead) were 8m50s/8.19s cold and 8.08s/8.05s warm. Both attempts
+restored an existing ~142 MB npm download cache and still installed dependencies.
+
+Each revision built 94 pages and 53 Markdown alternatives in both attempts. The
+logged sets of 2,557 image asset names and 93 HTML route paths matched between
+attempts for each revision; these are inventory comparisons, not byte-level page
+comparisons. Regression tests separately protect image invalidation and
+preview/publication freshness.
+
+This is one cold run and one exact rerun, not a trend, a billing estimate, or a
+controlled old/new workflow benchmark. It directly demonstrates removal of the
+second cold image-transformation pass. Historical old-workflow timings above
+remain different PRs and route sets; no percentage pipeline-speedup claim is made.
+Further representative PRs, particularly differing toolchains and scheduled
+previews, can extend the evidence before issue acceptance. Full-page artifact
+transfer/storage overhead remains unmeasured; the warm pair still rebuilds in
+20s, so full-build caching remains disabled.
 
 ## Field data
 
