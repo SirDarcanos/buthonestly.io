@@ -16,7 +16,10 @@ async function steps(name) {
   return Object.values(workflow.jobs).flatMap((job) => job.steps);
 }
 
-test("all workflows install pnpm before requesting its package cache", async () => {
+test("all workflows bootstrap pinned pnpm with permitted actions before caching", async () => {
+  const manifest = JSON.parse(
+    await readFile(new URL("../package.json", import.meta.url), "utf8"),
+  );
   for (const name of [
     "ci",
     "lighthouse",
@@ -25,11 +28,22 @@ test("all workflows install pnpm before requesting its package cache", async () 
     "related",
   ]) {
     const workflow = await steps(name);
+    const node = workflow.findIndex(
+      (step) => step.uses === "actions/setup-node@v7",
+    );
     const setup = workflow.findIndex(
-      (step) => step.uses === "pnpm/action-setup@v4",
+      (step) => step.run === `npm install --global ${manifest.packageManager}`,
     );
     const cache = workflow.findIndex((step) => step.with?.cache === "pnpm");
-    assert.ok(setup >= 0 && setup < cache, name);
+    assert.ok(node >= 0 && node < setup && setup < cache, name);
+    assert.equal(workflow[node].with["package-manager-cache"], false, name);
+    for (const step of workflow.filter((step) => step.uses)) {
+      assert.match(
+        step.uses,
+        /^(?:actions\/[^@]+|1password\/install-cli-action)@/,
+        `${name}: ${step.uses} is outside the repository action allow-list`,
+      );
+    }
     assert.ok(
       workflow.some((step) =>
         step.run?.includes("pnpm install --frozen-lockfile"),
