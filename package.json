@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.3",
-    "@astrojs/mdx": "^7.0.8",
+    "@astrojs/mdx": "^8.1.0",
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.3",
     "@tailwindcss/vite": "^4.3.3",
@@ -47,7 +47,6 @@
     "chrome-launcher": "^1.0.0",
     "chrome-remote-interface": "^0.33.3",
     "google-auth-library": "^11.0.2",
-    "gray-matter": "^4.0.3",
     "gsc-snapshot": "0.2.0",
     "lighthouse": "^13.4.1",
     "prettier": "^3.9.6",

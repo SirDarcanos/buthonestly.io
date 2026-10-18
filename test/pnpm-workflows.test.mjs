@@ -96,6 +96,16 @@ test("Lighthouse installs old npm bases and migrated pnpm bases with their own l
   );
 });
 
+test("embedding dependencies explicitly disable the optional protobufjs install hook", async () => {
+  const settings = parse(
+    await readFile(new URL("../pnpm-workspace.yaml", import.meta.url), "utf8"),
+  );
+  assert.equal(settings.allowBuilds.protobufjs, false);
+  assert.equal(settings.allowBuilds["onnxruntime-node"], true);
+  assert.notEqual(settings.strictDepBuilds, false);
+  assert.notEqual(settings.dangerouslyAllowAllBuilds, true);
+});
+
 test("workflow-only embedding installation restores the manifest on success and failure", async (t) => {
   const root = await sandbox(t);
   const workflow = await steps("related");

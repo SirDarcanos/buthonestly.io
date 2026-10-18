@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
-import matter from "gray-matter";
+import { parseEssayFrontmatter } from "./essay-frontmatter.mjs";
 import { SITE_URL } from "../consts.ts";
 import { STATIC_BASE } from "./cdn.mjs";
 import { narrationUrl } from "./narration.mjs";
@@ -119,7 +119,7 @@ export const resolveEssayCoverPath = (sourcePath, cover) =>
 export const readEssayCoverPath = (sourcePath) =>
   resolveEssayCoverPath(
     sourcePath,
-    matter(readFileSync(sourcePath, "utf8")).data.cover,
+    parseEssayFrontmatter(readFileSync(sourcePath, "utf8")).data.cover,
   );
 
 export const taxonomySlug = (name) =>
@@ -420,7 +420,7 @@ export function loadEssayInventory({
   const tagNamesBySlug = new Map();
   for (const source of sources) {
     const sourceContent = readFileSync(source.sourcePath, "utf8");
-    const parsed = matter(sourceContent);
+    const parsed = parseEssayFrontmatter(sourceContent);
     for (const field of Object.keys(parsed.data)) {
       if (!METADATA_FIELDS.has(field)) {
         diagnostics.push(

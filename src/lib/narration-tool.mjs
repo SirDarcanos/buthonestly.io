@@ -10,7 +10,7 @@ import {
   writeFile,
 } from "node:fs/promises";
 import path from "node:path";
-import matter from "gray-matter";
+import { parseEssayFrontmatter } from "./essay-frontmatter.mjs";
 import remarkGfm from "remark-gfm";
 import remarkMdx from "remark-mdx";
 import remarkParse from "remark-parse";
@@ -274,7 +274,7 @@ const renderBlocks = (nodes, medium) => {
 };
 
 const narrationText = (sourceContent, sourcePath) => {
-  const parsed = matter(sourceContent);
+  const parsed = parseEssayFrontmatter(sourceContent);
   const title =
     typeof parsed.data.title === "string" ? parsed.data.title.trim() : "";
   if (!title) throw new Error(`${sourcePath} must have a non-empty title`);
@@ -793,7 +793,7 @@ const narrationMetadataChange = (source, filename, sourcePath) => {
   if (audioLines.length > 1) {
     throw new Error(`${sourcePath} contains more than one audio field`);
   }
-  const existing = matter(source).data.audio;
+  const existing = parseEssayFrontmatter(source).data.audio;
   if (existing !== undefined && typeof existing !== "string") {
     throw new Error(`${sourcePath} audio metadata must be a filename`);
   }
