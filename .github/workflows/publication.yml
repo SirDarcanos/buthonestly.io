@@ -27,16 +27,18 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
+      - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v7
         with:
           node-version: 24
-          cache: npm
+          cache: pnpm
 
       - uses: 1password/install-cli-action@v4
         with:
           version: latest-beta
 
-      - run: npm ci
+      - run: pnpm install --frozen-lockfile
 
       - name: Prepare publication actions
         id: publication_prepare
@@ -44,7 +46,7 @@ jobs:
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           PUBLICATION_MONITORING_HANDOFF_FILE: artifacts/publication-monitoring-handoff.json
-        run: op run --environment "${{ vars.OP_ENVIRONMENT_ID }}" -- env -u OP_SERVICE_ACCOUNT_TOKEN npm run publication
+        run: op run --environment "${{ vars.OP_ENVIRONMENT_ID }}" -- env -u OP_SERVICE_ACCOUNT_TOKEN pnpm run publication
 
       - name: Record draft identities and partial successes
         id: publication_checkpoint
@@ -60,7 +62,7 @@ jobs:
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           PUBLICATION_MONITORING_HANDOFF_FILE: artifacts/publication-monitoring-handoff.json
-        run: op run --environment "${{ vars.OP_ENVIRONMENT_ID }}" -- env -u OP_SERVICE_ACCOUNT_TOKEN npm run publication
+        run: op run --environment "${{ vars.OP_ENVIRONMENT_ID }}" -- env -u OP_SERVICE_ACCOUNT_TOKEN pnpm run publication
 
       - name: Record delivery and remaining partial successes
         id: publication_final_checkpoint

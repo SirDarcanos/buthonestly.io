@@ -15,12 +15,14 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v7
         with:
           node-version: 24
-          cache: npm
+          cache: pnpm
 
-      - run: npm ci
+      - run: pnpm install --frozen-lockfile
 
       - name: Identify image toolchain
         id: image_toolchain
@@ -37,16 +39,16 @@ jobs:
             ${{ runner.os }}-${{ runner.arch }}-astro-assets-v3-main-${{ steps.image_toolchain.outputs.key }}-
 
       - name: Test failure detection
-        run: npm test
+        run: pnpm test
 
       - name: Verify code and configuration formatting
-        run: npm run format:check
+        run: pnpm run format:check
 
       - name: Verify content correctness
-        run: npm run check:links
+        run: pnpm run check:links
 
       - name: Build production site
-        run: npm run build
+        run: pnpm run build
 
       - name: Save trusted main image assets
         if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.image_toolchain.outputs.key != '' && steps.image_cache.outputs.cache-hit != 'true'

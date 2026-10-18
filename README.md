@@ -50,12 +50,17 @@ is a commit.
 
 ## Getting started
 
-Requires **Node 24** (see `.nvmrc`).
+Requires **Node 24** (see `.nvmrc`) and **pnpm 11.20.0** (pinned in `package.json`).
 
 ```bash
-npm install
-npm run dev
+pnpm install
+pnpm run dev
 ```
+
+CI uses `pnpm install --frozen-lockfile`. Commit dependency changes with
+`pnpm-lock.yaml`. Pre/post scripts stay enabled in `pnpm-workspace.yaml` so
+builds still generate Markdown alternatives. Lighthouse can compare the
+migrated site against older npm-based revisions without changing their tooling.
 
 The dev server runs at http://localhost:4321. Scheduled essays render there so
 they can be proofread before they land.
@@ -63,7 +68,7 @@ they can be proofread before they land.
 Run the automated test suite before opening a pull request:
 
 ```bash
-npm test
+pnpm test
 ```
 
 The command exits nonzero when a test fails. Its fixtures deliberately prove
@@ -73,13 +78,13 @@ detected.
 To check the production output:
 
 ```bash
-npm run build
-npm run preview
+pnpm run build
+pnpm run preview
 ```
 
 > [!NOTE]
 > The `postbuild` step projects marked editorial regions into portable Markdown
-> alternatives. Use `npm run build` before checking the `.md` links advertised
+> alternatives. Use `pnpm run build` before checking the `.md` links advertised
 > in `dist/llms.txt`.
 
 > [!IMPORTANT]
@@ -149,18 +154,18 @@ Import `Figure`, `Gallery`, `QuickSummary`, `Callout`, and `Blockquote` from
 
 ## Tooling
 
-| Command                       | What it does                                                                                                  |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `npm run dev`                 | Dev server on port 4321.                                                                                      |
-| `npm test`                    | Runs the automated test suite, including deliberate CI-stage failure fixtures.                                |
-| `npm run build`               | Builds to `dist/`, then projects editorial Markdown alternatives.                                             |
-| `npm run lint`                | Prettier check plus link check.                                                                               |
-| `npm run check:links`         | Verifies canonical internal links, publication safety, and local assets.                                      |
-| `npm run links`               | Prints advisory prose-link analysis; pass `-- --json <path>` for local JSON.                                  |
-| `npm run images [-- <slug>]`  | Manually resizes and compresses oversized sources and converts opaque images to JPEG, printing renamed paths. |
-| `npm run related`             | Rebuilds the semantic related-essays map.                                                                     |
-| `npm run publication`         | Verifies live content, deploys stale versions, resumes Kit delivery, and submits changed content to IndexNow. |
-| `npm run narration -- --help` | Documents the staged local Narration workflow and every command option.                                       |
+| Command                     | What it does                                                                                                  |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `pnpm run dev`              | Dev server on port 4321.                                                                                      |
+| `pnpm test`                 | Runs the automated test suite, including deliberate CI-stage failure fixtures.                                |
+| `pnpm run build`            | Builds to `dist/`, then projects editorial Markdown alternatives.                                             |
+| `pnpm run lint`             | Prettier check plus link check.                                                                               |
+| `pnpm run check:links`      | Verifies canonical internal links, publication safety, and local assets.                                      |
+| `pnpm run links`            | Prints advisory prose-link analysis; pass `--json <path>` for local JSON.                                     |
+| `pnpm run images [<slug>]`  | Manually resizes and compresses oversized sources and converts opaque images to JPEG, printing renamed paths. |
+| `pnpm run related`          | Rebuilds the semantic related-essays map.                                                                     |
+| `pnpm run publication`      | Verifies live content, deploys stale versions, resumes Kit delivery, and submits changed content to IndexNow. |
+| `pnpm run narration --help` | Documents the staged local Narration workflow and every command option.                                       |
 
 ### Producing a Narration
 
@@ -171,7 +176,7 @@ work-in-progress Essay under `src/content/drafts/`.
 
 Prerequisites:
 
-- Node 24 dependencies installed with `npm install`.
+- Node 24 dependencies installed with `pnpm install`.
 - `ffmpeg` with the `libmp3lame` encoder (`brew install ffmpeg` on macOS, or
   use the distribution package manager on Linux).
 - A billed Google Cloud project with the Vertex AI API enabled. The identity
@@ -206,10 +211,10 @@ Run the stages through 1Password so each subprocess receives the Environment
 without persisting its values to disk:
 
 ```bash
-op run --environment "$OP_ENVIRONMENT_ID" -- npm run narration -- prepare <Essay>
-op run --environment "$OP_ENVIRONMENT_ID" -- npm run narration -- synthesize <Essay>
-op run --environment "$OP_ENVIRONMENT_ID" -- npm run narration -- upload <Essay>
-op run --environment "$OP_ENVIRONMENT_ID" -- npm run narration -- clean <Essay>
+op run --environment "$OP_ENVIRONMENT_ID" -- pnpm run narration prepare <Essay>
+op run --environment "$OP_ENVIRONMENT_ID" -- pnpm run narration synthesize <Essay>
+op run --environment "$OP_ENVIRONMENT_ID" -- pnpm run narration upload <Essay>
+op run --environment "$OP_ENVIRONMENT_ID" -- pnpm run narration clean <Essay>
 ```
 
 Between preparation and synthesis, read and edit `<slug>.audio.txt`. Use
@@ -226,7 +231,7 @@ written-only passages are omitted and narration-only passages are included.
 style, pace, and chunk count, then requires typing `yes` before the paid request.
 Use `--yes` to skip that prompt. `--voice`, `--style`, `--pace`, `--model`,
 `--region`, `--chunk-words`, and `--join-silence-ms` override the defaults shown
-by `npm run narration -- --help` and persist them in the script. Successful
+by `pnpm run narration --help` and persist them in the script. Successful
 chunks are checkpointed under `local/narration/`. Rerun the same command after a
 partial provider failure to reuse them; edited chunks and provider-affecting
 setting changes are synthesized again. Always listen to the complete MP3 after

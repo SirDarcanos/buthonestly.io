@@ -24,16 +24,19 @@ jobs:
           path: .lighthouse-base
           persist-credentials: false
 
+      - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v7
         with:
           node-version: 24
-          cache: npm
+          cache: pnpm
           cache-dependency-path: |
-            package-lock.json
+            pnpm-lock.yaml
+            .lighthouse-base/pnpm-lock.yaml
             .lighthouse-base/package-lock.json
 
       - name: Install head revision dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Plan pull-request routes
         id: pull_request_plan
@@ -44,7 +47,12 @@ jobs:
       - name: Install base revision dependencies
         if: steps.pull_request_plan.outputs.selected == 'true'
         working-directory: .lighthouse-base
-        run: npm ci
+        run: |
+          if [ -f pnpm-lock.yaml ]; then
+            pnpm install --frozen-lockfile
+          else
+            npm ci
+          fi
 
       - name: Identify head image toolchain
         id: head_image_toolchain
@@ -89,7 +97,7 @@ jobs:
         env:
           LIGHTHOUSE_PREVIEW_SLUGS: ${{ steps.pull_request_plan.outputs.preview_slugs }}
         shell: bash
-        run: npm run build 2>&1 | tee "$RUNNER_TEMP/lighthouse-head-build.log"
+        run: pnpm run build 2>&1 | tee "$RUNNER_TEMP/lighthouse-head-build.log"
 
       - name: Share head image assets with base
         if: steps.pull_request_plan.outputs.selected == 'true'
@@ -102,17 +110,21 @@ jobs:
           LIGHTHOUSE_PREVIEW_SLUGS: ${{ steps.pull_request_plan.outputs.preview_slugs }}
         shell: bash
         run: |
+          if [ -f pnpm-lock.yaml ]; then manager=pnpm; else manager=npm; fi
           if grep -q LIGHTHOUSE_PREVIEW_SLUGS src/lib/essays.ts; then
-            npm run build
+            $manager run build
           else
-            LIGHTHOUSE_INCLUDE_SCHEDULED=true npm run build
+            LIGHTHOUSE_INCLUDE_SCHEDULED=true $manager run build
           fi 2>&1 | tee "$RUNNER_TEMP/lighthouse-base-build.log"
 
       - name: Start revision servers
         if: steps.pull_request_plan.outputs.selected == 'true'
         run: |
-          (npm run preview -- --host 127.0.0.1 --port 4321 > "$RUNNER_TEMP/lighthouse-head.log" 2>&1 &)
-          (cd .lighthouse-base && npm run preview -- --host 127.0.0.1 --port 4322 > "$RUNNER_TEMP/lighthouse-base.log" 2>&1 &)
+          (pnpm run preview --host 127.0.0.1 --port 4321 > "$RUNNER_TEMP/lighthouse-head.log" 2>&1 &)
+          (cd .lighthouse-base && {
+            if [ -f pnpm-lock.yaml ]; then pnpm run preview --host 127.0.0.1 --port 4322;
+            else npm run preview -- --host 127.0.0.1 --port 4322; fi
+          } > "$RUNNER_TEMP/lighthouse-base.log" 2>&1 &)
           for url in http://127.0.0.1:4321 http://127.0.0.1:4322; do
             for attempt in {1..30}; do curl --fail --silent "$url" >/dev/null && break; sleep 1; done
             curl --fail --silent "$url" >/dev/null
@@ -126,7 +138,7 @@ jobs:
           LIGHTHOUSE_HEAD_URL: http://127.0.0.1:4321
           LIGHTHOUSE_ARTIFACT_DIR: artifacts/lighthouse
           LIGHTHOUSE_PULL_REQUEST_ROUTES: ${{ steps.pull_request_plan.outputs.routes }}
-        run: npm run lighthouse -- --trigger pull-request
+        run: pnpm run lighthouse --trigger pull-request
 
       - name: Report image cache outcome
         if: always() && steps.pull_request_plan.outputs.selected == 'true'

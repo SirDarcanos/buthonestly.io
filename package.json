@@ -2,6 +2,7 @@
   "name": "buthonestly-io",
   "type": "module",
   "version": "0.1.0",
+  "packageManager": "pnpm@11.20.0",
   "engines": {
     "node": ">=24.0.0"
   },
@@ -56,6 +57,7 @@
     "turndown": "^7.2.4",
     "turndown-plugin-gfm": "^1.0.2",
     "typescript": "^6.0.3",
-    "wrangler": "4.151.1"
+    "wrangler": "4.151.1",
+    "yaml": "2.9.1"
   }
 }

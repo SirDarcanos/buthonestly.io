@@ -8,6 +8,7 @@ astro dev --background
 
 Manage the background server with `astro dev stop`, `astro dev status`, and `astro dev logs`.
 
+Use pnpm 11.20.0 (pinned in `package.json`) for dependencies and project commands.
 Node 24 (LTS) everywhere: `.nvmrc`, `engines`, and the GitHub workflows.
 Astro does not hot-reload `astro.config.mjs` — restart the dev server after
 changing it (including the markdown remark/rehype plugins).
@@ -30,19 +31,19 @@ accumulate and go out as a batch. Do not push on every change.
 
 ## Tooling
 
-- `npm run images [-- <slug>]` — manually optimize essay source images in
+- `pnpm run images [<slug>]` — manually optimize essay source images in
   place: resize oversized files to max 1376px, recompress them, and convert
   opaque images to JPEG. A conversion prints both paths; update authored MDX
   references yourself. Invalid cover proportions block the command.
-- `npm run related` — rebuild the semantic related-essays map (normally left
+- `pnpm run related` — rebuild the semantic related-essays map (normally left
   to the `related.yml` Action).
-- `npm run links` — print advisory analysis of the editorial internal-link
+- `pnpm run links` — print advisory analysis of the editorial internal-link
   graph. Counts only links written into prose: summaries, related essays,
   taxonomy links, and the footer are excluded. Reports orphans, dead ends,
   cluster density, and cornerstone reach, with scheduled essays counted
-  separately. Pass `-- --json <path>` to write local JSON analysis explicitly;
+  separately. Pass `--json <path>` to write local JSON analysis explicitly;
   no graph artifact is tracked or written by default.
-- `npm run publication` — run deployment verification, resumable Kit delivery,
+- `pnpm run publication` — run deployment verification, resumable Kit delivery,
   and IndexNow follow-up. Normally left to `publication.yml`, which runs hourly,
   on essay changes, and by manual dispatch. It can call live providers: use
   manual dispatch for recovery rather than running it casually. The IndexNow key
@@ -68,7 +69,7 @@ that Astro re-encodes to AVIF/WebP for the site. Audio MP3s are the
 opposite: git-ignored, uploaded to R2.
 
 - **Covers must be 16:9**; ~1376px wide is the target (2× the reading column).
-  `npm run images` enforces that and blocks on a non-16:9 cover — resizing by
+  `pnpm run images` enforces that and blocks on a non-16:9 cover — resizing by
   width never crops, so a wrong ratio would ship distorted.
 - **Body images can be any shape** — a wide dataset strip or a tall diagram is
   fine. Only width matters: anything over 1376px is resized down, and anything
@@ -108,7 +109,7 @@ opposite: git-ignored, uploaded to R2.
   withheld from the production build, so the link 404s the moment you push. The
   dev server builds both, which is why this looks fine locally; `check:links`
   catches it.
-- `cornerstone: true` marks an evergreen hub other essays link to. `npm run
+- `cornerstone: true` marks an evergreen hub other essays link to. `pnpm run
 links` reports how many essays in each cluster reach theirs. Only durable
   pieces qualify — a cornerstone accumulates links for years, so pointing one at
   something destined for a rewrite wastes the accumulation.

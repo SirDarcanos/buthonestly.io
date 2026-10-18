@@ -10,7 +10,8 @@ on:
     paths:
       - ".github/workflows/related.yml"
       - "package.json"
-      - "package-lock.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
       - "scripts/build-related.mjs"
       - "src/content/essays/**"
       - "src/lib/essay-inventory.mjs"
@@ -33,20 +34,27 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
+      - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v7
         with:
           node-version: 24
-          cache: npm
+          cache: pnpm
 
       - uses: 1password/install-cli-action@v4
         with:
           version: latest-beta
 
-      - run: npm ci
+      - run: pnpm install --frozen-lockfile
 
-      - run: npm install --no-save @huggingface/transformers@4.2.0
+      - name: Install the workflow-only embedding runtime
+        run: |
+          manifest=$(mktemp)
+          cp package.json "$manifest"
+          trap 'cp "$manifest" package.json; rm -f "$manifest"' EXIT
+          pnpm add --lockfile=false @huggingface/transformers@4.2.0
 
-      - run: npm run related
+      - run: pnpm run related
 
       - name: Commit refreshed map
         env:

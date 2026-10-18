@@ -77,7 +77,7 @@ test("pull-request revisions are isolated and measured on one unprivileged runne
   );
   assert.match(
     pullRequestWorkflow,
-    /grep -q LIGHTHOUSE_PREVIEW_SLUGS src\/lib\/essays\.ts[\s\S]*LIGHTHOUSE_INCLUDE_SCHEDULED=true npm run build/,
+    /grep -q LIGHTHOUSE_PREVIEW_SLUGS src\/lib\/essays\.ts[\s\S]*LIGHTHOUSE_INCLUDE_SCHEDULED=true \$manager run build/,
   );
   assert.match(
     pullRequestWorkflow,
@@ -85,7 +85,7 @@ test("pull-request revisions are isolated and measured on one unprivileged runne
   );
   assert.match(
     pullRequestWorkflow,
-    /npm run lighthouse -- --trigger pull-request/,
+    /pnpm run lighthouse --trigger pull-request/,
   );
 });
 
@@ -112,7 +112,7 @@ test("pull-request builds share image assets without reusing rendered pages", ()
   );
   assert.match(
     pullRequestWorkflow,
-    /cache: npm\n\s+cache-dependency-path: \|\n\s+package-lock.json\n\s+\.lighthouse-base\/package-lock.json/,
+    /cache: pnpm\n\s+cache-dependency-path: \|\n\s+pnpm-lock.yaml\n\s+\.lighthouse-base\/pnpm-lock.yaml\n\s+\.lighthouse-base\/package-lock.json/,
   );
   const shareIndex = pullRequestWorkflow.indexOf(
     "run: node scripts/share-lighthouse-images.mjs . .lighthouse-base",
@@ -139,13 +139,13 @@ test("pull-request builds share image assets without reusing rendered pages", ()
   );
   assert.match(
     pullRequestWorkflow,
-    /name: Build head revision[\s\S]*?shell: bash\n\s+run: npm run build.*tee/,
+    /name: Build head revision[\s\S]*?shell: bash\n\s+run: pnpm run build.*tee/,
   );
   assert.ok(
     headInstallIndex < imageCacheIndex &&
       baseInstallIndex < imageCacheIndex &&
       imageCacheIndex < buildIndex,
-    "both Astro image caches must be restored after npm ci and before the builds",
+    "both Astro image caches must be restored after dependency installation and before the builds",
   );
 });
 

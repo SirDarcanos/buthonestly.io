@@ -19,21 +19,23 @@ const run = (command, args) =>
     encoding: "utf8",
   });
 
-test("CI restores Astro's image cache after npm ci and before tests", () => {
+test("CI restores Astro's image cache after pnpm install --frozen-lockfile and before tests", () => {
   const workflow = readFileSync(
     path.join(repositoryRoot, ".github", "workflows", "ci.yml"),
     "utf8",
   );
-  const installIndex = workflow.indexOf("- run: npm ci");
+  const installIndex = workflow.indexOf(
+    "- run: pnpm install --frozen-lockfile",
+  );
   const imageCacheIndex = workflow.indexOf("path: node_modules/.astro");
-  const testIndex = workflow.indexOf("run: npm test");
+  const testIndex = workflow.indexOf("run: pnpm test");
 
   assert.notEqual(installIndex, -1, "CI must install dependencies");
   assert.notEqual(imageCacheIndex, -1, "CI must cache Astro image derivatives");
   assert.notEqual(testIndex, -1, "CI must run tests");
   assert.ok(
     installIndex < imageCacheIndex && imageCacheIndex < testIndex,
-    "the Astro image cache must be restored after npm ci and before npm test",
+    "the Astro image cache must be restored after pnpm install --frozen-lockfile and before pnpm test",
   );
 });
 
@@ -45,7 +47,8 @@ test("format verification rejects an unformatted fixture", (testContext) => {
   const ignorePath = path.join(temporaryDirectory, ".prettierignore");
   writeFileSync(ignorePath, "");
 
-  const result = run("npx", [
+  const result = run("pnpm", [
+    "exec",
     "prettier",
     "--check",
     "--ignore-path",
@@ -77,7 +80,13 @@ test("production build rejects an invalid Astro fixture", (testContext) => {
     recursive: true,
   });
 
-  const result = run("npx", ["astro", "build", "--root", temporaryDirectory]);
+  const result = run("pnpm", [
+    "exec",
+    "astro",
+    "build",
+    "--root",
+    temporaryDirectory,
+  ]);
 
   assert.notEqual(result.status, 0, result.stdout + result.stderr);
   assert.match(result.stdout + result.stderr, /does-not-exist/);
