@@ -280,8 +280,8 @@ test("repository keeps graph analysis local and correctness blocking", () => {
 
   assert.match(ignore, /^data\/link-graph\.json$/m);
   assert.equal(trackedGraph.stdout.trim(), "");
-  assert.match(workflow, /npm run check:links/);
-  assert.doesNotMatch(workflow, /npm run links/);
+  assert.match(workflow, /pnpm run check:links/);
+  assert.doesNotMatch(workflow, /pnpm run links/);
 });
 
 test("blocking checker validates MDX links, publication state, and local assets", (testContext) => {

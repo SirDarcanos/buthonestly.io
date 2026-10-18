@@ -1233,7 +1233,7 @@ test("the publication workflow owns hourly, essay-change, and manual orchestrati
   assert.match(workflow, /group: publication/);
   assert.match(workflow, /cancel-in-progress: false/);
   assert.match(workflow, /timeout-minutes: 30/);
-  assert.equal(workflow.match(/npm run publication/g)?.length, 2);
+  assert.equal(workflow.match(/pnpm run publication/g)?.length, 2);
   assert.match(workflow, /Record draft identities and partial successes/);
   assert.match(workflow, /steps\.publication_checkpoint\.outcome == 'success'/);
   assert.match(workflow, /Resume recorded Kit broadcasts/);

@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { appendFile, readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { readImageLock } from "./lib/image-lock.mjs";
 
 function resolveLockedPackage(packages, name, from = "") {
   let directory = from;
@@ -94,10 +95,10 @@ function imagePackages(lock) {
 export async function imageCacheKey(root) {
   try {
     const [lock, configuration] = await Promise.all([
-      readFile(path.join(root, "package-lock.json"), "utf8"),
+      readImageLock(root),
       readFile(path.join(root, "astro.config.mjs")),
     ]);
-    const packages = imagePackages(JSON.parse(lock));
+    const packages = imagePackages(lock);
     if (!packages) return null;
     return createHash("sha256")
       .update(

@@ -1457,7 +1457,7 @@ const parseArguments = (arguments_) => {
     arguments_[0] !== "--month" ||
     !arguments_[1]
   ) {
-    fail("Usage: npm run search-report -- --month YYYY-MM");
+    fail("Usage: pnpm run search-report --month YYYY-MM");
   }
   return arguments_[1];
 };

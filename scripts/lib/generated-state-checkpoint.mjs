@@ -29,6 +29,8 @@ const PROFILES = Object.freeze({
       ".github/workflows/related.yml",
       "package.json",
       "package-lock.json",
+      "pnpm-lock.yaml",
+      "pnpm-workspace.yaml",
       "scripts/build-related.mjs",
       "src/content/essays",
       "src/lib/essay-inventory.mjs",

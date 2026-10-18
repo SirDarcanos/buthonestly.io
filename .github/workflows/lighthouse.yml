@@ -43,7 +43,15 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 24
-          cache: npm
+          package-manager-cache: false
+
+      - name: Install pinned pnpm
+        run: npm install --global pnpm@11.20.0
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
 
       - uses: 1password/install-cli-action@v4
         with:
@@ -59,7 +67,7 @@ jobs:
           if [[ -n "$devices" ]]; then echo "selected=true" >> "$GITHUB_OUTPUT"; else echo "selected=false" >> "$GITHUB_OUTPUT"; fi
 
       - if: github.event_name != 'schedule' || steps.schedule_selection.outputs.selected == 'true'
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Audit scheduled production matrix
         if: github.event_name == 'schedule' && steps.schedule_selection.outputs.selected == 'true'
@@ -68,7 +76,7 @@ jobs:
           LIGHTHOUSE_ARTIFACT_DIR: artifacts/lighthouse
           LIGHTHOUSE_SCHEDULE: ${{ github.event.schedule }}
           LIGHTHOUSE_SCHEDULED_RUN_ID: ${{ github.run_id }}
-        run: npm run lighthouse -- --trigger scheduled
+        run: pnpm run lighthouse --trigger scheduled
 
       - name: Audit manual route
         if: github.event_name == 'workflow_dispatch'
@@ -77,7 +85,7 @@ jobs:
           LIGHTHOUSE_ARTIFACT_DIR: artifacts/lighthouse
           LIGHTHOUSE_ROUTE: ${{ inputs.route }}
           LIGHTHOUSE_DEVICE: ${{ inputs.device }}
-        run: npm run lighthouse -- --trigger manual --route "$LIGHTHOUSE_ROUTE" --device "$LIGHTHOUSE_DEVICE"
+        run: pnpm run lighthouse --trigger manual --route "$LIGHTHOUSE_ROUTE" --device "$LIGHTHOUSE_DEVICE"
 
       - name: Receive Live Essay handoffs
         if: github.event_name == 'workflow_run'
@@ -97,7 +105,7 @@ jobs:
           PUBLICATION_MONITORING_HANDOFF_FILE: ${{ runner.temp }}/publication-monitoring-handoff/publication-monitoring-handoff.json
           PUBLICATION_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
           PUBLICATION_RUN_STARTED_AT: ${{ github.event.workflow_run.run_started_at }}
-        run: npm run lighthouse -- --trigger post-publication
+        run: pnpm run lighthouse --trigger post-publication
 
       - name: Retain diagnostic reports
         if: always()

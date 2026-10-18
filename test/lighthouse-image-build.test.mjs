@@ -12,6 +12,7 @@ import os from "node:os";
 import path from "node:path";
 import test from "node:test";
 import sharp from "sharp";
+import { parse, stringify } from "yaml";
 
 import { shareLighthouseImages } from "../scripts/share-lighthouse-images.mjs";
 
@@ -82,8 +83,8 @@ test(
         '{"type":"module"}',
       );
       await writeFile(
-        path.join(directory, "package-lock.json"),
-        await readFile(path.join(project, "package-lock.json"), "utf8"),
+        path.join(directory, "pnpm-lock.yaml"),
+        await readFile(path.join(project, "pnpm-lock.yaml"), "utf8"),
       );
       await writeFile(
         path.join(directory, "astro.config.mjs"),
@@ -97,13 +98,15 @@ test(
     assert.doesNotMatch(cold.output, /reused cache entry/);
     assert.match(cold.html, />withheld</);
 
-    const unrelatedUpdate = JSON.parse(
-      await readFile(path.join(otherPullRequest, "package-lock.json"), "utf8"),
+    const unrelatedUpdate = parse(
+      await readFile(path.join(otherPullRequest, "pnpm-lock.yaml"), "utf8"),
     );
-    unrelatedUpdate.packages["node_modules/smol-toml"].version = "99.0.0";
+    unrelatedUpdate.packages["unrelated@99.0.0"] = {
+      resolution: { integrity: "unrelated" },
+    };
     await writeFile(
-      path.join(otherPullRequest, "package-lock.json"),
-      JSON.stringify(unrelatedUpdate),
+      path.join(otherPullRequest, "pnpm-lock.yaml"),
+      stringify(unrelatedUpdate),
     );
 
     for (const consumer of [head, otherPullRequest]) {

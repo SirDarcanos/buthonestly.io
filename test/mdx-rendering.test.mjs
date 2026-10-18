@@ -19,10 +19,14 @@ test("MDX renders ordinary Markdown and the semantic content modules", (context)
   });
   copyFileSync(path.join(fixtureRoot, "astro.config.fixture"), configPath);
 
-  const result = spawnSync("npx", ["astro", "build", "--root", fixtureRoot], {
-    cwd: repositoryRoot,
-    encoding: "utf8",
-  });
+  const result = spawnSync(
+    "pnpm",
+    ["exec", "astro", "build", "--root", fixtureRoot],
+    {
+      cwd: repositoryRoot,
+      encoding: "utf8",
+    },
+  );
 
   assert.equal(result.status, 0, result.stdout + result.stderr);
 

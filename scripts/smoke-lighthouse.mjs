@@ -15,7 +15,7 @@ const delay = (milliseconds) =>
   new Promise((resolve) => setTimeout(resolve, milliseconds));
 
 const runBuild = async () => {
-  await execFileAsync("npm", ["run", "build"], {
+  await execFileAsync("pnpm", ["run", "build"], {
     encoding: "utf8",
     maxBuffer: 50 * 1024 * 1024,
     timeout: 180_000,
@@ -24,8 +24,8 @@ const runBuild = async () => {
 
 const startPreview = async ({ port }) => {
   const child = execFile(
-    "npm",
-    ["run", "preview", "--", "--host", "127.0.0.1", "--port", String(port)],
+    "pnpm",
+    ["run", "preview", "--host", "127.0.0.1", "--port", String(port)],
     { encoding: "utf8" },
   );
   let output = "";
