@@ -1211,7 +1211,7 @@ test("the publication workflow owns hourly, essay-change, and manual orchestrati
   assert.match(workflow, /contents: read/);
   assert.match(workflow, /persist-credentials: false/);
   assert.match(workflow, /uses: 1password\/install-cli-action@v4/);
-  assert.match(workflow, /version: latest-beta/);
+  assert.match(workflow, /^\s+version: latest$/m);
   assert.match(
     workflow,
     /OP_SERVICE_ACCOUNT_TOKEN: \$\{\{ secrets\.OP_SERVICE_ACCOUNT_TOKEN \}\}/,
