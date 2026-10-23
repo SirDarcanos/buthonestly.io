@@ -4,6 +4,7 @@
   "searchType": "web",
   "essayCohorts": {
     "10-types-of-websites": "Peripheral essay",
+    "1password-cli-setup": "Editorial-focus essay",
     "adhd-planner": "Editorial-focus essay",
     "ai-slop-midas-touch-modern-internet": "Editorial-focus essay",
     "automated-x-account-cleanup": "Editorial-focus essay",
@@ -78,6 +79,8 @@
       "values": [
         "10-types-of-websites",
         "10 Types of Websites and What I’d Use to Build Them",
+        "1password-cli-setup",
+        "1Password CLI Setup: Environments, Agents, and GitHub Actions",
         "adhd-planner",
         "My Mental ADHD Planner: How I Blog Without Burning Out",
         "ai-slop-midas-touch-modern-internet",
