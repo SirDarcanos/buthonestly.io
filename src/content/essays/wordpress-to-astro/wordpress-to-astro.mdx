@@ -260,6 +260,8 @@ Four scheduled jobs watch the repository. One rebuilds the site when an essay’
 
 One regenerates the related-posts map. One tells Bing, Yandex, Seznam and Naver that something changed, since Google doesn’t take that kind of notification and finds it through the sitemap anyway. One emails subscribers.
 
+For credentials such as the Kit API key and Cloudflare deploy hook, I use [1Password CLI with GitHub Actions](/1password-cli-setup/).
+
 Every one of them also runs on a daily timer, for a reason that took me longer to see than it should have. A date passing is not an event. Nothing happens when the clock rolls over an essay’s publish time — no webhook, no signal, nothing to react to. Something has to wake up and check.
 
 The harder part was making sure a job didn’t do its work twice.
