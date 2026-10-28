@@ -18,7 +18,7 @@ Phonon's complete text goes directly to its built-in sentence-aligned splitter (
 
 ## Preview contract for #97 / #98
 
-The public path relative to `STATIC_BASE` is `phonon-voice-samples/<stable-voice-id>-sample.mp3`. For example, Zoey uses `phonon-voice-samples/NbpkqMVS3CJeq2j8-sample.mp3`. Kokoro's existing `kokoro-voice-samples/<id>-sample.mp3` paths remain unchanged. `previewPath()` and the source catalogue are shared mapping authorities for the independent sample utility; this change generates and uploads no preview assets. Missing preview files do not enter the synthesis path.
+The public path relative to `STATIC_BASE` is `phonon-voice-samples/<stable-voice-id>-sample.mp3`. For example, Zoey uses `phonon-voice-samples/NbpkqMVS3CJeq2j8-sample.mp3`. Kokoro's existing `kokoro-voice-samples/<id>-sample.mp3` paths remain unchanged. `previewPath()` and the source catalogue are shared mapping authorities for the independent sample utility; the browser integration itself generates and uploads no preview assets. See [the local preview utility and manual handoff](phonon-previews.md) for #97. Missing preview files do not enter the synthesis path.
 
 Every preview should read: “Some mornings, the coffee tastes better than usual — and I never quite know why.” Use the pinned 31M English model, normal speed (`duration_delta: 0`), and record actual runtime/encoding settings in the #97 manifest. Public-file availability remains for #98/#99 after manual upload.
 
