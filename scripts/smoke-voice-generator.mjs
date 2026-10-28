@@ -2,6 +2,10 @@ import assert from "node:assert/strict";
 import { mkdir, writeFile } from "node:fs/promises";
 import { launch } from "chrome-launcher";
 import CDP from "chrome-remote-interface";
+import {
+  essaySpeechText,
+  essayLongSentence,
+} from "./lib/voice-smoke-input.mjs";
 
 const origin = process.env.VOICE_SMOKE_ORIGIN || "http://localhost:4321";
 const selectedModel = process.argv[2] || "phonon";
@@ -116,18 +120,48 @@ try {
   }
   await evaluate(`{
     const NativeWorker = window.Worker;
-    window.__liveWorkers = new Set(); window.__maxWorkers = 0;
+    window.__liveWorkers = new Set(); window.__maxWorkers = 0; window.__runtimeDetails = [];
     window.Worker = class extends NativeWorker {
-      constructor(...args) { super(...args); window.__liveWorkers.add(this); window.__maxWorkers = Math.max(window.__maxWorkers, window.__liveWorkers.size); const stop = this.terminate.bind(this); this.terminate = () => { window.__liveWorkers.delete(this); stop(); }; }
+      constructor(...args) {
+        super(...args);
+        window.__liveWorkers.add(this); window.__maxWorkers = Math.max(window.__maxWorkers, window.__liveWorkers.size);
+        let requestedDevice;
+        const send = this.postMessage.bind(this);
+        this.postMessage = (message, ...rest) => { if (message.type === 'load') requestedDevice = message.options.device; return send(message, ...rest); };
+        this.addEventListener('message', ({data}) => {
+          if (data.type === 'result' && data.value?.device) window.__runtimeDetails.push({model: 'phonon', device: data.value.device, reason: data.value.deviceReason, threads: data.value.threads});
+          if (data.result === true && requestedDevice) window.__runtimeDetails.push({model: 'kokoro', device: requestedDevice});
+        });
+        const stop = this.terminate.bind(this);
+        this.terminate = () => { window.__liveWorkers.delete(this); stop(); };
+      }
     };
   }`);
-  const passage =
+  let passage =
     "The first part begins here. We walk through a quiet garden and notice the different flowers growing along the wall. At the far end there is a bench where someone has left a blue umbrella. The second part begins after the gate. " +
     "The long sentence starts with a red umbrella and " +
     "the visitor follows the winding path past the trees and across the wooden bridge while the afternoon light falls over the water and the leaves turn gently in the breeze and ".repeat(
       9,
     ) +
     "the long sentence ends beside a yellow bicycle.";
+  const essaySlug = process.env.VOICE_SMOKE_ESSAY;
+  if (essaySlug) {
+    assert.match(essaySlug, /^[a-z0-9-]+$/);
+    const response = await fetch(`${origin}/${essaySlug}/`);
+    assert.ok(response.ok, `Essay request failed: ${response.status}`);
+    passage = essaySpeechText(await response.text());
+    if (process.env.VOICE_SMOKE_LONG_SENTENCE === "1")
+      passage = essayLongSentence(passage);
+  }
+  console.log(
+    JSON.stringify({
+      essaySlug,
+      characters: passage.length,
+      words: passage.split(/\s+/).length,
+      longSentence: process.env.VOICE_SMOKE_LONG_SENTENCE === "1",
+    }),
+  );
+  assert.ok(passage.length > 0 && passage.length <= 50000);
   await evaluate(`{
     const pick = n => document.querySelector('[data-bhktw="'+n+'"]');
     pick('text').value = ${JSON.stringify(passage)};
@@ -166,7 +200,7 @@ try {
     console.log(JSON.stringify({ switched }));
   }
   const outcome = await evaluate(`new Promise((resolve, reject) => {
-    const timeout = setTimeout(() => { clearInterval(timer); reject(new Error('Generation timeout: '+document.querySelector('[data-bhktw="status-msg"]').textContent)); }, 600000);
+    const timeout = setTimeout(() => { clearInterval(timer); reject(new Error('Generation timeout: '+document.querySelector('[data-bhktw="status-msg"]').textContent)); }, ${Number(process.env.VOICE_SMOKE_TIMEOUT_MS || 600000)});
     const timer = setInterval(() => {
       const button = document.querySelector('[data-bhktw="generate"]');
       if (button.disabled) return;
@@ -190,6 +224,20 @@ try {
     ),
   );
   assert.equal(outcome.error, null);
+  const runtimeDetails = await evaluate("window.__runtimeDetails");
+  const backend = runtimeDetails
+    .filter((runtime) => runtime.model === selectedModel)
+    .at(-1);
+  assert.ok(backend, "Runtime did not report its selected backend");
+  assert.equal(
+    backend.device,
+    process.env.VOICE_SMOKE_GPU === "1"
+      ? "webgpu"
+      : selectedModel === "phonon"
+        ? "cpu"
+        : "wasm",
+  );
+  console.log(JSON.stringify({ backend, runtimeDetails }));
   assert.equal(outcome.earlyOutput, false);
   assert.equal(outcome.mp3, true);
   assert.equal(outcome.wav, true);
@@ -222,7 +270,7 @@ try {
   assert.ok(Math.abs(mp3Decoded.duration - decoded.duration) < 0.2);
   console.log(JSON.stringify({ mp3Decoded }));
   await mkdir("/tmp/voice96-audio", { recursive: true });
-  const prefix = `/tmp/voice96-audio/${selectedModel}-${process.env.VOICE_SMOKE_GPU === "1" ? "gpu" : "cpu"}`;
+  const prefix = `/tmp/voice96-audio/${selectedModel}-${process.env.VOICE_SMOKE_GPU === "1" ? "gpu" : "cpu"}${essaySlug ? `-${essaySlug}${process.env.VOICE_SMOKE_LONG_SENTENCE === "1" ? "-long-sentence" : ""}` : ""}`;
   for (const [extension, mime] of [
     ["wav", "audio/wav"],
     ["mp3", "audio/mpeg"],
