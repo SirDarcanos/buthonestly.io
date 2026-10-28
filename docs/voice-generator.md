@@ -1,0 +1,35 @@
+# Phonon voice generator integration
+
+## Pinned inputs
+
+- Browser runtime: official `phonon-tts@0.5.0`, exact dependency and lockfile integrity. pnpm added an exact-version minimum-release-age exception for this dependency.
+- Runtime guide/source inspected: `gradium-ai/xn-ptts@11a1425d3b1b1749c55d5c897cb8a216926ea1d4`, especially `ptts-wasm/js/README.md`, `docs/cli.md`, `ptts/src/conditioners.rs` and the published package's `index.js`/`worker.js`.
+- English model: `gradium/phonon-31m-en@92741c5b07d085ff840e26fea8ce43110b87852f`.
+- Catalogue: `gradium/phonon-voices@0ee17205f254b5abc43b266c8a0f215565c352f7`, `voices.jsonl`, filtered by `language: en`. `src/lib/voice-catalogue.mjs` retains the 25 regular and 12 character stable IDs and filenames. Other-language embeddings do not make the English checkpoint multilingual.
+- Existing Kokoro package and ONNX revision remain unchanged.
+
+## Speed and runtime
+
+Phonon's `duration_delta` is a continuous model conditioner fixed at `PhononTTS.load`, not a synthesis-time speed multiplier. The pinned CLI guide says negative values speak faster, positive values slower, and zero is normal; large values make speech less reliable. The runtime accepts finite numeric values and defines no hard numeric range. The UI deliberately limits adjustments to −0.5…0.5, in steps of 0.05; this is a UI guardrail, not a claimed model training range. Normal-speed previews use `duration_delta: 0`, without per-voice adjustments.
+
+The browser integration requests q8, `device: auto`, and one CPU thread. The official runtime tries usable WebGPU and falls back to the same model on CPU, reporting its device reason. No isolation headers are introduced. SIMD/module-worker load errors remain recoverable; model selection never silently changes. A runtime is disposed after each job, including failed or invalidated jobs. Kokoro runs in a dedicated module worker; each WebGPU/CPU load attempt gets a fresh worker because failed ONNX WebGPU initialization can poison a same-realm CPU retry. Failed attempts terminate before fallback, and worker crashes reject pending requests. Asset pinning stays inside that worker rather than repeatedly wrapping the page's global fetch. The next job reloads from browser cache rather than retaining two models in memory. Switching during loading invalidates the result and blocks new jobs until loading settles; the library does not expose a load abort handle. Switching during Phonon synthesis aborts its stream.
+
+Phonon's complete text goes directly to its built-in sentence-aligned splitter (50-token target; long sentences can split at up to 200 tokens). The client drains the PCM stream in order, then encodes one complete result. Kokoro retains its 60-word splitter and timed-pause notation. Both downloads are encoded locally at the runtime sample rate; neither partial playback nor streamed autoplay is exposed.
+
+## Preview contract for #97 / #98
+
+The public path relative to `STATIC_BASE` is `phonon-voice-samples/<stable-voice-id>-sample.mp3`. For example, Zoey uses `phonon-voice-samples/NbpkqMVS3CJeq2j8-sample.mp3`. Kokoro's existing `kokoro-voice-samples/<id>-sample.mp3` paths remain unchanged. `previewPath()` and the source catalogue are shared mapping authorities for the independent sample utility; this change generates and uploads no preview assets. Missing preview files do not enter the synthesis path.
+
+Every preview should read: “Some mornings, the coffee tastes better than usual — and I never quite know why.” Use the pinned 31M English model, normal speed (`duration_delta: 0`), and record actual runtime/encoding settings in the #97 manifest. Public-file availability remains for #98/#99 after manual upload.
+
+## Sizes and claims
+
+The pinned Hugging Face tree API reports q8 weights of 64,512,352 bytes (61.5 MiB), tokenizer JSON of 277,967 bytes, and config of 4,634 bytes. The installed single-thread WASM files are each about 4.2 MiB; the browser selects its SIMD variant, not both. Selected voice embeddings and JavaScript add overhead. These are inspected file sizes, **not** a measured total browser download or memory estimate. Browser caches may be evicted or revalidated. Do not use vendor native benchmark numbers as browser performance claims.
+
+The model and voice catalogue carry Apache-2.0 labels. The runtime is MIT OR Apache-2.0 and includes third-party notices. These labels do not grant blanket rights to generated speech; users remain responsible for text and other applicable rights.
+
+## Verification boundary
+
+Focused tests exercise session defaults, independent settings, invalid voice/speed rejection, serialized jobs, stale loads/generation/disposal, cleanup/retry, ordered complete PCM assembly, stream errors and text validation. Catalogue checks assert group counts, unique stable IDs and preview mappings. They use controlled runtime doubles and do not establish real model audio quality.
+
+`scripts/smoke-voice-generator.mjs [phonon|kokoro]` uses the existing Chrome/CDP dependencies against `VOICE_SMOKE_ORIGIN` (default `http://localhost:4321`). It exercises model/state selection, a multi-sentence passage with a long sentence, complete-output gating, WAV decode and download enablement, and request inspection across attached page and worker targets. Run results and environment limitations are reported separately; the script's presence is not a pass. Set `VOICE_SMOKE_GPU=1` to allow the browser's hardware WebGPU adapter. Successful runs retain WAV/MP3 audio, input text and a screenshot under `/tmp/voice96-audio/` for listening and review. The sample includes a single sentence over 300 words as well as shorter sentences. The harness pauses newly attached workers until request observation is enabled and rejects attachment failures. It rejects remote POST requests and requests containing the complete test passage; this bounded trace is not a universal privacy proof. Review the worker sources as well. Safari/iPhone, hardware WebGPU, and perceptual listening need explicit evidence; synthetic PCM checks and headless decoding do not replace them.

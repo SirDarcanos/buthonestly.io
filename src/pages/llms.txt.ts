@@ -40,7 +40,7 @@ const PAGES = [
   [
     "Free AI Voice Generator",
     "/resources/free-ai-voice-generator/",
-    "Browser-based text-to-speech powered by Kokoro. Nothing typed is sent to a server.",
+    "Browser-based English text-to-speech with Phonon 31M and Kokoro. Complete MP3/WAV output; text and audio stay on-device.",
   ],
   [
     "How BUT. Honestly Uses AI",
