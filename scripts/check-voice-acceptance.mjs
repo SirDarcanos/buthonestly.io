@@ -141,10 +141,12 @@ try {
   }`);
   const state = await evaluate(`(() => {
     if (pick('model').value !== 'phonon') throw Error('Fresh default is not Phonon');
-    const configure = (name,value) => { pick(name).value=value; pick(name).dispatchEvent(new Event('change')); };
+    const configure = (name,value) => { pick(name).value=value; pick(name).dispatchEvent(new Event(name === 'speed' ? 'input' : 'change')); };
     pick('text').value='A preserved passage.';
     configure('voice','NIWIOv5vTi5eRMj8'); configure('speed','1.3');
+    if (pick('speed-value').textContent !== '1.3×') throw Error('Phonon slider readout did not update');
     choose('kokoro'); configure('voice','af_bella'); configure('speed','1.25');
+    if (pick('speed-value').textContent !== '1.25×') throw Error('Kokoro slider readout did not update');
     const result = {};
     for (const model of ['phonon','kokoro']) {
       choose(model); result[model] = {voice:pick('voice').value,speed:pick('speed').value,text:pick('text').value};
@@ -353,6 +355,46 @@ try {
       normal: normal.seconds,
       slow: slow.seconds,
     });
+    phase = `${model}-timed-pauses`;
+    const pauses = await evaluate(`(async () => {
+      pick('speed').value = '1'; pick('speed').dispatchEvent(new Event('input'));
+      pick('text').value = '[0.5s]First passage.[1s]Second passage.[0.5s]';
+      pick('generate').click();
+      if (!pick('output').classList.contains('hidden')) throw Error('Output available before completion');
+      await waitFor(() => !pick('generate').disabled);
+      if (!pick('err').classList.contains('hidden')) throw Error(pick('err').textContent);
+      const response = await fetch(pick('audio').src); const bytes = await response.arrayBuffer();
+      const view = new DataView(bytes); const rate = view.getUint32(24,true);
+      const samples = new Int16Array(bytes,44); const edge = Math.round(rate*0.5);
+      if (!samples.slice(0,edge).every(value => value === 0) || !samples.slice(-edge).every(value => value === 0)) throw Error('Missing edge silence');
+      const middle = samples.slice(edge,-edge); let longest = 0; let current = 0;
+      for (const sample of middle) { current = sample === 0 ? current+1 : 0; longest = Math.max(longest,current); }
+      if (longest < rate) throw Error('Missing internal timed silence');
+      if (!middle.some(value => value !== 0)) throw Error('Missing speech');
+      const downloads = {};
+      for (const format of ['mp3','wav']) {
+        const button = pick('download-'+format); if (button.disabled) throw Error('Download disabled');
+        const nativeClick = HTMLAnchorElement.prototype.click; let blobUrl;
+        HTMLAnchorElement.prototype.click = function() { blobUrl = this.href; };
+        let encoded;
+        try { button.click(); if (!blobUrl) throw Error('Missing download URL'); encoded = await (await fetch(blobUrl)).arrayBuffer(); }
+        finally { HTMLAnchorElement.prototype.click = nativeClick; }
+        const byteLength = encoded.byteLength;
+        const context = new AudioContext({sampleRate:rate});
+        try { const decoded = await context.decodeAudioData(encoded); downloads[format] = {bytes:byteLength,seconds:decoded.duration,decodedSampleRate:decoded.sampleRate}; }
+        finally { await context.close(); }
+      }
+      return {sampleRate:rate,seconds:samples.length/rate,internalSilenceSeconds:longest/rate,downloads,live:live.size};
+    })()`);
+    assert.equal(pauses.sampleRate, 24000);
+    assert.equal(pauses.live, 0);
+    for (const format of ["mp3", "wav"]) {
+      assert.ok(pauses.downloads[format].bytes > 0);
+      assert.equal(pauses.downloads[format].decodedSampleRate, 24000);
+    }
+    assert.ok(Math.abs(pauses.downloads.mp3.seconds - pauses.seconds) < 0.2);
+    assert.ok(Math.abs(pauses.downloads.wav.seconds - pauses.seconds) < 0.01);
+    check(phase, pauses);
     phase = `${model}-mid-generation-switch`;
     const switched = await evaluate(`(async () => {
       choose(${JSON.stringify(model)}); events = []; window.switchAt = ${JSON.stringify(model)};

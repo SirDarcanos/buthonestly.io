@@ -13,6 +13,11 @@ import {
   validateFileMapping,
 } from "./lib/phonon-previews.mjs";
 
+export function validatePreviewSettings({ model, speed }) {
+  if (model !== "phonon") throw new Error("Expected Phonon");
+  if (Number(speed) !== 1) throw new Error("Expected normal speed");
+}
+
 function inspectAudio(path) {
   const probe = JSON.parse(
     execFileSync(
@@ -160,8 +165,7 @@ async function generate(directory) {
     for (const entry of previewEntries()) {
       const result = await evaluate(`(async () => {
         const pick = name => document.querySelector('[data-bhktw="'+name+'"]');
-        if (pick('model').value !== 'phonon') throw new Error('Expected Phonon');
-        if (Number(pick('speed').value) !== 0) throw new Error('Expected normal speed');
+        (${validatePreviewSettings.toString()})({model:pick('model').value,speed:pick('speed').value});
         window.__previewBlobs = []; window.__previewBackends = [];
         pick('voice').value = ${JSON.stringify(entry.id)};
         if (pick('voice').value !== ${JSON.stringify(entry.id)}) throw new Error('Unknown voice');

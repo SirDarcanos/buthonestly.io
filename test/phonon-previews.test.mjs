@@ -7,6 +7,31 @@ import {
   validateFileMapping,
 } from "../scripts/lib/phonon-previews.mjs";
 import { previewPath } from "../src/lib/voice-catalogue.mjs";
+import { validatePreviewSettings } from "../scripts/generate-phonon-previews.mjs";
+import {
+  createVoiceSession,
+  phononDurationDelta,
+} from "../src/lib/voice-generator.mjs";
+
+test("preview preflight accepts the session's normal speed and rejects other settings", () => {
+  const session = createVoiceSession();
+  const settings = { model: session.model, speed: session.settings.speed };
+  validatePreviewSettings(settings);
+  assert.equal(phononDurationDelta(settings.speed), 0);
+  assert.equal(previewManifest({}, []).generation.duration_delta, 0);
+  assert.throws(
+    () => validatePreviewSettings({ ...settings, speed: 0 }),
+    /normal speed/,
+  );
+  assert.throws(
+    () => validatePreviewSettings({ ...settings, speed: 1.3 }),
+    /normal speed/,
+  );
+  assert.throws(
+    () => validatePreviewSettings({ ...settings, model: "kokoro" }),
+    /Phonon/,
+  );
+});
 
 test("preview manifest preserves all English IDs, groups, paths and pinned normal-speed inputs", () => {
   const files = previewEntries();
