@@ -49,6 +49,10 @@ export function createPinnedModelFetch(fetchImpl) {
   };
 }
 
+export function phononDurationDelta(speed) {
+  return Number((1 - speed).toFixed(2));
+}
+
 export async function generateSpeech(runtime, request, notify = () => {}) {
   const { model, text, voice, speed, signal } = request;
   if (!text?.trim()) throw new Error("Paste some text first.");
@@ -57,32 +61,25 @@ export async function generateSpeech(runtime, request, notify = () => {}) {
   const parts = [];
   let sampleRate = runtime.sampleRate || 24000;
   const check = () => signal?.throwIfAborted();
-  if (model === "phonon") {
-    for (const chunk of chunkText(text, 40)) {
-      check();
-      const speech = runtime.stream(chunk, { voice, signal });
-      for await (const pcm of speech) {
-        check();
-        parts.push(pcm);
-        notify("Generating Phonon audio…");
-      }
-      await speech.done;
+  for (const segment of text.split(/(\[\d+(?:\.\d+)?s\])/g)) {
+    check();
+    if (/^\[\d+(?:\.\d+)?s\]$/.test(segment)) {
+      parts.push(
+        new Float32Array(Math.round(parseFloat(segment.slice(1)) * sampleRate)),
+      );
+      continue;
     }
-  } else {
-    const segments = text.split(/(\[\d+(?:\.\d+)?s\])/g);
-    for (const segment of segments) {
+    for (const chunk of chunkText(segment, model === "phonon" ? 40 : 60)) {
       check();
-      if (/^\[\d+(?:\.\d+)?s\]$/.test(segment)) {
-        parts.push(
-          new Float32Array(
-            Math.round(parseFloat(segment.slice(1)) * sampleRate),
-          ),
-        );
-        continue;
-      }
-      // Kokoro's phoneme context truncates long input; retain the existing 60-word bound.
-      for (const chunk of chunkText(segment, 60)) {
-        check();
+      if (model === "phonon") {
+        const speech = runtime.stream(chunk, { voice, signal });
+        for await (const pcm of speech) {
+          check();
+          parts.push(pcm);
+          notify("Generating Phonon audio…");
+        }
+        await speech.done;
+      } else {
         notify("Generating Kokoro audio…");
         const result = await runtime.generate(chunk, { voice, speed });
         const rate = result.sampling_rate || result.sampleRate;
@@ -115,7 +112,7 @@ export function createVoiceSession() {
   let busy = false;
   let activeController;
   const settings = {
-    phonon: { voice: "NbpkqMVS3CJeq2j8", speed: 0 },
+    phonon: { voice: "NbpkqMVS3CJeq2j8", speed: 1 },
     kokoro: { voice: "af_heart", speed: 1 },
   };
   return {

@@ -166,14 +166,14 @@ try {
     const pick = n => document.querySelector('[data-bhktw="'+n+'"]');
     pick('text').value = ${JSON.stringify(passage)};
     pick('model').value = 'phonon'; pick('model').dispatchEvent(new Event('change'));
-    pick('speed').value = '0.2'; pick('speed').dispatchEvent(new Event('change'));
+    pick('speed').value = '1.3'; pick('speed').dispatchEvent(new Event('change'));
     pick('model').value = 'kokoro'; pick('model').dispatchEvent(new Event('change'));
     if (pick('voice').options.length !== 28) throw new Error('Kokoro voice count');
     pick('speed').value = '1.2'; pick('speed').dispatchEvent(new Event('change'));
     pick('model').value = 'phonon'; pick('model').dispatchEvent(new Event('change'));
-    if (pick('speed').value !== '0.2' || pick('text').value !== ${JSON.stringify(passage)}) throw new Error('State not restored');
+    if (pick('speed').value !== '1.3' || pick('text').value !== ${JSON.stringify(passage)}) throw new Error('State not restored');
     pick('model').value = ${JSON.stringify(selectedModel)}; pick('model').dispatchEvent(new Event('change'));
-    pick('speed').value = ${JSON.stringify(selectedModel === "phonon" ? "0" : "1")}; pick('speed').dispatchEvent(new Event('change'));
+    pick('speed').value = ${JSON.stringify("1")}; pick('speed').dispatchEvent(new Event('change'));
     window.__blobs = [];
     const createUrl = URL.createObjectURL.bind(URL);
     URL.createObjectURL = blob => { window.__blobs.push(blob); return createUrl(blob); };

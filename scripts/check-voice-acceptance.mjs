@@ -143,7 +143,7 @@ try {
     if (pick('model').value !== 'phonon') throw Error('Fresh default is not Phonon');
     const configure = (name,value) => { pick(name).value=value; pick(name).dispatchEvent(new Event('change')); };
     pick('text').value='A preserved passage.';
-    configure('voice','NIWIOv5vTi5eRMj8'); configure('speed','-0.25');
+    configure('voice','NIWIOv5vTi5eRMj8'); configure('speed','1.3');
     choose('kokoro'); configure('voice','af_bella'); configure('speed','1.25');
     const result = {};
     for (const model of ['phonon','kokoro']) {
@@ -162,7 +162,7 @@ try {
   })()`);
   assert.deepEqual(state.phonon, {
     voice: "NIWIOv5vTi5eRMj8",
-    speed: "-0.25",
+    speed: "1.3",
     text: "A preserved passage.",
   });
   assert.deepEqual(state.kokoro, {
@@ -310,21 +310,17 @@ try {
     })()`);
     assert.ok(failedPreview > 0);
     check(phase, { url: failedUrl, mediaErrorCode: failedPreview });
-    const normal = await run(
-      model,
-      model === "phonon" ? 0 : 1,
-      `${model}-retry-failed-preview`,
-    );
+    const normal = await run(model, 1, `${model}-retry-failed-preview`);
     await Network.setBlockedURLs({ urls: [] });
-    const warm = await run(model, model === "phonon" ? 0 : 1, `${model}-warm`);
+    const warm = await run(model, 1, `${model}-warm`);
     const fast = await run(
       model,
-      model === "phonon" ? -0.3 : 1.2,
+      model === "phonon" ? 1.3 : 1.2,
       `${model}-fast`,
     );
     const slow = await run(
       model,
-      model === "phonon" ? 0.3 : 0.8,
+      model === "phonon" ? 0.7 : 0.8,
       `${model}-slow`,
     );
     assert.ok(fast.seconds < normal.seconds && normal.seconds < slow.seconds);
@@ -407,7 +403,7 @@ try {
     check(phase, switched);
     await run(
       model === "phonon" ? "kokoro" : "phonon",
-      model === "phonon" ? 1 : 0,
+      1,
       `${model}-switch-new-generation`,
     );
   }

@@ -14,7 +14,7 @@ test("pinned English catalogue has 25 regular and 12 character voices; Kokoro re
   assert.deepEqual(
     VOICE_GROUPS.phonon.map((g) => [g.label, g.voices.length]),
     [
-      ["Regular English", 25],
+      ["English", 25],
       ["Characters", 12],
     ],
   );

@@ -73,16 +73,15 @@ const jsonLd = [
         complete audio is generated on your device.
       </p>
       <p>
-        It starts with <a href="https://huggingface.co/gradium/phonon-31m-en"
-          >Phonon 31M English</a
-        >, with 25 regular and 12 character voices. You can also choose <a
+        You can choose between <a
+          href="https://huggingface.co/gradium/phonon-31m-en">Phonon</a
+        >, with 25 English and 12 character voices, or <a
           href="https://huggingface.co/hexgrad/Kokoro-82M"
           target="_blank"
           rel="noopener">Kokoro</a
         >, with 28 American and British English voices. Both run in your
         browser, trying available WebGPU acceleration with a CPU fallback.
-        Generation time depends on your device; native vendor benchmarks are not
-        browser measurements.
+        Generation time depends on your device.
       </p>
     </div>
 
@@ -117,12 +116,12 @@ const jsonLd = [
           data-bhktw="model"
           class="border-line bg-background text-ink w-full border px-3 py-2.5 font-sans text-base"
         >
-          <option value="phonon">Phonon 31M English</option>
+          <option value="phonon">Phonon</option>
           <option value="kokoro">Kokoro</option>
         </select>
       </div>
-      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-        <div class="flex flex-col gap-1.5 sm:col-span-1">
+      <div class="grid grid-cols-1 items-end gap-4 sm:grid-cols-2 sm:gap-6">
+        <div class="flex min-w-0 flex-col gap-1.5">
           <label
             for="bhktw-voice"
             class="text-muted font-sans text-[0.7rem] font-semibold tracking-[0.12em] uppercase"
@@ -144,52 +143,64 @@ const jsonLd = [
             }
           </select>
         </div>
-      </div>
-
-      <div class="flex flex-wrap items-end gap-4">
-        <div class="flex w-[calc(50%-0.5rem)] flex-col gap-1.5 sm:w-24">
-          <label
-            for="bhktw-speed"
-            data-bhktw="speed-label"
-            class="text-muted font-sans text-[0.7rem] font-semibold tracking-[0.12em] uppercase"
-            >Duration adjustment</label
-          >
+        <div class="flex min-w-0 flex-col gap-1.5">
+          <div class="flex items-center justify-between gap-4">
+            <label
+              for="bhktw-speed"
+              data-bhktw="speed-label"
+              class="text-muted font-sans text-[0.7rem] font-semibold tracking-[0.12em] uppercase"
+              >Speed</label
+            >
+            <output
+              for="bhktw-speed"
+              data-bhktw="speed-value"
+              class="text-ink font-mono text-sm tabular-nums">1×</output
+            >
+          </div>
           <input
-            type="number"
+            type="range"
             id="bhktw-speed"
             data-bhktw="speed"
-            min="-0.5"
-            max="0.5"
+            min="0.5"
+            max="1.5"
             step="0.05"
-            value="0"
-            class="border-line bg-background text-ink w-full border px-3 py-2.5 font-sans text-base disabled:opacity-50"
+            value="1"
+            class="accent-accent h-10 w-full cursor-pointer disabled:cursor-default disabled:opacity-50"
           />
         </div>
+      </div>
+      <div
+        class="flex flex-col items-stretch gap-4 sm:flex-row sm:items-center"
+      >
         <button
           data-bhktw="generate"
           type="button"
-          class="bg-accent text-background w-full cursor-pointer border-0 px-6 py-3 font-sans text-[0.9rem] font-semibold tracking-[0.02em] transition-opacity hover:opacity-90 disabled:cursor-default disabled:opacity-50 sm:ml-auto sm:w-auto"
+          class="bg-accent text-background w-full shrink-0 cursor-pointer border-0 px-6 py-3 font-sans text-[0.9rem] font-semibold tracking-[0.02em] transition-opacity hover:opacity-90 disabled:cursor-default disabled:opacity-50 sm:w-auto"
         >
           Generate
         </button>
-      </div>
-
-      <p data-bhktw="speed-help" class="text-muted text-sm">
-        0 is normal; negative is faster, positive is slower.
-      </p>
-      <div
-        role="status"
-        aria-live="polite"
-        class="text-muted flex items-center gap-2.5 font-mono text-[0.8rem]"
-      >
-        <span data-bhktw="dot" class="bg-muted size-2 flex-none rounded-full"
-        ></span>
-        <span data-bhktw="status-msg"
-          >Click Generate to load the selected model. Cached files are reused.</span
-        >
-      </div>
-      <div data-bhktw="progress" class="bg-faint hidden h-0.75 overflow-hidden">
-        <div class="bg-accent h-full w-0 transition-[width] duration-200"></div>
+        <div class="flex min-w-0 flex-col gap-2 sm:flex-1">
+          <div
+            role="status"
+            aria-live="polite"
+            class="text-muted flex items-center gap-2.5 font-mono text-[0.8rem]"
+          >
+            <span
+              data-bhktw="dot"
+              class="bg-muted size-2 flex-none rounded-full"></span>
+            <span data-bhktw="status-msg" class="min-w-0 break-words"
+              >Click Generate to load the selected model. Cached files are
+              reused.</span
+            >
+          </div>
+          <div
+            data-bhktw="progress"
+            class="bg-faint hidden h-0.75 overflow-hidden"
+          >
+            <div class="bg-accent h-full w-0 transition-[width] duration-200">
+            </div>
+          </div>
+        </div>
       </div>
       <div
         data-bhktw="err"
@@ -239,8 +250,8 @@ const jsonLd = [
             Paste your text, then choose Phonon or Kokoro and one of its voices.
           </li>
           <li>
-            With Kokoro, add a pause by writing <code>[0.5s]</code> in the text. Pause
-            tags are Kokoro-only; both models generate long text in smaller passages.
+            Add a pause by writing <code>[0.5s]</code> in the text for half a second
+            of silence, or <code>[1s]</code> for a full second.
           </li>
           <li>
             Click <strong>Generate</strong>. When it finishes, play the audio or
@@ -263,10 +274,9 @@ const jsonLd = [
               data-voice-samples={model}
               class:list={[model !== "phonon" && "hidden"]}
             >
-              <h3 class="mt-8">{model === "phonon" ? "Phonon" : "Kokoro"}</h3>
               {groups.map((group) => (
                 <>
-                  <h4 class="mt-6">{group.label}</h4>
+                  <h3 class="mt-6">{group.label}</h3>
                   <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
                     {group.voices.map(([id, name]) => (
                       <audio
@@ -290,15 +300,13 @@ const jsonLd = [
       <h2>Limitations</h2>
       <div class="post-content mt-4">
         <p>
-          Voice quality varies. Training duration matters, but so do the source
-          audio and how well it aligns with the text. Heart has the highest
-          official overall grade.
+          Voice quality varies by model and voice. I update the generator as
+          their developers release new versions.
         </p>
         <p>
           Both models produce 24&nbsp;kHz speech. WAV is uncompressed 16-bit
           mono (about 2.9&nbsp;MB per minute). MP3 uses 128&nbsp;kbps CBR, about
-          960&nbsp;KB per minute. Playback appears only after the whole passage
-          has been generated and encoded.
+          960&nbsp;KB per minute.
         </p>
       </div>
     </section>
@@ -381,15 +389,12 @@ const jsonLd = [
           >
           <div class="post-content mt-3">
             <p>
-              The license labels alone do not provide blanket commercial
-              clearance. Phonon 31M English and its voice catalogue are labeled
-              Apache-2.0; its browser runtime is MIT OR Apache-2.0, with
-              separate third-party notices. The reviewed Kokoro model, ONNX
-              conversion, JavaScript code, and repository-distributed voice
-              tensors are labeled Apache-2.0. That does not settle ownership of
-              generated audio or any other rights that may apply. You are
-              responsible for the text you supply and for checking whether your
-              intended use is permitted.
+              I place no additional restrictions on the audio you generate with
+              this tool, whether for personal or commercial projects. You are
+              responsible for checking that you have the rights to the source
+              text, that its license permits your intended use, and that you
+              comply with any other rights that apply. I do not check those
+              rights or take responsibility for how you use the audio.
             </p>
           </div>
         </details>

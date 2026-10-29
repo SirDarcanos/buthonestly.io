@@ -10,6 +10,7 @@ import {
   generateSpeech,
   LAMEJS_URL,
   loadScriptOnce,
+  phononDurationDelta,
 } from "./voice-generator.mjs";
 
 import { loadKokoroRuntime } from "./kokoro-runtime.mjs";
@@ -93,7 +94,7 @@ async function loadRuntime(request, notify) {
       quant: "q8",
       device: "auto",
       threads: 1,
-      conditions: { duration_delta: request.speed },
+      conditions: { duration_delta: phononDurationDelta(request.speed) },
       model: {
         weights: { q8: `${base}/model.q8.gguf` },
         tokenizer: `${base}/tokenizer.json`,
@@ -159,6 +160,9 @@ export function initVoiceGenerator(root) {
     error.textContent = message;
     error.classList.remove("hidden");
   }
+  function renderSpeedValue() {
+    pick("speed-value").textContent = `${Number(speed.value)}×`;
+  }
   function renderModel() {
     const settings = session.settings;
     voice.replaceChildren(
@@ -175,12 +179,8 @@ export function initVoiceGenerator(root) {
     const range = SPEED_CONTROLS[session.model];
     for (const key of ["min", "max", "step"]) speed[key] = String(range[key]);
     speed.value = String(settings.speed);
-    pick("speed-label").textContent =
-      session.model === "phonon" ? "Duration adjustment" : "Speed ×";
-    pick("speed-help").textContent =
-      session.model === "phonon"
-        ? "0 is normal; negative is faster, positive is slower. Small adjustments work best."
-        : "1 is normal; larger values are faster.";
+    renderSpeedValue();
+    pick("speed-label").textContent = "Speed";
     document.querySelectorAll("[data-voice-samples]").forEach((section) => {
       const selected = section.dataset.voiceSamples === session.model;
       section.classList.toggle("hidden", !selected);
@@ -201,15 +201,18 @@ export function initVoiceGenerator(root) {
     [voice, "voice"],
     [speed, "speed"],
   ]) {
-    element.addEventListener("change", () => {
+    const updateSetting = () => {
       try {
         session.configure({
           [key]: key === "speed" ? Number(element.value) : element.value,
         });
+        renderSpeedValue();
       } catch (e) {
         showError(e.message);
       }
-    });
+    };
+    element.addEventListener("change", updateSetting);
+    if (key === "speed") element.addEventListener("input", updateSetting);
   }
   for (const [btn, extension] of [
     [mp3, "mp3"],

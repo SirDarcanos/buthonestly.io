@@ -268,9 +268,9 @@ export const KOKORO_VOICE_GROUPS = [
 ];
 
 export const PHONON_VOICE_GROUPS = ["Regular English", "Characters"].map(
-  (label) => ({
-    label,
-    voices: PHONON_VOICES.filter((v) => v.group === label).map((v) => [
+  (group) => ({
+    label: group === "Regular English" ? "English" : group,
+    voices: PHONON_VOICES.filter((v) => v.group === group).map((v) => [
       v.id,
       v.name,
     ]),
@@ -282,7 +282,7 @@ export const VOICE_GROUPS = {
   kokoro: KOKORO_VOICE_GROUPS,
 };
 export const SPEED_CONTROLS = {
-  phonon: { min: -0.5, max: 0.5, step: 0.05, initial: 0 },
+  phonon: { min: 0.5, max: 1.5, step: 0.05, initial: 1 },
   kokoro: { min: 0.5, max: 1.5, step: 0.05, initial: 1 },
 };
 export function previewPath(model, id) {

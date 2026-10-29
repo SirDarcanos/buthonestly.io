@@ -22,7 +22,7 @@ test("Phonon drains every PCM frame before returning a completed result", async 
       model: "phonon",
       text,
       voice: "NbpkqMVS3CJeq2j8",
-      speed: 0,
+      speed: 1,
     })
     .then((result) => {
       completed = true;
@@ -173,6 +173,82 @@ test("a failed Phonon stream cannot return partial audio and validation rejects 
     );
 });
 
+test("shared speed multipliers map to Phonon duration adjustments", () => {
+  assert.equal(generator.phononDurationDelta(0.5), 0.5);
+  assert.equal(generator.phononDurationDelta(1), 0);
+  assert.equal(generator.phononDurationDelta(1.2), -0.2);
+  assert.equal(generator.phononDurationDelta(1.5), -0.5);
+  for (const model of ["phonon", "kokoro"]) {
+    const session = generator.createVoiceSession();
+    session.select(model);
+    assert.equal(session.settings.speed, 1);
+    assert.throws(() => session.configure({ speed: 0.45 }), /speed/);
+    assert.throws(() => session.configure({ speed: 1.55 }), /speed/);
+  }
+});
+
+for (const model of ["phonon", "kokoro"]) {
+  test(`${model} inserts exact timed silence without sending pause tags to synthesis`, async () => {
+    const calls = [];
+    const runtime = {
+      sampleRate: 8,
+      stream(text) {
+        calls.push(text);
+        const marker = calls.length;
+        return {
+          done: Promise.resolve(),
+          async *[Symbol.asyncIterator]() {
+            yield new Float32Array([marker]);
+          },
+        };
+      },
+      async generate(text) {
+        calls.push(text);
+        return { audio: new Float32Array([calls.length]), sampling_rate: 8 };
+      },
+    };
+    const result = await generator.generateSpeech(runtime, {
+      model,
+      text: "[0.25s]First.[0s][0.5s]Second.[0.25s]",
+    });
+    assert.deepEqual(calls, ["First.", "Second."]);
+    assert.equal(result.sampleRate, 8);
+    assert.deepEqual(
+      result.audio,
+      new Float32Array([0, 0, 1, 0, 0, 0, 0, 2, 0, 0]),
+    );
+  });
+}
+
+test("Phonon keeps 40-word requests ordered on either side of a pause", async () => {
+  const words = Array.from({ length: 160 }, (_, index) => `word${index}`);
+  const calls = [];
+  const result = await generator.generateSpeech(
+    {
+      sampleRate: 8,
+      stream(text) {
+        calls.push(text);
+        const marker = calls.length;
+        return {
+          done: Promise.resolve(),
+          async *[Symbol.asyncIterator]() {
+            yield new Float32Array([marker]);
+          },
+        };
+      },
+    },
+    {
+      model: "phonon",
+      text: `${words.slice(0, 80).join(" ")}[0.5s]${words.slice(80).join(" ")}`,
+    },
+  );
+  assert.deepEqual(
+    calls,
+    [0, 40, 80, 120].map((start) => words.slice(start, start + 40).join(" ")),
+  );
+  assert.deepEqual(result.audio, new Float32Array([1, 2, 0, 0, 0, 0, 3, 4]));
+});
+
 const deferred = () => {
   let resolve;
   const promise = new Promise((r) => (resolve = r));
@@ -183,12 +259,12 @@ test("a session defaults to Phonon and restores independent voice and speed sett
   assert.equal(typeof generator.createVoiceSession, "function");
   const session = generator.createVoiceSession();
   assert.equal(session.model, "phonon");
-  session.configure({ voice: "NIWIOv5vTi5eRMj8", speed: 0.2 });
+  session.configure({ voice: "NIWIOv5vTi5eRMj8", speed: 1.3 });
   session.select("kokoro");
   assert.deepEqual(session.settings, { voice: "af_heart", speed: 1 });
   session.configure({ voice: "bm_george", speed: 1.2 });
   session.select("phonon");
-  assert.deepEqual(session.settings, { voice: "NIWIOv5vTi5eRMj8", speed: 0.2 });
+  assert.deepEqual(session.settings, { voice: "NIWIOv5vTi5eRMj8", speed: 1.3 });
   assert.throws(() => session.configure({ voice: "af_heart" }), /voice/i);
   session.select("kokoro");
   assert.deepEqual(session.settings, { voice: "bm_george", speed: 1.2 });
