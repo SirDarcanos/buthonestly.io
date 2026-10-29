@@ -28,6 +28,35 @@ The pinned Hugging Face tree API reports q8 weights of 64,512,352 bytes (61.5 Mi
 
 The model and voice catalogue carry Apache-2.0 labels. The runtime is MIT OR Apache-2.0 and includes third-party notices. These labels do not grant blanket rights to generated speech; users remain responsible for text and other applicable rights.
 
+## Remaining acceptance checks
+
+Run the browser checks against a local server and the uploaded handoff manifest:
+
+```sh
+VOICE_PREVIEW_MANIFEST=local/phonon-previews-97-complete/manifest.json \
+  pnpm exec node scripts/check-voice-acceptance.mjs
+```
+
+The harness uses a fresh Chrome profile with GPU disabled, observes page and worker requests, and writes `/tmp/voice99-remaining/report.json`. Override the server with `VOICE_SMOKE_ORIGIN` and the output directory with `VOICE_ACCEPTANCE_OUTPUT`. It checks rendered selection/preview names, groups and URLs; loads all 65 native preview players; separately downloads and decodes every MP3; and compares all 37 Phonon hashes with the handoff. The public media origin does not grant cross-origin JavaScript reads, so file hashing uses Node fetch rather than changing site headers or bypassing browser security. Native media loading is checked independently.
+
+It also exercises independent settings and validation, failed previews followed by real synthesis, controlled worker/WebAssembly unavailability and retry, normal/fast/slow generation, and actual in-flight switching. Phonon switches after a real PCM frame; Kokoro switches after dispatching a real generation and before its reply. The report includes output durations, status messages, worker lifecycle, asset traffic and Cache API inventory. Worker counts are not a total-memory measurement, and short-fixture timings are not target-device performance claims. Controlled runtime failures are not physical-device compatibility tests. The script's presence is not executed acceptance evidence. Run the unit suite and build before these browser checks: their temporary fixture configuration and dependency-cache changes can reload a running dev page.
+
+### Observed remaining checks, 2026-10-29
+
+On macOS arm64, Node 24.21.0, pnpm 11.20.0 and Chrome 156.0.8078.48, the harness completed all 27 check records against the local dev server. These are representative desktop results, not universal device or speech-quality guarantees.
+
+- **AC-01/02/09:** All 37 Phonon and 28 Kokoro selection/preview IDs, names, groups and URLs matched the catalogue. All 65 rendered native players loaded metadata and all MP3s decoded; all 37 Phonon hashes matched the maintainer-accepted handoff. Retrieval/hash/decode does not constitute fresh listening.
+- **AC-03/07:** Text and separate voice/speed settings survived model switches. Empty and 50,001-character inputs were rejected for both models. Both output formats remain available together rather than through a format selector.
+- **AC-04/09:** Blocking one actual preview per model produced a media error without blocking synthesis. Controlled missing-worker and unavailable-WebAssembly failures exposed recoverable, model-specific errors; restoring the environment allowed real generation without silently changing models. Phonon reported CPU because no WebGPU adapter was available; Kokoro loaded its WASM backend.
+- **AC-07:** Phonon switched after receiving real PCM, sent cancellation and terminated its worker. Kokoro switched about 102 ms after dispatching a real synthesis request; its current passage settled about 38.8 seconds later before cleanup. Both discarded old output, kept playback/downloads unavailable and allowed a successful next-model generation. At most one tracked model worker existed, with zero remaining after each job. Kokoro does not offer immediate mid-passage cancellation.
+- **AC-03/10:** For the same short fixture, Phonon durations at −0.3/0/+0.3 were 3.92/4.88/5.68 seconds; Kokoro at 1.2/1/0.8 produced 4.40/5.00/5.975 seconds. Normal-speed repeat durations matched. These measurements verify speed direction for representative voices, not every voice or setting.
+- **AC-04/10:** Cache contents included the 64,512,352-byte Phonon q8 weights and 92,361,116-byte Kokoro q8 weights. Neither warm job requested its model weights again. Phonon's warm statuses reported cached reads; Kokoro now labels progress “Loading” because the library reports progress for cached reads too. Selected Hugging Face/WASM requests transferred 68,927,443 encoded bytes on the first successful Phonon job and 95,928,138 on the first successful Kokoro job, including redirects/runtime/selected voice overhead. These are bounded transfer observations, not whole-page download or memory totals. Browser eviction/revalidation remains possible.
+- **AC-04:** No remote POST or full-fixture-bearing URL/body appeared in the attached page/worker trace. This bounded observation and source inspection do not prove every possible privacy property.
+
+The current unit suite passed all 315 tests, formatting passed, the build produced 94 pages, links resolved for 52 essays, and rendered SEO passed for 94 pages/75 sitemap URLs. Earlier actual CPU/WebGPU completed-output and long-text evidence remains applicable to unchanged synthesis paths; this run did not repeat the long-text listening work or measure GPU performance. The preview handoff's separate maintainer acceptance remains distinct from automated decoding.
+
+Safari WebDriver could not create a session because “Allow remote automation” is disabled; it was left unchanged. No iPhone was available. Safari/iPhone compatibility is **unverified**, not a pass. Controlled runtime failures do not fill that device gap. No 50,000-character completion guarantee, exhaustive voice/speed listening, total-memory bound or target-device performance claim is established.
+
 ## Verification boundary
 
 Focused tests exercise session defaults, independent settings, invalid voice/speed rejection, serialized jobs, stale loads/generation/disposal, cleanup/retry, ordered complete PCM assembly, stream errors and text validation. Catalogue checks assert group counts, unique stable IDs and preview mappings. They use controlled runtime doubles and do not establish real model audio quality.

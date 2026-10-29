@@ -15,7 +15,7 @@ self.onmessage = async ({ data }) => {
         progress_callback: (progress) => {
           if (progress.status === "progress" && progress.total)
             self.postMessage({
-              status: `Downloading ${progress.file}: ${Math.round(progress.progress)}%…`,
+              status: `Loading ${progress.file}: ${Math.round(progress.progress)}%…`,
             });
         },
       });
