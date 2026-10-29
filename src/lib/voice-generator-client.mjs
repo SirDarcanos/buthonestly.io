@@ -260,27 +260,36 @@ export function initVoiceGenerator(root) {
           );
           notify("Encoding completed audio…");
           const wavBlob = encodeWav(result.audio, result.sampleRate);
-          await loadScriptOnce(LAMEJS_URL, {
-            isReady: () => getLamejs() !== null,
-          });
-          request.signal.throwIfAborted();
-          return {
-            wav: wavBlob,
-            mp3: encodeMp3(result.audio, result.sampleRate),
-          };
+          let mp3Blob;
+          let mp3Error;
+          try {
+            await loadScriptOnce(LAMEJS_URL, {
+              isReady: () => getLamejs() !== null,
+            });
+            request.signal.throwIfAborted();
+            mp3Blob = encodeMp3(result.audio, result.sampleRate);
+          } catch (e) {
+            request.signal.throwIfAborted();
+            mp3Error = `MP3 export failed: ${e.message} You can play or download the completed WAV audio.`;
+          }
+          return { wav: wavBlob, mp3: mp3Blob, mp3Error };
         },
         onStatus: (message) => {
           status.textContent = message;
         },
       });
       downloads.set("wav", result.wav);
-      downloads.set("mp3", result.mp3);
+      if (result.mp3) downloads.set("mp3", result.mp3);
       audioUrl = URL.createObjectURL(result.wav);
       audio.src = audioUrl;
       audio.dataset.audioLabel = `${model.options[model.selectedIndex].text} — ${voice.options[voice.selectedIndex].text}`;
-      mp3.disabled = wav.disabled = false;
+      mp3.disabled = !result.mp3;
+      wav.disabled = false;
       output.classList.remove("hidden");
-      status.textContent = "Done. The complete passage is ready.";
+      status.textContent = result.mp3Error
+        ? "Done. WAV audio is ready; MP3 export failed."
+        : "Done. The complete passage is ready.";
+      if (result.mp3Error) showError(result.mp3Error);
       window.fathom?.trackEvent?.("Voice generated");
     } catch (e) {
       if (e.name === "AbortError")
