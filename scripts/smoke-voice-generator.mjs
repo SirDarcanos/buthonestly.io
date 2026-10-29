@@ -269,8 +269,10 @@ try {
   assert.ok(mp3Decoded.bytes > 1000);
   assert.ok(Math.abs(mp3Decoded.duration - decoded.duration) < 0.2);
   console.log(JSON.stringify({ mp3Decoded }));
-  await mkdir("/tmp/voice96-audio", { recursive: true });
-  const prefix = `/tmp/voice96-audio/${selectedModel}-${process.env.VOICE_SMOKE_GPU === "1" ? "gpu" : "cpu"}${essaySlug ? `-${essaySlug}${process.env.VOICE_SMOKE_LONG_SENTENCE === "1" ? "-long-sentence" : ""}` : ""}`;
+  const outputDirectory =
+    process.env.VOICE_SMOKE_OUTPUT_DIR || "/tmp/voice96-audio";
+  await mkdir(outputDirectory, { recursive: true });
+  const prefix = `${outputDirectory}/${selectedModel}-${process.env.VOICE_SMOKE_GPU === "1" ? "gpu" : "cpu"}${essaySlug ? `-${essaySlug}${process.env.VOICE_SMOKE_LONG_SENTENCE === "1" ? "-long-sentence" : ""}` : ""}`;
   for (const [extension, mime] of [
     ["wav", "audio/wav"],
     ["mp3", "audio/mpeg"],

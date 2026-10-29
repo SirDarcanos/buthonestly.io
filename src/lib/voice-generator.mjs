@@ -58,13 +58,16 @@ export async function generateSpeech(runtime, request, notify = () => {}) {
   let sampleRate = runtime.sampleRate || 24000;
   const check = () => signal?.throwIfAborted();
   if (model === "phonon") {
-    const speech = runtime.stream(text, { voice, signal });
-    for await (const pcm of speech) {
+    for (const chunk of chunkText(text, 40)) {
       check();
-      parts.push(pcm);
-      notify("Generating Phonon audio…");
+      const speech = runtime.stream(chunk, { voice, signal });
+      for await (const pcm of speech) {
+        check();
+        parts.push(pcm);
+        notify("Generating Phonon audio…");
+      }
+      await speech.done;
     }
-    await speech.done;
   } else {
     const segments = text.split(/(\[\d+(?:\.\d+)?s\])/g);
     for (const segment of segments) {
