@@ -651,30 +651,30 @@
   "issues": {},
   "outcomes": {
     "desktop:/": {
-      "checkedAt": "2026-10-05T15:40:57.289Z",
-      "consecutivePasses": 2,
-      "observationId": "37334738153:desktop",
+      "checkedAt": "2026-11-02T16:54:28.983Z",
+      "consecutivePasses": 3,
+      "observationId": "41485947794:desktop",
       "openIssueNumber": null,
       "status": "passed"
     },
     "desktop:/resources/free-ai-voice-generator/": {
-      "checkedAt": "2026-10-05T15:40:57.289Z",
-      "consecutivePasses": 2,
-      "observationId": "37334738153:desktop",
+      "checkedAt": "2026-11-02T16:54:28.983Z",
+      "consecutivePasses": 3,
+      "observationId": "41485947794:desktop",
       "openIssueNumber": null,
       "status": "passed"
     },
     "desktop:/what-is-a-gpu/": {
-      "checkedAt": "2026-10-05T15:40:57.289Z",
-      "consecutivePasses": 2,
-      "observationId": "37334738153:desktop",
+      "checkedAt": "2026-11-02T16:54:28.983Z",
+      "consecutivePasses": 3,
+      "observationId": "41485947794:desktop",
       "openIssueNumber": null,
       "status": "passed"
     },
     "desktop:/when-ai-stops-being-a-tool/": {
-      "checkedAt": "2026-10-05T15:40:57.289Z",
-      "consecutivePasses": 2,
-      "observationId": "37334738153:desktop",
+      "checkedAt": "2026-11-02T16:54:28.983Z",
+      "consecutivePasses": 3,
+      "observationId": "41485947794:desktop",
       "openIssueNumber": null,
       "status": "passed"
     },
