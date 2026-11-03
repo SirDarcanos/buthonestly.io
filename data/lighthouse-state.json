@@ -579,6 +579,9 @@
       "68b016e87648199ee6d4f5db08554fbfa54b9b82dd990d928b15e8c767542295",
       "9e21ca3d916ec53ee368080a36254d6f9a137d0ece1b986460fb5fadf5fbd691"
     ],
+    "pi-coding-agent-setup": [
+      "4e3d9aca44fe5623c9132c0b8614ec9725c5853176ff79b2e12e2a225cf5209a"
+    ],
     "psychological-safety-in-teams-people-first-leadership": [
       "1d671c6e988229e9d4437a79ed75141a46c6ec44484499b72832fb8a8e85aff5"
     ],
@@ -679,9 +682,8 @@
       "status": "passed"
     },
     "mobile:/": {
-      "checkedAt": "2026-10-26T12:24:43.521Z",
-      "consecutivePasses": 17,
-      "observationId": "40322273358:mobile",
+      "checkedAt": "2026-11-03T15:06:25.867Z",
+      "consecutivePasses": 18,
       "openIssueNumber": null,
       "status": "passed"
     },
@@ -712,6 +714,12 @@
     "mobile:/nimble-free-local-alternative-to-jev/": {
       "checkedAt": "2026-10-17T09:35:31.222Z",
       "consecutivePasses": 2,
+      "openIssueNumber": null,
+      "status": "passed"
+    },
+    "mobile:/pi-coding-agent-setup/": {
+      "checkedAt": "2026-11-03T15:06:25.867Z",
+      "consecutivePasses": 1,
       "openIssueNumber": null,
       "status": "passed"
     },
