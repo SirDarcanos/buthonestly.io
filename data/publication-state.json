@@ -214,7 +214,7 @@
     "pi-coding-agent-setup": {
       "newsletter": {
         "broadcastId": 26775299,
-        "status": "draft"
+        "status": "delivery-requested"
       },
       "indexNow": {
         "contentHash": "4e3d9aca44fe5623c9132c0b8614ec9725c5853176ff79b2e12e2a225cf5209a"
