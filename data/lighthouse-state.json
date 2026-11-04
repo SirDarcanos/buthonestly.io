@@ -576,6 +576,7 @@
       "6f0a6fa0a4ea6ef2fbb4e37c3834c3c4acf4a98ca03c0b1c6775ced4f3903bb5"
     ],
     "nimble-free-local-alternative-to-jev": [
+      "5dcb0881a0687d86a7aaf7639a7a14fa43f63b0e4f52f5faab8cfaa913506c8f",
       "68b016e87648199ee6d4f5db08554fbfa54b9b82dd990d928b15e8c767542295",
       "8ac0eedf894e958d8344d584c42ef5185ea0fe2e0703f8ee1865f1da6bed94bb",
       "9e21ca3d916ec53ee368080a36254d6f9a137d0ece1b986460fb5fadf5fbd691"
@@ -621,7 +622,8 @@
       "66d7dc38b2506a22f0551f03690a156f79beb81c034fa368ef77cb3d96574539"
     ],
     "what-is-vibe-coding-how-to-do-it": [
-      "16ed821e59467ec64cf58337db69bd9247b18c55beb37188c54fe655bc51c4cd"
+      "16ed821e59467ec64cf58337db69bd9247b18c55beb37188c54fe655bc51c4cd",
+      "eb36f7c37ffc0a40cfbb3bae04f3fcedab8ba7d27c8593748abaf15509a2cf0d"
     ],
     "when-ai-stops-being-a-tool": [
       "6ab9afba28ee6fe554273492e3eee71e18326877058f34517d0098f847579311",
@@ -684,8 +686,8 @@
       "status": "passed"
     },
     "mobile:/": {
-      "checkedAt": "2026-11-04T05:45:44.746Z",
-      "consecutivePasses": 20,
+      "checkedAt": "2026-11-04T06:12:41.622Z",
+      "consecutivePasses": 22,
       "openIssueNumber": null,
       "status": "passed"
     },
@@ -714,8 +716,8 @@
       "status": "passed"
     },
     "mobile:/nimble-free-local-alternative-to-jev/": {
-      "checkedAt": "2026-11-04T05:45:44.746Z",
-      "consecutivePasses": 3,
+      "checkedAt": "2026-11-04T06:12:41.622Z",
+      "consecutivePasses": 4,
       "openIssueNumber": null,
       "status": "passed"
     },
@@ -748,6 +750,12 @@
       "checkedAt": "2026-10-26T12:24:43.521Z",
       "consecutivePasses": 4,
       "observationId": "40322273358:mobile",
+      "openIssueNumber": null,
+      "status": "passed"
+    },
+    "mobile:/what-is-vibe-coding-how-to-do-it/": {
+      "checkedAt": "2026-11-04T06:12:41.622Z",
+      "consecutivePasses": 1,
       "openIssueNumber": null,
       "status": "passed"
     },
