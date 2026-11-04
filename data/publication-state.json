@@ -208,7 +208,7 @@
         "status": "delivered"
       },
       "indexNow": {
-        "contentHash": "8ac0eedf894e958d8344d584c42ef5185ea0fe2e0703f8ee1865f1da6bed94bb"
+        "contentHash": "5dcb0881a0687d86a7aaf7639a7a14fa43f63b0e4f52f5faab8cfaa913506c8f"
       }
     },
     "pi-coding-agent-setup": {
@@ -311,7 +311,7 @@
     },
     "what-is-vibe-coding-how-to-do-it": {
       "indexNow": {
-        "contentHash": "16ed821e59467ec64cf58337db69bd9247b18c55beb37188c54fe655bc51c4cd"
+        "contentHash": "eb36f7c37ffc0a40cfbb3bae04f3fcedab8ba7d27c8593748abaf15509a2cf0d"
       },
       "newsletter": {
         "status": "delivered"
