@@ -77,7 +77,7 @@ test("pull-request revisions are isolated and measured on one unprivileged runne
   );
   assert.match(
     pullRequestWorkflow,
-    /grep -q LIGHTHOUSE_PREVIEW_SLUGS src\/lib\/essays\.ts[\s\S]*LIGHTHOUSE_INCLUDE_SCHEDULED=true npm run build/,
+    /grep -q LIGHTHOUSE_PREVIEW_SLUGS src\/lib\/essays\.ts[\s\S]*LIGHTHOUSE_INCLUDE_SCHEDULED=true \$manager run build/,
   );
   assert.match(
     pullRequestWorkflow,
@@ -85,33 +85,67 @@ test("pull-request revisions are isolated and measured on one unprivileged runne
   );
   assert.match(
     pullRequestWorkflow,
-    /npm run lighthouse -- --trigger pull-request/,
+    /pnpm run lighthouse --trigger pull-request/,
   );
 });
 
-test("pull-request builds restore Astro image caches after dependency installation", () => {
-  const headInstallIndex = pullRequestWorkflow.indexOf("- run: npm ci");
+test("pull-request builds share image assets without reusing rendered pages", () => {
+  const headInstallIndex = pullRequestWorkflow.indexOf(
+    "name: Install head revision dependencies",
+  );
   const baseInstallIndex = pullRequestWorkflow.indexOf(
     "working-directory: .lighthouse-base",
   );
   const imageCacheIndex = pullRequestWorkflow.indexOf(
-    "name: Restore Astro image caches",
+    "name: Restore head Astro image assets",
   );
-  const buildIndex = pullRequestWorkflow.indexOf(
-    "name: Build pull-request revisions",
-  );
+  const buildIndex = pullRequestWorkflow.indexOf("name: Build head revision");
 
   assert.notEqual(headInstallIndex, -1, "the head revision must be installed");
   assert.notEqual(baseInstallIndex, -1, "the base revision must be installed");
   assert.notEqual(imageCacheIndex, -1, "Astro image caches must be restored");
   assert.notEqual(buildIndex, -1, "the revisions must be built");
-  assert.match(pullRequestWorkflow, /path: \|\n\s+node_modules\/\.astro/);
-  assert.match(pullRequestWorkflow, /\.lighthouse-base\/node_modules\/\.astro/);
+  assert.match(pullRequestWorkflow, /path: node_modules\/\.astro\/assets\n/);
+  assert.doesNotMatch(
+    pullRequestWorkflow,
+    /path:.*dist|actions\/download-artifact/,
+  );
+  assert.match(
+    pullRequestWorkflow,
+    /cache: pnpm\n\s+cache-dependency-path: \|\n\s+pnpm-lock.yaml\n\s+\.lighthouse-base\/pnpm-lock.yaml\n\s+\.lighthouse-base\/package-lock.json/,
+  );
+  const shareIndex = pullRequestWorkflow.indexOf(
+    "run: node scripts/share-lighthouse-images.mjs . .lighthouse-base",
+  );
+  const baseBuildIndex = pullRequestWorkflow.indexOf(
+    "name: Build base revision",
+  );
+  const serverIndex = pullRequestWorkflow.indexOf(
+    "name: Start revision servers",
+  );
+  assert.ok(buildIndex < shareIndex && shareIndex < baseBuildIndex);
+  assert.ok(baseBuildIndex < serverIndex);
+  assert.match(
+    pullRequestWorkflow,
+    /key:.*runner\.arch.*steps\.head_image_toolchain.outputs.key.*base\.sha/,
+  );
+  assert.match(
+    pullRequestWorkflow,
+    /name: Report image cache outcome\n\s+if: always\(\)/,
+  );
+  assert.equal(
+    (pullRequestWorkflow.match(/LIGHTHOUSE_PREVIEW_SLUGS: \$/g) ?? []).length,
+    2,
+  );
+  assert.match(
+    pullRequestWorkflow,
+    /name: Build head revision[\s\S]*?shell: bash\n\s+run: pnpm run build.*tee/,
+  );
   assert.ok(
     headInstallIndex < imageCacheIndex &&
       baseInstallIndex < imageCacheIndex &&
       imageCacheIndex < buildIndex,
-    "both Astro image caches must be restored after npm ci and before the builds",
+    "both Astro image caches must be restored after dependency installation and before the builds",
   );
 });
 

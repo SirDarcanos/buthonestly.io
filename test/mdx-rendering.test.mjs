@@ -19,10 +19,14 @@ test("MDX renders ordinary Markdown and the semantic content modules", (context)
   });
   copyFileSync(path.join(fixtureRoot, "astro.config.fixture"), configPath);
 
-  const result = spawnSync("npx", ["astro", "build", "--root", fixtureRoot], {
-    cwd: repositoryRoot,
-    encoding: "utf8",
-  });
+  const result = spawnSync(
+    "pnpm",
+    ["exec", "astro", "build", "--root", fixtureRoot],
+    {
+      cwd: repositoryRoot,
+      encoding: "utf8",
+    },
+  );
 
   assert.equal(result.status, 0, result.stdout + result.stderr);
 
@@ -62,6 +66,10 @@ test("MDX renders ordinary Markdown and the semantic content modules", (context)
   );
   assert.match(rich, /<summary[^>]*>Quick Summary<\/summary>/);
   assert.match(rich, /AI-generated summary based on the text of the article/);
+  assert.match(
+    rich,
+    /<a[^>]*href="\/artificial-intelligence-tools\/"[^>]*>\s*Read about how BUT\. Honestly uses AI\s*<\/a>/,
+  );
   assert.match(rich, /class="callout callout-tip"/);
   assert.match(rich, /class="callout callout-information"/);
   assert.match(rich, /class="callout callout-disclaimer"/);

@@ -67,7 +67,7 @@
     },
     "creating-a-custom-add-to-cart-link-woocommerce": {
       "indexNow": {
-        "contentHash": "c5e85c07695a207ce15e3533525c77a43064cd2c2b108f720220312472e3e00b"
+        "contentHash": "ceb075bcd8fb8a2f31c524bbabc79abe110b373a42caab8ed60809fbf712a6ac"
       },
       "newsletter": {
         "status": "delivered"
@@ -208,7 +208,16 @@
         "status": "delivered"
       },
       "indexNow": {
-        "contentHash": "9e21ca3d916ec53ee368080a36254d6f9a137d0ece1b986460fb5fadf5fbd691"
+        "contentHash": "8ac0eedf894e958d8344d584c42ef5185ea0fe2e0703f8ee1865f1da6bed94bb"
+      }
+    },
+    "pi-coding-agent-setup": {
+      "newsletter": {
+        "broadcastId": 26775299,
+        "status": "delivered"
+      },
+      "indexNow": {
+        "contentHash": "ff855a676042cffc302dbfca5330ce55bb5b4dc0699f905784a05f12f6ab2afe"
       }
     },
     "psychological-safety-in-teams-people-first-leadership": {
@@ -229,7 +238,7 @@
     },
     "shotlist-automatic-annotated-screenshots": {
       "indexNow": {
-        "contentHash": "606e93aac1a6e0bf47b2a8736e3b0c72362bae552132983df630d345b92dd1ff"
+        "contentHash": "0fe526dcc57d0967ac851d6d52c7ec49a4fb70d522c45570609e3e031d91ecb5"
       },
       "newsletter": {
         "status": "delivered"
@@ -278,7 +287,7 @@
     "what-if-wordpress-wasnt-gpl": {
       "newsletter": {
         "broadcastId": 26457295,
-        "status": "delivery-requested"
+        "status": "delivered"
       },
       "indexNow": {
         "contentHash": "4db70fa59a674723620b17bf369d74449f7f4b457c62c71856cfa331c60c315b"

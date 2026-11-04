@@ -57,7 +57,7 @@ This is my setup as of October 2026:
 | Workflow | [My Agent Skills collection](https://github.com/SirDarcanos/agentskills), GitHub | Reusable agent instructions, specifications, and tickets |
 | Delegation and background work | [pi-subagents](https://github.com/nicobailon/pi-subagents), [pi-background-tasks](https://github.com/ismailsaleekh/pi-background-tasks) | Separate agents for reviews and parallel work; tasks that run in the background |
 | Interface | [pi-open-tui](https://github.com/OldSuns/pi-open-tui), neutral-panels theme, [pi-chat-bubbles](https://github.com/SirDarcanos/pi-chat-bubbles), [pi-compact-tools](https://github.com/nedleeds/pi-compact-tools) | Make conversations and tool output easier to follow |
-| Context pruning | [pi-nimble-compact](https://github.com/SirDarcanos/pi-nimble-compact) | Trim older tool output from the context sent to the model |
+| Context pruning | [pi-s1-compact](https://github.com/SirDarcanos/pi-s1-compact) | Trim older tool output from the context sent to the model |
 | Local models | [Ollama](https://ollama.com/) | Run Nimble and Clef for focused questions, with occasional use of Gemma and Qwen |
 | Terminal and editor | [Ghostty](https://ghostty.org/), [VS Code](https://code.visualstudio.com/) | Run Pi in Ghostty; open VS Code when I write code manually |
 
@@ -183,13 +183,13 @@ These changes affect what I see in the terminal. Collapsing a tool’s output on
 
 ### Keeping Older Tool Output out of the Way
 
-[pi-nimble-compact](https://github.com/SirDarcanos/pi-nimble-compact) works on the model’s context instead. It removes or shortens eligible older tool outputs from later requests, while preserving the originals for the agent to retrieve when needed.
+I now use [pi-s1-compact](https://github.com/SirDarcanos/pi-s1-compact) to work on the model’s context instead. It removes or shortens eligible older tool outputs from later requests, while preserving the originals for the agent to retrieve when needed.
 
-I adapted it from [Nour Helmi’s pi-jev-compaction](https://github.com/nourhelmi/pi-jev-compaction) and [tamaratran’s fast-jev-compaction](https://github.com/tamaratran/fast-jev-compaction), using Nimble locally through Ollama.
+It lets me choose a classifier independently of my coding model, using a local model through Ollama or one in Pi’s registry.
 
 I consider this one useful rather than essential. It works quietly, and I occasionally look at the reductions it reports. Those figures estimate how much context has been removed; they aren’t a measure of subscription or billing savings.
 
-I’ve covered the local setup and the comparison with Jev in [my essay about running Nimble locally with Ollama](/nimble-free-local-alternative-to-jev/).
+I cover installation, classifier selection, and the pruning commands in [my essay about running Nimble locally with Ollama](/nimble-free-local-alternative-to-jev/#a-pi-coding-agent-extension-for-context-pruning).
 
 ## Where Ollama and Local Models Fit
 

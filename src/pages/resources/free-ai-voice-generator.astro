@@ -7,52 +7,17 @@ import { AUTHOR_ID, SITE_URL } from "../../consts.ts";
 import { STATIC_BASE } from "../../lib/cdn.mjs";
 import { breadcrumbList } from "../../lib/schema.ts";
 
-const voiceGroups = [
-  {
-    label: "American English",
-    voices: [
-      ["am_adam", "Adam (Male)"],
-      ["af_alloy", "Alloy (Female)"],
-      ["af_aoede", "Aoede (Female)"],
-      ["af_bella", "Bella (Female)"],
-      ["am_echo", "Echo (Male)"],
-      ["am_eric", "Eric (Male)"],
-      ["am_fenrir", "Fenrir (Male)"],
-      ["af_heart", "Heart (Female)"],
-      ["af_jessica", "Jessica (Female)"],
-      ["af_kore", "Kore (Female)"],
-      ["am_liam", "Liam (Male)"],
-      ["am_michael", "Michael (Male)"],
-      ["af_nicole", "Nicole (Female)"],
-      ["af_nova", "Nova (Female)"],
-      ["am_onyx", "Onyx (Male)"],
-      ["am_puck", "Puck (Male)"],
-      ["af_river", "River (Female)"],
-      ["am_santa", "Santa (Male)"],
-      ["af_sarah", "Sarah (Female)"],
-      ["af_sky", "Sky (Female)"],
-    ],
-  },
-  {
-    label: "British English",
-    voices: [
-      ["bf_alice", "Alice (Female)"],
-      ["bm_daniel", "Daniel (Male)"],
-      ["bf_emma", "Emma (Female)"],
-      ["bm_fable", "Fable (Male)"],
-      ["bm_george", "George (Male)"],
-      ["bf_isabella", "Isabella (Female)"],
-      ["bm_lewis", "Lewis (Male)"],
-      ["bf_lily", "Lily (Female)"],
-    ],
-  },
-];
+import {
+  VOICE_GROUPS,
+  PHONON_VOICE_GROUPS,
+  previewPath,
+} from "../../lib/voice-catalogue.mjs";
+const voiceGroups = PHONON_VOICE_GROUPS;
 
 const sampleSentence =
   "Some mornings, the coffee tastes better than usual — and I never quite know why.";
-const sampleBase = `${STATIC_BASE}/kokoro-voice-samples`;
 const description =
-  "Free AI voice generator with 28 English Kokoro voices. Generate MP3 or WAV speech on your device, with no signup required.";
+  "Free AI voice generator with Phonon and Kokoro English voices. Generate complete MP3 or WAV speech on your device, with no signup required.";
 const ogImage = `${SITE_URL}/og/free-ai-voice-generator.png`;
 const ogImageAlt =
   "Free AI Voice Generator social preview showing text becoming an audio waveform.";
@@ -73,13 +38,13 @@ const jsonLd = [
     applicationSubCategory: "Text-to-Speech",
     operatingSystem: "Any",
     browserRequirements:
-      "Requires a browser with WebAssembly; WebGPU is recommended for faster generation.",
+      "Phonon requires WebAssembly SIMD and module workers; optional WebGPU, with CPU fallback.",
     isAccessibleForFree: true,
     offers: { "@type": "Offer", price: 0 },
     inLanguage: "en",
     featureList: [
       "Local text-to-speech generation",
-      "28 American and British English voices",
+      "37 Phonon English voices and 28 Kokoro English voices",
       "On-device synthesis",
       "Timed pauses",
       "MP3 and WAV downloads",
@@ -104,16 +69,19 @@ const jsonLd = [
     <div class="post-content mt-7">
       <p>
         I built this free AI voice generator to turn text into speech without an
-        account. Paste your text, choose one of 28 American or British English
-        voices, and the audio is generated on your device.
+        account. Paste your text, choose a model and an English voice, and the
+        complete audio is generated on your device.
       </p>
       <p>
-        It runs the open-source <a
+        You can choose between <a
+          href="https://huggingface.co/gradium/phonon-31m-en">Phonon</a
+        >, with 25 English and 12 character voices, or <a
           href="https://huggingface.co/hexgrad/Kokoro-82M"
           target="_blank"
           rel="noopener">Kokoro</a
-        > model in your browser. It tries WebGPU when available and falls back to
-        slower WebAssembly when needed.
+        >, with 28 American and British English voices. Both run in your
+        browser, trying available WebGPU acceleration with a CPU fallback.
+        Generation time depends on your device.
       </p>
     </div>
 
@@ -137,8 +105,23 @@ const jsonLd = [
         ></textarea>
       </div>
 
-      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-        <div class="flex flex-col gap-1.5 sm:col-span-1">
+      <div class="flex flex-col gap-1.5">
+        <label
+          for="bhktw-model"
+          class="text-muted font-sans text-[0.7rem] font-semibold tracking-[0.12em] uppercase"
+          >Model</label
+        >
+        <select
+          id="bhktw-model"
+          data-bhktw="model"
+          class="border-line bg-background text-ink w-full border px-3 py-2.5 font-sans text-base"
+        >
+          <option value="phonon">Phonon</option>
+          <option value="kokoro">Kokoro</option>
+        </select>
+      </div>
+      <div class="grid grid-cols-1 items-end gap-4 sm:grid-cols-2 sm:gap-6">
+        <div class="flex min-w-0 flex-col gap-1.5">
           <label
             for="bhktw-voice"
             class="text-muted font-sans text-[0.7rem] font-semibold tracking-[0.12em] uppercase"
@@ -160,47 +143,68 @@ const jsonLd = [
             }
           </select>
         </div>
-      </div>
-
-      <div class="flex flex-wrap items-end gap-4">
-        <div class="flex w-[calc(50%-0.5rem)] flex-col gap-1.5 sm:w-24">
-          <label
-            for="bhktw-speed"
-            class="text-muted font-sans text-[0.7rem] font-semibold tracking-[0.12em] uppercase"
-            >Speed ×</label
-          >
+        <div class="flex min-w-0 flex-col gap-1.5">
+          <div class="flex items-center justify-between gap-4">
+            <label
+              for="bhktw-speed"
+              data-bhktw="speed-label"
+              class="text-muted font-sans text-[0.7rem] font-semibold tracking-[0.12em] uppercase"
+              >Speed</label
+            >
+            <output
+              for="bhktw-speed"
+              data-bhktw="speed-value"
+              class="text-ink font-mono text-sm tabular-nums">1×</output
+            >
+          </div>
           <input
-            type="number"
+            type="range"
             id="bhktw-speed"
             data-bhktw="speed"
             min="0.5"
             max="1.5"
             step="0.05"
             value="1"
-            class="border-line bg-background text-ink w-full border px-3 py-2.5 font-sans text-base disabled:opacity-50"
+            class="accent-accent h-10 w-full cursor-pointer disabled:cursor-default disabled:opacity-50"
           />
         </div>
+      </div>
+      <div
+        class="flex flex-col items-stretch gap-4 sm:flex-row sm:items-center"
+      >
         <button
           data-bhktw="generate"
           type="button"
-          class="bg-accent text-background w-full cursor-pointer border-0 px-6 py-3 font-sans text-[0.9rem] font-semibold tracking-[0.02em] transition-opacity hover:opacity-90 disabled:cursor-default disabled:opacity-50 sm:ml-auto sm:w-auto"
+          class="bg-accent text-background w-full shrink-0 cursor-pointer border-0 px-6 py-3 font-sans text-[0.9rem] font-semibold tracking-[0.02em] transition-opacity hover:opacity-90 disabled:cursor-default disabled:opacity-50 sm:w-auto"
         >
           Generate
         </button>
-      </div>
-
-      <div class="text-muted flex items-center gap-2.5 font-mono text-[0.8rem]">
-        <span data-bhktw="dot" class="bg-muted size-2 flex-none rounded-full"
-        ></span>
-        <span data-bhktw="status-msg"
-          >Checking whether the voice model is ready…</span
-        >
-      </div>
-      <div data-bhktw="progress" class="bg-faint hidden h-0.75 overflow-hidden">
-        <div class="bg-accent h-full w-0 transition-[width] duration-200"></div>
+        <div class="flex min-w-0 flex-col gap-2 sm:flex-1">
+          <div
+            role="status"
+            aria-live="polite"
+            class="text-muted flex items-center gap-2.5 font-mono text-[0.8rem]"
+          >
+            <span
+              data-bhktw="dot"
+              class="bg-muted size-2 flex-none rounded-full"></span>
+            <span data-bhktw="status-msg" class="min-w-0 break-words"
+              >Click Generate to load the selected model. Cached files are
+              reused.</span
+            >
+          </div>
+          <div
+            data-bhktw="progress"
+            class="bg-faint hidden h-0.75 overflow-hidden"
+          >
+            <div class="bg-accent h-full w-0 transition-[width] duration-200">
+            </div>
+          </div>
+        </div>
       </div>
       <div
         data-bhktw="err"
+        role="alert"
         class="border-accent text-accent hidden border px-4 py-3 font-sans text-[0.9rem]"
       >
       </div>
@@ -243,12 +247,11 @@ const jsonLd = [
       <div class="post-content mt-4">
         <ul>
           <li>
-            Paste your text, then choose one of the 28 American and British
-            English voices.
+            Paste your text, then choose Phonon or Kokoro and one of its voices.
           </li>
           <li>
-            Add a pause anywhere by writing <code>[0.5s]</code> in the text — change
-            the number to whatever you prefer.
+            Add a pause by writing <code>[0.5s]</code> in the text for half a second
+            of silence, or <code>[1s]</code> for a full second.
           </li>
           <li>
             Click <strong>Generate</strong>. When it finishes, play the audio or
@@ -266,21 +269,28 @@ const jsonLd = [
         </p>
 
         {
-          voiceGroups.map((group) => (
-            <>
-              <h3 class="mt-8">{group.label}</h3>
-              <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                {group.voices.map(([id, name]) => (
-                  <audio
-                    class="audio-enhance w-full"
-                    preload="none"
-                    data-audio-label={name}
-                    src={`${sampleBase}/${id}-sample.mp3`}
-                    controls
-                  />
-                ))}
-              </div>
-            </>
+          Object.entries(VOICE_GROUPS).map(([model, groups]) => (
+            <div
+              data-voice-samples={model}
+              class:list={[model !== "phonon" && "hidden"]}
+            >
+              {groups.map((group) => (
+                <>
+                  <h3 class="mt-6">{group.label}</h3>
+                  <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    {group.voices.map(([id, name]) => (
+                      <audio
+                        class="audio-enhance w-full"
+                        preload="none"
+                        data-audio-label={name}
+                        src={`${STATIC_BASE}/${previewPath(model, id)}`}
+                        controls
+                      />
+                    ))}
+                  </div>
+                </>
+              ))}
+            </div>
           ))
         }
       </details>
@@ -290,15 +300,13 @@ const jsonLd = [
       <h2>Limitations</h2>
       <div class="post-content mt-4">
         <p>
-          Voice quality varies. Training duration matters, but so do the source
-          audio and how well it aligns with the text. Heart has the highest
-          official overall grade.
+          Voice quality varies by model and voice. I update the generator as
+          their developers release new versions.
         </p>
         <p>
-          WAV is uncompressed PCM (24&nbsp;kHz, 16-bit mono, about 2.9&nbsp;MB
-          per minute). MP3 uses 128&nbsp;kbps CBR and is about 960&nbsp;KB per
-          minute. Kokoro produces 24&nbsp;kHz speech, so neither download is
-          studio-quality audio.
+          Both models produce 24&nbsp;kHz speech. WAV is uncompressed 16-bit
+          mono (about 2.9&nbsp;MB per minute). MP3 uses 128&nbsp;kbps CBR, about
+          960&nbsp;KB per minute.
         </p>
       </div>
     </section>
@@ -322,8 +330,9 @@ const jsonLd = [
           >
           <div class="post-content mt-3">
             <p>
-              The generator offers 20 American English and 8 British English
-              voices. Kokoro voices for other languages are not included.
+              Phonon offers 25 regular English voices and 12 English character
+              voices. Kokoro offers 20 American English and 8 British English
+              voices. Other languages and voice cloning are not included.
             </p>
           </div>
         </details>
@@ -331,9 +340,11 @@ const jsonLd = [
           <summary class="callout-title">Which browsers work?</summary>
           <div class="post-content mt-3">
             <p>
-              A browser with WebAssembly is required. The generator uses WebGPU
-              when the browser and device expose it. Otherwise, it starts with
-              the slower WASM fallback.
+              Phonon requires WebAssembly SIMD and module workers. WebGPU is
+              optional: if it cannot start, the same model runs on the CPU. This
+              page uses one CPU thread and does not require cross-origin
+              isolation. Kokoro also supports a WebAssembly CPU fallback.
+              Performance and completion depend on your browser and device.
             </p>
           </div>
         </details>
@@ -343,13 +354,15 @@ const jsonLd = [
           >
           <div class="post-content mt-3">
             <p>
-              The first generation downloads Kokoro's scripts, tokenizer, model,
-              and selected voice. The WebGPU model is roughly 326&nbsp;MB. The
-              WASM model is roughly 92&nbsp;MB, plus its runtime and other
-              assets. A failed WebGPU attempt may download both models. Your
-              browser can cache these files, but it may evict or revalidate
-              them. Clear this site's stored data in your browser settings to
-              remove them.
+              Phonon's pinned q8 weights are 64,512,352 bytes (61.5&nbsp;MiB),
+              plus roughly 4.2&nbsp;MiB of WebAssembly, its tokenizer, config
+              and selected voice. These are file sizes, not a measured total
+              browser transfer. Each model loads only when you generate with it.
+              Kokoro's WebGPU model is roughly 326&nbsp;MB. The WASM model is
+              roughly 92&nbsp;MB, plus its runtime and other assets. A failed
+              WebGPU attempt may download both models. Your browser can cache
+              these files, but it may evict or revalidate them. Clear this
+              site's stored data in your browser settings to remove them.
             </p>
           </div>
         </details>
@@ -358,12 +371,13 @@ const jsonLd = [
           <div class="post-content mt-3">
             <p>
               Speech synthesis runs on your device. The generator does not
-              upload the text you enter or the audio it creates. It still
-              downloads scripts, model files, and voices from jsDelivr and
-              Hugging Face. Those providers receive ordinary request metadata,
-              including your IP address, browser, requested URL, and the time of
-              the request. In production, Fathom records page views and the
-              fixed
+              upload the text you enter or the audio it creates. It still loads
+              Phonon's runtime from this site, and downloads model files and
+              voices from Hugging Face. Kokoro and the MP3 encoder also load
+              scripts from jsDelivr. Those providers receive ordinary request
+              metadata, including your IP address, browser, requested URL, and
+              the time of the request. In production, Fathom records page views
+              and the fixed
               <code>Voice generated</code> event. It does not receive your text or
               audio from this generator.
             </p>
@@ -375,13 +389,12 @@ const jsonLd = [
           >
           <div class="post-content mt-3">
             <p>
-              The license labels alone do not provide blanket commercial
-              clearance. The reviewed Kokoro model, ONNX conversion, JavaScript
-              code, and repository-distributed voice tensors are labeled
-              Apache-2.0. That does not settle ownership of generated audio or
-              any other rights that may apply. You are responsible for the text
-              you supply and for checking whether your intended use is
-              permitted.
+              I place no additional restrictions on the audio you generate with
+              this tool, whether for personal or commercial projects. You are
+              responsible for checking that you have the rights to the source
+              text, that its license permits your intended use, and that you
+              comply with any other rights that apply. I do not check those
+              rights or take responsibility for how you use the audio.
             </p>
           </div>
         </details>
@@ -393,420 +406,6 @@ const jsonLd = [
 </Layout>
 
 <script>
-  import { chunkText } from "../../lib/chunk-text.mjs";
-  import {
-    KOKORO_MODEL_ID,
-    KOKORO_MODULE_URL,
-    LAMEJS_URL,
-    createPinnedModelFetch,
-    loadScriptOnce,
-    modelLoadOptions,
-    modelLoadSequence,
-  } from "../../lib/voice-generator.mjs";
-
-  // Kokoro silently truncates input past its ~512 phoneme-token context
-  // (≈100 words); stay well under it. The chunker may still merge up to 1.2×.
-  const MAX_CHUNK_WORDS = 60;
-
-  function getLamejs() {
-    const candidates = [
-      typeof window.lamejs !== "undefined" ? window.lamejs : null,
-      typeof window.Lame !== "undefined" ? window.Lame : null,
-    ];
-    for (const c of candidates) {
-      if (!c) continue;
-      if (typeof c.Mp3Encoder === "function") return c;
-      if (c.default && typeof c.default.Mp3Encoder === "function")
-        return c.default;
-    }
-    return null;
-  }
-
-  function parseChunks(raw) {
-    const out = [];
-    const re = /\[(\d+(?:\.\d+)?)s\]/g;
-    let lastIdx = 0;
-    let m;
-    while ((m = re.exec(raw)) !== null) {
-      const before = raw.slice(lastIdx, m.index).trim();
-      if (before) {
-        for (const piece of chunkText(before, MAX_CHUNK_WORDS)) {
-          out.push({ type: "text", text: piece });
-        }
-      }
-      out.push({ type: "silence", seconds: parseFloat(m[1]) });
-      lastIdx = m.index + m[0].length;
-    }
-    const tail = raw.slice(lastIdx).trim();
-    if (tail) {
-      for (const piece of chunkText(tail, MAX_CHUNK_WORDS)) {
-        out.push({ type: "text", text: piece });
-      }
-    }
-    return out;
-  }
-
-  function concatFloat32(arrays) {
-    let total = 0;
-    for (const a of arrays) total += a.length;
-    const out = new Float32Array(total);
-    let off = 0;
-    for (const a of arrays) {
-      out.set(a, off);
-      off += a.length;
-    }
-    return out;
-  }
-
-  function encodeWav(samples, sampleRate) {
-    const dataSize = samples.length * 2;
-    const buffer = new ArrayBuffer(44 + dataSize);
-    const view = new DataView(buffer);
-    function writeString(off, str) {
-      for (let i = 0; i < str.length; i++)
-        view.setUint8(off + i, str.charCodeAt(i));
-    }
-    writeString(0, "RIFF");
-    view.setUint32(4, 36 + dataSize, true);
-    writeString(8, "WAVE");
-    writeString(12, "fmt ");
-    view.setUint32(16, 16, true);
-    view.setUint16(20, 1, true);
-    view.setUint16(22, 1, true);
-    view.setUint32(24, sampleRate, true);
-    view.setUint32(28, sampleRate * 2, true);
-    view.setUint16(32, 2, true);
-    view.setUint16(34, 16, true);
-    writeString(36, "data");
-    view.setUint32(40, dataSize, true);
-    let off = 44;
-    for (let i = 0; i < samples.length; i++) {
-      const s = Math.max(-1, Math.min(1, samples[i]));
-      view.setInt16(off, s < 0 ? s * 0x8000 : s * 0x7fff, true);
-      off += 2;
-    }
-    return new Blob([buffer], { type: "audio/wav" });
-  }
-
-  function encodeMp3(samples, sampleRate) {
-    const lib = getLamejs();
-    if (!lib)
-      throw new Error(
-        "MP3 encoder (lamejs) not available — script may have failed to load.",
-      );
-    const int16 = new Int16Array(samples.length);
-    for (let i = 0; i < samples.length; i++) {
-      const s = Math.max(-1, Math.min(1, samples[i]));
-      int16[i] = s < 0 ? s * 0x8000 : s * 0x7fff;
-    }
-    const encoder = new lib.Mp3Encoder(1, sampleRate, 128);
-    const blockSize = 1152;
-    const chunks = [];
-    for (let i = 0; i < int16.length; i += blockSize) {
-      const slice = int16.subarray(i, i + blockSize);
-      const buf = encoder.encodeBuffer(slice);
-      if (buf.length > 0) chunks.push(buf);
-    }
-    const flushBuf = encoder.flush();
-    if (flushBuf.length > 0) chunks.push(flushBuf);
-    return new Blob(chunks, { type: "audio/mpeg" });
-  }
-
-  function fmtTime(seconds) {
-    const s = Math.max(0, Math.round(seconds));
-    if (s < 60) return `${s}s`;
-    return `${Math.floor(s / 60)}m ${String(s % 60).padStart(2, "0")}s`;
-  }
-
-  // transformers.js picks its own cache name, so scan them all for the model's
-  // .onnx weights — the check then survives library/cache-name changes.
-  async function isModelCached() {
-    if (!("caches" in window)) return false;
-    try {
-      for (const name of await caches.keys()) {
-        const cache = await caches.open(name);
-        for (const req of await cache.keys()) {
-          if (/kokoro-82m/i.test(req.url) && /\.onnx(\?|#|$)/i.test(req.url)) {
-            return true;
-          }
-        }
-      }
-    } catch (e) {
-      /* Cache API blocked (private mode, etc.) — treat as not cached. */
-    }
-
-    return false;
-  }
-
-  let ttsPromise = null;
-  async function getTts(setStatus, setProgress) {
-    if (!ttsPromise) {
-      ttsPromise = (async () => {
-        setStatus("Loading the text-to-speech model…", "busy");
-        setProgress(0);
-        window.fetch = createPinnedModelFetch(window.fetch.bind(window));
-        const { KokoroTTS } = await import(KOKORO_MODULE_URL);
-
-        // Each load attempt gets its own byte accounting, so a WebGPU→WASM
-        // fallback (different files) starts the bar cleanly.
-        const load = (opts) => {
-          const files = new Map();
-          let startedAt = null;
-          const onProgress = (data) => {
-            if (!data || data.status !== "progress" || !data.total) return;
-            if (startedAt == null) startedAt = performance.now();
-            files.set(data.file, {
-              loaded: data.loaded || 0,
-              total: data.total,
-            });
-            let loaded = 0;
-            let total = 0;
-            for (const f of files.values()) {
-              loaded += f.loaded;
-              total += f.total;
-            }
-            const pct = Math.min(100, (loaded / total) * 100);
-            setProgress(pct);
-            if (loaded >= total) {
-              setStatus("Preparing model…", "busy");
-              return;
-            }
-            const mb = (loaded / 1048576).toFixed(0);
-            const totalMb = (total / 1048576).toFixed(0);
-            const elapsed = (performance.now() - startedAt) / 1000;
-            const speed = elapsed > 0 ? loaded / elapsed : 0;
-            const eta =
-              speed > 0 ? ` · ~${fmtTime((total - loaded) / speed)} left` : "";
-            setStatus(
-              `Downloading model — ${mb} / ${totalMb} MB (${pct.toFixed(0)}%)${eta}`,
-              "busy",
-            );
-          };
-          return KokoroTTS.from_pretrained(KOKORO_MODEL_ID, {
-            ...opts,
-            progress_callback: onProgress,
-          });
-        };
-
-        let lastError;
-        for (const runtime of modelLoadSequence(Boolean(navigator.gpu))) {
-          if (runtime === "wasm" && lastError) {
-            setStatus(
-              "WebGPU unavailable — downloading the CPU model instead…",
-              "busy",
-            );
-            setProgress(0);
-          }
-          try {
-            return await load(modelLoadOptions(runtime));
-          } catch (error) {
-            lastError = error;
-          }
-        }
-        throw lastError;
-      })();
-    }
-    return ttsPromise;
-  }
-
-  function initInstance(root) {
-    const pick = (name) => root.querySelector(`[data-bhktw="${name}"]`);
-    const textInput = pick("text");
-    const voiceSelect = pick("voice");
-    const speedInput = pick("speed");
-    const generateBtn = pick("generate");
-    const statusMsgEl = pick("status-msg");
-    const dotEl = pick("dot");
-    const progressEl = pick("progress");
-    const progressBarEl = progressEl.querySelector("div");
-    const errEl = pick("err");
-    const outputEl = pick("output");
-    const audioEl = pick("audio");
-    const downloadMp3Btn = pick("download-mp3");
-    const downloadWavBtn = pick("download-wav");
-
-    let lastSampleRate = 24000;
-    const objectUrls = [];
-    const downloads = new Map();
-
-    const DOT_CLASS = {
-      idle: "bg-muted",
-      ready: "bg-green-600",
-      busy: "bg-muted animate-pulse",
-      ok: "bg-green-600",
-      err: "bg-red-600",
-    };
-    function setStatus(msg, mode = "idle") {
-      statusMsgEl.textContent = msg;
-      dotEl.className =
-        "size-2 flex-none rounded-full " + (DOT_CLASS[mode] ?? DOT_CLASS.idle);
-    }
-    function setProgress(pct) {
-      if (pct == null) {
-        progressEl.classList.add("hidden");
-        return;
-      }
-      progressEl.classList.remove("hidden");
-      progressBarEl.style.width = Math.max(0, Math.min(100, pct)) + "%";
-    }
-    function showError(msg) {
-      errEl.textContent = msg;
-      errEl.classList.remove("hidden");
-      dotEl.className = "size-2 flex-none rounded-full " + DOT_CLASS.err;
-    }
-    function clearError() {
-      errEl.classList.add("hidden");
-      errEl.textContent = "";
-    }
-    function timestamp() {
-      return new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
-    }
-    function setDownload(btn, blob, filename) {
-      downloads.set(btn, { blob, filename });
-      btn.disabled = false;
-    }
-    function downloadBlob(btn) {
-      const download = downloads.get(btn);
-      if (!download) return;
-      const url = URL.createObjectURL(download.blob);
-      const anchor = document.createElement("a");
-      anchor.href = url;
-      anchor.download = download.filename;
-      anchor.click();
-      URL.revokeObjectURL(url);
-    }
-
-    downloadMp3Btn.addEventListener("click", () =>
-      downloadBlob(downloadMp3Btn),
-    );
-    downloadWavBtn.addEventListener("click", () =>
-      downloadBlob(downloadWavBtn),
-    );
-
-    async function generateChunk(tts, text, voice, speed) {
-      const result = await tts.generate(text, { voice, speed });
-      if (result && result.audio) {
-        lastSampleRate = result.sampling_rate || result.sampleRate || 24000;
-        return result.audio;
-      }
-      if (result instanceof Float32Array) return result;
-      throw new Error("Unexpected output from kokoro-js.");
-    }
-
-    async function doGenerate() {
-      clearError();
-      const text = textInput.value.trim();
-      if (!text) {
-        showError("Paste some text first.");
-        return;
-      }
-      if (text.length > 50000) {
-        showError(
-          "Text is very long — please split it into smaller pieces (under 50,000 characters).",
-        );
-        return;
-      }
-      const voice = voiceSelect.value;
-      const speed = parseFloat(speedInput.value) || 1;
-
-      generateBtn.disabled = true;
-      outputEl.classList.add("hidden");
-      setProgress(0);
-      try {
-        const tts = await getTts(setStatus, setProgress);
-        const parsed = parseChunks(text);
-        const audioParts = [];
-        let chunkIdx = 0;
-        const totalChunks = parsed.filter((p) => p.type === "text").length;
-
-        for (const part of parsed) {
-          if (part.type === "silence") {
-            audioParts.push(
-              new Float32Array(Math.round(part.seconds * lastSampleRate)),
-            );
-            continue;
-          }
-          chunkIdx++;
-          setStatus(`Generating chunk ${chunkIdx} of ${totalChunks}…`, "busy");
-          setProgress(((chunkIdx - 1) / Math.max(1, totalChunks)) * 100);
-          const buffer = await generateChunk(tts, part.text, voice, speed);
-          audioParts.push(buffer);
-        }
-
-        setStatus("Encoding…", "busy");
-        setProgress(95);
-        const merged = concatFloat32(audioParts);
-
-        for (const u of objectUrls) URL.revokeObjectURL(u);
-        objectUrls.length = 0;
-        const stamp = timestamp();
-
-        downloads.clear();
-        downloadMp3Btn.disabled = true;
-        downloadWavBtn.disabled = true;
-        const wavBlob = encodeWav(merged, lastSampleRate);
-        const audioUrl = URL.createObjectURL(wavBlob);
-        objectUrls.push(audioUrl);
-        audioEl.src = audioUrl;
-        setDownload(downloadWavBtn, wavBlob, `audio-${stamp}.wav`);
-
-        try {
-          await loadScriptOnce(LAMEJS_URL, {
-            isReady: () => getLamejs() !== null,
-          });
-          const mp3Blob = encodeMp3(merged, lastSampleRate);
-          setDownload(downloadMp3Btn, mp3Blob, `audio-${stamp}.mp3`);
-          downloadMp3Btn.classList.remove("hidden");
-        } catch (e) {
-          downloadMp3Btn.disabled = true;
-        }
-
-        outputEl.classList.remove("hidden");
-        setProgress(100);
-        setStatus("Done.", "ok");
-        // Inline script — can't import the track() helper, so call Fathom directly.
-        window.fathom?.trackEvent?.("Voice generated");
-        setTimeout(() => setProgress(null), 800);
-      } catch (e) {
-        console.error("[bh-kokoro-tts-web]", e);
-        setStatus("Generation failed. Details are below.", "err");
-        showError(e && e.message ? e.message : String(e));
-        setProgress(null);
-      } finally {
-        generateBtn.disabled = false;
-      }
-    }
-
-    generateBtn.addEventListener("click", doGenerate);
-
-    // A CPU-only browser is not an error, so it keeps the idle/ready dot.
-    (async () => {
-      const cached = await isModelCached();
-      const gpuNote = navigator.gpu
-        ? ""
-        : " (No WebGPU. The model will run in a slower CPU mode. Chrome, Edge, or Brave are faster.)";
-      if (cached) {
-        setStatus(
-          "Voice model detected. Click Generate to begin." + gpuNote,
-          "ready",
-        );
-      } else {
-        setStatus(
-          "Click Generate to begin downloading the voice model and generating the audio." +
-            gpuNote,
-          "idle",
-        );
-      }
-    })();
-  }
-
-  function boot() {
-    document.querySelectorAll(".bh-kokoro-tts-app").forEach(initInstance);
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", boot, { once: true });
-  } else {
-    boot();
-  }
+  import { initVoiceGenerator } from "../../lib/voice-generator-client.mjs";
+  document.querySelectorAll(".bh-kokoro-tts-app").forEach(initVoiceGenerator);
 </script>

@@ -2,6 +2,7 @@
   "name": "buthonestly-io",
   "type": "module",
   "version": "0.1.0",
+  "packageManager": "pnpm@11.20.0",
   "engines": {
     "node": ">=24.0.0"
   },
@@ -26,13 +27,14 @@
     "lighthouse:smoke": "node scripts/smoke-lighthouse.mjs"
   },
   "dependencies": {
-    "@astrojs/markdown-remark": "^7.2.4",
-    "@astrojs/mdx": "^7.0.8",
+    "@astrojs/markdown-remark": "^7.3.3",
+    "@astrojs/mdx": "^8.1.0",
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.3",
     "@tailwindcss/vite": "^4.3.3",
-    "astro": "^7.2.9",
+    "astro": "^7.4.0",
     "astro-icon": "^1.2.0",
+    "phonon-tts": "0.5.0",
     "remark-gfm": "^4.0.1",
     "remark-mdx": "^3.1.1",
     "remark-parse": "^11.0.0",
@@ -46,16 +48,16 @@
     "chrome-launcher": "^1.0.0",
     "chrome-remote-interface": "^0.33.3",
     "google-auth-library": "^11.0.2",
-    "gray-matter": "^4.0.3",
     "gsc-snapshot": "0.2.0",
     "lighthouse": "^13.4.1",
     "prettier": "^3.9.6",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.8.1",
-    "sharp": "^0.35.4",
+    "sharp": "^0.35.5",
     "turndown": "^7.2.4",
     "turndown-plugin-gfm": "^1.0.2",
     "typescript": "^6.0.3",
-    "wrangler": "4.144.0"
+    "wrangler": "4.151.1",
+    "yaml": "2.9.1"
   }
 }

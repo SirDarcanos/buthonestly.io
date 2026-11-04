@@ -19,7 +19,7 @@ async function embed(texts) {
     ({ pipeline } = await import("@huggingface/transformers"));
   } catch (error) {
     throw new Error(
-      "Changed essays require @huggingface/transformers: npm install --no-save @huggingface/transformers@4.2.0",
+      "Changed essays require @huggingface/transformers@4.2.0, installed by the related workflow",
       { cause: error },
     );
   }

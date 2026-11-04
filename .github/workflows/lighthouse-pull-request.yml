@@ -17,18 +17,32 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - uses: actions/setup-node@v7
-        with:
-          node-version: 24
-
-      - run: npm ci
-
       - name: Check out pull-request base
         uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.base.sha }}
           path: .lighthouse-base
           persist-credentials: false
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          package-manager-cache: false
+
+      - name: Install pinned pnpm
+        run: npm install --global pnpm@11.20.0
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: |
+            pnpm-lock.yaml
+            .lighthouse-base/pnpm-lock.yaml
+            .lighthouse-base/package-lock.json
+
+      - name: Install head revision dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Plan pull-request routes
         id: pull_request_plan
@@ -39,33 +53,84 @@ jobs:
       - name: Install base revision dependencies
         if: steps.pull_request_plan.outputs.selected == 'true'
         working-directory: .lighthouse-base
-        run: npm ci
+        run: |
+          if [ -f pnpm-lock.yaml ]; then
+            pnpm install --frozen-lockfile
+          else
+            npm ci
+          fi
 
-      - name: Restore Astro image caches
+      - name: Identify head image toolchain
+        id: head_image_toolchain
         if: steps.pull_request_plan.outputs.selected == 'true'
-        uses: actions/cache@v5
-        with:
-          path: |
-            node_modules/.astro
-            .lighthouse-base/node_modules/.astro
-          key: ${{ runner.os }}-astro-images-${{ hashFiles('package-lock.json', 'astro.config.mjs', 'src/**/*.astro', 'src/**/*.avif', 'src/**/*.gif', 'src/**/*.jpeg', 'src/**/*.jpg', 'src/**/*.png', 'src/**/*.webp', '.lighthouse-base/package-lock.json', '.lighthouse-base/astro.config.mjs', '.lighthouse-base/src/**/*.astro', '.lighthouse-base/src/**/*.avif', '.lighthouse-base/src/**/*.gif', '.lighthouse-base/src/**/*.jpeg', '.lighthouse-base/src/**/*.jpg', '.lighthouse-base/src/**/*.png', '.lighthouse-base/src/**/*.webp') }}
-          restore-keys: |
-            ${{ runner.os }}-astro-images-
+        run: node scripts/image-cache-key.mjs .
 
-      - name: Build pull-request revisions
+      - name: Identify base image toolchain
+        id: base_image_toolchain
+        if: steps.pull_request_plan.outputs.selected == 'true'
+        run: node scripts/image-cache-key.mjs .lighthouse-base
+
+      - name: Restore base Astro image assets
+        id: base_image_cache
+        if: steps.pull_request_plan.outputs.selected == 'true' && steps.base_image_toolchain.outputs.key != ''
+        uses: actions/cache/restore@v5
+        with:
+          path: node_modules/.astro/assets
+          key: ${{ runner.os }}-${{ runner.arch }}-astro-assets-v3-main-${{ steps.base_image_toolchain.outputs.key }}-${{ github.event.pull_request.base.sha }}
+          restore-keys: |
+            ${{ runner.os }}-${{ runner.arch }}-astro-assets-v3-main-${{ steps.base_image_toolchain.outputs.key }}-
+
+      - name: Stage base image cache before restoring head
+        if: steps.pull_request_plan.outputs.selected == 'true'
+        run: |
+          if [ -d node_modules/.astro/assets ]; then
+            mkdir -p .lighthouse-base/node_modules/.astro
+            mv node_modules/.astro/assets .lighthouse-base/node_modules/.astro/
+          fi
+
+      - name: Restore head Astro image assets
+        id: image_cache
+        if: steps.pull_request_plan.outputs.selected == 'true' && steps.head_image_toolchain.outputs.key != ''
+        uses: actions/cache/restore@v5
+        with:
+          path: node_modules/.astro/assets
+          key: ${{ runner.os }}-${{ runner.arch }}-astro-assets-v3-main-${{ steps.head_image_toolchain.outputs.key }}-${{ github.event.pull_request.base.sha }}
+          restore-keys: |
+            ${{ runner.os }}-${{ runner.arch }}-astro-assets-v3-main-${{ steps.head_image_toolchain.outputs.key }}-
+
+      - name: Build head revision
         if: steps.pull_request_plan.outputs.selected == 'true'
         env:
           LIGHTHOUSE_PREVIEW_SLUGS: ${{ steps.pull_request_plan.outputs.preview_slugs }}
+        shell: bash
+        run: pnpm run build 2>&1 | tee "$RUNNER_TEMP/lighthouse-head-build.log"
+
+      - name: Share head image assets with base
+        if: steps.pull_request_plan.outputs.selected == 'true'
+        run: node scripts/share-lighthouse-images.mjs . .lighthouse-base
+
+      - name: Build base revision
+        if: steps.pull_request_plan.outputs.selected == 'true'
+        working-directory: .lighthouse-base
+        env:
+          LIGHTHOUSE_PREVIEW_SLUGS: ${{ steps.pull_request_plan.outputs.preview_slugs }}
+        shell: bash
         run: |
-          npm run build
-          (npm run preview -- --host 127.0.0.1 --port 4321 > "$RUNNER_TEMP/lighthouse-head.log" 2>&1 &)
-          cd .lighthouse-base
+          if [ -f pnpm-lock.yaml ]; then manager=pnpm; else manager=npm; fi
           if grep -q LIGHTHOUSE_PREVIEW_SLUGS src/lib/essays.ts; then
-            npm run build
+            $manager run build
           else
-            LIGHTHOUSE_INCLUDE_SCHEDULED=true npm run build
-          fi
-          (npm run preview -- --host 127.0.0.1 --port 4322 > "$RUNNER_TEMP/lighthouse-base.log" 2>&1 &)
+            LIGHTHOUSE_INCLUDE_SCHEDULED=true $manager run build
+          fi 2>&1 | tee "$RUNNER_TEMP/lighthouse-base-build.log"
+
+      - name: Start revision servers
+        if: steps.pull_request_plan.outputs.selected == 'true'
+        run: |
+          (pnpm run preview --host 127.0.0.1 --port 4321 > "$RUNNER_TEMP/lighthouse-head.log" 2>&1 &)
+          (cd .lighthouse-base && {
+            if [ -f pnpm-lock.yaml ]; then pnpm run preview --host 127.0.0.1 --port 4322;
+            else npm run preview -- --host 127.0.0.1 --port 4322; fi
+          } > "$RUNNER_TEMP/lighthouse-base.log" 2>&1 &)
           for url in http://127.0.0.1:4321 http://127.0.0.1:4322; do
             for attempt in {1..30}; do curl --fail --silent "$url" >/dev/null && break; sleep 1; done
             curl --fail --silent "$url" >/dev/null
@@ -79,13 +144,40 @@ jobs:
           LIGHTHOUSE_HEAD_URL: http://127.0.0.1:4321
           LIGHTHOUSE_ARTIFACT_DIR: artifacts/lighthouse
           LIGHTHOUSE_PULL_REQUEST_ROUTES: ${{ steps.pull_request_plan.outputs.routes }}
-        run: npm run lighthouse -- --trigger pull-request
+        run: pnpm run lighthouse --trigger pull-request
+
+      - name: Report image cache outcome
+        if: always() && steps.pull_request_plan.outputs.selected == 'true'
+        env:
+          HEAD_IMAGE_CACHE_HIT: ${{ steps.image_cache.outputs.cache-hit }}
+          HEAD_IMAGE_CACHE_KEY: ${{ steps.image_cache.outputs.cache-matched-key }}
+          BASE_IMAGE_CACHE_HIT: ${{ steps.base_image_cache.outputs.cache-hit }}
+          BASE_IMAGE_CACHE_KEY: ${{ steps.base_image_cache.outputs.cache-matched-key }}
+        run: |
+          {
+            printf '\n## Lighthouse build reuse\n\nHead trusted main image-cache key: `%s` (empty means miss or disabled). Exact hit: `%s`.\n\n' "$HEAD_IMAGE_CACHE_KEY" "$HEAD_IMAGE_CACHE_HIT"
+            printf 'Base trusted main image-cache key: `%s` (empty means miss or disabled). Exact hit: `%s`.\n\nPRs restore only; successful main CI is the only producer.\n\n' "$BASE_IMAGE_CACHE_KEY" "$BASE_IMAGE_CACHE_HIT"
+            printf 'Transfer size and restore duration are in the cache restore logs; phase timings are in the job steps. Both revisions rebuild pages and run fresh audits.\n\n'
+            for revision in head base; do
+              log="$RUNNER_TEMP/lighthouse-$revision-build.log"
+              if [ -f "$log" ]; then
+                generated=$(grep -c '(before: .*kB, after: .*kB)' "$log" || true)
+                reused=$(grep -c '(reused cache entry)' "$log" || true)
+                revalidated=$(grep -c '(revalidated cache entry)' "$log" || true)
+                printf '%s image transforms: %s generated, %s reused, %s revalidated (partial if build failed).\n' "$revision" "$generated" "$reused" "$revalidated"
+              else
+                printf '%s build log unavailable.\n' "$revision"
+              fi
+            done
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Retain diagnostic reports
         if: always()
         uses: actions/upload-artifact@v7
         with:
           name: lighthouse-${{ github.run_id }}
-          path: artifacts/lighthouse
+          path: |
+            artifacts/lighthouse
+            ${{ runner.temp }}/lighthouse-*-build.log
           if-no-files-found: ignore
           retention-days: 90

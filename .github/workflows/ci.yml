@@ -18,26 +18,47 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 24
-          cache: npm
+          package-manager-cache: false
 
-      - run: npm ci
+      - name: Install pinned pnpm
+        run: npm install --global pnpm@11.20.0
 
-      - name: Restore Astro image cache
-        uses: actions/cache@v5
+      - uses: actions/setup-node@v7
         with:
-          path: node_modules/.astro
-          key: ${{ runner.os }}-astro-images-${{ hashFiles('package-lock.json', 'astro.config.mjs', 'src/**/*.astro', 'src/**/*.avif', 'src/**/*.gif', 'src/**/*.jpeg', 'src/**/*.jpg', 'src/**/*.png', 'src/**/*.webp') }}
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Identify image toolchain
+        id: image_toolchain
+        run: node scripts/image-cache-key.mjs .
+
+      - name: Restore trusted main image assets
+        id: image_cache
+        if: steps.image_toolchain.outputs.key != ''
+        uses: actions/cache/restore@v5
+        with:
+          path: node_modules/.astro/assets
+          key: ${{ runner.os }}-${{ runner.arch }}-astro-assets-v3-main-${{ steps.image_toolchain.outputs.key }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-astro-images-
+            ${{ runner.os }}-${{ runner.arch }}-astro-assets-v3-main-${{ steps.image_toolchain.outputs.key }}-
 
       - name: Test failure detection
-        run: npm test
+        run: pnpm test
 
       - name: Verify code and configuration formatting
-        run: npm run format:check
+        run: pnpm run format:check
 
       - name: Verify content correctness
-        run: npm run check:links
+        run: pnpm run check:links
 
       - name: Build production site
-        run: npm run build
+        run: pnpm run build
+
+      - name: Save trusted main image assets
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.image_toolchain.outputs.key != '' && steps.image_cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v5
+        with:
+          path: node_modules/.astro/assets
+          key: ${{ steps.image_cache.outputs.cache-primary-key }}

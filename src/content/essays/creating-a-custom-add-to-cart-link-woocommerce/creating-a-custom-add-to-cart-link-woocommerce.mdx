@@ -1,11 +1,12 @@
 ---
 title: Creating a Custom Add to Cart Link with WooCommerce
+seoTitle: "WooCommerce Add-to-Cart Links: Products, Quantities & Checkout"
 seoDescription: Create WooCommerce add-to-cart links for simple, variable, and grouped products, set quantities and redirects, then use them in buttons or emails.
 date: 2015-09-18
-updated: 2025-11-25
+updated: 2026-10-17
 sticky: false
 cornerstone: false
-excerpt: Learn how to create custom Add to Cart links with WooCommerce for various product types, enhancing the shopping experience.
+excerpt: A WooCommerce add-to-cart link needs the right product or variation ID. Copy examples for quantities, grouped products, and cart or checkout pages.
 newsletterIntro: |-
   Learn how to create custom Add to Cart links with WooCommerce for various product types, enhancing the shopping experience.
 categories:
@@ -29,56 +30,81 @@ import addButtonWithLink from "./add-button-with-link.jpg";
 
 <QuickSummary>
 
+- Add `?add-to-cart=1234&quantity=1` to your store URL, replacing `1234` with the item’s ID.
+- Use the product ID for a simple product and the variation ID for a specific variation.
+- Grouped products need the group ID plus a separate `quantity[ID]` for each child product.
+- Use your configured cart or checkout URL as the destination, and check the store’s redirect settings.
 
 </QuickSummary>
 
-Turning visitors into buyers on your online store starts with an easy Add to Cart process.
+To add one simple product to a WooCommerce cart from a link, start with this:
 
-WooCommerce lets you add products normally, but sometimes you need something special. Adding a custom button linked to the Add to Cart link can really make a difference!
+```text
+https://example.com/?add-to-cart=1234&quantity=1
+```
 
-## Custom Add to Cart Link for Simple Products
+Replace `https://example.com/` with your store’s base URL, `1234` with your product ID, and `1` with the quantity to add. The numbers in every example below are placeholders, not IDs from your store.
 
-**Step 1**: Find the product ID under Products > All Products in your dashboard.
+These patterns follow [WooCommerce’s add-to-cart URL documentation](https://woocommerce.com/document/quick-guide-to-woocommerce-add-to-cart-urls/). The destination also depends on your store’s settings, as explained below.
+
+## Simple Products
+
+Find the product ID under **Products > All Products** in your WordPress dashboard. Hover over the product title to see its ID.
 
 <Figure src={productId} alt={"The products list in Products > All Products, highlighting the product ID of a simple product."} />
 
-**Step 2**: add `?add-to-cart=[Product ID]&quantity=1` to your website’s base URL. This creates a link like `https://www.yourwebsite.com/?add-to-cart=39367&quantity=1` that puts the product directly in the cart of those who click it.
+Use that ID in `add-to-cart`, as in the opening example. To add three of the same product, change `quantity=1` to `quantity=3`.
 
-### Redirects After Add to Cart
+## Variable Products
 
-If you want customers to go to a specific page after adding a product, change the URL. For example, to send them to the Checkout page, use `https://yourwebsite.com/checkout/?add-to-cart=[Product ID]&quantity=1`. Make sure the URL is that of your Cart or Checkout page.
-
-### Adjusting Product Quantities
-
-You can easily adjust how many products are added by changing `&quantity=X` in the URL, where X is the number you want to add to the cart
-
-## Custom Add to Cart Link for Variable Products
-
-With new WooCommerce versions, this process is simpler. It’s like with simple products, but use the variation ID found under Variations on the Edit Product page. If you are not sure whether you need a variation at all, [the difference between attributes and variations](/woocommerce-attributes-vs-variations/) decides it.
+For a specific variation, use its **variation ID** instead of the parent product ID. Find it under **Product data > Variations** when editing the product. If you are not sure whether you need a variation at all, [the difference between attributes and variations](/woocommerce-attributes-vs-variations/) explains when they are useful.
 
 <Figure src={variationId} alt={"The Variations tab of a variable product highlighting the variation ID."} />
 
-The link is made in the same way, but you use the variation ID instead of the product ID, like this:
+If the variation ID is `5678`, the link is:
 
-- Redirect to the Homepage: `` https://yourwebsite.com/?add-to-cart=[Variation ID]`&quantity=1` ``
-- Redirect to the Cart: `` https://yourwebsite.com/cart/?add-to-cart=[Variation ID]`&quantity=1` ``
-- Redirect to the Checkout: `` https://yourwebsite.com/checkout/?add-to-cart=[Variation ID]`&quantity=1` ``
-- Redirect to any page: `` https://yourwebsite.com/page-slug/?add-to-cart=[Variation ID]`&quantity=1` ``
+```text
+https://example.com/?add-to-cart=5678&quantity=1
+```
 
-## Custom Add to Cart Link for Grouped Products
+This selects that variation, rather than asking the customer to choose one on the product page.
 
-The add to cart link is slightly different when dealing with grouped products with multiple sub-products. Use the Grouped Product ID with the IDs and quantities of each sub-product. For instance, `https://yourdomain.com/?add-to-cart=1234&quantity[5678]=5&quantity[7890]=2` adds certain amounts of sub-products to the cart.
+## Grouped Products
 
-## How to Use the Custom Add to Cart Link
+Use the grouped product’s ID in `add-to-cart`, then specify each child product’s quantity separately:
 
-After making your link, adding it to your site is easy. It can be a simple link, a button, or part of a pricing table. You can place it in your content using the text editor or as a button in a Button Block.
+```text
+https://example.com/?add-to-cart=1234&quantity[5678]=5&quantity[7890]=2
+```
 
-- Create a simple add-to-cart link anywhere in your content by using the text editor:
+Here, `1234` is the group ID. Replace `5678` and `7890` with the child product IDs. The example requests five of the first child product and two of the second.
 
-<Figure src={addLinkToText} alt={"The WordPress content editor showing how to add the add to cart URL to a text link in"} />
+## Cart, Checkout, Or Another Page
 
-- Or using a [Button block](https://wordpress.org/documentation/article/buttons-block/):
+Put the query string after the URL where you want the customer to land. For a simple product, these examples use cart and checkout paths:
+
+```text
+https://example.com/cart/?add-to-cart=1234&quantity=1
+https://example.com/checkout/?add-to-cart=1234&quantity=1
+```
+
+Replace `/cart/` and `/checkout/` with the actual paths of the pages configured for your store. For a variation, replace `1234` with its variation ID. The same approach works with another page on your store, using that page’s URL before the `?`.
+
+WooCommerce’s [product settings](https://woocommerce.com/document/configuring-woocommerce-settings/products/#general) include **Redirect to cart page after successful addition**, under **WooCommerce > Settings > Products > General**. That setting can take the customer to the cart instead of leaving them on the requested page. Check it when choosing a destination, and verify the final behavior on your own store before sharing the link.
+
+## If The Link Does Not Work
+
+- **Wrong item or no item:** Recheck the ID under Products. A simple product needs its product ID; a specific variation needs its own variation ID.
+- **Unavailable product:** Check its published status and stock settings. WooCommerce’s [product editor documentation](https://woocommerce.com/document/managing-products/product-editor-settings/) explains these controls, including stock status and backorders. An out-of-stock item that cannot be backordered is not available to purchase through a link.
+- **Unexpected quantity:** Check stock availability and **Sold individually** in the product’s inventory settings. Sold individually limits purchases to one of that item per order; changing the URL quantity does not remove that restriction.
+- **Wrong destination:** Confirm the configured cart or checkout page URL and the redirect-to-cart setting described above.
+
+## Use The Link In WordPress
+
+Paste the finished URL into a text link in the content editor:
+
+<Figure src={addLinkToText} alt={"The WordPress content editor showing how to add the add-to-cart URL to a text link."} />
+
+Or use it as the link for a [Button block](https://wordpress.org/documentation/article/buttons-block/):
 
 <Figure src={addButtonWithLink} alt={"The WordPress content editor showing how to add the add to cart URL to the Button block."} />
-
-There are many more ways; for example, you might want to use it as part of a pricing table block or shortcode or as a heading or another type of block. The options are virtually limitless. If you can add a link, that link can be a custom WooCommerce Add to Cart link.

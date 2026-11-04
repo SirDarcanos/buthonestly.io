@@ -15,7 +15,7 @@ import {
   runNarrationCommand,
 } from "../src/lib/narration-tool.mjs";
 
-const usage = `Usage: npm run narration -- <command> <Essay slug|path> [options]
+const usage = `Usage: pnpm run narration <command> <Essay slug|path> [options]
 
 Run stages in order: prepare -> review script -> synthesize -> listen -> upload.
 Clean is local-only and may run after synthesis or upload.

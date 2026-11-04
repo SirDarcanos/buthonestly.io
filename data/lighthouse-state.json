@@ -388,13 +388,110 @@
         "requiredObservations": 4,
         "route": "/resources/free-ai-voice-generator/",
         "workload": "navigation"
+      },
+      {
+        "checkedAt": "2026-10-26T12:24:43.521Z",
+        "device": "mobile",
+        "metrics": {
+          "accessibility": 1,
+          "bestPractices": 1,
+          "cls": 0,
+          "firstPartyTransferBytes": 255057,
+          "lcpMs": 2987.3610000000003,
+          "mainThreadWorkMs": 424.8120000000004,
+          "performance": 0.94,
+          "scriptTransferBytes": 4258,
+          "seo": 1,
+          "thirdPartyTransferBytes": 13669
+        },
+        "observation": 3,
+        "observationId": "40322273358:mobile",
+        "requiredObservations": 4,
+        "route": "/",
+        "workload": "navigation"
+      },
+      {
+        "checkedAt": "2026-10-26T12:24:43.521Z",
+        "device": "mobile",
+        "metrics": {
+          "accessibility": 1,
+          "bestPractices": 1,
+          "cls": 0,
+          "firstPartyTransferBytes": 270451,
+          "lcpMs": 3191.3899999999985,
+          "mainThreadWorkMs": 535.8640000000001,
+          "performance": 0.92,
+          "scriptTransferBytes": 6585,
+          "seo": 1,
+          "thirdPartyTransferBytes": 14208
+        },
+        "observation": 3,
+        "observationId": "40322273358:mobile",
+        "requiredObservations": 4,
+        "route": "/when-ai-stops-being-a-tool/",
+        "workload": "navigation"
+      },
+      {
+        "checkedAt": "2026-10-26T12:24:43.521Z",
+        "device": "mobile",
+        "metrics": {
+          "accessibility": 1,
+          "bestPractices": 1,
+          "cls": 0,
+          "firstPartyTransferBytes": 372348,
+          "lcpMs": 3385.084999999999,
+          "mainThreadWorkMs": 542.7,
+          "performance": 0.9,
+          "scriptTransferBytes": 6585,
+          "seo": 1,
+          "thirdPartyTransferBytes": 14212
+        },
+        "observation": 3,
+        "observationId": "40322273358:mobile",
+        "requiredObservations": 4,
+        "route": "/what-is-a-gpu/",
+        "workload": "navigation"
+      },
+      {
+        "checkedAt": "2026-10-26T12:24:43.521Z",
+        "device": "mobile",
+        "metrics": {
+          "firstPartyImageTransferBytes": 294374,
+          "layoutShift": 0
+        },
+        "observation": 3,
+        "observationId": "40322273358:mobile",
+        "requiredObservations": 4,
+        "route": "/what-is-a-gpu/",
+        "workload": "cold-scroll"
+      },
+      {
+        "checkedAt": "2026-10-26T12:24:43.521Z",
+        "device": "mobile",
+        "metrics": {
+          "accessibility": 1,
+          "bestPractices": 1,
+          "cls": 0,
+          "firstPartyTransferBytes": 247793,
+          "lcpMs": 2967.878,
+          "mainThreadWorkMs": 614.6280000000007,
+          "performance": 0.94,
+          "scriptTransferBytes": 10710,
+          "seo": 1,
+          "thirdPartyTransferBytes": 13669
+        },
+        "observation": 3,
+        "observationId": "40322273358:mobile",
+        "requiredObservations": 4,
+        "route": "/resources/free-ai-voice-generator/",
+        "workload": "navigation"
       }
     ],
     "budgetProposal": null,
     "budgetsApproved": false,
     "scheduledObservations": {
       "desktop": 2,
-      "mobile": 2
+      "mobile": 3
     },
     "startedAt": "2026-08-30T00:00:00.000Z"
   },
@@ -425,7 +522,8 @@
       "37d909c1a423c5118afd9fd1c67d5926f2f3741d45f759df8fbef62212f5e8c6"
     ],
     "creating-a-custom-add-to-cart-link-woocommerce": [
-      "c5e85c07695a207ce15e3533525c77a43064cd2c2b108f720220312472e3e00b"
+      "c5e85c07695a207ce15e3533525c77a43064cd2c2b108f720220312472e3e00b",
+      "ceb075bcd8fb8a2f31c524bbabc79abe110b373a42caab8ed60809fbf712a6ac"
     ],
     "delete-expired-coupons-automatically-woocommerce": [
       "8ccc38e9fc5a6f1c29c6631d785f35dbfde49d006cf446ce089ab86e7c78f03d"
@@ -478,7 +576,13 @@
       "6f0a6fa0a4ea6ef2fbb4e37c3834c3c4acf4a98ca03c0b1c6775ced4f3903bb5"
     ],
     "nimble-free-local-alternative-to-jev": [
+      "68b016e87648199ee6d4f5db08554fbfa54b9b82dd990d928b15e8c767542295",
+      "8ac0eedf894e958d8344d584c42ef5185ea0fe2e0703f8ee1865f1da6bed94bb",
       "9e21ca3d916ec53ee368080a36254d6f9a137d0ece1b986460fb5fadf5fbd691"
+    ],
+    "pi-coding-agent-setup": [
+      "4e3d9aca44fe5623c9132c0b8614ec9725c5853176ff79b2e12e2a225cf5209a",
+      "ff855a676042cffc302dbfca5330ce55bb5b4dc0699f905784a05f12f6ab2afe"
     ],
     "psychological-safety-in-teams-people-first-leadership": [
       "1d671c6e988229e9d4437a79ed75141a46c6ec44484499b72832fb8a8e85aff5"
@@ -487,6 +591,7 @@
       "a87786a22bce400f64958577dead2042b31f42a64202128d533185ac8a9ee0fe"
     ],
     "shotlist-automatic-annotated-screenshots": [
+      "0fe526dcc57d0967ac851d6d52c7ec49a4fb70d522c45570609e3e031d91ecb5",
       "606e93aac1a6e0bf47b2a8736e3b0c72362bae552132983df630d345b92dd1ff"
     ],
     "team-building-activities-for-work": [
@@ -551,41 +656,47 @@
   "issues": {},
   "outcomes": {
     "desktop:/": {
-      "checkedAt": "2026-10-05T15:40:57.289Z",
-      "consecutivePasses": 2,
-      "observationId": "37334738153:desktop",
+      "checkedAt": "2026-11-02T16:54:28.983Z",
+      "consecutivePasses": 3,
+      "observationId": "41485947794:desktop",
       "openIssueNumber": null,
       "status": "passed"
     },
     "desktop:/resources/free-ai-voice-generator/": {
-      "checkedAt": "2026-10-05T15:40:57.289Z",
-      "consecutivePasses": 2,
-      "observationId": "37334738153:desktop",
+      "checkedAt": "2026-11-02T16:54:28.983Z",
+      "consecutivePasses": 3,
+      "observationId": "41485947794:desktop",
       "openIssueNumber": null,
       "status": "passed"
     },
     "desktop:/what-is-a-gpu/": {
-      "checkedAt": "2026-10-05T15:40:57.289Z",
-      "consecutivePasses": 2,
-      "observationId": "37334738153:desktop",
+      "checkedAt": "2026-11-02T16:54:28.983Z",
+      "consecutivePasses": 3,
+      "observationId": "41485947794:desktop",
       "openIssueNumber": null,
       "status": "passed"
     },
     "desktop:/when-ai-stops-being-a-tool/": {
-      "checkedAt": "2026-10-05T15:40:57.289Z",
-      "consecutivePasses": 2,
-      "observationId": "37334738153:desktop",
+      "checkedAt": "2026-11-02T16:54:28.983Z",
+      "consecutivePasses": 3,
+      "observationId": "41485947794:desktop",
       "openIssueNumber": null,
       "status": "passed"
     },
     "mobile:/": {
-      "checkedAt": "2026-10-16T14:22:13.242Z",
-      "consecutivePasses": 13,
+      "checkedAt": "2026-11-04T05:45:44.746Z",
+      "consecutivePasses": 20,
       "openIssueNumber": null,
       "status": "passed"
     },
     "mobile:/buildings-never-were/": {
       "checkedAt": "2026-10-03T05:40:22.185Z",
+      "consecutivePasses": 1,
+      "openIssueNumber": null,
+      "status": "passed"
+    },
+    "mobile:/creating-a-custom-add-to-cart-link-woocommerce/": {
+      "checkedAt": "2026-10-17T10:06:51.969Z",
       "consecutivePasses": 1,
       "openIssueNumber": null,
       "status": "passed"
@@ -603,15 +714,27 @@
       "status": "passed"
     },
     "mobile:/nimble-free-local-alternative-to-jev/": {
-      "checkedAt": "2026-10-02T15:07:35.299Z",
-      "consecutivePasses": 1,
+      "checkedAt": "2026-11-04T05:45:44.746Z",
+      "consecutivePasses": 3,
+      "openIssueNumber": null,
+      "status": "passed"
+    },
+    "mobile:/pi-coding-agent-setup/": {
+      "checkedAt": "2026-11-04T05:45:44.746Z",
+      "consecutivePasses": 2,
       "openIssueNumber": null,
       "status": "passed"
     },
     "mobile:/resources/free-ai-voice-generator/": {
-      "checkedAt": "2026-10-12T14:39:11.782Z",
-      "consecutivePasses": 2,
-      "observationId": "38264430323:mobile",
+      "checkedAt": "2026-10-26T12:24:43.521Z",
+      "consecutivePasses": 3,
+      "observationId": "40322273358:mobile",
+      "openIssueNumber": null,
+      "status": "passed"
+    },
+    "mobile:/shotlist-automatic-annotated-screenshots/": {
+      "checkedAt": "2026-10-17T09:35:31.222Z",
+      "consecutivePasses": 1,
       "openIssueNumber": null,
       "status": "passed"
     },
@@ -622,16 +745,16 @@
       "status": "passed"
     },
     "mobile:/what-is-a-gpu/": {
-      "checkedAt": "2026-10-12T14:39:11.782Z",
-      "consecutivePasses": 3,
-      "observationId": "38264430323:mobile",
+      "checkedAt": "2026-10-26T12:24:43.521Z",
+      "consecutivePasses": 4,
+      "observationId": "40322273358:mobile",
       "openIssueNumber": null,
       "status": "passed"
     },
     "mobile:/when-ai-stops-being-a-tool/": {
-      "checkedAt": "2026-10-12T14:39:11.782Z",
-      "consecutivePasses": 3,
-      "observationId": "38264430323:mobile",
+      "checkedAt": "2026-10-26T12:24:43.521Z",
+      "consecutivePasses": 4,
+      "observationId": "40322273358:mobile",
       "openIssueNumber": null,
       "status": "passed"
     },

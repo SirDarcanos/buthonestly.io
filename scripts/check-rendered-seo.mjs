@@ -227,19 +227,19 @@ export function checkRenderedSeo({
     "@id": VOICE_GENERATOR_ID,
     name: "Free AI Voice Generator",
     description:
-      "Free AI voice generator with 28 English Kokoro voices. Generate MP3 or WAV speech on your device, with no signup required.",
+      "Free AI voice generator with Phonon and Kokoro English voices. Generate complete MP3 or WAV speech on your device, with no signup required.",
     url: VOICE_GENERATOR_URL,
     applicationCategory: "MultimediaApplication",
     applicationSubCategory: "Text-to-Speech",
     operatingSystem: "Any",
     browserRequirements:
-      "Requires a browser with WebAssembly; WebGPU is recommended for faster generation.",
+      "Phonon requires WebAssembly SIMD and module workers; optional WebGPU, with CPU fallback.",
     isAccessibleForFree: true,
     offers: { "@type": "Offer", price: 0 },
     inLanguage: "en",
     featureList: [
       "Local text-to-speech generation",
-      "28 American and British English voices",
+      "37 Phonon English voices and 28 Kokoro English voices",
       "On-device synthesis",
       "Timed pauses",
       "MP3 and WAV downloads",

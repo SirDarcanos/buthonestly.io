@@ -30,7 +30,7 @@ const withoutFencedCode = (markdown) =>
 const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 test("the production build exposes homepage and agent-readable navigation", async (context) => {
-  const build = spawnSync("npm", ["run", "build"], {
+  const build = spawnSync("pnpm", ["run", "build"], {
     cwd: repositoryRoot,
     encoding: "utf8",
     maxBuffer: 10 * 1024 * 1024,

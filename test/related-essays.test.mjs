@@ -197,14 +197,17 @@ test("semantic workflow runs for essay changes and manually without a schedule",
   assert.match(workflow, /src\/content\/essays\/\*\*/);
   assert.match(workflow, /workflow_dispatch:/);
   assert.doesNotMatch(workflow, /^\s*schedule:/m);
-  assert.match(workflow, /npm install --no-save @huggingface\/transformers/);
-  assert.match(workflow, /package-lock\.json/);
+  assert.match(
+    workflow,
+    /pnpm add --lockfile=false @huggingface\/transformers/,
+  );
+  assert.match(workflow, /pnpm-lock\.yaml/);
   assert.match(workflow, /\.github\/workflows\/related\.yml/);
   assert.match(workflow, /src\/lib\/essay-inventory\.mjs/);
   assert.match(workflow, /contents: read/);
   assert.match(workflow, /persist-credentials: false/);
   assert.match(workflow, /uses: 1password\/install-cli-action@v4/);
-  assert.match(workflow, /version: latest-beta/);
+  assert.match(workflow, /^\s+version: latest$/m);
   assert.match(
     workflow,
     /OP_SERVICE_ACCOUNT_TOKEN: \$\{\{ secrets\.OP_SERVICE_ACCOUNT_TOKEN \}\}/,
