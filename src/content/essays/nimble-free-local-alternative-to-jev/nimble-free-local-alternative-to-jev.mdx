@@ -2,7 +2,7 @@
 title: "Bespoke Nimble: A Free, Local Alternative to Jev"
 seoDescription: Run Bespoke Nimble locally with Ollama. Compare it with Jev and trained classifiers, with API examples and automatic agent context pruning.
 date: 2026-10-02
-updated:
+updated: 2026-11-04
 sticky: true
 cornerstone: false
 excerpt: I can give Nimble new classification tasks without retraining it. I use Ollama to run it locally, without a subscription or per-request bill.
@@ -19,8 +19,8 @@ tags:
 downloads:
   - href: https://github.com/SirDarcanos/agentskills
     label: Explore Agent Skills on GitHub
-  - href: https://github.com/SirDarcanos/pi-nimble-compact
-    label: Explore pi-nimble-compact on GitHub
+  - href: https://github.com/SirDarcanos/pi-s1-compact
+    label: Explore pi-s1-compact on GitHub
 cover: ./nimble-local-ai-decision-model.jpg
 coverAlt: A person seen from above in a tall white room with small rectangular openings in the walls.
 coverCaption: Photo by <a href="https://unsplash.com/@jan_genge">Jan Genge</a> on <a href="https://unsplash.com/photos/white-and-gray-floor-tiles-GvnIvq7LPkY">Unsplash</a>
@@ -29,8 +29,6 @@ coverCaption: Photo by <a href="https://unsplash.com/@jan_genge">Jan Genge</a> o
 import QuickSummary from "../../../components/content/QuickSummary.astro";
 import Figure from "../../../components/content/Figure.astro";
 import cardCatalog from "./tool-output-archive-card-catalog.jpg";
-import nimbleStatus from "./pi-nimble-status.jpg";
-import nimbleAutomaticIndicator from "./pi-nimble-automatic-indicator.jpg";
 
 <QuickSummary>
 
@@ -39,7 +37,7 @@ import nimbleAutomaticIndicator from "./pi-nimble-automatic-indicator.jpg";
 - It runs locally through Ollama, so evidence submitted to the local model doesn't go to a hosted inference provider.
 - Published benchmarks put Nimble close to Jev on the evaluated tasks. My early results look similar too, but I haven't tested Jev enough to call them equivalent.
 - The ask-nimble skill lets me ask in plain language; the agent gathers evidence, prepares the request, and interprets the result.
-- pi-nimble-compact removes or shortens eligible older tool outputs while preserving originals for retrieval.
+- pi-s1-compact removes or shortens eligible older tool outputs while preserving originals for retrieval.
 - Decisions need checking against your own data; context pruning can add retrieval and caching costs.
 
 </QuickSummary>
@@ -50,7 +48,7 @@ Once I saw what it did, I wondered: how is this better than the classifiers we'v
 
 While I was looking into that, an email from Ollama introduced me to [Bespoke Nimble](https://github.com/bespokelabsai/nimble), which takes the same approach and runs locally. I could download Nimble and experiment locally without paying for each request.
 
-It ran smoothly, and the evidence I sent to the local model stayed on my machine. To make it easier to use, I built `ask-nimble`, a skill that lets me ask questions through an agent without constructing the API requests myself. I also adapted a Pi extension to use Nimble for pruning older tool outputs from the agent's context: `pi-nimble-compact`.
+It ran smoothly, and the evidence I sent to the local model stayed on my machine. To make it easier to use, I built `ask-nimble`, a skill that lets me ask questions through an agent without constructing the API requests myself. I also built a Pi extension for pruning older tool outputs from the agent's context: `pi-s1-compact`. It can use Nimble locally through Ollama or another supported classifier.
 
 ## What Is Nimble, and How Does It Make Decisions?
 
@@ -277,55 +275,47 @@ The review didn't change the GPU essay. Acting on the advice requires a separate
 
 Another use caught my attention while I was looking at what developers had built around Jev. [Nour Helmi's Pi extension](https://github.com/nourhelmi/pi-jev-compaction) used it to assess which older tool outputs still needed to stay in the agent's context.
 
-Why not do the same with Nimble?
-
-I adapted that work, along with [tamaratran's fast-jev-compaction](https://github.com/tamaratran/fast-jev-compaction), into [pi-nimble-compact](https://github.com/SirDarcanos/pi-nimble-compact).
+I built [pi-s1-compact](https://github.com/SirDarcanos/pi-s1-compact) around the same idea, drawing on that work and [tamaratran's fast-jev-compaction](https://github.com/tamaratran/fast-jev-compaction). It lets me choose a classifier independently of my coding model. Local Nimble through Ollama is the default; other compatible Ollama classifiers and classifiers in Pi's registry are options too.
 
 During a coding session, tool outputs accumulate: file reads, searches, test results, and diagnostics. Some remain useful. Others have been superseded by a newer read or a complete test run, but still occupy space in the context sent to the main model.
 
-The extension waits until context reaches its configured threshold, then considers eligible older outputs. It asks local Nimble whether uncertain results need to remain verbatim. Recent material and several protected kinds of output are excluded.
-
-<Figure src={nimbleAutomaticIndicator} alt="Pi's footer displaying ‘Nimble ready · ~33k tokens removed so far’.">
-  This is what I normally see in Pi's footer while the extension works automatically, without me triggering a pass. The ~33k figure estimates tokens removed from context so far, not billing savings.
-</Figure>
+Automatic pruning considers eligible older outputs when context pressure and cooldown checks allow it. Later complete reads or successful reruns can supersede earlier evidence; other candidates go to the selected classifier within fixed request budgets. Recent material and several protected kinds of output are excluded. Outputs omitted from scoring stay untouched.
 
 An output selected for removal becomes a retrieval marker. Some retained long outputs can instead become excerpts containing their beginning and end. The excerpt keeps the beginning and end exactly as written; it contains no summary of the missing middle.
 
-The complete originals remain in Pi's saved session history. If the agent needs something that was omitted, it can retrieve it with `nimble_read`, rather than rerunning a command. That matters when the underlying file has changed—or when repeating the command could have side effects.
+The complete originals remain in Pi's saved session history. If the agent needs something that was omitted, it can retrieve it with `s1_compact_read`, rather than rerunning a command. That matters when the underlying file has changed—or when repeating the command could have side effects.
 
 <Figure src={cardCatalog} alt="Rows of wooden library card catalogue drawers with metal label holders and round handles.">
   Photo by <a href="https://unsplash.com/@format_">Daniel</a> on <a href="https://unsplash.com/photos/vintage-wooden-card-catalog-drawers-with-labels-kAQo6CJCPN4">Unsplash</a>
 </Figure>
 
-My main coding model stays the same. Nimble handles these smaller judgments locally, and Pi's normal compaction remains available. If scoring fails, the extension applies no new pruning decisions.
+My main coding model stays the same. The selected classifier handles these smaller judgments, and Pi's normal compaction remains available. If scoring fails, the extension pauses scoring without switching models or destinations. A hosted classifier receives conversation and tool-output excerpts, so choosing one changes the privacy tradeoff and can incur charges.
 
 Related work from Meta and university researchers explores a different approach. In [Context Language Models](https://arxiv.org/abs/2609.37725), the model manages its own context by editing a file. On BrowseComp-Plus, the authors report 11.4% higher accuracy with 21.5% fewer floating-point operations than their context-management baseline.
 
-My extension uses a separate local model to assess older tool outputs, rather than letting the main model edit its own context. The CLM results give me a reason to investigate model-driven context management, but they don't validate this extension.
+My extension uses a separate classifier to assess older tool outputs, rather than letting the main model edit its own context. The CLM results give me a reason to investigate model-driven context management, but they don't validate this extension.
 
 The aim is to reduce stale context, but fewer visible tokens don't automatically mean a cheaper session. Changing context can affect prompt caching, and retrieving omitted evidence adds work. The extension includes a cache-payback check, though its estimates aren't billing guarantees.
 
-If Nimble misjudges relevance or a shortened output omits an important detail, the agent can retrieve the original.
+If the classifier misjudges relevance or a shortened output omits an important detail, the agent can retrieve the original.
 
-With Ollama running and Nimble downloaded, installation is:
+The extension requires Pi 1.0.0 or newer and Node.js 24 or newer. With Ollama running and Nimble downloaded for the default local setup, installation is:
 
 ```sh
-pi install npm:pi-nimble-compact
+pi install npm:pi-s1-compact
 ```
+
+Restart Pi or run `/reload`, then open `/s1-compact-settings` to choose a classifier, review its destination, and save. Automatic pruning is enabled by default; I can turn it off in settings.
 
 Inside Pi, I can run a pruning pass on demand:
 
 ```text
-/nimble-compact
+/s1-compact
 ```
 
-It waits for the agent to become idle, then runs the same pruning process without waiting for the automatic context threshold or cooldown. The protections and cache-payback check still apply, so a pass may remove nothing. Changes affect the next model request; this doesn't invoke Pi's `/compact` or generate a summary.
+Manual pruning bypasses the automatic context-pressure and cooldown checks. The protections and cache-payback check still apply, so a pass may remove nothing. This doesn't invoke Pi's `/compact` or generate a summary.
 
-`/nimble-status` shows pruning activity, while `/nimble-reset` restores the outputs hidden or shortened by the extension on the active branch.
-
-<Figure src={nimbleStatus} alt="Output from /nimble-status showing the automatic context threshold, local endpoint, active retrieval, seven shortened outputs and none cleared on this branch, about 33k estimated tokens removed from context across the session, and no evaluation yet under latest activity.">
-  My `/nimble-status` output shows seven shortened outputs on this branch and an estimated ~33k tokens removed from context across the session. Those are context estimates, not billing savings.
-</Figure>
+`/s1-compact-status` shows the selected classifier, pruning activity, and estimated context reductions, not billing savings. `/s1-compact-reset` restores the outputs hidden or shortened by the extension on the active branch; originals remain available for retrieval.
 
 ## Where I Want to Take It
 
