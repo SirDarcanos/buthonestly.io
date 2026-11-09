@@ -485,13 +485,110 @@
         "requiredObservations": 4,
         "route": "/resources/free-ai-voice-generator/",
         "workload": "navigation"
+      },
+      {
+        "checkedAt": "2026-11-09T15:26:45.146Z",
+        "device": "mobile",
+        "metrics": {
+          "accessibility": 1,
+          "bestPractices": 1,
+          "cls": 0,
+          "firstPartyTransferBytes": 256777,
+          "lcpMs": 3079.1399999999994,
+          "mainThreadWorkMs": 359.336,
+          "performance": 0.93,
+          "scriptTransferBytes": 4438,
+          "seo": 1,
+          "thirdPartyTransferBytes": 13671
+        },
+        "observation": 4,
+        "observationId": "42644674001:mobile",
+        "requiredObservations": 4,
+        "route": "/",
+        "workload": "navigation"
+      },
+      {
+        "checkedAt": "2026-11-09T15:26:45.146Z",
+        "device": "mobile",
+        "metrics": {
+          "accessibility": 1,
+          "bestPractices": 1,
+          "cls": 0,
+          "firstPartyTransferBytes": 270538,
+          "lcpMs": 3158.656,
+          "mainThreadWorkMs": 463.3720000000004,
+          "performance": 0.92,
+          "scriptTransferBytes": 6761,
+          "seo": 1,
+          "thirdPartyTransferBytes": 14214
+        },
+        "observation": 4,
+        "observationId": "42644674001:mobile",
+        "requiredObservations": 4,
+        "route": "/when-ai-stops-being-a-tool/",
+        "workload": "navigation"
+      },
+      {
+        "checkedAt": "2026-11-09T15:26:45.146Z",
+        "device": "mobile",
+        "metrics": {
+          "accessibility": 1,
+          "bestPractices": 1,
+          "cls": 0,
+          "firstPartyTransferBytes": 372458,
+          "lcpMs": 3182.996000000001,
+          "mainThreadWorkMs": 451.24000000000035,
+          "performance": 0.91,
+          "scriptTransferBytes": 6762,
+          "seo": 1,
+          "thirdPartyTransferBytes": 14221
+        },
+        "observation": 4,
+        "observationId": "42644674001:mobile",
+        "requiredObservations": 4,
+        "route": "/what-is-a-gpu/",
+        "workload": "navigation"
+      },
+      {
+        "checkedAt": "2026-11-09T15:26:45.146Z",
+        "device": "mobile",
+        "metrics": {
+          "firstPartyImageTransferBytes": 294377,
+          "layoutShift": 0
+        },
+        "observation": 4,
+        "observationId": "42644674001:mobile",
+        "requiredObservations": 4,
+        "route": "/what-is-a-gpu/",
+        "workload": "cold-scroll"
+      },
+      {
+        "checkedAt": "2026-11-09T15:26:45.146Z",
+        "device": "mobile",
+        "metrics": {
+          "accessibility": 1,
+          "bestPractices": 1,
+          "cls": 0,
+          "firstPartyTransferBytes": 252090,
+          "lcpMs": 2957.7679999999996,
+          "mainThreadWorkMs": 580.0720000000028,
+          "performance": 0.94,
+          "scriptTransferBytes": 13415,
+          "seo": 1,
+          "thirdPartyTransferBytes": 13670
+        },
+        "observation": 4,
+        "observationId": "42644674001:mobile",
+        "requiredObservations": 4,
+        "route": "/resources/free-ai-voice-generator/",
+        "workload": "navigation"
       }
     ],
     "budgetProposal": null,
     "budgetsApproved": false,
     "scheduledObservations": {
       "desktop": 2,
-      "mobile": 3
+      "mobile": 4
     },
     "startedAt": "2026-08-30T00:00:00.000Z"
   },
@@ -686,8 +783,9 @@
       "status": "passed"
     },
     "mobile:/": {
-      "checkedAt": "2026-11-04T06:12:41.622Z",
-      "consecutivePasses": 22,
+      "checkedAt": "2026-11-09T15:26:45.146Z",
+      "consecutivePasses": 23,
+      "observationId": "42644674001:mobile",
       "openIssueNumber": null,
       "status": "passed"
     },
@@ -728,9 +826,9 @@
       "status": "passed"
     },
     "mobile:/resources/free-ai-voice-generator/": {
-      "checkedAt": "2026-10-26T12:24:43.521Z",
-      "consecutivePasses": 3,
-      "observationId": "40322273358:mobile",
+      "checkedAt": "2026-11-09T15:26:45.146Z",
+      "consecutivePasses": 4,
+      "observationId": "42644674001:mobile",
       "openIssueNumber": null,
       "status": "passed"
     },
@@ -747,9 +845,9 @@
       "status": "passed"
     },
     "mobile:/what-is-a-gpu/": {
-      "checkedAt": "2026-10-26T12:24:43.521Z",
-      "consecutivePasses": 4,
-      "observationId": "40322273358:mobile",
+      "checkedAt": "2026-11-09T15:26:45.146Z",
+      "consecutivePasses": 5,
+      "observationId": "42644674001:mobile",
       "openIssueNumber": null,
       "status": "passed"
     },
@@ -760,9 +858,9 @@
       "status": "passed"
     },
     "mobile:/when-ai-stops-being-a-tool/": {
-      "checkedAt": "2026-10-26T12:24:43.521Z",
-      "consecutivePasses": 4,
-      "observationId": "40322273358:mobile",
+      "checkedAt": "2026-11-09T15:26:45.146Z",
+      "consecutivePasses": 5,
+      "observationId": "42644674001:mobile",
       "openIssueNumber": null,
       "status": "passed"
     },
