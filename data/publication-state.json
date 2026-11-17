@@ -9,6 +9,15 @@
         "status": "delivered"
       }
     },
+    "1password-cli-setup": {
+      "newsletter": {
+        "broadcastId": 27111879,
+        "status": "draft"
+      },
+      "indexNow": {
+        "contentHash": "fb1531c3e03fb3bccf744aa9b4ad17a81e2ee3dcec5593184161521e1b15a612"
+      }
+    },
     "adhd-planner": {
       "indexNow": {
         "contentHash": "80bc68d563587471cc73e761dfb93751875b932564fc80f1a3cd1b34c5bee67b"
