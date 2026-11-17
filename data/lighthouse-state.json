@@ -596,6 +596,9 @@
     "10-types-of-websites": [
       "1e83f9a74adf23afc407954c4b6342e3c45724394f2a24d392125fde617c509a"
     ],
+    "1password-cli-setup": [
+      "fb1531c3e03fb3bccf744aa9b4ad17a81e2ee3dcec5593184161521e1b15a612"
+    ],
     "adhd-planner": [
       "80bc68d563587471cc73e761dfb93751875b932564fc80f1a3cd1b34c5bee67b"
     ],
@@ -783,9 +786,14 @@
       "status": "passed"
     },
     "mobile:/": {
-      "checkedAt": "2026-11-09T15:26:45.146Z",
-      "consecutivePasses": 23,
-      "observationId": "42644674001:mobile",
+      "checkedAt": "2026-11-17T13:13:20.083Z",
+      "consecutivePasses": 24,
+      "openIssueNumber": null,
+      "status": "passed"
+    },
+    "mobile:/1password-cli-setup/": {
+      "checkedAt": "2026-11-17T13:13:20.083Z",
+      "consecutivePasses": 1,
       "openIssueNumber": null,
       "status": "passed"
     },
