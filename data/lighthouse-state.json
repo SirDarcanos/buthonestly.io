@@ -723,6 +723,7 @@
     ],
     "what-is-vibe-coding-how-to-do-it": [
       "16ed821e59467ec64cf58337db69bd9247b18c55beb37188c54fe655bc51c4cd",
+      "c983f75838277f424d719972d4d98d6250306a31fd4512710c38e36fbee55aa0",
       "eb36f7c37ffc0a40cfbb3bae04f3fcedab8ba7d27c8593748abaf15509a2cf0d"
     ],
     "when-ai-stops-being-a-tool": [
@@ -749,7 +750,8 @@
     ],
     "wordpress-to-astro": [
       "049f49f47a5a3a0452014dc02eb55fbe9c4567de9edbe31f95f36040dacd468b",
-      "b1a2c35063bbaf0a20e58e7c38ab285a1e004e84c74eef761b3541bc9f942133"
+      "b1a2c35063bbaf0a20e58e7c38ab285a1e004e84c74eef761b3541bc9f942133",
+      "c75fe82c587e2756b03840a5c53f6381deb1c619f60f8dd9639f0aaa500dfc37"
     ],
     "write-in-markdown": [
       "1cb244df62c475df8299e7a15af0394bffe1a394c0880f122464285bff7c60f2"
@@ -786,8 +788,8 @@
       "status": "passed"
     },
     "mobile:/": {
-      "checkedAt": "2026-11-17T13:13:20.083Z",
-      "consecutivePasses": 24,
+      "checkedAt": "2026-11-18T07:58:18.577Z",
+      "consecutivePasses": 26,
       "openIssueNumber": null,
       "status": "passed"
     },
@@ -860,8 +862,8 @@
       "status": "passed"
     },
     "mobile:/what-is-vibe-coding-how-to-do-it/": {
-      "checkedAt": "2026-11-04T06:12:41.622Z",
-      "consecutivePasses": 1,
+      "checkedAt": "2026-11-18T07:58:18.577Z",
+      "consecutivePasses": 2,
       "openIssueNumber": null,
       "status": "passed"
     },
@@ -873,8 +875,8 @@
       "status": "passed"
     },
     "mobile:/wordpress-to-astro/": {
-      "checkedAt": "2026-08-31T19:30:50.881Z",
-      "consecutivePasses": 1,
+      "checkedAt": "2026-11-18T07:58:18.577Z",
+      "consecutivePasses": 2,
       "openIssueNumber": null,
       "status": "passed"
     }
