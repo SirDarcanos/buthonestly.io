@@ -6,3 +6,6 @@ allowBuilds:
   workerd: true
   onnxruntime-node: true
   protobufjs: false
+
+minimumReleaseAgeExclude:
+  - phonon-tts@0.5.0

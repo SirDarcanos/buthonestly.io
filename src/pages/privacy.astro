@@ -86,8 +86,13 @@ import Label from "../components/Label.astro";
     <p class="mt-4">
       The voice generator runs entirely on your device. The text you type and
       the audio it produces never leave your browser — there's no server doing
-      the work. The one-time model download comes from a public CDN, which sees
-      only the request (as any file download would), not your text or audio.
+      the work. Phonon and Kokoro download model and voice files from Hugging
+      Face; Kokoro and the MP3 encoder also load scripts from jsDelivr. Phonon's
+      runtime is served by this site. Those hosts receive ordinary request
+      metadata, including your IP address, browser and requested URL, but not
+      your text or generated audio. Browser caches may be evicted or
+      revalidated, so downloads can recur. The fixed “Voice generated” analytics
+      event contains no text or audio.
     </p>
 
     <h2 class="mt-12 text-2xl">Hosting &amp; files</h2>
@@ -104,6 +109,6 @@ import Label from "../components/Label.astro";
       footer.
     </p>
 
-    <p class="mt-10 text-xs">Last updated: July 2026</p>
+    <p class="mt-10 text-xs">Last updated: October 2026</p>
   </Container>
 </Layout>

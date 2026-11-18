@@ -9,6 +9,15 @@
         "status": "delivered"
       }
     },
+    "1password-cli-setup": {
+      "newsletter": {
+        "broadcastId": 27111879,
+        "status": "delivered"
+      },
+      "indexNow": {
+        "contentHash": "fb1531c3e03fb3bccf744aa9b4ad17a81e2ee3dcec5593184161521e1b15a612"
+      }
+    },
     "adhd-planner": {
       "indexNow": {
         "contentHash": "80bc68d563587471cc73e761dfb93751875b932564fc80f1a3cd1b34c5bee67b"
@@ -208,7 +217,16 @@
         "status": "delivered"
       },
       "indexNow": {
-        "contentHash": "68b016e87648199ee6d4f5db08554fbfa54b9b82dd990d928b15e8c767542295"
+        "contentHash": "5dcb0881a0687d86a7aaf7639a7a14fa43f63b0e4f52f5faab8cfaa913506c8f"
+      }
+    },
+    "pi-coding-agent-setup": {
+      "newsletter": {
+        "broadcastId": 26775299,
+        "status": "delivered"
+      },
+      "indexNow": {
+        "contentHash": "ff855a676042cffc302dbfca5330ce55bb5b4dc0699f905784a05f12f6ab2afe"
       }
     },
     "psychological-safety-in-teams-people-first-leadership": {
@@ -302,7 +320,7 @@
     },
     "what-is-vibe-coding-how-to-do-it": {
       "indexNow": {
-        "contentHash": "16ed821e59467ec64cf58337db69bd9247b18c55beb37188c54fe655bc51c4cd"
+        "contentHash": "eb36f7c37ffc0a40cfbb3bae04f3fcedab8ba7d27c8593748abaf15509a2cf0d"
       },
       "newsletter": {
         "status": "delivered"

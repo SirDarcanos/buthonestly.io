@@ -1,8 +1,6 @@
 ---
 import Label from "./Label.astro";
 
-// Posts to Kit form 9685650 over AJAX so the visitor stays on the page; Kit
-// then sends the double opt-in confirmation email.
 interface Props {
   inline?: boolean;
 }
@@ -100,12 +98,31 @@ const { inline = false } = Astro.props;
           },
         );
         const data = await res.json().catch(() => ({}));
-        if (!res.ok || (data.errors && data.errors.length)) {
+        if (!res.ok || (data.errors && Object.keys(data.errors).length)) {
+          throw new Error("subscribe failed");
+        }
+        if (data.status === "quarantined") {
+          const guard = new URL(data.url);
+          if (
+            guard.origin !== "https://app.kit.com" ||
+            guard.username ||
+            guard.password ||
+            !/^\/forms\/guards\/[a-f0-9-]+$/i.test(guard.pathname)
+          ) {
+            throw new Error("invalid security check URL");
+          }
+          set("pending", "Complete the security check to finish subscribing.");
+          window.location.assign(guard.href);
+          return;
+        }
+        if (data.status !== "success") {
           throw new Error("subscribe failed");
         }
         form.reset();
         set("ok", "Almost there — check your inbox to confirm.");
-        track("Newsletter subscribed");
+        try {
+          track("Newsletter subscribed");
+        } catch {}
       } catch {
         set("error", "That didn't go through. Please try again.");
       } finally {
